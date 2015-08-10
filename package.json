@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "name": "Nursing.Web",
+  "private": true,
+  "scripts": {
+    "start": "gulp play"
+  },
+  "devDependencies": {
+    "connect": "^3.3.4",
+    "del": "~1.1.1",
+    "gulp": "^3.9.0",
+    "gulp-plumber": "^1.0.0",
+    "gulp-rename": "~1.2.0",
+    "gulp-size": "^1.2.1",
+    "gulp-traceur": "0.17.*",
+    "mkpath": "~0.1.0",
+    "open": "0.0.5",
+    "rework": "~1.0.1",
+    "rework-npm": "~1.0.0",
+    "serve-static": "~1.8.1",
+    "systemjs-builder": "^0.12.2",
+    "through2": "~0.6.3",
+    "gulp-jscs": "^1.6.0",
+    "gulp-jshint": "^1.11.2",
+    "jshint-stylish": "^2.0.1",
+    "gulp-util": "^3.0.6",
+    "gulp-print": "^1.1.0",
+    "gulp-if": "^1.2.5",
+    "yargs": "^3.15.0"
+  },
+  "dependencies": {
+    "angular2": "^2.0.0-alpha.31",
+    "reflect-metadata": "^0.1.0",
+    "jwt-decode": "~1.1.0",
+    "systemjs": "^0.18.4",
+    "whatwg-fetch": "~0.7.0",
+    "when": "~3.7.3",
+    "jquery": "^2.1.4"
+  }
+}
