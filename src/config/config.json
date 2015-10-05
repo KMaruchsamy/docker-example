@@ -1,0 +1,34 @@
+﻿{
+  "links": {
+    "api": {
+      "local": {
+        "server": "http://localhost/"
+      },
+      "dev": {
+        "server": "http://dev.nursing.ktp.io/"
+      },
+      "qa": {
+        "server": "https://nursingqa-test.kaplan.com/"
+      },
+      "baseurl": "api/v1/",
+      "admin": {
+        "authenticationapi": "admin/login",
+        "forgotpasswordapi": "admin/forgetPassword",
+        "settemporarypasswordapi": "admin/resetPassword",
+        "resetprofileapi": "admin/resetProfile",
+        "resetemailapi": "admin/resetEmail",
+        "resetfacultypasswordafterloginapi":"admin/resetPasswordAfterLogin"
+      }
+    },
+    "resetemailexpire": {
+      "expirytime": "2"
+    }
+  },
+  "errorcode": {
+    "UNAUTHORIZED": "401",
+    "SUCCESS": "200",
+    "ERROR": "400",
+    "SERVERERROR": "500",
+    "API":"422"
+  }
+}
