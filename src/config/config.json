@@ -17,7 +17,8 @@
         "settemporarypasswordapi": "admin/resetPassword",
         "resetprofileapi": "admin/resetProfile",
         "resetemailapi": "admin/resetEmail",
-        "resetfacultypasswordafterloginapi":"admin/resetPasswordAfterLogin"
+        "resetfacultypasswordafterloginapi":"admin/resetPasswordAfterLogin",
+        "resetstudentpassword":"admin/sendStudentEmail"
       }
     },
     "resetemailexpire": {

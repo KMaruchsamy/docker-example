@@ -49,6 +49,9 @@
     "newpass_specialcharacter_validation": "Your new password must contain at least one special character.",
     "newpass_number_specialcharacter_validation": "Your password must contain at least one number and one special character.",
     "newpass_match": "Your new passwords must match. Please try again."    
+  },
+  "reset_student_password":{
+    "success_message":"Your student will receive a password reset email soon."
   }
 
 }

@@ -107,11 +107,15 @@ export class Account {
         if (this.auth.isAuth()) {
             let $btnResetResetPassword = $('#btnResetResetPassword');
             let $successResetPasswordContainer = $('#successResetPasswordContainer');
+            
+            let $btnClearResetStudentPassword = $('#btnClearResetStudentPassword');
+            let $successResetStudentPasswordContainer = $('#successResetStudentPasswordContainer');
 
             self.getInitialize();
             self.resetProfileFields();
             self.HideChangeEmail();
             self.initializeResetPassword();
+            self.initializeResetStudentPassword();
             
             $('#firstName').bind('input', function () {
                 self.checkfirstnamelastname();
@@ -148,6 +152,8 @@ export class Account {
             });
             $('#resetStudentPassword').bind('input', function () {
                 self.checkstudentemail();
+                 if ($btnClearResetStudentPassword.hasClass('hidden'))
+                    self.resetSuccess($btnClearResetStudentPassword, $successResetStudentPasswordContainer);
             });
         }
         else {
@@ -368,13 +374,68 @@ export class Account {
         $('#spnResetPasswordErrorMessage').text('');                 
     }
     
-    onSubmitResetStudentPassword(txtResetStudentPassword,btnResetStudentPassword,ResetStudentPasswordErrorContainer,SuccessResetStudentPasswordContainer,event){
+    
+    initializeResetStudentPassword() {
+        let $btnStudentReset = $('#btnStudentReset');
+        let $btnClearResetStudentPassword = $('#btnClearResetStudentPassword');
+        let $spnResetStudentPasswordErrorMessage = $('#spnResetStudentPasswordErrorMessage');
+        let $resetstudentpasswordErrorcontainer = $spnResetStudentPasswordErrorMessage.parent('p.error');
+        $btnStudentReset.attr("disabled", "true");
+        $btnStudentReset.attr("aria-disabled", "true");
+        $btnClearResetStudentPassword.removeClass('hidden');
+        $('#resetStudentPassword').val('');
+        $spnResetStudentPasswordErrorMessage.text('');
+        if ($resetstudentpasswordErrorcontainer.length > 0)
+            $resetstudentpasswordErrorcontainer.hide();
+        $('#successResetStudentPasswordContainer').hide();
+    }
+    
+    onSubmitResetStudentPassword(txtResetStudentPassword,btnResetStudentPassword,resetStudentPasswordErrorContainer,successResetStudentPasswordContainer,btnClearResetStudentPassword,event){
         event.preventDefault();
-        this.clearError(ResetStudentPasswordErrorContainer, SuccessResetStudentPasswordContainer,1);
-        let studentemailid=txtResetStudentPassword.value;
-        if(this.validateEmail(studentemailid,SuccessResetStudentPasswordContainer,ResetStudentPasswordErrorContainer,1)){
-            
+        this.clearError(resetStudentPasswordErrorContainer, successResetStudentPasswordContainer,5);
+        let studentEmailID=txtResetStudentPassword.value;
+        if(this.validateEmail(studentEmailID,successResetStudentPasswordContainer,resetStudentPasswordErrorContainer,1)){
+             let authheader = this.auth.authheader;
+            let userId = this.auth.userid;
+            let apiURL = this.apiServer + this.config.links.api.baseurl + this.config.links.api.admin.resetstudentpassword;
+            let self = this;
+            let status =0;
+            let resetStudentPasswordPromise = this.resetStudentPassword(apiURL, authheader, userId, studentEmailID);
+            resetStudentPasswordPromise.then(function (response) {
+                status = response.status;
+                return response.json();
+            }).then(function (json) {
+                if (status.toString() === self.config.errorcode.SUCCESS) {
+                     successResetStudentPasswordContainer.innerHTML = self.errorMessages.reset_student_password.success_message;
+                     self.showSuccess(btnClearResetStudentPassword, successResetStudentPasswordContainer, btnResetStudentPassword);
+                     self.clearResetStudentPassword(txtResetStudentPassword, btnResetStudentPassword);
+                }
+                else if (status.toString() === self.config.errorcode.API) {
+                    if (json.Payload.length > 0) {
+                        if (json.Payload[0].Messages.length > 0) {
+                             self.showError(json.Payload[0].Messages[0].toString(), resetStudentPasswordErrorContainer, 5);
+                            self.clearResetStudentPassword(txtResetStudentPassword);
+                        }
+                    }
+                }
+                else {
+                     self.showError(self.errorMessages.general.exception, resetStudentPasswordErrorContainer, 5);
+                   self.clearResetStudentPassword(txtResetStudentPassword);
+                }
+            }).catch(function (ex) {
+                 self.showError(self.errorMessages.general.exception, resetStudentPasswordErrorContainer, 5);
+                self.clearResetStudentPassword(txtResetStudentPassword);
+            });
         }
+    }
+    
+    clearResetStudentPassword(txtResetStudentPassword, btnClearResetStudentPassword) {
+        txtResetStudentPassword.value = '';
+        if (btnClearResetStudentPassword) {
+            $(btnClearResetStudentPassword).attr("disabled", "true");
+            $(btnClearResetStudentPassword).attr("aria-disabled", "true");
+        }
+
     }
     
     onCancelResetStudentPassword(txtResetStudentPassword,btnResetStudentPassword,event){
@@ -592,6 +653,22 @@ export class Account {
                 userid: userid,               
                 Password:currentPassword,
                 NewPassword:newPassword
+            })
+        });
+    }
+    
+    
+    resetStudentPassword(url,authheader,userid,studentEmail){
+          return fetch(url, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':authheader
+            },
+            body: JSON.stringify({
+                userid: userid,               
+                StudentEmail:studentEmail
             })
         });
     }

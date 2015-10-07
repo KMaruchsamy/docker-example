@@ -80,11 +80,11 @@
                     <div class="form-narrow">
                         <label class="teal-label" for="resetStudentPassword">Student Email Address</label>
                         <input type="email" id="resetStudentPassword" #resetstudentpassword >
-                        <p class="error" #resetstudentpasswordcontainer><span id="spnResetStudentPasswordErrorMessage"></span></p>
+                        <p  class="error" #resetstudentpasswordcontainer><span id="spnResetStudentPasswordErrorMessage"></span></p>
                         <div class="margin-1em-top">
-                            <button id="btnStudentReset" class="button button-with-validation" type="submit" aria-disabled="true" disabled #btnresetstudentpassword (click)="onSubmitResetStudentPassword(resetstudentpassword,btnresetstudentpassword,resetstudentpasswordcontainer,successresetstudentpasswordcontainer,$event)">Send student password reset request</button>
-                            <input type="reset" class="reset-input reset-input-mobile-block" value="Cancel" (click)="onCancelResetStudentPassword(resetstudentpassword,btnresetstudentpassword,$event)">
-                            <p #successresetstudentpasswordcontainer class="success success-icon" style="display:none" id="successresetstudentpasswordmsg">Your student will receive a password reset email soon.</p>
+                            <button id="btnStudentReset" class="button button-with-validation" type="submit" aria-disabled="true" disabled #btnresetstudentpassword (click)="onSubmitResetStudentPassword(resetstudentpassword,btnresetstudentpassword,resetstudentpasswordcontainer,successresetstudentpasswordcontainer,btnclearresetstudentpassword,$event)">Send student password reset request</button>
+                            <input id="btnClearResetStudentPassword" type="reset" #btnclearresetstudentpassword class="reset-input reset-input-mobile-block" value="Cancel" (click)="onCancelResetStudentPassword(resetstudentpassword,btnresetstudentpassword,$event)">
+                            <p #successresetstudentpasswordcontainer class="success success-icon" style="display:none" id="successResetStudentPasswordContainer">Your student will receive a password reset email soon.</p>
                         </div>
                     </div>
                 </form>
