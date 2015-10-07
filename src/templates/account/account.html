@@ -51,7 +51,7 @@
             <hr>
 
             <div class="section-medium-thin">
-                <h3 class="text-larger-teal text-larger-margin">Reset Password</h3>
+                <h3 class="text-larger-teal text-larger-margin">Reset Your Password</h3>
                 <form role="form">
                     <div class="form-narrow teal-label">
                         <label for="currentPassword">Current Password</label>
@@ -64,7 +64,7 @@
                         <p class="error" id="errorResetPasswordContainer" #resetpasswordcontainer><span id="spnResetPasswordErrorMessage"></span></p>
                     </div>
                     <div class="margin-1em-top">
-                        <button class="button button-with-validation" id="btnResetPassword" type="submit" aria-disabled="true" disabled #resetpassword (click)="onSubmitResetPassword(currentpassword,newpassword,confirmpassword,resetpassword,resetresetpassword,currentpasswordcontainer,resetpasswordcontainer,successresetpasswordcontainer,$event)">Reset password</button>
+                        <button class="button button-with-validation" id="btnResetPassword" type="submit" aria-disabled="true" disabled #resetpassword (click)="onSubmitResetPassword(currentpassword,newpassword,confirmpassword,resetpassword,resetresetpassword,currentpasswordcontainer,resetpasswordcontainer,successresetpasswordcontainer,$event)">Reset your password</button>
                         <!--reset input would be replaced by success paragraph after successful submission of form-->
                         <input type="reset" #resetresetpassword id="btnResetResetPassword" class="reset-input" value="Cancel" (click)="onCancelResetPassword(currentpassword,newpassword,confirmpassword,resetpassword,$event)">
                         <p #successresetpasswordcontainer class="success success-icon" style="display:none" id="successResetPasswordContainer"></p>
@@ -74,17 +74,17 @@
             <hr>
 
             <div class="section-medium-thin">
-                <h3 class="text-larger-teal">Request Student Password Reset</h3>
+                <h3 class="text-larger-teal">Send Student User Name and Password</h3>
                 <form role="form">
-                    <p class="text-larger-margin">Enter the student email’s address below and they will receive an email to reset their password.</p>
+                    <p class="text-larger-margin">Enter a student's email address below to have their Kaplan Nursing user name and password sent to their mailbox.</p>
                     <div class="form-narrow">
                         <label class="teal-label" for="resetStudentPassword">Student Email Address</label>
                         <input type="email" id="resetStudentPassword" #resetstudentpassword >
                         <p  class="error" #resetstudentpasswordcontainer><span id="spnResetStudentPasswordErrorMessage"></span></p>
                         <div class="margin-1em-top">
-                            <button id="btnStudentReset" class="button button-with-validation" type="submit" aria-disabled="true" disabled #btnresetstudentpassword (click)="onSubmitResetStudentPassword(resetstudentpassword,btnresetstudentpassword,resetstudentpasswordcontainer,successresetstudentpasswordcontainer,btnclearresetstudentpassword,$event)">Send student password reset request</button>
+                            <button id="btnStudentReset" class="button button-with-validation" type="submit" aria-disabled="true" disabled #btnresetstudentpassword (click)="onSubmitResetStudentPassword(resetstudentpassword,btnresetstudentpassword,resetstudentpasswordcontainer,successresetstudentpasswordcontainer,btnclearresetstudentpassword,$event)">Send Kaplan sign in info to student</button>
                             <input id="btnClearResetStudentPassword" type="reset" #btnclearresetstudentpassword class="reset-input reset-input-mobile-block" value="Cancel" (click)="onCancelResetStudentPassword(resetstudentpassword,btnresetstudentpassword,$event)">
-                            <p #successresetstudentpasswordcontainer class="success success-icon" style="display:none" id="successResetStudentPasswordContainer">Your student will receive a password reset email soon.</p>
+                            <p #successresetstudentpasswordcontainer class="success success-icon" style="display:none" id="successResetStudentPasswordContainer"></p>
                         </div>
                     </div>
                 </form>

@@ -51,7 +51,7 @@
     "newpass_match": "Your new passwords must match. Please try again."    
   },
   "reset_student_password":{
-    "success_message":"Your student will receive a password reset email soon."
+    "success_message":"Your student will receive an email with their user name and password in a few minutes."
   }
 
 }
