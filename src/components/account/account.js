@@ -282,7 +282,7 @@ export class Account {
     
     HideChangeEmail()
     {
-        $('#changeEmailFormSubmittable').show().addClass('hidden');
+        $('#changeEmailFormSubmittable').hide().addClass('hidden');
         $('#showChangeEmail').removeClass('hidden');
         $('#successemailmsg').removeProp('display');
         $('#successemailmsg').css('display', 'none');
