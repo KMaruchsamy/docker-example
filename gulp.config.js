@@ -23,7 +23,11 @@ module.exports = function () {
 			'src/webworkers/logging-worker.js',
 			'node_modules/angular2/bundles/angular2.js',
 			'node_modules/angular2/bundles/router.dev.js',
-			'node_modules/angular2/bundles/http.js'
+			'node_modules/angular2/bundles/http.js',
+			'node_modules/jasmine-core/lib/jasmine-core/jasmine.css',
+			'node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
+			'node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js',
+			'node_modules/jasmine-core/lib/jasmine-core/boot.js'
 		],
 		jsreview: [
 			'./src/app/*.js',
