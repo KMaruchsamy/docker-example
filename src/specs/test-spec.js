@@ -1,27 +1,28 @@
 import {Auth} from '../services/auth';
-import {View, Component,bootstrap} from 'angular2/angular2';
-let auth = new Auth();
+import {View, Component, bootstrap} from 'angular2/angular2';
+import {Router, Location, LocationStrategy} from 'angular2/router';
+import {Help} from '../components/help/help';
 
-describe('Test', function () {
-    it('testing', function () {
-		expect(true).toEqual(true);
-    });
-    it('authentication token', function () {
-		expect(auth.isAuth()).toEqual(false);
-    });
-    it('Check for undefined', function () {
-		expect(Component).toBeDefined();
-    });
+let help;
+let auth;
+
+
+beforeEach(function () {
+    help = new Help();
+    auth = new Auth();
 });
 
-describe('Test1', function () {
-    it('testing', function () {
-		expect(true).toEqual(true);
+describe('Tests', function () {
+    it('test function', function () {
+        expect(true).toEqual(true);
     });
     it('authentication token', function () {
-		expect(auth.isAuth()).toEqual(false);
+        expect(auth.isAuth()).toEqual(false);
     });
     it('Check for undefined', function () {
-		expect(Component).toBeDefined();
+        expect(Component).toBeDefined();
+    });
+    it('check for undefined help component', function () {
+        expect(help).toBeDefined();
     });
 });
