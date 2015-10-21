@@ -21,6 +21,17 @@
         "resetstudentpassword":"admin/sendStudentEmail"
       }
     },
+    "nursingit":{
+       "local": {
+        "server": "http://localhost/"
+      },
+      "dev": {
+        "server": "http://nursing.dev.kaplan.com/"
+      },
+      "qa": {
+        "server": "https://nursingqa.kaplan.com/"
+      }
+    },
     "resetemailexpire": {
       "expirytime": "2"
     }
