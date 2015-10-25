@@ -50,7 +50,6 @@ export class SetPasswordFirstTime {
         this.common.getErrorMessages().then(function (response) {
             return response.json();
         }).then(function (json) {
-            console.log('parsed json', json)
             self.errorMessages = json;
             self.successMessage = json;
         }).catch(function (ex) {
@@ -62,7 +61,6 @@ export class SetPasswordFirstTime {
         this.common.getConfig().then(function (response) {
             return response.json()
         }).then(function (json) {
-            console.log('parsed json', json)
             self.config = json
             self.getApiServer();
         }).catch(function (ex) {
@@ -127,11 +125,11 @@ export class SetPasswordFirstTime {
 
     RedirectToLogin(event) {
         event.preventDefault();
-        this.router.parent.navigate('/login');
+        this.router.parent.navigateByUrl('/login');
     }
     RedirectToHome(event) {
         event.preventDefault();
-        this.router.parent.navigate('/home');
+        this.router.parent.navigateByUrl('/home');
     }
 
     validate(newpassword, confirmpassword, btnSetPassword, lnkhomeredirect, errorContainer, successContainer) {

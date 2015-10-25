@@ -27,6 +27,6 @@ export class ForgotPasswordConfirmation {
     }
     RedirectToLogin(event) {
         event.preventDefault();
-        this.router.parent.navigate('/login');
+        this.router.parent.navigateByUrl('/login');
     }
 }

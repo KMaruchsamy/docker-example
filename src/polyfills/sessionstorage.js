@@ -7,7 +7,6 @@
     localStorage.setItem('storage_test', 1);
     localStorage.removeItem('storage_test');
   } catch (e) {
-    console.log('private browsing');
     (function() {
       function createCookie(name, value, days) {
         var expires;

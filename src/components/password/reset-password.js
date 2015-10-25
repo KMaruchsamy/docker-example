@@ -40,7 +40,6 @@ export class ResetPassword {
         this.common.getErrorMessages().then(function (response) {
             return response.json()
         }).then(function (json) {
-            console.log('parsed json', json)
             self.errorMessages = json
             self.successMessage = json
         }).catch(function (ex) {
@@ -52,7 +51,6 @@ export class ResetPassword {
         this.common.getConfig().then(function (response) {
             return response.json()
         }).then(function (json) {
-            console.log('parsed json', json)
             self.config = json
             self.getApiServer();
         }).catch(function (ex) {
@@ -133,7 +131,7 @@ export class ResetPassword {
     }
     RedirectToLogin(event) {
         event.preventDefault();
-        this.router.parent.navigate('/login');
+        this.router.parent.navigateByUrl('/login');
     }
     route(path, e) {
         this.utility.route(path, this.router, e);

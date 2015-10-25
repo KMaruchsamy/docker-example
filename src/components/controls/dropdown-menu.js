@@ -101,6 +101,6 @@ export class DropdownMenu {
 
   logout() {
     this.auth.logout();
-    this.router.parent.navigate('/login');
+    this.router.parent.navigateByUrl('/login');
   }
 }

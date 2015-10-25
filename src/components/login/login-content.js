@@ -35,7 +35,6 @@ export class LoginContent {
         this.common.getErrorMessages().then(function (response) {
             return response.json()
         }).then(function (json) {
-            console.log('parsed json', json)
             self.errorMessages = json
         }).catch(function (ex) {
             console.log('parsing failed', ex)
@@ -47,7 +46,6 @@ export class LoginContent {
         this.common.getConfig().then(function (response) {
             return response.json()
         }).then(function (json) {
-            console.log('parsed json', json)
             self.config = json
             self.getApiServer();
             self.getNursingITServer();
@@ -109,10 +107,10 @@ export class LoginContent {
                         self.sStorage.setItem('institutions', name);
                         self.sStorage.setItem('securitylevel', json.SecurityLevel);
                         if (json.TemporaryPassword) {
-                            self.router.parent.navigate('/set-password-first-time');
+                            self.router.parent.navigateByUrl('/set-password-first-time');
                         }
                         else {
-                            self.router.parent.navigate('/');
+                            self.router.parent.navigateByUrl('/');
                         }
                     }
                     else {
@@ -216,7 +214,7 @@ export class LoginContent {
     }
     RedirectToForgotpassword(event) {
         event.preventDefault();
-        this.router.parent.navigate('/forgot-password');
+        this.router.parent.navigateByUrl('/forgot-password');
     }
 
     radioChanged(elem, otherElem) {

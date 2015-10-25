@@ -1,7 +1,6 @@
-import {View, Component,bootstrap} from 'angular2/angular2';
-import {Router, RouterOutlet,RouteConfig,RouterLink,ROUTER_BINDINGS,LocationStrategy,HashLocationStrategy,Location,RouteParams} from 'angular2/router';
-import {http, HTTP_BINDINGS} from 'angular2/http';
-import { bind } from 'angular2/di';
+import {View, Component,bootstrap,bind} from 'angular2/angular2';
+import {Router, RouterOutlet,RouteConfig,RouterLink,ROUTER_PROVIDERS,LocationStrategy,HashLocationStrategy,Location,RouteParams} from 'angular2/router';
+import {http, HTTP_PROVIDERS} from 'angular2/http';
 import {Home} from '../components/home/home';
 import {Login} from '../components/login/login';
 import {Auth} from '../services/auth';
@@ -27,14 +26,15 @@ import {Logger} from '../../scripts/logger';
 })
 
 @RouteConfig([
-    {path:'/', component:Home, as : 'home'},
-    {path:'/login', component:Login, as : 'login'},
-    {path:'/reset-password/:id/:expirytime', component:ResetPassword, as : 'reset-password'},
-    {path:'/forgot-password', component:ForgotPassword, as : 'forgot-password'},
-    {path:'/forgot-password-confirmation', component:ForgotPasswordConfirmation, as : 'forgot-password-confirmation'},
-    {path:'/help', component:Help, as : 'help'},
-    {path:'/set-password-first-time', component:SetPasswordFirstTime, as : 'set-password-first-time'},
-    {path:'/account', component:Account, as : 'account'}
+    {path:'/', redirectTo:'/home'},
+    {path:'/home', component:Home, as : 'Home'},
+    {path:'/login', component:Login, as : 'Login'},
+    {path:'/reset-password/:id/:expirytime', component:ResetPassword, as : 'ResetPassword'},
+    {path:'/forgot-password', component:ForgotPassword, as : 'ForgotPassword'},
+    {path:'/forgot-password-confirmation', component:ForgotPasswordConfirmation, as : 'ForgotPasswordConfirmation'},
+    {path:'/help', component:Help, as : 'Help'},
+    {path:'/set-password-first-time', component:SetPasswordFirstTime, as : 'SetPasswordFirstTime'},
+    {path:'/account', component:Account, as : 'Account'}
 ])
 export class App {
     constructor(auth: Auth) {
@@ -47,7 +47,7 @@ export class App {
 }
 
 bootstrap(App, [
-    ROUTER_BINDINGS,
-    HTTP_BINDINGS,
+    ROUTER_PROVIDERS,
+    HTTP_PROVIDERS,
     bind(LocationStrategy).toClass(HashLocationStrategy)
 ]);

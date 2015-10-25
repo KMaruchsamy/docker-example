@@ -50,7 +50,6 @@ export class ForgotPassword {
         this.common.getErrorMessages().then(function (response) {
             return response.json()
         }).then(function (json) {
-            console.log('parsed json', json)
             self.errorMessages = json
             self.successMessage = json
         }).catch(function (ex) {
@@ -78,7 +77,7 @@ export class ForgotPassword {
         if (location.hostname.indexOf('qa') > -1)
             this.apiServer = configJSON.links.api.qa.server;
     }
-    onForgotPassword(txtEmailId, btnSend, errorContainer, event) {debugger;
+    onForgotPassword(txtEmailId, btnSend, errorContainer, event) {
         event.preventDefault();
         let self = this;
         let emailid = txtEmailId.value;
@@ -99,7 +98,7 @@ export class ForgotPassword {
                 return response.status;
             }).then(function (status) {
                 if (status.toString()===self.config.errorcode.SUCCESS) {
-                    self.router.parent.navigate('/forgot-password-confirmation');
+                    self.router.parent.navigateByUrl('/forgot-password-confirmation');
                 }
                 else if (status.toString()===self.config.errorcode.SERVERERROR) {
                     self.showError(self.errorMessages.forgot_password.failed_sent_mail, errorContainer);
@@ -114,7 +113,7 @@ export class ForgotPassword {
     }
     RedirectToLogin(event) {
         event.preventDefault();
-        this.router.parent.navigate('/login');
+        this.router.parent.navigateByUrl('/login');
     }
 
     validate(emailId, errorContainer) {
