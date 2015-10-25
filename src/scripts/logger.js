@@ -20,12 +20,10 @@ export class Logger {
 
 	terminate() {
 		this.worker.terminate();
-		console.log('terminate');
 	}
 
 	log(args) {
 		if (window.Worker) {
-			console.log('inside');
 			this.worker.postMessage(args);
 		}
 		else {

@@ -162,7 +162,7 @@ export class Account {
     }
     
     RedirectToLogin() {
-        this.router.parent.navigate('/login');
+        this.router.parent.navigateByUrl('/login');
     }
 
     onSubmitSaveProfile(txtFirstname,txtLastname,txtTitle,btnSaveProfile,resetSaveProfile,successContainer,event)

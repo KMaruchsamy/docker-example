@@ -1,6 +1,5 @@
 export class Page {
 	constructor() {
-		console.log('Super class');
 	}
 
 	onerror(errorMsg, url, lineNumber) {

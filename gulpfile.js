@@ -82,7 +82,7 @@ gulp.task('play', ['build'], function () {
     var connect = require('connect');
     var serveStatic = require('serve-static');
     var open = require('open');
-    var port = 3001;
+    var port = 3000;
     var app;
 
     gulp.watch(config.src.html, ['html']);
@@ -193,7 +193,7 @@ gulp.task('debug',function(){
     var connect = require('connect');
     var serveStatic = require('serve-static');
     var open = require('open');
-    var port = 3000;
+    var port = 3002;
     var app;
 
     gulp.watch(config.src.html, ['html']);
@@ -217,7 +217,7 @@ gulp.task('test',['build'],function(){
     var connect = require('connect');
     var serveStatic = require('serve-static');
     var open = require('open');
-    var port = 3000;
+    var port = 3001;
     var app;
 
     gulp.watch(config.src.html, ['html']);

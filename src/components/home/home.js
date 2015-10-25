@@ -27,10 +27,10 @@ export class Home {
   redirectToPage(){
       if(this.location.path().search("first")>0){
           if((this.auth.istemppassword=="true"?true:false) && this.auth.isAuth())
-              this.router.parent.navigate('/login');
+              this.router.parent.navigateByUrl('/login');
       }
       else if (!this.auth.isAuth())
-          this.router.parent.navigate('/login');
+          this.router.parent.navigateByUrl('/login');
   }
   initialize(){
     $('title').html('Faculty Home Page');
@@ -38,6 +38,6 @@ export class Home {
 
   redirectToLogin(event) {
     event.preventDefault(); 
-    this.router.parent.navigate('/login');    
+    this.router.parent.navigateByUrl('/login');    
   }
 }

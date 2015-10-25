@@ -4,7 +4,7 @@
 
     route(path,router,e){
         e.preventDefault();
-        router.parent.navigate(path);
+        router.parent.navigateByUrl(path);
     }
 
 
