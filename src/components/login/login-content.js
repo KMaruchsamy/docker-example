@@ -123,10 +123,10 @@ export class LoginContent {
                 });
             }
             else {
-                $('<form action=' + this.nursingITServer + 's_login.aspx?facultylogin=1 method="POST" target="_blank">' +
-                    '<input type="hidden" name="useremail" value="' + useremail + '">' +
-                    '<input type="hidden" name="password" value="' + password + '">' +
-                    '</form>').submit();
+                var serverURL = this.nursingITServer + 's_login.aspx?facultylogin=1';
+                $('#hdUserName').val(useremail);
+                $('#hdPassword').val(password);
+                $('#myForm').attr('ACTION', serverURL).submit();
             }
 
 
