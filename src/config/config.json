@@ -30,7 +30,8 @@
       },
       "qa": {
         "server": "https://nursingqa.kaplan.com/"
-      }
+      },
+      "landingpage":"s_login.aspx?facultylogin=1"
     },
     "resetemailexpire": {
       "expirytime": "2"
