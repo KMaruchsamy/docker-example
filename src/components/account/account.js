@@ -243,7 +243,6 @@ export class Account {
             }).then(function(json) {    
                       
                 if (status.toString()===self.config.errorcode.SUCCESS) {
-                    $(btnChangeEmail).addClass('button-with-validation');
                     self.showSuccess(resetEmailSave,SuccessEmailContainer,btnChangeEmail);
                     self.sStorage.setItem('jwt', json.AccessToken);
                     self.sStorage.setItem('useremail',newemailid);
@@ -254,7 +253,6 @@ export class Account {
                         $( "#changeEmailFormSubmittable" ).slideUp( "slow", function() {
                             $('#changeEmailFormSubmittable').addClass('hidden');
                             $('#showChangeEmail').removeClass('hidden');
-                            $(btnChangeEmail).removeClass('button-with-validation');
                         });
                     },1000);               
                 }
@@ -281,12 +279,19 @@ export class Account {
 
     }
     
-    showChangeEmail(btnShowChangeEmail,$event)
+    showChangeEmail(btnShowChangeEmail,txtNewEmailId,txtPassword,btnChangeEmail,$event)
     {
         $('#successemailmsg').hide();
         $('#changeEmailFormSubmittable').show().removeClass('hidden');
         $(btnShowChangeEmail).addClass('hidden');
-        $('#resetEmailSave').toggleClass('hidden');
+        $('#resetEmailSave').removeClass('hidden');
+        
+        txtNewEmailId.value="";
+        txtPassword.value="";
+        $(btnChangeEmail).attr("disabled", "true");
+        $(btnChangeEmail).attr("aria-disabled", "true");
+        $('#spnEmailErrorMessage').text('');
+        $('#spnPasswordErrorMessage').text('');
     }
     
     HideChangeEmail()
@@ -298,6 +303,8 @@ export class Account {
     }
     
     onCancelChangeEmail(txtNewEmailId,txtPassword,btnChangeEmail,event){
+        $('#changeEmailFormSubmittable').hide().addClass('hidden');
+        $('#showChangeEmail').removeClass('hidden');
         txtNewEmailId.value="";
         txtPassword.value="";
         $(btnChangeEmail).attr("disabled", "true");
