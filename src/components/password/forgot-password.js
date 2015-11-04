@@ -32,7 +32,7 @@ export class ForgotPassword {
 
     initialize() {
         let self=this;
-        $('title').html('Kaplan Nursing | Forgot Password');
+        $('title').html('Forgot Password  |  Kaplan Nursing');
         $('#forgotPassword').bind('input', function(){
            self.checkpasswordlength();
         });

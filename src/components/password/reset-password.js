@@ -32,7 +32,7 @@ export class ResetPassword {
     }
 
     initialize() {
-        $('title').html('Kaplan Nursing | Reset Password');
+        $('title').html('Reset Password  |  Kaplan Nursing');
     }
 
     getErrorMessages() {
