@@ -117,6 +117,8 @@ export class Account {
             self.initializeResetPassword();
             self.initializeResetStudentPassword();
             
+            $('#divNewPasswordInfo').hide().addClass('hidden');
+            
             $('#firstName').bind('input', function () {
                 self.checkfirstnamelastname();
                 self.resetProfileFields();
@@ -139,8 +141,13 @@ export class Account {
                 self.checkpasswordlength();
                 if ($btnResetResetPassword.hasClass('hidden'))
                     self.resetSuccess($btnResetResetPassword, $successResetPasswordContainer);
+            });            
+            $('#newPassword').focus(function(){
+                $('#divNewPasswordInfo').slideDown('fast',function(){
+                   $(this).removeClass('hidden'); 
+                });
             });
-            $('#newPassword').bind('input', function () {
+            $('#newPassword').bind('input', function () {                
                 self.checkpasswordlength();
                 if ($btnResetResetPassword.hasClass('hidden'))
                     self.resetSuccess($btnResetResetPassword, $successResetPasswordContainer);
@@ -160,6 +167,8 @@ export class Account {
             self.RedirectToLogin();
         }
     }
+    
+    
     
     RedirectToLogin() {
         this.router.parent.navigateByUrl('/login');
@@ -307,7 +316,7 @@ export class Account {
         let newpassword = txtNewPassword.value;
         let confirmpassword = txtConfirmPassword.value;
         let status = 0;
-        if (this.validatePassword(newpassword, confirmpassword, ResetPasswordErrorContainer, SuccessResetPasswordContainer)) {
+        if (this.validatePassword(newpassword, confirmpassword, ResetPasswordErrorContainer, SuccessResetPasswordContainer)) {            
             let authheader = this.auth.authheader;
             let userId = this.auth.userid;
             let apiURL = this.apiServer + this.config.links.api.baseurl + this.config.links.api.admin.resetfacultypasswordafterloginapi;
@@ -318,6 +327,9 @@ export class Account {
                 return response.json();
             }).then(function (json) {
                 if (status.toString() === self.config.errorcode.SUCCESS) {
+                    $('#divNewPasswordInfo').slideUp('fast', function () {
+                        $(this).addClass('hidden');
+                    });
                     SuccessResetPasswordContainer.innerHTML = self.errorMessages.reset_password_after_login.resetpass_success;
                     self.showSuccess(btnResetResetPassword, SuccessResetPasswordContainer, btnResetPassword);
                     self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
@@ -371,7 +383,10 @@ export class Account {
         event.preventDefault();
         this.clearResetPassword(txtCurrentPassword,txtNewPassword,txtConfirmPassword);  
         $('#spnCurrentPasswordErrorMessage').text('');
-        $('#spnResetPasswordErrorMessage').text('');                 
+        $('#spnResetPasswordErrorMessage').text('');        
+        $('#divNewPasswordInfo').slideUp('fast', function () {
+            $(this).addClass('hidden');
+        });         
     }
     
     
