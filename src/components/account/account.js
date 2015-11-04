@@ -65,17 +65,17 @@ export class Account {
             this.apiServer = configJSON.links.api.qa.server;
     }
     
-    getInitialize()
-    {  
+    getInitialize() {
         this.sStorage = this.common.sStorage;
-        if(this.auth.isAuth()){
-            $('title').html('Manage Account  |  Kaplan Nursing');        
+        if (this.auth.isAuth()) {
+            $('title').html('Manage Account  |  Kaplan Nursing');
             $('#firstName').val(this.sStorage.getItem('firstname'));
             $('#lastName').val(this.sStorage.getItem('lastname'));
             $('#facultyTitle').val(this.sStorage.getItem('title'));
             this.setInstitutionName(this.sStorage.getItem('institutions'));
-            $('#emailId').text(this.sStorage.getItem('useremail'));}
-        else{
+            $('#emailId').text(this.sStorage.getItem('useremail'));
+        }
+        else {
             this.RedirectToLogin();
         }
     }
@@ -240,21 +240,22 @@ export class Account {
             promise.then(function(response) {               
                 status=response.status;
                 return response.json();
-            }).then(function(json) {    
-                      
+            }).then(function(json) {
                 if (status.toString()===self.config.errorcode.SUCCESS) {
                     self.showSuccess(resetEmailSave,SuccessEmailContainer,btnChangeEmail);
                     self.sStorage.setItem('jwt', json.AccessToken);
                     self.sStorage.setItem('useremail',newemailid);
                     self.auth.authheader= 'Bearer '+ json.AccessToken;
                     self.auth.useremail = newemailid
-                    self.getInitialize();
+                    $('#emailId').text(newemailid);
+                    txtNewEmailId.value='';
+                    // self.getInitialize();
                     setTimeout(function(){                
-                        $( "#changeEmailFormSubmittable" ).slideUp( "slow", function() {
+                        $("#changeEmailFormSubmittable" ).slideUp( "slow", function() {
                             $('#changeEmailFormSubmittable').addClass('hidden');
                             $('#showChangeEmail').removeClass('hidden');
                         });
-                    },1000);               
+                    },3000);               
                 }
                 else if (status.toString()===self.config.errorcode.API){
                     if(json.Payload.length>0){
@@ -282,7 +283,10 @@ export class Account {
     showChangeEmail(btnShowChangeEmail,txtNewEmailId,txtPassword,btnChangeEmail,$event)
     {
         $('#successemailmsg').hide();
-        $('#changeEmailFormSubmittable').show().removeClass('hidden');
+        // $('#changeEmailFormSubmittable').show().removeClass('hidden');
+        $('#changeEmailFormSubmittable').slideDown('fast', function () {
+            $(this).removeClass('hidden');
+        });
         $(btnShowChangeEmail).addClass('hidden');
         $('#resetEmailSave').removeClass('hidden');
         
@@ -302,8 +306,7 @@ export class Account {
         $('#successemailmsg').css('display', 'none');
     }
     
-    onCancelChangeEmail(txtNewEmailId,txtPassword,btnChangeEmail,event){
-        $('#changeEmailFormSubmittable').hide().addClass('hidden');
+    onCancelChangeEmail(txtNewEmailId,txtPassword,btnChangeEmail,event){       
         $('#showChangeEmail').removeClass('hidden');
         txtNewEmailId.value="";
         txtPassword.value="";
@@ -311,6 +314,10 @@ export class Account {
         $(btnChangeEmail).attr("aria-disabled", "true");
         $('#spnEmailErrorMessage').text('');
         $('#spnPasswordErrorMessage').text('');
+        // $('#changeEmailFormSubmittable').hide().addClass('hidden');
+        $('#changeEmailFormSubmittable').slideUp('fast', function () {
+            $(this).addClass('hidden');
+        });
     }
     
     
