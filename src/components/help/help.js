@@ -18,7 +18,7 @@ export class Help{
     }
     
     initialize(){
-        $('title').html('Kaplan Nursing | Help');
+        $('title').html('Help  |  Kaplan Nursing');
     }
     
     onReuse(){

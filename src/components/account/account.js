@@ -69,7 +69,7 @@ export class Account {
     {  
         this.sStorage = this.common.sStorage;
         if(this.auth.isAuth()){
-            $('title').html('Kaplan Nursing | Account');        
+            $('title').html('Manage Account  |  Kaplan Nursing');        
             $('#firstName').val(this.sStorage.getItem('firstname'));
             $('#lastName').val(this.sStorage.getItem('lastname'));
             $('#facultyTitle').val(this.sStorage.getItem('title'));

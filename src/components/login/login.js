@@ -21,7 +21,7 @@ export class Login {
    }
    
    initialize(){
-     $('title').html('Kaplan Nursing | Sign In');
+     $('title').html('Faculty Sign In  |  Kaplan Nursing');
    }
    
     reset(){         

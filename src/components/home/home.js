@@ -36,7 +36,7 @@ export class Home {
   }
 
   initialize() {
-    $('title').html('Faculty Home Page');
+    $('title').html('Faculty Home  |  Kaplan Nursing');
   }
 
   redirectToLogin(event) {

@@ -32,7 +32,7 @@ export class SetPasswordFirstTime {
     }
 
     initialize() {
-        $('title').html('Kaplan Nursing | Change Password');
+        $('title').html('Change Password  |  Kaplan Nursing');
     }
 
     reset() {
