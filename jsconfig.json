@@ -33,6 +33,7 @@
 		"src/components/controls/dropdown-menu.js",
 		"src/components/account/account.js",
 		"src/scripts/user-context.js",
-		"src/specs/test-specs.js"
+		"src/specs/test-specs.js",
+		"src/components/shared/choose-institution.js"
 	]
 }

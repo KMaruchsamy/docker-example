@@ -99,7 +99,7 @@ export class ResetPassword {
                     if (status.toString() === self.config.errorcode.SUCCESS) {
                         txtnPassword.value = "";
                         txtcPassword.value = "";
-                        self.AuthanticateUser(decryptedId, newpassword, 'admin');
+                        self.AuthanticateUser(decryptedId, newpassword, 'admin', errorContainer);
                         self.showSuccess(successcontainer, lnkhomeredirect, btnResetPassword);
                     }
                     else if (status.toString() === self.config.errorcode.API) {
@@ -197,17 +197,14 @@ export class ResetPassword {
         let decryptedStr = CryptoJS.AES.decrypt(addedEscapeIntoStr, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }).toString(CryptoJS.enc.Utf8);
         return decryptedStr;
     }
-    AuthanticateUser(useremail, password, userType) {
+    AuthanticateUser(useremail, password, userType, errorContainer) {
         let self = this;
         let apiURL = this.apiServer + this.config.links.api.baseurl + this.config.links.api.admin.authenticationapi;
         let promise = this.auth.login(apiURL, useremail, password, userType);
         promise.then(function (response) {
             return response.json();
         }).then(function (json) {
-            if (json.AccessToken != null && json.AccessToken != '') {
-                // if (self.common.isPrivateBrowsing()) {
-                //     this.sStorage = window.sessionStorage.__proto__;                        
-                // }                  
+            if (json.AccessToken != null && json.AccessToken != '') {                
                 self.sStorage.setItem('jwt', json.AccessToken);
                 self.sStorage.setItem('useremail', json.Email);
                 self.sStorage.setItem('istemppassword', json.TemporaryPassword);
@@ -215,8 +212,9 @@ export class ResetPassword {
                 self.sStorage.setItem('firstname', json.FirstName);
                 self.sStorage.setItem('lastname', json.LastName);
                 self.sStorage.setItem('title', json.JobTitle);
-                let name = self.getInstitutions(json.Institutions);
-                self.sStorage.setItem('institutions', name);
+                // let name = self.getInstitutions(json.Institutions);
+                // self.sStorage.setItem('institutions', name);
+                self.sStorage.setItem('institutions', JSON.stringify(json.Institutions));
                 self.sStorage.setItem('securitylevel', json.SecurityLevel);
             }
             else {
@@ -226,22 +224,22 @@ export class ResetPassword {
             self.showError(self.errorMessages.general.exception, errorContainer);
         });
     }
-    getInstitutions(institutionarr) {
-        var len1 = institutionarr.length;
-        var name = "";
-        for (var i = 0; i < len1; i++) {
-            if (institutionarr[i].InstitutionNameWithProgOfStudy != "") {
-                if (name === "")
-                    name = institutionarr[i].InstitutionNameWithProgOfStudy + '|';
-                else
-                    name = name + institutionarr[i].InstitutionNameWithProgOfStudy + '|';
-            }
-        }
-        if (name != null && name != "") {
-            if (name.indexOf('|') > 0) {
-                name = name.substr(0, name.lastIndexOf('|'));
-            }
-        }
-        return name;
-    }
+    // getInstitutions(institutionarr) {
+    //     var len1 = institutionarr.length;
+    //     var name = "";
+    //     for (var i = 0; i < len1; i++) {
+    //         if (institutionarr[i].InstitutionNameWithProgOfStudy != "") {
+    //             if (name === "")
+    //                 name = institutionarr[i].InstitutionNameWithProgOfStudy + '|';
+    //             else
+    //                 name = name + institutionarr[i].InstitutionNameWithProgOfStudy + '|';
+    //         }
+    //     }
+    //     if (name != null && name != "") {
+    //         if (name.indexOf('|') > 0) {
+    //             name = name.substr(0, name.lastIndexOf('|'));
+    //         }
+    //     }
+    //     return name;
+    // }
 }

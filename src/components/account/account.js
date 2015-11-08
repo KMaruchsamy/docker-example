@@ -5,6 +5,7 @@ import {PageFooter} from '../shared/page-footer';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {Validations} from '../../services/validations';
+import * as _ from '../../lib/index';
 
 @Component({
     selector: 'account',
@@ -72,7 +73,8 @@ export class Account {
             $('#firstName').val(this.sStorage.getItem('firstname'));
             $('#lastName').val(this.sStorage.getItem('lastname'));
             $('#facultyTitle').val(this.sStorage.getItem('title'));
-            this.setInstitutionName(this.sStorage.getItem('institutions'));
+            // this.setInstitutionName(this.sStorage.getItem('institutions'));
+            this.setInstitutionNames(JSON.parse(this.auth.institutions));
             $('#emailId').text(this.sStorage.getItem('useremail'));
         }
         else {
@@ -80,27 +82,32 @@ export class Account {
         }
     }
     
-    setInstitutionName(institutename)
-    {
-        if(institutename!=null && institutename!="")
-        {            
-            if(institutename.indexOf('|')>0){
-                let name=institutename.split('|');
-                let institutionlist="";
-                for(let i=0;i<name.length;i++)
-                {
-                    if(institutionlist==="")
-                        institutionlist=name[i]+"<br/>";
-                    else
-                        institutionlist=institutionlist+ name[i]+"<br/>";
-                }
-                $('#schoolName').html(institutionlist);
-            }
-            else{
-                $('#schoolName').html(institutename=='undefined'?"":institutename);
-            }
-        }
+    setInstitutionNames(institutions) {
+        if (institutions !== null || institutions !== 'undefined')
+            $('#schoolName').html(_.pluck(institutions, 'InstitutionNameWithProgOfStudy').join('<br />'));
     }
+    
+    // setInstitutionName(institutename)
+    // {
+    //     if(institutename!=null && institutename!="")
+    //     {            
+    //         if(institutename.indexOf('|')>0){
+    //             let name=institutename.split('|');
+    //             let institutionlist="";
+    //             for(let i=0;i<name.length;i++)
+    //             {
+    //                 if(institutionlist==="")
+    //                     institutionlist=name[i]+"<br/>";
+    //                 else
+    //                     institutionlist=institutionlist+ name[i]+"<br/>";
+    //             }
+    //             $('#schoolName').html(institutionlist);
+    //         }
+    //         else{
+    //             $('#schoolName').html(institutename=='undefined'?"":institutename);
+    //         }
+    //     }
+    // }
     
     initialize() {
         let self = this;

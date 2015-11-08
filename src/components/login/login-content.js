@@ -28,6 +28,8 @@ export class LoginContent {
         this.getErrorMessages();
         this.getConfig();
         this.sStorage = this.common.sStorage;
+        this.institutionRN = 0;
+        this.institutionPN = 0;
     }
 
     getErrorMessages() {
@@ -88,24 +90,26 @@ export class LoginContent {
             else
                 userType = 'student';
 
-            if (userType === 'admin') {
-                let apiURL = this.apiServer + this.config.links.api.baseurl + this.config.links.api.admin.authenticationapi;
-                let promise = this.auth.login(apiURL, useremail, password, userType);
-                promise.then(function (response) {
-                    return response.json();
-
-                }).then(function (json) {
-                    if (json.AccessToken != null && json.AccessToken != '') {
-                        self.sStorage.setItem('jwt', json.AccessToken);
-                        self.sStorage.setItem('useremail', json.Email);
-                        self.sStorage.setItem('istemppassword', json.TemporaryPassword);
-                        self.sStorage.setItem('userid', json.UserId);
-                        self.sStorage.setItem('firstname', json.FirstName);
-                        self.sStorage.setItem('lastname', json.LastName);
-                        self.sStorage.setItem('title', json.JobTitle);
-                        let name = self.getInstitutions(json.Institutions);
-                        self.sStorage.setItem('institutions', name);
-                        self.sStorage.setItem('securitylevel', json.SecurityLevel);
+            let apiURL = this.apiServer + this.config.links.api.baseurl + this.config.links.api.admin.authenticationapi;
+            let promise = this.auth.login(apiURL, useremail, password, userType);
+            promise.then(function (response) {
+                return response.json();
+            }).then(function (json) {
+                if (json.AccessToken != null && json.AccessToken != '') {
+                    self.sStorage.setItem('jwt', json.AccessToken);
+                    self.sStorage.setItem('useremail', json.Email);
+                    self.sStorage.setItem('istemppassword', json.TemporaryPassword);
+                    self.sStorage.setItem('userid', json.UserId);
+                    self.sStorage.setItem('firstname', json.FirstName);
+                    self.sStorage.setItem('lastname', json.LastName);
+                    self.sStorage.setItem('title', json.JobTitle);
+                    self.sStorage.setItem('institutions', JSON.stringify(json.Institutions));
+                    self.sStorage.setItem('securitylevel', json.SecurityLevel);
+                    self.auth.refresh();
+                    if (userType === 'student') {
+                        self.prepareRedirectToStudentSite('Login');
+                    }
+                    else {
                         if (json.TemporaryPassword) {
                             self.router.parent.navigateByUrl('/set-password-first-time');
                         }
@@ -113,23 +117,15 @@ export class LoginContent {
                             self.router.parent.navigateByUrl('/');
                         }
                     }
-                    else {
-                        self.showError(self.errorMessages.login.auth_failed, errorContainer);
-                        txtPassword.value = '';
-                    }
-                }).catch(function (ex) {
-                    self.showError(self.errorMessages.general.exception, errorContainer);
+                }
+                else {
+                    self.showError(self.errorMessages.login.auth_failed, errorContainer);
                     txtPassword.value = '';
-                });
-            }
-            else {
-                var serverURL = this.nursingITServer + 's_login.aspx?facultylogin=1';
-                $('#hdUserName').val(useremail);
-                $('#hdPassword').val(password);
-                $('#myForm').attr('ACTION', serverURL).submit();
-            }
-
-
+                }
+            }).catch(function (ex) {
+                self.showError(self.errorMessages.general.exception, errorContainer);
+                txtPassword.value = '';
+            });
         }
         else {
             txtPassword.value = '';
@@ -137,25 +133,47 @@ export class LoginContent {
 
     }
 
-    getInstitutions(institutionarr) {
-        var len1 = institutionarr.length;
-        var name = "";
-        for (var i = 0; i < len1; i++) {
-            if (institutionarr[i].InstitutionNameWithProgOfStudy != "") {
-                if (name === "")
-                    name = institutionarr[i].InstitutionNameWithProgOfStudy + '|';
-                else
-                    name = name + institutionarr[i].InstitutionNameWithProgOfStudy + '|';
-            }
+    prepareRedirectToStudentSite(returnPage) {
+        this.page = 'StudentHome';
+        this.form = document.getElementById('myForm');
+        this.hdInstitution = document.getElementById('institutionID');
+        this.hdToken = document.getElementById('jwtToken');
+        this.hdURL = document.getElementById('redirectPage');
+        this.checkInstitutions();
+
+        if (this.institutionRN > 0 && this.institutionPN > 0) {
+            // open the interstitial page here ...
+            console.log(this.institutionRN);
+            console.log(this.institutionPN);
+            console.log(this.page);
+            // this.router.parent.navigate(['/ChooseInstitution', { page: this.page, idRN: this.institutionRN, idPN: this.institutionPN }]);
+            this.router.parent.navigateByUrl(`/choose-institution/${returnPage}/${this.page}/${this.institutionRN}/${this.institutionPN}`);
         }
-        if (name != null && name != "") {
-            if (name.indexOf('|') > 0) {
-                name = name.substr(0, name.lastIndexOf('|'));
-            }
+        else {
+            this.redirectToStudentSite();
         }
-        return name;
     }
 
+    redirectToStudentSite() {
+        var serverURL = this.common.nursingITServer + this.common.config.links.nursingit.landingpage;
+        this.hdInstitution.value = (this.institutionRN > 0) ? this.institutionRN : this.institutionPN;
+        this.hdToken.value = this.auth.token
+        this.hdURL.value = this.page;
+        console.log(this.hdInstitution.value);
+        $(this.form).attr('ACTION', serverURL).submit();
+    }
+
+    checkInstitutions() {
+        let institutions = _.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
+        if (institutions != null && institutions != 'undefined') {
+            let institutionsRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
+            let institutionsPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
+            if (institutionsRN.length > 0)
+                this.institutionRN = institutionsRN[0];
+            if (institutionsPN.length > 0)
+                this.institutionPN = institutionsPN[0];
+        }
+    }
 
     validate(email, password, errorContainer) {
         if (!this.validateEmail(email) && !this.validatePassword(password)) {

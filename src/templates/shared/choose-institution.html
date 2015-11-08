@@ -1,0 +1,32 @@
+<page-header [show-cover]=true  [aria-disabled]=true ></page-header>
+<main role="main">
+		<div class="section container-medium-width">
+			<i class="icon sun-icon"></i>
+			<h2 class="h4 teal center margin-1em-top">
+			Welcome!<br>Please select the program for which you’d like to schedule a test:
+		</h2>
+			<div class="choose-program-module container-narrow hidden-extra-small-down">
+				<div class="choose-program-module-grid">
+					<h3 class="h1 center">RN</h3>
+					<button class="button centered" (click)="triggerRedirect('RN',myform,hdinstitution,hdtoken,hdpage,$event);">Select</button>
+				</div>
+				<div class="choose-program-module-grid">
+					<h3 class="h1 center">PN</h3>
+					<button class="button centered" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,$event);">Select</button>
+				</div>
+			</div>
+			<div class="hidden-extra-small-up">
+				<button #btnrn class="button button-mobile-block margin-2em-top" (click)="triggerRedirect('RN',myform,hdinstitution,hdtoken,hdpage,$event);">RN Program</button>
+				<button #btnpn class="button button-mobile-block margin-2em-top-bottom" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,$event);">PN Program</button>
+			</div>
+			<div class="center">
+				<a (click)="goBack();">Cancel and return to Faculty Home</a>
+			</div>
+		</div>
+</main>
+
+<form #myform ACTION="http://localhost/s_login.aspx?facultylogin=1" method="POST" target="_blank">
+	<input #hdinstitution type="hidden" id="institutionID" name="institutionID">
+	<input #hdtoken type="hidden" id="jwtToken" name="jwtToken">
+	<input #hdpage type="hidden" id="redirectPage" name="redirectPage">
+</form>
