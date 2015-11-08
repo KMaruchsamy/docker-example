@@ -1,4 +1,6 @@
-﻿export class Common {
+﻿import * as _ from '../../lib/index';
+
+export class Common {
     constructor() {
         this.sStorage = this.getStorage();
         this.apiServer = '';
@@ -78,6 +80,4 @@
         if (location.hostname.indexOf('qa') > -1)
             this.nursingITServer = configJSON.links.nursingit.qa.server;
     }
-
-
 }

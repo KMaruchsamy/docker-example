@@ -170,7 +170,7 @@
           <h2>Teaching Tools (Student Site)</h2>
           <div class="faculty-links">
             <div class="faculty-link-list">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)=redirectToStudentSite("student/TestReview.aspx",myform,hdemail,hdtoken,hdurl); href="#">Focused Review Tests</a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)=prepareRedirectToStudentSite("TestReview",myform,hdinstitution,hdtoken,hdpage); href="#">Focused Review Tests</a></h3>
               <ul class="bullet">
                 <li>For content mastery</li>
                 <li>Access standard tests or help students create their own</li>
@@ -178,14 +178,14 @@
               </ul>
             </div>
             <div class="faculty-link-list">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)=redirectToStudentSite("student/CaseStudies.aspx",myform,hdemail,hdtoken,hdurl); href="#">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)=redirectToStudentSite("student/SkillsModule.aspx",myform,hdemail,hdtoken,hdurl); href="#">Skills Demonstration Videos</a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)=prepareRedirectToStudentSite("CaseStudies",myform,hdinstitution,hdtoken,hdpage); href="#">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)=prepareRedirectToStudentSite("SkillsModules",myform,hdinstitution,hdtoken,hdpage); href="#">Skills Demonstration Videos</a></h3>
               <ul class="bullet">
                 <li>For practical learning simulation</li>
               </ul>
             </div>
             <div class="faculty-link-list">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)=redirectToStudentSite("student/Nclex.aspx",myform,hdemail,hdtoken,hdurl); href="#">NCLEX Resources</a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)=prepareRedirectToStudentSite("Nclex",myform,hdinstitution,hdtoken,hdpage); href="#">NCLEX Resources</a></h3>
               <ul class="bullet">
                 <li>For standardized test mastery</li>
                 <li>Access diagnostic tests and Question Trainers</li>
@@ -280,9 +280,9 @@
 
 
 <form  #myform ACTION="http://localhost/s_login.aspx?facultylogin=1" method="POST" target="_blank">
-  <input #hdemail   type="hidden" name="userEmail">
-  <input #hdtoken type="hidden" name="jwtToken">
-  <input #hdurl type="hidden" name="redirectURL">
+  <input #hdinstitution   type="hidden" id="institutionID" name="institutionID">
+  <input #hdtoken type="hidden" id="jwtToken" name="jwtToken">
+  <input #hdpage type="hidden" id="redirectPage" name="redirectPage">
 </form>
 
 

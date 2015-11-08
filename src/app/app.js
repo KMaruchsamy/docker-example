@@ -10,8 +10,9 @@ import {ForgotPasswordConfirmation} from '../components/password/forgot-password
 import {Help} from '../components/help/help';
 import {SetPasswordFirstTime} from '../components/password/set-password-first-time';
 import {Account} from '../components/account/account';
-import {Page} from '../../scripts/page';
-import {Logger} from '../../scripts/logger';
+import {Page} from '../scripts/page';
+import {Logger} from '../scripts/logger';
+import {ChooseInstitution} from '../components/shared/choose-institution';
 // import {ExceptionHandler} from 'angular2/src/core/exception_handler';
 // import {MyExceptionHandler} from '../../scripts/myexception-handler';
 
@@ -34,7 +35,8 @@ import {Logger} from '../../scripts/logger';
     {path:'/forgot-password-confirmation', component:ForgotPasswordConfirmation, as : 'ForgotPasswordConfirmation'},
     {path:'/help', component:Help, as : 'Help'},
     {path:'/set-password-first-time', component:SetPasswordFirstTime, as : 'SetPasswordFirstTime'},
-    {path:'/account', component:Account, as : 'Account'}
+    {path:'/account', component:Account, as : 'Account'},
+    {path:'/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component:ChooseInstitution, as : 'ChooseInstitution'}
 ])
 export class App {
     constructor(auth: Auth) {

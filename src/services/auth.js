@@ -8,14 +8,30 @@ export class Auth {
     this.user = this.token && jwt_decode(this.token);
     this.useremail = this.sStorage.getItem('useremail');
     this.authheader = 'Bearer ' + this.token;
-    this.istemppassword=this.sStorage.getItem('istemppassword');
-    this.userid=this.sStorage.getItem('userid');
-    this.firstname=this.sStorage.getItem('firstname');
-    this.lastname=this.sStorage.getItem('lastname');
-    this.title=this.sStorage.getItem('title');
-    this.institutions =this.sStorage.getItem('institutions');
-    this.securitylevel=this.sStorage.getItem('securitylevel');
+    this.istemppassword = this.sStorage.getItem('istemppassword');
+    this.userid = this.sStorage.getItem('userid');
+    this.firstname = this.sStorage.getItem('firstname');
+    this.lastname = this.sStorage.getItem('lastname');
+    this.title = this.sStorage.getItem('title');
+    this.institutions = this.sStorage.getItem('institutions');
+    this.securitylevel = this.sStorage.getItem('securitylevel');
   }
+
+
+  refresh() {
+    this.token = this.sStorage.getItem('jwt');
+    this.user = this.token && jwt_decode(this.token);
+    this.useremail = this.sStorage.getItem('useremail');
+    this.authheader = 'Bearer ' + this.token;
+    this.istemppassword = this.sStorage.getItem('istemppassword');
+    this.userid = this.sStorage.getItem('userid');
+    this.firstname = this.sStorage.getItem('firstname');
+    this.lastname = this.sStorage.getItem('lastname');
+    this.title = this.sStorage.getItem('title');
+    this.institutions = this.sStorage.getItem('institutions');
+    this.securitylevel = this.sStorage.getItem('securitylevel');
+  }
+
 
   isAuth() {
     return !!this.token;
@@ -41,18 +57,18 @@ export class Auth {
   }
 
   logout() {
-    this.sStorage.removeItem('jwt');
+    this.sStorage.clear();
     this.token = null;
     this.user = null;
     this.header = null;
     this.useremail = null;
-    this.istemppassword=false;
-    this.userid=null;
-    this.firstname=null;
-    this.lastname=null;
-    this.title=null;
-    this.institutions=null;
-    this.securitylevel=null;
+    this.istemppassword = false;
+    this.userid = null;
+    this.firstname = null;
+    this.lastname = null;
+    this.title = null;
+    this.institutions = null;
+    this.securitylevel = null;
   }
   settemporarypassword(url, useremail, password) {
     return fetch(url, {
