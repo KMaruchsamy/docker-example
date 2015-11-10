@@ -90,7 +90,7 @@ export class ForgotPassword {
                 
         // Expiry Time Encryption
         let encryptedTime = this.getEncryption(expiryTime.toString());
-
+        
         if (this.validate(emailid, errorContainer)) {
             let apiURL = this.apiServer + this.config.links.api.baseurl + this.config.links.api.admin.forgotpasswordapi;
             let promise = this.forgotpassword(apiURL, emailid, encryptedId, encryptedTime);
@@ -155,8 +155,8 @@ export class ForgotPassword {
         let key = CryptoJS.enc.Base64.parse("MTIzNDU2NzgxMjM0NTY3OA==");
         let iv = CryptoJS.enc.Base64.parse("EBESExQVFhcYGRobHB0eHw==");
         let encryptedStr = CryptoJS.AES.encrypt(strToEncrypt, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }).toString();
-        let replaceEscapeFromStr = encryptedStr.replace(/\//g, "#").replace(/=/g,"~");
-        return replaceEscapeFromStr;
+        // let replaceEscapeFromStr = encryptedStr.replace(/\//g, "#").replace(/=/g,"~");
+        return encodeURIComponent(encryptedStr);
     }
     
     forgotpassword(url, useremail, encryptedUserEmail, expiryTime) {
