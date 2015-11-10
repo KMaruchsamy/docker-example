@@ -143,9 +143,6 @@ export class LoginContent {
 
         if (this.institutionRN > 0 && this.institutionPN > 0) {
             // open the interstitial page here ...
-            console.log(this.institutionRN);
-            console.log(this.institutionPN);
-            console.log(this.page);
             // this.router.parent.navigate(['/ChooseInstitution', { page: this.page, idRN: this.institutionRN, idPN: this.institutionPN }]);
             this.router.parent.navigateByUrl(`/choose-institution/${returnPage}/${this.page}/${this.institutionRN}/${this.institutionPN}`);
         }
@@ -160,7 +157,9 @@ export class LoginContent {
         this.hdToken.value = this.auth.token
         this.hdURL.value = this.page;
         console.log(this.hdInstitution.value);
+        this.auth.logout();
         $(this.form).attr('ACTION', serverURL).submit();
+       
     }
 
     checkInstitutions() {
