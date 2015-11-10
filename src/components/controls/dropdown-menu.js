@@ -4,7 +4,8 @@ import {Auth} from '../../services/auth';
 import '../../plugins/dropdown.js';
 
 @Component({
-  selector: 'dropdown-menu'
+  selector: 'dropdown-menu',
+  inputs:['ariaDisabled']
 })
 @View({
   templateUrl: '../../templates/controls/dropdown-menu.html',
