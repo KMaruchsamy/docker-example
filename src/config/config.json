@@ -31,7 +31,8 @@
       "qa": {
         "server": "https://nursingqa.kaplan.com/"
       },
-      "landingpage":"NewSiteLandingPage.aspx?facultylogin=1"
+      "landingpage": "NewSiteLandingPage.aspx?facultylogin=1",
+      "ReportingLandingPage": "UX_ALogin.aspx"
     },
     "resetemailexpire": {
       "expirytime": "2"

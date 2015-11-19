@@ -45,6 +45,9 @@ export class Home {
     this.hdInstitution = null;
     this.hdToken = null;
     this.hdURL = null;
+    this.hdusername=null;
+    this.hdpassword=null;
+    this.hdpage=null;
   }
 
   redirectToLogin(event) {
@@ -96,6 +99,23 @@ export class Home {
       if (institutionsPN.length > 0)
         this.institutionPN = institutionsPN[0];
     }
+  }
+
+  prepareRedirectToStudentSite(page, form, hdusername, hdpassword, hdpage) {
+      this.page=page;
+      this.form = form;
+      this.hdusername = hdusername;
+      this.hdpassword = hdpassword;
+      this.hdpage = hdpage;
+      this.redirectToReports();
+      return false;
+  }
+  redirectToReports() {
+      var serverURL = this.common.nursingITServer + this.common.config.links.nursingit.ReportingLandingPage;
+      this.hdusername.value =this.auth.username;
+      this.hdpassword.value =this.auth.password;
+      this.hdpage.value=this.page;
+      $(this.form).attr('ACTION', serverURL).submit();
   }
   
 }
