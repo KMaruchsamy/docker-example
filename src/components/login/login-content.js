@@ -106,7 +106,6 @@ export class LoginContent {
                     self.sStorage.setItem('institutions', JSON.stringify(json.Institutions));
                     self.sStorage.setItem('securitylevel', json.SecurityLevel);
                     self.sStorage.setItem('username', json.UserName);
-                    self.sStorage.setItem('password', password);
                     self.auth.refresh();
                     if (userType === 'student') {
                         self.prepareRedirectToStudentSite('Login');
