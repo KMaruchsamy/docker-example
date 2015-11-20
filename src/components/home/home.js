@@ -101,7 +101,7 @@ export class Home {
     }
   }
 
-  prepareRedirectToStudentSite(page, form, hdusername, hdpassword, hdpage) {
+  prepareRedirectToReports(page, form, hdusername, hdpassword, hdpage) {
       this.page=page;
       this.form = form;
       this.hdusername = hdusername;
