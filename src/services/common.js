@@ -1,10 +1,11 @@
 ﻿import * as _ from '../../lib/index';
+import {links} from '../constants/config';
 
 export class Common {
     constructor() {
         this.sStorage = this.getStorage();
-        this.apiServer = '';
-        this.nursingITServer = '';
+        this.getApiServer();
+        this.getNursingITServer();
         this.errorMessages = this.fetchErrorMessages();
         this.config = this.fetchConfig();
     }
@@ -53,8 +54,8 @@ export class Common {
             return response.json()
         }).then(function (json) {
             self.config = json
-            self.getApiServer();
-            self.getNursingITServer();
+           // self.getApiServer();
+            //self.getNursingITServer();
         }).catch(function (ex) {
             console.log('parsing failed', ex)
         });
@@ -62,22 +63,20 @@ export class Common {
 
 
     getApiServer() {
-        let configJSON = this.config;
         if (location.hostname.indexOf('localhost') > -1)
-            this.apiServer = configJSON.links.api.local.server;
+            this.apiServer = links.api.local.server;
         if (location.hostname.indexOf('dev') > -1)
-            this.apiServer = configJSON.links.api.dev.server;
+            this.apiServer = links.api.dev.server;
         if (location.hostname.indexOf('qa') > -1)
-            this.apiServer = configJSON.links.api.qa.server;
+            this.apiServer = links.api.qa.server;
     }
 
     getNursingITServer() {
-        let configJSON = this.config;
         if (location.hostname.indexOf('localhost') > -1)
-            this.nursingITServer = configJSON.links.nursingit.local.server;
+            this.nursingITServer = links.nursingit.local.server;
         if (location.hostname.indexOf('dev') > -1)
-            this.nursingITServer = configJSON.links.nursingit.dev.server;
+            this.nursingITServer = links.nursingit.dev.server;
         if (location.hostname.indexOf('qa') > -1)
-            this.nursingITServer = configJSON.links.nursingit.qa.server;
+            this.nursingITServer = links.nursingit.qa.server;
     }
 }

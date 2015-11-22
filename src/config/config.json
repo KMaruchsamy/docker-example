@@ -18,7 +18,8 @@
         "resetprofileapi": "admin/resetProfile",
         "resetemailapi": "admin/resetEmail",
         "resetfacultypasswordafterloginapi":"admin/resetPasswordAfterLogin",
-        "resetstudentpassword":"admin/sendStudentEmail"
+        "resetstudentpassword":"admin/sendStudentEmail",
+        "getprofiles":"profile"
       }
     },
     "nursingit":{

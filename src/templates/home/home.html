@@ -203,47 +203,8 @@
     <div class="section-purple"></div>
     <div class="section-light-gray">
       <div class="bottom-grid">
-        <div class="bottom-grid-cell">
-          <div class="section-purple"></div>
-          <div class="kaplan-profiles">
-            <h2 class="profiles-heading" id="account-manager">Your Kaplan Account Manager</h2>
-            <img src="images/account-manager_2x.jpg" class="profile-image img-round" alt="Josh Leber profile picture" aria-describedby="account-manager">
-            <p class="profile-name h5">Josh Leber</p>
-            <p class="h6 text-purple">Ed.S., PGC-PSY, LAC</p>
-            <a href="#" class="button">Learn more and contact</a>
-          </div>
-          <div class="section-medium-thin for-help-list">
-            <p class="bullet-heading">For help with:</p>
-            <ul class="bullet bullet-indented">
-              <li>Renewal contracts</li>
-              <li>Test scheduling</li>
-              <li>Roster submissions</li>
-              <li>Invoices</li>
-              <li>Faculty/student presentations</li>
-            </ul>
-          </div>
-        </div>
-        <div class="bottom-grid-cell">
-          <div class="section-purple"></div>
-          <div class="kaplan-profiles">
-            <h2 class="profiles-heading" id="nurse-consultant">Your Kaplan Nurse Consultant</h2>
-            <img src="images/nurse-consultant_2x.jpg" class="profile-image img-round" alt="Maria Flores-Harris profile picture" aria-describedby="nurse-consultant">
-            <p class="profile-name h5">Maria Flores-Harris</p>
-            <p class="h6 text-purple">MSN, RN, CNE</p>
-            <a href="your-nurse-consultant.html" class="button">Learn more and contact</a>
-          </div>
-          <div class="section-medium-thin for-help-list">
-            <p class="bullet-heading">For help with:</p>
-            <ul class="bullet bullet-indented">
-              <li>Curriculum mapping</li>
-              <li>Faculty training and support</li>
-              <li>Remediation and enrichment ideas</li>
-              <li>Test customization support</li>
-              <li>Reporting</li>
-            </ul>
-          </div>
-        </div>
-        <!--closes-grid-cell-->
+        <!--Account Manager and Nurse consultant profiles -->
+        <profile *ng-for="#profile of profiles" [profile]="profile"></profile>
       </div>
       <!--closes-grid-->
     </div>
@@ -279,8 +240,8 @@
 </main>
 
 
-<form  #myform ACTION="http://localhost/s_login.aspx?facultylogin=1" method="POST" target="_blank">
-  <input #hdinstitution   type="hidden" id="institutionID" name="institutionID">
+<form #myform ACTION="http://localhost/s_login.aspx?facultylogin=1" method="POST" target="_blank">
+  <input #hdinstitution type="hidden" id="institutionID" name="institutionID">
   <input #hdtoken type="hidden" id="jwtToken" name="jwtToken">
   <input #hdpage type="hidden" id="redirectPage" name="redirectPage">
   <input #hduserid type="hidden" id="userid" name="userid">

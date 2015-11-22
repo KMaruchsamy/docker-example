@@ -24,7 +24,23 @@ export class ChooseInstitution {
 		this.page = this.routeParams.get('redirectpage');
 		this.institutionRN = this.routeParams.get('idRN');
 		this.institutionPN = this.routeParams.get('idPN');
+		this.setBackMessage();
 	}
+
+	setBackMessage() {
+		switch (this.fromPage.toUpperCase()) {
+			case "LOGIN":
+				this.backMessage = 'Cancel and return to Sign In';
+				break;
+			case "HOME":
+				this.backMessage = 'Cancel and return to Faculty Home';
+				break;
+			default:
+				this.backMessage = 'Cancel and return to Faculty Home';
+				break;
+		}
+	}
+
 
 	triggerRedirect(programType, myform, hdInstitution, hdToken, hdPage, event) {
 		var serverURL = this.common.nursingITServer + this.common.config.links.nursingit.landingpage;

@@ -34,6 +34,12 @@
 		"src/components/account/account.js",
 		"src/scripts/user-context.js",
 		"src/specs/test-specs.js",
-		"src/components/shared/choose-institution.js"
+		"src/components/shared/choose-institution.js",
+		"src/components/home/profile.js",
+		"src/components/home/profile-description.js",
+		"src/models/profile-model.js",
+		"src/services/home-service.js",
+		"src/constants/config.js",
+		"src/constants/error-messages.js"
 	]
 }
