@@ -102,7 +102,6 @@ export class Home {
     this.hdInstitution = null;
     this.hdToken = null;
     this.hdURL = null;
-    this.hduserid = null;
     this.hdpage = null;
   }
 
@@ -161,17 +160,17 @@ export class Home {
     }
   }
 
-  prepareRedirectToReports(page, form, hduserid, hdpage) {
+  prepareRedirectToReports(page, form, hdToken,hdpage) {
     this.page = page;
     this.form = form;
-    this.hduserid = hduserid;
+    this.hdToken=hdToken;
     this.hdpage = hdpage;
     this.redirectToReports();
     return false;
   }
   redirectToReports() {
     var serverURL = this.common.nursingITServer + this.common.config.links.nursingit.ReportingLandingPage;
-    this.hduserid.value = this.auth.userid;
+    this.hdToken.value = this.auth.token;
     this.hdpage.value = this.page;
     $(this.form).attr('ACTION', serverURL).submit();
   }
