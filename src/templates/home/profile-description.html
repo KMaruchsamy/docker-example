@@ -1,45 +1,42 @@
-<main role="main" class="app-main">
-    <div class="kaplan-consultant-profiles-section">
-        <div class="section-light-gray individual-profile">
-            <div class="kaplan-profiles container">
-                <h2 class="white-text consultant-heading" id="nurse-consultant">Your Kaplan Nurse Consultant</h2>
-                <img src="images/nurse-consultant_2x.jpg" class="profile-image-large" alt="Maria Flores-Harris profile picture" aria-describedby="nurse-consultant">
-                <p class="profile-name h2">Maria Flores-Harris</p>
-                <p class="text-purple h3">MSN, RN, CNE</p>
-                <p class="text-purple">Director of Nurse Consulting</p>
-                <div class="contact-details margin-2em-top">
-                    <a href="tel:+1-828-406-0262" class="link-base-color icon telephone-icon">828-406-0262</a>
-                    <a href="mailto:maria.flores.harris@kaplan.com" class="link-base-color icon email-icon">maria.flores.harris@kaplan.com</a>
-                </div>
-            </div>
-        </div>
+<page-header></page-header>
 
-        <div class="section container-narrow">
-            <p class="bullet-heading">Contact Maria for:</p>
+      <main role="main" class="app-main">
+        <div class="kaplan-consultant-profiles-section">
+          <div class="section-light-gray individual-profile">
+            <div class="kaplan-profiles container">
+              <h2 class="white-text consultant-heading" id="nurse-consultant">{{profile.header}}</h2>
+              <img src="{{profile.photoUrl}}" class="profile-image-large img-round" alt="{{profile.firstName}} {{profile.lastName}} profile picture" aria-describedby="nurse-consultant">
+              <p class="profile-name h2">{{profile.firstName}} {{profile.lastName}}</p>
+              <p class="text-purple h3">{{profile.degrees}}</p>
+              <p class="text-purple">{{profile.designation}}</p>
+              <div class="contact-details margin-2em-top">
+                <div class="contact-details-info">
+                  <img src="images/telephone-icon_2x.png" class="telephone-icon" alt="telephone icon">
+                  <a href="tel://{{profile.telephone}}" class="link-base-color margin-right-2em">{{profile.telephone}}</a>
+                </div>
+                <div class="contact-details-info">
+                  <img src="images/email-icon_2x.png" class="email-icon" alt="email icon">
+                  <a href="mailto:{{profile.email}}" class="link-base-color">{{profile.email}}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section container-narrow">
+            <p class="bullet-heading">Contact {{profile.firstName}} for:</p>
             <ul class="bullet two-columns">
-                <li>Curriculum mapping</li>
-                <li>Faculty training and support</li>
-                <li>Remediation and enrichment ideas</li>
-                <li>Test customization support</li>
-                <li>Reporting assistance</li>
-                <li>Student/class outcome counseling</li>
+              <li *ng-for="#bullet of profile.bulletsForFrontEnd">{{bullet}}</li>
             </ul>
-            <p class="js-bolded section-medium-thin">Maria has nearly 20 years of experience as a Registered Nurse and Nurse Educator. She received her Bachelor of
-                Science and Master of Science degrees in Nursing from Clemson University and remains loyal to her Clemson
-                Tigers! She is presently a Doctor of Nursing Practice student at American Sentinel University. She has served
-                in many roles as a nurse educator including Nursing Instructor and Director of Nursing in Practical Nursing
-                and Registered Nursing programs. Presently, Maria is employed as the Senior Nurse Consultant for Kaplan Nursing
-                and travels the country presenting workshops on nursing education topics such as test construction, test
-                item writing, student success, critical thinking/clinical reasoning and NCLEX success.
+            <p class="js-bolded section-medium-thin">{{profile.bio}}
             </p>
             <p>Use these external forms to submit requests directly to Maria:</p>
-            <ul class="action-links">
-                <li><a href="#" class="icon action-color-link-icon">Request to Customize Integrated Test</a></li>
-                <li><a href="#" class="icon action-color-link-icon">Request to Attend Kaplan Faculty Orientation</a></li>
-                <li><a href="#" class="icon action-color-link-icon">Link 3 Here</a></li>
-                <li><a href="#" class="icon action-color-link-icon">Link 4 Here</a></li>
-            </ul>
+              <ul class="action-links">
+                <li *ng-for="#link of profile.linksForFrontEnd"><a href="{{link.LinkUrl}}" target="_blank" class="icon action-color-link-icon">{{link.LinkTextToDisplay}}</a></li>  
+              </ul>
+          </div>
         </div>
-    </div>
 
-</main>
+    </main>
+
+
+<page-footer></page-footer>

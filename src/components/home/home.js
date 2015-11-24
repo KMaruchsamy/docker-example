@@ -31,8 +31,6 @@ export class Home {
     this.homeService = homeService;
     this.redirectToPage();
     this.initialize();
-    console.log(this.common.apiServer);
-    console.log(links.api.baseurl);
     this.profiles = [];
     let self = this;
     this.loadProfiles(self);
@@ -44,44 +42,31 @@ export class Home {
     let res = null;
     if (institutionID > 0) {
       let url = this.common.apiServer + links.api.baseurl + links.api.admin.profilesapi + '?institutionId=' + institutionID;
-      console.log(this.common.apiServer);
       let profilePromise = this.homeService.getProfiles(url);
       profilePromise.then((response) => {
         res = response;
         return response.json();
       })
-      .then((json) => {
-        if (!!res.ok)
-          this.bindToModel(self, json);
-      })
-      .catch((error) => {
-        alert(error);
-      });
+        .then((json) => {
+          if (!!res.ok)
+            this.bindToModel(self, json);
+        })
+        .catch((error) => {
+          alert(error);
+        });
     }
   }
 
   bindToModel(self, json) {
     // alert(JSON.stringify(json));
+    let profiles = _.sortByOrder(json, 'KaplanAdminTypeId', 'desc');
     if (json) {
-      _.forEach(json, function (profile, key) {
-        self.profiles.push(new ProfileModel(
-          profile.KaplanAdminId,
-          profile.KaplanAdminTypeId,
-          profile.KaplanAdminTypeName,
-          profile.Active,
-          profile.Bio,
-          profile.FirstName,
-          profile.LastName,
-          profile.Designation,
-          profile.Email,
-          profile.LinksForFrontEnd,
-          profile.BulletsForFrontEnd,
-          profile.Photo.PhotoUrl,
-          profile.Telephone
-          ));
+      let i = 0;
+      _.forEach(profiles, function (profile, key) {
+        self.profiles.push(self.homeService.bindToModel(profile,(((i % 2) == 0) ? true : false)));
+        i++;
       });
     }
-    console.log(self.profiles);
   }
 
   redirectToPage() {
@@ -135,7 +120,6 @@ export class Home {
     this.hdInstitution.value = (this.institutionRN > 0) ? this.institutionRN : this.institutionPN;
     this.hdToken.value = this.auth.token
     this.hdURL.value = this.page;
-    console.log(this.hdInstitution.value);
     $(this.form).attr('ACTION', serverURL).submit();
   }
 
@@ -160,14 +144,15 @@ export class Home {
     }
   }
 
-  prepareRedirectToReports(page, form, hdToken,hdpage) {
+  prepareRedirectToReports(page, form, hdToken, hdpage) {
     this.page = page;
     this.form = form;
-    this.hdToken=hdToken;
+    this.hdToken = hdToken;
     this.hdpage = hdpage;
     this.redirectToReports();
     return false;
   }
+
   redirectToReports() {
     var serverURL = this.common.nursingITServer + this.common.config.links.nursingit.ReportingLandingPage;
     this.hdToken.value = this.auth.token;
