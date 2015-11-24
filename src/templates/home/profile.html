@@ -4,7 +4,7 @@
     <h2 class="profiles-heading" id="account-manager">{{profile.header}}</h2>
     <img src='{{profile.photoUrl}}' class="profile-image img-round" alt='{{profile.firstName}} {{profile.lastName}} profile picture' aria-describedby="account-manager">
     <p class="profile-name h5">{{profile.firstName}} {{profile.lastName}}</p>
-    <p class="h6 text-purple">Ed.S., PGC-PSY, LAC</p>
+    <p class="h6 text-purple">{{profile.degrees}}</p>
     <a [router-link]="['/Profiles',{id : profile.kaplanAdminId}]" class="button">Learn more and contact</a>
   </div>
   <div class="section-medium-thin for-help-list">
