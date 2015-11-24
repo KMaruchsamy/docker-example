@@ -7,7 +7,7 @@ export const links = {
 			server: "http://dev.nursing.ktp.io/"
 		},
 		qa: {
-			server : "https://nursingqa.kaplan.com/"
+			server : "https://nursingqa-test.kaplan.com/"			
 		},
 		baseurl: "api/v1/",
 		admin: {
