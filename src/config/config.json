@@ -18,7 +18,8 @@
         "resetprofileapi": "admin/resetProfile",
         "resetemailapi": "admin/resetEmail",
         "resetfacultypasswordafterloginapi":"admin/resetPasswordAfterLogin",
-        "resetstudentpassword":"admin/sendStudentEmail"
+        "resetstudentpassword":"admin/sendStudentEmail",
+        "getprofiles":"profile"
       }
     },
     "nursingit":{
@@ -31,7 +32,8 @@
       "qa": {
         "server": "https://nursingqa.kaplan.com/"
       },
-      "landingpage":"NewSiteLandingPage.aspx?facultylogin=1"
+      "landingpage": "NewSiteLandingPage.aspx?facultylogin=1",
+      "ReportingLandingPage": "UX_ALogin.aspx"
     },
     "resetemailexpire": {
       "expirytime": "2"

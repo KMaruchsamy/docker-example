@@ -9,24 +9,81 @@ import {DashboardPod4} from './dashboard-pod4';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import * as _ from '../../lib/index';
+import {ProfileModel} from '../../models/profile-model';
+import {Profile} from './profile';
+import {HomeService} from '../../services/home-service';
+import {links} from '../../constants/config';
 
 @Component({
   selector: 'home',
-  viewBindings: [Auth, Common]
+  viewBindings: [Auth, Common, HomeService]
 })
 @View({
   templateUrl: '../../templates/home/home.html',
-  directives: [PageHeader, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4]
+  directives: [PageHeader, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile]
 })
 export class Home {
-  constructor(router: Router, auth: Auth, location: Location, common: Common) {
+  constructor(router: Router, auth: Auth, location: Location, common: Common, homeService: HomeService) {
     this.common = common;
     this.router = router;
     this.auth = auth;
     this.location = location;
+    this.homeService = homeService;
     this.redirectToPage();
     this.initialize();
+    console.log(this.common.apiServer);
+    console.log(links.api.baseurl);
+    this.profiles = [];
+    let self = this;
+    this.loadProfiles(self);
   }
+
+
+  loadProfiles(self) {
+    let institutionID = this.getLatestInstitution();
+    let res = null;
+    if (institutionID > 0) {
+      let url = this.common.apiServer + links.api.baseurl + links.api.admin.profilesapi + '?institutionId=' + institutionID;
+      console.log(this.common.apiServer);
+      let profilePromise = this.homeService.getProfiles(url);
+      profilePromise.then((response) => {
+        res = response;
+        return response.json();
+      })
+      .then((json) => {
+        if (!!res.ok)
+          this.bindToModel(self, json);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+    }
+  }
+
+  bindToModel(self, json) {
+    // alert(JSON.stringify(json));
+    if (json) {
+      _.forEach(json, function (profile, key) {
+        self.profiles.push(new ProfileModel(
+          profile.KaplanAdminId,
+          profile.KaplanAdminTypeId,
+          profile.KaplanAdminTypeName,
+          profile.Active,
+          profile.Bio,
+          profile.FirstName,
+          profile.LastName,
+          profile.Designation,
+          profile.Email,
+          profile.LinksForFrontEnd,
+          profile.BulletsForFrontEnd,
+          profile.Photo.PhotoUrl,
+          profile.Telephone
+          ));
+      });
+    }
+    console.log(self.profiles);
+  }
+
   redirectToPage() {
     if (this.location.path().search("first") > 0) {
       if ((this.auth.istemppassword == "true" ? true : false) && this.auth.isAuth())
@@ -37,7 +94,7 @@ export class Home {
   }
 
   initialize() {
-    $('title').html('Faculty Home  |  Kaplan Nursing');    
+    $('title').html('Faculty Home  |  Kaplan Nursing');
     this.institutionRN = 0;
     this.institutionPN = 0;
     this.page = null;
@@ -45,6 +102,7 @@ export class Home {
     this.hdInstitution = null;
     this.hdToken = null;
     this.hdURL = null;
+    this.hdpage = null;
   }
 
   redirectToLogin(event) {
@@ -59,12 +117,9 @@ export class Home {
     this.hdToken = hdToken;
     this.hdURL = hdURL;
     this.checkInstitutions();
-    
+
     if (this.institutionRN > 0 && this.institutionPN > 0) {
       // open the interstitial page here ...
-      console.log(this.institutionRN);
-      console.log(this.institutionPN);
-      console.log(this.page);
       // this.router.parent.navigate(['/ChooseInstitution', { page: this.page, idRN: this.institutionRN, idPN: this.institutionPN }]);
       this.router.parent.navigateByUrl(`/choose-institution/Home/${this.page}/${this.institutionRN}/${this.institutionPN}`);
     }
@@ -72,9 +127,9 @@ export class Home {
       this.redirectToStudentSite();
     }
     return false
-  }  
- 
-  
+  }
+
+
   redirectToStudentSite() {
     var serverURL = this.common.nursingITServer + this.common.config.links.nursingit.landingpage;
     this.hdInstitution.value = (this.institutionRN > 0) ? this.institutionRN : this.institutionPN;
@@ -83,9 +138,16 @@ export class Home {
     console.log(this.hdInstitution.value);
     $(this.form).attr('ACTION', serverURL).submit();
   }
-  
-  
-    
+
+  getLatestInstitution() {
+    if (this.auth.institutions != null && this.auth.institutions != 'undefined') {
+      let latestInstitution = _.first(_.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
+      if (latestInstitution)
+        return latestInstitution.InstitutionId;
+    }
+    return 0;
+  }
+
   checkInstitutions() {
     let institutions = _.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
     if (institutions != null && institutions != 'undefined') {
@@ -97,5 +159,20 @@ export class Home {
         this.institutionPN = institutionsPN[0];
     }
   }
-  
+
+  prepareRedirectToReports(page, form, hdToken,hdpage) {
+    this.page = page;
+    this.form = form;
+    this.hdToken=hdToken;
+    this.hdpage = hdpage;
+    this.redirectToReports();
+    return false;
+  }
+  redirectToReports() {
+    var serverURL = this.common.nursingITServer + this.common.config.links.nursingit.ReportingLandingPage;
+    this.hdToken.value = this.auth.token;
+    this.hdpage.value = this.page;
+    $(this.form).attr('ACTION', serverURL).submit();
+  }
+
 }

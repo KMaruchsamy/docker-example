@@ -7,12 +7,12 @@
 		</h2>
 			<div class="choose-program-module container-narrow hidden-extra-small-down">
 				<div class="choose-program-module-grid">
-					<h3 class="h1 center">RN</h3>
-					<button class="button centered" (click)="triggerRedirect('RN',myform,hdinstitution,hdtoken,hdpage,$event);">Select</button>
+					<h3 class="h1 center" id="RNProgram">RN</h3>
+					<button class="button centered" (click)="triggerRedirect('RN',myform,hdinstitution,hdtoken,hdpage,$event);" aria-labelledby="RNProgram">Select</button>
 				</div>
 				<div class="choose-program-module-grid">
-					<h3 class="h1 center">PN</h3>
-					<button class="button centered" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,$event);">Select</button>
+					<h3 class="h1 center" id="PNProgram">PN</h3>
+					<button class="button centered" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,$event);" aria-labelledby="PNProgram">Select</button>
 				</div>
 			</div>
 			<div class="hidden-extra-small-up">
@@ -20,7 +20,7 @@
 				<button #btnpn class="button button-mobile-block margin-2em-top-bottom" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,$event);">PN Program</button>
 			</div>
 			<div class="center">
-				<a (click)="goBack();">Cancel and return to Faculty Home</a>
+				<a (click)="goBack();">{{backMessage}}</a>
 			</div>
 		</div>
 </main>

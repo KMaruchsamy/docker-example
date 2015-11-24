@@ -13,6 +13,7 @@ import {Account} from '../components/account/account';
 import {Page} from '../scripts/page';
 import {Logger} from '../scripts/logger';
 import {ChooseInstitution} from '../components/shared/choose-institution';
+import {ProfileDescription} from '../components/home/profile-description';
 // import {ExceptionHandler} from 'angular2/src/core/exception_handler';
 // import {MyExceptionHandler} from '../../scripts/myexception-handler';
 
@@ -36,7 +37,8 @@ import {ChooseInstitution} from '../components/shared/choose-institution';
     {path:'/help', component:Help, as : 'Help'},
     {path:'/set-password-first-time', component:SetPasswordFirstTime, as : 'SetPasswordFirstTime'},
     {path:'/account', component:Account, as : 'Account'},
-    {path:'/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component:ChooseInstitution, as : 'ChooseInstitution'}
+    {path:'/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component:ChooseInstitution, as : 'ChooseInstitution'},
+    {path:'/profiles/:id', component:ProfileDescription, as : 'Profiles'}
 ])
 export class App {
     constructor(auth: Auth) {

@@ -15,6 +15,7 @@ export class Auth {
     this.title = this.sStorage.getItem('title');
     this.institutions = this.sStorage.getItem('institutions');
     this.securitylevel = this.sStorage.getItem('securitylevel');
+    this.username=this.sStorage.getItem('username');
   }
 
 
@@ -30,6 +31,7 @@ export class Auth {
     this.title = this.sStorage.getItem('title');
     this.institutions = this.sStorage.getItem('institutions');
     this.securitylevel = this.sStorage.getItem('securitylevel');
+    this.username=this.sStorage.getItem('username');
   }
 
 
@@ -69,6 +71,7 @@ export class Auth {
     this.title = null;
     this.institutions = null;
     this.securitylevel = null;
+    this.username=null;
   }
   settemporarypassword(url, useremail, password) {
     return fetch(url, {
