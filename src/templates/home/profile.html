@@ -1,10 +1,10 @@
-<div class="bottom-grid-cell">
+<div class="bottom-grid-cell" [class.bottom-grid-cell-left] = "profile.isLeft" [class.bottom-grid-cell-right] = "!profile.isLeft" >
   <div class="section-purple"></div>
   <div class="kaplan-profiles">
     <h2 class="profiles-heading" id="account-manager">{{profile.header}}</h2>
-    <img src={{photoUrl}} class="profile-image" alt='{{profile.FirstName}} {{profile.LastName}} profile picture' aria-describedby="account-manager">
-    <p class="profile-name h5">{{profile.FirstName}} {{profile.LastName}}</p>
-    <p class="h6 text-purple">Ed.S., PGC-PSY, LAC</p>
+    <img [src]='profile.photoUrl' class="profile-image img-round" alt='{{profile.firstName}} {{profile.lastName}} profile picture' aria-describedby="account-manager">
+    <p class="profile-name h5">{{profile.firstName}} {{profile.lastName}}</p>
+    <p class="h6 text-purple">{{profile.degrees}}</p>
     <a [router-link]="['/Profiles',{id : profile.kaplanAdminId}]" class="button">Learn more and contact</a>
   </div>
   <div class="section-medium-thin for-help-list">

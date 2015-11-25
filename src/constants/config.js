@@ -7,7 +7,7 @@ export const links = {
 			server: "http://dev.nursing.ktp.io/"
 		},
 		qa: {
-			server: "https://nursingqa-test.kaplan.com/"
+			server : "https://nursingqa-test.kaplan.com/"			
 		},
 		baseurl: "api/v1/",
 		admin: {
@@ -39,10 +39,10 @@ export const links = {
     },
 	profile:{
 		accountmanager:{
-			defaultimage : 'images/account-manager_2x.jpg'
+			defaultimage : 'images/profile-noimage.jpg'
 		},
 		nurseconsultant:{
-			defaultimage:'images/nurse-consultant_2x.jpg'
+			defaultimage:'images/profile-noimage.jpg'
 		}
 	}
 };
