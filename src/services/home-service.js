@@ -6,7 +6,7 @@ import * as _ from '../lib/index';
 
 @Injectable()
 export class HomeService {
-	constructor(http: Http, @Inject(Auth) auth: Auth) {
+	constructor(http: Http, auth: Auth) {
 		this.http = http;
 		this.auth = auth;
 		this.auth.refresh();
@@ -18,7 +18,6 @@ export class HomeService {
 			method: 'get',
 			headers: {
 				'Accept': 'application/json',
-				'Content-Type': 'application/json',
 				'Authorization': self.auth.authheader
 			}
 		});
@@ -30,14 +29,13 @@ export class HomeService {
 			method: 'get',
 			headers: {
 				'Accept': 'application/json',
-				'Content-Type': 'application/json',
 				'Authorization': self.auth.authheader
 			}
 		});
 	}
 
 
-	bindToModel(profile,isLeft=true) {		
+	bindToModel(profile, isLeft = true) {
 		return new ProfileModel(
 			profile.KaplanAdminId,
 			profile.KaplanAdminTypeId,
@@ -51,7 +49,7 @@ export class HomeService {
 			profile.Email,
 			profile.LinksForFrontEnd,
 			profile.BulletsForFrontEnd,
-			profile.Photo.PhotoUrl,
+			(profile.Photo.PhotoUrl === null || profile.Photo.PhotoUrl === '') ? null : profile.Photo.PhotoUrl,
 			profile.Telephone,
 			isLeft
 			);

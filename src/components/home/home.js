@@ -1,6 +1,7 @@
 import {Component, View} from 'angular2/angular2';
 import {Router, Location} from 'angular2/router';
 import {PageHeader} from '../shared/page-header';
+import {PageFooter} from '../shared/page-footer';
 import {DashboardHeader} from './dashboard-header';
 import {DashboardPod1} from './dashboard-pod1';
 import {DashboardPod2} from './dashboard-pod2';
@@ -20,7 +21,7 @@ import {links} from '../../constants/config';
 })
 @View({
   templateUrl: '../../templates/home/home.html',
-  directives: [PageHeader, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile]
+  directives: [PageHeader, PageFooter, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile]
 })
 export class Home {
   constructor(router: Router, auth: Auth, location: Location, common: Common, homeService: HomeService) {
@@ -39,17 +40,14 @@ export class Home {
 
   loadProfiles(self) {
     let institutionID = this.getLatestInstitution();
-    let res = null;
     if (institutionID > 0) {
       let url = this.common.apiServer + links.api.baseurl + links.api.admin.profilesapi + '?institutionId=' + institutionID;
       let profilePromise = this.homeService.getProfiles(url);
       profilePromise.then((response) => {
-        res = response;
         return response.json();
       })
         .then((json) => {
-          if (!!res.ok)
-            this.bindToModel(self, json);
+          self.bindToModel(self, json);
         })
         .catch((error) => {
           alert(error);
@@ -58,12 +56,11 @@ export class Home {
   }
 
   bindToModel(self, json) {
-    // alert(JSON.stringify(json));
     let profiles = _.sortByOrder(json, 'KaplanAdminTypeId', 'desc');
     if (json) {
       let i = 0;
       _.forEach(profiles, function (profile, key) {
-        self.profiles.push(self.homeService.bindToModel(profile,(((i % 2) == 0) ? true : false)));
+        self.profiles.push(self.homeService.bindToModel(profile, (((i % 2) == 0) ? true : false)));
         i++;
       });
     }

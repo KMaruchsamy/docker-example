@@ -12,32 +12,28 @@ import {PageFooter} from '../shared/page-footer';
 })
 @View({
 	templateUrl: '../../templates/home/profile-description.html',
-	directives: [RouterLink,PageHeader,PageFooter]
+	directives: [RouterLink, PageHeader, PageFooter]
 })
 export class ProfileDescription {
-	constructor(routeParams: RouteParams, homeService: HomeService, common: Common) {
+	constructor(routeParams: RouteParams, homeService: HomeService, common: Common) {		
 		this.routeParams = routeParams;
 		this.homeService = homeService;
 		this.common = common;
 		this.kaplanAdminId = this.routeParams.get('id');
 		this.profile = {};
 		let self = this;
-		this.loadProfileDescription(self);		
+		this.loadProfileDescription(self);
 	}
 
 	loadProfileDescription(self) {
-		let objResponse = null;
 		if (this.kaplanAdminId != null && this.kaplanAdminId > 0) {
 			let url = this.common.apiServer + links.api.baseurl + links.api.admin.profilesapi + '/' + this.kaplanAdminId;
 			let profilePromise = this.homeService.getProfile(url);
 			profilePromise.then((response) => {
-				objResponse = response;
 				return response.json();
 			})
 				.then((json) => {
-					if (!!objResponse.ok){
-						self.profile = self.homeService.bindToModel(json,true);						
-					}						
+					self.profile = self.homeService.bindToModel(json, true);
 				})
 				.catch((error) => {
 					console.log(error);

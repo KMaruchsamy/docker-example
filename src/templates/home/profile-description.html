@@ -5,16 +5,16 @@
           <div class="section-light-gray individual-profile">
             <div class="kaplan-profiles container">
               <h2 class="white-text consultant-heading" id="nurse-consultant">{{profile.header}}</h2>
-              <img src="{{profile.photoUrl}}" class="profile-image-large img-round" alt="{{profile.firstName}} {{profile.lastName}} profile picture" aria-describedby="nurse-consultant">
+              <img [src]='profile.photoUrl' class="profile-image-large img-round" alt="{{profile.firstName}} {{profile.lastName}} profile picture" aria-describedby="nurse-consultant">
               <p class="profile-name h2">{{profile.firstName}} {{profile.lastName}}</p>
               <p class="text-purple h3">{{profile.degrees}}</p>
               <p class="text-purple">{{profile.designation}}</p>
               <div class="contact-details margin-2em-top">
-                <div class="contact-details-info">
+                <div *ng-if="profile.telephone"  class="contact-details-info">
                   <img src="images/telephone-icon_2x.png" class="telephone-icon" alt="telephone icon">
                   <a href="tel://{{profile.telephone}}" class="link-base-color margin-right-2em">{{profile.telephone}}</a>
                 </div>
-                <div class="contact-details-info">
+                <div *ng-if="profile.email" class="contact-details-info">
                   <img src="images/email-icon_2x.png" class="email-icon" alt="email icon">
                   <a href="mailto:{{profile.email}}" class="link-base-color">{{profile.email}}</a>
                 </div>
@@ -31,7 +31,7 @@
             </p>
             <p>Use these external forms to submit requests directly to Maria:</p>
               <ul class="action-links">
-                <li *ng-for="#link of profile.linksForFrontEnd"><a href="{{link.LinkUrl}}" target="_blank" class="icon action-color-link-icon">{{link.LinkTextToDisplay}}</a></li>  
+                <li *ng-for="#link of profile.linksForFrontEnd"><a [href]='link.LinkUrl' target="_blank" class="icon action-color-link-icon">{{link.LinkTextToDisplay}}</a></li>  
               </ul>
           </div>
         </div>
