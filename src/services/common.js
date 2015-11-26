@@ -6,8 +6,8 @@ export class Common {
         this.sStorage = this.getStorage();
         this.getApiServer();
         this.getNursingITServer();
-        this.errorMessages = this.fetchErrorMessages();
-        this.config = this.fetchConfig();
+        this.fetchErrorMessages();
+        this.fetchConfig();
     }
 
     getErrorMessages() {
