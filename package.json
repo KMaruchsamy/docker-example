@@ -26,7 +26,13 @@
     "rework-npm": "~1.0.0",
     "robocopy": "^0.1.15",
     "serve-static": "~1.8.1",
-    "yargs": "^3.15.0"
+    "yargs": "^3.15.0",
+    "gulp-typescript": "^2.9.2",
+    "jasmine": "2.3.2",
+    "karma": "^0.12.23",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-cli": "^0.0.4",
+    "karma-jasmine": "^0.3.6"
   },
   "dependencies": {
     "angular2": "^2.0.0-alpha.45",
@@ -38,6 +44,7 @@
     "jquery": "^2.1.4",
     "lodash": "^3.10.1",
     "bootstrap": "^3.3.5",
-    "moment": "^2.10.6"
+    "moment": "^2.10.6",
+    "es6-shim": "^0.33.12"
   }
 }

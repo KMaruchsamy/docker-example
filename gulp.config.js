@@ -1,39 +1,42 @@
 module.exports = function () {
 	var config = {
-		src: {
-			js: 'src/**/*.js',
-			html: 'src/**/*.html',
-			images: 'src/images/*.*',
-			css: 'src/**/*.css',
-			json: 'src/**/*.json',
-			favicons: 'src/favicons/*.*',
-			build: 'build'
+		app:{
+			src: {
+				js: 'src/app/**/*.js',
+				ts:'src/app/**/*.ts',
+				html: 'src/app/**/*.html',
+				images: 'src/app/images/*.*',
+				css: 'src/app/**/*.css',
+				json: 'src/app/**/*.json',
+				favicons: 'src/app/favicons/*.*',
+				build: 'build/app'
+			},
+			lib: [
+				'node_modules/gulp-traceur/node_modules/traceur/bin/traceur-runtime.js',
+				'node_modules/systemjs/dist/system-csp-production.src.js',
+				'node_modules/systemjs/dist/system-polyfills.js',
+				'node_modules/reflect-metadata/Reflect.js',
+				'node_modules/whatwg-fetch/fetch.js',
+				'node_modules/jwt-decode/build/jwt-decode.js',
+				'node_modules/jquery/dist/jquery.min.js',
+				'node_modules/jquery/dist/jquery.min.map',
+				'src/app/polyfills/sessionstorage.js',
+				'node_modules/lodash/index.js',
+				'src/app/webworkers/logging-worker.js',
+				'node_modules/angular2/bundles/angular2.js',
+				'node_modules/angular2/bundles/router.dev.js',
+				'node_modules/angular2/bundles/http.js',
+				'node_modules/jasmine-core/lib/jasmine-core/jasmine.css',
+				'node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
+				'node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js',
+				'node_modules/jasmine-core/lib/jasmine-core/boot.js'
+			],
+			jsreview: [
+				'./src/app/app/*.js',
+				'./src/app/components/**/*.js',
+				'./src/app/services/*.js'
+			]	
 		},
-		lib: [
-			'node_modules/gulp-traceur/node_modules/traceur/bin/traceur-runtime.js',
-			'node_modules/systemjs/dist/system-csp-production.src.js',
-			'node_modules/systemjs/dist/system-polyfills.js',
-			'node_modules/reflect-metadata/Reflect.js',
-			'node_modules/whatwg-fetch/fetch.js',
-			'node_modules/jwt-decode/build/jwt-decode.js',
-			'node_modules/jquery/dist/jquery.min.js',
-			'node_modules/jquery/dist/jquery.min.map',
-			'src/polyfills/sessionstorage.js',
-			'node_modules/lodash/index.js',
-			'src/webworkers/logging-worker.js',
-			'node_modules/angular2/bundles/angular2.js',
-			'node_modules/angular2/bundles/router.dev.js',
-			'node_modules/angular2/bundles/http.js',
-			'node_modules/jasmine-core/lib/jasmine-core/jasmine.css',
-			'node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
-			'node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js',
-			'node_modules/jasmine-core/lib/jasmine-core/boot.js'
-		],
-		jsreview: [
-			'./src/app/*.js',
-			'./src/components/**/*.js',
-			'./src/services/*.js'
-		],
 		deploy: {
 			DEV: {
 				backupFolder: '//DWNUXWEB01.kaplaninc.com/d$/Site_Build',

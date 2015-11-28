@@ -18,63 +18,79 @@ var gulpif = require('gulp-if');
 var args = require('yargs').argv;
 var moment = require('moment');
 var robocopy = require('robocopy');
+var typescript = require('gulp-typescript');
+var tscConfig = require('./tsconfig.json');
 
 gulp.task('clean', function (done) {
     del([config.src.build], done);
 });
 
-
-gulp.task('js', function () {
-    return gulp.src(config.src.js)
-      .pipe(rename({ extname: '' })) //hack, see: https://github.com/sindresorhus/gulp-traceur/issues/54
-      .pipe(plumber())
-      .pipe(traceur({
-          modules: 'instantiate',
-          moduleName: true,
-          annotations: true,
-          types: true,
-          memberVariables: true
-      }))
-      .pipe(rename({ extname: '.js' })) //hack, see: https://github.com/sindresorhus/gulp-traceur/issues/54
-      .pipe(gulp.dest(config.src.build));
+gulp.task('ts', function () {
+    var tsResult = gulp
+        .src([config.app.src.ts])
+        .pipe(typescript(tscConfig.compilerOptions));
+    return tsResult.js.pipe(gulp.dest(config.app.src.build));
 });
 
+gulp.task('js', function () {
+    var tsResult = gulp
+        .src([config.app.src.js])
+        .pipe(typescript(tscConfig.compilerOptions));
+    return tsResult.js.pipe(gulp.dest(config.app.src.build));
+});
+
+
+// gulp.task('js', function () {
+//     return gulp.src(config.app.src.js)
+//       .pipe(rename({ extname: '' })) //hack, see: https://github.com/sindresorhus/gulp-traceur/issues/54
+//       .pipe(plumber())
+//       .pipe(traceur({
+//           modules: 'instantiate',
+//           moduleName: true,
+//           annotations: true,
+//           types: true,
+//           memberVariables: true
+//       }))
+//       .pipe(rename({ extname: '.js' })) //hack, see: https://github.com/sindresorhus/gulp-traceur/issues/54
+//       .pipe(gulp.dest(config.app.src.build));
+// });
+
 gulp.task('images', function () {
-    return gulp.src(config.src.images)
-     .pipe(gulp.dest(config.src.build + '/images'));
+    return gulp.src(config.app.src.images)
+     .pipe(gulp.dest(config.app.src.build + '/images'));
 });
 
 gulp.task('favicons', function () {
-    return gulp.src(config.src.favicons)
-     .pipe(gulp.dest(config.src.build));
+    return gulp.src(config.app.src.favicons)
+     .pipe(gulp.dest(config.app.src.build));
 });
 
 gulp.task('html', function () {
-    return gulp.src(config.src.html)
-      .pipe(gulp.dest(config.src.build));
+    return gulp.src(config.app.src.html)
+      .pipe(gulp.dest(config.app.src.build));
 });
 
 gulp.task('json', function () {
-    return gulp.src(config.src.json)
-      .pipe(gulp.dest(config.src.build));
+    return gulp.src(config.app.src.json)
+      .pipe(gulp.dest(config.app.src.build));
 });
 
 
 gulp.task('css', function () {
-    return gulp.src(config.src.css)
-    .pipe(gulp.dest(config.src.build));
+    return gulp.src(config.app.src.css)
+    .pipe(gulp.dest(config.app.src.build));
 });
 
 gulp.task('libs', function () {
     console.log('Branch : ' + args.branch );
     var size = require('gulp-size');
-    return gulp.src(config.lib)
+    return gulp.src(config.app.lib)
       .pipe(size({ showFiles: true, gzip: true }))
-      .pipe(gulp.dest('build/lib'));
+      .pipe(gulp.dest('build/app/lib'));
 });
 
 
-gulp.task('build', ['js', 'html','json','css','images','favicons', 'libs']);
+gulp.task('build', ['ts','js', 'html','json','css','images','favicons', 'libs']);
 
 gulp.task('play', ['build'], function () {
 
@@ -85,14 +101,14 @@ gulp.task('play', ['build'], function () {
     var port = 3000;
     var app;
 
-    gulp.watch(config.src.html, ['html']);
-    gulp.watch(config.src.js, ['js']);
-    gulp.watch(config.src.json, ['json']);
-    gulp.watch(config.src.css, ['css']);
+    gulp.watch(config.app.src.html, ['html']);
+    gulp.watch(config.app.src.js, ['js']);
+    gulp.watch(config.app.src.json, ['json']);
+    gulp.watch(config.app.src.css, ['css']);
 
     app = connect();
 
-    app.use(serveStatic(__dirname + '/build'));  // serve everything that is static
+    app.use(serveStatic(__dirname + '/build/app'));  // serve everything that is static
 
     http.createServer(app).listen(port, function () {
         console.log('\n', 'Server listening on port', port, '\n')
@@ -119,13 +135,13 @@ var backupFolder ='';
 gulp.task('backup',['build'], function() {
     log('Backuping the current build');
     
-    if (args.branch == "refs/heads/dev") {
+    if (args.branch === "refs/heads/dev") {
         liveFolder=config.deploy.DEV.liveFolder;
-        backupFolder=config.deploy.DEV.backupFolder
+        backupFolder = config.deploy.DEV.backupFolder;
     }
-    else if (args.branch == "refs/heads/qa") {
+    else if (args.branch === "refs/heads/qa") {
         liveFolder=config.deploy.QA.liveFolder;
-        backupFolder=config.deploy.QA.backupFolder
+        backupFolder = config.deploy.QA.backupFolder;
     }
     
     util.log(liveFolder);
@@ -196,14 +212,14 @@ gulp.task('debug',function(){
     var port = 3002;
     var app;
 
-    gulp.watch(config.src.html, ['html']);
-    gulp.watch(config.src.js, ['js']);
-    gulp.watch(config.src.json, ['json']);
-    gulp.watch(config.src.css, ['css']);
+    gulp.watch(config.app.src.html, ['html']);
+    gulp.watch(config.app.src.js, ['js']);
+    gulp.watch(config.app.src.json, ['json']);
+    gulp.watch(config.app.src.css, ['css']);
 
     app = connect();
 
-    app.use(serveStatic(__dirname + '/build'));  // serve everything that is static
+    app.use(serveStatic(__dirname + '/build/app'));  // serve everything that is static
 
     http.createServer(app).listen(port, function () {
         console.log('\n', 'Server listening on port', port, '\n')
@@ -220,14 +236,14 @@ gulp.task('test',['build'],function(){
     var port = 3001;
     var app;
 
-    gulp.watch(config.src.html, ['html']);
-    gulp.watch(config.src.js, ['js']);
-    gulp.watch(config.src.json, ['json']);
-    gulp.watch(config.src.css, ['css']);
+    gulp.watch(config.app.src.html, ['html']);
+    gulp.watch(config.app.src.js, ['js']);
+    gulp.watch(config.app.src.json, ['json']);
+    gulp.watch(config.app.src.css, ['css']);
 
     app = connect();
 
-    app.use(serveStatic(__dirname + '/build'));  // serve everything that is static
+    app.use(serveStatic(__dirname + '/build/app'));  // serve everything that is static
 
     http.createServer(app).listen(port, function () {
         console.log('\n', 'Server listening on port', port, '\n')
