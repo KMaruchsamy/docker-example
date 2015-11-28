@@ -1,26 +1,27 @@
-import {links} from '../constants/config.js';
+import {links} from '../constants/config';
 
 export class ProfileModel {
+	public header: string;
 	constructor(
-		kaplanAdminId,
-		kaplanAdminTypeId,
-		kaplanAdminTypeName,
-		active,
-		bio,
-		degrees,
-		firstName,
-		lastName,
-		designation,
-		email,
-		linksForFrontEnd,
-		bulletsForFrontEnd,
-		photoUrl,
-		telephone,
-		isLeft = true
-		) {
+		public kaplanAdminId,
+		public kaplanAdminTypeId,
+		public kaplanAdminTypeName,
+		public active,
+		public bio,
+		public degrees,
+		public firstName,
+		public lastName,
+		public designation,
+		public email,
+		public linksForFrontEnd,
+		public bulletsForFrontEnd,
+		public photoUrl,
+		public telephone,
+		public isLeft = true
+	) {
 		if (kaplanAdminId) {
-			this.kaplanAdminId = kaplanAdminId==null ? 0 :kaplanAdminId;
-			this.kapanAdminTypeId = kaplanAdminTypeId;
+			this.kaplanAdminId = kaplanAdminId == null ? 0 : kaplanAdminId;
+			this.kaplanAdminTypeId = kaplanAdminTypeId;
 			this.kaplanAdminTypeName = kaplanAdminTypeName;
 			this.active = active;
 			this.bio = bio;

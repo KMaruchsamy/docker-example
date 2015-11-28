@@ -4,6 +4,7 @@ import {PageHeader} from './page-header';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import * as _ from '../../lib/index';
+import {links} from '../../constants/config';
 
 @Component({
     selector: 'choose-institution',
@@ -15,11 +16,18 @@ import * as _ from '../../lib/index';
 })
 
 export class ChooseInstitution {
-	constructor(router: Router, routeParams: RouteParams, common: Common, auth: Auth) {
-		this.common = common;
-		this.auth = auth;
-		this.router = router;
-		this.routeParams = routeParams;
+	fromPage: string;
+	page: string;
+	institutionRN: string;
+	institutionPN: string;
+	backMessage: string;
+	nursingITServer: string;
+	constructor(public router: Router, public routeParams: RouteParams, public common: Common, public auth: Auth) {
+		// this.common = common;
+		// this.auth = auth;
+		// this.router = router;
+		// this.routeParams = routeParams;
+		this.nursingITServer = this.common.getNursingITServer();
 		this.fromPage = this.routeParams.get('frompage');
 		this.page = this.routeParams.get('redirectpage');
 		this.institutionRN = this.routeParams.get('idRN');
@@ -43,7 +51,7 @@ export class ChooseInstitution {
 
 
 	triggerRedirect(programType, myform, hdInstitution, hdToken, hdPage, event) {
-		var serverURL = this.common.nursingITServer + this.common.config.links.nursingit.landingpage;
+		var serverURL = this.nursingITServer + links.nursingit.landingpage;
 		hdInstitution.value = programType === 'RN' ? this.institutionRN : this.institutionPN
 		hdToken.value = this.auth.token
 		hdPage.value = this.page;

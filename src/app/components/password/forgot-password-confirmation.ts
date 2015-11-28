@@ -13,20 +13,11 @@ import {PasswordHeader} from '../password/password-header';
 
 
 export class ForgotPasswordConfirmation {
-    constructor(router: Router) {
-        this.router = router;
+    constructor(public router: Router) {
         this.initialize();
     }
 
     initialize() {
         $('title').html('Kaplan Nursing | Forgot Password Confirmation');
-    }
-
-    onForgotPassword(txtEmailId, btnSend, event) {
-        event.preventDefault();
-    }
-    RedirectToLogin(event) {
-        event.preventDefault();
-        this.router.parent.navigateByUrl('/login');
     }
 }

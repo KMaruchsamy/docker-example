@@ -4,6 +4,8 @@ import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';
 import {Validations} from '../../services/validations';
+import {links,errorcodes} from '../../constants/config';
+import {general,reset_password,temp_password,login} from '../../constants/error-messages';
 
 @Component({
     selector: 'reset-password',
@@ -15,57 +17,66 @@ import {Validations} from '../../services/validations';
 })
 
 export class ResetPassword {
-    constructor(router: Router, auth: Auth, common: Common, location: Location, validations: Validations) {
-        this.location = location;
-        this.router = router;
-        this.auth = auth;
-        this.common = common;
-        this.validations = validations;
-        this.errorMessages = "";
-        this.successMessage = "";
-        this.getErrorMessages();
-        this.config = "";
-        this.apiServer = "";
-        this.getConfig();
+    // errorMessages: any;
+    // successMessage: string;
+    // config: any;
+    apiServer: string;
+    sStorage: any;
+    constructor(public router: Router, public auth: Auth, public common: Common, public location: Location, public validations: Validations) {
+        // this.location = location;
+        // this.router = router;
+        // this.auth = auth;
+        // this.common = common;
+        // this.validations = validations;
+        // this.errorMessages = "";
+        // this.successMessage = "";
+        // this.getErrorMessages();
+        // this.config = "";
+        this.apiServer = this.common.getApiServer();
+        // this.getConfig();
         this.initialize();
-        this.sStorage = this.common.sStorage;
+        this.sStorage = this.common.getStorage();
     }
 
     initialize() {
         $('title').html('Reset Password  |  Kaplan Nursing');
     }
 
-    getErrorMessages() {
-        let self = this;
-        this.common.getErrorMessages().then(function (response) {
-            return response.json()
-        }).then(function (json) {
-            self.errorMessages = json
-            self.successMessage = json
-        }).catch(function (ex) {
-            console.log('parsing failed', ex)
-        });
-    }
-    getConfig() {
-        let self = this;
-        this.common.getConfig().then(function (response) {
-            return response.json()
-        }).then(function (json) {
-            self.config = json
-            self.getApiServer();
-        }).catch(function (ex) {
-            console.log('parsing failed', ex)
-        });
-    }
-    getApiServer() {
-        let configJSON = this.config;
-        if (location.hostname.indexOf('localhost') > -1)
-            this.apiServer = configJSON.links.api.local.server;
-        if (location.hostname.indexOf('dev') > -1)
-            this.apiServer = configJSON.links.api.dev.server;
-        if (location.hostname.indexOf('qa') > -1)
-            this.apiServer = configJSON.links.api.qa.server;
-    }
+    // getErrorMessages() {
+    //     let self = this;
+    //     this.common.getErrorMessages().then(function(response) {
+    //         return response.json()
+    //     }).then(function(json) {
+    //         self.errorMessages = json
+    //         self.successMessage = json
+    //     }).catch(function(ex) {
+    //         console.log('parsing failed', ex)
+    //     });
+    // }
+    // getConfig() {
+    //     let self = this;
+    //     this.common.getConfig().then(function(response) {
+    //         return response.json()
+    //     }).then(function(json) {
+    //         self.config = json
+    //         self.getApiServer();
+    //     }).catch(function(ex) {
+    //         console.log('parsing failed', ex)
+    //     });
+    // }
+    // getApiServer() {
+    //     let configJSON = this.config;
+    //     if (location.hostname.indexOf('localhost') > -1)
+    //         this.apiServer = configJSON.links.api.local.server;
+    //     if (location.hostname.indexOf('dev') > -1)
+    //         this.apiServer = configJSON.links.api.dev.server;
+    //     if (location.hostname.indexOf('qa') > -1)
+    //         this.apiServer = configJSON.links.api.qa.server;
+    // }
+    
+    
+    
+    
     onResetPassword(txtnPassword, txtcPassword, btnResetPassword, lnkhomeredirect, errorContainer, successcontainer, event) {
         event.preventDefault();
         let self = this;
@@ -80,8 +91,8 @@ export class ResetPassword {
             let decryptedId = this.decryption(encryptedId);
             let decryptedTime = this.decryption(encryptedExpiry);
 
-            let currentTime = new Date();
-            let isExpire = new Date(decryptedTime) - currentTime;
+            let currentTime: any = new Date();
+            let isExpire: any = new Date(decryptedTime) - currentTime;
             let status = '';
 
             if (isExpire < 0)
@@ -90,32 +101,32 @@ export class ResetPassword {
             { alert('Please refresh the page and try once again.'); }
             else {
 
-                let apiURL = this.apiServer + this.config.links.api.baseurl + this.config.links.api.admin.settemporarypasswordapi;
+                let apiURL = this.apiServer + links.api.baseurl + links.api.admin.settemporarypasswordapi;
                 let promise = this.auth.settemporarypassword(apiURL, decryptedId, newpassword);
-                promise.then(function (response) {
+                promise.then(function(response) {
                     status = response.status;
                     return response.json();
-                }).then(function (json) {
-                    if (status.toString() === self.config.errorcode.SUCCESS) {
+                }).then(function(json) {
+                    if (status.toString() === errorcodes.SUCCESS) {
                         txtnPassword.value = "";
                         txtcPassword.value = "";
                         self.AuthanticateUser(decryptedId, newpassword, 'admin', errorContainer);
                         self.showSuccess(successcontainer, lnkhomeredirect, btnResetPassword);
                     }
-                    else if (status.toString() === self.config.errorcode.API) {
+                    else if (status.toString() === errorcodes.API) {
                         if (json.Payload.length > 0) {
                             if (json.Payload[0].Messages.length > 0) {
-                                self.showError(json.Payload[0].Messages[0].toString(), errorContainer);  
-                                self.clearPasswords(txtnPassword, txtcPassword);                              
+                                self.showError(json.Payload[0].Messages[0].toString(), errorContainer);
+                                self.clearPasswords(txtnPassword, txtcPassword);
                             }
                         }
                     }
                     else {
-                        self.showError(self.errorMessages.temp_password.valid_emailid, errorContainer);
+                        self.showError(general.exception, errorContainer);
                         self.clearPasswords(txtnPassword, txtcPassword);
                     }
-                }).catch(function (ex) {
-                    self.showError(self.errorMessages.general.exception, errorContainer);
+                }).catch(function(ex) {
+                    self.showError(general.exception, errorContainer);
                     self.clearPasswords(txtnPassword, txtcPassword);
                 });
             }
@@ -129,29 +140,31 @@ export class ResetPassword {
         txtnPassword.value = '';
         txtcPassword.value = '';
     }
+    
     RedirectToLogin(event) {
         event.preventDefault();
         this.router.parent.navigateByUrl('/login');
     }
-    route(path, e) {
-        this.utility.route(path, this.router, e);
-    }
+    
+    // route(path, e) {
+    //     this.utility.route(path, this.router, e);
+    // }
     validate(newpassword, confirmpassword, btnResetPassword, lnkhomeredirect, errorContainer, successContainer) {
         this.clearError(errorContainer, successContainer, lnkhomeredirect);
         if (!this.validations.comparePasswords(newpassword, confirmpassword)) {
-            this.showError(this.errorMessages.reset_password.newpass_match, errorContainer);
+            this.showError(reset_password.newpass_match, errorContainer);
             return false;
         } else if (!this.validations.validateLength(newpassword)) {
-            this.showError(this.errorMessages.reset_password.newpass_character_count, errorContainer);
+            this.showError(reset_password.newpass_character_count, errorContainer);
             return false;
         } else if (!this.validations.validateSpecialCharacterCount(confirmpassword) && !this.validations.validateNumberCount(confirmpassword)) {
-            this.showError(this.errorMessages.reset_password.newpass_number_specialcharacter_validation, errorContainer);
+            this.showError(reset_password.newpass_number_specialcharacter_validation, errorContainer);
             return false;
         } else if (!this.validations.validateSpecialCharacterCount(confirmpassword)) {
-            this.showError(this.errorMessages.reset_password.newpass_specialcharacter_validation, errorContainer);
+            this.showError(reset_password.newpass_specialcharacter_validation, errorContainer);
             return false;
         } else if (!this.validations.validateNumberCount(confirmpassword)) {
-            this.showError(this.errorMessages.reset_password.newpass_number_validation, errorContainer);
+            this.showError(reset_password.newpass_number_validation, errorContainer);
             return false;
         }
         return true;
@@ -200,12 +213,12 @@ export class ResetPassword {
     }
     AuthanticateUser(useremail, password, userType, errorContainer) {
         let self = this;
-        let apiURL = this.apiServer + this.config.links.api.baseurl + this.config.links.api.admin.authenticationapi;
+        let apiURL = this.apiServer + links.api.baseurl + links.api.admin.authenticationapi;
         let promise = this.auth.login(apiURL, useremail, password, userType);
-        promise.then(function (response) {
+        promise.then(function(response) {
             return response.json();
-        }).then(function (json) {
-            if (json.AccessToken != null && json.AccessToken != '') {                
+        }).then(function(json) {
+            if (json.AccessToken != null && json.AccessToken != '') {
                 self.sStorage.setItem('jwt', json.AccessToken);
                 self.sStorage.setItem('useremail', json.Email);
                 self.sStorage.setItem('istemppassword', json.TemporaryPassword);
@@ -219,28 +232,10 @@ export class ResetPassword {
                 self.sStorage.setItem('securitylevel', json.SecurityLevel);
             }
             else {
-                self.showError(self.errorMessages.login.auth_failed, errorContainer);
+                self.showError(login.auth_failed, errorContainer);
             }
-        }).catch(function (ex) {
-            self.showError(self.errorMessages.general.exception, errorContainer);
+        }).catch(function(ex) {
+            self.showError(general.exception, errorContainer);
         });
     }
-    // getInstitutions(institutionarr) {
-    //     var len1 = institutionarr.length;
-    //     var name = "";
-    //     for (var i = 0; i < len1; i++) {
-    //         if (institutionarr[i].InstitutionNameWithProgOfStudy != "") {
-    //             if (name === "")
-    //                 name = institutionarr[i].InstitutionNameWithProgOfStudy + '|';
-    //             else
-    //                 name = name + institutionarr[i].InstitutionNameWithProgOfStudy + '|';
-    //         }
-    //     }
-    //     if (name != null && name != "") {
-    //         if (name.indexOf('|') > 0) {
-    //             name = name.substr(0, name.lastIndexOf('|'));
-    //         }
-    //     }
-    //     return name;
-    // }
 }

@@ -18,26 +18,42 @@ var gulpif = require('gulp-if');
 var args = require('yargs').argv;
 var moment = require('moment');
 var robocopy = require('robocopy');
+var typescript = require('gulp-typescript');
+var tscConfig = require('./tsconfig.json');
 
 gulp.task('clean', function (done) {
     del([config.src.build], done);
 });
 
+gulp.task('ts', function () {
+    var tsResult = gulp
+        .src([config.app.src.ts])
+        .pipe(typescript(tscConfig.compilerOptions));
+    return tsResult.js.pipe(gulp.dest(config.app.src.build));
+});
 
 gulp.task('js', function () {
-    return gulp.src(config.app.src.js)
-      .pipe(rename({ extname: '' })) //hack, see: https://github.com/sindresorhus/gulp-traceur/issues/54
-      .pipe(plumber())
-      .pipe(traceur({
-          modules: 'instantiate',
-          moduleName: true,
-          annotations: true,
-          types: true,
-          memberVariables: true
-      }))
-      .pipe(rename({ extname: '.js' })) //hack, see: https://github.com/sindresorhus/gulp-traceur/issues/54
-      .pipe(gulp.dest(config.app.src.build));
+    var tsResult = gulp
+        .src([config.app.src.js])
+        .pipe(typescript(tscConfig.compilerOptions));
+    return tsResult.js.pipe(gulp.dest(config.app.src.build));
 });
+
+
+// gulp.task('js', function () {
+//     return gulp.src(config.app.src.js)
+//       .pipe(rename({ extname: '' })) //hack, see: https://github.com/sindresorhus/gulp-traceur/issues/54
+//       .pipe(plumber())
+//       .pipe(traceur({
+//           modules: 'instantiate',
+//           moduleName: true,
+//           annotations: true,
+//           types: true,
+//           memberVariables: true
+//       }))
+//       .pipe(rename({ extname: '.js' })) //hack, see: https://github.com/sindresorhus/gulp-traceur/issues/54
+//       .pipe(gulp.dest(config.app.src.build));
+// });
 
 gulp.task('images', function () {
     return gulp.src(config.app.src.images)
@@ -74,7 +90,7 @@ gulp.task('libs', function () {
 });
 
 
-gulp.task('build', ['js', 'html','json','css','images','favicons', 'libs']);
+gulp.task('build', ['ts','js', 'html','json','css','images','favicons', 'libs']);
 
 gulp.task('play', ['build'], function () {
 
@@ -119,13 +135,13 @@ var backupFolder ='';
 gulp.task('backup',['build'], function() {
     log('Backuping the current build');
     
-    if (args.branch == "refs/heads/dev") {
+    if (args.branch === "refs/heads/dev") {
         liveFolder=config.deploy.DEV.liveFolder;
-        backupFolder=config.deploy.DEV.backupFolder
+        backupFolder = config.deploy.DEV.backupFolder;
     }
-    else if (args.branch == "refs/heads/qa") {
+    else if (args.branch === "refs/heads/qa") {
         liveFolder=config.deploy.QA.liveFolder;
-        backupFolder=config.deploy.QA.backupFolder
+        backupFolder = config.deploy.QA.backupFolder;
     }
     
     util.log(liveFolder);

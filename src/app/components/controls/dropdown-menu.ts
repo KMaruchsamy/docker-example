@@ -12,9 +12,7 @@ import '../../plugins/dropdown.js';
   directives: [RouterLink]
 })
 export class DropdownMenu {
-  constructor(router: Router, auth: Auth) {
-    this.router = router;
-    this.auth = auth;
+  constructor(public router: Router,public auth: Auth) {
   }
 
 
@@ -26,7 +24,7 @@ export class DropdownMenu {
       , firstItem
       , focusDelay = 200
       , menus = $(toggle).parent().find('ul').attr('role', 'menu')
-      , lis = menus.find('li').attr('role', 'presentation')
+      , lis = menus.find('li').attr('role', 'presentation');
 
 
     $(document).off('click.dropdown.data-api', '.dropdown-menu');

@@ -1,6 +1,6 @@
 import {View, Component,bootstrap,bind} from 'angular2/angular2';
 import {Router, RouterOutlet,RouteConfig,RouterLink,ROUTER_PROVIDERS,LocationStrategy,HashLocationStrategy,Location,RouteParams} from 'angular2/router';
-import {http, HTTP_PROVIDERS} from 'angular2/http';
+import {HTTP_PROVIDERS} from 'angular2/http';
 import {Home} from './components/home/home';
 import {Login} from './components/login/login';
 import {Auth} from './services/auth';
@@ -41,13 +41,8 @@ import {ProfileDescription} from './components/home/profile-description';
     {path:'/profiles/:id', component:ProfileDescription, as : 'Profiles'}
 ])
 export class App {
-    constructor(auth: Auth) {
-       this.auth = auth;    
-    }
-    
     onInit(){
-    }
-  
+    }  
 }
 
 bootstrap(App, [

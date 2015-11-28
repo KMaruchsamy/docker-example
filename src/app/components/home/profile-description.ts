@@ -5,6 +5,7 @@ import {Common} from '../../services/common';
 import {links} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
+import {ProfileModel} from '../../models/profile-model';
 
 @Component({
 	selector: 'profile-description',
@@ -15,20 +16,24 @@ import {PageFooter} from '../shared/page-footer';
 	directives: [RouterLink, PageHeader, PageFooter]
 })
 export class ProfileDescription {
-	constructor(routeParams: RouteParams, homeService: HomeService, common: Common) {		
-		this.routeParams = routeParams;
-		this.homeService = homeService;
-		this.common = common;
-		this.kaplanAdminId = this.routeParams.get('id');
+	kaplanAdminId: number;
+	profile: ProfileModel;
+	apiServer: string;
+	constructor(public routeParams: RouteParams, public homeService: HomeService, public common: Common) {		
+		// this.routeParams = routeParams;
+		// this.homeService = homeService;
+		// this.common = common;
+		this.apiServer = this.common.getApiServer();
+		this.kaplanAdminId = parseInt(this.routeParams.get('id'));
 		this.profile = {};
-		let self = this;
-		this.loadProfileDescription(self);
+		this.loadProfileDescription();
 	}
 
-	loadProfileDescription(self) {
+	loadProfileDescription(): void {
 		if (this.kaplanAdminId != null && this.kaplanAdminId > 0) {
-			let url = this.common.apiServer + links.api.baseurl + links.api.admin.profilesapi + '/' + this.kaplanAdminId;
+			let url = this.apiServer + links.api.baseurl + links.api.admin.profilesapi + '/' + this.kaplanAdminId;
 			let profilePromise = this.homeService.getProfile(url);
+			let self: ProfileDescription = this;
 			profilePromise.then((response) => {
 				return response.json();
 			})
@@ -40,10 +45,5 @@ export class ProfileDescription {
 				});
 		}
 	}
-
-
-
-
-
 
 }

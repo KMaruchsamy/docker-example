@@ -6,7 +6,7 @@ import * as _ from '../lib/index';
 
 @Injectable()
 export class HomeService {
-	constructor(http: Http, auth: Auth) {
+	constructor(public http: Http,public auth: Auth) {
 		this.http = http;
 		this.auth = auth;
 		this.auth.refresh();
@@ -35,7 +35,7 @@ export class HomeService {
 	}
 
 
-	bindToModel(profile, isLeft = true) {
+	bindToModel(profile, isLeft = true):ProfileModel {
 		return new ProfileModel(
 			profile.KaplanAdminId,
 			profile.KaplanAdminTypeId,

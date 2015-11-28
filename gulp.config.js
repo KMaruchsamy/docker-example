@@ -3,6 +3,7 @@ module.exports = function () {
 		app:{
 			src: {
 				js: 'src/app/**/*.js',
+				ts:'src/app/**/*.ts',
 				html: 'src/app/**/*.html',
 				images: 'src/app/images/*.*',
 				css: 'src/app/**/*.css',

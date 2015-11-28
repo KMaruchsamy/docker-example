@@ -4,6 +4,8 @@ import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';
 import {Validations} from '../../services/validations';
 import {Logger} from '../../scripts/logger';
+import {links, errorcodes} from '../../constants/config';
+import {general, forgot_password} from '../../constants/error-messages';
 
 @Component({
     selector: 'forgot-password',
@@ -15,26 +17,29 @@ import {Logger} from '../../scripts/logger';
 })
 
 export class ForgotPassword {
-    constructor(router: Router, common: Common,validations:Validations,logger:Logger) {
-        this.router = router;
-        this.common = common;
+    // errorMessages:any;
+    // successMessage:string;
+    // config:any;
+    apiServer:string;
+    constructor(public router: Router,public common: Common,public validations:Validations,public logger:Logger) {
+        // this.router = router;
+        // this.common = common;
         this.validations=validations;
-        this.errorMessages = "";
-        this.successMessage = "";
-        this.getErrorMessages();
-        this.config = "";
-        this.apiServer = "";
-        this.getConfig();
+        // this.errorMessages = "";
+        // this.successMessage = "";
+        // this.getErrorMessages();
+        // this.config = "";
+        this.apiServer = this.common.getApiServer();
+        // this.getConfig();
         this.initialize();
         this.reset();
         this.logger = logger;
     }
 
-    initialize() {
-        let self=this;
+    initialize():void {
         $('title').html('Forgot Password  |  Kaplan Nursing');
         $('#forgotPassword').bind('input', function(){
-           self.checkpasswordlength();
+           this.checkpasswordlength();
         });
     }
 
@@ -45,38 +50,40 @@ export class ForgotPassword {
         $('#btnSend').attr("aria-disabled", "true");
     }
 
-    getErrorMessages() {
-        let self = this;
-        this.common.getErrorMessages().then(function (response) {
-            return response.json()
-        }).then(function (json) {
-            self.errorMessages = json
-            self.successMessage = json
-        }).catch(function (ex) {
-            console.log('parsing failed', ex)
-        });
-    }
-    getConfig() {
-        let self = this;
-        this.common.getConfig().then(function (response) {
-            return response.json()
-        }).then(function (json) {
-            console.log('parsed json', json)
-            self.config = json
-            self.getApiServer();
-        }).catch(function (ex) {
-            console.log('parsing failed', ex)
-        });
-    }
-    getApiServer() {
-        let configJSON = this.config;
-        if (location.hostname.indexOf('localhost') > -1)
-            this.apiServer = configJSON.links.api.local.server;
-        if (location.hostname.indexOf('dev') > -1)
-            this.apiServer = configJSON.links.api.dev.server;
-        if (location.hostname.indexOf('qa') > -1)
-            this.apiServer = configJSON.links.api.qa.server;
-    }
+    // getErrorMessages() {
+    //     let self = this;
+    //     this.common.getErrorMessages().then(function (response) {
+    //         return response.json()
+    //     }).then(function (json) {
+    //         self.errorMessages = json
+    //         self.successMessage = json
+    //     }).catch(function (ex) {
+    //         console.log('parsing failed', ex)
+    //     });
+    // }
+    // getConfig() {
+    //     let self = this;
+    //     this.common.getConfig().then(function (response) {
+    //         return response.json()
+    //     }).then(function (json) {
+    //         console.log('parsed json', json)
+    //         self.config = json
+    //         self.getApiServer();
+    //     }).catch(function (ex) {
+    //         console.log('parsing failed', ex)
+    //     });
+    // }
+    // getApiServer() {
+    //     let configJSON = this.config;
+    //     if (location.hostname.indexOf('localhost') > -1)
+    //         this.apiServer = configJSON.links.api.local.server;
+    //     if (location.hostname.indexOf('dev') > -1)
+    //         this.apiServer = configJSON.links.api.dev.server;
+    //     if (location.hostname.indexOf('qa') > -1)
+    //         this.apiServer = configJSON.links.api.qa.server;
+    // }
+    
+    
     onForgotPassword(txtEmailId, btnSend, errorContainer, event) {
         event.preventDefault();
         let self = this;
@@ -84,7 +91,7 @@ export class ForgotPassword {
 
         let encryptedId = this.getEncryption(emailid);
 
-        let expiryhour=parseInt(this.config.links.resetemailexpire.expirytime); // Default expiry hour is 2 hours. To change hours go to config.json & change expirytime...
+        let expiryhour=parseInt(links.resetemailexpire.expirytime); // Default expiry hour is 2 hours. To change hours go to config.json & change expirytime...
         let currentTime = new Date();
         let expiryTime = new Date(currentTime.getTime() + (expiryhour * 60 * 60 * 1000));     // converting hours to milliseconds and adding to Date
                 
@@ -92,22 +99,22 @@ export class ForgotPassword {
         let encryptedTime = this.getEncryption(expiryTime.toString());
         
         if (this.validate(emailid, errorContainer)) {
-            let apiURL = this.apiServer + this.config.links.api.baseurl + this.config.links.api.admin.forgotpasswordapi;
+            let apiURL = this.apiServer + links.api.baseurl + links.api.admin.forgotpasswordapi;
             let promise = this.forgotpassword(apiURL, emailid, encryptedId, encryptedTime);
             promise.then(function (response) {
                 return response.status;
             }).then(function (status) {
-                if (status.toString()===self.config.errorcode.SUCCESS) {
+                if (status.toString()===errorcodes.SUCCESS) {
                     self.router.parent.navigateByUrl('/forgot-password-confirmation');
                 }
-                else if (status.toString()===self.config.errorcode.SERVERERROR) {
-                    self.showError(self.errorMessages.forgot_password.failed_sent_mail, errorContainer);
+                else if (status.toString()===errorcodes.SERVERERROR) {
+                    self.showError(forgot_password.failed_sent_mail, errorContainer);
                 }
                 else {
-                    self.showError(self.errorMessages.forgot_password.invalid_emailid, errorContainer);
+                    self.showError(forgot_password.invalid_emailid, errorContainer);
                 }
             }).catch(function (ex) {
-                self.showError(self.errorMessages.general.exception, errorContainer);
+                self.showError(general.exception, errorContainer);
             });
         }
     }
@@ -120,7 +127,7 @@ export class ForgotPassword {
         this.clearError(errorContainer);
 
         if (!this.validations.validateValidEmailId(emailId)) {
-            this.showError(this.errorMessages.forgot_password.email_format_validation, errorContainer);
+            this.showError(forgot_password.email_format_validation, errorContainer);
             return false;
         }
         return true;

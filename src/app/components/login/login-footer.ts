@@ -11,14 +11,4 @@ import {Utility} from '../../scripts/utility';
     directives:[RouterLink]
 })
 export class LoginFooter{
-    constructor(router:Router, utility:Utility){
-        this.router = router;
-        this.utility = utility;
-    }
-
-    route(path,e){
-        e.preventDefault();
-        this.utility.route(path,this.router,e);
-    }
-
 }

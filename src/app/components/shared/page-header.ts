@@ -15,9 +15,7 @@ import {DropdownMenu} from '../controls/dropdown-menu';
 })
 
 export class PageHeader{
-    constructor(router: Router,auth : Auth ){       
-        this.router=router;
-        this.auth = auth;
+    constructor(public router: Router,public auth : Auth ){
         //public inputs will not be available here .. will be bound in the onInit event
     }
     

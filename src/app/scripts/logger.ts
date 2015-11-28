@@ -1,4 +1,5 @@
 export class Logger {
+	worker : any;
 	constructor() {
 		this.worker = this.getWorker();
 	}

@@ -1,9 +1,23 @@
 import {Common} from './common';
 
 export class Auth {
+  sStorage:any;
+    token:string;
+    user:any;
+    authheader:string;
+    useremail:string;
+    istemppassword:boolean;
+    userid :number;
+    firstname:string;
+    lastname:string;
+    title:string;
+    institutions:any;
+    securitylevel:number;
+    username:string;
+    common:Common;
   constructor() {
     this.common = new Common();
-    this.sStorage = this.common.sStorage;
+    this.sStorage = this.common.getStorage();
     this.token = this.sStorage.getItem('jwt');
     this.user = this.token && jwt_decode(this.token);
     this.useremail = this.sStorage.getItem('useremail');
@@ -62,7 +76,7 @@ export class Auth {
     this.sStorage.clear();
     this.token = null;
     this.user = null;
-    this.header = null;
+    this.authheader = null;
     this.useremail = null;
     this.istemppassword = false;
     this.userid = null;

@@ -10,7 +10,7 @@ import {View,Component} from 'angular2/angular2';
 export class LoginHeader{
     constructor(){}
 
-    closeMessage(spnMessage){        
+    closeMessage(spnMessage):void{        
         $(spnMessage).closest('.alert').slideUp(function(){
             $(this).addClass('hidden');
         });

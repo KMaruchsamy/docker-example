@@ -4,6 +4,8 @@ import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';
 import {Validations} from '../../services/validations';
+import {links,errorcodes} from '../../constants/config';
+import {temp_password,general} from '../../constants/error-messages';
 
 @Component({
     selector: 'set-password-first-time',
@@ -15,20 +17,25 @@ import {Validations} from '../../services/validations';
 })
 
 export class SetPasswordFirstTime {
-    constructor(router: Router, auth: Auth, common: Common, validations: Validations) {
-        this.router = router;
-        this.auth = auth;
-        this.common = common;
-        this.validations = validations;
-        this.errorMessages = "";
-        this.successMessage = "";
-        this.getErrorMessages();
-        this.config = "";
-        this.apiServer = "";
-        this.getConfig();
+    // errorMessages:any;
+    // successMessage:string;
+    // config:any;
+    apiServer:string;
+    sStorage:any;
+    constructor(public router: Router,public auth: Auth,public common: Common,public validations: Validations) {
+        // this.router = router;
+        // this.auth = auth;
+        // this.common = common;
+        // this.validations = validations;
+        // this.errorMessages = "";
+        // this.successMessage = "";
+        // this.getErrorMessages();
+        // this.config = "";
+        this.apiServer = this.common.getApiServer();
+        // this.getConfig();
         this.reset();
         this.initialize();
-        this.sStorage = this.common.sStorage;
+        this.sStorage = this.common.getStorage();
     }
 
     initialize() {
@@ -45,37 +52,38 @@ export class SetPasswordFirstTime {
         $('#resetPassword').attr("aria-disabled", "true");
     }
 
-    getErrorMessages() {
-        let self = this;
-        this.common.getErrorMessages().then(function (response) {
-            return response.json();
-        }).then(function (json) {
-            self.errorMessages = json;
-            self.successMessage = json;
-        }).catch(function (ex) {
-            console.log('parsing failed', ex);
-        });
-    }
-    getConfig() {
-        let self = this;
-        this.common.getConfig().then(function (response) {
-            return response.json()
-        }).then(function (json) {
-            self.config = json
-            self.getApiServer();
-        }).catch(function (ex) {
-            console.log('parsing failed', ex)
-        });
-    }
-    getApiServer() {
-        let configJSON = this.config;
-        if (location.hostname.indexOf('localhost') > -1)
-            this.apiServer = configJSON.links.api.local.server;
-        if (location.hostname.indexOf('dev') > -1)
-            this.apiServer = configJSON.links.api.dev.server;
-        if (location.hostname.indexOf('qa') > -1)
-            this.apiServer = configJSON.links.api.qa.server;
-    }
+    // getErrorMessages() {
+    //     let self = this;
+    //     this.common.getErrorMessages().then(function (response) {
+    //         return response.json();
+    //     }).then(function (json) {
+    //         self.errorMessages = json;
+    //         self.successMessage = json;
+    //     }).catch(function (ex) {
+    //         console.log('parsing failed', ex);
+    //     });
+    // }
+    // getConfig() {
+    //     let self = this;
+    //     this.common.getConfig().then(function (response) {
+    //         return response.json()
+    //     }).then(function (json) {
+    //         self.config = json
+    //         self.getApiServer();
+    //     }).catch(function (ex) {
+    //         console.log('parsing failed', ex)
+    //     });
+    // }
+    // getApiServer() {
+    //     let configJSON = this.config;
+    //     if (location.hostname.indexOf('localhost') > -1)
+    //         this.apiServer = configJSON.links.api.local.server;
+    //     if (location.hostname.indexOf('dev') > -1)
+    //         this.apiServer = configJSON.links.api.dev.server;
+    //     if (location.hostname.indexOf('qa') > -1)
+    //         this.apiServer = configJSON.links.api.qa.server;
+    // }
+    
     onSetPasswordFirstTime(txtnPassword, txtcPassword, btnSetPassword, lnkhomeredirect, errorContainer, successcontainer, event) {
         event.preventDefault();
         let self = this;
@@ -84,19 +92,19 @@ export class SetPasswordFirstTime {
         let confirmpassword = txtcPassword.value;
         let status = '';
         if (this.validate(newpassword, confirmpassword, btnSetPassword, lnkhomeredirect, errorContainer, successcontainer)) {
-            let apiURL = this.apiServer + this.config.links.api.baseurl + this.config.links.api.admin.settemporarypasswordapi;
+            let apiURL = this.apiServer + links.api.baseurl + links.api.admin.settemporarypasswordapi;
             let promise = this.auth.settemporarypassword(apiURL, emailid, newpassword);
             promise.then(function (response) {
                 status = response.status;
                 return response.json();
             }).then(function (json) {
-                if (status.toString() === self.config.errorcode.SUCCESS) {
+                if (status.toString() === errorcodes.SUCCESS) {
                     txtnPassword.value = "";
                     txtcPassword.value = "";
                     self.sStorage.setItem('istemppassword', false);
                     self.showSuccess(successcontainer, lnkhomeredirect, btnSetPassword);
                 }
-                else if (status.toString() === self.config.errorcode.API) {
+                else if (status.toString() === errorcodes.API) {
                     if (json.Payload.length > 0) {
                         if (json.Payload[0].Messages.length > 0) {
                             self.showError(json.Payload[0].Messages[0].toString(), errorContainer);
@@ -105,11 +113,11 @@ export class SetPasswordFirstTime {
                     }
                 }
                 else {
-                    self.showError(self.errorMessages.temp_password.valid_emailid, errorContainer);
+                    self.showError(general.exception, errorContainer);
                     self.clearPasswords(txtnPassword, txtcPassword);
                 }
             }).catch(function (ex) {
-                self.showError(self.errorMessages.general.exception, errorContainer);
+                self.showError(general.exception, errorContainer);
                 self.clearPasswords(txtnPassword, txtcPassword);
             });
         }
@@ -135,19 +143,19 @@ export class SetPasswordFirstTime {
     validate(newpassword, confirmpassword, btnSetPassword, lnkhomeredirect, errorContainer, successContainer) {
         this.clearError(errorContainer, successContainer, lnkhomeredirect);
         if (!this.validations.comparePasswords(newpassword, confirmpassword)) {
-            this.showError(this.errorMessages.temp_password.newpass_match, errorContainer);
+            this.showError(temp_password.newpass_match, errorContainer);
             return false;
         } else if (!this.validations.validateLength(newpassword)) {
-            this.showError(this.errorMessages.temp_password.newpass_character_count, errorContainer);
+            this.showError(temp_password.newpass_character_count, errorContainer);
             return false;
         } else if (!this.validations.validateSpecialCharacterCount(confirmpassword) && !this.validations.validateNumberCount(confirmpassword)) {
-            this.showError(this.errorMessages.temp_password.newpass_number_specialcharacter_validation, errorContainer);
+            this.showError(temp_password.newpass_number_specialcharacter_validation, errorContainer);
             return false;
         } else if (!this.validations.validateSpecialCharacterCount(confirmpassword)) {
-            this.showError(this.errorMessages.temp_password.newpass_specialcharacter_validation, errorContainer);
+            this.showError(temp_password.newpass_specialcharacter_validation, errorContainer);
             return false;
         } else if (!this.validations.validateNumberCount(confirmpassword)) {
-            this.showError(this.errorMessages.temp_password.newpass_number_validation, errorContainer);
+            this.showError(temp_password.newpass_number_validation, errorContainer);
             return false;
         }
 

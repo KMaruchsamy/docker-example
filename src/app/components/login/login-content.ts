@@ -5,6 +5,8 @@ import {Router, RouterLink} from 'angular2/router';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import * as _ from '../../lib/index';
+import {links} from '../../constants/config';
+import {general, login} from '../../constants/error-messages';
 
 
 @Component({
@@ -17,65 +19,77 @@ import * as _ from '../../lib/index';
 })
 
 export class LoginContent {
-    constructor(router: Router, auth: Auth, common: Common) {
-        this.router = router;
-        this.auth = auth;
-        this.common = common;
-        this.errorMessages = '';
-        this.config = '';
-        this.apiServer = '';
-        this.nursingITServer = '';
-        this.getErrorMessages();
-        this.getConfig();
-        this.sStorage = this.common.sStorage;
+    // errorMessages:any;
+    // config:any;
+    apiServer: string;
+    nursingITServer: string;
+    sStorage: any;
+    institutionRN: number;
+    institutionPN: number;
+    page: string;
+    form: any;
+    hdInstitution: any;
+    hdToken: any;
+    hdURL: any;
+    constructor(public router: Router, public auth: Auth, public common: Common) {
+        // this.router = router;
+        // this.auth = auth;
+        // this.common = common;
+        // this.errorMessages = '';
+        // this.config = '';
+        this.apiServer = this.common.getApiServer();
+        this.nursingITServer = this.common.getNursingITServer();
+        // this.getErrorMessages();
+        // this.getConfig();
+        this.sStorage = this.common.getStorage();
         this.institutionRN = 0;
         this.institutionPN = 0;
     }
 
-    getErrorMessages() {
-        let self = this;
-        this.common.getErrorMessages().then(function (response) {
-            return response.json()
-        }).then(function (json) {
-            self.errorMessages = json
-        }).catch(function (ex) {
-            console.log('parsing failed', ex)
-        });
-    }
+    // getErrorMessages() {
+    //     let self = this;
+    //     this.common.getErrorMessages().then(function (response) {
+    //         return response.json()
+    //     }).then(function (json) {
+    //         self.errorMessages = json
+    //     }).catch(function (ex) {
+    //         console.log('parsing failed', ex)
+    //     });
+    // }
 
-    getConfig() {
-        let self = this;
-        this.common.getConfig().then(function (response) {
-            return response.json()
-        }).then(function (json) {
-            self.config = json
-            self.getApiServer();
-            self.getNursingITServer();
-        }).catch(function (ex) {
-            console.log('parsing failed', ex)
-        });
-    }
-
-
-    getApiServer() {
-        let configJSON = this.config;
-        if (location.hostname.indexOf('localhost') > -1)
-            this.apiServer = configJSON.links.api.local.server;
-        if (location.hostname.indexOf('dev') > -1)
-            this.apiServer = configJSON.links.api.dev.server;
-        if (location.hostname.indexOf('qa') > -1)
-            this.apiServer = configJSON.links.api.qa.server;
-    }
-
-    getNursingITServer() {
-        let configJSON = this.config;
-        if (location.hostname.indexOf('localhost') > -1)
-            this.nursingITServer = configJSON.links.nursingit.local.server;
-        if (location.hostname.indexOf('dev') > -1)
-            this.nursingITServer = configJSON.links.nursingit.dev.server;
-        if (location.hostname.indexOf('qa') > -1)
-            this.nursingITServer = configJSON.links.nursingit.qa.server;
-    }
+    //     getConfig() {
+    //         let self = this;
+    //         this.common.getConfig().then(function (response) {
+    //             return response.json()
+    //         }).then(function (json) {
+    //             self.config = json
+    //             self.getApiServer();
+    //             self.getNursingITServer();
+    //         }).catch(function (ex) {
+    //             console.log('parsing failed', ex)
+    //         });
+    //     }
+    // 
+    // 
+    //     getApiServer() {
+    //         let configJSON = this.config;
+    //         if (location.hostname.indexOf('localhost') > -1)
+    //             this.apiServer = configJSON.links.api.local.server;
+    //         if (location.hostname.indexOf('dev') > -1)
+    //             this.apiServer = configJSON.links.api.dev.server;
+    //         if (location.hostname.indexOf('qa') > -1)
+    //             this.apiServer = configJSON.links.api.qa.server;
+    //     }
+    // 
+    //     getNursingITServer() {
+    //         let configJSON = this.config;
+    //         if (location.hostname.indexOf('localhost') > -1)
+    //             this.nursingITServer = configJSON.links.nursingit.local.server;
+    //         if (location.hostname.indexOf('dev') > -1)
+    //             this.nursingITServer = configJSON.links.nursingit.dev.server;
+    //         if (location.hostname.indexOf('qa') > -1)
+    //             this.nursingITServer = configJSON.links.nursingit.qa.server;
+    //     }
 
 
     onSignIn(txtUserName, txtPassword, rdFaculty, rdStudent, errorContainer, btnSignIn, event) {
@@ -90,11 +104,11 @@ export class LoginContent {
             else
                 userType = 'student';
 
-            let apiURL = this.apiServer + this.config.links.api.baseurl + this.config.links.api.admin.authenticationapi;
+            let apiURL = this.apiServer + links.api.baseurl + links.api.admin.authenticationapi;
             let promise = this.auth.login(apiURL, useremail, password, userType);
-            promise.then(function (response) {
+            promise.then(function(response) {
                 return response.json();
-            }).then(function (json) {
+            }).then(function(json) {
                 if (json.AccessToken != null && json.AccessToken != '') {
                     self.sStorage.setItem('jwt', json.AccessToken);
                     self.sStorage.setItem('useremail', json.Email);
@@ -120,11 +134,11 @@ export class LoginContent {
                     }
                 }
                 else {
-                    self.showError(self.errorMessages.login.auth_failed, errorContainer);
+                    self.showError(login.auth_failed, errorContainer);
                     txtPassword.value = '';
                 }
-            }).catch(function (ex) {
-                self.showError(self.errorMessages.general.exception, errorContainer);
+            }).catch(function(ex) {
+                self.showError(general.exception, errorContainer);
                 txtPassword.value = '';
             });
         }
@@ -153,14 +167,14 @@ export class LoginContent {
     }
 
     redirectToStudentSite() {
-        var serverURL = this.common.nursingITServer + this.common.config.links.nursingit.landingpage;
+        var serverURL = this.nursingITServer + links.nursingit.landingpage;
         this.hdInstitution.value = (this.institutionRN > 0) ? this.institutionRN : this.institutionPN;
         this.hdToken.value = this.auth.token
         this.hdURL.value = this.page;
         console.log(this.hdInstitution.value);
         this.auth.logout();
         $(this.form).attr('ACTION', serverURL).submit();
-       
+
     }
 
     checkInstitutions() {
@@ -177,16 +191,16 @@ export class LoginContent {
 
     validate(email, password, errorContainer) {
         if (!this.validateEmail(email) && !this.validatePassword(password)) {
-            this.showError(this.errorMessages.login.email_pass_required_validation, errorContainer);
+            this.showError(login.email_pass_required_validation, errorContainer);
             return false;
         } else if (!this.validateEmail(email)) {
-            this.showError(this.errorMessages.login.email_required_validation, errorContainer);
+            this.showError(login.email_required_validation, errorContainer);
             return false;
         } else if (!this.validateEmailFormat(email)) {
-            this.showError(this.errorMessages.login.email_format_validation, errorContainer);
+            this.showError(login.email_format_validation, errorContainer);
             return false;
         } else if (!this.validatePassword(password)) {
-            this.showError(this.errorMessages.login.pass_required_validation, errorContainer);
+            this.showError(login.pass_required_validation, errorContainer);
             return false;
         }
 
@@ -226,7 +240,7 @@ export class LoginContent {
     }
 
     closealert(btnClose) {
-        $(btnClose).closest('div.alert').fadeOut(function () {
+        $(btnClose).closest('div.alert').fadeOut(function() {
             $(this).addClass('hidden');
         });
     }
