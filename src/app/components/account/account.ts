@@ -32,45 +32,11 @@ export class Account {
         this.initialize();
 
     }
-    
-    // getErrorMessages() {
-    //     let self = this;
-    //     this.common.getErrorMessages().then(function (response) {
-    //         return response.json();
-    //     }).then(function (json) {
-    //         self.errorMessages = json;
-    //         self.successMessage = json;
-    //     }).catch(function (ex) {
-    //         console.log('parsing failed', ex);
-    //     });
-    // }
-    // 
-    // getConfig() {
-    //     let self = this;
-    //     this.common.getConfig().then(function (response) {
-    //         return response.json()
-    //     }).then(function (json) {
-    //         self.config = json
-    //         self.getApiServer();
-    //     }).catch(function (ex) {
-    //         console.log('parsing failed', ex)
-    //     });
-    // }
-    // 
-    // getApiServer() {
-    //     let configJSON = this.config;
-    //     if (location.hostname.indexOf('localhost') > -1)
-    //         this.apiServer = configJSON.links.api.local.server;
-    //     if (location.hostname.indexOf('dev') > -1)
-    //         this.apiServer = configJSON.links.api.dev.server;
-    //     if (location.hostname.indexOf('qa') > -1)
-    //         this.apiServer = configJSON.links.api.qa.server;
-    // }
-    
+        
     getInitialize() {
         // this.sStorage = this.common.sStorage;
         if (this.auth.isAuth()) {
-            $('title').html('Manage Account  |  Kaplan Nursing');
+            $('title').html('Manage Account &ndash; Kaplan Nursing');
             $('#firstName').val(this.sStorage.getItem('firstname'));
             $('#lastName').val(this.sStorage.getItem('lastname'));
             $('#facultyTitle').val(this.sStorage.getItem('title'));

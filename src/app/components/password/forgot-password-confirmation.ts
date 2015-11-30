@@ -18,6 +18,6 @@ export class ForgotPasswordConfirmation {
     }
 
     initialize() {
-        $('title').html('Kaplan Nursing | Forgot Password Confirmation');
+        $('title').html('Kaplan Nursing &ndash; Forgot Password Confirmation');
     }
 }

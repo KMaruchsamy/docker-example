@@ -39,6 +39,12 @@ export class ProfileDescription {
 			})
 				.then((json) => {
 					self.profile = self.homeService.bindToModel(json, true);
+					if (self.profile) {
+						if (self.profile.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER')
+							$('title').html('Your Account Manager &ndash; Kaplan Nursing');
+						else
+							$('title').html('Your Nurse Consultant &ndash; Kaplan Nursing');
+					}
 				})
 				.catch((error) => {
 					console.log(error);

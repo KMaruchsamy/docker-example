@@ -42,11 +42,6 @@ export class Home {
   apiServer: string;
   nursingITServer: string;
   constructor(public router: Router, public auth: Auth, public location: Location, public common: Common, public homeService: HomeService) {
-    // this.common = common;
-    // this.router = router;
-    // this.auth = auth;
-    // this.location = location;
-    // this.homeService = homeService;
     this.apiServer = this.common.getApiServer();
     this.nursingITServer = this.common.getNursingITServer();
     this.redirectToPage();
@@ -94,7 +89,7 @@ export class Home {
   }
 
   initialize(): void {
-    $('title').html('Faculty Home  |  Kaplan Nursing');
+    $('title').html('Faculty Home &ndash; Kaplan Nursing');
     this.institutionRN = 0;
     this.institutionPN = 0;
     this.page = null;

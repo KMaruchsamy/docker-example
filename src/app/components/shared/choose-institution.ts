@@ -23,10 +23,6 @@ export class ChooseInstitution {
 	backMessage: string;
 	nursingITServer: string;
 	constructor(public router: Router, public routeParams: RouteParams, public common: Common, public auth: Auth) {
-		// this.common = common;
-		// this.auth = auth;
-		// this.router = router;
-		// this.routeParams = routeParams;
 		this.nursingITServer = this.common.getNursingITServer();
 		this.fromPage = this.routeParams.get('frompage');
 		this.page = this.routeParams.get('redirectpage');

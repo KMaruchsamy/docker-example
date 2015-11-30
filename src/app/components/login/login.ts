@@ -7,7 +7,10 @@ import {Logger} from '../../scripts/logger';
 
 @Component({
   selector: 'login',
-  viewBindings: [Logger]
+  viewBindings: [Logger],
+  host: {
+    '(window:resize)':'resize($event)'
+  }
 })
 @View({
   templateUrl: '../../templates/login/login.html',
@@ -19,8 +22,11 @@ export class Login {
     this.reset();
   }
 
+  resize($event) {
+    console.log($event);
+}  
   initialize(): void {
-    $('title').html('Faculty Sign In  |  Kaplan Nursing');
+    $('title').html('Faculty Sign In &ndash; Kaplan Nursing');
   }
 
   reset(): void {

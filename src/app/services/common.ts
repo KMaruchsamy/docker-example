@@ -2,26 +2,8 @@
 import {links} from '../constants/config';
 
 export class Common {
-    // sStorage:any;
-    // apiServer:string;
-    // nursingITServer:string;
-    // errorMessages:any;
-    // config:any;
     constructor() {
-        // this.sStorage = this.getStorage();
-        // this.getApiServer();
-        // this.getNursingITServer();
-        // this.fetchErrorMessages();
-        // this.fetchConfig();
     }
-
-//     getErrorMessages() {
-//         return fetch('../config/error-messages.json');
-//     }
-// 
-//     getConfig() {
-//         return fetch('../config/config.json');
-//     }
 
     isPrivateBrowsing() {
         var testKey = 'test', storage = window.sessionStorage;
@@ -41,31 +23,6 @@ export class Common {
         else
             return window.sessionStorage;
     }
-
-//     fetchErrorMessages() {
-//        let self = this;
-//        fetch('../config/error-messages.json').then(function (response) {
-//             return response.json()
-//         }).then(function (json) {
-//             self.errorMessages = json
-//         }).catch(function (ex) {
-//             console.log('parsing failed', ex)
-//         });
-//     }
-// 
-//     fetchConfig() {
-//         let self = this;
-//         fetch('../config/config.json').then(function (response) {
-//             return response.json()
-//         }).then(function (json) {
-//             self.config = json
-//            // self.getApiServer();
-//             //self.getNursingITServer();
-//         }).catch(function (ex) {
-//             console.log('parsing failed', ex)
-//         });
-//     }
-
 
     getApiServer() {
         if (location.hostname.indexOf('localhost') > -1)
