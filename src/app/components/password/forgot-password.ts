@@ -22,22 +22,15 @@ export class ForgotPassword {
     // config:any;
     apiServer:string;
     constructor(public router: Router,public common: Common,public validations:Validations,public logger:Logger) {
-        // this.router = router;
-        // this.common = common;
         this.validations=validations;
-        // this.errorMessages = "";
-        // this.successMessage = "";
-        // this.getErrorMessages();
-        // this.config = "";
         this.apiServer = this.common.getApiServer();
-        // this.getConfig();
         this.initialize();
         this.reset();
         this.logger = logger;
     }
 
     initialize():void {
-        $('title').html('Forgot Password  |  Kaplan Nursing');
+        $('title').html('Forgot Password &ndash; Kaplan Nursing');
         $('#forgotPassword').bind('input', function(){
            this.checkpasswordlength();
         });
@@ -49,40 +42,6 @@ export class ForgotPassword {
         $('#btnSend').attr("disabled", "true");
         $('#btnSend').attr("aria-disabled", "true");
     }
-
-    // getErrorMessages() {
-    //     let self = this;
-    //     this.common.getErrorMessages().then(function (response) {
-    //         return response.json()
-    //     }).then(function (json) {
-    //         self.errorMessages = json
-    //         self.successMessage = json
-    //     }).catch(function (ex) {
-    //         console.log('parsing failed', ex)
-    //     });
-    // }
-    // getConfig() {
-    //     let self = this;
-    //     this.common.getConfig().then(function (response) {
-    //         return response.json()
-    //     }).then(function (json) {
-    //         console.log('parsed json', json)
-    //         self.config = json
-    //         self.getApiServer();
-    //     }).catch(function (ex) {
-    //         console.log('parsing failed', ex)
-    //     });
-    // }
-    // getApiServer() {
-    //     let configJSON = this.config;
-    //     if (location.hostname.indexOf('localhost') > -1)
-    //         this.apiServer = configJSON.links.api.local.server;
-    //     if (location.hostname.indexOf('dev') > -1)
-    //         this.apiServer = configJSON.links.api.dev.server;
-    //     if (location.hostname.indexOf('qa') > -1)
-    //         this.apiServer = configJSON.links.api.qa.server;
-    // }
-    
     
     onForgotPassword(txtEmailId, btnSend, errorContainer, event) {
         event.preventDefault();
