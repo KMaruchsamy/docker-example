@@ -176,7 +176,7 @@ gulp.task('copy',['backup'], function() {
     log(liveFolder);
     log(backupFolder);
     return robocopy({
-        source: config.src.build,
+        source: config.app.src.build,
         destination: liveFolder,
         files: ['*.*'],
         copy: {
