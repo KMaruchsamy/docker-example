@@ -42,7 +42,7 @@ import {ProfileDescription} from './components/home/profile-description';
 ])
 export class App {
     onInit(){
-    }  
+    }
 }
 
 bootstrap(App, [

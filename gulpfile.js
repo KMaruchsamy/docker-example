@@ -20,23 +20,29 @@ var moment = require('moment');
 var robocopy = require('robocopy');
 var typescript = require('gulp-typescript');
 var tscConfig = require('./tsconfig.json');
+var tslint = require('gulp-tslint');
+var sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('clean', function (done) {
-    del([config.src.build], done);
+    del([config.app.src.build], done);
 });
 
 gulp.task('ts', function () {
     var tsResult = gulp
         .src([config.app.src.ts])
+        .pipe(sourcemaps.init())
         .pipe(typescript(tscConfig.compilerOptions));
-    return tsResult.js.pipe(gulp.dest(config.app.src.build));
+    return tsResult.js
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(config.app.src.build));
 });
 
 gulp.task('js', function () {
     var tsResult = gulp
         .src([config.app.src.js])
         .pipe(typescript(tscConfig.compilerOptions));
-    return tsResult.js.pipe(gulp.dest(config.app.src.build));
+    return tsResult.js       
+        .pipe(gulp.dest(config.app.src.build));
 });
 
 
@@ -89,6 +95,13 @@ gulp.task('libs', function () {
       .pipe(gulp.dest('build/app/lib'));
 });
 
+gulp.task('ts-lint', function () {
+    return gulp.src(config.app.src.ts)
+        .pipe(tslint())
+        .pipe(tslint.report('prose', {
+            emitError: false
+        }));
+});
 
 gulp.task('build', ['ts','js', 'html','json','css','images','favicons', 'libs']);
 
