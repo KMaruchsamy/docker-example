@@ -1,4 +1,4 @@
-import {Component, View} from 'angular2/angular2';
+import {Component, View,NgFor,NgIf} from 'angular2/angular2';
 import {RouteParams, RouterLink} from 'angular2/router';
 import {HomeService} from '../../services/home-service';
 import {Common} from '../../services/common';
@@ -12,8 +12,8 @@ import {ProfileModel} from '../../models/profile-model';
 	viewProviders: [HomeService, Common]
 })
 @View({
-	templateUrl: '../../templates/home/profile-description.html',
-	directives: [RouterLink, PageHeader, PageFooter]
+        templateUrl: '../../templates/home/profile-description.html',
+        directives: [RouterLink, PageHeader, PageFooter, NgFor, NgIf]
 })
 export class ProfileDescription {
 	kaplanAdminId: number;
