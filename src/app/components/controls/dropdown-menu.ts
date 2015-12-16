@@ -5,20 +5,18 @@ import '../../plugins/dropdown.js';
 
 @Component({
   selector: 'dropdown-menu',
-  inputs:['ariaDisabled']
+  inputs: ['ariaDisabled']
 })
 @View({
   templateUrl: '../../templates/controls/dropdown-menu.html',
   directives: [RouterLink]
 })
 export class DropdownMenu {
-  constructor(public router: Router,public auth: Auth) {
+  constructor(public router: Router, public auth: Auth) {
+    this.auth = new Auth(); 
   }
-
-
-
-  onInit() {
-    
+  
+  ngOnInit():void {
     var toggle = '[data-toggle=dropdown]'
       , $par
       , firstItem

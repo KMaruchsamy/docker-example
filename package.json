@@ -34,10 +34,11 @@
     "karma-cli": "^0.0.4",
     "karma-jasmine": "^0.3.6",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-tslint": "^4.1.0"
+    "gulp-tslint": "^4.1.0",
+    "run-sequence": "^1.1.5"
   },
   "dependencies": {
-    "angular2": "^2.0.0-alpha.45",
+    "angular2": "2.0.0-alpha.45",
     "reflect-metadata": "^0.1.0",
     "jwt-decode": "~1.1.0",
     "systemjs": "0.18.4",

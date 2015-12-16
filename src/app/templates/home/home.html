@@ -149,19 +149,19 @@
           <h2>Reporting Tools</h2>
           <div class="faculty-links">
             <div class="faculty-link-list">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportStudentCard (click)=prepareRedirectToReports("StudentReportCard",myform,hdtoken,hdpage); href="#">Student Report Card</a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportStudentCard (click)="prepareRedirectToReports('StudentReportCard',myform,hdtoken,hdpage);" href="#">Student Report Card</a></h3>
               <span>Review your students’ performance at a glance</span>
             </div>
             <div class="faculty-link-list">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportCohortByQuestion (click)=redirectToStudentSite("Admin/ReportCohortTestByQuestion.aspx?Mode=1",myform,hdemail,hdtoken,hdurl); href="#">Test Result by Question</a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportCohortByQuestion (click)="prepareRedirectToReports('ReportCohortByQuestion',myform,hdtoken,hdpage);" href="#">Test Result by Question</a></h3>
               <span>Review performance by topic and difficulty level</span>
             </div>
             <div class="faculty-link-list">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportCohortByTest (click)=redirectToStudentSite("Admin/ReportCohortByTest.aspx?Mode=1",myform,hdemail,hdtoken,hdurl);  href="#">Cohort by Test</a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportCohortByTest (click)="prepareRedirectToReports('ReportCohortByTest',myform,hdtoken,hdpage);"  href="#">Cohort by Test</a></h3>
               <span>Review an entire cohort’s performance</span>
             </div>
             <div class="faculty-link-list">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkUtilizationReport (click)=redirectToStudentSite("Admin/UtilizationReport.aspx",myform,hdemail,hdtoken,hdurl);  href="#">Utilization Report</a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkUtilizationReport (click)="prepareRedirectToReports('UtilizationReport',myform,hdtoken,hdpage);"  href="#">Utilization Report</a></h3>
               <span>Review how your students are using their resources</span>
             </div>
           </div>
@@ -170,7 +170,7 @@
           <h2>Teaching Tools (Student Site)</h2>
           <div class="faculty-links">
             <div class="faculty-link-list">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)=prepareRedirectToStudentSite("TestReview",myform,hdinstitution,hdtoken,hdpage); href="#">Focused Review Tests</a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('TestReview',myform,hdinstitution,hdtoken,hdpage);" href="#">Focused Review Tests</a></h3>
               <ul class="bullet">
                 <li>For content mastery</li>
                 <li>Access standard tests or help students create their own</li>
@@ -178,14 +178,14 @@
               </ul>
             </div>
             <div class="faculty-link-list">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)=prepareRedirectToStudentSite("CaseStudies",myform,hdinstitution,hdtoken,hdpage); href="#">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)=prepareRedirectToStudentSite("SkillsModules",myform,hdinstitution,hdtoken,hdpage); href="#">Skills Demonstration Videos</a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('CaseStudies',myform,hdinstitution,hdtoken,hdpage);" href="#">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('SkillsModules',myform,hdinstitution,hdtoken,hdpage);" href="#">Skills Demonstration Videos</a></h3>
               <ul class="bullet">
                 <li>For practical learning simulation</li>
               </ul>
             </div>
             <div class="faculty-link-list">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)=prepareRedirectToStudentSite("Nclex",myform,hdinstitution,hdtoken,hdpage); href="#">NCLEX Resources</a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('Nclex',myform,hdinstitution,hdtoken,hdpage);" href="#">NCLEX Resources</a></h3>
               <ul class="bullet">
                 <li>For standardized test mastery</li>
                 <li>Access diagnostic tests and Question Trainers</li>
@@ -204,7 +204,9 @@
     <div class="section-light-gray">
       <div class="bottom-grid">
         <!--Account Manager and Nurse consultant profiles -->
-        <profile *ng-for="#profile of profiles" [profile]="profile"></profile>
+        <profile [profile]="accountManagerProfile"></profile>
+        <profile [profile]="nurseConsultantProfile"></profile>
+        <!--<profile *ng-for="#profile of profiles" [profile]="profile"></profile>-->
       </div>
       <!--closes-grid-->
     </div>
@@ -245,5 +247,3 @@
   <input #hdtoken type="hidden" id="jwtToken" name="jwtToken">
   <input #hdpage type="hidden" id="redirectPage" name="redirectPage">
 </form>
-
-

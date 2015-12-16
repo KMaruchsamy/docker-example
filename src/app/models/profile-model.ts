@@ -1,26 +1,26 @@
 import {links} from '../constants/config';
 
 export class ProfileModel {
-	public header: string;
+	public header: string = '';
+	public isAccountManager: boolean = true;
 	constructor(
-		public kaplanAdminId,
-		public kaplanAdminTypeId,
-		public kaplanAdminTypeName,
-		public active,
-		public bio,
-		public degrees,
-		public firstName,
-		public lastName,
-		public designation,
-		public email,
-		public linksForFrontEnd,
-		public bulletsForFrontEnd,
-		public photoUrl,
-		public telephone,
-		public isLeft = true
+		public kaplanAdminId?: number,
+		public kaplanAdminTypeId?: number,
+		public kaplanAdminTypeName?: string,
+		public active?: boolean,
+		public bio?: string,
+		public degrees?: string,
+		public firstName?: string,
+		public lastName?: string,
+		public designation?: string,
+		public email?: string,
+		public linksForFrontEnd?: Array<string>,
+		public bulletsForFrontEnd?: any,
+		public photoUrl?: string,
+		public telephone?: any
 	) {
+		this.kaplanAdminId = (kaplanAdminId === null || kaplanAdminId === undefined) ? null : kaplanAdminId;
 		if (kaplanAdminId) {
-			this.kaplanAdminId = kaplanAdminId == null ? 0 : kaplanAdminId;
 			this.kaplanAdminTypeId = kaplanAdminTypeId;
 			this.kaplanAdminTypeName = kaplanAdminTypeName;
 			this.active = active;
@@ -35,7 +35,16 @@ export class ProfileModel {
 			this.photoUrl = (photoUrl == null) ? ((this.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER') ? links.profile.accountmanager.defaultimage : links.profile.nurseconsultant.defaultimage) : photoUrl;
 			this.telephone = telephone;
 			this.header = 'Your Kaplan ' + ((this.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER') ? 'Account Manager' : 'Nurse Consultant');
-			this.isLeft = isLeft;
+			this.isAccountManager = ((this.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER') ? true: false);
+		}
+		else {
+			this.firstName = 'Coming';
+			this.lastName = 'Soon!'
+			if (kaplanAdminTypeName !== null || kaplanAdminTypeName !== undefined) {
+				this.header = 'Your Kaplan ' + ((this.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER') ? 'Account Manager' : 'Nurse Consultant');
+				this.isAccountManager = ((this.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER') ? true: false);
+			}
+			this.photoUrl = ((this.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER') ? links.profile.accountmanager.defaultimage : links.profile.nurseconsultant.defaultimage)
 		}
 
 	}

@@ -1,5 +1,5 @@
-import {View, Component,bootstrap,bind} from 'angular2/angular2';
-import {Router, RouterOutlet,RouteConfig,RouterLink,ROUTER_PROVIDERS,LocationStrategy,HashLocationStrategy,Location,RouteParams} from 'angular2/router';
+import {View, Component, bootstrap, provide, OnInit} from 'angular2/angular2';
+import {RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy} from 'angular2/router';
 import {HTTP_PROVIDERS} from 'angular2/http';
 import {Home} from './components/home/home';
 import {Login} from './components/login/login';
@@ -19,34 +19,32 @@ import {ProfileDescription} from './components/home/profile-description';
 
 
 @Component({
-    selector: 'app',
-    viewBindings:[Auth]
+    selector: 'app'
 })
 @View({
     template: `<router-outlet></router-outlet>`,
-    directives: [RouterOutlet,RouterLink]
+    directives: [ROUTER_DIRECTIVES, RouterOutlet, RouterLink]
 })
 
-@RouteConfig([
-    {path:'/', redirectTo:'/home'},
-    {path:'/home', component:Home, as : 'Home'},
-    {path:'/login', component:Login, as : 'Login'},
-    {path:'/reset-password/:id/:expirytime', component:ResetPassword, as : 'ResetPassword'},
-    {path:'/forgot-password', component:ForgotPassword, as : 'ForgotPassword'},
-    {path:'/forgot-password-confirmation', component:ForgotPasswordConfirmation, as : 'ForgotPasswordConfirmation'},
-    {path:'/help', component:Help, as : 'Help'},
-    {path:'/set-password-first-time', component:SetPasswordFirstTime, as : 'SetPasswordFirstTime'},
-    {path:'/account', component:Account, as : 'Account'},
-    {path:'/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component:ChooseInstitution, as : 'ChooseInstitution'},
-    {path:'/profiles/:id', component:ProfileDescription, as : 'Profiles'}
+    @RouteConfig([
+    { path: '/', component: Login, as: 'Login' },
+    { path: '/home', component: Home, as: 'Home' },   
+    { path: '/reset-password/:id/:expirytime', component: ResetPassword, as: 'ResetPassword' },
+    { path: '/forgot-password', component: ForgotPassword, as: 'ForgotPassword' },
+    { path: '/forgot-password-confirmation', component: ForgotPasswordConfirmation, as: 'ForgotPasswordConfirmation' },
+    { path: '/help', component: Help, as: 'Help' },
+    { path: '/set-password-first-time', component: SetPasswordFirstTime, as: 'SetPasswordFirstTime' },
+    { path: '/account', component: Account, as: 'Account' },
+    { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, as: 'ChooseInstitution' },
+    { path: '/profiles/:id', component: ProfileDescription, as: 'Profiles' }
 ])
 export class App {
-    onInit(){
+    ngOnInit() {
     }
 }
 
 bootstrap(App, [
     ROUTER_PROVIDERS,
     HTTP_PROVIDERS,
-    bind(LocationStrategy).toClass(HashLocationStrategy)
+    provide(LocationStrategy, { useClass: HashLocationStrategy })
 ]);

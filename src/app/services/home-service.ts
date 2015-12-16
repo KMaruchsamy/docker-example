@@ -6,9 +6,10 @@ import * as _ from '../lib/index';
 
 @Injectable()
 export class HomeService {
-	constructor(public http: Http,public auth: Auth) {
+	auth: Auth;
+	constructor(public http: Http) {	
 		this.http = http;
-		this.auth = auth;
+		this.auth = new Auth();
 		this.auth.refresh();
 	}
 
@@ -35,7 +36,7 @@ export class HomeService {
 	}
 
 
-	bindToModel(profile, isLeft = true):ProfileModel {
+	bindToModel(profile): ProfileModel {
 		return new ProfileModel(
 			profile.KaplanAdminId,
 			profile.KaplanAdminTypeId,
@@ -50,9 +51,8 @@ export class HomeService {
 			profile.LinksForFrontEnd,
 			profile.BulletsForFrontEnd,
 			(profile.Photo.PhotoUrl === null || profile.Photo.PhotoUrl === '') ? null : profile.Photo.PhotoUrl,
-			profile.Telephone,
-			isLeft
-			);
+			profile.Telephone
+		);
 	}
 
 }

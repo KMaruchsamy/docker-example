@@ -30,7 +30,7 @@ import {links} from '../../constants/config';
   return true;
 })
 export class Home {
-  profiles: Array<ProfileModel>;
+  // profiles: Array<ProfileModel>;
   institutionRN: number;
   institutionPN: number;
   page: string;
@@ -41,13 +41,17 @@ export class Home {
   hdpage: any;
   apiServer: string;
   nursingITServer: string;
+  accountManagerProfile: ProfileModel;
+  nurseConsultantProfile: ProfileModel;
   constructor(public router: Router, public auth: Auth, public location: Location, public common: Common, public homeService: HomeService) {
     this.apiServer = this.common.getApiServer();
     this.nursingITServer = this.common.getNursingITServer();
     this.redirectToPage();
     this.initialize();
-    this.profiles = [];
+    // this.profiles = [];
     let self = this;
+    this.accountManagerProfile = {};
+    this.nurseConsultantProfile = {};
     this.loadProfiles(self);
   }
 
@@ -66,17 +70,29 @@ export class Home {
           alert(error);
         });
     }
+    else {
+      this.accountManagerProfile = new ProfileModel(null, null, 'ACCOUNTMANAGER', null, null, null, null, null, null, null, null, null, null, null);
+      this.nurseConsultantProfile = new ProfileModel(null, null, 'NURSECONSULTANT', null, null, null, null, null, null, null, null, null, null, null);
+    }
   }
 
   bindToModel(self, json): void {
-    let profiles = _.sortByOrder(json, 'KaplanAdminTypeId', 'desc');
     if (json) {
-      let i = 0;
-      _.forEach(profiles, function(profile, key) {
-        self.profiles.push(self.homeService.bindToModel(profile, (((i % 2) == 0) ? true : false)));
-        i++;
+      _.forEach(json, function(profile, key) {
+        if (profile && profile.KaplanAdminTypeName !== undefined) {
+          if (profile.KaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER') {
+            self.accountManagerProfile = self.homeService.bindToModel(profile);
+          }
+          else {
+            self.nurseConsultantProfile = self.homeService.bindToModel(profile);
+          }
+        }
       });
     }
+    if (!self.accountManagerProfile.kaplanAdminTypeId)
+      self.accountManagerProfile = new ProfileModel(null, null, 'ACCOUNTMANAGER', null, null, null, null, null, null, null, null, null, null, null);
+    if (!self.nurseConsultantProfile.kaplanAdminTypeId)
+      self.nurseConsultantProfile = new ProfileModel(null, null, 'NURSECONSULTANT', null, null, null, null, null, null, null, null, null, null, null);
   }
 
   redirectToPage(): void {

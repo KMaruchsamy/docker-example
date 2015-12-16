@@ -1,4 +1,4 @@
-import {Component, View} from 'angular2/angular2';
+import {Component, View,NgFor,NgIf} from 'angular2/angular2';
 import {RouteParams, RouterLink} from 'angular2/router';
 import {HomeService} from '../../services/home-service';
 import {Common} from '../../services/common';
@@ -12,8 +12,8 @@ import {ProfileModel} from '../../models/profile-model';
 	viewProviders: [HomeService, Common]
 })
 @View({
-	templateUrl: '../../templates/home/profile-description.html',
-	directives: [RouterLink, PageHeader, PageFooter]
+        templateUrl: '../../templates/home/profile-description.html',
+        directives: [RouterLink, PageHeader, PageFooter, NgFor, NgIf]
 })
 export class ProfileDescription {
 	kaplanAdminId: number;
@@ -25,7 +25,7 @@ export class ProfileDescription {
 		// this.common = common;
 		this.apiServer = this.common.getApiServer();
 		this.kaplanAdminId = parseInt(this.routeParams.get('id'));
-		this.profile = {};
+		this.profile = {}
 		this.loadProfileDescription();
 	}
 
@@ -38,7 +38,7 @@ export class ProfileDescription {
 				return response.json();
 			})
 				.then((json) => {
-					self.profile = self.homeService.bindToModel(json, true);
+					self.profile = self.homeService.bindToModel(json);
 					if (self.profile) {
 						if (self.profile.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER')
 							$('title').html('Your Account Manager &ndash; Kaplan Nursing');

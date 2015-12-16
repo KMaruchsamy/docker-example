@@ -22,6 +22,7 @@ var typescript = require('gulp-typescript');
 var tscConfig = require('./tsconfig.json');
 var tslint = require('gulp-tslint');
 var sourcemaps = require('gulp-sourcemaps');
+var runSequence = require('run-sequence');
 
 gulp.task('clean', function (done) {
     del([config.app.src.build], done);
@@ -103,7 +104,13 @@ gulp.task('ts-lint', function () {
         }));
 });
 
-gulp.task('build', ['ts','js', 'html','json','css','images','favicons', 'libs']);
+gulp.task('build', function (done) {
+    runSequence('clean',
+        ['ts', 'js', 'html', 'json', 'css', 'images', 'favicons', 'libs'],
+        done
+        );
+});
+
 
 gulp.task('play', ['build'], function () {
 
@@ -115,6 +122,7 @@ gulp.task('play', ['build'], function () {
     var app;
 
     gulp.watch(config.app.src.html, ['html']);
+    gulp.watch(config.app.src.ts, ['ts']);
     gulp.watch(config.app.src.js, ['js']);
     gulp.watch(config.app.src.json, ['json']);
     gulp.watch(config.app.src.css, ['css']);
@@ -212,10 +220,7 @@ gulp.task('copy',['backup'], function() {
     });
 });
 
-gulp.task('deploy',['copy']);
-
-
-
+gulp.task('deploy', ['copy']);
 
 gulp.task('debug',function(){
     var http = require('http');
