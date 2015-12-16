@@ -1,5 +1,7 @@
 import {Common} from './common';
+import {Injectable} from 'angular2/angular2';
 
+@Injectable()
 export class Auth {
   sStorage:any;
     token:string;

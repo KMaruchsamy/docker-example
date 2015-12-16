@@ -30,8 +30,7 @@
                     <input type="radio" name="radio_button" #rdstudent id="student_site" (change)="radioChanged(rdstudent,rdfaculty);" value="student_site"
                     aria-checked="false">
                     <label for="student_site" class="h3 white-text label-bold">Student Site</label>
-                    <p class="text-larger">See what your students see:
-                        <br> take practice tests, access course books, review content</p>
+                    <p class="text-larger">See what your students see:<br /> take practice tests, access course books, review content</p>
                 </div>
             </div>
         </div>
@@ -42,7 +41,7 @@
     </form>
 
     <div class="center">
-        <a [router-link]=["/ForgotPassword"] class="forgot-password white-text">Forgot your password?</a>
+        <a [router-link]="['/ForgotPassword']" class="forgot-password white-text">Forgot your password?</a>
     </div>
 
     <form id="myForm" ACTION="http://localhost/s_login.aspx?facultylogin=1" method="POST" target="_blank">

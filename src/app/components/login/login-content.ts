@@ -32,65 +32,12 @@ export class LoginContent {
     hdToken: any;
     hdURL: any;
     constructor(public router: Router, public auth: Auth, public common: Common) {
-        // this.router = router;
-        // this.auth = auth;
-        // this.common = common;
-        // this.errorMessages = '';
-        // this.config = '';
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
-        // this.getErrorMessages();
-        // this.getConfig();
         this.sStorage = this.common.getStorage();
         this.institutionRN = 0;
         this.institutionPN = 0;
     }
-
-    // getErrorMessages() {
-    //     let self = this;
-    //     this.common.getErrorMessages().then(function (response) {
-    //         return response.json()
-    //     }).then(function (json) {
-    //         self.errorMessages = json
-    //     }).catch(function (ex) {
-    //         console.log('parsing failed', ex)
-    //     });
-    // }
-
-    //     getConfig() {
-    //         let self = this;
-    //         this.common.getConfig().then(function (response) {
-    //             return response.json()
-    //         }).then(function (json) {
-    //             self.config = json
-    //             self.getApiServer();
-    //             self.getNursingITServer();
-    //         }).catch(function (ex) {
-    //             console.log('parsing failed', ex)
-    //         });
-    //     }
-    // 
-    // 
-    //     getApiServer() {
-    //         let configJSON = this.config;
-    //         if (location.hostname.indexOf('localhost') > -1)
-    //             this.apiServer = configJSON.links.api.local.server;
-    //         if (location.hostname.indexOf('dev') > -1)
-    //             this.apiServer = configJSON.links.api.dev.server;
-    //         if (location.hostname.indexOf('qa') > -1)
-    //             this.apiServer = configJSON.links.api.qa.server;
-    //     }
-    // 
-    //     getNursingITServer() {
-    //         let configJSON = this.config;
-    //         if (location.hostname.indexOf('localhost') > -1)
-    //             this.nursingITServer = configJSON.links.nursingit.local.server;
-    //         if (location.hostname.indexOf('dev') > -1)
-    //             this.nursingITServer = configJSON.links.nursingit.dev.server;
-    //         if (location.hostname.indexOf('qa') > -1)
-    //             this.nursingITServer = configJSON.links.nursingit.qa.server;
-    //     }
-
 
     onSignIn(txtUserName, txtPassword, rdFaculty, rdStudent, errorContainer, btnSignIn, event) {
         event.preventDefault();
@@ -129,7 +76,7 @@ export class LoginContent {
                             self.router.parent.navigateByUrl('/set-password-first-time');
                         }
                         else {
-                            self.router.parent.navigateByUrl('/');
+                            self.router.parent.navigateByUrl('/home');
                         }
                     }
                 }
