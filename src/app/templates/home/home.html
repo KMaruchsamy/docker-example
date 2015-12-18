@@ -137,7 +137,7 @@
       <ul class="nav-items">
         <li class="nav-icon schedule-icon"><a href="choose-test.html">Schedule an Integrated Test</a></li>
         <li class="nav-icon email-icon-outline"><a href="account.html#send-student-info">Send student sign in info</a></li>
-        <li class="nav-icon download-folder-icon"><a href="#">Get resources and info</a></li>
+        <li class="nav-icon info-icon-white"><a href="#">View user guide</a></li>
       </ul>
     </nav>
   </div>
@@ -164,6 +164,11 @@
               <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkUtilizationReport (click)="prepareRedirectToReports('UtilizationReport',myform,hdtoken,hdpage);"  href="#">Utilization Report</a></h3>
               <span>Review how your students are using their resources</span>
             </div>
+              <div class="faculty-link-list">
+                  <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkCohortComparision (click)="prepareRedirectToReports('CohortComparisonsReport',myform,hdtoken,hdpage);" href="#">Category Comparisons</a></h3>
+                  <span>Compare cohort performance in over 80 categories</span>
+              </div>
+
           </div>
         </div>
         <div class="teaching-tools-grid">
@@ -171,8 +176,8 @@
           <div class="faculty-links">
             <div class="faculty-link-list">
               <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('TestReview',myform,hdinstitution,hdtoken,hdpage);" href="#">Focused Review Tests</a></h3>
+              <p>For content mastery</p>
               <ul class="bullet">
-                <li>For content mastery</li>
                 <li>Access standard tests or help students create their own</li>
                 <li>Utilize extensive remediation resources</li>
               </ul>
@@ -180,14 +185,12 @@
             <div class="faculty-link-list">
               <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('CaseStudies',myform,hdinstitution,hdtoken,hdpage);" href="#">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
               <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('SkillsModules',myform,hdinstitution,hdtoken,hdpage);" href="#">Skills Demonstration Videos</a></h3>
-              <ul class="bullet">
-                <li>For practical learning simulation</li>
-              </ul>
+              <p>For practical learning simulation</p>
             </div>
             <div class="faculty-link-list">
               <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('Nclex',myform,hdinstitution,hdtoken,hdpage);" href="#">NCLEX Resources</a></h3>
+              <p>For standardized test mastery</p>
               <ul class="bullet">
-                <li>For standardized test mastery</li>
                 <li>Access diagnostic tests and Question Trainers</li>
                 <li>Access content, test-taking and Decision Tree videos</li>
               </ul>

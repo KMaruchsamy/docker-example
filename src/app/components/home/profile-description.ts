@@ -6,10 +6,11 @@ import {links} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {ProfileModel} from '../../models/profile-model';
+import {BoldText} from '../../scripts/bold-text';
 
 @Component({
-	selector: 'profile-description',
-	viewProviders: [HomeService, Common]
+    selector: 'profile-description',
+    viewProviders: [HomeService, Common, BoldText]
 })
 @View({
         templateUrl: '../../templates/home/profile-description.html',
@@ -18,8 +19,8 @@ import {ProfileModel} from '../../models/profile-model';
 export class ProfileDescription {
 	kaplanAdminId: number;
 	profile: ProfileModel;
-	apiServer: string;
-	constructor(public routeParams: RouteParams, public homeService: HomeService, public common: Common) {		
+    apiServer: string;
+    constructor(public routeParams: RouteParams, public homeService: HomeService, public common: Common, public boldtext: BoldText) {		
 		// this.routeParams = routeParams;
 		// this.homeService = homeService;
 		// this.common = common;
@@ -39,7 +40,8 @@ export class ProfileDescription {
 			})
 				.then((json) => {
 					self.profile = self.homeService.bindToModel(json);
-					if (self.profile) {
+                    if (self.profile) {
+                        this.boldtext.getTextBold(self.profile.bio);
 						if (self.profile.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER')
 							$('title').html('Your Account Manager &ndash; Kaplan Nursing');
 						else
