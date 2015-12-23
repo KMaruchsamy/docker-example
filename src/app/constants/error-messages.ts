@@ -20,9 +20,9 @@ export const login = {
 
 export const temp_password = {
     newpass_character_count: "Your new password must be at least 8 characters long.",
-    newpass_number_validation: "Your password must contain at least one number.",
+    newpass_number_validation: "Your new password must contain at least one number.",
     newpass_specialcharacter_validation: "Your new password must contain at least one special character.",
-    newpass_number_specialcharacter_validation: "Your password must contain at least one number and one special character.",
+    newpass_number_specialcharacter_validation: "Your new password must contain at least one number and one special character.",
     newpass_match: "Your new passwords must match. Please try again.",
     newpass_success: "You have successfully set your new password."
 };
@@ -36,9 +36,9 @@ export const forgot_password = {
 
 export const reset_password = {
     newpass_character_count: "Your new password must be at least 8 characters long.",
-    newpass_number_validation: "Your password must contain at least one number.",
+    newpass_number_validation: "Your new password must contain at least one number.",
     newpass_specialcharacter_validation: "Your new password must contain at least one special character.",
-    newpass_number_specialcharacter_validation: "Your password must contain at least one number and one special character.",
+    newpass_number_specialcharacter_validation: "Your new password must contain at least one number and one special character.",
     newpass_match: "Your new passwords must match. Please try again.",
     newpass_success: "You have successfully set your new password."
 };
@@ -52,9 +52,9 @@ export const manage_account = {
     invalid_emailid: "Whoops! Looks like you entered an invalid email. Please try again.",
     incorrect_password: "Whoops! Looks like you entered an incorrect password. Please try again.",
     newpass_character_count: "Your new password must be at least 8 characters long.",
-    newpass_number_validation: "Your password must contain at least one number.",
+    newpass_number_validation: "Your new password must contain at least one number.",
     newpass_specialcharacter_validation: "Your new password must contain at least one special character.",
-    newpass_number_specialcharacter_validation: "Your password must contain at least one number and one special character.",
+    newpass_number_specialcharacter_validation: "Your new password must contain at least one number and one special character.",
     newpass_match: "Your new passwords must match. Please try again."
 };
 
