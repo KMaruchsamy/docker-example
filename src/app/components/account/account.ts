@@ -123,7 +123,7 @@ export class Account {
 
 
     redirectToLogin() {
-        this.router.parent.navigateByUrl('/login');
+        this.router.parent.navigateByUrl('/');
     }
 
     onSubmitSaveProfile(txtFirstname, txtLastname, txtTitle, btnSaveProfile, resetSaveProfile, successContainer, event) {

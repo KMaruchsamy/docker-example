@@ -80,7 +80,7 @@ export class ForgotPassword {
     }
     RedirectToLogin(event) {
         event.preventDefault();
-        this.router.parent.navigateByUrl('/login');
+        this.router.parent.navigateByUrl('/');
     }
 
     validate(emailId, errorContainer) {

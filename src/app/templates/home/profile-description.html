@@ -29,7 +29,7 @@
             </ul>
             <p class="js-bolded section-medium-thin">{{profile.bio}}
             </p>
-            <p>Use these external forms to submit requests directly to Maria:</p>
+            <p>Use these external forms to submit requests directly to {{profile.firstName}}:</p>
               <ul class="action-links">
                 <li *ng-for="#link of profile.linksForFrontEnd"><a [href]='link.LinkUrl' target="_blank" class="icon action-color-link-icon">{{link.LinkTextToDisplay}}</a></li>  
               </ul>
