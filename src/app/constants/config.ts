@@ -4,10 +4,10 @@ export const links = {
 			server: "http://localhost/"
 		},
 		dev: {
-			server: "http://dev.nursing.ktp.io/"
+			server: "https://dev01-nursing.kaptest.com/"
 		},
 		qa: {
-			server : "https://nursingqa-test.kaplan.com/"			
+			server : "https://qa-nursing.kaptest.com/"			
 		},
 		baseurl: "api/v1/",
 		admin: {
@@ -26,10 +26,10 @@ export const links = {
 			server: "http://localhost/"
 		},
 		dev: {
-			server: "http://nursing.dev.kaplan.com/"
+			server: "https://dev01-nursing.kaptest.com/"
 		},
 		qa: {
-			server: "https://nursingqa.kaplan.com/"
+			server: "https://qa-nursing.kaptest.com/"
 		},
 		landingpage: "NewSiteLandingPage.aspx?facultylogin=1",
 		ReportingLandingPage: "UX_ALogin.aspx"
