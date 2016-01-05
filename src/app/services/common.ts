@@ -35,7 +35,7 @@ export class Common {
             return links.api.qa.server;
         if (location.href.indexOf('81') > -1) // Incase if SSL not working then to read from IP address
             return links.api.qa.server;
-        if (location.href.indexOf('80') > -1) // Incase if SSL not working then to read from IP address
+        if (location.href.indexOf('138') > -1) // Incase if SSL not working then to read from IP address
             return links.api.dev.server;
     }
 
@@ -48,7 +48,7 @@ export class Common {
             return links.nursingit.qa.server;
         if (location.href.indexOf('81') > -1) // Incase if SSL not working then to read from IP address
             return links.nursingit.qa.server;
-        if (location.href.indexOf('80') > -1) // Incase if SSL not working then to read from IP address
+        if (location.href.indexOf('138') > -1) // Incase if SSL not working then to read from IP address
             return links.nursingit.dev.server;
     }
 }

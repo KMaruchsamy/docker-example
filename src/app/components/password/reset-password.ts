@@ -98,7 +98,7 @@ export class ResetPassword {
     
     RedirectToLogin(event) {
         event.preventDefault();
-        this.router.parent.navigateByUrl('/login');
+        this.router.parent.navigateByUrl('/');
     }
     
     // route(path, e) {

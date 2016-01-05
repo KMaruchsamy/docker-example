@@ -96,12 +96,12 @@ export class Home {
   }
 
   redirectToPage(): void {
-    if (this.location.path().search("first") > 0) {
-      if (this.auth.istemppassword && this.auth.isAuth())
-        this.router.parent.navigateByUrl('/login');
-    }
-    else if (!this.auth.isAuth())
-      this.router.parent.navigateByUrl('/login');
+      if (this.location.path().search("first") > 0) {
+          if (this.auth.istemppassword && this.auth.isAuth())
+              this.router.parent.navigateByUrl('/');
+      }
+      else if (!this.auth.isAuth())
+          this.router.parent.navigateByUrl('/');
   }
 
   initialize(): void {
@@ -118,7 +118,7 @@ export class Home {
 
   redirectToLogin(event): void {
     event.preventDefault();
-    this.router.parent.navigateByUrl('/login');
+    this.router.parent.navigateByUrl('/');
   }
 
   prepareRedirectToStudentSite(page, form, hdInstitution, hdToken, hdURL): boolean {

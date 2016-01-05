@@ -59,7 +59,7 @@ export class ChooseInstitution {
 		switch (this.fromPage.toUpperCase()) {
 			case "LOGIN":
 				this.auth.logout();
-				this.router.parent.navigateByUrl('/login');
+				this.router.parent.navigateByUrl('/');
 				break;
 			case "HOME":
 				this.router.parent.navigateByUrl('/home');

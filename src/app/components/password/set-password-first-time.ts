@@ -89,7 +89,7 @@ export class SetPasswordFirstTime {
 
     RedirectToLogin(event) {
         event.preventDefault();
-        this.router.parent.navigateByUrl('/login');
+        this.router.parent.navigateByUrl('/');
     }
     RedirectToHome(event) {
         event.preventDefault();
