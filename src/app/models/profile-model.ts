@@ -1,4 +1,5 @@
 import {links} from '../constants/config';
+import {Utility} from '../scripts/utility';
 
 export class ProfileModel {
 	public header: string = '';
@@ -18,13 +19,14 @@ export class ProfileModel {
 		public bulletsForFrontEnd?: any,
 		public photoUrl?: string,
 		public telephone?: any
-	) {
+    ) {
+        let utility = new Utility();        
 		this.kaplanAdminId = (kaplanAdminId === null || kaplanAdminId === undefined) ? null : kaplanAdminId;
 		if (kaplanAdminId) {
 			this.kaplanAdminTypeId = kaplanAdminTypeId;
 			this.kaplanAdminTypeName = kaplanAdminTypeName;
 			this.active = active;
-			this.bio = bio;
+            this.bio = (bio !== null && bio !== undefined && bio !== '') ? utility.boldText(bio) : bio;
 			this.email = email;
 			this.degrees = degrees;
 			this.firstName = firstName;
