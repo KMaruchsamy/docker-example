@@ -23,7 +23,6 @@ export class Login {
   }
 
   resize($event) {
-    console.log($event);
 }  
   initialize(): void {
     $('title').html('Faculty Sign In &ndash; Kaplan Nursing');

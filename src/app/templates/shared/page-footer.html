@@ -13,12 +13,12 @@
             <a href="#">Manage Groups</a>
         </div>
         <div>
-            <a [router-link]="['/Help']">Help/Contact</a><br>
-            <a [router-link]="['/Login']">Sign Out</a>
+            <a [router-link]="['/UserGuide']">Faculty User Guide</a><br>
+            <a (click)=signout()>Sign Out</a>
         </div>
     </nav>
 
     <div class="footer-copyright section-thin center">
-        <span>© 2015 Kaplan, Inc.</span>
+        <span>© 2016 Kaplan, Inc.</span>
     </div>
 </footer>
