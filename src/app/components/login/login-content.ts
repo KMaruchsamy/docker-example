@@ -118,7 +118,6 @@ export class LoginContent {
         this.hdInstitution.value = (this.institutionRN > 0) ? this.institutionRN : this.institutionPN;
         this.hdToken.value = this.auth.token
         this.hdURL.value = this.page;
-        console.log(this.hdInstitution.value);
         this.auth.logout();
         $(this.form).attr('ACTION', serverURL).submit();
 

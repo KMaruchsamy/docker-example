@@ -27,7 +27,7 @@
             <ul class="bullet two-columns">
               <li *ng-for="#bullet of profile.bulletsForFrontEnd">{{bullet}}</li>
             </ul>
-            <p class="js-bolded section-medium-thin" [innerHTML]="profile.bio">
+            <p class="js-bolded section-medium-thin" [inner-html]='profile.bio'>
             </p>
             <p>Use these external forms to submit requests directly to {{profile.firstName}}:</p>
               <ul class="action-links">

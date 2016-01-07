@@ -13,10 +13,11 @@ import '../../plugins/dropdown.js';
 })
 export class DropdownMenu {
   constructor(public router: Router, public auth: Auth) {
-    this.auth = new Auth(); 
+      this.auth = new Auth(); 
+      this.initialize();  
   }
   
-  ngOnInit():void {
+  initialize():void {
     var toggle = '[data-toggle=dropdown]'
       , $par
       , firstItem

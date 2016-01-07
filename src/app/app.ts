@@ -8,6 +8,7 @@ import {ResetPassword} from './components/password/reset-password';
 import {ForgotPassword} from './components/password/forgot-password';
 import {ForgotPasswordConfirmation} from './components/password/forgot-password-confirmation';
 import {Help} from './components/help/help';
+import {UserGuide} from './components/userguide/userguide';
 import {SetPasswordFirstTime} from './components/password/set-password-first-time';
 import {Account} from './components/account/account';
 import {Page} from './scripts/page';
@@ -33,6 +34,7 @@ import {ProfileDescription} from './components/home/profile-description';
     { path: '/forgot-password', component: ForgotPassword, as: 'ForgotPassword' },
     { path: '/forgot-password-confirmation', component: ForgotPasswordConfirmation, as: 'ForgotPasswordConfirmation' },
     { path: '/help', component: Help, as: 'Help' },
+    { path: '/userguide', component: UserGuide, as: 'UserGuide' },
     { path: '/set-password-first-time', component: SetPasswordFirstTime, as: 'SetPasswordFirstTime' },
     { path: '/account', component: Account, as: 'Account' },
     { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, as: 'ChooseInstitution' },
