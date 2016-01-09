@@ -1,9 +1,7 @@
-import {View,Component} from 'angular2/angular2';
+import {Component} from 'angular2/core';
 
 @Component({
-	selector:'dashboard-pod2'
-})
-@View({
+	selector:'dashboard-pod2',
 	templateUrl:'../../templates/home/dashboard-pod2.html'
 })
 export class DashboardPod2{

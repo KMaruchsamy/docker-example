@@ -1,4 +1,4 @@
-import {Injectable, Inject} from 'angular2/angular2';
+import {Injectable, Inject} from 'angular2/core';
 import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {Auth} from './auth';
 import {ProfileModel} from '../models/profile-model';

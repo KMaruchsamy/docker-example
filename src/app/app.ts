@@ -1,6 +1,7 @@
-import {View, Component, bootstrap, provide, OnInit} from 'angular2/angular2';
+import {View, Component, provide} from 'angular2/core';
+import {bootstrap} from 'angular2/platform/browser';
 import {RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy} from 'angular2/router';
-import {HTTP_PROVIDERS} from 'angular2/http';
+import {HTTP_PROVIDERS, Http} from 'angular2/http';
 import {Home} from './components/home/home';
 import {Login} from './components/login/login';
 import {Auth} from './services/auth';
@@ -20,16 +21,14 @@ import {ProfileDescription} from './components/home/profile-description';
 
 
 @Component({
-    selector: 'app'
-})
-@View({
+    selector: 'app',
     template: `<router-outlet></router-outlet>`,
     directives: [ROUTER_DIRECTIVES, RouterOutlet, RouterLink]
 })
 
-    @RouteConfig([
+@RouteConfig([
     { path: '/', component: Login, as: 'Login' },
-    { path: '/home', component: Home, as: 'Home' },   
+    { path: '/home', component: Home, as: 'Home' },
     { path: '/reset-password/:id/:expirytime', component: ResetPassword, as: 'ResetPassword' },
     { path: '/forgot-password', component: ForgotPassword, as: 'ForgotPassword' },
     { path: '/forgot-password-confirmation', component: ForgotPasswordConfirmation, as: 'ForgotPasswordConfirmation' },

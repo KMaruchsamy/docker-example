@@ -1,4 +1,4 @@
-﻿import {Component, View} from 'angular2/angular2';
+﻿import {Component, View} from 'angular2/core';
 import {Router, RouterLink} from 'angular2/router';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -9,9 +9,7 @@ import {temp_password,general} from '../../constants/error-messages';
 
 @Component({
     selector: 'set-password-first-time',
-    viewBindings: [Auth, Common, Validations]
-})
-@View({
+    providers: [Auth, Common, Validations],
     templateUrl: '../../templates/password/set-password-first-time.html',
     directives: [PasswordHeader, RouterLink]
 })

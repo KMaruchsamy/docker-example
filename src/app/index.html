@@ -25,11 +25,16 @@
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="css/style.css">
-    <style>        
-        home,page-footer,page-header,profile,dropdown-menu{
+    <style>
+        home,
+        page-footer,
+        page-header,
+        profile,
+        dropdown-menu {
             display: block;
         }
-        .inner-banner h1{
+        
+        .inner-banner h1 {
             line-height: 0;
         }
     </style>
@@ -43,8 +48,10 @@
         <script>baseElement = document.querySelector('base');baseElement.attr = baseElement.getAttribute;</script>-->
 
     <!-- ES6-related imports -->
-    <script src="lib/traceur-runtime.js"></script>
-    <script src="lib/system-csp-production.src.js"></script>
+    <!--<script src="lib/traceur-runtime.js"></script>-->
+    <script src="lib/angular2-polyfills.js"></script>
+    <script src="lib/es6-shim.min.js"></script>
+    <script src="lib/system.js"></script>
     <script src="lib/Reflect.js"></script>
     <script>
         System.config({ defaultJSExtensions: true });
@@ -54,7 +61,8 @@
     <!-- Angular2-related imports -->
     <!--<script src="lib/zone.js"></script>
         <script src="lib/long-stack-trace-zone.js"></script>-->
-    <script src="lib/angular2.js"></script>
+    <script src="lib/Rx.js"></script>
+    <script src="lib/angular2.min.js"></script>
     <script src="lib/router.dev.js"></script>
     <script src="lib/http.js"></script>
     <!-- Libraries for example -->

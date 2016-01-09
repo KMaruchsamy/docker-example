@@ -1,4 +1,4 @@
-import {ExceptionHandler} from 'angular2/src/core/exception_handler';
+import {ExceptionHandler} from 'angular2/core';
 import {Logger} from './logger';
 export class MyExceptionHandler extends ExceptionHandler {
       constructor() {
@@ -6,6 +6,6 @@ export class MyExceptionHandler extends ExceptionHandler {
       }
       call(error, stackTrace = null, reason = null) {
             // do something with the exception
-            alert('custom exception triggered');
+            console.log('custom exception triggered');
       }
 }

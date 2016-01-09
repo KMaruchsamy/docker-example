@@ -1,11 +1,9 @@
-﻿import {View, Component} from 'angular2/angular2';
+﻿import {Component} from 'angular2/core';
 import {Router, RouterLink} from 'angular2/router';
 import {Auth} from '../../services/auth';
 @Component({
     selector: 'page-footer',
-    viewProviders:[Auth]
-})
-@View({
+    providers:[Auth],
     templateUrl: '../../templates/shared/page-footer.html',
     directives: [RouterLink]
 })

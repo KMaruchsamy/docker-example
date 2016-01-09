@@ -1,4 +1,4 @@
-﻿import {Component, View} from 'angular2/angular2';
+﻿import {Component} from 'angular2/core';
 import {Router} from 'angular2/router';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
@@ -11,9 +11,7 @@ import {manage_account, general, reset_password_after_login, reset_student_passw
 
 @Component({
     selector: 'account',
-    viewBindings: [Auth, Common, Validations]
-})
-@View({
+    providers: [Auth, Common, Validations],
     templateUrl: '../../templates/account/account.html',
     directives: [PageHeader, PageFooter]
 })

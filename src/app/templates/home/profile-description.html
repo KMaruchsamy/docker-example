@@ -10,11 +10,11 @@
               <p class="text-purple h3">{{profile.degrees}}</p>
               <p class="text-purple">{{profile.designation}}</p>
               <div class="contact-details margin-2em-top">
-                <div *ng-if="profile.telephone"  class="contact-details-info">
+                <div *ngIf="profile.telephone"  class="contact-details-info">
                   <img src="images/telephone-icon_2x.png" class="telephone-icon" alt="telephone icon">
                   <a href="tel://{{profile.telephone}}" class="link-base-color margin-right-2em">{{profile.telephone}}</a>
                 </div>
-                <div *ng-if="profile.email" class="contact-details-info">
+                <div *ngIf="profile.email" class="contact-details-info">
                   <img src="images/email-icon_2x.png" class="email-icon" alt="email icon">
                   <a href="mailto:{{profile.email}}" class="link-base-color">{{profile.email}}</a>
                 </div>
@@ -25,13 +25,13 @@
           <div class="section container-narrow">
             <p class="bullet-heading">Contact {{profile.firstName}} for:</p>
             <ul class="bullet two-columns">
-              <li *ng-for="#bullet of profile.bulletsForFrontEnd">{{bullet}}</li>
+              <li *ngFor="#bullet of profile.bulletsForFrontEnd">{{bullet}}</li>
             </ul>
-            <p class="js-bolded section-medium-thin" [inner-html]='profile.bio'>
+            <p class="js-bolded section-medium-thin" [innerHTML]='profile.bio'>
             </p>
             <p>Use these external forms to submit requests directly to {{profile.firstName}}:</p>
               <ul class="action-links">
-                <li *ng-for="#link of profile.linksForFrontEnd"><a [href]='link.LinkUrl' target="_blank" class="icon action-color-link-icon">{{link.LinkTextToDisplay}}</a></li>  
+                <li *ngFor="#link of profile.linksForFrontEnd"><a [href]='link.LinkUrl' target="_blank" class="icon action-color-link-icon">{{link.LinkTextToDisplay}}</a></li>  
               </ul>
           </div>
         </div>

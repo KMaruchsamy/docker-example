@@ -1,4 +1,4 @@
-import {View, Component} from 'angular2/angular2';
+import {Component} from 'angular2/core';
 import {Router, RouterLink, RouteParams} from 'angular2/router';
 import {PageHeader} from './page-header';
 import {Auth} from '../../services/auth';
@@ -8,9 +8,7 @@ import {links} from '../../constants/config';
 
 @Component({
     selector: 'choose-institution',
-	viewBindings: [Common, Auth]
-})
-@View({
+	providers: [Common, Auth],
     templateUrl: '../../templates/shared/choose-institution.html',
 	directives: [PageHeader, RouterLink]
 })
