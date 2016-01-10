@@ -16,8 +16,8 @@ import {Page} from './scripts/page';
 import {Logger} from './scripts/logger';
 import {ChooseInstitution} from './components/shared/choose-institution';
 import {ProfileDescription} from './components/home/profile-description';
-// import {ExceptionHandler} from 'angular2/src/core/exception_handler';
-// import {MyExceptionHandler} from '../../scripts/myexception-handler';
+import {ExceptionHandler} from 'angular2/core';
+import {MyExceptionHandler} from './scripts/myexception-handler';
 
 
 @Component({
@@ -40,12 +40,13 @@ import {ProfileDescription} from './components/home/profile-description';
     { path: '/profiles/:id', component: ProfileDescription, as: 'Profiles' }
 ])
 export class App {
-    ngOnInit() {
+    constructor() {
     }
 }
 
 bootstrap(App, [
     ROUTER_PROVIDERS,
     HTTP_PROVIDERS,
+    provide(ExceptionHandler, { useClass: MyExceptionHandler }),
     provide(LocationStrategy, { useClass: HashLocationStrategy })
 ]);
