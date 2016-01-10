@@ -1,9 +1,7 @@
-import {View,Component} from 'angular2/angular2';
+import {Component} from 'angular2/core';
 
 @Component({
-	selector:'login-header'
-})
-@View({
+	selector:'login-header',
 	templateUrl:'../../templates/login/login-header.html'
 })
 

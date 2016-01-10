@@ -1,10 +1,8 @@
-import {Component,View} from 'angular2/angular2';
+import {Component} from 'angular2/core';
 import {CanActivate} from 'angular2/router';
 
 @Component({
-    selector:'userguide'
-})
-@View({
+    selector:'userguide',
     templateUrl:'../../templates/userguide/userguide.html',
 })
 export class UserGuide{

@@ -1,4 +1,5 @@
-import {Component, View, NgFor, NgIf} from 'angular2/angular2';
+import {Component} from 'angular2/core';
+import {NgFor, NgIf} from 'angular2/common';
 import {RouteParams, RouterLink} from 'angular2/router';
 import {HomeService} from '../../services/home-service';
 import {Common} from '../../services/common';
@@ -9,9 +10,7 @@ import {ProfileModel} from '../../models/profile-model';
 
 @Component({
     selector: 'profile-description',
-    viewProviders: [HomeService, Common]
-})
-@View({
+    providers: [HomeService, Common],
     templateUrl: '../../templates/home/profile-description.html',
     directives: [RouterLink, PageHeader, PageFooter, NgFor, NgIf]
 })

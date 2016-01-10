@@ -1,4 +1,4 @@
-﻿import {Component, View} from 'angular2/angular2';
+﻿import {Component} from 'angular2/core';
 import {Router} from 'angular2/router';
 import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';
@@ -9,9 +9,7 @@ import {general, forgot_password} from '../../constants/error-messages';
 
 @Component({
     selector: 'forgot-password',
-    viewBindings: [Common,Validations,Logger]
-})
-@View({
+    providers: [Common,Validations,Logger],
     templateUrl: '../../templates/password/forgot-password.html',
     directives: [PasswordHeader]
 })

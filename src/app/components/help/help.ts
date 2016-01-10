@@ -1,13 +1,10 @@
-﻿"use strict";
-import {Component,View} from 'angular2/angular2';
+﻿import {Component} from 'angular2/core';
 import {HelpHeader} from './help-header';
 import {HelpContent} from './help-content';
 import {CanActivate} from 'angular2/router';
 
 @Component({
-    selector:'help'
-})
-@View({
+    selector:'help',
     templateUrl:'../../templates/help/help.html',
     directives:[HelpHeader, HelpContent]
 })
@@ -21,19 +18,5 @@ export class Help{
         $('title').html('Help &ndash; Kaplan Nursing');
     }
     
-    onReuse(){
-    }
-    
-    canActivate(){
-    }
-    onDeactivate(){
-    }
-    
-    canDeactivate(){
-        // return false;
-    }
-    onActivate(){
-    }
-    onInit(){
-    }
+
 }

@@ -1,4 +1,4 @@
-import {Component, View, Injector, Inject} from 'angular2/angular2';
+import {Component, Injector, Inject} from 'angular2/core';
 import {Router, Location, CanActivate} from 'angular2/router';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
@@ -17,9 +17,7 @@ import {links} from '../../constants/config';
 
 @Component({
   selector: 'home',
-  viewBindings: [Auth, Common, HomeService]
-})
-@View({
+  providers: [Auth, Common, HomeService],
   templateUrl: '../../templates/home/home.html',
   directives: [PageHeader, PageFooter, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile]
 })

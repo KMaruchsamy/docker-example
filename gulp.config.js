@@ -12,24 +12,27 @@ module.exports = function () {
 				build: 'build/app'
 			},
 			lib: [
-				'node_modules/gulp-traceur/node_modules/traceur/bin/traceur-runtime.js',
-				'node_modules/systemjs/dist/system-csp-production.src.js',
+				// 'node_modules/gulp-traceur/node_modules/traceur/bin/traceur-runtime.js',
+				'node_modules/systemjs/dist/system.js',
 				'node_modules/systemjs/dist/system-polyfills.js',
 				'node_modules/reflect-metadata/Reflect.js',
 				'node_modules/whatwg-fetch/fetch.js',
 				'node_modules/jwt-decode/build/jwt-decode.js',
 				'node_modules/jquery/dist/jquery.min.js',
-				'node_modules/jquery/dist/jquery.min.map',
+				// 'node_modules/jquery/dist/jquery.min.map',
 				'src/app/polyfills/sessionstorage.js',
 				'node_modules/lodash/index.js',
 				'src/app/webworkers/logging-worker.js',
-				'node_modules/angular2/bundles/angular2.js',
+				'node_modules/angular2/bundles/angular2.min.js',
 				'node_modules/angular2/bundles/router.dev.js',
 				'node_modules/angular2/bundles/http.js',
 				'node_modules/jasmine-core/lib/jasmine-core/jasmine.css',
 				'node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
 				'node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js',
-				'node_modules/jasmine-core/lib/jasmine-core/boot.js'
+                'node_modules/jasmine-core/lib/jasmine-core/boot.js',
+                'node_modules/es6-shim/es6-shim.min.js',
+                'node_modules/angular2/bundles/angular2-polyfills.js',
+                'node_modules/rxjs/bundles/Rx.js'
 			],
 			jsreview: [
 				'./src/app/app/*.js',

@@ -1,9 +1,7 @@
-import {View,Component} from 'angular2/angular2';
+import {Component} from 'angular2/core';
 
 @Component({
-	selector:'dashboard-header'
-})
-@View({
+	selector:'dashboard-header',
 	templateUrl:'../../templates/home/dashboard-header.html'
 })
 export class DashboardHeader{
