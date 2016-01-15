@@ -9,6 +9,12 @@ export const links = {
 		qa: {
 			server : "https://qa-nursing.kaptest.com/"			
 		},
+        stg: {
+			server : "https://stg-nursing.kaptest.com/"			
+		},
+        prod: {
+			server : "https://nursing.kaplan.com/"			
+		},
 		baseurl: "api/v1/",
 		admin: {
 			authenticationapi: "admin/login",
@@ -31,8 +37,31 @@ export const links = {
 		qa: {
 			server: "https://qa-nursing.kaptest.com/"
 		},
+        stg: {
+			server: "https://stg-nursing.kaptest.com/"
+		},
+        prod: {
+			server: "https://nursing.kaplan.com/"
+		},
 		landingpage: "NewSiteLandingPage.aspx?facultylogin=1",
 		ReportingLandingPage: "UX_ALogin.aspx"
+    },
+    faculty:{
+        local: {
+			server: "http://localhost:3000/"
+		},
+		dev: {
+			server: "https://dev-nit.kaptest.com/"
+		},
+		qa: {
+			server : "https://qa-nit.kaptest.com/ "			
+		},
+        stg: {
+			server : "https://stg-nit.kaptest.com/faculty"			
+		},
+        prod: {
+			server : "https://nit.kaplan.com/faculty"			
+		},
     },
     resetemailexpire: {
 		expirytime: "2"
