@@ -18,6 +18,8 @@ import {ChooseInstitution} from './components/shared/choose-institution';
 import {ProfileDescription} from './components/home/profile-description';
 import {ExceptionHandler} from 'angular2/core';
 import {MyExceptionHandler} from './scripts/myexception-handler';
+import {ChooseTest} from './components/tests/choose-test';
+import {ScheduleTest} from './components/tests/schedule-test';
 
 
 @Component({
@@ -37,7 +39,9 @@ import {MyExceptionHandler} from './scripts/myexception-handler';
     { path: '/set-password-first-time', component: SetPasswordFirstTime, as: 'SetPasswordFirstTime' },
     { path: '/account', component: Account, as: 'Account' },
     { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, as: 'ChooseInstitution' },
-    { path: '/profiles/:id', component: ProfileDescription, as: 'Profiles' }
+    { path: '/profiles/:id', component: ProfileDescription, as: 'Profiles' },
+    { path: '/tests/choose-test', component: ChooseTest, as: 'ChooseTest' },
+    { path: '/tests/schedule-test', component: ScheduleTest, as: 'ScheduleTest' }
 ])
 export class App {
     constructor() {

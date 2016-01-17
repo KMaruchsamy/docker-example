@@ -1,5 +1,5 @@
 import {Component, Injector, Inject} from 'angular2/core';
-import {Router, Location, CanActivate} from 'angular2/router';
+import {Router,RouterLink, Location, CanActivate} from 'angular2/router';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {DashboardHeader} from './dashboard-header';
@@ -19,7 +19,7 @@ import {links} from '../../constants/config';
   selector: 'home',
   providers: [Auth, Common, HomeService],
   templateUrl: '../../templates/home/home.html',
-  directives: [PageHeader, PageFooter, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile]
+  directives: [PageHeader, PageFooter, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile,RouterLink]
 })
 @CanActivate((next, prev) => {
   // let authInjector = Injector.resolveAndCreate([Auth]);

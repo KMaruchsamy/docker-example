@@ -24,7 +24,11 @@ export const links = {
 			resetemailapi: "admin/resetEmail",
 			resetfacultypasswordafterloginapi: "admin/resetPasswordAfterLogin",
 			resetstudentpassword: "admin/sendStudentEmail",
-			profilesapi: "profile"
+            profilesapi: "profile",
+            test: {
+                subjects: "scheduling/institutions/§institutionid/subjects?testType=§testtype",
+                tests:"scheduling/institutions/§institutionid/tests?subject=§subject&testType=§testtype"
+            }
 		}
     },
     nursingit: {
