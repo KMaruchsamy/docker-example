@@ -135,7 +135,7 @@
   <div class="section section-teal section-thin">
     <nav class="navigation container" role="navigation" aria-label="secondary">
       <ul class="nav-items">
-        <li class="nav-icon schedule-icon"><a [routerLink]="['/ChooseTest']">Schedule an Integrated Test</a></li>
+        <li class="nav-icon schedule-icon"><a href="#" (click)="redirectToRoute('choose-test');">Schedule an Integrated Test</a></li>
         <li class="nav-icon email-icon-outline"><a href="account.html#send-student-info">Send student sign in info</a></li>
         <li class="nav-icon info-icon-white"><a href="#">View user guide</a></li>
       </ul>
@@ -183,7 +183,7 @@
               </ul>
             </div>
             <div class="faculty-link-list">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('CaseStudies',myform,hdinstitution,hdtoken,hdpage);" href="#">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
+              <h3 class="h4 text-smaller-margin" *ngIf="(institutionRN>0)"><a class="mobile-button" (click)="prepareRedirectToStudentSite('CaseStudies',myform,hdinstitution,hdtoken,hdpage);" href="#">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
               <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('SkillsModules',myform,hdinstitution,hdtoken,hdpage);" href="#">Skills Demonstration Videos</a></h3>
               <p>For practical learning simulation</p>
             </div>

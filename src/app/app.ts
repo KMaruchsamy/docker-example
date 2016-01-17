@@ -1,4 +1,4 @@
-import {View, Component, provide} from 'angular2/core';
+import {Component, provide, enableProdMode} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
 import {RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy} from 'angular2/router';
 import {HTTP_PROVIDERS, Http} from 'angular2/http';
@@ -40,13 +40,15 @@ import {ScheduleTest} from './components/tests/schedule-test';
     { path: '/account', component: Account, as: 'Account' },
     { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, as: 'ChooseInstitution' },
     { path: '/profiles/:id', component: ProfileDescription, as: 'Profiles' },
-    { path: '/tests/choose-test', component: ChooseTest, as: 'ChooseTest' },
+    { path: '/tests/choose-test/:institutionId', component: ChooseTest, as: 'ChooseTest' },
     { path: '/tests/schedule-test', component: ScheduleTest, as: 'ScheduleTest' }
 ])
 export class App {
     constructor() {
     }
 }
+
+// enableProdMode();
 
 bootstrap(App, [
     ROUTER_PROVIDERS,

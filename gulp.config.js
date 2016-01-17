@@ -36,6 +36,8 @@ module.exports = function () {
                 'src/app/scripts/ga.js',
                 'node_modules/bootstrap-select/dist/js/bootstrap-select.min.js',
                 'src/app/plugins/bootstrap-select.js'
+                // 'src/app/plugins/bootstrap-datepicker.min.js',
+                // 'src/app/plugins/jquery.timepicker.js',
 			],
 			jsreview: [
 				'./src/app/app/*.js',
