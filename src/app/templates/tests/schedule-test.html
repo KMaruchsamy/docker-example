@@ -7,14 +7,14 @@
       <form action="add-students.html" id="scheduleTest">
         <div class="date-time-container clearfix">
           <label class="label-inline screen-reader-only" for="startDate">Start Date (MM/DD/YYYY)</label>
-          <input type="text" class="date start required-entry" placeholder="Date" id="startDate" />
+          <input #startdate type="text" class="date start required-entry" placeholder="Date" id="startDate" [value]="startDate"  (keydown)="onKeyDownStartDate(startdate, $event)" />
           <label class="label-inline screen-reader-only" for="startTime">Start Time</label>
           <input type="text" class="time start required-entry" placeholder="Time" id="startTime" />
           <span class="date-pair-span">to</span>
           <label class="label-inline screen-reader-only" for="endTime">End Time</label>
           <input type="text" class="time end required-entry" placeholder="Time" id="endTime" />
           <label class="label-inline screen-reader-only" for="endDate">End Date (MM/DD/YYYY)</label>
-          <input type="text" class="date end required-entry" placeholder="Date" id="endDate" />
+          <input #enddate type="text" class="date end required-entry" placeholder="Date" id="endDate" [value]="endDate"  (keydown)="onKeyDownEndDate(enddate, $event)" />
         </div>
         <p *ngIf="invalid8hours" class="error" role="alert" aria-live="assertive" aria-atomic="true">
           For security reasons, your testing window cannot be longer than 8 hours.

@@ -35,9 +35,11 @@ module.exports = function () {
                 'node_modules/rxjs/bundles/Rx.js',
                 'src/app/scripts/ga.js',
                 'node_modules/bootstrap-select/dist/js/bootstrap-select.min.js',
-                'src/app/plugins/bootstrap-select.js'
+                'src/app/plugins/bootstrap-select.js',
+                'node_modules/moment/min/moment.min.js',
                 // 'src/app/plugins/bootstrap-datepicker.min.js',
                 // 'src/app/plugins/jquery.timepicker.js',
+                'src/app/plugins/date.js'
 			],
 			jsreview: [
 				'./src/app/app/*.js',
