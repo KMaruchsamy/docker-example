@@ -33,24 +33,33 @@ module.exports = function () {
                 'node_modules/es6-shim/es6-shim.min.js',
                 'node_modules/angular2/bundles/angular2-polyfills.js',
                 'node_modules/rxjs/bundles/Rx.js',
-                'src/app/scripts/ga.js'
-            ],
-            jsreview: [
-                './src/app/app/*.js',
-                './src/app/components/**/*.js',
-                './src/app/services/*.js'
-            ]
-        },
-        deploy: {
-            DEV: {
-                backupFolder: '//DWNUXWEB01.kaplaninc.com/d$/Site_Build',
-                liveFolder: '//DWNUXWEB01.kaplaninc.com/d$/NursingAdminWeb'
-            },
-            QA: {
-                backupFolder: '//DWNUXWEB01.kaplaninc.com/e$/Site_Build',
-                liveFolder: '//DWNUXWEB01.kaplaninc.com/e$/NursingAdminWeb'
-            }
-        }
-    };
-    return config;
+                'src/app/scripts/ga.js',
+                'node_modules/bootstrap-select/dist/js/bootstrap-select.min.js',
+                'src/app/plugins/bootstrap-select.js',
+                'node_modules/moment/min/moment.min.js',
+                // 'src/app/plugins/bootstrap-datepicker.min.js',
+                // 'src/app/plugins/jquery.timepicker.js',
+                'src/app/plugins/date.js'
+			],
+			jsreview: [
+				'./src/app/app/*.js',
+				'./src/app/components/**/*.js',
+				'./src/app/services/*.js'
+			]	
+		},
+		deploy: {
+			DEV: {
+				backupFolder: '//DWNUXWEB01.kaplaninc.com/d$/Site_Build',
+				liveFolder: '//DWNUXWEB01.kaplaninc.com/d$/NursingAdminWeb'
+			},
+			QA: {
+				backupFolder: '//DWNUXWEB01.kaplaninc.com/e$/Site_Build',
+				liveFolder: '//DWNUXWEB01.kaplaninc.com/e$/NursingAdminWeb'
+			}
+		},
+        ebsSource: './ebs/',
+        elasticbeanstalk: './.elasticbeanstalk/',
+        ebExtensions: './.ebextensions/'
+	};
+	return config;
 }

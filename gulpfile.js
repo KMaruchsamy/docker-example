@@ -23,6 +23,8 @@ var tscConfig = require('./tsconfig.json');
 var tslint = require('gulp-tslint');
 var sourcemaps = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
+var plugins = require('gulp-load-plugins')({lazy: true});
+var env = process.env.NODE_ENV || 'qa';
 
 gulp.task('clean', function (done) {
     del([config.app.src.build], done);
@@ -111,6 +113,33 @@ gulp.task('build', function (done) {
         );
 });
 
+gulp.task('prepare_config', function () {
+    gulp.src([config.ebsSource + 'config.yml'])
+        .pipe(plugins.replace('@@environment', env))
+        .pipe(gulp.dest(config.elasticbeanstalk));
+
+    gulp.src([config.ebsSource + 'env.config'])
+        .pipe(plugins.replace('@@environment', env))
+        .pipe(plugins.replace('@@date', new Date()))
+        .pipe(gulp.dest(config.ebExtensions));
+
+    gulp.src(`ebs/resources_${env}.config`)
+        .pipe(plugins.rename({
+            dirname: '',
+            basename: 'resources',
+            extname: '.config'
+        }))
+        .pipe(gulp.dest(`${config.ebExtensions}`));
+});
+
+gulp.task('create_zip', function(){
+    gulp.src(['./Dockerrun.aws.json', 
+            config.ebExtensions + 'env.config',
+            config.ebExtensions + 'resources.config',
+            config.elasticbeanstalk + 'config.yml'], { base: "." })
+        .pipe(plugins.zip(`${env}.zip`))
+        .pipe(gulp.dest('dist'));
+});
 
 gulp.task('play', ['build'], function () {
 
