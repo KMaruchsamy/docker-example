@@ -56,7 +56,10 @@ module.exports = function () {
 				backupFolder: '//DWNUXWEB01.kaplaninc.com/e$/Site_Build',
 				liveFolder: '//DWNUXWEB01.kaplaninc.com/e$/NursingAdminWeb'
 			}
-		}
+		},
+        ebsSource: './ebs/',
+        elasticbeanstalk: './.elasticbeanstalk/',
+        ebExtensions: './.ebextensions/'
 	};
 	return config;
 }
