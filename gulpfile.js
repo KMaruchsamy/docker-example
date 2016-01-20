@@ -25,6 +25,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
 var plugins = require('gulp-load-plugins')({lazy: true});
 var env = process.env.NODE_ENV || 'qa';
+var app_version = process.env.app_version || 'stg_v0';
 
 gulp.task('clean', function (done) {
     del([config.app.src.build], done);
@@ -145,7 +146,7 @@ gulp.task('create_zip', function(){
     gulp.src(['./Dockerrun.aws.json', 
             config.ebExtensions + 'env.config',
             config.ebExtensions + 'resources.config'], { base: "." })
-        .pipe(plugins.zip(`${env}.zip`))
+        .pipe(plugins.zip(`nursing-adminapp-${app_version}.zip`))
         .pipe(gulp.dest('dist'));
 });
 
