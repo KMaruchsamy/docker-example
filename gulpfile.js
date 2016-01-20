@@ -130,13 +130,21 @@ gulp.task('prepare_config', function () {
             extname: '.config'
         }))
         .pipe(gulp.dest(`${config.ebExtensions}`));
+
+    gulp.src(`ebs/Dockerrun_${env}.aws.json`)
+        .pipe(plugins.rename({
+            dirname: '',
+            basename: 'Dockerrun.aws',
+            extname: '.json'
+        }))
+        .pipe(gulp.dest('.'));
+
 });
 
 gulp.task('create_zip', function(){
     gulp.src(['./Dockerrun.aws.json', 
             config.ebExtensions + 'env.config',
-            config.ebExtensions + 'resources.config',
-            config.elasticbeanstalk + 'config.yml'], { base: "." })
+            config.ebExtensions + 'resources.config'], { base: "." })
         .pipe(plugins.zip(`${env}.zip`))
         .pipe(gulp.dest('dist'));
 });
