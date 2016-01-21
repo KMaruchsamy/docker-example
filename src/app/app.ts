@@ -1,4 +1,4 @@
-import {View, Component, provide} from 'angular2/core';
+import {Component, provide, enableProdMode} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
 import {RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy} from 'angular2/router';
 import {HTTP_PROVIDERS, Http} from 'angular2/http';
@@ -18,6 +18,8 @@ import {ChooseInstitution} from './components/shared/choose-institution';
 import {ProfileDescription} from './components/home/profile-description';
 import {ExceptionHandler} from 'angular2/core';
 import {MyExceptionHandler} from './scripts/myexception-handler';
+import {ChooseTest} from './components/tests/choose-test';
+import {ScheduleTest} from './components/tests/schedule-test';
 
 
 @Component({
@@ -37,12 +39,18 @@ import {MyExceptionHandler} from './scripts/myexception-handler';
     { path: '/set-password-first-time', component: SetPasswordFirstTime, as: 'SetPasswordFirstTime' },
     { path: '/account', component: Account, as: 'Account' },
     { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, as: 'ChooseInstitution' },
-    { path: '/profiles/:id', component: ProfileDescription, as: 'Profiles' }
+    { path: '/profiles/:id', component: ProfileDescription, as: 'Profiles' },
+    { path: '/tests/choose-test/:institutionId', component: ChooseTest, as: 'ChooseTest' },
+    { path: '/tests/schedule-test', component: ScheduleTest, as: 'ScheduleTest' },
+    { path: '/tests/:action/choose-test/:institutionId/:scheduleId', component: ChooseTest, as: 'ModifyChooseTest' },
+    { path: '/tests/:action/schedule-test', component: ScheduleTest, as: 'ModifyScheduleTest' }
 ])
 export class App {
     constructor() {
     }
 }
+
+// enableProdMode();
 
 bootstrap(App, [
     ROUTER_PROVIDERS,

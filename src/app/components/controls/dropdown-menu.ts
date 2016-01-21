@@ -1,4 +1,4 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component, OnInit, Input} from 'angular2/core';
 import {Router, RouterLink} from 'angular2/router';
 import {Auth} from '../../services/auth';
 import '../../plugins/dropdown.js';
@@ -10,8 +10,10 @@ import '../../plugins/dropdown.js';
     directives: [RouterLink]
 })
 export class DropdownMenu implements OnInit {
+    @Input() ariaDisabled;
     constructor(public router: Router, public auth: Auth) {
         this.auth = new Auth();
+        // alert(this.ariaDisabled);
     }
 
     ngOnInit() {
@@ -19,7 +21,7 @@ export class DropdownMenu implements OnInit {
     }
 
     makeControlAccessible(): void {
-        var toggle = '[data-toggle=dropdown]'
+        let toggle = 'a[data-toggle=dropdown]'
             , $par
             , firstItem
             , focusDelay = 200
@@ -27,8 +29,8 @@ export class DropdownMenu implements OnInit {
             , lis = menus.find('li').attr('role', 'presentation');
 
 
-        $(document).off('click.dropdown.data-api', '.dropdown-menu');
-        $(document).off('focusout.dropdown.data-api', '.dropdown-menu');
+        $(document).off('click.dropdown.data-api', 'header .dropdown-menu');
+        $(document).off('focusout.dropdown.data-api', 'header .dropdown-menu');
         $(document).off('keydown.bs.dropdown.data-api', toggle + ', [role=menu]')
 
         lis.find('a').attr({ 'role': 'menuitem', 'tabIndex': '-1' })
@@ -37,11 +39,11 @@ export class DropdownMenu implements OnInit {
 
         $(toggle).parent().on('shown.bs.dropdown', function(e) {
             $par = $(this)
-            var $toggle = $par.find(toggle)
+            let $toggle = $par.find(toggle)
             $toggle.attr('aria-expanded', 'true')
             $toggle.on('keydown.bs.dropdown', $.proxy(function(ev) {
                 setTimeout(function() {
-                    firstItem = $('.dropdown-menu [role=menuitem]:visible', $par)[0]
+                    firstItem = $('header .dropdown-menu [role=menuitem]:visible', $par)[0]
                     try { firstItem.focus() } catch (ex) { }
                 }, focusDelay)
             }, this))
@@ -50,12 +52,12 @@ export class DropdownMenu implements OnInit {
 
         $(toggle).parent().on('hidden.bs.dropdown', function(e) {
             $par = $(this)
-            var $toggle = $par.find(toggle)
+            let $toggle = $par.find(toggle)
             $toggle.attr('aria-expanded', 'false')
         })
 
         $(document)
-            .on('click.dropdown.data-api', '.dropdown-menu', function(e) {
+            .on('click.dropdown.data-api', 'header .dropdown-menu', function(e) {
                 var $this = $(this)
                     , that = this
                 if (!$.contains(that, document.activeElement)) {
@@ -65,8 +67,8 @@ export class DropdownMenu implements OnInit {
             });
 
         $(document)
-            .on('focusout.dropdown.data-api', '.dropdown-menu', function(e) {
-                var $this = $(this)
+            .on('focusout.dropdown.data-api', 'header .dropdown-menu', function(e) {
+                let $this = $(this)
                     , that = this
                 setTimeout(function() {
                     if (!$.contains(that, document.activeElement)) {
