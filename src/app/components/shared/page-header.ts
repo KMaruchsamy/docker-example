@@ -16,16 +16,12 @@ import {DropdownMenu} from '../controls/dropdown-menu';
 export class PageHeader implements OnInit{
     @Input() showCover:boolean;
     @Input() ariaDisabled: boolean;
-    dropDownAriaDisabled: boolean;    
     constructor(public router: Router,public auth : Auth ){
         //public inputs will not be available here .. will be bound in the onInit event
     }
     
     ngOnInit():void{
-        //public input available here
-        console.log(this.showCover);
-        console.log(this.ariaDisabled); 
-        this.dropDownAriaDisabled = this.ariaDisabled;
+        
     }
 }
 
