@@ -13,7 +13,6 @@ export class DropdownMenu implements OnInit {
     @Input() ariaDisabled;
     constructor(public router: Router, public auth: Auth) {
         this.auth = new Auth();
-        // alert(this.ariaDisabled);
     }
 
     ngOnInit() {

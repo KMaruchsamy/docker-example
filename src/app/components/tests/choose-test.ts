@@ -102,18 +102,16 @@ export class ChooseTest implements OnInit, OnDeactivate {
                 });
             })
             .catch((error) => {
-                alert(error);
+                console.log(error);
             });
     }
 
 
     resolveTestsURL(url: string): string {
-        console.log(url);
         return url.replace('§institutionid', this.institutionID.toString()).replace('§subject', this.subjectId.toString()).replace('§testtype', this.testTypeId.toString());
     }
 
     resolveSubjectsURL(url: string): string {
-        console.log(url);
         return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeId.toString());
     }
 
@@ -139,7 +137,7 @@ export class ChooseTest implements OnInit, OnDeactivate {
                 });
             })
             .catch((error) => {
-                alert(error);
+                console.log(error);
             });
 
         //this.reload = true;
