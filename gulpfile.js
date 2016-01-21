@@ -131,7 +131,6 @@ gulp.task('prepare_config', function () {
             extname: '.config'
         }))
         .pipe(gulp.dest('${config.ebExtensions}'));
-
     gulp.src('ebs/Dockerrun_${env}.aws.json')
         .pipe(plugins.rename({
             dirname: '',
