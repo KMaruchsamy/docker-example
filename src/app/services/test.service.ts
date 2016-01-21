@@ -17,8 +17,9 @@ export class TestService {
     }
 
     getTestSchedule(): TestScheduleModel {
-        this.testSchedule = JSON.parse(this.sStorage.getItem('testschedule'));
-        return this.testSchedule;
+        if (this.sStorage.getItem('testschedule'))
+            return this.testSchedule = JSON.parse(this.sStorage.getItem('testschedule'));
+        else null;
     }
 
     getSubjects(url): any {

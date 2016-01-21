@@ -213,12 +213,12 @@ body {
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
           flex-direction: column;
-  min-height: 100%; }
+  min-height: 100vh; }
 
-.p-1em-top {
+.padding-1em-top {
   padding-top: 1em; }
 
-.p-2em-top {
+.padding-2em-top {
   padding-top: 2em; }
 
 .margin-1em-top {
@@ -256,10 +256,10 @@ body {
 .margin-bottom-none {
   margin-bottom: 0; }
 
-.border-top {
+.border-top, .border-top-bottom {
   border-top: 1px solid #e3e3e3; }
 
-.border-bottom {
+.border-bottom, .border-top-bottom {
   border-bottom: 1px solid #e3e3e3; }
 
 /*
@@ -676,6 +676,10 @@ table.dataTable.table-with-cell-padding tbody td {
 table.dataTable.table-with-cell-padding td:first-child {
   padding-left: 1em; }
 
+.dataTable.first-col-wrap td:first-child {
+  min-width: 150px;
+  white-space: normal; }
+
 .tablesaw-sortable .tablesaw-sortable-head button::after {
   height: 0;
   width: 0;
@@ -983,6 +987,9 @@ b, strong, .bolded {
     font-size: 0.75019em;
     font-weight: normal; }
 
+.text-link-color {
+  color: #C85300; }
+
 hr {
   display: block;
   height: 1px;
@@ -1114,6 +1121,10 @@ select {
   color: #B14F4E;
   display: block;
   font-size: 1.125em; }
+
+.label-larger {
+  font-size: 1.125em;
+  margin-bottom: 0.33333em; }
 
 form .error {
   margin-top: -.3em; }
@@ -1671,6 +1682,8 @@ main .right-grid ::-webkit-scrollbar {
     background: #F9F9F9; }
   .section-purple {
     background: #5A5EA9; }
+  .section-blue {
+    background: #dbe9f9; }
   .section-light-pink {
     background: #fff4f1; }
   .section-thin {
@@ -2675,27 +2688,29 @@ input.checkbox-small-image:focus + label::before {
 
 .modal-header {
   min-height: 16.43px;
-  padding: 1.5em 1.5em;
+  padding: 1.5em;
   padding-bottom: 0; }
+  .modal-header h4 {
+    line-height: 1.5; }
 
 .modal-body {
   position: relative;
-  padding: 1em; }
+  padding: 1em;
+  /*@include breakpoint($small-screen-up) {
+      padding: 1.5em 5em;
+  }*/ }
   .modal-body::after {
     clear: both;
     content: "";
     display: table; }
   @media (min-width: 25.9375em) {
     .modal-body {
-      padding: 1.5em 1.5em; } }
-  @media (min-width: 48em) {
-    .modal-body {
-      padding: 1.5em 5em; } }
+      padding: 1.5em 1.5em 1em; } }
   .modal-body-no-padding-top {
     padding-top: 0; }
 
 .modal-footer {
-  padding: 1.5em 0;
+  padding: 1.5em;
   text-align: right; }
   .modal-footer::after {
     clear: both;
@@ -2706,15 +2721,17 @@ input.checkbox-small-image:focus + label::before {
       padding-bottom: 4em; }
       .modal-footer .button {
         display: block;
+        text-align: center;
         width: 100%; }
       .modal-footer .anchor-button-left {
-        bottom: -1em;
+        bottom: -.5em;
         left: 50%;
         margin-bottom: 1.5em;
         position: absolute;
         -webkit-transform: translate(-50%, -50%);
             -ms-transform: translate(-50%, -50%);
-                transform: translate(-50%, -50%); } }
+                transform: translate(-50%, -50%);
+        width: 100%; } }
 
 /*.modal-backdrop {
     position: fixed;
@@ -2736,7 +2753,8 @@ input.checkbox-small-image:focus + label::before {
     right: 17px; }
   .modal-full-overlay-content {
     margin: 0 auto;
-    max-width: 50.9375em; }
+    max-width: 50.9375em;
+    padding-bottom: 1.5em; }
 
 .manage {
   margin: 2em 0; }
@@ -4050,7 +4068,7 @@ input.page-lg-heading {
   .name-testing-session .one-half-grid .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
     width: 100%; }
   .name-testing-session .one-half-grid p {
-    margin-top: 1.5em; }
+    margin-top: 1.85em; }
 
 @media (max-width: 61.9375em) {
   .name-testing-session .one-half-grid {
@@ -4074,19 +4092,21 @@ input.page-lg-heading {
   margin-bottom: 5px; }
   .test-summary-heading a {
     color: #B35300;
-    margin-left: .5em;
-    margin-right: .75em; }
+    margin-left: .5em; }
   .test-summary-heading-details {
-    display: inline; }
+    display: inline;
+    margin-right: 0.75em; }
     @media (min-width: 34.4375em) and (max-width: 62em) {
       .test-summary-heading-details {
         display: block; } }
+  .test-summary-heading-modify {
+    background-color: #ecf3fc; }
   @media (max-width: 34.375em) {
     .test-summary-heading span {
       display: none; }
     .test-summary-heading a {
       margin: 0; }
-      .test-summary-heading a[href="schedule-test.html"] {
+      .test-summary-heading a.change-date-time {
         margin-left: 1.5em; } }
 
 .breadcrumb-number {
@@ -4132,17 +4152,18 @@ input.page-lg-heading {
   padding-top: 4px;
   margin-bottom: -4px; }
 
-@media (max-width: 61.9375em) {
-  .manage-test-breadcrumb {
-    padding: 0; } }
-
-.manage-test-breadcrumb .grid {
-  width: 20%;
-  float: left;
-  padding-left: 8%;
-  padding-right: 8%;
-  text-align: center;
-  padding: 0; }
+.manage-test-breadcrumb {
+  margin-bottom: -.25em; }
+  @media (max-width: 61.9375em) {
+    .manage-test-breadcrumb {
+      padding: 0; } }
+  .manage-test-breadcrumb .grid {
+    width: 20%;
+    float: left;
+    padding-left: 8%;
+    padding-right: 8%;
+    text-align: center;
+    padding: 0; }
 
 .review-details-table {
   table-layout: fixed; }

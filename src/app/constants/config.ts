@@ -1,7 +1,7 @@
 export const links = {
     api: {
 		local: {
-			server: "https://qa-nursing.kaptest.com/"
+			server: "http://localhost/"
 		},
 		dev: {
 			server: "https://dev01-nursing.kaptest.com/"
@@ -77,7 +77,10 @@ export const links = {
 		nurseconsultant:{
 			defaultimage:'images/profile-noimage.jpg'
 		}
-	}
+    },
+    tests:{
+        defaultScheduleDurationHours:3
+    }
 };
 
 export const errorcodes = {

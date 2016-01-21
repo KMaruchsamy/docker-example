@@ -8,6 +8,7 @@ import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
+import {Utility} from '../../scripts/utility';
 import * as _ from '../../lib/index';
 import '../../plugins/dropdown.js';
 // import '../../plugins/bootstrap-select.js';
@@ -22,7 +23,7 @@ import '../../plugins/dataTables.responsive.js';
     selector: 'choose-test',
     templateUrl: '../../templates/tests/choose-test.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
-    providers: [TestService, Auth, TestScheduleModel],
+    providers: [TestService, Auth, TestScheduleModel, Utility],
     directives: [PageHeader, TestHeader, PageFooter],
     pipes: [RemoveWhitespacePipe]
 })
@@ -30,40 +31,59 @@ import '../../plugins/dataTables.responsive.js';
 export class ChooseTest implements OnInit, OnDeactivate {
     institutionID: number;
     apiServer: string;
-    subjectID: number;
-    testTypeID: number;
+    subjectId: number;
+    testTypeId: number;
     subjects: Object[] = [];
     tests: Object[] = [];
     testsTable: any;
     sStorage: any;
-    constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams) {
+    action: string;
+    constructor(public testService: TestService, public auth: Auth, public utitlity: Utility,
+        public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams) {
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else
-        this.initialize();
+            this.initialize();
     }
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        // this.logService.addLog(`Navigating from "${prev ? prev.urlPath : 'null'}" to "${next.urlPath}"`);
         if (this.testsTable)
             this.testsTable.destroy();
         $('.selectpicker').val('').selectpicker('render');
     }
 
-    ngOnInit() {
-        
-        // console.log('on init');
-    }
-
     initialize(): void {
+        if (this.routeParams.get('action'))
+            this.action = this.routeParams.get('action');
         this.testsTable = null;
-        this.testScheduleModel.currentStep = 1;
-        this.testTypeID = 1;
+        this.testTypeId = 1;
         this.institutionID = parseInt(this.routeParams.get('institutionId'));
-        this.testScheduleModel.institutionId = this.institutionID;
         this.apiServer = this.auth.common.getApiServer();
         this.loadSubjects();
     }
+
+    loadSchedule(): void {
+        if (this.action === 'modify') {
+            let savedSchedule = this.testService.getTestSchedule();
+            if (savedSchedule) {
+                this.testScheduleModel = savedSchedule;
+                this.subjectId = this.testScheduleModel.subjectId;
+
+                setTimeout(json => {
+                    $('.selectpicker').selectpicker('refresh');
+                    this.loadTests(this.subjectId);
+                });
+            }
+        }
+        else {
+            this.testScheduleModel.currentStep = 1;
+            this.testScheduleModel.activeStep = 1;
+            this.testScheduleModel.institutionId = this.institutionID;
+        }
+    }
+
+
+
 
     loadSubjects(): void {
         let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
@@ -73,9 +93,12 @@ export class ChooseTest implements OnInit, OnDeactivate {
         })
             .then((json) => {
                 this.subjects = json;
-                //this.bindSubjects();
                 setTimeout(json => {
-                    $('.selectpicker').selectpicker();
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
+                        $('.selectpicker').selectpicker('mobile');
+                    else
+                        $('.selectpicker').selectpicker();
+                    this.loadSchedule();
                 });
             })
             .catch((error) => {
@@ -85,15 +108,17 @@ export class ChooseTest implements OnInit, OnDeactivate {
 
 
     resolveTestsURL(url: string): string {
-        return url.replace('§institutionid', this.institutionID.toString()).replace('§subject', this.subjectID.toString()).replace('§testtype', this.testTypeID.toString());
+        console.log(url);
+        return url.replace('§institutionid', this.institutionID.toString()).replace('§subject', this.subjectId.toString()).replace('§testtype', this.testTypeId.toString());
     }
 
     resolveSubjectsURL(url: string): string {
-        return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeID.toString());
+        console.log(url);
+        return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeId.toString());
     }
 
     loadTests(subjectID: number): void {
-        this.subjectID = subjectID;
+        this.subjectId = subjectID;
         let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}`);
         let testsPromise = this.testService.getTests(testsURL);
         testsPromise.then((response) => {
@@ -109,23 +134,36 @@ export class ChooseTest implements OnInit, OnDeactivate {
                         "searching": false,
                         "responsive": true,
                         "info": false,
-                        "ordering": false,
-                        columnDefs: [
-                            { responsivePriority: 1, targets: 0 },
-                            { responsivePriority: 2, targets: -1 }
-                        ]
+                        "ordering": false
                     });
                 });
-                //this.bindTests();
-
             })
             .catch((error) => {
                 alert(error);
             });
+
+        //this.reload = true;
+        // 
+        //         this.testsTable.on('responsive-display', function(e, datatable, row, showHide, update) {
+        //             console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
+        //         });
     }
+
+    // bindRadioEvent(): void {
+    //     let __this = this;
+    //     $('#chooseTestTable input[type=radio]').change(function() {
+    //         let testId = $(this).attr('testid');
+    //         let testName = $(this).attr('testname');
+    //         let subjectId = $('#testSubjectOptions').val();
+    //         __this.selectTest(testId, testName, subjectId);
+    //         $('#chooseTestTable input[type=radio]').not($(this)).attr('checked', false);
+    //     });
+    // }
+
 
     saveChooseTest(): void {
         this.testScheduleModel.completed = true;
+        this.testScheduleModel.scheduleId = this.utitlity.generateUUID();
         this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         this.router.parent.navigateByUrl('/tests/schedule-test');
@@ -134,8 +172,8 @@ export class ChooseTest implements OnInit, OnDeactivate {
 
 
     selectTest(testId: number, testName: string, subjectId: number): void {
-        this.testScheduleModel.subjectID = subjectId;
-        this.testScheduleModel.testID = testId;
+        this.testScheduleModel.subjectId = subjectId;
+        this.testScheduleModel.testId = testId;
         this.testScheduleModel.testName = testName;
         //    let selectedTest =  _.find(this.tests, function(test) {
         //         return test.TestId === testId;

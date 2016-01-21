@@ -10,7 +10,7 @@ import * as _ from '../../lib/index';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import '../../plugins/bootstrap-datepicker.min.js';
 import '../../plugins/jquery.timepicker.js';
-import * as moment from '../../lib/moment.min.js';
+
 @Component({
     selector: 'choose-test',
     templateUrl: '../../templates/tests/schedule-test.html',
@@ -23,6 +23,8 @@ export class ScheduleTest implements OnInit {
     invalid8hours: boolean = false;
     startDate: string = '';
     endDate: string = '';
+    startTime: string = '';
+    endTime: string = '';
     $startDate: any;
     $endDate: any;
     dontPropogate: boolean = false;
@@ -30,24 +32,38 @@ export class ScheduleTest implements OnInit {
         public testService: TestService) {
         this.$startDate = $('#startDate');
         this.$endDate = $('#endDate');
-        
-        console.log(Date.today().toString("M/d/yyyy"));
+        var now = moment();
     }
 
     ngOnInit(): void {
         this.testScheduleModel = this.testService.getTestSchedule();
         this.testScheduleModel.currentStep = 2;
+        this.testScheduleModel.activeStep = 2;
         this.testScheduleModel.completed = false;
         let __this = this;
-        
-        
+
+
         $('#startTime').timepicker({
             'showDuration': true,
             'timeFormat': 'g:ia',
             'minTime': '8:00am'
         }).on('changeTime', function() {
-            console.log($(this).val());
+            __this.startTime = $(this).timepicker('getTime', new Date(__this.startDate));           
+            if (__this.endTime === '') {
+                 let endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
+                $('#endTime').timepicker('setTime', new Date(endTime));
+                __this.endDate = moment(new Date(endTime)).format('L');              
+            }
         });
+
+        $('#endTime').timepicker({
+            'showDuration': true,
+            'timeFormat': 'g:ia',
+            'minTime': '8:00am'
+        }).on('changeTime', function() {
+            __this.endTime = $(this).timepicker('getTime', new Date(__this.endDate));
+        });
+
 
 
 
@@ -62,11 +78,13 @@ export class ScheduleTest implements OnInit {
                 __this.startDate = __this.$startDate.val();
                 setTimeout(outputString=> {
                     __this.$startDate.datepicker('update', __this.startDate);
-                    if (__this.endDate === '')
+                    if (__this.endDate === '') {
+                        __this.endDate = __this.startDate;
                         __this.$endDate.datepicker('update', __this.startDate);
+                    }
                 });
             }
-
+            __this.dontPropogate = false;
         });
 
         this.$endDate.datepicker({
@@ -75,15 +93,22 @@ export class ScheduleTest implements OnInit {
             todayHighlight: true, //highlights today's date
             startDate: new Date()
         }).on('hide', function() {
-            if (!this.dontPropogate) {
+            if (!__this.dontPropogate) {
                 __this.endDate = __this.$endDate.val();
                 setTimeout(outputString=> {
-                    if (__this.endDate === '')
-                        __this.$endDate.datepicker('update', __this.startDate);
-                });
+                    __this.$endDate.datepicker('update', __this.endDate);
+                })
             }
+            __this.dontPropogate = false;
         });
 
+    }
+
+    validate(): boolean {
+        
+        
+        
+        return true;
     }
 
     onKeyDownStartDate($control: any, e: any): boolean {
@@ -101,8 +126,11 @@ export class ScheduleTest implements OnInit {
                     this.startDate = outputString;
                 setTimeout(outputString=> {
                     this.$startDate.datepicker('update', this.startDate);
-                    if (this.endDate === '')
+                    if (this.endDate === '') {
+                        this.endDate = this.startDate;
                         this.$endDate.datepicker('update', this.startDate);
+                    }
+
                 });
                 // return false;
             }

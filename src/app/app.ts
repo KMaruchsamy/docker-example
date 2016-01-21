@@ -41,7 +41,9 @@ import {ScheduleTest} from './components/tests/schedule-test';
     { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, as: 'ChooseInstitution' },
     { path: '/profiles/:id', component: ProfileDescription, as: 'Profiles' },
     { path: '/tests/choose-test/:institutionId', component: ChooseTest, as: 'ChooseTest' },
-    { path: '/tests/schedule-test', component: ScheduleTest, as: 'ScheduleTest' }
+    { path: '/tests/schedule-test', component: ScheduleTest, as: 'ScheduleTest' },
+    { path: '/tests/:action/choose-test/:institutionId/:scheduleId', component: ChooseTest, as: 'ModifyChooseTest' },
+    { path: '/tests/:action/schedule-test', component: ScheduleTest, as: 'ModifyScheduleTest' }
 ])
 export class App {
     constructor() {
