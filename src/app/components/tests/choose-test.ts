@@ -28,7 +28,7 @@ import '../../plugins/dataTables.responsive.js';
     pipes: [RemoveWhitespacePipe]
 })
 
-export class ChooseTest implements OnInit, OnDeactivate {
+export class ChooseTest implements OnDeactivate {
     institutionID: number;
     apiServer: string;
     subjectId: number;

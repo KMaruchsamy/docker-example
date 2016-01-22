@@ -1,0 +1,32 @@
+/* CSS class for the angular selectors..*/
+
+/*home,
+    page-footer,
+    page-header,
+    profile,
+    dropdown-menu,
+    choose-test {
+        display: block;
+}*/  
+        
+.app-main{
+    flex:1 0 auto;
+}
+        
+app,
+choose-test {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-height: 100vh;
+}        
+
+.inner-banner h1 {
+    line-height: 0;
+}
