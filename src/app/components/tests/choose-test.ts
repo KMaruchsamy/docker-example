@@ -8,13 +8,11 @@ import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
+import {RoundPipe} from '../../pipes/round.pipe';
 import {Utility} from '../../scripts/utility';
 import * as _ from '../../lib/index';
 import '../../plugins/dropdown.js';
-// import '../../plugins/bootstrap-select.js';
 import '../../plugins/bootstrap-select.min.js';
-// import '../../plugins/tab.js';
-// import '../../plugins/typeahead.bundle.js';
 import '../../plugins/jquery.dataTables.min.js';
 import '../../plugins/dataTables.responsive.js';
 
@@ -25,7 +23,7 @@ import '../../plugins/dataTables.responsive.js';
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
     providers: [TestService, Auth, TestScheduleModel, Utility],
     directives: [PageHeader, TestHeader, PageFooter],
-    pipes: [RemoveWhitespacePipe]
+    pipes: [RemoveWhitespacePipe,RoundPipe]
 })
 
 export class ChooseTest implements OnDeactivate {
@@ -49,7 +47,7 @@ export class ChooseTest implements OnDeactivate {
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         if (this.testsTable)
             this.testsTable.destroy();
-        $('.selectpicker').val('').selectpicker('render');
+        $('.selectpicker').val('').selectpicker('refresh');
     }
 
     initialize(): void {
@@ -68,11 +66,11 @@ export class ChooseTest implements OnDeactivate {
             if (savedSchedule) {
                 this.testScheduleModel = savedSchedule;
                 this.subjectId = this.testScheduleModel.subjectId;
-
+                this.loadTests(this.subjectId);
                 setTimeout(json => {
                     $('.selectpicker').selectpicker('refresh');
-                    this.loadTests(this.subjectId);
                 });
+
             }
         }
         else {
@@ -93,12 +91,12 @@ export class ChooseTest implements OnDeactivate {
         })
             .then((json) => {
                 this.subjects = json;
+                this.loadSchedule();
                 setTimeout(json => {
                     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
                         $('.selectpicker').selectpicker('mobile');
                     else
-                        $('.selectpicker').selectpicker();
-                    this.loadSchedule();
+                        $('.selectpicker').selectpicker('refresh');                    
                 });
             })
             .catch((error) => {
@@ -133,6 +131,7 @@ export class ChooseTest implements OnDeactivate {
                         "responsive": true,
                         "info": false,
                         "ordering": false
+                        // "order": [[ 0, "desc" ]]
                     });
                 });
             })
