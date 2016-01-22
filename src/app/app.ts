@@ -20,6 +20,7 @@ import {ExceptionHandler} from 'angular2/core';
 import {MyExceptionHandler} from './scripts/myexception-handler';
 import {ChooseTest} from './components/tests/choose-test';
 import {ScheduleTest} from './components/tests/schedule-test';
+import {AddStudents} from './components/tests/add-students';
 
 
 @Component({
@@ -41,7 +42,8 @@ import {ScheduleTest} from './components/tests/schedule-test';
     { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, as: 'ChooseInstitution' },
     { path: '/profiles/:id', component: ProfileDescription, as: 'Profiles' },
     { path: '/tests/choose-test/:institutionId', component: ChooseTest, as: 'ChooseTest' },
-    { path: '/tests/schedule-test', component: ScheduleTest, as: 'ScheduleTest' }
+    { path: '/tests/schedule-test', component: ScheduleTest, as: 'ScheduleTest' },
+    { path: '/tests/add-students', component: AddStudents, as: 'AddStudents' }
 ])
 export class App {
     constructor() {
