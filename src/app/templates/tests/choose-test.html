@@ -4,7 +4,7 @@
     <div class="section-medium-thin">
         <div class="container-medium-width">
             <p class="text-link-color margin-1em-top"><b>Choose by subject </b></p>
-            <select #subjectDropDown id="testSubjectOptions" (load)="loadTests(subjectDropDown.value)" (change)="loadTests(subjectDropDown.value)"
+            <select #subjectDropDown id="testSubjectOptions" (change)="loadTests(subjectDropDown.value)"
             class="selectpicker" data-width="400" data-size="6" title='Choose a test by subject'>
                 <option *ngFor="#subject of subjects; #i = index" [selected]="subject.SubjectId==subjectId" [value]='subject.SubjectId'>{{subject.SubjectName}}</option>
             </select>
@@ -31,7 +31,7 @@
                     <tbody>
                         <tr *ngFor="#test of tests; #x = index">
                             <td>{{test.TestName}}</td>
-                            <td>{{(test.NumberOfQuestionsInTest * test.SecondsPerQuestion)/60}} mins</td>
+                            <td>{{(test.NumberOfQuestionsInTest * test.SecondsPerQuestion)/60|round}} mins</td>
                             <td class="center">{{test.NumberOfQuestionsInTest}}</td>
                             <td>{{test.NormingStatusName}}</td>
                             <td class="center">
