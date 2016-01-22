@@ -127,7 +127,7 @@ export class Home {
             this.router.parent.navigateByUrl(`/choose-institution/Home/${route}/${this.institutionRN}/${this.institutionPN}`);
         }
         else {
-            this.router.parent.navigateByUrl('/choose-test');
+            this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
         }
         return false;
     }

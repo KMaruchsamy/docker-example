@@ -39,7 +39,7 @@ module.exports = function () {
                 'node_modules/moment/min/moment.min.js',
                 // 'src/app/plugins/bootstrap-datepicker.min.js',
                 // 'src/app/plugins/jquery.timepicker.js',
-                'src/app/plugins/date.js'
+                // 'src/app/plugins/date.js'
 			],
 			jsreview: [
 				'./src/app/app/*.js',
