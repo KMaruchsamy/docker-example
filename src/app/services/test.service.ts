@@ -44,4 +44,15 @@ export class TestService {
             }
         });
     }
+
+    getActiveCohorts(url): any {
+        let self = this;
+        return fetch(url, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': self.auth.authheader
+            }
+        });
+    }
 }

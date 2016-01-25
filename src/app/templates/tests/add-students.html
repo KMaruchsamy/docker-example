@@ -19,19 +19,16 @@
                         <div class="tab-pane active" id="addByCohort">
                             <div id="chooseCohortContainer">
                                 <div class="top-section">
-                                    <select id="chooseCohort" class="selectpicker" title='Choose a Cohort' data-width="65%">
-                                        <option value="December2015Cohort">December 2015 Cohort</option>
-                                        <option>August 2016 Cohort</option>
-                                        <option>December 2016 Cohort</option>
-                                        <option>August 2017 Cohort</option>
-                                        <option>December 2017 Cohort</option>
+                                    <select id="chooseCohort" #sel class="selectpicker" title="Choose a Cohort" data-width="65%" (load)="loadCohorts()" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,sel.value)">
+                                        <option *ngFor="#cohort of cohorts;" [selected]="cohort.CohortId==cohortID"  [value]="cohort.CohortId">{{cohort.CohortName}}</option>
                                     </select>
-                                    <button id="addAllStudents" class="button button-small button-light right hidden">Add all students</button>
+                                    <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden">Add all students</button>
                                 </div>
+                                <div><input id="cohortname" type="hidden" value="sel.value" /></div>
 
-                                <div class="hidden" id="cohortStudentList">
+                                <div class="hidden" id="cohortStudentList" #cohortstudentlist>
                                     <!--contains table and sets a max height so that it scrolls-->
-                                    <table class="tablesorter table-with-small-button-row order-column stripe table-with-cell-padding table-striped last-row-no-border">
+                                    <table id="cohortStudents" class="tablesorter table-with-small-button-row order-column stripe table-with-cell-padding table-striped last-row-no-border">
                                         <thead>
                                             <tr>
                                                 <th class="select-filter" scope="col">Last Name</th>
@@ -42,47 +39,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Blumenthal</td>
-                                                <td>Erika</td>
-                                                <td>Dec 2015</td>
-                                                <td>No</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cheng</td>
-                                                <td>Tom</td>
-                                                <td>Dec 2015</td>
-                                                <td>No</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Freiman</td>
-                                                <td>Allison</td>
-                                                <td>Dec 2015</td>
-                                                <td>No</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Gardner</td>
-                                                <td>Pamela</td>
-                                                <td>Dec 2015</td>
-                                                <td>No</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Greenman</td>
-                                                <td>Stacey</td>
-                                                <td>Dec 2015</td>
-                                                <td class="teal bolded">Yes</td>
+                                            <tr *ngFor="#student of students;#j=index;">
+                                                <td>{{student.LastName}}</td>
+                                                <td>{{student.FirstName}}</td>
+                                                <td>{{cohortID}}</td>
+                                                <td>{{student.Retester}}</td>
                                                 <td>
                                                     <button class="button button-small button-light">Add</button>
                                                 </td>
@@ -94,186 +55,6 @@
                             </div>
                             <!-- closes cohort container-->
                         </div><!--closes tab pane-->
-                        <!--<div class="tab-pane" id="addByGroup">
-                            <div id="chooseGroupContainer">
-                                <div class="top-section">
-                                    <select id="chooseGroup" class="selectpicker" title='Choose a Group' data-width="65%">
-                                        <option value="groupA">Group A</option>
-                                        <option>Group B</option>
-                                        <option>Group C</option>
-                                        <option>Group D</option>
-                                        <option>Group E</option>
-                                    </select>
-                                    <button id="addAllGroup" class="button button-small button-light right hidden">Add all students</button>
-                                </div>
-
-                                <div class="hidden" id="groupStudentList">
-                                    <table class="tablesorter table-with-small-button-row order-column stripe table-with-cell-padding table-striped last-row-no-border">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Last Name</th>
-                                                <th scope="col">First Name</th>
-                                                <th scope="col">Cohort</th>
-                                                <th scope="col">Retesting</th>
-                                                <th class="all" scope="col"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Alvarado</td>
-                                                <td>Melissa</td>
-                                                <td>Dec 2015</td>
-                                                <td>No</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Pelletier</td>
-                                                <td>Cinzia</td>
-                                                <td>Aug 2016</td>
-                                                <td>No</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Penk</td>
-                                                <td>Toby</td>
-                                                <td>Dec 2015</td>
-                                                <td>No</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Salvador</td>
-                                                <td>Charlene</td>
-                                                <td>Aug 2016</td>
-                                                <td>No</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Sanders</td>
-                                                <td>Susan</td>
-                                                <td>Aug 2016</td>
-                                                <td class="teal bolded">Yes</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Schaffer</td>
-                                                <td>Russell</td>
-                                                <td>Dec 2015</td>
-                                                <td class="teal bolded">Yes</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Shah</td>
-                                                <td>Maulik</td>
-                                                <td>Dec 2016</td>
-                                                <td>No</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Silverman</td>
-                                                <td>Coral</td>
-                                                <td>Dec 2016</td>
-                                                <td>No</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Vargas-Tate</td>
-                                                <td>Lo’Rita</td>
-                                                <td>Dec 2016</td>
-                                                <td class="teal bolded">Yes</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Venegas</td>
-                                                <td>Elisabeth</td>
-                                                <td>Dec 2015</td>
-                                                <td>No</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Vinnakota</td>
-                                                <td>Geeta</td>
-                                                <td>Aug 2016</td>
-                                                <td class="teal bolded">Yes</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Williams</td>
-                                                <td>Kelly Ann</td>
-                                                <td>Aug 2016</td>
-                                                <td class="teal bolded">Yes</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Xavier</td>
-                                                <td>Tony</td>
-                                                <td>Dec 2015</td>
-                                                <td>No</td>
-                                                <td>
-                                                    <button class="button button-small button-light">Add</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>-->
-                        <!--<div class="tab-pane" id="addByName">
-
-                            <div id="chooseStudentContainer">
-                                <div class="top-section">
-                                    <div id="chooseStudent">
-                                        <form class="search-bar" role="form">
-                                            <label for="findStudentToAdd">Find student by first or last name</label>
-                                            <div class="search-input">
-                                                <input class="typeahead" type="search" onkeypress="return searchKeyPress(event);" role="search" id="findStudentToAdd">
-                                                <button class="button" id="btnTypeahead" type="submit">
-                                                    <img src="images/search-icon_2x.png" alt="Search Icon">
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-
-                                <div class="hidden" id="individualStudents">
-                                    <table class="tablesorter table-with-small-button-row order-column stripe table-with-cell-padding table-striped last-row-no-border">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Last Name</th>
-                                                <th scope="col">First Name</th>
-                                                <th scope="col">Cohort</th>
-                                                <th scope="col">Retesting</th>
-                                                <th class="all"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>-->
                     </div>
                 </div>
                 <!--end left-grid-->
