@@ -7,14 +7,14 @@
       <form action="add-students.html" id="scheduleTest">
         <div class="date-time-container clearfix">
           <label class="label-inline screen-reader-only" for="startDate">Start Date (MM/DD/YYYY)</label>
-          <input #startdate type="text" class="date start required-entry" placeholder="Date" id="startDate" [value]="startDate"  (keydown)="onKeyDownStartDate(startdate, $event)" />
+          <input #startdate type="text" autocomplete="off" class="date start required-entry" placeholder="Date" id="startDate" (keyup)="onKeyUpDate(startdate,$event);"   />
           <label class="label-inline screen-reader-only" for="startTime">Start Time</label>
-          <input type="text" class="time start required-entry" placeholder="Time" id="startTime" />
+          <input type="text" class="time start required-entry" autocomplete="off" placeholder="Time" id="startTime" #starttime (keyup)="onKeyUpTime(starttime,$event);"  />
           <span class="date-pair-span">to</span>
           <label class="label-inline screen-reader-only" for="endTime">End Time</label>
-          <input type="text" class="time end required-entry" placeholder="Time" id="endTime" />
+          <input type="text" class="time end required-entry" placeholder="Time" autocomplete="off" id="endTime" #endtime (keyup)="onKeyUpTime(endtime,$event);" />
           <label class="label-inline screen-reader-only" for="endDate">End Date (MM/DD/YYYY)</label>
-          <input #enddate type="text" class="date end required-entry" placeholder="Date" id="endDate" [value]="endDate"  (keydown)="onKeyDownEndDate(enddate, $event)" />
+          <input #enddate type="text" class="date end required-entry" placeholder="Date" autocomplete="off" id="endDate" (keyup)="onKeyUpDate(enddate,$event);" />
         </div>
         <p *ngIf="invalid8hours" class="error" role="alert" aria-live="assertive" aria-atomic="true">
           For security reasons, your testing window cannot be longer than 8 hours.

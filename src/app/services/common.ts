@@ -4,7 +4,11 @@ import {Injectable} from 'angular2/core';
 
 @Injectable()
 export class Common {
+    apiServer: string;
+    nitServer: string;
     constructor() {
+        this.apiServer = this.getApiServer();
+        this.nitServer = this.getNursingITServer();
     }
 
     isPrivateBrowsing() {

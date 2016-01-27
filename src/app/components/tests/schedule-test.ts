@@ -12,7 +12,7 @@ import '../../plugins/bootstrap-datepicker.min.js';
 import '../../plugins/jquery.timepicker.js';
 
 @Component({
-    selector: 'choose-test',
+    selector: 'schedule-test',
     templateUrl: '../../templates/tests/schedule-test.html',
     providers: [TestService, Auth, TestScheduleModel],
     directives: [PageHeader, TestHeader, PageFooter, NgIf]
@@ -21,149 +21,257 @@ import '../../plugins/jquery.timepicker.js';
 export class ScheduleTest implements OnInit {
     valid: boolean = false;
     invalid8hours: boolean = false;
-    startDate: string = '';
-    endDate: string = '';
-    startTime: string = '';
-    endTime: string = '';
+    ignore8HourRule: boolean = false;
+    startDate: string;
+    endDate: string;
+    startTime: string;
+    endTime: string;
     $startDate: any;
+    $startTime: any;
     $endDate: any;
+    $endTime: any;
     dontPropogate: boolean = false;
+
     constructor(public testScheduleModel: TestScheduleModel,
-        public testService: TestService) {
+        public testService: TestService, public auth: Auth) {
         this.$startDate = $('#startDate');
         this.$endDate = $('#endDate');
-        var now = moment();
+        this.$startTime = $('#startTime');
+        this.$endTime = $('#endTime');
     }
+
+
 
     ngOnInit(): void {
         this.testScheduleModel = this.testService.getTestSchedule();
         this.testScheduleModel.currentStep = 2;
         this.testScheduleModel.activeStep = 2;
         this.testScheduleModel.completed = false;
+        this.set8HourRule();
+        this.bindEvents();
+    }
+
+
+    bindEvents(): void {
+
         let __this = this;
-
-
-        $('#startTime').timepicker({
-            'showDuration': true,
+        this.$startTime.timepicker({
             'timeFormat': 'g:ia',
             'minTime': '8:00am'
-        }).on('changeTime', function() {
-            __this.startTime = $(this).timepicker('getTime', new Date(__this.startDate));           
-            if (__this.endTime === '') {
-                 let endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
-                $('#endTime').timepicker('setTime', new Date(endTime));
-                __this.endDate = moment(new Date(endTime)).format('L');              
+        }).on('change', function(e) {
+            console.log(e);
+            if (__this.startDate) {
+                __this.startTime = $(this).timepicker('getTime', new Date(__this.startDate));
+                if (moment(__this.startTime).isValid()) {
+                    __this.$endTime.timepicker('option', 'minTime', __this.startTime);
+                    if (!__this.endTime) {
+                        __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
+                        __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                        __this.endDate = moment(new Date(__this.endTime)).format('L');
+                        __this.$endDate.datepicker('update', __this.endDate);
+                    }
+                } else
+                    __this.$startTime.timepicker('setTime', '');
+
             }
+            else
+                __this.$startTime.timepicker('setTime', '');
+
+            __this.validate(__this);
         });
 
-        $('#endTime').timepicker({
+        this.$endTime.timepicker({
             'showDuration': true,
             'timeFormat': 'g:ia',
             'minTime': '8:00am'
-        }).on('changeTime', function() {
-            __this.endTime = $(this).timepicker('getTime', new Date(__this.endDate));
+        }).on('change', function(e) {
+            if (__this.endDate) {
+                __this.endTime = $(this).timepicker('getTime', new Date(__this.endDate));
+                if (!moment(__this.endTime).isValid())
+                    __this.$endTime.timepicker('setTime', '');
+
+            } else
+                __this.$endTime.timepicker('setTime', '');
+
+            __this.validate(__this);
         });
-
-
-
 
 
         this.$startDate.datepicker({
             format: 'mm/dd/yyyy',
             autoclose: true,
-            todayHighlight: true, //highlights today's date
+            todayHighlight: true,
+            forceParse: false,
             startDate: new Date()
-        }).on('hide', function() {
-            if (!__this.dontPropogate) {
-                __this.startDate = __this.$startDate.val();
-                setTimeout(outputString=> {
-                    __this.$startDate.datepicker('update', __this.startDate);
-                    if (__this.endDate === '') {
-                        __this.endDate = __this.startDate;
-                        __this.$endDate.datepicker('update', __this.startDate);
-                    }
-                });
+        }).on('hide', function(e) {
+            let outputString = '';
+
+            outputString = __this.parseDateString(e.currentTarget.value);
+
+            if (outputString !== '' && moment(outputString).isValid()) {
+                
+                // Checking if the startdate is before endate and before current date. 
+                let selectedDateTime = __this.$startTime.timepicker('getTime', new Date(outputString));
+                console.log(selectedDateTime,__this.endTime,moment(selectedDateTime).isAfter(__this.endTime));
+                
+                
+                if (new Date() > new Date(outputString))
+                    __this.startDate = moment(new Date()).format('L');
+                else
+                    __this.startDate = outputString;
+
+                __this.$startDate.datepicker('update', __this.startDate);
+                
+                
+                // have to change the date part of the time because the date is changed ..
+                __this.startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
+
+                //Auto populate the enddate only if the enddate is null or the very first time .                
+                if (!__this.endDate) {
+                    __this.endDate = __this.startDate;
+                    __this.$endDate.datepicker('update', __this.startDate);
+                    // have to change the date part of the time because the date is changed ..
+                    __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
+                    __this.$startDate.datepicker('setEndDate', __this.endDate);
+                }
+                
+                //setting the start date of end datepicker with the start date so that we cannot select a date less than than the start date.
+                __this.$endDate.datepicker('setStartDate', __this.startDate);
             }
-            __this.dontPropogate = false;
+            else {
+                if (__this.startDate)
+                    __this.$startDate.datepicker('update', new Date(__this.startDate));
+                else
+                    __this.$startDate.datepicker('update', '');
+            }
+            __this.validate(__this);
         });
 
         this.$endDate.datepicker({
             format: 'mm/dd/yyyy',
             autoclose: true,
             todayHighlight: true, //highlights today's date
-            startDate: new Date()
-        }).on('hide', function() {
-            if (!__this.dontPropogate) {
-                __this.endDate = __this.$endDate.val();
-                setTimeout(outputString=> {
-                    __this.$endDate.datepicker('update', __this.endDate);
-                })
+            startDate: new Date(),
+            forceParse: false
+        }).on('hide', function(e) {
+            let outputString = '';
+
+            outputString = __this.parseDateString(e.currentTarget.value);
+
+            if (outputString !== '' && moment(outputString).isValid()) {
+                if (new Date() > new Date(outputString))
+                    __this.endDate = moment(new Date()).format('L');
+                else
+                    __this.endDate = outputString;
+
+                __this.$endDate.datepicker('update', __this.endDate);
+                // have to change the date part of the time because the date is changed ..
+                __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
+                
+                //setting the start date of end datepicker with the start date so that we cannot select a date less than than the start date.
+                __this.$startDate.datepicker('setEndDate', __this.endDate);
+            } else {
+                if (__this.endDate)
+                    __this.$endDate.datepicker('update', new Date(__this.endDate));
+                else
+                    __this.$endDate.datepicker('update', '');
             }
-            __this.dontPropogate = false;
+            __this.validate(__this);
         });
-
     }
 
-    validate(): boolean {
-        
-        
-        
-        return true;
+
+    set8HourRule(): void {
+        let institution = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': this.testScheduleModel.institutionId });
+        if (institution)
+            this.ignore8HourRule = !institution.IsIpBlank;
+
+        if (this.ignore8HourRule)
+            return;
+
+        let __this = this;
+        let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
+        let openIntegratedTestsPromise = this.testService.getOpenIntegratedTests(url);
+        openIntegratedTestsPromise.then((response) => {
+            return response.json();
+        })
+            .then((json) => {
+                this.ignore8HourRule = _.contains(json, __this.testScheduleModel.testId);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
-    onKeyDownStartDate($control: any, e: any): boolean {
-        this.dontPropogate = true;
+    onKeyUpDate($date: any, e: any): boolean {
         var keyCode = e.keyCode || e.which;
-        if (keyCode === 9 || keyCode === 13) {
-            let inputString = $control.value;
-            let outputString = this.parseDateString(inputString);
-            if (outputString !== '') {
-                // $control.value = '';
-                // $control.value = outputString;
-                if (new Date() > new Date(outputString))
-                    this.startDate = new Date().toDateString();
-                else
-                    this.startDate = outputString;
-                setTimeout(outputString=> {
-                    this.$startDate.datepicker('update', this.startDate);
-                    if (this.endDate === '') {
-                        this.endDate = this.startDate;
-                        this.$endDate.datepicker('update', this.startDate);
-                    }
-
-                });
-                // return false;
-            }
-
-        }
-        e.stopPropagation();
-        return true;
-    }
-
-    onKeyDownEndDate($control: any, e: any): boolean {
-        this.dontPropogate = true;
-        var keyCode = e.keyCode || e.which;
-        if (keyCode === 9 || keyCode === 13) {
-            let inputString = $control.value;
-            let outputString = this.parseDateString(inputString);
-            if (outputString !== '') {
-                // $control.value = '';
-                // $control.value = outputString;
-                if (new Date() > new Date(outputString))
-                    this.endDate = new Date().toDateString();
-                else
-                    this.endDate = outputString;
-                setTimeout(outputString=> {
-                    this.$endDate.datepicker('update', this.endDate);
-                })
-                // return false;
-            }
-            e.stopPropagation();
+        if (keyCode === 9 || keyCode === 13 || keyCode === 27)
             return true;
-        }
-
+        $($date).datepicker('show');
+        return true;
     }
 
+    onKeyUpTime($time: any, e: any): boolean {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 9 || keyCode === 13 || keyCode === 27)
+            return true;
+        $($time).timepicker('show');
+        return true;
+    }
+
+
+    validate(__this): boolean {
+        // console.log(__this.endTime);
+        // console.log(__this.startTime);
+        // console.log(moment.duration(moment(__this.endTime).diff(moment(__this.startTime))));
+        // console.log(moment.duration(100));
+        // console.log(moment(__this.startDate).isValid());
+        // console.log(moment(__this.startTime).isValid());
+        // console.log(moment(__this.endDate).isValid());
+        // console.log(moment(__this.endTime).isValid());
+        // console.log(__this.startDate + '--' + __this.startTime);
+        // console.log(__this.endDate + '--' + __this.endTime);
+        // console.log(moment(new Date(__this.startTime)).isAfter(new Date(__this.endTime))); 
+        
+        if (!(moment(__this.startDate).isValid() || moment(__this.endDate).isValid() || moment(__this.startTime).isValid() || moment(__this.endTime).isValid())) {
+            console.log('invalid date/time');
+            return;
+        }
+
+        if (moment(__this.startTime).isAfter(__this.endTime)) {
+            console.log(__this.startTime, __this.endTime);
+            
+            console.log('endtime less than starttime');
+            return;
+        }
+
+
+        if (!__this.ignore8HourRule) {
+            let duration = moment.duration(moment(__this.endTime).diff(moment(__this.startTime)));
+            let years = duration.years();
+            let months = duration.months();
+            let days = duration.days();
+            let hours = duration.hours();
+            let minutes = duration.minutes();
+            let seconds = duration.seconds();
+            let milliseconds = duration.milliseconds();
+            if (years > 0 || months > 0 || days > 0 || hours > 8) {
+                __this.invalid8hours = true;
+                return;
+            }
+
+            if (hours === 8) {
+                if (minutes > 0 || seconds > 0 || milliseconds > 0) {
+                    this.invalid8hours = true;
+                    return;
+                }
+            }
+
+
+        }
+
+        return true;
+    }
 
 
     parseDateString(inputDate: string): string {

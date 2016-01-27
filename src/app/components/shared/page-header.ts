@@ -8,7 +8,7 @@ import {DropdownMenu} from '../controls/dropdown-menu';
 @Component({
 	selector:'page-header',
     providers:[Auth],
-    inputs:['showCover','ariaDisabled'],
+    inputs:['showCover','ariaDisabled', 'hideDropdown'],
     templateUrl:'../../templates/shared/page-header.html',
     directives: [RouterLink,DropdownMenu,NgClass]
 })
@@ -16,12 +16,13 @@ import {DropdownMenu} from '../controls/dropdown-menu';
 export class PageHeader implements OnInit{
     @Input() showCover:boolean;
     @Input() ariaDisabled: boolean;
+    @Input() hideDropdown: boolean;
     constructor(public router: Router,public auth : Auth ){
         //public inputs will not be available here .. will be bound in the onInit event
     }
     
     ngOnInit():void{
-        
+        console.log(this.hideDropdown);
     }
 }
 
