@@ -19,12 +19,12 @@
                         <div class="tab-pane active" id="addByCohort">
                             <div id="chooseCohortContainer">
                                 <div class="top-section">
-                                    <select id="chooseCohort" #sel class="selectpicker" title="Choose a Cohort" data-width="65%" (load)="loadCohorts()" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,sel.value)">
-                                        <option *ngFor="#cohort of cohorts;" [selected]="cohort.CohortId==cohortID"  [value]="cohort.CohortId">{{cohort.CohortName}}</option>
+                                    <select id="chooseCohort" #selectcohort class="selectpicker" title="Choose a Cohort" data-width="65%" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,selectcohort.value)">
+                                        <option *ngFor="#cohort of cohorts;#i=index;" [selected]="cohort.CohortId==cohortID"  [value]="cohort.CohortId">{{cohort.CohortName}}</option>
                                     </select>
-                                    <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden">Add all students</button>
+                                    <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort()">Add all students</button>
                                 </div>
-                                <div><input id="cohortname" type="hidden" value="sel.value" /></div>
+                                <!--<div><input id="cohortname" type="hidden" value="sel.value" /></div>-->
 
                                 <div class="hidden" id="cohortStudentList" #cohortstudentlist>
                                     <!--contains table and sets a max height so that it scrolls-->
@@ -39,16 +39,19 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="#student of students;#j=index;">
+                                            <tr *ngFor="#student of cohortStudents;#j=index;">
                                                 <td>{{student.LastName}}</td>
                                                 <td>{{student.FirstName}}</td>
                                                 <td>{{cohortID}}</td>
                                                 <td>{{student.Retester}}</td>
                                                 <td>
-                                                    <button class="button button-small button-light">Add</button>
+                                                    <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" >Add</button>
                                                 </td>
                                             </tr>
                                         </tbody>
+                                        <tfoot>
+
+                                        </tfoot>
                                     </table>
                                 </div>
                                 <!--closes hidden-->
@@ -75,7 +78,7 @@
                         <div class="search-added-students">
                             <label class="screen-reader-only" for="filterSelectedStudents">Find Student</label>
                             <input type="search" role="search" id="filterSelectedStudents" placeholder="Find student" class="small-search-box">
-                            <button class="button button-small button-light" id="RemoveAllStudents">Remove all students</button>
+                            <button class="button button-small button-light" id="RemoveAllStudents" (click)="RemoveALlSelectedStudents()">Remove all students</button>
                         </div>
                         <!--closes search for student-->
                     </div>

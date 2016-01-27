@@ -35,7 +35,8 @@ export class AddStudents implements OnInit, OnDeactivate {
     cohortName: string;
     testTypeID: number;
     cohorts: Object[] = [];
-    students: Object[] = [];
+    cohortStudents: Object[] = [];
+    selectedStudents: Object[] = [];
     testsTable: any;
     sStorage: any;
     windowStart: string;
@@ -49,6 +50,7 @@ export class AddStudents implements OnInit, OnDeactivate {
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         if (this.testsTable)
             this.testsTable.destroy();
+        $('.selectpicker').val('').selectpicker('refresh');
     }
 
     ngOnInit() {
@@ -59,7 +61,7 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.testsTable = null;
         this.testScheduleModel.currentStep = 3;
         this.testTypeID = 1;
-        this.windowStart = '01.01.14';
+        this.windowStart = '01.01.14'; //this.testScheduleModel.
         this.windowEnd = '12.12.16';
         this.institutionID = parseInt(this.routeParams.get('institutionId'));
         this.apiServer = this.auth.common.getApiServer();
@@ -83,6 +85,12 @@ export class AddStudents implements OnInit, OnDeactivate {
             .then((json) => {
                 console.log('Cohorts=' + json);
                 _this.cohorts = json;
+                setTimeout(json => {
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
+                        $('.selectpicker').selectpicker('mobile');
+                    else
+                        $('.selectpicker').selectpicker('refresh');
+                });
             })
             .catch((error) => {
                 console.log(error);
@@ -99,10 +107,7 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
 
     loadStudentsByCohort(btnAddAllStudent, tblCohortStudentList, cohortId: number): void {
-        if (cohortId > 0) {
-            
-            $('#' + btnAddAllStudent.id).removeClass('hidden');
-            $('#' + tblCohortStudentList.id).removeClass('hidden');
+        if (cohortId > 0) {           
             this.cohortID = cohortId;
             let CohortStudentsURL = this.resolveCohortStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.cohortstudents}`);
             let testsPromise = this.testService.getTests(CohortStudentsURL);
@@ -112,7 +117,9 @@ export class AddStudents implements OnInit, OnDeactivate {
                 .then((json) => {
                     if (this.testsTable)
                         this.testsTable.destroy();
-                    this.students = json;
+                    $('#' + btnAddAllStudent.id).removeClass('hidden');
+                    $('#' + tblCohortStudentList.id).removeClass('hidden');
+                    this.cohortStudents = json;
                     setTimeout(json=> {
                         this.testsTable = $('#cohortStudents').DataTable({
                             "paging": false,
@@ -128,5 +135,55 @@ export class AddStudents implements OnInit, OnDeactivate {
                     console.log(error);
                 });
         }
+    }
+
+    AddAllStudentsByCohort(): void {
+        $('#testSchedulingSelectedStudentsList').append(this.AddStudentList());
+        $('.top-section').addClass('active');
+        $('#selectedStudentsContainer').addClass('hidden');
+        $('#testSchedulingSelectedStudents').removeClass('hidden');
+        $('#addAllStudents').attr('disabled', 'true');
+    }
+    AddStudentList(): string {
+        var studentlist = "";        
+        if (this.cohortStudents.length > 0) {
+            for (var i = 0; i < this.cohortStudents.length; i++) {
+                var student = this.cohortStudents[i];
+                if (!$('#cohort-' + student.StudentId).prop('disabled')) {
+                    this.selectedStudents.push(student);
+                    $('#cohort-' + student.StudentId).attr('disabled', 'true');
+                    var retesting = "";
+                    if (student.Retester) {
+                        retesting = "RETESTING";
+                    }
+                    studentlist += "<li class='clearfix'><div class='students-in-testing-session-list-item'><span class='js-selected-student'>" + student.LastName.toString() + "," + student.FirstName.toString() + "</span><span class='small-tag-text'>" + " " + retesting + "</span></div><button class='button button-small button-light' click='RemoveSelectedStudents(" + student.StudentId + ")'>Remove</button></li>";
+                }
+            }
+        }
+        return studentlist;
+    }
+
+    RemoveSelectedStudents(studentId: number):void{
+        debugger;
+        if (this.selectedStudents.length > 0) {
+            $('#addAllStudents').removeAttr('disabled', 'disabled');
+            $('#cohort-' + studentId.toString()).removeAttr('disabled','disabled');
+        }
+    }
+
+    RemoveALlSelectedStudents(): void {
+        debugger;
+        
+        $('#addAllStudents').removeAttr('disabled', 'disabled');
+        if (this.selectedStudents.length > 0) {
+            for (var i = 0; i < this.selectedStudents.length; i++) {
+                var studentId = this.cohortStudents[i].StudentId;
+                $('#cohort-' + studentId).removeAttr('disabled', 'disabled');
+            }
+            this.selectedStudents = [];
+        }
+        $('.top-section').removeClass('active');
+        $('#selectedStudentsContainer').removeClass('hidden');
+        $('#testSchedulingSelectedStudents').addClass('hidden');
     }
 }
