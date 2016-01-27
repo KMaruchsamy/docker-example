@@ -11,6 +11,7 @@ import '../../plugins/dropdown.js';
 })
 export class DropdownMenu implements OnInit {
     @Input() ariaDisabled;
+    @Input() hideDropdown;
     constructor(public router: Router, public auth: Auth) {
         this.auth = new Auth();
     }

@@ -27,7 +27,10 @@ export const links = {
             profilesapi: "profile",
             test: {
                 subjects: "scheduling/institutions/§institutionid/subjects?testType=§testtype",
-                tests:"scheduling/institutions/§institutionid/tests?subject=§subject&testType=§testtype"
+                tests: "scheduling/institutions/§institutionid/tests?subject=§subject&testType=§testtype",
+                openintegratedtests:"scheduling/OpenIntegratedTests",
+                cohorts: "scheduling/institutions/§institutionid/activeCohorts?windowStart=§windowstart&windowEnd=§windowend",
+                cohortstudents: "scheduling/cohorts/§cohortid/students?testId=§testid"
             }
 		}
     },
