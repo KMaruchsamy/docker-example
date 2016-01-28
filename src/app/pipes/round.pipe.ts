@@ -5,9 +5,12 @@ import * as _ from '../lib/index';
     name: "round"
 }) 
 export class RoundPipe implements PipeTransform{
-    transform(value: any):string {
-        if (!value)
-            return '';
+    transform(value: any): string {
+        if (!value) {
+            if (value === 0)
+                return 'Untimed';
+             return '';
+        }           
         return _.round(value).toString();
     }
 }

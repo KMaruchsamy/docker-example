@@ -80,9 +80,6 @@ export class ChooseTest implements OnDeactivate {
         }
     }
 
-
-
-
     loadSubjects(): void {
         let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
         let subjectsPromise = this.testService.getSubjects(subjectsURL);
@@ -131,32 +128,13 @@ export class ChooseTest implements OnDeactivate {
                         "responsive": true,
                         "info": false,
                         "ordering": false
-                        // "order": [[ 0, "desc" ]]
                     });
                 });
             })
             .catch((error) => {
                 console.log(error);
             });
-
-        //this.reload = true;
-        // 
-        //         this.testsTable.on('responsive-display', function(e, datatable, row, showHide, update) {
-        //             console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
-        //         });
     }
-
-    // bindRadioEvent(): void {
-    //     let __this = this;
-    //     $('#chooseTestTable input[type=radio]').change(function() {
-    //         let testId = $(this).attr('testid');
-    //         let testName = $(this).attr('testname');
-    //         let subjectId = $('#testSubjectOptions').val();
-    //         __this.selectTest(testId, testName, subjectId);
-    //         $('#chooseTestTable input[type=radio]').not($(this)).attr('checked', false);
-    //     });
-    // }
-
 
     saveChooseTest(): void {
         this.testScheduleModel.completed = true;
@@ -172,11 +150,6 @@ export class ChooseTest implements OnDeactivate {
         this.testScheduleModel.subjectId = subjectId;
         this.testScheduleModel.testId = testId;
         this.testScheduleModel.testName = testName;
-        //    let selectedTest =  _.find(this.tests, function(test) {
-        //         return test.TestId === testId;
-        //     });
-        //    if (selectedTest)
-        //        selectedTest.isSelected = true;    
     }
 
 
