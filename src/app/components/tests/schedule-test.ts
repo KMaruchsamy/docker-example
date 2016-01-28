@@ -300,8 +300,6 @@ export class ScheduleTest implements OnInit {
 
 
     validate(__this): boolean {
-        console.log(this.startTime, this.endTime);
-        
         if (__this.startDate === undefined || __this.startTime === undefined || __this.endDate === undefined || __this.endTime === undefined) {
             __this.valid = false;
             return;

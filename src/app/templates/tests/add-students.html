@@ -45,7 +45,7 @@
                                                 <td>{{cohortID}}</td>
                                                 <td>{{student.Retester}}</td>
                                                 <td>
-                                                    <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" >Add</button>
+                                                    <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" (click)="AddStudent(student)">Add</button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -64,7 +64,7 @@
 
                 <div class="grid right-grid">
                     <div class="top-section">
-                        <h4 class="white-text h6 no-margin-bottom" id="studentAddedToTestingSession">Students in Testing Session</h4>
+                        <h4 class="white-text h6 no-margin-bottom" id="studentAddedToTestingSession">Students in Testing Session ({{selectedStudentCount}})</h4>
                     </div>
                     <div class="section-medium-thin container-narrow lightbulb-icon-container-flush-text" id="selectedStudentsContainer">
                         <p class="icon lightbulb-icon">Students you add to your testing session by Cohort, Group or Name will appear here.</p>
@@ -98,11 +98,11 @@
             </div>
         </div>
 
-        <!--<div class="container add-students-outer-container delete-draft">
+        <div class="container add-students-outer-container delete-draft section-medium-thin invisible">
             <hr>
             <button class="anchor-button smaller">Delete this draft</button>
             <p class="saved-draft-info smaller teal">Draft saved Friday, October 23, 2015 at 2:31pm</p>
-        </div>-->
+        </div>
     </div>
     <!--closes div section-->
 </main>

@@ -3,8 +3,8 @@
 
     <test-header scheduleStep='Choose date and time' [testSchedule]="testScheduleModel"></test-header>
 
-    <div class="section container-medium-width">
-        <form action="add-students.html" id="scheduleTest">
+    <div class="section-thin container-medium-width">
+        <form class="margin-2em-top clearfix" id="scheduleTest">
             <div class="date-time-container clearfix">
                 <label class="label-inline screen-reader-only" for="startDate">Start Date (MM/DD/YYYY)</label>
                 <input #startdate type="text" autocomplete="off" class="date start required-entry" placeholder="Date" id="startDate" (keyup)="onKeyUpDate(startdate,$event);"
@@ -35,6 +35,11 @@
             </div>
             <button type=submit class="button margin-2em-top button-mobile-block right" (click)="saveDateTime();" [disabled]="!valid">Next step: Add students</button>
         </form>
+        <div class="delete-draft section-medium-thin clearfix">
+            <hr>
+            <button class="anchor-button smaller">Delete this draft</button>
+            <p class="saved-draft-info smaller teal">Saving draft…</p>
+        </div>
     </div>
     <!--closes div containing form-->
 

@@ -46,6 +46,7 @@ import {AddStudents} from './components/tests/add-students';
     { path: '/tests/:action/choose-test/:institutionId/:scheduleId', component: ChooseTest, as: 'ModifyChooseTest' },
     { path: '/tests/:action/schedule-test', component: ScheduleTest, as: 'ModifyScheduleTest' },
     { path: '/tests/add-students', component: AddStudents, as: 'AddStudents' }
+    // {path: '/*path', component: Help}
 ])
 export class App {
     constructor() {
