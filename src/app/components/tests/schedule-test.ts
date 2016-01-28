@@ -184,7 +184,6 @@ export class ScheduleTest implements OnInit {
                     __this.$endDate.datepicker('update', __this.startDate);
                     // have to change the date part of the time because the date is changed ..
                     __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
-                    alert(__this.endTime);
                 }
                 
                 //setting the start date of end datepicker with the start date so that we cannot select a date less than than the start date.
