@@ -8,7 +8,6 @@ export class RoundPipe implements PipeTransform{
     transform(value: any):string {
         if (!value)
             return '';
-        console.log(value + ' - ' + _.round(value));
         return _.round(value).toString();
     }
 }
