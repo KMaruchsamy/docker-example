@@ -23,7 +23,7 @@ import '../../plugins/dataTables.responsive.js';
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
     providers: [TestService, Auth, TestScheduleModel, Utility],
     directives: [PageHeader, TestHeader, PageFooter],
-    pipes: [RemoveWhitespacePipe,RoundPipe]
+    pipes: [RemoveWhitespacePipe, RoundPipe]
 })
 
 export class ChooseTest implements OnDeactivate {
@@ -93,7 +93,7 @@ export class ChooseTest implements OnDeactivate {
                     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
                         $('.selectpicker').selectpicker('mobile');
                     else
-                        $('.selectpicker').selectpicker('refresh');                    
+                        $('.selectpicker').selectpicker('refresh');
                 });
             })
             .catch((error) => {
@@ -129,6 +129,12 @@ export class ChooseTest implements OnDeactivate {
                         "info": false,
                         "ordering": false
                     });
+
+
+                    $('#chooseTestTable').on('responsive-display.dt', function() {                      
+                      $(this).find('.child .dtr-title br').remove();
+                    });
+
                 });
             })
             .catch((error) => {
