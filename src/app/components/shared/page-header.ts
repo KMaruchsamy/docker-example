@@ -22,7 +22,6 @@ export class PageHeader implements OnInit{
     }
     
     ngOnInit():void{
-        console.log(this.hideDropdown);
     }
 }
 

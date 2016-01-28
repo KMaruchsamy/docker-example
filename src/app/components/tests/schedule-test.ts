@@ -67,6 +67,7 @@ export class ScheduleTest implements OnInit {
                     __this.startTime = startTime;
                     __this.$endTime.timepicker('option', 'minTime', __this.startTime);
                     if (!__this.endTime) {
+                       
                         __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
                         __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                         __this.endDate = moment(new Date(__this.endTime)).format('L');
@@ -299,6 +300,8 @@ export class ScheduleTest implements OnInit {
 
 
     validate(__this): boolean {
+        console.log(this.startTime, this.endTime);
+        
         if (__this.startDate === undefined || __this.startTime === undefined || __this.endDate === undefined || __this.endTime === undefined) {
             __this.valid = false;
             return;
@@ -346,13 +349,14 @@ export class ScheduleTest implements OnInit {
     }
 
 
-    saveDateTime(): void {
+    saveDateTime(): boolean {
         if (this.startTime !== undefined && moment(this.startTime).isValid() && this.endTime != undefined && moment(this.endTime).isValid()) {
-            this.testScheduleModel.scheduleStartTime = this.startTime;
-            this.testScheduleModel.scheduleEndTime = this.endTime;
+            this.testScheduleModel.scheduleStartTime = new Date(this.startTime);
+            this.testScheduleModel.scheduleEndTime = new Date(this.endTime);
             this.sStorage = this.auth.common.getStorage();
-            this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
+            this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));           
             this.router.parent.navigateByUrl('/tests/add-students');
+            return false;
         }
     }
 
