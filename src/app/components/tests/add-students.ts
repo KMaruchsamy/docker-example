@@ -1,6 +1,6 @@
 ﻿import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef,EventEmitter} from 'angular2/core';
 import {Router, RouteParams, OnDeactivate, ComponentInstruction} from 'angular2/router';
-import {COMMON_DIRECTIVES,NgFor} from 'angular2/common';
+import {NgFor} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {links} from '../../constants/config';
@@ -11,10 +11,7 @@ import {TestScheduleModel} from '../../models/testSchedule.model';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import * as _ from '../../lib/index';
 import '../../plugins/dropdown.js';
-// import '../../plugins/bootstrap-select.js';
 import '../../plugins/bootstrap-select.min.js';
-// import '../../plugins/tab.js';
-// import '../../plugins/typeahead.bundle.js';
 import '../../plugins/jquery.dataTables.min.js';
 import '../../plugins/dataTables.responsive.js';
 
@@ -24,7 +21,7 @@ import '../../plugins/dataTables.responsive.js';
     templateUrl: '../../templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
     providers: [TestService, Auth, TestScheduleModel],
-    directives: [PageHeader, TestHeader, PageFooter, NgFor, COMMON_DIRECTIVES],
+    directives: [PageHeader, TestHeader, PageFooter, NgFor],
     pipes: [RemoveWhitespacePipe]
 })
 
@@ -41,6 +38,7 @@ export class AddStudents implements OnInit, OnDeactivate {
     sStorage: any;
     windowStart: string;
     windowEnd: string;
+    selectedStudentCount: number=0;
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams) {
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
@@ -65,7 +63,9 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.windowEnd = '12.12.16';
         this.institutionID = parseInt(this.routeParams.get('institutionId'));
         this.apiServer = this.auth.common.getApiServer();
+        
         this.loadActiveCohorts();
+        
     }
 
     loadActiveCohorts(): void {
@@ -143,6 +143,7 @@ export class AddStudents implements OnInit, OnDeactivate {
         $('#selectedStudentsContainer').addClass('hidden');
         $('#testSchedulingSelectedStudents').removeClass('hidden');
         $('#addAllStudents').attr('disabled', 'true');
+        this.displaySelectedStudentCount();
     }
     AddStudentList(): string {
         var studentlist = "";        
@@ -156,24 +157,41 @@ export class AddStudents implements OnInit, OnDeactivate {
                     if (student.Retester) {
                         retesting = "RETESTING";
                     }
-                    studentlist += "<li class='clearfix'><div class='students-in-testing-session-list-item'><span class='js-selected-student'>" + student.LastName.toString() + "," + student.FirstName.toString() + "</span><span class='small-tag-text'>" + " " + retesting + "</span></div><button class='button button-small button-light' click='RemoveSelectedStudents(" + student.StudentId + ")'>Remove</button></li>";
+                    studentlist += "<li class='clearfix'><div class='students-in-testing-session-list-item'><span class='js-selected-student'>" + student.LastName.toString() + "," + student.FirstName.toString() + "</span><span class='small-tag-text'>" + " " + retesting + "</span></div><button class='button button-small button-light' (click)='RemoveSelectedStudents(" + student.StudentId + ")'>Remove</button></li>";
                 }
             }
         }
         return studentlist;
     }
 
-    RemoveSelectedStudents(studentId: number):void{
+    RemoveSelectedStudents(studentId: number): void{
         debugger;
         if (this.selectedStudents.length > 0) {
             $('#addAllStudents').removeAttr('disabled', 'disabled');
             $('#cohort-' + studentId.toString()).removeAttr('disabled','disabled');
         }
     }
+    AddStudent(student: Object): void {
+        debugger;
+        $('#cohort-' + student.StudentId.toString()).attr('disabled', 'true');
+        this.selectedStudents.push(student);
+        var retesting = "";
+        if (student.Retester) {
+            retesting = "RETESTING";
+        }
+        var studentli = "<li class='clearfix'><div class='students-in-testing-session-list-item'><span class='js-selected-student'>" + student.LastName.toString() + "," + student.FirstName.toString() + "</span><span class='small-tag-text'>" + " " + retesting + "</span></div><button class='button button-small button-light' (click)='RemoveSelectedStudents(" + student.StudentId + ")'>Remove</button></li>";
+        $('#testSchedulingSelectedStudentsList').append(studentli);
+        $('.top-section').addClass('active');
+        $('#selectedStudentsContainer').addClass('hidden');
+        $('#testSchedulingSelectedStudents').removeClass('hidden');
+        this.displaySelectedStudentCount();
+    }
+    displaySelectedStudentCount(): void {
+        this.selectedStudentCount = this.selectedStudents.length;
+    }
 
     RemoveALlSelectedStudents(): void {
-        debugger;
-        
+        debugger;        
         $('#addAllStudents').removeAttr('disabled', 'disabled');
         if (this.selectedStudents.length > 0) {
             for (var i = 0; i < this.selectedStudents.length; i++) {
@@ -184,6 +202,8 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
         $('.top-section').removeClass('active');
         $('#selectedStudentsContainer').removeClass('hidden');
+        $('#testSchedulingSelectedStudentsList').empty();
         $('#testSchedulingSelectedStudents').addClass('hidden');
+        this.displaySelectedStudentCount();
     }
 }
