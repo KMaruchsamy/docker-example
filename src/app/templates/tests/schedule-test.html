@@ -1,37 +1,44 @@
 <page-header></page-header>
 <main role="main" class="app-main">
 
-<test-header scheduleStep='Choose date and time' [testSchedule]="testScheduleModel"></test-header>
+    <test-header scheduleStep='Choose date and time' [testSchedule]="testScheduleModel"></test-header>
 
     <div class="section container-medium-width">
-      <form action="add-students.html" id="scheduleTest">
-        <div class="date-time-container clearfix">
-          <label class="label-inline screen-reader-only" for="startDate">Start Date (MM/DD/YYYY)</label>
-          <input #startdate type="text" autocomplete="off" class="date start required-entry" placeholder="Date" id="startDate" (keyup)="onKeyUpDate(startdate,$event);"   />
-          <label class="label-inline screen-reader-only" for="startTime">Start Time</label>
-          <input type="text" class="time start required-entry" autocomplete="off" placeholder="Time" id="startTime" #starttime (keyup)="onKeyUpTime(starttime,$event);"  />
-          <span class="date-pair-span">to</span>
-          <label class="label-inline screen-reader-only" for="endTime">End Time</label>
-          <input type="text" class="time end required-entry" placeholder="Time" autocomplete="off" id="endTime" #endtime (keyup)="onKeyUpTime(endtime,$event);" />
-          <label class="label-inline screen-reader-only" for="endDate">End Date (MM/DD/YYYY)</label>
-          <input #enddate type="text" class="date end required-entry" placeholder="Date" autocomplete="off" id="endDate" (keyup)="onKeyUpDate(enddate,$event);" />
-        </div>
-        <p *ngIf="invalid8hours" class="error" role="alert" aria-live="assertive" aria-atomic="true">
-          For security reasons, your testing window cannot be longer than 8 hours.
-          <br> Please specify a shorter testing window.
-        </p>
+        <form action="add-students.html" id="scheduleTest">
+            <div class="date-time-container clearfix">
+                <label class="label-inline screen-reader-only" for="startDate">Start Date (MM/DD/YYYY)</label>
+                <input #startdate type="text" autocomplete="off" class="date start required-entry" placeholder="Date" id="startDate" (keyup)="onKeyUpDate(startdate,$event);"
+                />
+                <label class="label-inline screen-reader-only" for="startTime">Start Time</label>
+                <input type="text" class="time start required-entry" autocomplete="off" placeholder="Time" id="startTime" #starttime (keyup)="onKeyUpTime(starttime,$event);"
+                />
+                <span class="date-pair-span">to</span>
+                <label class="label-inline screen-reader-only" for="endTime">End Time</label>
+                <input type="text" class="time end required-entry" placeholder="Time" autocomplete="off" id="endTime" #endtime (keyup)="onKeyUpTime(endtime,$event);"
+                />
+                <label class="label-inline screen-reader-only" for="endDate">End Date (MM/DD/YYYY)</label>
+                <input #enddate type="text" class="date end required-entry" placeholder="Date" autocomplete="off" id="endDate" (keyup)="onKeyUpDate(enddate,$event);"
+                />
+            </div>
+            <p *ngIf="invalid8hours" class="error" role="alert" aria-live="assertive" aria-atomic="true">
+                For security reasons, your testing window cannot be longer than 8 hours.
+                <br> Please specify a shorter testing window.
+            </p>
 
-        <div class="margin-2em-top form-narrow lightbulb-icon-container-flush-text">
-          <p class="icon lightbulb-icon">
-            The dates and times you specify make up your ​<strong>testing window</strong>. This is the amount of time the test is open for a student to begin taking the test.
-            This is not the same as the ​<strong>test duration</strong>​, which is based on the amount of questions on the test.
-          </p>
-          <p>Choosing shorter testing windows will help maintain better security.</p>
-        </div>  <button type=submit class="button margin-2em-top button-mobile-block right" [disabled]="!valid">Next step: Add students</button>
-      </form>
-    </div><!--closes div containing form-->
+            <div class="margin-2em-top form-narrow lightbulb-icon-container-flush-text">
+                <p class="icon lightbulb-icon">
+                    The dates and times you specify make up your ​<strong>testing window</strong>. This is the amount of
+                    time the test is open for a student to begin taking the test. This is not the same as the ​<strong>test duration</strong>​,
+                    which is based on the amount of questions on the test.
+                </p>
+                <p>Choosing shorter testing windows will help maintain better security.</p>
+            </div>
+            <button type=submit class="button margin-2em-top button-mobile-block right" (click)="saveDateTime();" [disabled]="!valid">Next step: Add students</button>
+        </form>
+    </div>
+    <!--closes div containing form-->
 
-  
 
-  </main>
-  <page-footer></page-footer>
+
+</main>
+<page-footer></page-footer>

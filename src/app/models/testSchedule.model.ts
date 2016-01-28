@@ -3,9 +3,7 @@ export class TestScheduleModel{
     subjectId: number;
     testId: number;
     testName: string;
-    scheduleStartDate: Date;
     scheduleStartTime: any;
-    scheduleEndDate: Date;
     scheduleEndTime: any;
     currentStep: number;
     activeStep: number; 
