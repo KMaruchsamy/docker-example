@@ -114,47 +114,30 @@ gulp.task('build', function (done) {
         );
 });
 
+// To run: NODE_ENV=production gulp prepare_config
 gulp.task('prepare_config', function () {
-    gulp.src([config.ebsSource + 'config.yml'])
-        .pipe(plugins.replace('@@environment', env))
-        .pipe(gulp.dest(config.elasticbeanstalk));
-
-    gulp.src([config.ebsSource + 'env.config'])
-        .pipe(plugins.replace('@@environment', env))
-        .pipe(plugins.replace('@@date', new Date()))
-        .pipe(gulp.dest(config.ebExtensions));
-
-    gulp.src('ebs/resources_${env}.config')
+    gulp.src('ebs/resources_' + env + '.config')
         .pipe(plugins.rename({
             dirname: '',
             basename: 'resources',
             extname: '.config'
         }))
-        .pipe(gulp.dest('${config.ebExtensions}'));
+        .pipe(gulp.dest(config.ebExtensions));
 
-    gulp.src('ebs/Dockerrun_${env}.aws.json')
+    gulp.src('ebs/Dockerrun_' + env + '.aws.json')
         .pipe(plugins.rename({
             dirname: '',
             basename: 'Dockerrun.aws',
             extname: '.json'
         }))
         .pipe(gulp.dest('.'));
-
 });
 
-// <<<<<<< HEAD
-// gulp.task('create_zip', function () {
-//     gulp.src(['./Dockerrun.aws.json',
-//         config.ebExtensions + 'env.config',
-//         config.ebExtensions + 'resources.config'], { base: "." })
-//         .pipe(plugins.zip(`nursing-adminapp-${app_version}.zip`))
-// =======
+// To run: app_version=qa_v4 gulp create_zip
 gulp.task('create_zip', function(){
     gulp.src(['./Dockerrun.aws.json', 
-            config.ebExtensions + 'env.config',
             config.ebExtensions + 'resources.config'], { base: "." })
-        .pipe(plugins.zip('nursing-adminapp-${app_version}.zip'))
-// >>>>>>> dev
+        .pipe(plugins.zip('nursing-adminapp-' + app_version + '.zip'))
         .pipe(gulp.dest('dist'));
 });
 

@@ -58,7 +58,6 @@ module.exports = function () {
 			}
 		},
         ebsSource: './ebs/',
-        elasticbeanstalk: './.elasticbeanstalk/',
         ebExtensions: './.ebextensions/'
 	};
 	return config;
