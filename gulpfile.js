@@ -124,15 +124,15 @@ gulp.task('prepare_config', function () {
         .pipe(plugins.replace('@@date', new Date()))
         .pipe(gulp.dest(config.ebExtensions));
 
-    gulp.src(`ebs/resources_${env}.config`)
+    gulp.src('ebs/resources_${env}.config')
         .pipe(plugins.rename({
             dirname: '',
             basename: 'resources',
             extname: '.config'
         }))
-        .pipe(gulp.dest(`${config.ebExtensions}`));
+        .pipe(gulp.dest('${config.ebExtensions}'));
 
-    gulp.src(`ebs/Dockerrun_${env}.aws.json`)
+    gulp.src('ebs/Dockerrun_${env}.aws.json')
         .pipe(plugins.rename({
             dirname: '',
             basename: 'Dockerrun.aws',
@@ -146,7 +146,7 @@ gulp.task('create_zip', function(){
     gulp.src(['./Dockerrun.aws.json', 
             config.ebExtensions + 'env.config',
             config.ebExtensions + 'resources.config'], { base: "." })
-        .pipe(plugins.zip(`nursing-adminapp-${app_version}.zip`))
+        .pipe(plugins.zip('nursing-adminapp-${app_version}.zi'))
         .pipe(gulp.dest('dist'));
 });
 
