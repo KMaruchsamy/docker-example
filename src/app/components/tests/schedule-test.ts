@@ -74,11 +74,16 @@ export class ScheduleTest implements OnInit {
                     __this.startTime = startTime;
                     __this.$endTime.timepicker('option', 'minTime', __this.startTime);
                     if (!__this.endTime) {
-
                         __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
                         __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                         __this.endDate = moment(new Date(__this.endTime)).format('L');
                         __this.$endDate.datepicker('update', __this.endDate);
+                    }
+                    else {
+                        if (moment(__this.startTime).isAfter(__this.endTime)) {
+                            __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                            __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                        }
                     }
                 } else {
                     if (!__this.startTime)
@@ -95,6 +100,12 @@ export class ScheduleTest implements OnInit {
                     if (!__this.endTime) {
                         __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
                         __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                    }
+                    else {
+                        if (moment(__this.startTime).isAfter(__this.endTime)) {
+                            __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                            __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                        }
                     }
                 }
                 else {
@@ -124,6 +135,12 @@ export class ScheduleTest implements OnInit {
                         __this.$startTime.timepicker('setTime', new Date(__this.startTime));
                         __this.$endTime.timepicker('option', 'minTime', __this.startTime);
                     }
+                    else {
+                         if (moment(__this.startTime).isAfter(__this.endTime)) {
+                            __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                            __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                        }
+                    }
                 } else {
                     if (!__this.endTime)
                         __this.$endTime.timepicker('setTime', '');
@@ -138,6 +155,12 @@ export class ScheduleTest implements OnInit {
                         __this.startTime = moment(new Date(__this.endTime)).subtract(3, 'hours').format();
                         __this.$startTime.timepicker('setTime', new Date(__this.startTime));
                         __this.$endTime.timepicker('option', 'minTime', __this.startTime);
+                    }
+                    else {
+                         if (moment(__this.startTime).isAfter(__this.endTime)) {
+                            __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                            __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                        }
                     }
                 }
                 else {
@@ -306,6 +329,8 @@ export class ScheduleTest implements OnInit {
 
 
     validate(__this): boolean {
+        __this.invalid8hours = false;
+        
         if (__this.startDate === undefined || __this.startTime === undefined || __this.endDate === undefined || __this.endTime === undefined) {
             __this.valid = false;
             return;
@@ -318,11 +343,7 @@ export class ScheduleTest implements OnInit {
             __this.valid = false;
             return;
         }
-
-        if (moment(__this.startTime).isAfter(__this.endTime)) {
-            __this.valid = false;
-            return;
-        }
+        
 
         if (!__this.ignore8HourRule) {
             let duration = moment.duration(moment(__this.endTime).diff(moment(__this.startTime)));
@@ -347,6 +368,11 @@ export class ScheduleTest implements OnInit {
                 }
             }
             __this.invalid8hours = false;
+        }
+        
+        if (moment(__this.startTime).isAfter(__this.endTime)) {
+            __this.valid = false;
+            return;
         }
 
         __this.valid = true;
