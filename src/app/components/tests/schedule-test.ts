@@ -34,7 +34,7 @@ export class ScheduleTest implements OnInit {
     dontPropogate: boolean = false;
     sStorage: any;
     constructor(public testScheduleModel: TestScheduleModel,
-        public testService: TestService, public auth: Auth, public router:Router) {
+        public testService: TestService, public auth: Auth, public router: Router) {
         this.$startDate = $('#startDate');
         this.$endDate = $('#endDate');
         this.$startTime = $('#startTime');
@@ -50,8 +50,15 @@ export class ScheduleTest implements OnInit {
         this.testScheduleModel.completed = false;
         this.set8HourRule();
         this.bindEvents();
+        this.initializeControls();
     }
 
+    initializeControls() {
+        this.$startDate.datepicker('update', '');
+        this.$endDate.datepicker('update', '');
+        this.$startTime.timepicker('setTime', '');
+        this.$endTime.timepicker('setTime', '');
+    }
 
     bindEvents(): void {
 
@@ -67,7 +74,7 @@ export class ScheduleTest implements OnInit {
                     __this.startTime = startTime;
                     __this.$endTime.timepicker('option', 'minTime', __this.startTime);
                     if (!__this.endTime) {
-                       
+
                         __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
                         __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                         __this.endDate = moment(new Date(__this.endTime)).format('L');
@@ -351,7 +358,7 @@ export class ScheduleTest implements OnInit {
             this.testScheduleModel.scheduleStartTime = new Date(this.startTime);
             this.testScheduleModel.scheduleEndTime = new Date(this.endTime);
             this.sStorage = this.auth.common.getStorage();
-            this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));           
+            this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
             this.router.parent.navigateByUrl('/tests/add-students');
             return false;
         }
