@@ -7,7 +7,7 @@
 <div *ngIf="testSchedule.currentStep>1" class="section-thin test-summary-heading">
     <div class="container-medium-width">
         <div *ngIf="testSchedule.currentStep>1" class="test-summary-heading-details"><span>Test: <b>{{testSchedule.testName}}</b></span>
-        <a href="#"  [routerLink]="['/ModifyChooseTest' , {institutionId : testSchedule.institutionId, action:'modify',scheduleId:testSchedule.scheduleId}]" class="link-darker">Change test</a></div>
+        <a href="#"  [routerLink]="['/ChooseTest' , {institutionId : testSchedule.institutionId}]" class="link-darker">Change test</a></div>
         <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>Wed 09/30/15 from 3:00pm – 6:00pm</b></span><a href="schedule-test.html" class="link-darker" >Change date or time</a></div>
     </div>
 </div>
