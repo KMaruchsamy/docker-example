@@ -21,7 +21,8 @@ import {MyExceptionHandler} from './scripts/myexception-handler';
 import {ChooseTest} from './components/tests/choose-test';
 import {ScheduleTest} from './components/tests/schedule-test';
 import {AddStudents} from './components/tests/add-students';
-
+import {PageNotFound} from './components/errors/pagenotfound';
+import {UnhandledException} from './components/errors/unhandledexception';
 
 @Component({
     selector: 'app',
@@ -43,10 +44,11 @@ import {AddStudents} from './components/tests/add-students';
     { path: '/profiles/:id', component: ProfileDescription, as: 'Profiles' },
     { path: '/tests/choose-test/:institutionId', component: ChooseTest, as: 'ChooseTest' },
     { path: '/tests/schedule-test', component: ScheduleTest, as: 'ScheduleTest' },
-    { path: '/tests/:action/choose-test/:institutionId/:scheduleId', component: ChooseTest, as: 'ModifyChooseTest' },
-    { path: '/tests/:action/schedule-test', component: ScheduleTest, as: 'ModifyScheduleTest' },
-    { path: '/tests/add-students', component: AddStudents, as: 'AddStudents' }
-    // {path: '/*path', component: Help}
+    // { path: '/tests/:action/choose-test/:institutionId/:scheduleId', component: ChooseTest, as: 'ModifyChooseTest' },
+    // { path: '/tests/:action/schedule-test', component: ScheduleTest, as: 'ModifyScheduleTest' },
+    { path: '/tests/add-students', component: AddStudents, as: 'AddStudents' },
+    { path: '/error', component: UnhandledException },
+    { path: '/*wildcard', component: PageNotFound }
 ])
 export class App {
     constructor() {
