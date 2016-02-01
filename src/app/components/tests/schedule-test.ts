@@ -35,7 +35,6 @@ export class ScheduleTest implements OnInit {
     sStorage: any;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public router: Router) {
-        console.log('cons');
         this.$startDate = $('#startDate');
         this.$endDate = $('#endDate');
         this.$startTime = $('#startTime');
@@ -45,7 +44,6 @@ export class ScheduleTest implements OnInit {
 
 
     ngOnInit(): void {
-        console.log('init');
         this.set8HourRule();
         this.bindEvents();
         this.initialize();
@@ -66,12 +64,10 @@ export class ScheduleTest implements OnInit {
                 this.endTime = this.testScheduleModel.scheduleEndTime;
             }
         }
-
-        this.testScheduleModel.currentStep = 2;
+        else {
+            this.testScheduleModel.currentStep = 2;
+        }
         this.testScheduleModel.activeStep = 2;
-        this.testScheduleModel.completed = false;
-
-
     }
 
     initializeControls() {
@@ -86,7 +82,7 @@ export class ScheduleTest implements OnInit {
         if (this.startTime)
             this.$startTime.timepicker('setTime', new Date(this.startTime));
         else
-             this.$startTime.timepicker('setTime', '');
+            this.$startTime.timepicker('setTime', '');
         if (this.endTime)
             this.$endTime.timepicker('setTime', new Date(this.endTime));
         else

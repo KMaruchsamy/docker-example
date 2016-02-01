@@ -1,6 +1,6 @@
 import {Component, provide, enableProdMode} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
-import {RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy} from 'angular2/router';
+import {RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy, APP_BASE_HREF} from 'angular2/router';
 import {HTTP_PROVIDERS, Http} from 'angular2/http';
 import {Home} from './components/home/home';
 import {Login} from './components/login/login';
@@ -31,22 +31,22 @@ import {UnhandledException} from './components/errors/unhandledexception';
 })
 
 @RouteConfig([
-    { path: '/', component: Login, as: 'Login' },
-    { path: '/home', component: Home, as: 'Home' },
-    { path: '/reset-password/:id/:expirytime', component: ResetPassword, as: 'ResetPassword' },
-    { path: '/forgot-password', component: ForgotPassword, as: 'ForgotPassword' },
-    { path: '/forgot-password-confirmation', component: ForgotPasswordConfirmation, as: 'ForgotPasswordConfirmation' },
-    { path: '/help', component: Help, as: 'Help' },
-    { path: '/userguide', component: UserGuide, as: 'UserGuide' },
-    { path: '/set-password-first-time', component: SetPasswordFirstTime, as: 'SetPasswordFirstTime' },
-    { path: '/account', component: Account, as: 'Account' },
-    { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, as: 'ChooseInstitution' },
-    { path: '/profiles/:id', component: ProfileDescription, as: 'Profiles' },
-    { path: '/tests/choose-test/:institutionId', component: ChooseTest, as: 'ChooseTest' },
-    { path: '/tests/schedule-test', component: ScheduleTest, as: 'ScheduleTest' },
+    { path: '/', component: Login, name: 'Login' },
+    { path: '/home', component: Home, name: 'Home' },
+    { path: '/reset-password/:id/:expirytime', component: ResetPassword, name: 'ResetPassword' },
+    { path: '/forgot-password', component: ForgotPassword, name: 'ForgotPassword' },
+    { path: '/forgot-password-confirmation', component: ForgotPasswordConfirmation, name: 'ForgotPasswordConfirmation' },
+    { path: '/help', component: Help, name: 'Help' },
+    { path: '/userguide', component: UserGuide, name: 'UserGuide' },
+    { path: '/set-password-first-time', component: SetPasswordFirstTime, name: 'SetPasswordFirstTime' },
+    { path: '/account', component: Account, name: 'Account' },
+    { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, name: 'ChooseInstitution' },
+    { path: '/profiles/:id', component: ProfileDescription, name: 'Profiles' },
+    { path: '/tests/choose-test/:institutionId', component: ChooseTest, name: 'ChooseTest' },
+    { path: '/tests/schedule-test', component: ScheduleTest, name: 'ScheduleTest' },
     // { path: '/tests/:action/choose-test/:institutionId/:scheduleId', component: ChooseTest, as: 'ModifyChooseTest' },
     // { path: '/tests/:action/schedule-test', component: ScheduleTest, as: 'ModifyScheduleTest' },
-    { path: '/tests/add-students', component: AddStudents, as: 'AddStudents' },
+    { path: '/tests/add-students', component: AddStudents, name: 'AddStudents' },
     { path: '/error', component: UnhandledException },
     { path: '/*wildcard', component: PageNotFound }
 ])
