@@ -35,7 +35,6 @@ export class ChooseTest implements OnDeactivate {
     tests: Object[] = [];
     testsTable: any;
     sStorage: any;
-    action: string;
     constructor(public testService: TestService, public auth: Auth, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams) {
         if (!this.auth.isAuth())
@@ -45,14 +44,14 @@ export class ChooseTest implements OnDeactivate {
     }
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+        console.log(prev);
+        console.log(next);
         if (this.testsTable)
             this.testsTable.destroy();
         $('.selectpicker').val('').selectpicker('refresh');
     }
 
     initialize(): void {
-        if (this.routeParams.get('action'))
-            this.action = this.routeParams.get('action');
         this.testsTable = null;
         this.testTypeId = 1;
         this.institutionID = parseInt(this.routeParams.get('institutionId'));
@@ -61,23 +60,21 @@ export class ChooseTest implements OnDeactivate {
     }
 
     loadSchedule(): void {
-        if (this.action === 'modify') {
-            let savedSchedule = this.testService.getTestSchedule();
-            if (savedSchedule) {
-                this.testScheduleModel = savedSchedule;
-                this.subjectId = this.testScheduleModel.subjectId;
-                this.loadTests(this.subjectId);
-                setTimeout(json => {
-                    $('.selectpicker').selectpicker('refresh');
-                });
-
-            }
+        let savedSchedule = this.testService.getTestSchedule();
+        if (savedSchedule) {
+            this.testScheduleModel = savedSchedule;
+            this.subjectId = this.testScheduleModel.subjectId;
+            this.loadTests(this.subjectId);
+            setTimeout(json => {
+                $('.selectpicker').selectpicker('refresh');
+            });
         }
         else {
             this.testScheduleModel.currentStep = 1;
-            this.testScheduleModel.activeStep = 1;
             this.testScheduleModel.institutionId = this.institutionID;
         }
+        this.testScheduleModel.activeStep = 1;
+
     }
 
     loadSubjects(): void {
@@ -131,8 +128,8 @@ export class ChooseTest implements OnDeactivate {
                     });
 
 
-                    $('#chooseTestTable').on('responsive-display.dt', function() {                      
-                      $(this).find('.child .dtr-title br').remove();
+                    $('#chooseTestTable').on('responsive-display.dt', function() {
+                        $(this).find('.child .dtr-title br').remove();
                     });
 
                 });
@@ -143,7 +140,6 @@ export class ChooseTest implements OnDeactivate {
     }
 
     saveChooseTest(): void {
-        this.testScheduleModel.completed = true;
         this.testScheduleModel.scheduleId = this.utitlity.generateUUID();
         this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));

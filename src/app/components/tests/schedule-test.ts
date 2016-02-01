@@ -44,20 +44,49 @@ export class ScheduleTest implements OnInit {
 
 
     ngOnInit(): void {
-        this.testScheduleModel = this.testService.getTestSchedule();
-        this.testScheduleModel.currentStep = 2;
-        this.testScheduleModel.activeStep = 2;
-        this.testScheduleModel.completed = false;
         this.set8HourRule();
         this.bindEvents();
+        this.initialize();
         this.initializeControls();
+        this.validate(this);
+    }
+
+    initialize() {
+        let savedSchedule = this.testService.getTestSchedule();
+        if (savedSchedule) {
+            this.testScheduleModel = savedSchedule;
+            if (this.testScheduleModel.scheduleStartTime) {
+                this.startDate = moment(this.testScheduleModel.scheduleStartTime).format('L');
+                this.startTime = this.testScheduleModel.scheduleStartTime;
+            }
+            if (this.testScheduleModel.scheduleEndTime) {
+                this.endDate = moment(this.testScheduleModel.scheduleEndTime).format('L');
+                this.endTime = this.testScheduleModel.scheduleEndTime;
+            }
+        }
+
+        if (this.testScheduleModel.currentStep < 2)
+            this.testScheduleModel.currentStep = 2;
+        this.testScheduleModel.activeStep = 2;
     }
 
     initializeControls() {
-        this.$startDate.datepicker('update', '');
-        this.$endDate.datepicker('update', '');
-        this.$startTime.timepicker('setTime', '');
-        this.$endTime.timepicker('setTime', '');
+        if (this.startDate)
+            this.$startDate.datepicker('update', this.startDate);
+        else
+            this.$startDate.datepicker('update', '');
+        if (this.endDate)
+            this.$endDate.datepicker('update', this.endDate);
+        else
+            this.$endDate.datepicker('update', '');
+        if (this.startTime)
+            this.$startTime.timepicker('setTime', new Date(this.startTime));
+        else
+            this.$startTime.timepicker('setTime', '');
+        if (this.endTime)
+            this.$endTime.timepicker('setTime', new Date(this.endTime));
+        else
+            this.$endTime.timepicker('setTime', '');
     }
 
     bindEvents(): void {
@@ -67,44 +96,60 @@ export class ScheduleTest implements OnInit {
             'timeFormat': 'g:ia',
             'minTime': '8:00am'
         }).on('change', function(e) {
-            let startTime;
-            if (__this.startDate) {
-                startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
-                if (startTime && moment(startTime).isValid()) {
-                    __this.startTime = startTime;
-                    __this.$endTime.timepicker('option', 'minTime', __this.startTime);
-                    if (!__this.endTime) {
-
-                        __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
-                        __this.$endTime.timepicker('setTime', new Date(__this.endTime));
-                        __this.endDate = moment(new Date(__this.endTime)).format('L');
-                        __this.$endDate.datepicker('update', __this.endDate);
-                    }
-                } else {
-                    if (!__this.startTime)
-                        __this.$startTime.timepicker('setTime', '');
-                    else
-                        __this.$startTime.timepicker('setTime', new Date(__this.startTime));
-                }
-            }
-            else {
-                startTime = __this.$startTime.timepicker('getTime', new Date());
-                if (startTime && moment(startTime).isValid()) {
-                    __this.startTime = startTime;
-                    __this.$endTime.timepicker('option', 'minTime', __this.startTime);
-                    if (!__this.endTime) {
-                        __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
-                        __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+            if (e.currentTarget.value) {
+                let startTime;
+                if (__this.startDate) {
+                    startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
+                    if (startTime && moment(startTime).isValid()) {
+                        __this.startTime = startTime;
+                        __this.$endTime.timepicker('option', 'minTime', __this.startTime);
+                        if (!__this.endTime) {
+                            __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
+                            __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                            __this.endDate = moment(new Date(__this.endTime)).format('L');
+                            __this.$endDate.datepicker('update', __this.endDate);
+                        }
+                        else {
+                            if (moment(__this.startTime).isAfter(__this.endTime)) {
+                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                            }
+                        }
+                    } else {
+                        if (!__this.startTime)
+                            __this.$startTime.timepicker('setTime', '');
+                        else
+                            __this.$startTime.timepicker('setTime', new Date(__this.startTime));
                     }
                 }
                 else {
-                    if (!__this.startTime)
-                        __this.$startTime.timepicker('setTime', '');
-                    else
-                        __this.$startTime.timepicker('setTime', new Date(__this.startTime));
+                    startTime = __this.$startTime.timepicker('getTime', new Date());
+                    if (startTime && moment(startTime).isValid()) {
+                        __this.startTime = startTime;
+                        __this.$endTime.timepicker('option', 'minTime', __this.startTime);
+                        if (!__this.endTime) {
+                            __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
+                            __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                        }
+                        else {
+                            if (moment(__this.startTime).isAfter(__this.endTime)) {
+                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                            }
+                        }
+                    }
+                    else {
+                        if (!__this.startTime)
+                            __this.$startTime.timepicker('setTime', '');
+                        else
+                            __this.$startTime.timepicker('setTime', new Date(__this.startTime));
+                    }
                 }
-            }
 
+            }
+            else {
+                __this.startTime = '';
+            }
 
             __this.validate(__this);
         });
@@ -114,39 +159,59 @@ export class ScheduleTest implements OnInit {
             'timeFormat': 'g:ia',
             'minTime': '8:00am'
         }).on('change', function(e) {
-            let endTime;
-            if (__this.endDate) {
-                endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
-                if (endTime && moment(endTime).isValid()) {
-                    __this.endTime = endTime;
-                    if (!__this.startTime) {
-                        __this.startTime = moment(new Date(__this.endTime)).subtract(3, 'hours').format();
-                        __this.$startTime.timepicker('setTime', new Date(__this.startTime));
-                        __this.$endTime.timepicker('option', 'minTime', __this.startTime);
+            if (e.currentTarget.value) {
+                let endTime;
+                if (__this.endDate) {
+                    endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
+                    if (endTime && moment(endTime).isValid()) {
+                        __this.endTime = endTime;
+                        if (!__this.startTime) {
+                            __this.startTime = moment(new Date(__this.endTime)).subtract(3, 'hours').format();
+                            __this.$startTime.timepicker('setTime', new Date(__this.startTime));
+                            __this.$endTime.timepicker('option', 'minTime', __this.startTime);
+                        }
+                        else {
+                            if (moment(__this.startTime).isAfter(__this.endTime)) {
+                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                            }
+                        }
+                    } else {
+                        if (!__this.endTime)
+                            __this.$endTime.timepicker('setTime', '');
+                        else
+                            __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                     }
                 } else {
-                    if (!__this.endTime)
-                        __this.$endTime.timepicker('setTime', '');
-                    else
-                        __this.$endTime.timepicker('setTime', new Date(__this.endTime));
-                }
-            } else {
-                endTime = __this.$endTime.timepicker('getTime', new Date());
-                if (endTime && moment(endTime).isValid()) {
-                    __this.endTime = endTime;
-                    if (!__this.startTime) {
-                        __this.startTime = moment(new Date(__this.endTime)).subtract(3, 'hours').format();
-                        __this.$startTime.timepicker('setTime', new Date(__this.startTime));
-                        __this.$endTime.timepicker('option', 'minTime', __this.startTime);
+                    endTime = __this.$endTime.timepicker('getTime', new Date());
+                    if (endTime && moment(endTime).isValid()) {
+                        __this.endTime = endTime;
+                        if (!__this.startTime) {
+                            __this.startTime = moment(new Date(__this.endTime)).subtract(3, 'hours').format();
+                            __this.$startTime.timepicker('setTime', new Date(__this.startTime));
+                            __this.$endTime.timepicker('option', 'minTime', __this.startTime);
+                        }
+                        else {
+                            if (moment(__this.startTime).isAfter(__this.endTime)) {
+                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                            }
+                        }
+                    }
+                    else {
+                        if (!__this.endTime)
+                            __this.$endTime.timepicker('setTime', '');
+                        else
+                            __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                     }
                 }
-                else {
-                    if (!__this.endTime)
-                        __this.$endTime.timepicker('setTime', '');
-                    else
-                        __this.$endTime.timepicker('setTime', new Date(__this.endTime));
-                }
             }
+            else {
+                __this.endTime = '';
+            }
+
+
+
             __this.validate(__this);
         });
 
@@ -160,48 +225,59 @@ export class ScheduleTest implements OnInit {
         }).on('hide', function(e) {
             let outputString = '';
 
-            outputString = __this.parseDateString(e.currentTarget.value);
+            if (e.currentTarget.value !== '') {
+                outputString = __this.parseDateString(e.currentTarget.value);
 
-            if (outputString !== '' && moment(outputString).isValid()) {
+                if (outputString !== '' && moment(outputString).isValid()) {
 
-                if (new Date() > new Date(outputString)) {
-                    if (!__this.startDate)
-                        __this.startDate = moment(new Date()).format('L');
-                }
-                else
-                    __this.startDate = outputString;
+                    // alert(moment(outputString).isBefore(new Date(),'day'));
+                    //  alert(moment(outputString).isSame(new Date(),'day'));
 
-                __this.$startDate.datepicker('update', __this.startDate);
+                
+                    if (moment(outputString).isBefore(new Date(), 'day')) {
+                        if (!__this.startDate)
+                            __this.startDate = moment(new Date()).format('L');
+                    }
+                    else
+                        __this.startDate = outputString;
+
+                    __this.$startDate.datepicker('update', __this.startDate);
                 
                 
-                // have to change the date part of the time because the date is changed ..
-                __this.startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
-
-                //Auto populate the enddate only if the enddate is null or the very first time .                
-                if (!__this.endDate) {
-                    __this.endDate = __this.startDate;
-                    __this.$endDate.datepicker('update', __this.endDate);
                     // have to change the date part of the time because the date is changed ..
-                    __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
-                    // __this.$startDate.datepicker('setEndDate', __this.endDate);
-                }
-                else if (moment(__this.startDate).isAfter(__this.endDate)) {
-                    // in case if the user startdate that is greater than the end date .
-                    __this.endDate = __this.startDate;
-                    __this.$endDate.datepicker('update', __this.startDate);
-                    // have to change the date part of the time because the date is changed ..
-                    __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
-                }
+                    __this.startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
+
+                    //Auto populate the enddate only if the enddate is null or the very first time .                
+                    if (!__this.endDate) {
+                        __this.endDate = __this.startDate;
+                        __this.$endDate.datepicker('update', __this.endDate);
+                        // have to change the date part of the time because the date is changed ..
+                        __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
+                        // __this.$startDate.datepicker('setEndDate', __this.endDate);
+                    }
+                    else if (moment(__this.startDate).isAfter(__this.endDate)) {
+                        // in case if the user startdate that is greater than the end date .
+                        __this.endDate = __this.startDate;
+                        __this.$endDate.datepicker('update', __this.startDate);
+                        // have to change the date part of the time because the date is changed ..
+                        __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
+                    }
                 
-                //setting the start date of end datepicker with the start date so that we cannot select a date less than than the start date.
-                __this.$endDate.datepicker('setStartDate', __this.startDate);
+                    //setting the start date of end datepicker with the start date so that we cannot select a date less than than the start date.
+                    __this.$endDate.datepicker('setStartDate', __this.startDate);
+                }
+                else {
+                    if (__this.startDate)
+                        __this.$startDate.datepicker('update', new Date(__this.startDate));
+                    else
+                        __this.$startDate.datepicker('update', '');
+                }
             }
             else {
-                if (__this.startDate)
-                    __this.$startDate.datepicker('update', new Date(__this.startDate));
-                else
-                    __this.$startDate.datepicker('update', '');
+                __this.startDate = '';
+                __this.startTime = __this.$startTime.timepicker('getTime', new Date());
             }
+
             __this.validate(__this);
         });
 
@@ -214,53 +290,70 @@ export class ScheduleTest implements OnInit {
         }).on('hide', function(e) {
             let outputString = '';
 
-            outputString = __this.parseDateString(e.currentTarget.value);
+            if (e.currentTarget.value !== '') {
+                outputString = __this.parseDateString(e.currentTarget.value);
 
-            if (outputString !== '' && moment(outputString).isValid()) {
-                if (new Date() > new Date(outputString)) {
-                    if (!__this.endDate) {
-                        if (__this.startDate) {
-                            if (moment(new Date()).isAfter(__this.startDate) || moment(new Date()).isSame(__this.startDate)) {
-                                __this.endDate = moment(new Date()).format('L');
+                //Check if the entered date string is valid .            
+                if (outputString !== '' && moment(outputString).isValid()) {
+
+                    //If the entered date is before current date then :-
+                    //  - we will revert to the old endate if there is an endate .
+                    //  - If there is no enddate then 
+                
+                    if (__this.startDate) {
+                        if (__this.startTime) {
+                            let outputTimeString = __this.$endTime.timepicker('getTime', new Date(outputString));
+                            if (moment(outputTimeString).isBefore(__this.startTime)) {
+                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                __this.endDate = moment(__this.startTime).format('L');
+                            }
+                            else {
+                                __this.endDate = moment(outputString).format('L');
                             }
                         }
-                        else
-                            __this.endDate = moment(new Date()).format('L');
-                    }
-
-                }
-                else {
-                    if (__this.startDate) {
-                        if (moment(outputString).isAfter(__this.startDate) || moment(outputString).isSame(__this.startDate)) {
-                            __this.endDate = outputString;
+                        else {
+                            if (moment(outputString).isBefore(__this.startDate)) {
+                                if (!__this.endDate)
+                                    __this.endDate = __this.startDate;
+                                else
+                                    __this.endDate = __this.startDate;
+                            }
                         }
                     }
-                    else
-                        __this.endDate = outputString;
-                }
+                    else {
+                        if (moment(outputString).isBefore(new Date(), 'day')) {
+                            if (!__this.endDate)
+                                __this.endDate = moment(new Date()).format('L');
+
+                        }
+                        //Auto populate the startdate only if it is null or the very first time . 
+                        __this.startDate = __this.endDate;
+                        __this.$startDate.datepicker('update', __this.startDate);
+                        // have to change the date part of the time because the date is changed ..
+                        __this.startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
+                        // __this.$startDate.datepicker('setEndDate', __this.endDate);
+                    }
 
 
-                __this.$endDate.datepicker('update', __this.endDate);
-                // have to change the date part of the time because the date is changed ..
-                __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
-                
-                //Auto populate the startdate only if it is null or the very first time .                
-                if (!__this.startDate) {
-                    __this.startDate = __this.endDate;
-                    __this.$startDate.datepicker('update', __this.startDate);
+                    __this.$endDate.datepicker('update', __this.endDate);
                     // have to change the date part of the time because the date is changed ..
-                    __this.startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
-                    // __this.$startDate.datepicker('setEndDate', __this.endDate);
+                    __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
+
+
+                } else {
+                    if (__this.endDate)
+                        __this.$endDate.datepicker('update', new Date(__this.endDate));
+                    else
+                        __this.$endDate.datepicker('update', '');
                 }
-                
-                //setting the start date of end datepicker with the start date so that we cannot select a date less than than the start date.
-                // __this.$startDate.datepicker('setEndDate', __this.endDate);
-            } else {
-                if (__this.endDate)
-                    __this.$endDate.datepicker('update', new Date(__this.endDate));
-                else
-                    __this.$endDate.datepicker('update', '');
             }
+            else {
+                __this.endDate = '';
+                __this.endTime = __this.$endTime.timepicker('getTime', new Date());
+            }
+
+
             __this.validate(__this);
         });
     }
@@ -306,6 +399,8 @@ export class ScheduleTest implements OnInit {
 
 
     validate(__this): boolean {
+        __this.invalid8hours = false;
+
         if (__this.startDate === undefined || __this.startTime === undefined || __this.endDate === undefined || __this.endTime === undefined) {
             __this.valid = false;
             return;
@@ -319,10 +414,6 @@ export class ScheduleTest implements OnInit {
             return;
         }
 
-        if (moment(__this.startTime).isAfter(__this.endTime)) {
-            __this.valid = false;
-            return;
-        }
 
         if (!__this.ignore8HourRule) {
             let duration = moment.duration(moment(__this.endTime).diff(moment(__this.startTime)));
@@ -349,6 +440,11 @@ export class ScheduleTest implements OnInit {
             __this.invalid8hours = false;
         }
 
+        if (moment(__this.startTime).isAfter(__this.endTime)) {
+            __this.valid = false;
+            return;
+        }
+
         __this.valid = true;
     }
 
@@ -373,12 +469,13 @@ export class ScheduleTest implements OnInit {
 
         if (inputDate.indexOf('/') > -1)
             inputArr = inputDate.split('/');
-        if (inputDate.indexOf('-') > -1)
+        else if (inputDate.indexOf('-') > -1)
             inputArr = inputDate.split('-');
-        if (inputDate.indexOf('.') > -1)
+        else if (inputDate.indexOf('.') > -1)
             inputArr = inputDate.split('.');
-        if (inputDate.indexOf(' ') > -1)
+        else if (inputDate.indexOf(' ') > -1)
             inputArr = inputDate.split(' ');
+
         if (inputArr.length < 3)
             return '';
 
@@ -388,6 +485,7 @@ export class ScheduleTest implements OnInit {
             if (value === undefined || value === '') {
                 return '';
             }
+
             dateNumber = parseInt(_.trim(value));
             if (!_.isNumber(dateNumber))
                 return '';
@@ -404,9 +502,9 @@ export class ScheduleTest implements OnInit {
                     month = dateNumber.toString();
             }
             if (i === 3) {
-                if (dateNumber.toString().length < 4)
+                if (dateNumber.toString().length === 2)
                     year = (dateNumber + 2000).toString();
-                else
+                else if (dateNumber.toString().length === 4)
                     year = dateNumber.toString();
             }
         });
