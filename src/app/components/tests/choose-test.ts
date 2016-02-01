@@ -140,7 +140,6 @@ export class ChooseTest implements OnDeactivate {
     }
 
     saveChooseTest(): void {
-        this.testScheduleModel.completed = true;
         this.testScheduleModel.scheduleId = this.utitlity.generateUUID();
         this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
