@@ -8,7 +8,6 @@ export class TestScheduleModel{
     currentStep: number;
     activeStep: number; 
     scheduleTiming: string;
-    completed: boolean = false;
     institutionId :number
     constructor(){}
 }

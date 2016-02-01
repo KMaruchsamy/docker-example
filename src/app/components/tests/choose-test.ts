@@ -35,7 +35,6 @@ export class ChooseTest implements OnDeactivate {
     tests: Object[] = [];
     testsTable: any;
     sStorage: any;
-    // action: string;
     constructor(public testService: TestService, public auth: Auth, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams) {
         if (!this.auth.isAuth())
@@ -53,8 +52,6 @@ export class ChooseTest implements OnDeactivate {
     }
 
     initialize(): void {
-        // if (this.routeParams.get('action'))
-        //     this.action = this.routeParams.get('action');
         this.testsTable = null;
         this.testTypeId = 1;
         this.institutionID = parseInt(this.routeParams.get('institutionId'));
@@ -71,13 +68,13 @@ export class ChooseTest implements OnDeactivate {
             setTimeout(json => {
                 $('.selectpicker').selectpicker('refresh');
             });
-
         }
         else {
             this.testScheduleModel.currentStep = 1;
-            this.testScheduleModel.activeStep = 1;
             this.testScheduleModel.institutionId = this.institutionID;
         }
+        this.testScheduleModel.activeStep = 1;
+
     }
 
     loadSubjects(): void {
