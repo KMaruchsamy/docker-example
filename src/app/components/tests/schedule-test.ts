@@ -64,9 +64,9 @@ export class ScheduleTest implements OnInit {
                 this.endTime = this.testScheduleModel.scheduleEndTime;
             }
         }
-        else {
+
+        if (this.testScheduleModel.currentStep < 2)
             this.testScheduleModel.currentStep = 2;
-        }
         this.testScheduleModel.activeStep = 2;
     }
 

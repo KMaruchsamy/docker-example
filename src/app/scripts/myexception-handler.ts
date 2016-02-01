@@ -12,6 +12,6 @@ export class MyExceptionHandler implements ExceptionHandler{
         console.log("STACKTRACE >> " + stackTrace);
         console.log("REASON >> " + reason);
         // this.router.navigateByUrl('/error');
-        location.href = '/#/error';
+        // location.href = '/#/error';
     }
 }
