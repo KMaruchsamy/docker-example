@@ -19,8 +19,8 @@
                         <div class="tab-pane active" id="addByCohort">
                             <div id="chooseCohortContainer">
                                 <div class="top-section">
-                                    <select id="chooseCohort" #selectcohort class="selectpicker" title="Choose a Cohort" data-width="65%" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,selectcohort.value)">
-                                        <option *ngFor="#cohort of cohorts;#i=index;" [selected]="cohort.CohortId==cohortID"  [value]="cohort.CohortId">{{cohort.CohortName}}</option>
+                                    <select id="chooseCohort" #selectcohort class="selectpicker" title="Choose a Cohort" data-width="65%" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,selectcohort)">
+                                        <option *ngFor="#cohort of cohorts;#i=index;" [selected]="cohort.CohortId==cohortID" [value]="cohort.CohortId">{{cohort.CohortName}}</option>
                                     </select>
                                     <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort()">Add all students</button>
                                 </div>
@@ -40,19 +40,27 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="#student of cohortStudents;#j=index;">
-                                                <td>{{student.LastName}}</td>
-                                                <td>{{student.FirstName}}</td>
-                                                <td>{{cohortID}}</td>
-                                                <td>{{student.Retester}}</td>
+                                                <td data-column="1">{{student.LastName}}</td>
+                                                <td data-column="2">{{student.FirstName}}</td>
+                                                <td data-column="3">{{cohortName}}</td>
+                                                <td data-column="4">{{student.Retester?"Yes":"No"}}</td>
                                                 <td>
                                                     <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" (click)="AddStudent(student)">Add</button>
                                                 </td>
                                             </tr>
                                         </tbody>
-                                        <tfoot>
-
-                                        </tfoot>
                                     </table>
+                                    <div class="add-students-table-search">
+                                        <div id="DataTables_Table_0_filter" class="dataTables_filter">
+                                            <label><input type="search" class="small-search-box" placeholder="Find student in cohort" aria-controls="DataTables_Table_0"></label>
+                                        </div>
+                                        <div class="form-group hidden-small-down">
+                                            <input type="checkbox" class="small-checkbox-image" id="cohortRepeatersOnly" name="filterADA" value="repeatersOnly" (click)="GetRepetersOnly()" >
+                                            <label class="smaller" for="cohortRepeatersOnly">Retesting only</label>
+                                            <input type="checkbox" class="small-checkbox-image" id="cohortExcludeRepeaters" name="filterADA" value="excludeRepeaters" (click)="ExcludeRepeaters()">
+                                            <label class="smaller" for="cohortExcludeRepeaters">Exclude retesting students</label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!--closes hidden-->
                             </div>

@@ -21,6 +21,7 @@ import {MyExceptionHandler} from './scripts/myexception-handler';
 import {ChooseTest} from './components/tests/choose-test';
 import {ScheduleTest} from './components/tests/schedule-test';
 import {AddStudents} from './components/tests/add-students';
+import {ReviewTest} from './components/tests/review-test';
 import {PageNotFound} from './components/errors/pagenotfound';
 import {UnhandledException} from './components/errors/unhandledexception';
 
@@ -47,6 +48,7 @@ import {UnhandledException} from './components/errors/unhandledexception';
     // { path: '/tests/:action/choose-test/:institutionId/:scheduleId', component: ChooseTest, as: 'ModifyChooseTest' },
     // { path: '/tests/:action/schedule-test', component: ScheduleTest, as: 'ModifyScheduleTest' },
     { path: '/tests/add-students', component: AddStudents, name: 'AddStudents' },
+    { path: '/tests/review', component: ReviewTest, name: 'ReviewTest' },
     { path: '/error', component: UnhandledException },
     { path: '/*wildcard', component: PageNotFound }
 ])

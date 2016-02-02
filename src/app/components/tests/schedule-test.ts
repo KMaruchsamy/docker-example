@@ -110,7 +110,7 @@ export class ScheduleTest implements OnInit {
                             __this.$endDate.datepicker('update', __this.endDate);
                         }
                         else {
-                            if (moment(__this.startTime).isAfter(__this.endTime)) {
+                            if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
                                 __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
                                 __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                             }
@@ -132,7 +132,7 @@ export class ScheduleTest implements OnInit {
                             __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                         }
                         else {
-                            if (moment(__this.startTime).isAfter(__this.endTime)) {
+                            if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
                                 __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
                                 __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                             }
@@ -171,7 +171,7 @@ export class ScheduleTest implements OnInit {
                             __this.$endTime.timepicker('option', 'minTime', __this.startTime);
                         }
                         else {
-                            if (moment(__this.startTime).isAfter(__this.endTime)) {
+                            if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
                                 __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
                                 __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                             }
@@ -192,7 +192,7 @@ export class ScheduleTest implements OnInit {
                             __this.$endTime.timepicker('option', 'minTime', __this.startTime);
                         }
                         else {
-                            if (moment(__this.startTime).isAfter(__this.endTime)) {
+                            if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
                                 __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
                                 __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                             }
@@ -295,10 +295,6 @@ export class ScheduleTest implements OnInit {
 
                 //Check if the entered date string is valid .            
                 if (outputString !== '' && moment(outputString).isValid()) {
-
-                    //If the entered date is before current date then :-
-                    //  - we will revert to the old endate if there is an endate .
-                    //  - If there is no enddate then 
                 
                     if (__this.startDate) {
                         if (__this.startTime) {
@@ -319,6 +315,9 @@ export class ScheduleTest implements OnInit {
                                 else
                                     __this.endDate = __this.startDate;
                             }
+                            else {
+                                __this.endDate = moment(outputString).format('L');
+                            }
                         }
                     }
                     else {
@@ -327,6 +326,10 @@ export class ScheduleTest implements OnInit {
                                 __this.endDate = moment(new Date()).format('L');
 
                         }
+                        else {
+                            __this.endDate = moment(outputString).format('L');
+                        }
+                            
                         //Auto populate the startdate only if it is null or the very first time . 
                         __this.startDate = __this.endDate;
                         __this.$startDate.datepicker('update', __this.startDate);
