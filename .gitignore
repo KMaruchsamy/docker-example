@@ -197,3 +197,4 @@ npm-debug.log
 typings/
 .settings/
 .vscode/
+lib/
