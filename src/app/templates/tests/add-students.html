@@ -39,13 +39,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="#student of cohortStudents;#j=index;">
+                                            <tr *ngFor="#student of cohortStudentlist;#j=index;">
                                                 <td data-column="1">{{student.LastName}}</td>
                                                 <td data-column="2">{{student.FirstName}}</td>
                                                 <td data-column="3">{{cohortName}}</td>
                                                 <td data-column="4">{{student.Retester?"Yes":"No"}}</td>
                                                 <td>
-                                                    <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" (click)="AddStudent(student)">Add</button>
+                                                    <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" (click)="AddStudent(student)" >Add</button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -101,7 +101,7 @@
                 <p class="icon info-icon-yellow margin-1em-top hidden" id="accommadationNote">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
                 <p class="icon info-icon-yellow margin-1em-top hidden" id="studentScheduleNote">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
                 <!--  <div class="right margin-2em-top-bottom">-->
-                <button class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" data-toggle="modal" data-target="#modalTimingException" disabled>Next step: Add details and review</button>
+                <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" data-toggle="modal" data-target="#modalTimingException" disabled (click)="DetailReviewTestClick()">Next step: Add details and review</button>
                 <!--</div>-->
             </div>
         </div>
@@ -116,3 +116,4 @@
 </main>
 
 <page-footer></page-footer>
+<exception-modal-popup></exception-modal-popup>

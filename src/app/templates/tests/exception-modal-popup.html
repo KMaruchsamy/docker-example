@@ -1,0 +1,175 @@
+﻿ <!-- Modal Timing Exception-->
+<div class="modal modal-full-overlay fade" id="modalTimingException" tabindex="-1" role="dialog" aria-labelledby="timingExceptionModal">
+    <div role="document">
+        <button aria-label="Close" class="close close-large-icon prototype-dismiss" data-dismiss="modal" type="button"></button>
+        <div class="modal-full-overlay-content">
+            <div class="modal-header">
+                <p class="icon clock-alert-icon center"></p>
+                <h4 class="attention center" id="timingExceptionModal">Timing Exceptions — Action Required</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="margin-1em-bottom">
+                    <span class="text-larger-teal">
+                        <b>
+                            The following student accounts are not active during
+                            the date and time window selected for your testing session (Thu 09/10/15 from 3:00pm – 6:00pm).
+                        </b>
+                    </span>
+                    <span class="text-larger"> Please go back and modify your selections.</span>
+                </div>
+                <div class="section-thin border-top-bottom">
+                    <ul class="list-extra-spacing js-repeaters-list">
+                        <li class="text-larger-purple"><b>Blumenthal, Erika</b></li>
+                        <li class="text-larger-purple"><b>Cheng, Tom</b></li>
+                        <li class="text-larger-purple"><b>Chresomales, Potoula</b></li>
+                        <li class="text-larger-purple"><b>Cooley, Sharon</b></li>
+                        <li class="text-larger-purple"><b>Donahue, Felicia</b></li>
+                    </ul>
+                </div>
+            </div><!--end modal body-->
+
+            <div class="modal-footer section-thin">
+                <button type="button" class="button prototype-dismiss" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div> <!--end modal Timing Exception-->
+<!-- Modal All Repeaters-->
+<div class="modal modal-full-overlay fade" id="modalAllRepeaters" tabindex="-1" role="dialog" aria-labelledby="repeatStudentsModal">
+    <div role="document">
+        <button aria-label="Close" class="close close-large-icon prototype-dismiss1" data-dismiss="modal" type="button"></button>
+        <div class="modal-full-overlay-content">
+            <div class="modal-header">
+                <p class="icon red-triangle-alert-large center"></p>
+                <h4 class="attention center" id="repeatStudentsModal">Test Exceptions — Action Required</h4>
+            </div>
+            <div class="modal-body modal-body-no-padding-top">
+
+                <form class="form-group-block">
+                    <!--this section OR the second section OR BOTH SECTIONS could appear within form depending on logic-->
+                    <section>
+                        <div class="margin-2em-top margin-1em-bottom">
+                            <span class="text-larger-teal"><b>The following students have already taken Medical Surgical 1 A.</b></span>
+                            <span class="text-larger"> Please assign another version of this test to these students or remove them from this testing session.</span>
+                        </div>
+                        <div class="test-exeptions-student section-thin border-top">
+                            <p class="text-larger-purple"><b>Freiman, Allison</b></p>
+                            <input type="radio" class="checkbox-image" name="radio1" id="Allison1">
+                            <label for="Allison1"><span class="text-purple">Medical Surgical 1 B*</span> (Normed)</label>
+                            <input type="radio" class="checkbox-image" name="radio1" id="Allison2">
+                            <label for="Allison2"><span class="text-purple">Medical Surgical 1 A, Repeat</span> (Not normed)</label>
+                            <input type="radio" class="checkbox-image" name="radio1" id="Allison3">
+                            <label for="Allison3"><span class="text-purple">Remove from testing session</span></label>
+                        </div>
+                        <div class="test-exeptions-student section-thin border-top">
+                            <p class="text-larger-purple"><b>Laub, Elizabeth</b></p>
+                            <input type="radio" class="checkbox-image" name="radio2" id="Elizabeth1">
+                            <label for="Elizabeth1"><span class="text-purple">Medical Surgical 1 B*</span> (Normed)</label>
+                            <input type="radio" class="checkbox-image" name="radio2" id="Elizabeth2" disabled>
+                            <label for="Elizabeth2"><span class="text-purple">Medical Surgical 1 A, Repeat</span> (Not normed)</label>
+                            <input type="radio" class="checkbox-image" name="radio2" id="Elizabeth3">
+                            <label for="Elizabeth3"><span class="text-purple">Remove from testing session</span></label>
+                        </div>
+                        <div class="test-exeptions-student section-thin border-top">
+                            <p class="text-larger-purple"><b>Donahue, Felicia</b></p>
+                            <input type="radio" class="checkbox-image" name="radio3" id="Felicia1" disabled>
+                            <label for="Felicia1"><span class="text-purple">Medical Surgical 1 B*</span> (Normed)</label>
+                            <input type="radio" class="checkbox-image" name="radio3" id="Felicia2" disabled>
+                            <label for="Felicia2"><span class="text-purple">Medical Surgical 1 A, Repeat</span> (Not normed)</label>
+                            <input type="radio" class="checkbox-image" name="radio3" id="Felicia3">
+                            <label for="Felicia3"><span class="text-purple">Remove from testing session</span></label>
+                        </div>
+                        <span class="text-purple">*recommended</span>
+                    </section>
+
+                    <section>
+                        <div class="margin-2em-top margin-1em-bottom">
+                            <span class="text-larger-teal"><b>The following students have been scheduled to take Medical Surgical 1 A in another testing session.</b></span>
+                            <span>Please assign another version of this test to these students or remove them from this testing session.</span>
+                        </div>
+                        <div class="test-exeptions-student section-thin border-top">
+                            <p class="text-larger-purple"><b>Salvador, Charlene</b></p>
+                            <input type="radio" class="checkbox-image" name="radio4" id="Charlene1">
+                            <label for="Charlene1"><span class="text-purple">Medical Surgical 1 B*</span> (Normed)</label>
+                            <input type="radio" class="checkbox-image" name="radio4" id="Charlene2">
+                            <label for="Charlene2"><span class="text-purple">Medical Surgical 1 A, Repeat</span> (Not normed)</label>
+                            <input type="radio" class="checkbox-image" name="radio4" id="Charlene3">
+                            <label for="Charlene3"><span class="text-purple">Remove from testing session</span></label>
+                        </div>
+                        <span class="text-purple">*recommended</span>
+                    </section>
+                </form>
+
+                <div class="section-thin section-gray please-note-section margin-1em-top margin-2em-bottom">
+                    <p class="attention">
+                        <strong>Please note:</strong>
+                        <ol class="default-ol">
+                            <li>If an alternate test option cannot be selected, the student has already taken that version of the test and it cannot be assigned again.</li>
+                            <li>Students who have taken all available versions of a test need to be removed from the testing session before proceeding.</li>
+                            <li>You will be able to change and/or confirm all assigned alternate tests before finalizing your testing session.</li>
+                        </ol>
+                </div>
+                <p>If you need further assistance, please contact your Account Manager. You can find your Account Manager’s contact info on the Home page.</p>
+            </div><!--end modal body-->
+
+            <div class="modal-footer">
+                <button type="button" class="anchor-button anchor-button-left prototype-dismiss1" data-dismiss="modal">Cancel</button>
+                <button id="addDetailsReview" class="button prototype-dismiss1" disabled>Next step: Add details and review</button>
+            </div>
+
+        </div>
+    </div>
+</div> <!--end modal all-repeaters-->
+<!-- Modal No Alternate Test-->
+
+<div class="modal modal-full-overlay fade" id="modalNoAlternateTest" tabindex="-1" role="dialog" aria-labelledby="noAlternativeTestModal">
+    <div role="document">
+        <button aria-label="Close" class="close close-large-icon" data-dismiss="modal" type="button"></button>
+        <div class="modal-full-overlay-content">
+            <div class="modal-header">
+                <p class="icon red-triangle-alert-large center"></p>
+                <h4 class="attention center" id="noAlternativeTestModal">Test Exceptions — Action Required</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="margin-1em-bottom">
+                    <span class="text-larger-teal"><b>The following students have already taken or are already scheduled to take Medical Surgical 135_2014.</b></span>
+                    <span class="text-larger"> There are no alternate versions of this test available. These students will be automatically removed from this testing session.</span>
+                </div>
+                <div class="section-thin border-top">
+                    <ul class="list-extra-spacing js-repeaters-list">
+                        <li class="text-larger-purple"><b>Freiman, Allison</b></li>
+                        <li class="text-larger-purple"><b>Laub, Elizabeth</b></li>
+                        <li class="text-larger-purple"><b>Donahue, Felicia</b></li>
+                        <li class="text-larger-purple"><b>Freiman, Allison</b></li>
+                        <li class="text-larger-purple"><b>Laub, Elizabeth</b></li>
+                        <li class="text-larger-purple"><b>Donahue, Felicia</b></li>
+                        <li class="text-larger-purple"><b>Freiman, Allison</b></li>
+                        <li class="text-larger-purple"><b>Laub, Elizabeth</b></li>
+                        <li class="text-larger-purple"><b>Donahue, Felicia</b></li>
+                        <li class="text-larger-purple"><b>Freiman, Allison</b></li>
+                        <li class="text-larger-purple"><b>Laub, Elizabeth</b></li>
+                        <li class="text-larger-purple"><b>Donahue, Felicia</b></li>
+                        <li class="text-larger-purple"><b>Freiman, Allison</b></li>
+                        <li class="text-larger-purple"><b>Laub, Elizabeth</b></li>
+                        <li class="text-larger-purple"><b>Donahue, Felicia</b></li>
+                        <li class="text-larger-purple"><b>Freiman, Allison</b></li>
+                        <li class="text-larger-purple"><b>Laub, Elizabeth</b></li>
+                        <li class="text-larger-purple"><b>Donahue, Felicia</b></li>
+                    </ul>
+                </div>
+                <div class="padding-1em-top margin-1em-bottom border-top">
+                    <p>If you need further assistance, please contact your Account Manager.You can find your Account Manager’s contact info on the Home page.</p>
+                </div>
+            </div><!--end modal body-->
+
+            <div class="modal-footer">
+                <button type="button" class="anchor-button anchor-button-left" data-dismiss="modal">Cancel</button>
+                <button id="addDetailsReview1" class="button">Next step: Add details and review</button>
+            </div>
+
+        </div>
+    </div>
+</div> <!--end modal no alternate test-->

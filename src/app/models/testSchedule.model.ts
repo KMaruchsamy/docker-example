@@ -8,6 +8,8 @@ export class TestScheduleModel{
     currentStep: number;
     activeStep: number; 
     scheduleTiming: string;
-    institutionId :number
+    institutionId: number;
+    lastselectedcohortId: number;
+    selectedStudents: Object[];
     constructor(){}
 }
