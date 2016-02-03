@@ -1,5 +1,5 @@
 import {Component, OnInit} from 'angular2/core';
-import {Router, RouterLink} from 'angular2/router';
+import {Router, RouterLink, OnDeactivate,ComponentInstruction} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -19,7 +19,7 @@ import {TestScheduleModel} from '../../models/testSchedule.model';
     pipes: [ParseDatePipe]
 })
 
-export class ReviewTest implements OnInit {
+export class ReviewTest implements OnInit, OnDeactivate {
     testScheduleWindow: string = '';
     isScheduleDatesSame: boolean = true;
     testScheduleDates: string = '';
@@ -27,6 +27,10 @@ export class ReviewTest implements OnInit {
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public router: Router) {
         this.initialize();
+    }
+
+    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+        this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.componentType.name)));
     }
 
     ngOnInit() {
@@ -60,8 +64,7 @@ export class ReviewTest implements OnInit {
                 this.testScheduleTimes = 'From ' + this.testScheduleTimes + ' to ' + moment(this.testScheduleModel.scheduleEndTime).format('LT');
             }
 
-            alert(this.testScheduleDates);
-            alert(this.testScheduleTimes);
+
 
         }
 
