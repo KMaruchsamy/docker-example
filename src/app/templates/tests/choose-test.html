@@ -3,7 +3,7 @@
     <test-header scheduleStep='Choose a test' [testSchedule]="testScheduleModel"></test-header>
     <div class="section-thin">
         <div class="container-medium-width">
-            <p class="text-link-color margin-1em-top"><b>Choose by subject </b></p>
+            <p class="text-link-color margin-1em-top"><b><h4 class="margin-1em-top h6">Choose by subject</h4>  </b></p>
             <select #subjectDropDown id="testSubjectOptions" (change)="loadTests(subjectDropDown.value)" class="selectpicker" data-width="400"
             data-size="6" title='Choose a test by subject'>
                 <option *ngFor="#subject of subjects; #i = index" [selected]="subject.SubjectId==subjectId" [value]='subject.SubjectId'>{{subject.SubjectName}}</option>
