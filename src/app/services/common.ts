@@ -81,22 +81,6 @@ export class Common {
                 return links.api.local.server;
                 break;
         }
-
-        // 
-        //         if (location.hostname.indexOf('localhost') > -1)
-        //             return links.api.local.server;
-        //         if (location.hostname.indexOf('dev') > -1)
-        //             return links.api.dev.server;
-        //         if (location.hostname.indexOf('qa') > -1)
-        //             return links.api.qa.server;
-        //         if (location.hostname.indexOf('stg') > -1)
-        //             return links.api.qa.server;
-        //         if (location.hostname.indexOf('nit.kaplan.com') > -1)
-        //             return links.api.qa.server;
-        //         if (location.href.indexOf('81') > -1) // Incase if SSL not working then to read from IP address
-        //             return links.api.qa.server;
-        //         if (location.href.indexOf('138') > -1) // Incase if SSL not working then to read from IP address
-        //             return links.api.dev.server;
     }
 
     getNursingITServer() {
@@ -119,19 +103,13 @@ export class Common {
             default:
                 return links.nursingit.local.server;
                 break;
-        }
-        
-        
-        
-        // if (location.hostname.indexOf('localhost') > -1)
-        //     return links.nursingit.local.server;
-        // if (location.hostname.indexOf('dev') > -1)
-        //     return links.nursingit.dev.server;
-        // if (location.hostname.indexOf('qa') > -1)
-        //     return links.nursingit.qa.server;
-        // if (location.href.indexOf('81') > -1) // Incase if SSL not working then to read from IP address
-        //     return links.nursingit.qa.server;
-        // if (location.href.indexOf('138') > -1) // Incase if SSL not working then to read from IP address
-        //     return links.nursingit.dev.server;
+        }        
+    }
+    
+    
+    removeWhitespace(value:string):string {
+        if (!value)
+            return '';
+        return value.replace(/\s/g, "");
     }
 }

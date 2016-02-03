@@ -1,5 +1,5 @@
 import {Component, OnInit} from 'angular2/core';
-import {Router} from 'angular2/router';
+import {Router, OnDeactivate, ComponentInstruction} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -19,7 +19,7 @@ import '../../plugins/jquery.timepicker.js';
     directives: [PageHeader, TestHeader, PageFooter, NgIf]
     // styleUrls: ['../../css/bootstrap-datepicker3.css', '../../css/jquery.timepicker.css']
 })
-export class ScheduleTest implements OnInit {
+export class ScheduleTest implements OnInit, OnDeactivate {
     valid: boolean = false;
     invalid8hours: boolean = false;
     ignore8HourRule: boolean = false;
@@ -41,7 +41,9 @@ export class ScheduleTest implements OnInit {
         this.$endTime = $('#endTime');
     }
 
-
+    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+        this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.componentType.name)));
+    }
 
     ngOnInit(): void {
         this.set8HourRule();
@@ -295,7 +297,7 @@ export class ScheduleTest implements OnInit {
 
                 //Check if the entered date string is valid .            
                 if (outputString !== '' && moment(outputString).isValid()) {
-                
+
                     if (__this.startDate) {
                         if (__this.startTime) {
                             let outputTimeString = __this.$endTime.timepicker('getTime', new Date(outputString));

@@ -44,8 +44,7 @@ export class ChooseTest implements OnDeactivate {
     }
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        console.log(prev);
-        console.log(next);
+        this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.componentType.name)));
         if (this.testsTable)
             this.testsTable.destroy();
         $('.selectpicker').val('').selectpicker('refresh');
