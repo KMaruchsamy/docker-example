@@ -144,6 +144,25 @@ export class AddStudents implements OnInit, OnDeactivate {
                                 searchable: false
                             }],
                         });
+                        //$('#cohortRepeatersOnly').on('click', function () {
+                        //    var $repeatersOnly = $('#cohortRepeatersOnly');
+                        //    if (!$(this).is(':checked')) {
+                        //        $repeatersOnly.prop('checked', false);
+                        //    }
+                        //    this.testsTable.column([4])
+                        //        .search('Yes')
+                        //        .draw();
+                        //});
+
+                        //$('#cohortExcludeRepeaters').on('click', function () {
+                        //    var $excludeRepeaters = $('#cohortExcludeRepeaters');
+                        //    if (!$(this).is(':checked')) {
+                        //        $excludeRepeaters.prop('checked', false);
+                        //    }
+                        //    this.testsTable.column([4])
+                        //        .search('No')
+                        //        .draw();
+                        //});
                     });
                 })
                 .catch((error) => {
@@ -158,35 +177,31 @@ export class AddStudents implements OnInit, OnDeactivate {
     //n.scrollTop = n.scrollHeight;
     //}
 
-    GetRepetersOnly(): void {
+    GetRepetersOnly(event): void {
+        event.preventDefault();
         var $repeatersOnly = $('#cohortRepeatersOnly');
 
         if ($repeatersOnly.prop('checked')) {
             $('#cohortExcludeRepeaters').prop('checked', false);
         }
-        this.testsTable.draw();
-        //var i = 4;// $(this).attr('data-column');  // getting column index
-        //var v = "Yes";//$(this).val();  // getting search input value
-        //var table = $('#cohortStudents').DataTable();
-        //table.columns(i).search(v).draw();
-        // $('#cohortStudents').DataTable
-        // this.testsTable.draw();
+        this.testsTable.column([4])
+                       .search('Yes')
+                       .draw();
         //$('#cohortStudentList table')
         //  //  .on('search.dt', function () { this.eventFired('Search'); })
         //    .DataTable().draw();
     }
 
-    ExcludeRepeaters(): void {
+    ExcludeRepeaters(event): void {
+        event.preventDefault();
         var $excludeRepeaters = $('#cohortExcludeRepeaters');
 
         if ($excludeRepeaters.prop('checked')) {
             $('#cohortRepeatersOnly').prop('checked', false);
         }
-        this.testsTable.draw();
-        //var i = 4;  // getting column index
-        //var v = "No";// $(this).val();  // getting search input value
-        //var table = $('#cohortStudents').DataTable();
-        //table.columns(i).search(v).draw();
+        this.testsTable.column([4])
+            .search('No')
+            .draw();
         //this.testsTable.draw();
         //$('#cohortStudentList table')
         ////    .on('search.dt', function () { this.eventFired('Search'); })
@@ -296,7 +311,7 @@ export class AddStudents implements OnInit, OnDeactivate {
         if (this.selectedStudents.length > 0) {
             for (var i = 0; i < this.selectedStudents.length; i++) {
                 let _student = this.selectedStudents[i];
-                this.selectedStudentModel = [];
+                this.selectedStudentModel.resetData();
                 let _selectedStudentModel = this.selectedStudentModel;
                 _selectedStudentModel.studentId = _student.StudentId;
                 _selectedStudentModel.firstName = _student.FirstName;
@@ -308,7 +323,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                 _selectedStudentModel.studentEmail = _student.Email;
                 _selectedStudentModel.retester = _student.Retester;
                 _selectedStudentModel.ADA = _student.Ada;
-                selectedStudentModelList[i] = _selectedStudentModel;
+                selectedStudentModelList.push(_selectedStudentModel);
             }
         }
         this.testScheduleModel.selectedStudents = selectedStudentModelList;

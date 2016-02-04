@@ -31,19 +31,19 @@
                                     <table id="cohortStudents" class="tablesorter table-with-small-button-row order-column stripe table-with-cell-padding table-striped last-row-no-border">
                                         <thead>
                                             <tr>
-                                                <th class="select-filter" scope="col">Last Name</th>
-                                                <th class="select-filter" scope="col">First Name</th>
-                                                <th scope="col">Cohort</th>
-                                                <th scope="col">Retesting</th>
+                                                <th class="select-filter" scope="col" data-column="1">Last Name</th>
+                                                <th class="select-filter" scope="col" data-column="2">First Name</th>
+                                                <th scope="col"  data-column="3">Cohort</th>
+                                                <th scope="col" data-column="4">Retesting</th>
                                                 <th class="all" scope="col"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="#student of cohortStudentlist;#j=index;">
-                                                <td data-column="1">{{student.LastName}}</td>
-                                                <td data-column="2">{{student.FirstName}}</td>
-                                                <td data-column="3">{{lastSelectedCohortName}}</td>
-                                                <td data-column="4">{{student.Retester?"Yes":"No"}}</td>
+                                                <td>{{student.LastName}}</td>
+                                                <td>{{student.FirstName}}</td>
+                                                <td>{{lastSelectedCohortName}}</td>
+                                                <td>{{student.Retester?"Yes":"No"}}</td>
                                                 <td>
                                                     <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" (click)="AddStudent(student,$event)" >Add</button>
                                                 </td>
@@ -55,9 +55,9 @@
                                             <label><input type="search" class="small-search-box" placeholder="Find student in cohort" aria-controls="DataTables_Table_0"></label>
                                         </div>
                                         <div class="form-group hidden-small-down">
-                                            <input type="checkbox" class="small-checkbox-image" id="cohortRepeatersOnly" name="filterADA" value="repeatersOnly" (click)="GetRepetersOnly()" >
+                                            <input type="checkbox" class="small-checkbox-image" id="cohortRepeatersOnly" name="filterADA" value="repeatersOnly" (click)="GetRepetersOnly($event)" >
                                             <label class="smaller" for="cohortRepeatersOnly">Retesting only</label>
-                                            <input type="checkbox" class="small-checkbox-image" id="cohortExcludeRepeaters" name="filterADA" value="excludeRepeaters" (click)="ExcludeRepeaters()">
+                                            <input type="checkbox" class="small-checkbox-image" id="cohortExcludeRepeaters" name="filterADA" value="excludeRepeaters" (click)="ExcludeRepeaters($event)">
                                             <label class="smaller" for="cohortExcludeRepeaters">Exclude retesting students</label>
                                         </div>
                                     </div>
