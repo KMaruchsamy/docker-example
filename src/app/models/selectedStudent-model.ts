@@ -1,10 +1,14 @@
 ﻿export class SelectedStudentModel {
-    testId: number;
-    testName: string;
-    cohortId: number;
-    cohortName: string;
+    studentId: number;
     firstName: string;
     lastName: string;
-    normingStatus: string;
-    constructor(){}
+    studentTestId: number;
+    studentTestName: string;
+    studentCohortId: number;
+    studentCohortName: string;
+    studentEmail: string;
+    retester: boolean;
+    ADA: boolean;
+    constructor() {
+    }
 }

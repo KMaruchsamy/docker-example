@@ -19,10 +19,10 @@
                         <div class="tab-pane active" id="addByCohort">
                             <div id="chooseCohortContainer">
                                 <div class="top-section">
-                                    <select id="chooseCohort" #selectcohort class="selectpicker" title="Choose a Cohort" data-width="65%" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,selectcohort)">
-                                        <option *ngFor="#cohort of cohorts;#i=index;" [selected]="cohort.CohortId==cohortID" [value]="cohort.CohortId">{{cohort.CohortName}}</option>
+                                    <select id="chooseCohort" #selectcohort class="selectpicker" title="Choose a Cohort" data-width="65%" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,selectcohort,$event)">
+                                        <option *ngFor="#cohort of cohorts;#i=index;" [selected]="cohort.CohortId==lastSelectedCohortID" [value]="cohort.CohortId">{{cohort.CohortName}}</option>
                                     </select>
-                                    <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort()">Add all students</button>
+                                    <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort($event)">Add all students</button>
                                 </div>
                                 <!--<div><input id="cohortname" type="hidden" value="sel.value" /></div>-->
 
@@ -42,10 +42,10 @@
                                             <tr *ngFor="#student of cohortStudentlist;#j=index;">
                                                 <td data-column="1">{{student.LastName}}</td>
                                                 <td data-column="2">{{student.FirstName}}</td>
-                                                <td data-column="3">{{cohortName}}</td>
+                                                <td data-column="3">{{lastSelectedCohortName}}</td>
                                                 <td data-column="4">{{student.Retester?"Yes":"No"}}</td>
                                                 <td>
-                                                    <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" (click)="AddStudent(student)" >Add</button>
+                                                    <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" (click)="AddStudent(student,$event)" >Add</button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -86,7 +86,7 @@
                         <div class="search-added-students">
                             <label class="screen-reader-only" for="filterSelectedStudents">Find Student</label>
                             <input type="search" role="search" id="filterSelectedStudents" placeholder="Find student" class="small-search-box">
-                            <button class="button button-small button-light" id="RemoveAllStudents" (click)="RemoveALlSelectedStudents()">Remove all students</button>
+                            <button class="button button-small button-light" id="RemoveAllStudents" (click)="RemoveALlSelectedStudents($event)">Remove all students</button>
                         </div>
                         <!--closes search for student-->
                     </div>
@@ -101,7 +101,7 @@
                 <p class="icon info-icon-yellow margin-1em-top hidden" id="accommadationNote">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
                 <p class="icon info-icon-yellow margin-1em-top hidden" id="studentScheduleNote">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
                 <!--  <div class="right margin-2em-top-bottom">-->
-                <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" data-toggle="modal" data-target="#modalTimingException" disabled (click)="DetailReviewTestClick()">Next step: Add details and review</button>
+                <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" data-toggle="modal" data-target="#modalTimingException" disabled (click)="DetailReviewTestClick($event)">Next step: Add details and review</button>
                 <!--</div>-->
             </div>
         </div>
