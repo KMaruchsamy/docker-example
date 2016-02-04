@@ -68,8 +68,8 @@ export class ReviewTest implements OnInit, OnDeactivate {
 
         }
 
-        if (this.testScheduleModel.currentStep < 3)
-            this.testScheduleModel.currentStep = 3;
-        this.testScheduleModel.activeStep = 3;
+        if (this.testScheduleModel.currentStep < 4)
+            this.testScheduleModel.currentStep = 4;
+        this.testScheduleModel.activeStep = 4;
     }
 }
