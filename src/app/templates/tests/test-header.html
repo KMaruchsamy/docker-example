@@ -4,9 +4,9 @@
         <h3 class="page-lg-heading">Schedule a Test</h3>
     </div>
 </div>
-<div *ngIf="testSchedule.currentStep>1" class="section-thin test-summary-heading">
+<div *ngIf="testSchedule.currentStep>1 && testSchedule.activeStep!==1" class="section-thin test-summary-heading">
     <div class="container-medium-width">
-        <div *ngIf="testSchedule.currentStep>1" class="test-summary-heading-details"><span>Test: <b>{{testSchedule.testName}}</b></span>
+        <div *ngIf="testSchedule.currentStep>1 " class="test-summary-heading-details"><span>Test: <b>{{testSchedule.testName}}</b></span>
             <a href="#" [routerLink]="['/ChooseTest' , {institutionId : testSchedule.institutionId}]" class="link-darker">Change test</a></div>
         <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>{{testSchedule.scheduleStartTime|parseDate|date:'EEE'}} {{testSchedule.scheduleStartTime|parseDate|date:'MM/dd/yy'}} from {{testSchedule.scheduleStartTime|parseDate|date:'hh:mm a'}} - {{testSchedule.scheduleEndTime|parseDate|date:'hh:mm a'}}</b></span><a [routerLink]="['/ScheduleTest']"  class="link-darker">Change date or time</a></div>
     </div>

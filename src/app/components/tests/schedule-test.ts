@@ -231,10 +231,6 @@ export class ScheduleTest implements OnInit, OnDeactivate {
                 outputString = __this.parseDateString(e.currentTarget.value);
 
                 if (outputString !== '' && moment(outputString).isValid()) {
-
-                    // alert(moment(outputString).isBefore(new Date(),'day'));
-                    //  alert(moment(outputString).isSame(new Date(),'day'));
-
                 
                     if (moment(outputString).isBefore(new Date(), 'day')) {
                         if (!__this.startDate)
