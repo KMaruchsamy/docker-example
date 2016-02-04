@@ -8,7 +8,7 @@
             <form class="clearfix name-testing-session">
                 <div class="one-half-grid">
                     <label class="label-bold label-larger" for="testSessionName">Name your testing session</label>
-                    <input type="text" id="testSessionName">
+                    <input type="text" id="testSessionName" maxlength="75" >
                 </div>
                 <div class="one-half-grid lightbulb-icon-container">
                     <p class="icon lightbulb-icon">Your testing session contains all the details related to the test you are scheduling. Name it for easy
@@ -16,14 +16,10 @@
                 </div>
                 <div class="one-half-grid">
                     <label class="label-bold label-larger" for="assignFacultyMember">Assign faculty member</label>
-                    <select id="assignFacultyMember" class="selectpicker">
-                        <option>Doe, Jane</option>
-                        <option>Johnson, Betty</option>
-                        <option value="medsurge">Morales, Rachel</option>
-                        <option>Perkins, Jessica</option>
-                        <option>Taylor, Amelia</option>
-                        <option>West, Crystal</option>
+                    <select id="ddlFaculty" class="selectpicker">
+                        <option *ngFor="#admin of faculty" [selected]="admin.AdminId === facultyId" [value]="admin.AdminId">{{admin.LastName}}, {{admin.FirstName}}</option>                     
                     </select>
+                    
                 </div>
                 <div class="one-half-grid lightbulb-icon-container">
                     <p class="icon lightbulb-icon">Both you and the faculty member you assign will be able to make changes to this testing session later

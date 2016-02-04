@@ -30,7 +30,8 @@ export const links = {
                 tests: "scheduling/institutions/§institutionid/tests?subject=§subject&testType=§testtype",
                 openintegratedtests: "scheduling/OpenIntegratedTests",
                 cohorts: "scheduling/institutions/§institutionid/activeCohorts?windowStart=§windowstart&windowEnd=§windowend",
-                cohortstudents: "scheduling/cohorts/§cohortid/students?testId=§testid"
+                cohortstudents: "scheduling/cohorts/§cohortid/students?testId=§testid",
+                faculty:"scheduling/institutions/§institutionid/faculty"
             }
         }
     },
