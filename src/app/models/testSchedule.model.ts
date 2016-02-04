@@ -1,3 +1,5 @@
+import {SelectedStudentModel} from './selectedStudent-model';
+
 export class TestScheduleModel{
     scheduleId: any;
     subjectId: number;
@@ -10,6 +12,6 @@ export class TestScheduleModel{
     scheduleTiming: string;
     institutionId: number;
     lastselectedcohortId: number;
-    selectedStudents: Object[];
+    selectedStudents: any;
     constructor(){}
 }

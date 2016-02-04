@@ -10,6 +10,8 @@ import {TestHeader} from './test-header';
 import * as _ from '../../lib/index';
 import {ParseDatePipe} from '../../pipes/parseDate.pipe';
 import {TestScheduleModel} from '../../models/testSchedule.model';
+import '../../plugins/dropdown.js';
+import '../../plugins/bootstrap-select.min.js';
 
 @Component({
     selector: "review-test",
@@ -24,6 +26,8 @@ export class ReviewTest implements OnInit, OnDeactivate {
     isScheduleDatesSame: boolean = true;
     testScheduleDates: string = '';
     testScheduleTimes: string = '';
+    faculty: Object[] = [];
+    facultyId: number;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public router: Router) {
         this.initialize();
@@ -34,7 +38,7 @@ export class ReviewTest implements OnInit, OnDeactivate {
     }
 
     ngOnInit() {
-
+        this.bindFaculty();
     }
     initialize() {
         let savedSchedule = this.testService.getTestSchedule();
@@ -46,8 +50,6 @@ export class ReviewTest implements OnInit, OnDeactivate {
             if (testScheduleWindowDuration.minutes() > 0)
                 this.testScheduleWindow += ' ' + testScheduleWindowDuration.minutes() + ' minute';
             this.testScheduleWindow += ' window';
-
-
 
 
             if (this.testScheduleModel.scheduleStartTime && moment(this.testScheduleModel.scheduleStartTime).isValid()) {
@@ -64,12 +66,38 @@ export class ReviewTest implements OnInit, OnDeactivate {
                 this.testScheduleTimes = 'From ' + this.testScheduleTimes + ' to ' + moment(this.testScheduleModel.scheduleEndTime).format('LT');
             }
 
-
-
         }
 
         if (this.testScheduleModel.currentStep < 4)
             this.testScheduleModel.currentStep = 4;
         this.testScheduleModel.activeStep = 4;
+        
+        this.facultyId = this.auth.userid;
+    }
+    
+    
+    bindFaculty(): void{
+        let facultyURL = this.resolveFacultyURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.faculty}`);
+        let facultyPromise = this.testService.getFaculty(facultyURL);
+         facultyPromise.then((response) => {
+            return response.json();
+        })
+            .then((json) => {
+                this.faculty = json;
+                console.log(this.faculty);
+                setTimeout(json => {
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
+                        $('#ddlFaculty').selectpicker('mobile');
+                    else
+                        $('#ddlFaculty').selectpicker('refresh');
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    
+    resolveFacultyURL(url: string): string{
+        return url.replace('§institutionid', this.testScheduleModel.institutionId.toString());
     }
 }

@@ -31,8 +31,8 @@ import '../../plugins/dataTables.responsive.js';
 export class AddStudents implements OnInit, OnDeactivate {
     institutionID: number;
     apiServer: string;
-    cohortID: number;
-    cohortName: string;
+    lastSelectedCohortID: number;
+    lastSelectedCohortName: string;
     testTypeID: number;
     cohorts: Object[] = [];
     cohortStudentlist: Object[] = [];
@@ -42,7 +42,7 @@ export class AddStudents implements OnInit, OnDeactivate {
     windowStart: string;
     windowEnd: string;
     selectedStudentCount: number = 0;
-    constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel:SelectedStudentModel) {
+    constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel) {
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else
@@ -69,7 +69,7 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.windowEnd = '12.12.16'; //new Date(this.testScheduleModel.scheduleEndTime);
         this.institutionID = parseInt(this.routeParams.get('institutionId'));
         this.apiServer = this.auth.common.getApiServer();
-       // this.bindPopup();
+        // this.bindPopup();
         this.loadActiveCohorts();
 
     }
@@ -107,15 +107,15 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
 
     resolveCohortStudentsURL(url: string): string {
-        return url.replace('§cohortid', this.cohortID.toString()).replace('§testid', this.testTypeID.toString());
+        return url.replace('§cohortid', this.lastSelectedCohortID.toString()).replace('§testid', this.testTypeID.toString());
     }
 
-    loadStudentsByCohort(btnAddAllStudent, tblCohortStudentList, selectedcohort: any): void {
-        //event.preventDefault();
+    loadStudentsByCohort(btnAddAllStudent, tblCohortStudentList, selectedcohort: any,event): void {
+        event.preventDefault();
         let cohortId = this.cohorts[selectedcohort.selectedIndex - 1].CohortId;
-        this.cohortName = this.cohorts[selectedcohort.selectedIndex - 1].CohortName.toString();
+        this.lastSelectedCohortName = this.cohorts[selectedcohort.selectedIndex - 1].CohortName.toString();
         if (cohortId > 0) {
-            this.cohortID = cohortId;
+            this.lastSelectedCohortID = cohortId;
             let CohortStudentsURL = this.resolveCohortStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.cohortstudents}`);
             let testsPromise = this.testService.getTests(CohortStudentsURL);
             testsPromise.then((response) => {
@@ -144,6 +144,25 @@ export class AddStudents implements OnInit, OnDeactivate {
                                 searchable: false
                             }],
                         });
+                        //$('#cohortRepeatersOnly').on('click', function () {
+                        //    var $repeatersOnly = $('#cohortRepeatersOnly');
+                        //    if (!$(this).is(':checked')) {
+                        //        $repeatersOnly.prop('checked', false);
+                        //    }
+                        //    this.testsTable.column([4])
+                        //        .search('Yes')
+                        //        .draw();
+                        //});
+
+                        //$('#cohortExcludeRepeaters').on('click', function () {
+                        //    var $excludeRepeaters = $('#cohortExcludeRepeaters');
+                        //    if (!$(this).is(':checked')) {
+                        //        $excludeRepeaters.prop('checked', false);
+                        //    }
+                        //    this.testsTable.column([4])
+                        //        .search('No')
+                        //        .draw();
+                        //});
                     });
                 })
                 .catch((error) => {
@@ -158,43 +177,39 @@ export class AddStudents implements OnInit, OnDeactivate {
     //n.scrollTop = n.scrollHeight;
     //}
 
-    GetRepetersOnly(): void {
+    GetRepetersOnly(event): void {
+        event.preventDefault();
         var $repeatersOnly = $('#cohortRepeatersOnly');
 
         if ($repeatersOnly.prop('checked')) {
             $('#cohortExcludeRepeaters').prop('checked', false);
         }
-        this.testsTable.draw();
-        //var i = 4;// $(this).attr('data-column');  // getting column index
-        //var v = "Yes";//$(this).val();  // getting search input value
-        //var table = $('#cohortStudents').DataTable();
-        //table.columns(i).search(v).draw();
-        // $('#cohortStudents').DataTable
-        // this.testsTable.draw();
+        this.testsTable.column([4])
+                       .search('Yes')
+                       .draw();
         //$('#cohortStudentList table')
         //  //  .on('search.dt', function () { this.eventFired('Search'); })
         //    .DataTable().draw();
     }
 
-    ExcludeRepeaters(): void {
+    ExcludeRepeaters(event): void {
+        event.preventDefault();
         var $excludeRepeaters = $('#cohortExcludeRepeaters');
 
         if ($excludeRepeaters.prop('checked')) {
             $('#cohortRepeatersOnly').prop('checked', false);
         }
-        this.testsTable.draw();
-        //var i = 4;  // getting column index
-        //var v = "No";// $(this).val();  // getting search input value
-        //var table = $('#cohortStudents').DataTable();
-        //table.columns(i).search(v).draw();
+        this.testsTable.column([4])
+            .search('No')
+            .draw();
         //this.testsTable.draw();
         //$('#cohortStudentList table')
         ////    .on('search.dt', function () { this.eventFired('Search'); })
         //    .DataTable().draw();
     }
 
-    AddAllStudentsByCohort(): void {
-       // event.preventDefault();
+    AddAllStudentsByCohort(event): void {
+        event.preventDefault();
         $('#testSchedulingSelectedStudentsList').append(this.AddStudentList());
         $('.top-section').addClass('active');
         $('#selectedStudentsContainer').addClass('hidden');
@@ -209,8 +224,9 @@ export class AddStudents implements OnInit, OnDeactivate {
             for (var i = 0; i < this.cohortStudentlist.length; i++) {
                 var student = this.cohortStudentlist[i];
                 if (!$('#cohort-' + student.StudentId).prop('disabled')) {
+                    student.CohortId = this.lastSelectedCohortID;
                     this.selectedStudents.push(student);
-                    $('#cohort-' + student.StudentId).attr('disabled', 'true');
+                    $('#cohort-' + student.StudentId).attr('disabled', 'disabled');
                     var retesting = "";
                     if (student.Retester) {
                         retesting = "RETESTING";
@@ -222,16 +238,18 @@ export class AddStudents implements OnInit, OnDeactivate {
         return studentlist;
     }
 
-    RemoveSelectedStudents(studentId: number): void {
+    RemoveSelectedStudents(studentId: number, event): void {
+        event.preventDefault();
         debugger;
         if (this.selectedStudents.length > 0) {
             $('#addAllStudents').removeAttr('disabled', 'disabled');
             $('#cohort-' + studentId.toString()).removeAttr('disabled', 'disabled');
         }
     }
-    AddStudent(student: Object): void {
-       // event.preventDefault();
-        $('#cohort-' + student.StudentId.toString()).attr('disabled', 'true');
+    AddStudent(student: Object,event): void {
+        event.preventDefault();
+        $('#cohort-' + student.StudentId.toString()).attr('disabled', 'disabled');
+        student.CohortId = this.lastSelectedCohortID;
         this.selectedStudents.push(student);
         var retesting = "";
         if (student.Retester) {
@@ -255,8 +273,8 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
     }
 
-    RemoveALlSelectedStudents(): void {
-      //  event.preventDefault();
+    RemoveALlSelectedStudents(event): void {
+        event.preventDefault();
         $('#addAllStudents').removeAttr('disabled', 'disabled');
         if (this.selectedStudents.length > 0) {
             for (var i = 0; i < this.selectedStudents.length; i++) {
@@ -287,8 +305,38 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
     }
 
-    DetailReviewTestClick(): void {
-        this.testScheduleModel.selectedStudents = this.selectedStudents;
+    DetailReviewTestClick(event): void {
+        event.preventDefault();
+        let selectedStudentModelList = [];
+        if (this.selectedStudents.length > 0) {
+            for (var i = 0; i < this.selectedStudents.length; i++) {
+                let _student = this.selectedStudents[i];
+                this.selectedStudentModel.resetData();
+                let _selectedStudentModel = this.selectedStudentModel;
+                _selectedStudentModel.studentId = _student.StudentId;
+                _selectedStudentModel.firstName = _student.FirstName;
+                _selectedStudentModel.lastName = _student.LastName;
+                _selectedStudentModel.studentTestId = this.testScheduleModel.testId;
+                _selectedStudentModel.studentTestName = this.testScheduleModel.testName;
+                _selectedStudentModel.studentCohortId = _student.CohortId;
+                _selectedStudentModel.studentCohortName = this.FindCohortName(_student.CohortId) ;
+                _selectedStudentModel.studentEmail = _student.Email;
+                _selectedStudentModel.retester = _student.Retester;
+                _selectedStudentModel.ADA = _student.Ada;
+                selectedStudentModelList.push(_selectedStudentModel);
+            }
+        }
+        this.testScheduleModel.selectedStudents = selectedStudentModelList;
+        this.sStorage = this.auth.common.getStorage();
+        this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         console.log('TestScheduleModel with Selected student' + this.testScheduleModel);
+    }
+
+    FindCohortName(cohortid: number): string {
+        for (var i = 0; i < this.cohorts.length; i++){
+            if (this.cohorts[i].CohortId === cohortid) {
+                return this.cohorts[i].CohortName;
+            }
+        }
     }
 }

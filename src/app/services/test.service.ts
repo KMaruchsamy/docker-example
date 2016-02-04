@@ -86,4 +86,15 @@ export class TestService {
             }
         });
     }
+    
+    getFaculty(url: string): any{
+         let self = this;
+          return fetch(url, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': self.auth.authheader
+            }
+        });
+    }
 }
