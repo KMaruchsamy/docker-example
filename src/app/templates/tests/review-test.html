@@ -72,125 +72,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Blumenthal</td>
-                    <td>Erika</td>
-                    <td>Dec 2015</td>
+                <tr *ngFor="#student of testScheduleModel.selectedStudents">
+                    <td>{{student.lastName}}</td>
+                    <td>{{student.firstName}}</td>
+                    <td>{{studentCohortName}}</td>
                     <td>Medical Surgical 1 A</td>
                     <td>Normed</td>
                 </tr>
-                <tr>
-                    <td>Cheng</td>
-                    <td>Tom</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 A</td>
-                    <td>Normed</td>
-                </tr>
-                <tr>
-                    <td>Chresomales</td>
-                    <td>Potoula</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 A</td>
-                    <td>Normed</td>
-                </tr>
-                <tr>
-                    <td>Cooley</td>
-                    <td>Sharon</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 A</td>
-                    <td>Normed</td>
-                </tr>
-                <tr>
-                    <td>Donahue</td>
-                    <td>Felicia</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 B</td>
-                    <td>Undergoing norming</td>
-                </tr>
-                <tr>
-                    <td>Doustan</td>
-                    <td>Michael</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 A</td>
-                    <td>Normed</td>
-                </tr>
-                <tr>
-                    <td>Freiman</td>
-                    <td>Allison</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 A</td>
-                    <td>Normed</td>
-                </tr>
-                <tr>
-                    <td>Gardner</td>
-                    <td>Pamela</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 A</td>
-                    <td>Normed</td>
-                </tr>
-                <tr>
-                    <td>Greenman</td>
-                    <td>Stacey</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 A</td>
-                    <td>Normed</td>
-                </tr>
-                <tr>
-                    <td>Herron</td>
-                    <td>Sean</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 B</td>
-                    <td>Undergoing norming</td>
-                </tr>
-                <tr>
-                    <td>Hickey</td>
-                    <td>Lisa</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 A</td>
-                    <td>Normed</td>
-                </tr>
-                <tr>
-                    <td>Irwin</td>
-                    <td>Barbara</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 A</td>
-                    <td>Normed</td>
-                </tr>
-                <tr>
-                    <td>Kapturkiewicz</td>
-                    <td>Ashley</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 B</td>
-                    <td>Undergoing norming</td>
-                </tr>
-                <tr>
-                    <td>Laub</td>
-                    <td>Elizabeth</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 B</td>
-                    <td>Undergoing norming</td>
-                </tr>
-                <tr>
-                    <td>Maciag</td>
-                    <td>Glenn</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 A</td>
-                    <td>Normed</td>
-                </tr>
-                <tr>
-                    <td>McGovern</td>
-                    <td>Terrence</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 A</td>
-                    <td>Normed</td>
-                </tr>
-                <tr>
-                    <td>Miller</td>
-                    <td>Stephanie</td>
-                    <td>Dec 2015</td>
-                    <td>Medical Surgical 1 B</td>
-                    <td>Undergoing norming</td>
-                </tr>
+               
             </tbody>
         </table>
     </div>
