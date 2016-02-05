@@ -35,10 +35,14 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     sStorage: any;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public router: Router) {
-        this.$startDate = $('#startDate');
-        this.$endDate = $('#endDate');
-        this.$startTime = $('#startTime');
-        this.$endTime = $('#endTime');
+        if (!this.auth.isAuth())
+            this.router.navigateByUrl('/');
+        else {
+            this.$startDate = $('#startDate');
+            this.$endDate = $('#endDate');
+            this.$startTime = $('#startTime');
+            this.$endTime = $('#endTime');
+        }
     }
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
@@ -46,10 +50,10 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     }
 
     ngOnInit(): void {
-        this.set8HourRule();
         this.bindEvents();
         this.initialize();
         this.initializeControls();
+        this.set8HourRule();        
         this.validate(this);
     }
 
@@ -231,7 +235,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
                 outputString = __this.parseDateString(e.currentTarget.value);
 
                 if (outputString !== '' && moment(outputString).isValid()) {
-                
+
                     if (moment(outputString).isBefore(new Date(), 'day')) {
                         if (!__this.startDate)
                             __this.startDate = moment(new Date()).format('L');
