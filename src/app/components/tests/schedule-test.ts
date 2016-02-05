@@ -9,7 +9,7 @@ import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
 import * as _ from '../../lib/index';
 import {TestScheduleModel} from '../../models/testSchedule.model';
-import '../../plugins/bootstrap-datepicker.min.js';
+import '../../plugins/bootstrap-datepicker-1.5.min.js';
 import '../../plugins/jquery.timepicker.js';
 
 @Component({
@@ -53,7 +53,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         this.bindEvents();
         this.initialize();
         this.initializeControls();
-        this.set8HourRule();        
+        this.set8HourRule();
         this.validate(this);
     }
 
@@ -74,13 +74,15 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         if (this.testScheduleModel.currentStep < 2)
             this.testScheduleModel.currentStep = 2;
         this.testScheduleModel.activeStep = 2;
+        
     }
 
     initializeControls() {
         if (this.startDate)
             this.$startDate.datepicker('update', this.startDate);
-        else
-            this.$startDate.datepicker('update', '');
+        else 
+            this.$startDate.datepicker('update', '');        
+
         if (this.endDate)
             this.$endDate.datepicker('update', this.endDate);
         else
@@ -215,9 +217,6 @@ export class ScheduleTest implements OnInit, OnDeactivate {
             else {
                 __this.endTime = '';
             }
-
-
-
             __this.validate(__this);
         });
 
@@ -227,7 +226,8 @@ export class ScheduleTest implements OnInit, OnDeactivate {
             autoclose: true,
             todayHighlight: true,
             forceParse: false,
-            startDate: new Date()
+            startDate: new Date(),
+            orientation: 'bottom'
         }).on('hide', function(e) {
             let outputString = '';
 
@@ -288,7 +288,8 @@ export class ScheduleTest implements OnInit, OnDeactivate {
             autoclose: true,
             todayHighlight: true, //highlights today's date
             startDate: new Date(),
-            forceParse: false
+            forceParse: false,
+            orientation: 'bottom'
         }).on('hide', function(e) {
             let outputString = '';
 

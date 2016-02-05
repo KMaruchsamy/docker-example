@@ -1,5 +1,5 @@
 import {Component, OnInit} from 'angular2/core';
-import {Router, RouterLink, OnDeactivate,ComponentInstruction} from 'angular2/router';
+import {Router, RouterLink, OnDeactivate, ComponentInstruction} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -30,7 +30,10 @@ export class ReviewTest implements OnInit, OnDeactivate {
     facultyId: number;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public router: Router) {
-        this.initialize();
+        if (!this.auth.isAuth())
+            this.router.navigateByUrl('/');
+        else
+            this.initialize();
     }
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
@@ -71,15 +74,15 @@ export class ReviewTest implements OnInit, OnDeactivate {
         if (this.testScheduleModel.currentStep < 4)
             this.testScheduleModel.currentStep = 4;
         this.testScheduleModel.activeStep = 4;
-        
+
         this.facultyId = this.auth.userid;
     }
-    
-    
-    bindFaculty(): void{
+
+
+    bindFaculty(): void {
         let facultyURL = this.resolveFacultyURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.faculty}`);
         let facultyPromise = this.testService.getFaculty(facultyURL);
-         facultyPromise.then((response) => {
+        facultyPromise.then((response) => {
             return response.json();
         })
             .then((json) => {
@@ -96,8 +99,8 @@ export class ReviewTest implements OnInit, OnDeactivate {
                 console.log(error);
             });
     }
-    
-    resolveFacultyURL(url: string): string{
+
+    resolveFacultyURL(url: string): string {
         return url.replace('§institutionid', this.testScheduleModel.institutionId.toString());
     }
 }

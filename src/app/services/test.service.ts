@@ -18,7 +18,7 @@ export class TestService {
     }
     
     
-    outOfTestScheduling(routeName: string):void{
+    outOfTestScheduling(routeName: string):boolean{
         let outOfTestScheduling: boolean = true;
         switch (routeName.toUpperCase()) {
             case TestShedulingPages.CHOOSETEST:
@@ -33,8 +33,13 @@ export class TestService {
                 break;
         }
         
-        if (outOfTestScheduling)
-            this.sStorage.removeItem('testschedule');    
+        if (outOfTestScheduling) {
+            this.sStorage.removeItem('testschedule');  
+            return true;
+        }
+        
+        return false;
+              
     }
     
 
