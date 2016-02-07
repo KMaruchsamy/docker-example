@@ -37,6 +37,7 @@ export class ChooseTest implements OnDeactivate {
     sStorage: any;
     constructor(public testService: TestService, public auth: Auth, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams) {
+        this.sStorage = this.auth.sStorage;
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else
@@ -44,7 +45,9 @@ export class ChooseTest implements OnDeactivate {
     }
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.componentType.name)));
+        let outOfTestScheduling = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.componentType.name)));
+        if (outOfTestScheduling)
+            this.sStorage.removeItem('testschedule');
         if (this.testsTable)
             this.testsTable.destroy();
         $('.selectpicker').val('').selectpicker('refresh');

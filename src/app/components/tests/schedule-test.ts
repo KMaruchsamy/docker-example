@@ -35,6 +35,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     sStorage: any;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public router: Router) {
+        this.sStorage = this.auth.sStorage;
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else {
@@ -46,7 +47,10 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     }
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.componentType.name)));
+        let outOfTestScheduling:boolean = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.componentType.name)));
+        if (outOfTestScheduling) {
+             this.sStorage.removeItem('testschedule');  
+        }
     }
 
     ngOnInit(): void {
