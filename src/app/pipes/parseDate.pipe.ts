@@ -4,9 +4,27 @@
     name: "parseDate"
 })
 export class ParseDatePipe implements PipeTransform {
-    transform(value: any): string {
+    transform(value: any, args: string[]): string {
         if (!value)
-            return '';
-        return Date.parse(value);
+            return null;
+
+        switch (args[0]) {
+            case 'EEE':
+                return moment(value).format('MMM');
+                break;
+
+            case 'MM/dd/yy':
+                return moment(value).format('MM/DD/YY');
+                break;
+
+            case 'hh:mm a':
+                return moment(value).format('hh:mm a');
+                break;
+
+            default:
+                break;
+        }
+
+
     }
 }
