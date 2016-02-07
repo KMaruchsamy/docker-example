@@ -16,32 +16,29 @@ export class TestService {
         this.sStorage = this.auth.sStorage;
         this.auth.refresh();
     }
-    
-    
-    outOfTestScheduling(routeName: string):boolean{
+
+
+    outOfTestScheduling(routeName: string): boolean {
         let outOfTestScheduling: boolean = true;
         switch (routeName.toUpperCase()) {
             case TestShedulingPages.CHOOSETEST:
             case TestShedulingPages.SCHEDULETEST:
             case TestShedulingPages.ADDSTUDENTS:
-            case TestShedulingPages.REVIEWTEST: 
-                outOfTestScheduling = false;    
+            case TestShedulingPages.REVIEWTEST:
+                outOfTestScheduling = false;
                 break;
-        
+
             default:
                 outOfTestScheduling = true;
                 break;
         }
-        
-        if (outOfTestScheduling) {
-            this.sStorage.removeItem('testschedule');  
+
+        if (outOfTestScheduling)
             return true;
-        }
-        
+
         return false;
-              
     }
-    
+
 
     getTestSchedule(): TestScheduleModel {
         if (this.sStorage.getItem('testschedule'))
@@ -71,9 +68,9 @@ export class TestService {
             }
         });
     }
-    
-    getOpenIntegratedTests(url):any{        
-         return fetch(url, {
+
+    getOpenIntegratedTests(url): any {
+        return fetch(url, {
             method: 'get',
             headers: {
                 'Accept': 'application/json'
@@ -91,10 +88,10 @@ export class TestService {
             }
         });
     }
-    
-    getFaculty(url: string): any{
-         let self = this;
-          return fetch(url, {
+
+    getFaculty(url: string): any {
+        let self = this;
+        return fetch(url, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
