@@ -204,17 +204,15 @@ html {
 *, *::after, *::before {
   box-sizing: inherit; }
 
+/*body {
+//  display: flex;
+//  flex-direction: column;
+  height: 100%;
+}*/
 body {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  height: 100%; }
+  height: 100%;
+  min-height: 100%;
+  position: relative; }
 
 .padding-1em-top {
   padding-top: 1em; }
@@ -449,9 +447,10 @@ ol {
     list-style-type: decimal;
     margin-bottom: 0.66667em;
     padding-left: 1.5em; }
-    ul.default-ol-indented,
-    ol.default-ol-indented {
-      padding-left: 3em; }
+    @media (min-width: 34.4375em) {
+      ul.default-ol-indented,
+      ol.default-ol-indented {
+        padding-left: 3em; } }
 
 ul.bullet,
 ol.bullet {
@@ -472,9 +471,7 @@ ol.bullet {
 
 ul.list-extra-spacing > li,
 ol.list-extra-spacing > li {
-  line-height: 2;
-  padding-left: 1em;
-  text-indent: -.85em; }
+  margin-bottom: .5em; }
 
 dl {
   margin-bottom: 0.66667em; }
@@ -1389,6 +1386,18 @@ picture {
       background-image: url(../images/sprite_2x.png);
       background-size: 299px 220px; } }
 
+.print-icon-white::before {
+  background-image: url(../images/sprite.png);
+  background-position: -21px -203px;
+  width: 19px;
+  height: 17px;
+  margin-bottom: 0;
+  margin-top: 0; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .print-icon-white::before {
+      background-image: url(../images/sprite_2x.png);
+      background-size: 299px 220px; } }
+
 .clock-alert-icon::before {
   background-image: url(../images/sprite.png);
   background-position: -96px 0px;
@@ -1697,21 +1706,23 @@ main .right-grid ::-webkit-scrollbar {
 }
 */
 .app-main {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 0 auto;
-      -ms-flex: 1 0 auto;
-          flex: 1 0 auto;
-  /* 2 */
   width: 100%;
-  padding-top: 4.5625em; }
+  padding-top: 4.5625em;
+  /*&::after {
+     content: '\00a0';
+     display: block;
+     height: 0px;
+     visibility: hidden;
+   }*/ }
   @media (max-width: 47.9375em) {
     .app-main {
       padding-top: 90px; } }
-  .app-main::after {
-    content: '\00a0';
-    display: block;
-    height: 0px;
-    visibility: hidden; }
+  @media (min-width: 25.9375em) {
+    .app-main {
+      min-height: calc(100vh - 214.5px); } }
+  @media (min-width: 48em) {
+    .app-main {
+      min-height: calc(100vh - 148px); } }
 
 .app-logged-out {
   padding-top: 3.5em; }
@@ -1949,12 +1960,9 @@ main .right-grid ::-webkit-scrollbar {
         background-image: url(../images/sprite_2x.png);
         background-size: 299px 220px; } }
 
-header {
-  -webkit-box-flex: 0;
-  -webkit-flex: none;
-      -ms-flex: none;
-          flex: none; }
-
+/*header {
+  flex: none;
+}*/
 .login-header {
   background: #fff;
   padding: 2em 1em .1em; }
@@ -1990,34 +1998,6 @@ header {
       margin-bottom: 0;
       width: 190px; } }
 
-/*.branding-logo-brand-color {
-  $logo-aspect-ratio: 0.5;  // height/width--trick taken from css-tricks logo treatment
-  @include retina-image(logo, 145px 71px);
-    background-position: center top;
-    display: block;
-    height: 71px;
-    width: 145px;
-    margin: 0 auto 2.5em;
-    @include breakpoint($x-large-screen-down) {
-    //  background-size: 90%;
-      margin-bottom: 1.5em;
-    }
-    //@include breakpoint($large-screen) {
-    //  background-size: 80%;
-    //}
-    @breakpoint (max-width: $medium-screen-down), (max-height:800px) {
-      background-size: 100px ((100 * $logo-aspect-ratio) + px);
-      height: (100 * $logo-aspect-ratio) + px;
-      width: 100px;
-      //background-size: 75%;
-    }
-    @include breakpoint($small-screen-down) {
-      //background-size: 65%;
-      background-size: 90px ((90 * $logo-aspect-ratio) + px);
-      height: (90 * $logo-aspect-ratio) + px;
-      width: 90px;
-    }
-} */
 .inner-banner {
   background: #717171;
   left: 0;
@@ -2045,18 +2025,6 @@ header {
   margin: 0 auto;
   width: 169px; }
 
-/*.branding-logo-white {
-  @include retina-image(logo-white, 169px 30px);
-    background-position: center center;
-    display: block;
-    height: 30px;
-    width: 169px;
-    margin: 0 auto;
-    @include breakpoint($small-screen-down) {
-      background-size: 85%;
-      margin-top: .5em;
-    }
-}*/
 .branding-center {
   width: 32.20339%;
   float: left;
@@ -2120,126 +2088,35 @@ main::before {
 .radio-large > p {
   padding-left: 45px; }
 
-/*.radio-checkbox {
-  input[type="radio"] {
-    //makes default input invisible, but keeps it tab accessable
-    @extend .screen-reader-only;
-    + :before{
-      @include retina-sprite($checkbox-unchecked-group);
-      content: " ";
-      display:inline-block;
-    }
-    &:checked + :before {
-    @include retina-sprite($checkbox-checked-group);
-     content: " ";
-     display: inline-block;
-    + input[type="radio"]:focus{
-      outline: 1px solid black;
-    }
-   }
-
-  > label {
-    display: inline-block;
-    cursor: pointer;
-    position: relative;
-    padding-left: 45px;
-    margin-right: 15px;
-  }
-  label:before {
-   border-radius: 15px;
-   content: "";
-   display: inline-block;
-   width: 30px;
-   height: 30px;
-   margin-right: 10px;
-   position: absolute;
-   left: 0;
-   bottom: 5px;
-   background-color: #fff;
-    @include breakpoint($medium-screen-down) {
-      bottom: 4px;
-    }
-  }
-}
-}*/
-/*  input[type="radio"].checkbox-image {
-    //makes default input invisible, but keeps it tab accessable
-    @extend .screen-reader-only;
-    + :before{
-      @include retina-sprite($checkbox-unchecked-group);
-      content: " ";
-      display:inline-block;
-    }
-    &:checked + :before {
-    @include retina-sprite($checkbox-checked-group);
-     content: " ";
-     display: inline-block;
-    + input[type="radio"]:focus{
-      outline: 1px solid black;
-    }
-   }
-
-  + label {
-    display: inline-block;
-    cursor: pointer;
-    position: relative;
-    margin-right: 15px;
-   &:before {
-   content: "";
-   display: inline-block;
-   position: absolute;
-   left: 0;
-   bottom: 5px;
-   background-color: #fff;
-  }
- }
-}*/
-/*input[type='radio']{
-
-    /* Hide the input, but have it still be clickable */
-/*  opacity: 0;
-
-    float: left;
-    width: 18px;
-} */
-/*input[type='radio'] + label {
-   margin: 0;
-   clear: none;
-
-   /* Left padding makes room for image */
-/*   padding: 5px 0 4px 24px;
-
-   /* Make look clickable because they are */
-/*cursor: pointer;
-
-   @include retina-sprite($checkbox-unchecked-group);
-} */
-/*
-   Change from unchecked to checked graphic
-*/
-/* input[type='radio']:checked + label {
-   @include retina-sprite($checkbox-unchecked-group);
-} */
 input[type="checkbox"], input.checkbox-image {
   opacity: 0;
   position: relative !important;
   top: -9px;
   left: 9px; }
 
-input[type="checkbox"] + label::before, .checkbox-image + label::before {
-  background-image: url(../images/sprite.png);
-  background-position: -130px -152px;
-  width: 21px;
-  height: 21px;
-  content: " ";
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 9px;
+input[type="checkbox"] + label, .checkbox-image + label {
   position: relative; }
-  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
-    input[type="checkbox"] + label::before, .checkbox-image + label::before {
-      background-image: url(../images/sprite_2x.png);
-      background-size: 299px 220px; } }
+  input[type="checkbox"] + label::before, .checkbox-image + label::before {
+    background-image: url(../images/sprite.png);
+    background-position: -130px -152px;
+    width: 21px;
+    height: 21px;
+    content: " ";
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 9px;
+    position: relative; }
+    @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+      input[type="checkbox"] + label::before, .checkbox-image + label::before {
+        background-image: url(../images/sprite_2x.png);
+        background-size: 299px 220px; } }
+  input[type="checkbox"] + label::after, .checkbox-image + label::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    left: -10px;
+    bottom: -10px; }
 
 input[type="checkbox"]:disabled + label::before, .checkbox-image:disabled + label::before {
   opacity: .4; }
@@ -2259,6 +2136,14 @@ input[type="checkbox"]:checked + label::before, .checkbox-image:checked + label:
       background-image: url(../images/sprite_2x.png);
       background-size: 299px 220px; } }
 
+input[type="checkbox"]:checked + label::after, .checkbox-image:checked + label::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  left: -10px;
+  bottom: -10px; }
+
 table input[type="checkbox"] + label, table .checkbox-image + label {
   margin-bottom: 0; }
 
@@ -2274,7 +2159,7 @@ input.small-checkbox-image {
 
 input.small-checkbox-image + label::before {
   background-image: url(../images/sprite.png);
-  background-position: -21px -203px;
+  background-position: -42px -203px;
   width: 17px;
   height: 17px;
   content: " ";
@@ -2292,7 +2177,7 @@ input.small-checkbox-image:disabled + label::before {
 
 input.small-checkbox-image:checked + label::before {
   background-image: url(../images/sprite.png);
-  background-position: -40px -203px;
+  background-position: -61px -203px;
   width: 17px;
   height: 17px;
   content: " ";
@@ -2751,25 +2636,23 @@ input.checkbox-small-image:focus + label::before {
   margin: 2em 0; }
 
 .datepicker {
-  /* margin: 10px; */
   padding: 2px;
   position: absolute !important;
   width: 265px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
-  /* top: 50%; */
   margin-top: -0.75em;
-  /* float: right; */
   box-shadow: 3px 6px 6px rgba(0, 0, 0, 0.2);
-  /* margin-left: 10%; */
-  border: 2px solid gainsboro; }
+  border: 2px solid #e3e3e3; }
   .datepicker th, .datepicker td {
     padding: .5em 0; }
   .datepicker table tr td.active, .datepicker table tr td.active:hover, .datepicker table tr td.active.disabled, .datepicker table tr td.active.disabled:hover {
     background-color: #4A7B71 !important; }
-  .datepicker table tr td.today, .datepicker table tr td.today:hover, .datepicker table tr td.today:hover:hover, .datepicker table tr td.today.disabled, .datepicker table tr td.today.disabled:hover {
+  .datepicker table tr td.today, .datepicker table tr td.today:hover, .datepicker table tr td.today:hover:hover {
     background-color: #E9F0EF; }
+  .datepicker table tr td.today.disabled, .datepicker table tr td.today:hover.disabled, .datepicker table tr td.today:hover.disabled:hover, .datepicker table tr td.today.disabled:hover, .datepicker table tr td.today.disabled.disabled, .datepicker table tr td.today.disabled:hover.disabled:hover, .datepicker table tr td.today.disabled:hover.disabled {
+    background-color: #e3e3e3; }
   .datepicker table tr td span.active, .datepicker table tr td span.active:hover, .datepicker table tr td span.active.disabled, .datepicker table tr td span.active.disabled:hover {
     background-color: #4A7B71 !important; }
 
@@ -2975,7 +2858,7 @@ input[type=search].small-search-box {
   top: 4px; }
   .close-red {
     background-image: url(../images/sprite.png);
-    background-position: -59px -203px;
+    background-position: -80px -203px;
     width: 15px;
     height: 15px; }
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
@@ -3012,12 +2895,9 @@ input[type=search].small-search-box {
   .close:hover, .closefocus {
     opacity: 1; }
 
-footer {
-  -webkit-box-flex: 0;
-  -webkit-flex: none;
-      -ms-flex: none;
-          flex: none; }
-
+/*footer {
+  flex: none;
+}*/
 .help-link:before {
   background-image: url(../images/sprite.png);
   background-position: -280px -75px;
@@ -4318,7 +4198,8 @@ input.page-lg-heading {
 
 @media (min-width: 48.0625em) and (max-width: 74.9375em) {
   .add-students-outer-container {
-    padding: 0 3em; } }
+    padding-left: 3em;
+    padding-right: 3em; } }
 
 .testing-add-students-container {
   max-width: 74em;
@@ -4606,6 +4487,40 @@ table.dataTable tbody td {
         float: right;
         margin-right: 0; } }
 
+@media (max-width: 61.9375em) {
+  .client-simulation-links {
+    margin-top: 2em; }
+    .client-simulation-links .base-font-color {
+      margin-bottom: 0.66667em;
+      text-align: center; }
+    .client-simulation-links ul > li {
+      padding-left: 0;
+      text-indent: 0; }
+      .client-simulation-links ul > li a {
+        font-weight: bold; } }
+
+.faculty-user-guide-header {
+  width: 100%; }
+
+.faculty-user-guide {
+  padding-top: 90px; }
+
+.faculty-user-guide-menu {
+  max-width: 260px; }
+  @media (min-width: 48em) {
+    .faculty-user-guide-menu {
+      width: 19.64286%;
+      float: left;
+      margin-right: 7.14286%; } }
+
+@media (min-width: 48em) {
+  .faculty-user-guide-content {
+    width: 73.21429%;
+    float: left;
+    margin-right: 7.14286%;
+    float: right;
+    margin-right: 0; } }
+
 .hidden {
   display: none; }
 
@@ -4733,6 +4648,12 @@ table.dataTable tbody td {
   clear: both;
   content: "";
   display: table; }
+
+.fixed-position {
+  position: fixed; }
+
+.relative-position {
+  position: relative; }
 
 @media print {
   body {
