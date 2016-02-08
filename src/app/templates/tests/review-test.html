@@ -57,7 +57,7 @@
                 </tbody>
             </table>
         </div>
-        <h4 class="teal" id="studentsInTestingSessionConfirmation">Students in Testing Session</h4>
+        <h4 class="teal" id="studentsInTestingSessionConfirmation">Students in Testing Session ({{testScheduleModel?.selectedStudents?.length}})</h4>
         <a href="add-students.html">Change</a>
         <button class="right anchor-button" data-toggle="modal" data-target="#modalAllRepeaters">Change alternate test assignments</button>
 
@@ -75,8 +75,8 @@
                 <tr *ngFor="#student of testScheduleModel.selectedStudents">
                     <td>{{student.lastName}}</td>
                     <td>{{student.firstName}}</td>
-                    <td>{{studentCohortName}}</td>
-                    <td>Medical Surgical 1 A</td>
+                    <td>{{student.studentCohortName}}</td>
+                    <td>{{student.studentTestName}}</td>
                     <td>Normed</td>
                 </tr>
                
