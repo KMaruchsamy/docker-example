@@ -16,27 +16,15 @@ export class TestService {
         this.sStorage = this.auth.sStorage;
         this.auth.refresh();
     }
-    
-    
-    outOfTestScheduling(routeName: string):void{
-        let outOfTestScheduling: boolean = true;
-        switch (routeName.toUpperCase()) {
-            case TestShedulingPages.CHOOSETEST:
-            case TestShedulingPages.SCHEDULETEST:
-            case TestShedulingPages.ADDSTUDENTS:
-            case TestShedulingPages.REVIEWTEST: 
-                outOfTestScheduling = false;    
-                break;
-        
-            default:
-                outOfTestScheduling = true;
-                break;
-        }
-        
-        if (outOfTestScheduling)
-            this.sStorage.removeItem('testschedule');    
+
+
+    outOfTestScheduling(routeName: string): boolean {
+        routeName = routeName.toUpperCase();
+        if (routeName.indexOf(TestShedulingPages.CHOOSETEST) > -1 || routeName.indexOf(TestShedulingPages.SCHEDULETEST) > -1 || routeName.indexOf(TestShedulingPages.ADDSTUDENTS) > -1 || routeName.indexOf(TestShedulingPages.REVIEWTEST) > -1)
+            return false;
+        return true;
     }
-    
+
 
     getTestSchedule(): TestScheduleModel {
         if (this.sStorage.getItem('testschedule'))
@@ -66,9 +54,9 @@ export class TestService {
             }
         });
     }
-    
-    getOpenIntegratedTests(url):any{        
-         return fetch(url, {
+
+    getOpenIntegratedTests(url): any {
+        return fetch(url, {
             method: 'get',
             headers: {
                 'Accept': 'application/json'
@@ -86,10 +74,10 @@ export class TestService {
             }
         });
     }
-    
-    getFaculty(url: string): any{
-         let self = this;
-          return fetch(url, {
+
+    getFaculty(url: string): any {
+        let self = this;
+        return fetch(url, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',

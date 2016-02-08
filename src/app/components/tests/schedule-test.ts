@@ -3,19 +3,20 @@ import {Router, OnDeactivate, ComponentInstruction} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
+import {Common} from '../../services/common';
 import {links} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
 import * as _ from '../../lib/index';
 import {TestScheduleModel} from '../../models/testSchedule.model';
-import '../../plugins/bootstrap-datepicker.min.js';
+import '../../plugins/bootstrap-datepicker-1.5.min.js';
 import '../../plugins/jquery.timepicker.js';
 
 @Component({
     selector: 'schedule-test',
     templateUrl: '../../templates/tests/schedule-test.html',
-    providers: [TestService, Auth, TestScheduleModel],
+    providers: [TestService, Auth, TestScheduleModel,Common],
     directives: [PageHeader, TestHeader, PageFooter, NgIf]
     // styleUrls: ['../../css/bootstrap-datepicker3.css', '../../css/jquery.timepicker.css']
 })
@@ -34,23 +35,31 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     dontPropogate: boolean = false;
     sStorage: any;
     constructor(public testScheduleModel: TestScheduleModel,
-        public testService: TestService, public auth: Auth, public router: Router) {
-        this.$startDate = $('#startDate');
-        this.$endDate = $('#endDate');
-        this.$startTime = $('#startTime');
-        this.$endTime = $('#endTime');
+        public testService: TestService, public auth: Auth, public router: Router, public common:Common) {
+        this.sStorage = this.common.getStorage();
+        if (!this.auth.isAuth())
+            this.router.navigateByUrl('/');
+        else {
+            this.$startDate = $('#startDate');
+            this.$endDate = $('#endDate');
+            this.$startTime = $('#startTime');
+            this.$endTime = $('#endTime');
+        }
     }
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.componentType.name)));
+        let outOfTestScheduling:boolean = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.urlPath)));
+        if (outOfTestScheduling) {
+             this.sStorage.removeItem('testschedule');  
+        }
     }
 
     ngOnInit(): void {
-        this.set8HourRule();
         this.bindEvents();
         this.initialize();
         this.initializeControls();
-        this.validate(this);
+        this.set8HourRule();
+       
     }
 
     initialize() {
@@ -70,13 +79,15 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         if (this.testScheduleModel.currentStep < 2)
             this.testScheduleModel.currentStep = 2;
         this.testScheduleModel.activeStep = 2;
+        
     }
 
     initializeControls() {
         if (this.startDate)
             this.$startDate.datepicker('update', this.startDate);
-        else
-            this.$startDate.datepicker('update', '');
+        else 
+            this.$startDate.datepicker('update', '');        
+
         if (this.endDate)
             this.$endDate.datepicker('update', this.endDate);
         else
@@ -211,9 +222,6 @@ export class ScheduleTest implements OnInit, OnDeactivate {
             else {
                 __this.endTime = '';
             }
-
-
-
             __this.validate(__this);
         });
 
@@ -223,7 +231,8 @@ export class ScheduleTest implements OnInit, OnDeactivate {
             autoclose: true,
             todayHighlight: true,
             forceParse: false,
-            startDate: new Date()
+            startDate: new Date(),
+            orientation: 'bottom'
         }).on('hide', function(e) {
             let outputString = '';
 
@@ -231,7 +240,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
                 outputString = __this.parseDateString(e.currentTarget.value);
 
                 if (outputString !== '' && moment(outputString).isValid()) {
-                
+
                     if (moment(outputString).isBefore(new Date(), 'day')) {
                         if (!__this.startDate)
                             __this.startDate = moment(new Date()).format('L');
@@ -284,7 +293,8 @@ export class ScheduleTest implements OnInit, OnDeactivate {
             autoclose: true,
             todayHighlight: true, //highlights today's date
             startDate: new Date(),
-            forceParse: false
+            forceParse: false,
+            orientation: 'bottom'
         }).on('hide', function(e) {
             let outputString = '';
 
@@ -375,7 +385,8 @@ export class ScheduleTest implements OnInit, OnDeactivate {
             return response.json();
         })
             .then((json) => {
-                this.ignore8HourRule = _.contains(json, __this.testScheduleModel.testId);
+                __this.ignore8HourRule = _.contains(json, __this.testScheduleModel.testId);
+                __this.validate(__this);
             })
             .catch((error) => {
                 console.log(error);
@@ -454,7 +465,6 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         if (this.startTime !== undefined && moment(this.startTime).isValid() && this.endTime != undefined && moment(this.endTime).isValid()) {
             this.testScheduleModel.scheduleStartTime = new Date(this.startTime);
             this.testScheduleModel.scheduleEndTime = new Date(this.endTime);
-            this.sStorage = this.auth.common.getStorage();
             this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
             this.router.parent.navigateByUrl('/tests/add-students');
             return false;
