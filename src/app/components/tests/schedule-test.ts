@@ -3,6 +3,7 @@ import {Router, OnDeactivate, ComponentInstruction} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
+import {Common} from '../../services/common';
 import {links} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
@@ -15,7 +16,7 @@ import '../../plugins/jquery.timepicker.js';
 @Component({
     selector: 'schedule-test',
     templateUrl: '../../templates/tests/schedule-test.html',
-    providers: [TestService, Auth, TestScheduleModel],
+    providers: [TestService, Auth, TestScheduleModel,Common],
     directives: [PageHeader, TestHeader, PageFooter, NgIf]
     // styleUrls: ['../../css/bootstrap-datepicker3.css', '../../css/jquery.timepicker.css']
 })
@@ -34,8 +35,8 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     dontPropogate: boolean = false;
     sStorage: any;
     constructor(public testScheduleModel: TestScheduleModel,
-        public testService: TestService, public auth: Auth, public router: Router) {
-        this.sStorage = this.auth.sStorage;
+        public testService: TestService, public auth: Auth, public router: Router, public common:Common) {
+        this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else {
@@ -47,7 +48,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     }
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        let outOfTestScheduling:boolean = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.componentType.name)));
+        let outOfTestScheduling:boolean = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.urlPath)));
         if (outOfTestScheduling) {
              this.sStorage.removeItem('testschedule');  
         }
@@ -58,7 +59,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         this.initialize();
         this.initializeControls();
         this.set8HourRule();
-        this.validate(this);
+       
     }
 
     initialize() {
@@ -384,7 +385,8 @@ export class ScheduleTest implements OnInit, OnDeactivate {
             return response.json();
         })
             .then((json) => {
-                this.ignore8HourRule = _.contains(json, __this.testScheduleModel.testId);
+                __this.ignore8HourRule = _.contains(json, __this.testScheduleModel.testId);
+                __this.validate(__this);
             })
             .catch((error) => {
                 console.log(error);
@@ -463,7 +465,6 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         if (this.startTime !== undefined && moment(this.startTime).isValid() && this.endTime != undefined && moment(this.endTime).isValid()) {
             this.testScheduleModel.scheduleStartTime = new Date(this.startTime);
             this.testScheduleModel.scheduleEndTime = new Date(this.endTime);
-            this.sStorage = this.auth.common.getStorage();
             this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
             this.router.parent.navigateByUrl('/tests/add-students');
             return false;

@@ -96,10 +96,10 @@ export const errorcodes = {
 };
 
 export const TestShedulingPages = {
-    CHOOSETEST: 'CHOOSETEST',
-    SCHEDULETEST: 'SCHEDULETEST',
-    ADDSTUDENTS: 'ADDSTUDENTS',
-    REVIEWTEST: 'REVIEWTEST'
+    CHOOSETEST: 'CHOOSE-TEST',
+    SCHEDULETEST: 'SCHEDULE-TEST',
+    ADDSTUDENTS: 'ADD-STUDENTS',
+    REVIEWTEST: 'REVIEW'
 };
   
   

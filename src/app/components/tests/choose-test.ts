@@ -2,6 +2,7 @@ import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRe
 import {Router, RouteParams, OnDeactivate, ComponentInstruction} from 'angular2/router';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
+import {Common} from '../../services/common';
 import {links} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
@@ -21,7 +22,7 @@ import '../../plugins/dataTables.responsive.js';
     selector: 'choose-test',
     templateUrl: '../../templates/tests/choose-test.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
-    providers: [TestService, Auth, TestScheduleModel, Utility],
+    providers: [TestService, Auth, TestScheduleModel, Utility, Common],
     directives: [PageHeader, TestHeader, PageFooter],
     pipes: [RemoveWhitespacePipe, RoundPipe]
 })
@@ -35,9 +36,9 @@ export class ChooseTest implements OnDeactivate {
     tests: Object[] = [];
     testsTable: any;
     sStorage: any;
-    constructor(public testService: TestService, public auth: Auth, public utitlity: Utility,
+    constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams) {
-        this.sStorage = this.auth.sStorage;
+        this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else
@@ -45,7 +46,7 @@ export class ChooseTest implements OnDeactivate {
     }
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        let outOfTestScheduling = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.componentType.name)));
+        let outOfTestScheduling = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         if (outOfTestScheduling)
             this.sStorage.removeItem('testschedule');
         if (this.testsTable)
@@ -57,7 +58,7 @@ export class ChooseTest implements OnDeactivate {
         this.testsTable = null;
         this.testTypeId = 1;
         this.institutionID = parseInt(this.routeParams.get('institutionId'));
-        this.apiServer = this.auth.common.getApiServer();
+        this.apiServer = this.common.getApiServer();
         this.loadSubjects();
     }
 
@@ -142,8 +143,7 @@ export class ChooseTest implements OnDeactivate {
     }
 
     saveChooseTest(): void {
-        this.testScheduleModel.scheduleId = this.utitlity.generateUUID();
-        this.sStorage = this.auth.common.getStorage();
+        this.testScheduleModel.scheduleId = this.utitlity.generateUUID();       
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         this.router.parent.navigateByUrl('/tests/schedule-test');
     }

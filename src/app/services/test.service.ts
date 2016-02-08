@@ -19,24 +19,10 @@ export class TestService {
 
 
     outOfTestScheduling(routeName: string): boolean {
-        let outOfTestScheduling: boolean = true;
-        switch (routeName.toUpperCase()) {
-            case TestShedulingPages.CHOOSETEST:
-            case TestShedulingPages.SCHEDULETEST:
-            case TestShedulingPages.ADDSTUDENTS:
-            case TestShedulingPages.REVIEWTEST:
-                outOfTestScheduling = false;
-                break;
-
-            default:
-                outOfTestScheduling = true;
-                break;
-        }
-
-        if (outOfTestScheduling)
-            return true;
-
-        return false;
+        routeName = routeName.toUpperCase();
+        if (routeName.indexOf(TestShedulingPages.CHOOSETEST) > -1 || routeName.indexOf(TestShedulingPages.SCHEDULETEST) > -1 || routeName.indexOf(TestShedulingPages.ADDSTUDENTS) > -1 || routeName.indexOf(TestShedulingPages.REVIEWTEST) > -1)
+            return false;
+        return true;
     }
 
 
