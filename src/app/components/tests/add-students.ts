@@ -69,13 +69,11 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.windowEnd = '12.12.16'; //new Date(this.testScheduleModel.scheduleEndTime);
         this.institutionID = parseInt(this.routeParams.get('institutionId'));
         this.apiServer = this.auth.common.getApiServer();
-        // this.bindPopup();
         this.loadActiveCohorts();
 
     }
 
     loadActiveCohorts(): void {
-        //      this.testScheduleModel.institutionId = this.institutionID;
         this.loadCohorts();
     }
 
@@ -110,7 +108,7 @@ export class AddStudents implements OnInit, OnDeactivate {
         return url.replace('§cohortid', this.lastSelectedCohortID.toString()).replace('§testid', this.testTypeID.toString());
     }
 
-    loadStudentsByCohort(btnAddAllStudent, tblCohortStudentList, selectedcohort: any,event): void {
+    loadStudentsByCohort(btnAddAllStudent, tblCohortStudentList, selectedcohort: any, event): void {
         event.preventDefault();
         let cohortId = this.cohorts[selectedcohort.selectedIndex - 1].CohortId;
         this.lastSelectedCohortName = this.cohorts[selectedcohort.selectedIndex - 1].CohortName.toString();
@@ -130,39 +128,24 @@ export class AddStudents implements OnInit, OnDeactivate {
                     setTimeout(json=> {
                         this.testsTable = $('#cohortStudents').DataTable({
                             "paging": false,
-                            "searching": false,
                             "responsive": true,
                             "info": false,
-                            // "ordering": false,
                             "scrollY": 551,
-                            
-                            //"scrollCollapse": true
-                            "order": [[0, "asc"]],
+                            "dom": 't<"add-students-table-search"f>',
+                            "language": {
+                                search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
+                                //search: "Find student in cohort",
+                                searchPlaceholder: "Find student in cohort",
+                                "zeroRecords": "No matching students in this cohort",
+                            },
                             columnDefs: [{
                                 targets: [2, 4],
                                 orderable: false,
                                 searchable: false
                             }],
-                        });
-                        //$('#cohortRepeatersOnly').on('click', function () {
-                        //    var $repeatersOnly = $('#cohortRepeatersOnly');
-                        //    if (!$(this).is(':checked')) {
-                        //        $repeatersOnly.prop('checked', false);
-                        //    }
-                        //    this.testsTable.column([4])
-                        //        .search('Yes')
-                        //        .draw();
-                        //});
 
-                        //$('#cohortExcludeRepeaters').on('click', function () {
-                        //    var $excludeRepeaters = $('#cohortExcludeRepeaters');
-                        //    if (!$(this).is(':checked')) {
-                        //        $excludeRepeaters.prop('checked', false);
-                        //    }
-                        //    this.testsTable.column([4])
-                        //        .search('No')
-                        //        .draw();
-                        //});
+                        });
+                        this.SearchFilterOptions();
                     });
                 })
                 .catch((error) => {
@@ -170,42 +153,34 @@ export class AddStudents implements OnInit, OnDeactivate {
                 });
         }
     }
+    SearchFilterOptions(): void {
+        $('#cohortStudentList .dataTables_filter :input').addClass('small-search-box');
+        var checkboxfilters = '<div class="form-group hidden-small-down"><input type="checkbox" class="small-checkbox-image" id="cohortRepeatersOnly" name="filterADA" value="repeatersOnly">' +
+            '<label class="smaller" for="cohortRepeatersOnly">Retesting only</label>' +
+            '<input type="checkbox" class="small-checkbox-image"  id="cohortExcludeRepeaters" name="filterADA" value="excludeRepeaters">' +
+            '<label class="smaller" for="cohortExcludeRepeaters">Exclude retesting students</label></div>';
 
-    //eventFired(type): void{
-    //var n = $('#demo_info')[0];
-    //n.innerHTML += '<div>' + type + ' event - ' + new Date().getTime() + '</div>';
-    //n.scrollTop = n.scrollHeight;
-    //}
+        $('#cohortStudentList .add-students-table-search').append(checkboxfilters);
+        $('#cohortRepeatersOnly').on('click', function () {
+            var $excludeRepeaters = $('#cohortExcludeRepeaters');
 
-    GetRepetersOnly(event): void {
-        event.preventDefault();
-        var $repeatersOnly = $('#cohortRepeatersOnly');
+            if ($(this).is(':checked')) {
+                $excludeRepeaters.prop('checked', false);
+            }
+            $('#cohortStudents').DataTable().column(3)
+                .search('Yes')
+                .draw();
+        });
+        $('#cohortExcludeRepeaters').on('click', function () {
+            var $Repeaters = $('#cohortRepeatersOnly');
 
-        if ($repeatersOnly.prop('checked')) {
-            $('#cohortExcludeRepeaters').prop('checked', false);
-        }
-        this.testsTable.column([4])
-                       .search('Yes')
-                       .draw();
-        //$('#cohortStudentList table')
-        //  //  .on('search.dt', function () { this.eventFired('Search'); })
-        //    .DataTable().draw();
-    }
-
-    ExcludeRepeaters(event): void {
-        event.preventDefault();
-        var $excludeRepeaters = $('#cohortExcludeRepeaters');
-
-        if ($excludeRepeaters.prop('checked')) {
-            $('#cohortRepeatersOnly').prop('checked', false);
-        }
-        this.testsTable.column([4])
-            .search('No')
-            .draw();
-        //this.testsTable.draw();
-        //$('#cohortStudentList table')
-        ////    .on('search.dt', function () { this.eventFired('Search'); })
-        //    .DataTable().draw();
+            if ($(this).is(':checked')) {
+                $Repeaters.prop('checked', false);
+            }
+            $('#cohortStudents').DataTable().column(3)
+                .search('No')
+                .draw();
+        });
     }
 
     AddAllStudentsByCohort(event): void {
@@ -231,22 +206,52 @@ export class AddStudents implements OnInit, OnDeactivate {
                     if (student.Retester) {
                         retesting = "RETESTING";
                     }
-                    studentlist += "<li class='clearfix'><div class='students-in-testing-session-list-item'><span class='js-selected-student'>" + student.LastName.toString() + "," + student.FirstName.toString() + "</span><span class='small-tag-text'>" + " " + retesting + "</span></div><button class='button button-small button-light' (click)='RemoveSelectedStudents(" + student.StudentId + ")'>Remove</button></li>";
+                    studentlist += "<li class='clearfix'><div class='students-in-testing-session-list-item'><span class='js-selected-student'>" + student.LastName.toString() + "," + student.FirstName.toString() + "</span><span class='small-tag-text'>" + " " + retesting + "</span></div><button class='button button-small button-light' data-id='" + student.StudentId + "'>Remove</button></li>";
                 }
             }
         }
         return studentlist;
     }
 
-    RemoveSelectedStudents(studentId: number, event): void {
-        event.preventDefault();
-        debugger;
-        if (this.selectedStudents.length > 0) {
-            $('#addAllStudents').removeAttr('disabled', 'disabled');
-            $('#cohort-' + studentId.toString()).removeAttr('disabled', 'disabled');
-        }
+    removeStudents(): void {
+        // Remove students
+        $(document).on('click', '#testSchedulingSelectedStudents button', function (e) {
+            e.preventDefault();
+            var rowID = $(this).attr('data-id');
+            var container = null;
+            if (rowID) {
+                //var addStudentsFrom = $('.minimal-nav-tabs .active').find('a').text();
+
+                //if (addStudentsFrom === 'Add by Cohort') {
+                //    container = $('#chooseCohortContainer');
+                //}
+                //else if (addStudentsFrom === 'Add by Group') {
+                //    container = $('#chooseGroupContainer');
+                //} else {
+                    container = $('#chooseStudentContainer');
+                //}
+
+                container.find('tr[data-id=' + rowID + ']').find('button:disabled').removeAttr('disabled');
+                var $li = $(this).closest('li');
+               // setFocus($li, 'li');
+                $(this).closest('li').detach();
+               // displaySelectedStudentsCount();
+                //enableDisableAddAllRemoveAllButtons(container);
+             //   displaySearchOption();
+            }
+        });
     }
-    AddStudent(student: Object,event): void {
+
+
+    //RemoveSelectedStudents(studentId: number, event): void {
+    //    event.preventDefault();
+    //    debugger;
+    //    if (this.selectedStudents.length > 0) {
+    //        $('#addAllStudents').removeAttr('disabled', 'disabled');
+    //        $('#cohort-' + studentId.toString()).removeAttr('disabled', 'disabled');
+    //    }
+    //}
+    AddStudent(student: Object, event): void {
         event.preventDefault();
         $('#cohort-' + student.StudentId.toString()).attr('disabled', 'disabled');
         student.CohortId = this.lastSelectedCohortID;
@@ -319,7 +324,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                 _selectedStudentModel.studentTestId = this.testScheduleModel.testId;
                 _selectedStudentModel.studentTestName = this.testScheduleModel.testName;
                 _selectedStudentModel.studentCohortId = _student.CohortId;
-                _selectedStudentModel.studentCohortName = this.FindCohortName(_student.CohortId) ;
+                _selectedStudentModel.studentCohortName = this.FindCohortName(_student.CohortId);
                 _selectedStudentModel.studentEmail = _student.Email;
                 _selectedStudentModel.retester = _student.Retester;
                 _selectedStudentModel.ADA = _student.Ada;
@@ -333,7 +338,7 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
 
     FindCohortName(cohortid: number): string {
-        for (var i = 0; i < this.cohorts.length; i++){
+        for (var i = 0; i < this.cohorts.length; i++) {
             if (this.cohorts[i].CohortId === cohortid) {
                 return this.cohorts[i].CohortName;
             }

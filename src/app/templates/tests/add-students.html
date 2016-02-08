@@ -24,17 +24,16 @@
                                     </select>
                                     <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort($event)">Add all students</button>
                                 </div>
-                                <!--<div><input id="cohortname" type="hidden" value="sel.value" /></div>-->
 
                                 <div class="hidden" id="cohortStudentList" #cohortstudentlist>
                                     <!--contains table and sets a max height so that it scrolls-->
                                     <table id="cohortStudents" class="tablesorter table-with-small-button-row order-column stripe table-with-cell-padding table-striped last-row-no-border">
                                         <thead>
                                             <tr>
-                                                <th class="select-filter" scope="col" data-column="1">Last Name</th>
-                                                <th class="select-filter" scope="col" data-column="2">First Name</th>
-                                                <th scope="col"  data-column="3">Cohort</th>
-                                                <th scope="col" data-column="4">Retesting</th>
+                                                <th class="select-filter" scope="col">Last Name</th>
+                                                <th class="select-filter" scope="col">First Name</th>
+                                                <th scope="col">Cohort</th>
+                                                <th scope="col">Retesting</th>
                                                 <th class="all" scope="col"></th>
                                             </tr>
                                         </thead>
@@ -50,17 +49,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <div class="add-students-table-search">
-                                        <div id="DataTables_Table_0_filter" class="dataTables_filter">
-                                            <label><input type="search" class="small-search-box" placeholder="Find student in cohort" aria-controls="DataTables_Table_0"></label>
-                                        </div>
-                                        <div class="form-group hidden-small-down">
-                                            <input type="checkbox" class="small-checkbox-image" id="cohortRepeatersOnly" name="filterADA" value="repeatersOnly" (click)="GetRepetersOnly($event)" >
-                                            <label class="smaller" for="cohortRepeatersOnly">Retesting only</label>
-                                            <input type="checkbox" class="small-checkbox-image" id="cohortExcludeRepeaters" name="filterADA" value="excludeRepeaters" (click)="ExcludeRepeaters($event)">
-                                            <label class="smaller" for="cohortExcludeRepeaters">Exclude retesting students</label>
-                                        </div>
-                                    </div>
+                                   
                                 </div>
                                 <!--closes hidden-->
                             </div>
