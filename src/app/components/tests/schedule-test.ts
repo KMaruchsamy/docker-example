@@ -16,9 +16,8 @@ import '../../plugins/jquery.timepicker.js';
 @Component({
     selector: 'schedule-test',
     templateUrl: '../../templates/tests/schedule-test.html',
-    providers: [TestService, Auth, TestScheduleModel,Common],
+    providers: [TestService, Auth, TestScheduleModel, Common],
     directives: [PageHeader, TestHeader, PageFooter, NgIf]
-    // styleUrls: ['../../css/bootstrap-datepicker3.css', '../../css/jquery.timepicker.css']
 })
 export class ScheduleTest implements OnInit, OnDeactivate {
     valid: boolean = false;
@@ -35,7 +34,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     dontPropogate: boolean = false;
     sStorage: any;
     constructor(public testScheduleModel: TestScheduleModel,
-        public testService: TestService, public auth: Auth, public router: Router, public common:Common) {
+        public testService: TestService, public auth: Auth, public router: Router, public common: Common) {
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
@@ -48,10 +47,10 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     }
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        let outOfTestScheduling:boolean = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.urlPath)));
-        if (outOfTestScheduling) {
-             this.sStorage.removeItem('testschedule');  
-        }
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.urlPath)));
+        if (outOfTestScheduling)
+            this.sStorage.removeItem('testschedule');
+
     }
 
     ngOnInit(): void {
@@ -59,7 +58,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         this.initialize();
         this.initializeControls();
         this.set8HourRule();
-       
+
     }
 
     initialize() {
@@ -79,14 +78,14 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         if (this.testScheduleModel.currentStep < 2)
             this.testScheduleModel.currentStep = 2;
         this.testScheduleModel.activeStep = 2;
-        
+
     }
 
     initializeControls() {
         if (this.startDate)
             this.$startDate.datepicker('update', this.startDate);
-        else 
-            this.$startDate.datepicker('update', '');        
+        else
+            this.$startDate.datepicker('update', '');
 
         if (this.endDate)
             this.$endDate.datepicker('update', this.endDate);
@@ -107,7 +106,8 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         let __this = this;
         this.$startTime.timepicker({
             'timeFormat': 'g:ia',
-            'minTime': '8:00am'
+            'minTime': '8:00am',
+            'disableTouchKeyboard': true
         }).on('change', function(e) {
             if (e.currentTarget.value) {
                 let startTime;
@@ -170,7 +170,8 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         this.$endTime.timepicker({
             'showDuration': true,
             'timeFormat': 'g:ia',
-            'minTime': '8:00am'
+            'minTime': '8:00am',
+            'disableTouchKeyboard': true
         }).on('change', function(e) {
             if (e.currentTarget.value) {
                 let endTime;
@@ -232,7 +233,8 @@ export class ScheduleTest implements OnInit, OnDeactivate {
             todayHighlight: true,
             forceParse: false,
             startDate: new Date(),
-            orientation: 'bottom'
+            orientation: 'bottom',
+            'disableTouchKeyboard': true
         }).on('hide', function(e) {
             let outputString = '';
 
@@ -294,10 +296,10 @@ export class ScheduleTest implements OnInit, OnDeactivate {
             todayHighlight: true, //highlights today's date
             startDate: new Date(),
             forceParse: false,
-            orientation: 'bottom'
+            orientation: 'bottom',
+            'disableTouchKeyboard': true
         }).on('hide', function(e) {
             let outputString = '';
-
             if (e.currentTarget.value !== '') {
                 outputString = __this.parseDateString(e.currentTarget.value);
 

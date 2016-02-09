@@ -3,6 +3,7 @@ import {Router, RouterLink, OnDeactivate, ComponentInstruction} from 'angular2/r
 import {NgIf} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
+import {Common} from '../../services/common';
 import {links} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
@@ -28,8 +29,9 @@ export class ReviewTest implements OnInit, OnDeactivate {
     testScheduleTimes: string = '';
     faculty: Object[] = [];
     facultyId: number;
+    sStorage: any;
     constructor(public testScheduleModel: TestScheduleModel,
-        public testService: TestService, public auth: Auth, public router: Router) {
+        public testService: TestService, public auth: Auth, public common: Common, public router: Router) {
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else
@@ -37,13 +39,16 @@ export class ReviewTest implements OnInit, OnDeactivate {
     }
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.componentType.name)));
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.urlPath)));
+        if (outOfTestScheduling)
+            this.sStorage.removeItem('testschedule');
     }
 
     ngOnInit() {
         this.bindFaculty();
     }
     initialize() {
+        this.sStorage = this.common.getStorage();
         let savedSchedule = this.testService.getTestSchedule();
         if (savedSchedule) {
             this.testScheduleModel = savedSchedule;
