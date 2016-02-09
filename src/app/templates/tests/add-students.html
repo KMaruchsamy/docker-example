@@ -39,7 +39,7 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="#student of cohortStudentlist;#j=index;">
-                                                <td>{{student.LastName}}</td>
+                                                <td title="{{student.Email}}">{{student.LastName}}</td>
                                                 <td>{{student.FirstName}}</td>
                                                 <td>{{lastSelectedCohortName}}</td>
                                                 <td>{{student.Retester?"Yes":"No"}}</td>
@@ -75,7 +75,7 @@
                         <div class="search-added-students">
                             <label class="screen-reader-only" for="filterSelectedStudents">Find Student</label>
                             <input type="search" role="search" id="filterSelectedStudents" placeholder="Find student" class="small-search-box">
-                            <button class="button button-small button-light" id="RemoveAllStudents" (click)="RemoveALlSelectedStudents($event)">Remove all students</button>
+                            <button class="button button-small button-light" id="RemoveAllStudents" (click)="RemoveAllSelectedStudents($event)">Remove all students</button>
                         </div>
                         <!--closes search for student-->
                     </div>
@@ -90,7 +90,7 @@
                 <p class="icon info-icon-yellow margin-1em-top hidden" id="accommadationNote">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
                 <p class="icon info-icon-yellow margin-1em-top hidden" id="studentScheduleNote">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
                 <!--  <div class="right margin-2em-top-bottom">-->
-                <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" data-toggle="modal" data-target="#modalTimingException" disabled (click)="DetailReviewTestClick($event)">Next step: Add details and review</button>
+                <button type="button" class="button button-mobile-block right margin-2em-top" id="reviewDetails" data-toggle="modal" data-target="#modalTimingException" disabled (click)="DetailReviewTestClick($event)">Next step: Add details and review</button>
                 <!--</div>-->
             </div>
         </div>

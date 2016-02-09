@@ -29,7 +29,7 @@ import '../../plugins/dataTables.responsive.js';
 })
 
 export class AddStudents implements OnInit, OnDeactivate {
-    institutionID: number;
+    //  institutionID: number;
     apiServer: string;
     lastSelectedCohortID: number;
     lastSelectedCohortName: string;
@@ -67,7 +67,6 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.testTypeID = 1;
         this.windowStart = '01.01.14'; //new Date(this.testScheduleModel.scheduleStartTime);
         this.windowEnd = '12.12.16'; //new Date(this.testScheduleModel.scheduleEndTime);
-        this.institutionID = parseInt(this.routeParams.get('institutionId'));
         this.apiServer = this.auth.common.getApiServer();
         this.loadActiveCohorts();
 
@@ -101,7 +100,7 @@ export class AddStudents implements OnInit, OnDeactivate {
 
 
     resolveCohortURL(url: string): string {
-        return url.replace('§institutionid', '379'/*this.institutionID.toString()*/).replace('§windowstart', this.windowStart.toString()).replace('§windowend', this.windowEnd.toString());
+        return url.replace('§institutionid', this.testScheduleModel.institutionId.toString()).replace('§windowstart', this.windowStart.toString()).replace('§windowend', this.windowEnd.toString());
     }
 
     resolveCohortStudentsURL(url: string): string {
@@ -166,32 +165,40 @@ export class AddStudents implements OnInit, OnDeactivate {
 
             if ($(this).is(':checked')) {
                 $excludeRepeaters.prop('checked', false);
+                $('#cohortStudents').DataTable().column(3)
+                    .search('Yes')
+                    .draw();
+            } else {
+                $('#cohortStudents').DataTable().column(3)
+                    .search('')
+                    .draw();
             }
-            $('#cohortStudents').DataTable().column(3)
-                .search('Yes')
-                .draw();
         });
         $('#cohortExcludeRepeaters').on('click', function () {
             var $Repeaters = $('#cohortRepeatersOnly');
 
             if ($(this).is(':checked')) {
                 $Repeaters.prop('checked', false);
+                $('#cohortStudents').DataTable().column(3)
+                    .search('No')
+                    .draw();
+            } else {
+                $('#cohortStudents').DataTable().column(3)
+                    .search('')
+                    .draw();
             }
-            $('#cohortStudents').DataTable().column(3)
-                .search('No')
-                .draw();
         });
     }
 
     AddAllStudentsByCohort(event): void {
         event.preventDefault();
         $('#testSchedulingSelectedStudentsList').append(this.AddStudentList());
-        $('.top-section').addClass('active');
-        $('#selectedStudentsContainer').addClass('hidden');
-        $('#testSchedulingSelectedStudents').removeClass('hidden');
         $('#addAllStudents').attr('disabled', 'true');
-        this.displaySelectedStudentCount();
+        this.ShowHideSelectedStudentContainer();
+        this.displaySelectedStudentFilter();
         this.EnableDisableButtonForDetailReview();
+        this.sortAlpha();
+        this.RemoveSelectedStudents();
     }
     AddStudentList(): string {
         var studentlist = "";
@@ -206,51 +213,44 @@ export class AddStudents implements OnInit, OnDeactivate {
                     if (student.Retester) {
                         retesting = "RETESTING";
                     }
-                    studentlist += "<li class='clearfix'><div class='students-in-testing-session-list-item'><span class='js-selected-student'>" + student.LastName.toString() + "," + student.FirstName.toString() + "</span><span class='small-tag-text'>" + " " + retesting + "</span></div><button class='button button-small button-light' data-id='" + student.StudentId + "'>Remove</button></li>";
+                    studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ',' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
                 }
             }
         }
         return studentlist;
     }
-
-    removeStudents(): void {
-        // Remove students
-        $(document).on('click', '#testSchedulingSelectedStudents button', function (e) {
+    RemoveSelectedStudents(): void {
+        debugger;
+        let _self = this;
+        $('#testSchedulingSelectedStudentsList button').on('click', function (e) {
             e.preventDefault();
-            var rowID = $(this).attr('data-id');
-            var container = null;
-            if (rowID) {
-                //var addStudentsFrom = $('.minimal-nav-tabs .active').find('a').text();
+            var rowId = $(this).attr('data-id');
+            $(this).parent().remove();
+            if (_self.selectedStudents.length > 0) {
+                $('#addAllStudents').removeAttr('disabled', 'disabled');
+                $('#cohort-' + rowId).removeAttr('disabled', 'disabled');
 
-                //if (addStudentsFrom === 'Add by Cohort') {
-                //    container = $('#chooseCohortContainer');
-                //}
-                //else if (addStudentsFrom === 'Add by Group') {
-                //    container = $('#chooseGroupContainer');
-                //} else {
-                    container = $('#chooseStudentContainer');
-                //}
-
-                container.find('tr[data-id=' + rowID + ']').find('button:disabled').removeAttr('disabled');
-                var $li = $(this).closest('li');
-               // setFocus($li, 'li');
-                $(this).closest('li').detach();
-               // displaySelectedStudentsCount();
-                //enableDisableAddAllRemoveAllButtons(container);
-             //   displaySearchOption();
+                _self.UpdateSelectedStudentCount(rowId);
+                _self.displaySelectedStudentFilter();
+                if (_self.selectedStudentCount < 1) {
+                    _self.ShowHideSelectedStudentContainer();
+                    _self.EnableDisableButtonForDetailReview();
+                }
             }
+
         });
     }
 
+    UpdateSelectedStudentCount(studentid: number): void {        
+        for (var i = 0; i < this.selectedStudents.length; i++) {
+            if (this.selectedStudents[i].StudentId.toString() === studentid) {
+                this.selectedStudents.splice(i,1);
+                this.selectedStudentCount = this.selectedStudentCount - 1;
+                break;
+            }
+        }
+    }
 
-    //RemoveSelectedStudents(studentId: number, event): void {
-    //    event.preventDefault();
-    //    debugger;
-    //    if (this.selectedStudents.length > 0) {
-    //        $('#addAllStudents').removeAttr('disabled', 'disabled');
-    //        $('#cohort-' + studentId.toString()).removeAttr('disabled', 'disabled');
-    //    }
-    //}
     AddStudent(student: Object, event): void {
         event.preventDefault();
         $('#cohort-' + student.StudentId.toString()).attr('disabled', 'disabled');
@@ -260,25 +260,19 @@ export class AddStudents implements OnInit, OnDeactivate {
         if (student.Retester) {
             retesting = "RETESTING";
         }
-        var studentli = "<li class='clearfix'><div class='students-in-testing-session-list-item'><span class='js-selected-student'>" + student.LastName.toString() + "," + student.FirstName.toString() + "</span><span class='small-tag-text'>" + " " + retesting + "</span></div><button class='button button-small button-light' (click)='RemoveSelectedStudents(" + student.StudentId + ")'>Remove</button></li>";
+        var studentli = '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ',' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
         $('#testSchedulingSelectedStudentsList').append(studentli);
-        $('.top-section').addClass('active');
-        $('#selectedStudentsContainer').addClass('hidden');
-        $('#testSchedulingSelectedStudents').removeClass('hidden');
-        this.displaySelectedStudentCount();
+        //$('.top-section').addClass('active');
+        //$('#selectedStudentsContainer').addClass('hidden');
+        //$('#testSchedulingSelectedStudents').removeClass('hidden');
+        this.ShowHideSelectedStudentContainer();
+        this.displaySelectedStudentFilter();
         this.EnableDisableButtonForDetailReview();
-    }
-    displaySelectedStudentCount(): void {
-        this.selectedStudentCount = this.selectedStudents.length;
-        if (this.selectedStudentCount >= 10) {
-            $('#filterSelectedStudents').attr('style', 'visibility:visible');
-        }
-        else {
-            $('#filterSelectedStudents').attr('style', 'visibility:hidden');
-        }
+        this.sortAlpha();
+        this.RemoveSelectedStudents();
     }
 
-    RemoveALlSelectedStudents(event): void {
+    RemoveAllSelectedStudents(event): void {
         event.preventDefault();
         $('#addAllStudents').removeAttr('disabled', 'disabled');
         if (this.selectedStudents.length > 0) {
@@ -288,12 +282,39 @@ export class AddStudents implements OnInit, OnDeactivate {
             }
             this.selectedStudents = [];
         }
-        $('.top-section').removeClass('active');
-        $('#selectedStudentsContainer').removeClass('hidden');
-        $('#testSchedulingSelectedStudentsList').empty();
-        $('#testSchedulingSelectedStudents').addClass('hidden');
-        this.displaySelectedStudentCount();
+        //$('.top-section').removeClass('active');
+        //$('#selectedStudentsContainer').removeClass('hidden');
+        //$('#testSchedulingSelectedStudentsList').empty();
+        //$('#testSchedulingSelectedStudents').addClass('hidden');
+        this.ShowHideSelectedStudentContainer();
+        this.displaySelectedStudentFilter();
         this.EnableDisableButtonForDetailReview();
+    }
+
+    ShowHideSelectedStudentContainer(): void {
+        this.selectedStudentCount = this.selectedStudents.length;
+        if (this.selectedStudentCount <1) {
+            $('.top-section').removeClass('active');
+            $('#selectedStudentsContainer').removeClass('hidden');
+            $('#testSchedulingSelectedStudentsList').empty();
+            $('#testSchedulingSelectedStudents').addClass('hidden');
+        }
+        else {
+            $('.top-section').addClass('active');
+            $('#selectedStudentsContainer').addClass('hidden');
+            $('#testSchedulingSelectedStudents').removeClass('hidden');
+           // $('#addAllStudents').attr('disabled', 'true');
+        }
+    }
+    displaySelectedStudentFilter(): void {
+        this.selectedStudentCount = this.selectedStudents.length;
+       if (this.selectedStudentCount >= 10) {
+           $('#filterSelectedStudents').attr('style', 'visibility:visible');
+           this.filterSelectedStudents();
+        }
+        else {
+            $('#filterSelectedStudents').attr('style', 'visibility:hidden');
+        }
     }
 
     EnableDisableButtonForDetailReview(): void {
@@ -310,8 +331,44 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
     }
 
+    filterSelectedStudents(): void {
+        // filter and hide students based on search in "Students in Testing Session" section
+        $('#filterSelectedStudents').on('keyup', function () {
+            var that = this;
+            $('#testSchedulingSelectedStudents li').each(function () {
+                var $span = $(this).find('span.js-selected-student');
+                var firstName = $span.text().split(',')[0].toUpperCase();
+                var lastName = $span.text().split(',')[1].replace(' ', '').toUpperCase();
+                var searchString = $(that).val().toUpperCase();
+                if (!(_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)))
+                    $(this).hide();
+                else
+                    $(this).show();
+            });
+
+            //var addStudentsFrom = $('.minimal-nav-tabs .active').find('a').text();
+            //if (addStudentsFrom === 'Add by Group')
+            //    enableDisableAddAllRemoveAllButtons($('#chooseGroupContainer'));
+            //else
+            //    enableDisableAddAllRemoveAllButtons($('#chooseCohortContainer'));
+        });
+
+
+    }
+
+    sortAlpha(): void {
+       // return a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase() ? 1 : -1;
+        var mylist = $('#testSchedulingSelectedStudentsList');
+        var listitems = mylist.children('li').get();
+        listitems.sort(function (a, b) {
+            return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
+        })
+        $.each(listitems, function (idx, itm) { mylist.append(itm); });
+    }
+
     DetailReviewTestClick(event): void {
         event.preventDefault();
+        let studentId = [];
         let selectedStudentModelList = [];
         if (this.selectedStudents.length > 0) {
             for (var i = 0; i < this.selectedStudents.length; i++) {
@@ -329,6 +386,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                 _selectedStudentModel.retester = _student.Retester;
                 _selectedStudentModel.ADA = _student.Ada;
                 selectedStudentModelList.push(_selectedStudentModel);
+                studentId.push(_student.StudentId);
             }
         }
         this.testScheduleModel.selectedStudents = selectedStudentModelList;
