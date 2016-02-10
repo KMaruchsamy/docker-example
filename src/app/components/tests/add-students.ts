@@ -59,14 +59,15 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
 
     initialize(): void {
+        debugger;
         this.testsTable = null;
         let savedSchedule = this.testService.getTestSchedule();
         this.testScheduleModel = savedSchedule;
         this.testScheduleModel.currentStep = 3;
         this.testScheduleModel.activeStep = 3;
         this.testTypeID = 1;
-        this.windowStart = '01.01.14'; //new Date(this.testScheduleModel.scheduleStartTime);
-        this.windowEnd = '12.12.16'; //new Date(this.testScheduleModel.scheduleEndTime);
+        this.windowStart = moment(this.testScheduleModel.scheduleStartTime).format("MM.DD.YY"); //'01.01.14'
+        this.windowEnd = moment(this.testScheduleModel.scheduleEndTime).format("MM.DD.YY"); //'12.12.16'; 
         this.apiServer = this.auth.common.getApiServer();
         this.loadActiveCohorts();
 
