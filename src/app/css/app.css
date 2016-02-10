@@ -1,0 +1,54 @@
+/* CSS class for the angular selectors..*/
+
+/*home,
+    page-footer,
+    page-header,
+    profile,
+    dropdown-menu,
+    choose-test {
+        display: block;
+}*/  
+        
+footer, header {
+ -webkit-box-flex: 0;
+ -webkit-flex: none;
+     -ms-flex: none;
+         flex: none;
+}
+
+.app-main {
+ -webkit-box-flex: 1;
+ -webkit-flex: 1 0 auto;
+     -ms-flex: 1 0 auto;
+         flex: 1 0 auto;
+ width: 100%; }
+
+.app-main::after {
+ content: '\00a0'; /* &nbsp; */
+ display: block;
+ height: 0px;
+ visibility: hidden; }
+        
+app,
+choose-test,
+schedule-test {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-height: 100vh;
+}        
+
+.inner-banner h1 {
+    line-height: 0;
+}
+
+/*page-header,
+page-footer{
+    flex-shrink: 0;
+}*/

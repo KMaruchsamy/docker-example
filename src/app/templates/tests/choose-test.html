@@ -1,0 +1,69 @@
+<page-header></page-header>
+<main role="main" class="app-main">
+    <test-header scheduleStep='Choose a test' [testSchedule]="testScheduleModel"></test-header>
+    <div class="section-thin">
+        <div class="container-medium-width">
+            <p class="text-link-color margin-1em-top"><b><h4 class="margin-1em-top h6">Choose by subject</h4>  </b></p>
+            <select #subjectDropDown id="testSubjectOptions" (change)="loadTests(subjectDropDown.value)" class="selectpicker" data-width="400"
+            data-size="6" title='Choose a test by subject'>
+                <option *ngFor="#subject of subjects; #i = index" [selected]="subject.SubjectId==subjectId" [value]='subject.SubjectId'>{{subject.SubjectName}}</option>
+            </select>
+            <div [class.hidden]="tests?.length===0" class="margin-2em-top available-tests hidden clearfix" id="availableTests">
+
+                <p class="text-larger-teal">Available Tests (choose one)</p>
+                <table id="chooseTestTable" class="table-with-cell-padding table-striped last-row-no-border first-col-wrap">
+                    <thead>
+                        <tr>
+                            <th class="all" scope="col">Test Name</th>
+                            <th scope="col">Length</th>
+                            <th scope="col" class="center">
+                                No. of
+                                <br> Questions
+                            </th>
+                            <th scope="col">Norming Status</th>
+                            <th scope="col" class="center">
+                                View Topical
+                                <br> Blueprint (PDF)
+                            </th>
+                            <th scope="col" class="all center">Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="#test of tests; #x = index">
+                            <td>{{test.TestName}}</td>
+                            <td>{{(test.NumberOfQuestionsInTest * test.SecondsPerQuestion)/60|round }} {{test.SecondsPerQuestion === 0 ? '': 'mins'}} </td>
+                            <td class="center">{{test.NumberOfQuestionsInTest}}</td>
+                            <td>{{test.NormingStatusName}}</td>
+                            <td class="center">
+                                <a [attr.href]='test.TopicalBlueprintLink' target="_blank"><img src="images/pdf-icon@2x.png" style="width:19px; height:23px; " class="pdf-icon" alt="open {{test.TestName}} Blueprint PDF"></a>
+                            </td>
+                            <td class="center">
+                                <input type="radio" [attr.testid]="test.TestId" [attr.testname]="test.TestName" [checked]="test.TestId === testScheduleModel.testId"
+                                (change)="selectTest(test.TestId,test.TestName, subjectDropDown.value);" class="checkbox-image"
+                                [attr.id]="'rdb' + test.TestName|removewhitespace" [attr.aria-label]="'Choose ' + test.TestName">
+                                <label [attr.for]="'rdb' + test.TestName|removewhitespace"></label>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <button type="submit" (click)="saveChooseTest()" id="chooseDate" class="button right margin-2em-top button-mobile-block"
+                [disabled]=!testScheduleModel.testId>
+                    Next step: Choose date and time
+                </button>
+                <!--</form>-->
+            </div>
+            <!--closes <div class="section available-tests">-->
+            <!--</section>-->
+            <div class="delete-draft section-medium-thin invisible clearfix">
+                <hr>
+                <button class="anchor-button smaller">Delete this draft</button>
+                <p class="saved-draft-info smaller teal">Saving draft…</p>
+            </div>
+        </div>
+        <!--closes container-medium-width-->
+    </div>
+    <!--closes div section-->
+</main>
+
+<page-footer></page-footer>

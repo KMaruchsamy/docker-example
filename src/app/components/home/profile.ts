@@ -1,14 +1,12 @@
-import {Component, View, Input,NgFor} from 'angular2/angular2';
+import {Component, Input} from 'angular2/core';
+import {NgFor} from 'angular2/common';
 import {Router, RouterLink} from 'angular2/router';
 import {ProfileModel} from '../../models/profile-model';
 
 
 @Component({
 	selector: 'profile',
-    inputs: ['profile']
-
-})
-@View({
+    inputs: ['profile'],
 	templateUrl: '../../templates/home/profile.html',
 	directives:[RouterLink,NgFor]
 })
@@ -16,8 +14,5 @@ export class Profile {
 	// profile: ProfileModel;	
 	constructor(){
 		
-	}
-	onInit() {
-		//console.log(this.profile);
 	}
 }

@@ -1,4 +1,4 @@
-import {Component, View} from 'angular2/angular2';
+import {Component} from 'angular2/core';
 import {LoginHeader} from './login-header';
 import {LoginContent} from './login-content';
 import {LoginFooter} from './login-footer';
@@ -10,9 +10,7 @@ import {Logger} from '../../scripts/logger';
   viewBindings: [Logger],
   host: {
     '(window:resize)':'resize($event)'
-  }
-})
-@View({
+  },
   templateUrl: '../../templates/login/login.html',
   directives: [LoginHeader, LoginContent, LoginFooter]
 })
@@ -23,7 +21,6 @@ export class Login {
   }
 
   resize($event) {
-    console.log($event);
 }  
   initialize(): void {
     $('title').html('Faculty Sign In &ndash; Kaplan Nursing');

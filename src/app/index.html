@@ -1,6 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang='en-US' class="login-page">
+
 <head>
+   <!-- <script>document.write('<base href="' + document.location + '" />');</script> -->
+    <!--<base href="/" />-->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1, width=device-width">
@@ -23,12 +26,31 @@
     <meta name="msapplication-TileColor" content="#603cba">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="css/responsive.dataTablesCustom.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker3-1.5.min.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.1/css/bootstrap-datepicker3.min.css">-->
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/schedule.css">
     <style>
-        .branding-logo-white{
-            display: inherit;
-        }
+     
     </style>
+      <script src="lib/system.js"></script>       
+    <script src="lib/system-polyfills.js"></script>  
+     <script src="lib/es6-shim.min.js"></script>
+    <script src="lib/angular2-polyfills.js"></script>
+    <script>
+        System.config({ defaultJSExtensions: true });
+    </script>
+    <!-- Angular2-related imports -->
+    <!--<script src="lib/zone.js"></script>
+        <script src="lib/long-stack-trace-zone.js"></script>-->
+    <script src="lib/Rx.js"></script>
+    <script src="lib/angular2.min.js"></script>
+    <script src="lib/router.dev.js"></script>
+    <script src="lib/http.js"></script>
 </head>
 
 <body>
@@ -39,31 +61,29 @@
         <script>baseElement = document.querySelector('base');baseElement.attr = baseElement.getAttribute;</script>-->
 
     <!-- ES6-related imports -->
-    <script src="lib/traceur-runtime.js"></script>
-    <script src="lib/system-csp-production.src.js"></script>
-    <script src="lib/Reflect.js"></script>
-    <script>
-        System.config({ defaultJSExtensions: true });
-    </script>
+    <!--<script src="lib/traceur-runtime.js"></script>-->
+
     <script src="lib/jquery.min.js"></script>
     <script src="lib/sessionstorage.js"></script>
-    <!-- Angular2-related imports -->
-    <!--<script src="lib/zone.js"></script>
-        <script src="lib/long-stack-trace-zone.js"></script>-->
-    <script src="lib/angular2.js"></script>
-    <script src="lib/router.dev.js"></script>
-    <script src="lib/http.js"></script>
+
     <!-- Libraries for example -->
     <script type="text/javascript" src="lib/fetch.js"></script>
     <script type="text/javascript" src="lib/jwt-decode.js"></script>
+    <!--<srcipt src="lib/moment.min.js"></srcipt>-->
     <!-- Encryption/Decryption using AES -->
     <script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
     <script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
     <script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/components/mode-cfb-min.js"></script>
     <script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pad-ansix923-min.js"></script>
+    <script src="lib/moment.min.js"></script>
+    <script src="lib/ga.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.1/js/bootstrap-datepicker.min.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.3.1/moment.min.js"></script>-->
+    
     <!-- Application bootstrap logic -->
     <script>
-        System.import('app').catch(console.log.bind(console));
+        // System.import('app').catch(console.log.bind(console));
+        System.import('app').then(null, console.error.bind(console));
     </script>
 </body>
 

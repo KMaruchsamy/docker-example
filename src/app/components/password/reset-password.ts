@@ -1,4 +1,4 @@
-﻿import {Component, View} from 'angular2/angular2';
+﻿import {Component} from 'angular2/core';
 import {Router, Location, RouterLink} from 'angular2/router';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -9,9 +9,7 @@ import {general,reset_password,temp_password,login} from '../../constants/error-
 
 @Component({
     selector: 'reset-password',
-    viewBindings: [Auth, Common, Validations]
-})
-@View({
+    providers: [Auth, Common, Validations],
     templateUrl: '../../templates/password/reset-password.html',
     directives: [PasswordHeader, RouterLink]
 })
@@ -98,7 +96,7 @@ export class ResetPassword {
     
     RedirectToLogin(event) {
         event.preventDefault();
-        this.router.parent.navigateByUrl('/login');
+        this.router.parent.navigateByUrl('/');
     }
     
     // route(path, e) {

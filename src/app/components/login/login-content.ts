@@ -1,6 +1,6 @@
 /// <reference path="../../../typings/jquery/jquery.d.ts"/>
 
-import {View, Component} from 'angular2/angular2';
+import {Component} from 'angular2/core';
 import {Router, RouterLink} from 'angular2/router';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -11,9 +11,7 @@ import {general, login} from '../../constants/error-messages';
 
 @Component({
     selector: 'login-content',
-    viewBindings: [Auth, Common]
-})
-@View({
+    providers: [Auth, Common],
     templateUrl: '../../templates/login/login-content.html',
     directives: [RouterLink]
 })
@@ -118,7 +116,6 @@ export class LoginContent {
         this.hdInstitution.value = (this.institutionRN > 0) ? this.institutionRN : this.institutionPN;
         this.hdToken.value = this.auth.token
         this.hdURL.value = this.page;
-        console.log(this.hdInstitution.value);
         this.auth.logout();
         $(this.form).attr('ACTION', serverURL).submit();
 

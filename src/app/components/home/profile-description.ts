@@ -1,4 +1,5 @@
-import {Component, View,NgFor,NgIf} from 'angular2/angular2';
+import {Component} from 'angular2/core';
+import {NgFor, NgIf} from 'angular2/common';
 import {RouteParams, RouterLink} from 'angular2/router';
 import {HomeService} from '../../services/home-service';
 import {Common} from '../../services/common';
@@ -6,52 +7,45 @@ import {links} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {ProfileModel} from '../../models/profile-model';
-import {BoldText} from '../../scripts/bold-text';
 
 @Component({
     selector: 'profile-description',
-    viewProviders: [HomeService, Common, BoldText]
-})
-@View({
-        templateUrl: '../../templates/home/profile-description.html',
-        directives: [RouterLink, PageHeader, PageFooter, NgFor, NgIf]
+    providers: [HomeService, Common],
+    templateUrl: '../../templates/home/profile-description.html',
+    directives: [RouterLink, PageHeader, PageFooter, NgFor, NgIf]
 })
 export class ProfileDescription {
-	kaplanAdminId: number;
-	profile: ProfileModel;
+    kaplanAdminId: number;
+    profile: ProfileModel;
     apiServer: string;
-    constructor(public routeParams: RouteParams, public homeService: HomeService, public common: Common, public boldtext: BoldText) {		
-		// this.routeParams = routeParams;
-		// this.homeService = homeService;
-		// this.common = common;
-		this.apiServer = this.common.getApiServer();
-		this.kaplanAdminId = parseInt(this.routeParams.get('id'));
-		this.profile = {}
-		this.loadProfileDescription();
-	}
+    constructor(public routeParams: RouteParams, public homeService: HomeService, public common: Common) {
+        this.apiServer = this.common.getApiServer();
+        this.kaplanAdminId = parseInt(this.routeParams.get('id'));
+        this.profile = {}
+        this.loadProfileDescription();
+    }
 
-	loadProfileDescription(): void {
-		if (this.kaplanAdminId != null && this.kaplanAdminId > 0) {
-			let url = this.apiServer + links.api.baseurl + links.api.admin.profilesapi + '/' + this.kaplanAdminId;
-			let profilePromise = this.homeService.getProfile(url);
-			let self: ProfileDescription = this;
-			profilePromise.then((response) => {
-				return response.json();
-			})
-				.then((json) => {
-					self.profile = self.homeService.bindToModel(json);
+    loadProfileDescription(): void {
+        if (this.kaplanAdminId != null && this.kaplanAdminId > 0) {
+            let url = this.apiServer + links.api.baseurl + links.api.admin.profilesapi + '/' + this.kaplanAdminId;
+            let profilePromise = this.homeService.getProfile(url);
+            let self: ProfileDescription = this;
+            profilePromise.then((response) => {
+                return response.json();
+            })
+                .then((json) => {
+                    self.profile = self.homeService.bindToModel(json);
                     if (self.profile) {
-                        this.boldtext.getTextBold(self.profile.bio);
-						if (self.profile.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER')
-							$('title').html('Your Account Manager &ndash; Kaplan Nursing');
-						else
-							$('title').html('Your Nurse Consultant &ndash; Kaplan Nursing');
-					}
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		}
-	}
+                        if (self.profile.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER')
+                            $('title').html('Your Account Manager &ndash; Kaplan Nursing');
+                        else
+                            $('title').html('Your Nurse Consultant &ndash; Kaplan Nursing');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }
 
 }

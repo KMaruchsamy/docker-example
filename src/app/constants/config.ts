@@ -1,50 +1,90 @@
 export const links = {
     api: {
-		local: {
-			server: "http://localhost/"
-		},
-		dev: {
-			server: "http://dev.nursing.ktp.io/"
-		},
-		qa: {
-			server : "https://nursingqa-test.kaplan.com/"			
-		},
-		baseurl: "api/v1/",
-		admin: {
-			authenticationapi: "admin/login",
-			forgotpasswordapi: "admin/forgetPassword",
-			settemporarypasswordapi: "admin/resetPassword",
-			resetprofileapi: "admin/resetProfile",
-			resetemailapi: "admin/resetEmail",
-			resetfacultypasswordafterloginapi: "admin/resetPasswordAfterLogin",
-			resetstudentpassword: "admin/sendStudentEmail",
-			profilesapi: "profile"
-		}
+        local: {
+            server: "http://localhost/"
+        },
+        dev: {
+            server: "https://dev01-nursing.kaptest.com/"
+        },
+        qa: {
+            server: "https://qa-nursing.kaptest.com/"
+        },
+        stg: {
+            server: "https://stg-nursing.kaptest.com/"
+        },
+        prod: {
+            server: "https://nursing.kaplan.com/"
+        },
+        baseurl: "api/v1/",
+        admin: {
+            authenticationapi: "admin/login",
+            forgotpasswordapi: "admin/forgetPassword",
+            settemporarypasswordapi: "admin/resetPassword",
+            resetprofileapi: "admin/resetProfile",
+            resetemailapi: "admin/resetEmail",
+            resetfacultypasswordafterloginapi: "admin/resetPasswordAfterLogin",
+            resetstudentpassword: "admin/sendStudentEmail",
+            profilesapi: "profile",
+            test: {
+                subjects: "scheduling/institutions/§institutionid/subjects?testType=§testtype",
+                tests: "scheduling/institutions/§institutionid/tests?subject=§subject&testType=§testtype",
+                openintegratedtests: "scheduling/OpenIntegratedTests",
+                cohorts: "scheduling/institutions/§institutionid/activeCohorts?windowStart=§windowstart&windowEnd=§windowend",
+                cohortstudents: "scheduling/cohorts/§cohortid/students?testId=§testid",
+                faculty:"scheduling/institutions/§institutionid/faculty"
+            }
+        }
     },
     nursingit: {
-		local: {
-			server: "http://localhost/"
-		},
-		dev: {
-			server: "http://nursing.dev.kaplan.com/"
-		},
-		qa: {
-			server: "https://nursingqa.kaplan.com/"
-		},
-		landingpage: "NewSiteLandingPage.aspx?facultylogin=1",
-		ReportingLandingPage: "UX_ALogin.aspx"
+        local: {
+            server: "http://localhost/"
+        },
+        dev: {
+            server: "https://dev01-nursing.kaptest.com/"
+        },
+        qa: {
+            server: "https://qa-nursing.kaptest.com/"
+        },
+        stg: {
+            server: "https://stg-nursing.kaptest.com/"
+        },
+        prod: {
+            server: "https://nursing.kaplan.com/"
+        },
+        landingpage: "NewSiteLandingPage.aspx?facultylogin=1",
+        ReportingLandingPage: "UX_ALogin.aspx"
+    },
+    faculty: {
+        local: {
+            server: "http://localhost:3000/"
+        },
+        dev: {
+            server: "https://dev-nit.kaptest.com/"
+        },
+        qa: {
+            server: "https://qa-nit.kaptest.com/ "
+        },
+        stg: {
+            server: "https://stg-nit.kaptest.com/faculty"
+        },
+        prod: {
+            server: "https://nit.kaplan.com/faculty"
+        },
     },
     resetemailexpire: {
-		expirytime: "2"
+        expirytime: "2"
     },
-	profile:{
-		accountmanager:{
-			defaultimage : 'images/profile-noimage.jpg'
-		},
-		nurseconsultant:{
-			defaultimage:'images/profile-noimage.jpg'
-		}
-	}
+    profile: {
+        accountmanager: {
+            defaultimage: 'images/profile-noimage.jpg'
+        },
+        nurseconsultant: {
+            defaultimage: 'images/profile-noimage.jpg'
+        }
+    },
+    tests: {
+        defaultScheduleDurationHours: 3
+    }
 };
 
 export const errorcodes = {
@@ -53,6 +93,13 @@ export const errorcodes = {
     ERROR: "400",
     SERVERERROR: "500",
     API: "422"
+};
+
+export const TestShedulingPages = {
+    CHOOSETEST: 'CHOOSE-TEST',
+    SCHEDULETEST: 'SCHEDULE-TEST',
+    ADDSTUDENTS: 'ADD-STUDENTS',
+    REVIEWTEST: 'REVIEW'
 };
   
   

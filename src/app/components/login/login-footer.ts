@@ -1,12 +1,10 @@
-﻿import {View,Component} from 'angular2/angular2';
+﻿import {Component} from 'angular2/core';
 import {Router,RouterLink} from 'angular2/router';
 import {Utility} from '../../scripts/utility';
 
 @Component({
     selector:'login-footer',
-    viewBindings:[Utility]
-})
-@View({
+    providers:[Utility],
     templateUrl:'../../templates/login/login-footer.html',
     directives:[RouterLink]
 })

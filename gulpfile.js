@@ -23,6 +23,9 @@ var tscConfig = require('./tsconfig.json');
 var tslint = require('gulp-tslint');
 var sourcemaps = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
+var plugins = require('gulp-load-plugins')({lazy: true});
+var env = process.env.NODE_ENV || 'qa';
+var app_version = process.env.app_version || 'stg_v0';
 
 gulp.task('clean', function (done) {
     del([config.app.src.build], done);
@@ -111,6 +114,32 @@ gulp.task('build', function (done) {
         );
 });
 
+// To run: NODE_ENV=production gulp prepare_config
+gulp.task('prepare_config', function () {
+    gulp.src('ebs/resources_' + env + '.config')
+        .pipe(plugins.rename({
+            dirname: '',
+            basename: 'resources',
+            extname: '.config'
+        }))
+        .pipe(gulp.dest(config.ebExtensions));
+
+    gulp.src('ebs/Dockerrun_' + env + '.aws.json')
+        .pipe(plugins.rename({
+            dirname: '',
+            basename: 'Dockerrun.aws',
+            extname: '.json'
+        }))
+        .pipe(gulp.dest('.'));
+});
+
+// To run: app_version=qa_v4 gulp create_zip
+gulp.task('create_zip', function(){
+    gulp.src(['./Dockerrun.aws.json', 
+            config.ebExtensions + 'resources.config'], { base: "." })
+        .pipe(plugins.zip('nursing-adminapp-' + app_version + '.zip'))
+        .pipe(gulp.dest('dist'));
+});
 
 gulp.task('play', ['build'], function () {
 

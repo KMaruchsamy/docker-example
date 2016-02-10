@@ -1,0 +1,108 @@
+﻿<page-header></page-header>
+<main role="main" class="app-main">
+    <test-header scheduleStep='Add students' [testSchedule]="testScheduleModel"></test-header>
+    <div class="section-thin">
+        <div class="container add-students-outer-container section-small-screen-no-padding">
+
+            <!--Tabs will not be shown for MVP. Only option will be to select by cohort-->
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs minimal-nav-tabs margin-left-1em">
+                <li class="active"><a href="#addByCohort" data-toggle="tab">Add by Cohort</a></li>
+                <!--<li><a href="#addByGroup" data-toggle="tab">Add by Group</a></li>
+                <li><a href="#addByName" data-toggle="tab">Add by Name</a></li>-->
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="testing-add-students-container">
+                <div class="grid left-grid">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="addByCohort">
+                            <div id="chooseCohortContainer">
+                                <div class="top-section">
+                                    <select id="chooseCohort" #selectcohort class="selectpicker" title="Choose a Cohort" data-width="65%" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,selectcohort,$event)">
+                                        <option *ngFor="#cohort of cohorts;#i=index;" [selected]="cohort.CohortId==lastSelectedCohortID" [value]="cohort.CohortId">{{cohort.CohortName}}</option>
+                                    </select>
+                                    <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort($event)">Add all students</button>
+                                </div>
+
+                                <div class="hidden" id="cohortStudentList" #cohortstudentlist>
+                                    <!--contains table and sets a max height so that it scrolls-->
+                                    <table id="cohortStudents" class="tablesorter table-with-small-button-row order-column stripe table-with-cell-padding table-striped last-row-no-border">
+                                        <thead>
+                                            <tr>
+                                                <th class="select-filter" scope="col">Last Name</th>
+                                                <th class="select-filter" scope="col">First Name</th>
+                                                <th scope="col">Cohort</th>
+                                                <th scope="col">Retesting</th>
+                                                <th class="all" scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="#student of cohortStudentlist;#j=index;">
+                                                <td title="{{student.Email}}">{{student.LastName}}</td>
+                                                <td>{{student.FirstName}}</td>
+                                                <td>{{lastSelectedCohortName}}</td>
+                                                <td>{{student.Retester?"Yes":"No"}}</td>
+                                                <td>
+                                                    <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" (click)="AddStudent(student,$event)" >Add</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                   
+                                </div>
+                                <!--closes hidden-->
+                            </div>
+                            <!-- closes cohort container-->
+                        </div><!--closes tab pane-->
+                    </div>
+                </div>
+                <!--end left-grid-->
+
+                <div class="grid right-grid">
+                    <div class="top-section">
+                        <h4 class="white-text h6 no-margin-bottom" id="studentAddedToTestingSession">Students in Testing Session ({{selectedStudentCount}})</h4>
+                    </div>
+                    <div class="section-medium-thin container-narrow lightbulb-icon-container-flush-text" id="selectedStudentsContainer">
+                        <p class="icon lightbulb-icon">Students you add to your testing session by Cohort, Group or Name will appear here.</p>
+                        <p class="icon lightbulb-icon">You will be able to assign alternate test versions to retesting students before moving to Step 4.</p>
+                        <p class="icon lightbulb-icon">If a cohort you are expecting to see does not appear in the menu, please check your testing window in Step 2.</p>
+                    </div>
+                    <div id="testSchedulingSelectedStudents" class="added-student-list hidden">
+                        <form class="test-scheduling-selected-students-container">
+                            <ul id="testSchedulingSelectedStudentsList"></ul>
+                        </form>
+                        <div class="search-added-students">
+                            <label class="screen-reader-only" for="filterSelectedStudents">Find Student</label>
+                            <input type="search" role="search" id="filterSelectedStudents" placeholder="Find student" class="small-search-box">
+                            <button class="button button-small button-light" id="RemoveAllStudents" (click)="RemoveAllSelectedStudents($event)">Remove all students</button>
+                        </div>
+                        <!--closes search for student-->
+                    </div>
+                    <!--closes added student list-->
+                </div>
+                <!--closes right grid-->
+            </div><!-- closes testing-add-students-container-->
+        </div><!--closes container small with no padding-->
+
+        <div class="container add-students-outer-container">
+            <div class="info-icon-yellow-container-flush-text">
+                <p class="icon info-icon-yellow margin-1em-top hidden" id="accommadationNote">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
+                <p class="icon info-icon-yellow margin-1em-top hidden" id="studentScheduleNote">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
+                <!--  <div class="right margin-2em-top-bottom">-->
+                <button type="button" class="button button-mobile-block right margin-2em-top" id="reviewDetails" data-toggle="modal" data-target="#modalTimingException" disabled (click)="DetailReviewTestClick($event)">Next step: Add details and review</button>
+                <!--</div>-->
+            </div>
+        </div>
+
+        <div class="container add-students-outer-container delete-draft section-medium-thin invisible">
+            <hr>
+            <button class="anchor-button smaller">Delete this draft</button>
+            <p class="saved-draft-info smaller teal">Draft saved Friday, October 23, 2015 at 2:31pm</p>
+        </div>
+    </div>
+    <!--closes div section-->
+</main>
+
+<page-footer></page-footer>
+<exception-modal-popup></exception-modal-popup>
