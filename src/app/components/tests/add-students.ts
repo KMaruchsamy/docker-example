@@ -109,6 +109,7 @@ export class AddStudents implements OnInit, OnDeactivate {
 
     loadStudentsByCohort(btnAddAllStudent, tblCohortStudentList, selectedcohort: any, event): void {
         event.preventDefault();
+        this.resetAllAddButtonsOnCohortSelection();
         let cohortId = this.cohorts[selectedcohort.selectedIndex - 1].CohortId;
         this.lastSelectedCohortName = this.cohorts[selectedcohort.selectedIndex - 1].CohortName.toString();
         if (cohortId > 0) {
@@ -145,11 +146,24 @@ export class AddStudents implements OnInit, OnDeactivate {
 
                         });
                         this.SearchFilterOptions();
+                        this.DisableAddButton();
+                        this.CheckForAllStudentSelected();
                     });
                 })
                 .catch((error) => {
                     console.log(error);
                 });
+        }
+    }
+
+    resetAllAddButtonsOnCohortSelection(): void {
+        if (this.selectedStudents.length > 0)
+        {
+            for (var i = 0; i < this.selectedStudents.length; i++)
+            {
+                var studentid = "cohort-" + this.selectedStudents[i].StudentId.toString();
+                this.EnableAddButton(studentid);
+            }
         }
     }
     SearchFilterOptions(): void {
@@ -162,7 +176,7 @@ export class AddStudents implements OnInit, OnDeactivate {
         $('#cohortStudentList .add-students-table-search').append(checkboxfilters);
         $('#cohortRepeatersOnly').on('click', function () {
             var $excludeRepeaters = $('#cohortExcludeRepeaters');
-
+            
             if ($(this).is(':checked')) {
                 $excludeRepeaters.prop('checked', false);
                 $('#cohortStudents').DataTable().column(3)
@@ -172,6 +186,15 @@ export class AddStudents implements OnInit, OnDeactivate {
                 $('#cohortStudents').DataTable().column(3)
                     .search('')
                     .draw();
+            }
+            var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
+            if (rows.length > 0) {
+                for (var i = 0; i < rows.length; i++) {
+                    var buttonId = eval($(rows[i])[4].split("id=")[1].split('>')[0]);
+                    if (!$('#' + buttonId).prop('disabled')) {
+                        $('#addAllStudents').removeAttr('disabled', 'disabled');
+                    }
+                }
             }
         });
         $('#cohortExcludeRepeaters').on('click', function () {
@@ -187,6 +210,15 @@ export class AddStudents implements OnInit, OnDeactivate {
                     .search('')
                     .draw();
             }
+            var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
+            if (rows.length > 0) {
+                for (var i = 0; i < rows.length; i++) {
+                    var buttonId = eval($(rows[i])[4].split("id=")[1].split('>')[0]);
+                    if (!$('#' + buttonId).prop('disabled')) {
+                        $('#addAllStudents').removeAttr('disabled', 'disabled');
+                    }
+                }
+            }
         });
     }
 
@@ -200,15 +232,21 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.sortAlpha();
         this.RemoveSelectedStudents();
     }
+
     AddStudentList(): string {
         var studentlist = "";
-        if (this.cohortStudentlist.length > 0) {
-            for (var i = 0; i < this.cohortStudentlist.length; i++) {
-                var student = this.cohortStudentlist[i];
-                if (!$('#cohort-' + student.StudentId).prop('disabled')) {
-                    student.CohortId = this.lastSelectedCohortID;
+        var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
+        if (rows.length > 0) {
+            for (var i = 0; i < rows.length; i++) {
+                var student = {};
+                var buttonId = eval($(rows[i])[4].split("id=")[1].split('>')[0]);
+                if (!$('#' + buttonId).prop('disabled')) {
+                    student.LastName = $(rows[i])[0];
+                    student.FirstName = $(rows[i])[1];
+                    student.Retester = $(rows[i])[3];
+                    student.StudentId = parseInt(buttonId.split('-')[1]);
                     this.selectedStudents.push(student);
-                    $('#cohort-' + student.StudentId).attr('disabled', 'disabled');
+                    $('#' + buttonId).attr('disabled', 'disabled');
                     var retesting = "";
                     if (student.Retester) {
                         retesting = "RETESTING";
@@ -219,8 +257,46 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
         return studentlist;
     }
-    RemoveSelectedStudents(): void {
-        debugger;
+
+    EnableAddButton(buttonid: string): void {
+        var rows = $("#cohortStudents").dataTable().fnGetNodes();
+        for (var i = 0; i < rows.length; i++) {
+            var button = $(rows[i]).find("td:eq(4) button").attr('id');
+            if (button === buttonid)
+            {
+                $(rows[i]).find("td:eq(4) button").removeAttr('disabled','disabled');
+            }
+        }
+    }
+
+    DisableAddButton(): void {
+        if (this.selectedStudents.length > 0) {
+            for (var j = 0; j <this.selectedStudents.length; j++) {
+                var buttonid = "cohort-" + this.selectedStudents[j].StudentId.toString();
+                var rows = $("#cohortStudents").dataTable().fnGetNodes();
+                for (var i = 0; i < rows.length; i++) {
+                    var button = $(rows[i]).find("td:eq(4) button").attr('id');
+                    if (button === buttonid) {
+                        $(rows[i]).find("td:eq(4) button").attr('disabled', 'disabled');
+                    }
+                }
+            }
+        }
+    }
+
+    CheckForAllStudentSelected(): void {
+        var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
+        if (rows.length > 0) {
+            for (var i = 0; i < rows.length; i++) {
+                var buttonId = eval($(rows[i])[4].split("id=")[1].split('>')[0]);
+                if (!$('#' + buttonId).prop('disabled')) {
+                    $('#addAllStudents').removeAttr('disabled', 'disabled');
+                }
+            }
+        }
+    }
+
+   RemoveSelectedStudents(): void {
         let _self = this;
         $('#testSchedulingSelectedStudentsList button').on('click', function (e) {
             e.preventDefault();
@@ -228,8 +304,7 @@ export class AddStudents implements OnInit, OnDeactivate {
             $(this).parent().remove();
             if (_self.selectedStudents.length > 0) {
                 $('#addAllStudents').removeAttr('disabled', 'disabled');
-                $('#cohort-' + rowId).removeAttr('disabled', 'disabled');
-
+                _self.EnableAddButton("cohort-" + rowId);
                 _self.UpdateSelectedStudentCount(rowId);
                 _self.displaySelectedStudentFilter();
                 if (_self.selectedStudentCount < 1) {
@@ -262,9 +337,6 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
         var studentli = '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ',' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
         $('#testSchedulingSelectedStudentsList').append(studentli);
-        //$('.top-section').addClass('active');
-        //$('#selectedStudentsContainer').addClass('hidden');
-        //$('#testSchedulingSelectedStudents').removeClass('hidden');
         this.ShowHideSelectedStudentContainer();
         this.displaySelectedStudentFilter();
         this.EnableDisableButtonForDetailReview();
@@ -277,15 +349,11 @@ export class AddStudents implements OnInit, OnDeactivate {
         $('#addAllStudents').removeAttr('disabled', 'disabled');
         if (this.selectedStudents.length > 0) {
             for (var i = 0; i < this.selectedStudents.length; i++) {
-                var studentId = this.selectedStudents[i].StudentId.toString();
-                $('#cohort-' + studentId).removeAttr('disabled', 'disabled');
+                var studentId = "cohort-"+ this.selectedStudents[i].StudentId.toString();
+                this.EnableAddButton(studentId);
             }
             this.selectedStudents = [];
         }
-        //$('.top-section').removeClass('active');
-        //$('#selectedStudentsContainer').removeClass('hidden');
-        //$('#testSchedulingSelectedStudentsList').empty();
-        //$('#testSchedulingSelectedStudents').addClass('hidden');
         this.ShowHideSelectedStudentContainer();
         this.displaySelectedStudentFilter();
         this.EnableDisableButtonForDetailReview();
@@ -318,7 +386,6 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
 
     EnableDisableButtonForDetailReview(): void {
-        debugger;
         if (this.selectedStudentCount > 0) {
             $('#accommadationNote').removeClass('hidden');
             $('#studentScheduleNote').removeClass('hidden');
