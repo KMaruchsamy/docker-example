@@ -24,23 +24,22 @@
                                     </select>
                                     <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort($event)">Add all students</button>
                                 </div>
-                                <!--<div><input id="cohortname" type="hidden" value="sel.value" /></div>-->
 
                                 <div class="hidden" id="cohortStudentList" #cohortstudentlist>
                                     <!--contains table and sets a max height so that it scrolls-->
                                     <table id="cohortStudents" class="tablesorter table-with-small-button-row order-column stripe table-with-cell-padding table-striped last-row-no-border">
                                         <thead>
                                             <tr>
-                                                <th class="select-filter" scope="col" data-column="1">Last Name</th>
-                                                <th class="select-filter" scope="col" data-column="2">First Name</th>
-                                                <th scope="col"  data-column="3">Cohort</th>
-                                                <th scope="col" data-column="4">Retesting</th>
+                                                <th class="select-filter" scope="col">Last Name</th>
+                                                <th class="select-filter" scope="col">First Name</th>
+                                                <th scope="col">Cohort</th>
+                                                <th scope="col">Retesting</th>
                                                 <th class="all" scope="col"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="#student of cohortStudentlist;#j=index;">
-                                                <td>{{student.LastName}}</td>
+                                                <td title="{{student.Email}}">{{student.LastName}}</td>
                                                 <td>{{student.FirstName}}</td>
                                                 <td>{{lastSelectedCohortName}}</td>
                                                 <td>{{student.Retester?"Yes":"No"}}</td>
@@ -50,17 +49,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <div class="add-students-table-search">
-                                        <div id="DataTables_Table_0_filter" class="dataTables_filter">
-                                            <label><input type="search" class="small-search-box" placeholder="Find student in cohort" aria-controls="DataTables_Table_0"></label>
-                                        </div>
-                                        <div class="form-group hidden-small-down">
-                                            <input type="checkbox" class="small-checkbox-image" id="cohortRepeatersOnly" name="filterADA" value="repeatersOnly" (click)="GetRepetersOnly($event)" >
-                                            <label class="smaller" for="cohortRepeatersOnly">Retesting only</label>
-                                            <input type="checkbox" class="small-checkbox-image" id="cohortExcludeRepeaters" name="filterADA" value="excludeRepeaters" (click)="ExcludeRepeaters($event)">
-                                            <label class="smaller" for="cohortExcludeRepeaters">Exclude retesting students</label>
-                                        </div>
-                                    </div>
+                                   
                                 </div>
                                 <!--closes hidden-->
                             </div>
@@ -86,7 +75,7 @@
                         <div class="search-added-students">
                             <label class="screen-reader-only" for="filterSelectedStudents">Find Student</label>
                             <input type="search" role="search" id="filterSelectedStudents" placeholder="Find student" class="small-search-box">
-                            <button class="button button-small button-light" id="RemoveAllStudents" (click)="RemoveALlSelectedStudents($event)">Remove all students</button>
+                            <button class="button button-small button-light" id="RemoveAllStudents" (click)="RemoveAllSelectedStudents($event)">Remove all students</button>
                         </div>
                         <!--closes search for student-->
                     </div>
@@ -101,7 +90,7 @@
                 <p class="icon info-icon-yellow margin-1em-top hidden" id="accommadationNote">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
                 <p class="icon info-icon-yellow margin-1em-top hidden" id="studentScheduleNote">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
                 <!--  <div class="right margin-2em-top-bottom">-->
-                <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" data-toggle="modal" data-target="#modalTimingException" disabled (click)="DetailReviewTestClick($event)">Next step: Add details and review</button>
+                <button type="button" class="button button-mobile-block right margin-2em-top" id="reviewDetails" data-toggle="modal" data-target="#modalTimingException" disabled (click)="DetailReviewTestClick($event)">Next step: Add details and review</button>
                 <!--</div>-->
             </div>
         </div>
