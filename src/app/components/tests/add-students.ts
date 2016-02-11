@@ -249,10 +249,10 @@ export class AddStudents implements OnInit, OnDeactivate {
                     this.selectedStudents.push(student);
                     $('#' + buttonId).attr('disabled', 'disabled');
                     var retesting = "";
-                    if (student.Retester) {
+                    if (student.Retester==="Yes") {
                         retesting = "RETESTING";
                     }
-                    studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ',' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
+                    studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
                 }
             }
         }
@@ -336,7 +336,7 @@ export class AddStudents implements OnInit, OnDeactivate {
         if (student.Retester) {
             retesting = "RETESTING";
         }
-        var studentli = '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ',' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
+        var studentli = '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
         $('#testSchedulingSelectedStudentsList').append(studentli);
         this.ShowHideSelectedStudentContainer();
         this.displaySelectedStudentFilter();

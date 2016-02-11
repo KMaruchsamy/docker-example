@@ -8,7 +8,7 @@
     <div class="container-medium-width" [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
         <div *ngIf="testSchedule.currentStep>1 " class="test-summary-heading-details"><span>Test: <b>{{testSchedule.testName}}</b></span>
             <a href="#" [routerLink]="['/ChooseTest' , {institutionId : testSchedule.institutionId}]" class="link-darker">Change test</a></div>
-        <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>{{testSchedule.scheduleStartTime|parseDate:'EEE'}} {{testSchedule.scheduleStartTime|parseDate:'MM/dd/yy'}} from {{testSchedule.scheduleStartTime|parseDate:'hh:mm a'}} - {{testSchedule.scheduleEndTime|parseDate:'hh:mm a'}}</b></span><a [routerLink]="['/ScheduleTest']"  class="link-darker">Change date or time</a></div>
+        <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>{{testSchedule.scheduleStartTime|parseDate:'ddd'}} {{testSchedule.scheduleStartTime|parseDate:'MM/dd/yy'}} from {{testSchedule.scheduleStartTime|parseDate:'hh:mm a'}} &ndash; {{testSchedule.scheduleEndTime|parseDate:'hh:mm a'}}</b></span><a [routerLink]="['/ScheduleTest']"  class="link-darker">Change date or time</a></div>
     </div>
 </div>
 <div class="section-thin section-gray">
