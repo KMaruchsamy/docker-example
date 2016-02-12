@@ -34,7 +34,6 @@ export class AddStudents implements OnInit, OnDeactivate {
     apiServer: string;
     lastSelectedCohortID: number;
     lastSelectedCohortName: string;
-    testTypeID: number;
     cohorts: Object[] = [];
     cohortStudentlist: Object[] = [];
     selectedStudents: Object[] = [];
@@ -71,7 +70,6 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.testScheduleModel = savedSchedule;
         this.testScheduleModel.currentStep = 3;
         this.testScheduleModel.activeStep = 3;
-        this.testTypeID = 1;
         this.windowStart = moment(this.testScheduleModel.scheduleStartTime).format("MM.DD.YY"); //'01.01.14'
         this.windowEnd = moment(this.testScheduleModel.scheduleEndTime).format("MM.DD.YY"); //'12.12.16'; 
         this.apiServer = this.auth.common.getApiServer();
@@ -111,7 +109,7 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
 
     resolveCohortStudentsURL(url: string): string {
-        return url.replace('§cohortid', this.lastSelectedCohortID.toString()).replace('§testid', this.testTypeID.toString());
+        return url.replace('§cohortid', this.lastSelectedCohortID.toString()).replace('§testid', this.testScheduleModel.testId.toString());
     }
 
     loadStudentsByCohort(btnAddAllStudent, tblCohortStudentList, selectedcohort: any, event): void {
@@ -129,33 +127,42 @@ export class AddStudents implements OnInit, OnDeactivate {
                 .then((json) => {
                     if (this.testsTable)
                         this.testsTable.destroy();
+                    let _self = this;
                     $('#' + btnAddAllStudent.id).removeClass('hidden');
                     $('#' + tblCohortStudentList.id).removeClass('hidden');
-                    this.cohortStudentlist = json;
-                    setTimeout(json=> {
-                        this.testsTable = $('#cohortStudents').DataTable({
-                            "paging": false,
-                            "responsive": true,
-                            "info": false,
-                            "scrollY": 551,
-                            "dom": 't<"add-students-table-search"f>',
-                            "language": {
-                                search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
-                                //search: "Find student in cohort",
-                                searchPlaceholder: "Find student in cohort",
-                                "zeroRecords": "No matching students in this cohort",
-                            },
-                            columnDefs: [{
-                                targets: [2, 4],
-                                orderable: false,
-                                searchable: false
-                            }],
+                    if (typeof (json.msg) != "undefined")
+                        this.cohortStudentlist = [];
+                    else
+                        this.cohortStudentlist = json;
 
+                        setTimeout(json=> {
+                            this.testsTable = $('#cohortStudents').DataTable({
+                                "paging": false,
+                                "responsive": true,
+                                "info": false,
+                                "scrollY": 551,
+                                "dom": 't<"add-students-table-search"f>',
+                                "language": {
+                                    search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
+                                    searchPlaceholder: "Find student in cohort",
+                                    "zeroRecords": "No matching students in this cohort",
+                                    "emptyTable":"No students for this cohort",
+                                },
+                                columnDefs: [{
+                                    targets: [2, 4],
+                                    orderable: false,
+                                    searchable: false
+                                }],
+
+                            });
+                            
+                           if (_self.cohortStudentlist.length > 0) {
+                                this.SearchFilterOptions();
+                                this.DisableAddButton();
+                                
+                            }
+                           this.CheckForAllStudentSelected();
                         });
-                        this.SearchFilterOptions();
-                        this.DisableAddButton();
-                        this.CheckForAllStudentSelected();
-                    });
                 })
                 .catch((error) => {
                     console.log(error);
@@ -315,6 +322,8 @@ export class AddStudents implements OnInit, OnDeactivate {
                 }
             }
         }
+        else
+            $('#addAllStudents').attr('disabled', 'disabled');
     }
 
    RemoveSelectedStudents(): void {
