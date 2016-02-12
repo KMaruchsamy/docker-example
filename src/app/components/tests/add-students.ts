@@ -4,6 +4,7 @@ import {NgFor} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {links} from '../../constants/config';
+import {Common} from '../../services/common';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
@@ -23,7 +24,7 @@ import '../../plugins/dataTables.responsive.js';
     selector: 'add-students',
     templateUrl: '../../templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
-    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel],
+    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common],
     directives: [PageHeader, TestHeader, PageFooter, ExceptionModalPopup, NgFor],
     pipes: [RemoveWhitespacePipe]
 })
@@ -42,7 +43,8 @@ export class AddStudents implements OnInit, OnDeactivate {
     windowStart: string;
     windowEnd: string;
     selectedStudentCount: number = 0;
-    constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel) {
+    constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common) {
+        this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else
@@ -477,26 +479,7 @@ export class AddStudents implements OnInit, OnDeactivate {
     DetailReviewTestClick(event): void {
         event.preventDefault();
         let studentId = [];
-        let selectedStudentModelList = this.selectedStudents;
-        //if (this.selectedStudents.length > 0) {
-        //    for (var i = 0; i < this.selectedStudents.length; i++) {
-        //        let _student = this.selectedStudents[i];
-        //        this.selectedStudentModel.resetData();
-        //        let _selectedStudentModel = this.selectedStudentModel;
-        //        _selectedStudentModel.studentId = _student.StudentId;
-        //        _selectedStudentModel.firstName = _student.FirstName;
-        //        _selectedStudentModel.lastName = _student.LastName;
-        //        _selectedStudentModel.studentTestId = this.testScheduleModel.testId;
-        //        _selectedStudentModel.studentTestName = this.testScheduleModel.testName;
-        //        _selectedStudentModel.studentCohortId = _student.CohortId;
-        //        _selectedStudentModel.studentCohortName = this.FindCohortName(_student.CohortId);
-        //        _selectedStudentModel.studentEmail = _student.Email;
-        //        _selectedStudentModel.retester = _student.Retester;
-        //        _selectedStudentModel.ADA = _student.Ada;
-        //        selectedStudentModelList.push(_selectedStudentModel);
-        //        studentId.push(_student.StudentId);
-        //    }
-        //}
+        let selectedStudentModelList = this.selectedStudents;        
         this.testScheduleModel.selectedStudents = selectedStudentModelList;
         this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
