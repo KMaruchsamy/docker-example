@@ -44,7 +44,7 @@
                                                 <td>{{lastSelectedCohortName}}</td>
                                                 <td>{{student.Retester?"Yes":"No"}}</td>
                                                 <td>
-                                                    <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" (click)="AddStudent(student,$event)" >Add</button>
+                                                    <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" [attr.ada]="student.Ada" [attr.email]="student.Email" (click)="AddStudent(student,$event)" >Add</button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -90,7 +90,7 @@
                 <p class="icon info-icon-yellow margin-1em-top hidden" id="accommadationNote">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
                 <p class="icon info-icon-yellow margin-1em-top hidden" id="studentScheduleNote">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
                 <!--  <div class="right margin-2em-top-bottom">-->
-                <button type="button" class="button button-mobile-block right margin-2em-top" id="reviewDetails" data-toggle="modal" data-target="#modalTimingException" disabled (click)="DetailReviewTestClick($event)">Next step: Add details and review</button>
+                <button type="button" class="button button-mobile-block right margin-2em-top" id="reviewDetails" disabled (click)="DetailReviewTestClick($event)">Next step: Add details and review</button>
                 <!--</div>-->
             </div>
         </div>

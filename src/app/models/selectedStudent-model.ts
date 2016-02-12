@@ -2,28 +2,28 @@
 
 @Injectable()
 export class SelectedStudentModel {
-    studentId: number;
-    firstName: string;
-    lastName: string;
-    studentTestId: number;
-    studentTestName: string;
-    studentCohortId: number;
-    studentCohortName: string;
-    studentEmail: string;
-    retester: boolean;
-    ADA: boolean;
+    StudentId: number;
+    FirstName: string;
+    LastName: string;
+    StudentTestId: number;
+    StudentTestName: string;
+    CohortId: number;
+    CohortName: string;
+    Email: string;
+    Retester: boolean;
+    Ada: boolean;
     constructor() {
     }
     resetData(): void {
-        this.studentId = 0;
-        this.firstName="";
-        this.lastName="";
-        this.studentTestId=0;
-        this.studentTestName = "";
-        this.studentCohortId = 0;
-        this.studentCohortName = "";
-        this.studentEmail = "";
-        this.retester = false;
-        this.ADA = false;
+        this.StudentId = 0;
+        this.FirstName="";
+        this.LastName="";
+        this.StudentTestId=0;
+        this.StudentTestName = "";
+        this.CohortId = 0;
+        this.CohortName = "";
+        this.Email = "";
+        this.Retester = false;
+        this.Ada = false;
     }
 }

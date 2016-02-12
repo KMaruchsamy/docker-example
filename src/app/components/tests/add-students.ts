@@ -49,6 +49,9 @@ export class AddStudents implements OnInit, OnDeactivate {
             this.initialize();
     }
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.urlPath)));
+        if (outOfTestScheduling)
+            this.sStorage.removeItem('testschedule');
         if (this.testsTable)
             this.testsTable.destroy();
         $('.selectpicker').val('').selectpicker('refresh');
@@ -56,10 +59,11 @@ export class AddStudents implements OnInit, OnDeactivate {
 
     ngOnInit() {
         // console.log('on init');
+        $('#addAllStudents').addClass('hidden');
+        $('#cohortStudentList').addClass('hidden');
     }
 
     initialize(): void {
-        debugger;
         this.testsTable = null;
         let savedSchedule = this.testService.getTestSchedule();
         this.testScheduleModel = savedSchedule;
@@ -191,7 +195,8 @@ export class AddStudents implements OnInit, OnDeactivate {
             var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
             if (rows.length > 0) {
                 for (var i = 0; i < rows.length; i++) {
-                    var buttonId = eval($(rows[i])[4].split("id=")[1].split('>')[0]);
+                    var data = $(rows[i])[4].split("id=")[1].split('>')[0].split("ada=");
+                    var buttonId = eval(data[0]);
                     if (!$('#' + buttonId).prop('disabled')) {
                         $('#addAllStudents').removeAttr('disabled', 'disabled');
                     }
@@ -214,7 +219,8 @@ export class AddStudents implements OnInit, OnDeactivate {
             var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
             if (rows.length > 0) {
                 for (var i = 0; i < rows.length; i++) {
-                    var buttonId = eval($(rows[i])[4].split("id=")[1].split('>')[0]);
+                    var data = $(rows[i])[4].split("id=")[1].split('>')[0].split("ada=");
+                    var buttonId = eval(data[0]);
                     if (!$('#' + buttonId).prop('disabled')) {
                         $('#addAllStudents').removeAttr('disabled', 'disabled');
                     }
@@ -240,16 +246,24 @@ export class AddStudents implements OnInit, OnDeactivate {
         if (rows.length > 0) {
             for (var i = 0; i < rows.length; i++) {
                 var student = {};
-                var buttonId = eval($(rows[i])[4].split("id=")[1].split('>')[0]);
+                var data = $(rows[i])[4].split("id=")[1].split('>')[0].split("ada=");
+                var attrs = data[1].split("email=");
+                var buttonId = eval(data[0]);
                 if (!$('#' + buttonId).prop('disabled')) {
                     student.LastName = $(rows[i])[0];
                     student.FirstName = $(rows[i])[1];
-                    student.Retester = $(rows[i])[3];
+                    student.Retester = $(rows[i])[3] === "Yes"?true:false;
                     student.StudentId = parseInt(buttonId.split('-')[1]);
+                    student.Email = eval(attrs[1]);
+                    student.CohortId = this.lastSelectedCohortID;
+                    student.CohortName = this.FindCohortName(student.CohortId);
+                    student.StudentTestId = this.testScheduleModel.testId;
+                    student.StudentTestName = this.testScheduleModel.testName;
+                    student.Ada = (eval(attrs[0])) == "true" ? true : false;
                     this.selectedStudents.push(student);
                     $('#' + buttonId).attr('disabled', 'disabled');
                     var retesting = "";
-                    if (student.Retester==="Yes") {
+                    if (student.retester) {
                         retesting = "RETESTING";
                     }
                     studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
@@ -258,6 +272,7 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
         return studentlist;
     }
+    
 
     EnableAddButton(buttonid: string): void {
         var rows = $("#cohortStudents").dataTable().fnGetNodes();
@@ -289,7 +304,8 @@ export class AddStudents implements OnInit, OnDeactivate {
         var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
         if (rows.length > 0) {
             for (var i = 0; i < rows.length; i++) {
-                var buttonId = eval($(rows[i])[4].split("id=")[1].split('>')[0]);
+                var data = $(rows[i])[4].split("id=")[1].split('>')[0].split("ada=");
+                var buttonId = eval(data[0]);
                 if (!$('#' + buttonId).prop('disabled')) {
                     $('#addAllStudents').removeAttr('disabled', 'disabled');
                 }
@@ -308,6 +324,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                 _self.EnableAddButton("cohort-" + rowId);
                 _self.UpdateSelectedStudentCount(rowId);
                 _self.displaySelectedStudentFilter();
+                _self.CheckForAdaStatus();
                 if (_self.selectedStudentCount < 1) {
                     _self.ShowHideSelectedStudentContainer();
                     _self.EnableDisableButtonForDetailReview();
@@ -331,6 +348,9 @@ export class AddStudents implements OnInit, OnDeactivate {
         event.preventDefault();
         $('#cohort-' + student.StudentId.toString()).attr('disabled', 'disabled');
         student.CohortId = this.lastSelectedCohortID;
+        student.CohortName = this.FindCohortName(student.CohortId);
+        student.StudentTestId = this.testScheduleModel.testId;
+        student.StudentTestName = this.testScheduleModel.testName;
         this.selectedStudents.push(student);
         var retesting = "";
         if (student.Retester) {
@@ -372,7 +392,6 @@ export class AddStudents implements OnInit, OnDeactivate {
             $('.top-section').addClass('active');
             $('#selectedStudentsContainer').addClass('hidden');
             $('#testSchedulingSelectedStudents').removeClass('hidden');
-           // $('#addAllStudents').attr('disabled', 'true');
         }
     }
     displaySelectedStudentFilter(): void {
@@ -386,9 +405,26 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
     }
 
+    CheckForAdaStatus(): void {
+        if (this.selectedStudents.length > 0)
+        {
+            for (var i = 0; i < this.selectedStudents.length; i++)
+            {
+                var student = this.selectedStudents[i];
+                if (student.Ada) {
+                    $('#accommadationNote').removeClass('hidden');
+                    break;
+                }
+                else
+                    $('#accommadationNote').addClass('hidden');
+            }
+        }
+    }
+
     EnableDisableButtonForDetailReview(): void {
         if (this.selectedStudentCount > 0) {
-            $('#accommadationNote').removeClass('hidden');
+            this.CheckForAdaStatus();
+           // $('#accommadationNote').removeClass('hidden');
             $('#studentScheduleNote').removeClass('hidden');
             $('#reviewDetails').removeAttr('disabled', 'disabled');
         }
@@ -437,26 +473,26 @@ export class AddStudents implements OnInit, OnDeactivate {
     DetailReviewTestClick(event): void {
         event.preventDefault();
         let studentId = [];
-        let selectedStudentModelList = [];
-        if (this.selectedStudents.length > 0) {
-            for (var i = 0; i < this.selectedStudents.length; i++) {
-                let _student = this.selectedStudents[i];
-                this.selectedStudentModel.resetData();
-                let _selectedStudentModel = this.selectedStudentModel;
-                _selectedStudentModel.studentId = _student.StudentId;
-                _selectedStudentModel.firstName = _student.FirstName;
-                _selectedStudentModel.lastName = _student.LastName;
-                _selectedStudentModel.studentTestId = this.testScheduleModel.testId;
-                _selectedStudentModel.studentTestName = this.testScheduleModel.testName;
-                _selectedStudentModel.studentCohortId = _student.CohortId;
-                _selectedStudentModel.studentCohortName = this.FindCohortName(_student.CohortId);
-                _selectedStudentModel.studentEmail = _student.Email;
-                _selectedStudentModel.retester = _student.Retester;
-                _selectedStudentModel.ADA = _student.Ada;
-                selectedStudentModelList.push(_selectedStudentModel);
-                studentId.push(_student.StudentId);
-            }
-        }
+        let selectedStudentModelList = this.selectedStudents;
+        //if (this.selectedStudents.length > 0) {
+        //    for (var i = 0; i < this.selectedStudents.length; i++) {
+        //        let _student = this.selectedStudents[i];
+        //        this.selectedStudentModel.resetData();
+        //        let _selectedStudentModel = this.selectedStudentModel;
+        //        _selectedStudentModel.studentId = _student.StudentId;
+        //        _selectedStudentModel.firstName = _student.FirstName;
+        //        _selectedStudentModel.lastName = _student.LastName;
+        //        _selectedStudentModel.studentTestId = this.testScheduleModel.testId;
+        //        _selectedStudentModel.studentTestName = this.testScheduleModel.testName;
+        //        _selectedStudentModel.studentCohortId = _student.CohortId;
+        //        _selectedStudentModel.studentCohortName = this.FindCohortName(_student.CohortId);
+        //        _selectedStudentModel.studentEmail = _student.Email;
+        //        _selectedStudentModel.retester = _student.Retester;
+        //        _selectedStudentModel.ADA = _student.Ada;
+        //        selectedStudentModelList.push(_selectedStudentModel);
+        //        studentId.push(_student.StudentId);
+        //    }
+        //}
         this.testScheduleModel.selectedStudents = selectedStudentModelList;
         this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
