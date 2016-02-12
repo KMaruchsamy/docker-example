@@ -260,6 +260,8 @@ export class AddStudents implements OnInit, OnDeactivate {
                     student.StudentTestId = this.testScheduleModel.testId;
                     student.StudentTestName = this.testScheduleModel.testName;
                     student.Ada = (eval(attrs[0])) == "true" ? true : false;
+                    student.NormingId = 0;
+                    student.NormingStatus = "";
                     this.selectedStudents.push(student);
                     $('#' + buttonId).attr('disabled', 'disabled');
                     var retesting = "";
@@ -351,6 +353,8 @@ export class AddStudents implements OnInit, OnDeactivate {
         student.CohortName = this.FindCohortName(student.CohortId);
         student.StudentTestId = this.testScheduleModel.testId;
         student.StudentTestName = this.testScheduleModel.testName;
+        student.NormingId = 0;
+        student.NormingStatus = "";
         this.selectedStudents.push(student);
         var retesting = "";
         if (student.Retester) {

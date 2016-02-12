@@ -12,6 +12,8 @@ export class SelectedStudentModel {
     Email: string;
     Retester: boolean;
     Ada: boolean;
+    NormingId: number;
+    NormingStatus: string;
     constructor() {
     }
     resetData(): void {
@@ -25,5 +27,7 @@ export class SelectedStudentModel {
         this.Email = "";
         this.Retester = false;
         this.Ada = false;
+        this.NormingId = 0;
+        this.NormingStatus = "";
     }
 }
