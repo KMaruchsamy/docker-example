@@ -1,5 +1,5 @@
 import {Component, OnInit} from 'angular2/core';
-import {Router, OnDeactivate, ComponentInstruction} from 'angular2/router';
+import {Router, CanDeactivate, OnDeactivate, ComponentInstruction} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -10,16 +10,18 @@ import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
 import * as _ from '../../lib/index';
 import {TestScheduleModel} from '../../models/testSchedule.model';
+import {ConfirmationPopup} from '../shared/confirmation.popup';
 import '../../plugins/bootstrap-datepicker-1.5.min.js';
 import '../../plugins/jquery.timepicker.js';
+import '../../lib/modal.js';
 
 @Component({
     selector: 'schedule-test',
     templateUrl: '../../templates/tests/schedule-test.html',
     providers: [TestService, Auth, TestScheduleModel, Common],
-    directives: [PageHeader, TestHeader, PageFooter, NgIf]
+    directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup]
 })
-export class ScheduleTest implements OnInit, OnDeactivate {
+export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     valid: boolean = false;
     invalid8hours: boolean = false;
     ignore8HourRule: boolean = false;
@@ -33,6 +35,8 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     $endTime: any;
     dontPropogate: boolean = false;
     sStorage: any;
+    attemptedRoute: string;
+    overrideRouteCheck: boolean = false;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public router: Router, public common: Common) {
         this.sStorage = this.common.getStorage();
@@ -46,11 +50,28 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         }
     }
 
-    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.urlPath)));
-        if (outOfTestScheduling)
+    routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+        if (!this.overrideRouteCheck) {
+            if (outOfTestScheduling) {
+                this.attemptedRoute = next.urlPath;
+                $('#confirmationPopup').modal('show');
+                return false;
+            }
+        }
+        if (outOfTestScheduling) {
+            this.startDate = null;
+            this.endDate = null;
             this.sStorage.removeItem('testschedule');
+            this.$startDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
+            this.$endDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
+        }
 
+        this.overrideRouteCheck = false;
+        return true;
+    }
+
+    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
     }
 
     ngOnInit(): void {
@@ -58,7 +79,6 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         this.initialize();
         this.initializeControls();
         this.set8HourRule();
-
     }
 
     initialize() {
@@ -84,13 +104,20 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     initializeControls() {
         if (this.startDate)
             this.$startDate.datepicker('update', this.startDate);
-        else
+        else {
+            this.$startDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
             this.$startDate.datepicker('update', '');
+            this.$endDate.datepicker('setStartDate', moment(new Date()).format('L'));
+        }
+
 
         if (this.endDate)
             this.$endDate.datepicker('update', this.endDate);
-        else
+        else {
+            this.$endDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
             this.$endDate.datepicker('update', '');
+        }
+
         if (this.startTime)
             this.$startTime.timepicker('setTime', new Date(this.startTime));
         else
@@ -377,8 +404,11 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         if (institution)
             this.ignore8HourRule = !institution.IsIpBlank;
 
-        if (this.ignore8HourRule)
+        if (this.ignore8HourRule) {
+            this.validate(this);
             return;
+        }
+
 
         let __this = this;
         let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
@@ -392,6 +422,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
             })
             .catch((error) => {
                 console.log(error);
+                __this.validate(__this);
             });
     }
 
@@ -529,6 +560,17 @@ export class ScheduleTest implements OnInit, OnDeactivate {
 
         return day + '/' + month + '/' + year;
 
+    }
+
+
+    onCancelConfirmation(e: any): void {
+        $('#confirmationPopup').modal('hide');
+        this.attemptedRoute = '';
+    }
+    onOKConfirmation(e: any): void {
+        $('#confirmationPopup').modal('hide');
+        this.overrideRouteCheck = true;
+        this.router.navigateByUrl(this.attemptedRoute);
     }
 
 }

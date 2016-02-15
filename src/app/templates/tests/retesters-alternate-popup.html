@@ -1,0 +1,72 @@
+﻿<div class="modal modal-full-overlay fade" id="modalAlternateTest" tabindex="-1" role="dialog" aria-labelledby="repeatStudentsModal">
+    <div role="document">
+        <button aria-label="Close" class="close close-large-icon prototype-dismiss1" data-dismiss="modal" type="button"></button>
+        <div class="modal-full-overlay-content">
+            <div class="modal-header">
+                <p class="icon red-triangle-alert-large center"></p>
+                <h4 class="attention center" id="repeatStudentsModal">Test Exceptions — Action Required</h4>
+            </div>
+            <div class="modal-body modal-body-no-padding-top">
+
+                <form class="form-group-block">
+                    <!--this section OR the second section OR BOTH SECTIONS could appear within form depending on logic-->
+                    <section>
+                        <div class="margin-2em-top margin-1em-bottom">
+                            <span class="text-larger-teal"><b>The following students have already taken {{testSchedule.testName}}.</b></span>
+                            <span class="text-larger"> Please assign another version of this test to these students or remove them from this testing session.</span>
+                        </div>
+                        <div class="test-exeptions-student section-thin border-top" *ngFor="#student of testTakenStudents">
+                            <p class="text-larger-purple"><b>{{student.StudentId}}</b></p>
+
+                            <div *ngFor="#test of student.AlternateTests">
+                                <input type="radio" class="checkbox-image" (change)="onChangeTestTaken(student.StudentId, $event);" [attr.name]="'testTaken' + student.StudentId" [attr.id]="'rdbTestTaken' + student.StudentId" [disabled]="test.ErrorCode>0">
+                                <label [attr.for]="'rdbTestTaken' + student.StudentId"><span class="text-purple">{{test.TestName}}</span> ({{test.NormingStatus}})</label>
+                            </div>
+                            <input type="radio" class="checkbox-image" [attr.name]="'testTaken' + student.StudentId" [attr.id]="'rdbTestTakenRemove' + student.StudentId" [checked]="!student.Enabled" (change)="onChangeTestTaken(student.StudentId, $event);">
+                            <label [attr.for]="'rdbTestTakenRemove' + student.StudentId"><span class="text-purple">Remove from testing session</span></label>
+                        </div>
+                        <span class="text-purple">*recommended</span>
+                    </section>
+
+                    <section>
+                        <div class="margin-2em-top margin-1em-bottom">
+                            <span class="text-larger-teal"><b>The following students have been scheduled to take {{testSchedule.testName}} in another testing session.</b></span>
+                            <span>Please assign another version of this test to these students or remove them from this testing session.</span>
+                        </div>
+                        <div class="test-exeptions-student section-thin border-top" *ngFor="#student of testScheduledSudents">
+                            <p class="text-larger-purple"><b>{{student.StudentId}}</b></p>
+                            <div *ngFor="#test of student.AlternateTests">
+                                <input type="radio" class="checkbox-image" [attr.name]="'testScheduled' + student.StudentId" [attr.id]="'rdbTestScheduled' + student.StudentId" (change)="onChangeTestScheduled(student.StudentId, $event);">
+                                <label [attr.for]="'rdbTestScheduled' + student.StudentId"><span class="text-purple">{{test.TestName}}</span> ({{test.NormingStatus}})</label>
+                            </div>
+                            <input type="radio" class="checkbox-image" [attr.name]="'testScheduled' + student.StudentId" [attr.id]="'rdbTestScheduledRemove' + student.StudentId" (change)="onChangeTestScheduled(student.StudentId, $event);">
+                            <label [attr.for]="'rdbTestScheduledRemove' + student.StudentId"><span class="text-purple">Remove from testing session</span></label>
+                        </div>
+                        <span class="text-purple">*recommended</span>
+                    </section>
+                </form>
+
+                <div class="section-thin section-gray please-note-section margin-1em-top margin-2em-bottom">
+                    <p class="attention"><strong>Please note:</strong>
+                        <ol class="default-ol">
+                            <li>If an alternate test option cannot be selected, the student has already taken that version of
+                                the test and it cannot be assigned again.</li>
+                            <li>Students who have taken all available versions of a test need to be removed from the testing
+                                session before proceeding.</li>
+                            <li>You will be able to change and/or confirm all assigned alternate tests before finalizing your
+                                testing session.</li>
+                        </ol>
+                </div>
+                <p>If you need further assistance, please contact your Account Manager. You can find your Account Manager’s
+                    contact info on the Home page.</p>
+            </div>
+            <!--end modal body-->
+
+            <div class="modal-footer">
+                <button type="button" class="anchor-button anchor-button-left prototype-dismiss1" data-dismiss="modal" (click)="cancel($event)">Cancel</button>
+                <button id="addDetailsReview" class="button" [disabled]="!valid" (click)="resolve($event);">Next step: Add details and review</button>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -107,7 +107,7 @@ export class Common {
     }
     
     
-    removeWhitespace(value:string):string {
+    removeWhitespace(value: string): string {
         if (!value)
             return '';
         return value.replace(/\s/g, "");

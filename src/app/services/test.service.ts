@@ -3,6 +3,7 @@ import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "angular2/
 import {Auth} from './auth';
 import * as _ from '../lib/index';
 import {TestScheduleModel} from '../models/testSchedule.model';
+import {SelectedStudentModel} from '../models/selectedStudent-model';
 import {TestShedulingPages} from '../constants/config';
 
 
@@ -12,7 +13,6 @@ export class TestService {
     sStorage: any;
     constructor(public http: Http, public testSchedule: TestScheduleModel, public auth: Auth) {
         this.http = http;
-        // this.auth = new Auth();
         this.sStorage = this.auth.sStorage;
         this.auth.refresh();
     }
@@ -20,7 +20,11 @@ export class TestService {
 
     outOfTestScheduling(routeName: string): boolean {
         routeName = routeName.toUpperCase();
-        if (routeName.indexOf(TestShedulingPages.CHOOSETEST) > -1 || routeName.indexOf(TestShedulingPages.SCHEDULETEST) > -1 || routeName.indexOf(TestShedulingPages.ADDSTUDENTS) > -1 || routeName.indexOf(TestShedulingPages.REVIEWTEST) > -1)
+        if (routeName.indexOf(TestShedulingPages.CHOOSETEST) > -1
+            || routeName.indexOf(TestShedulingPages.SCHEDULETEST) > -1
+            || routeName.indexOf(TestShedulingPages.ADDSTUDENTS) > -1
+            || routeName.indexOf(TestShedulingPages.REVIEWTEST) > -1
+            || routeName.indexOf(TestShedulingPages.CONFIRMATION) > -1)
             return false;
         return true;
     }
@@ -84,5 +88,79 @@ export class TestService {
                 'Authorization': self.auth.authheader
             }
         });
+    }
+
+
+    getRetesters(url: string, input: string): any {
+        let self = this;
+        return fetch(url, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': self.auth.authheader
+            },
+            body: input
+        });
+    }
+
+
+    scheduleTests(url: string, input: string): any {
+        let self = this;
+        return fetch(url, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': self.auth.authheader
+            },
+            body: input
+        });
+    }
+
+    getScheduleById(url: string): any {
+        let self = this;
+        return fetch(url, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': self.auth.authheader
+            }
+        });
+    }
+
+
+    mapTestScheduleObjects(objTestScheduleModel): TestScheduleModel {
+        let _testScheduleModel = new TestScheduleModel();
+        _testScheduleModel.scheduleId = objTestScheduleModel.TestingSessionId;
+        _testScheduleModel.scheduleName = objTestScheduleModel.SessionName;
+        _testScheduleModel.subjectId = objTestScheduleModel.LastSubjectSelectedId;
+        _testScheduleModel.testId = objTestScheduleModel.SessionTestId;
+        _testScheduleModel.testName = objTestScheduleModel.SessionTestName;
+        _testScheduleModel.scheduleStartTime = objTestScheduleModel.TestingWindowStart;
+        _testScheduleModel.scheduleEndTime = objTestScheduleModel.TestingWindowEnd;
+        _testScheduleModel.institutionId = objTestScheduleModel.InstitutionId;
+        _testScheduleModel.lastselectedcohortId = objTestScheduleModel.LastCohortSelectedId;
+        _testScheduleModel.facultyMemberId = objTestScheduleModel.FacultyMemberId;
+        _testScheduleModel.pageSavedOn = objTestScheduleModel.PageSavedOn;
+        if (objTestScheduleModel.Students.length > 0) {
+            _.forEach(objTestScheduleModel.Students, function(student, key) {
+                let _student = new SelectedStudentModel();
+                _student.StudentId = student.StudentId;
+                _student.LastName = student.LastName;
+                _student.FirstName = student.FirstName;
+                _student.StudentTestId = student.StudentTestId;
+                _student.StudentTestName = student.StudentTestName;
+                _student.Ada = student.Ada;
+                _student.Email = student.Email;
+                _student.Retester = student.Retester;
+                _student.CohortId = student.CohortId;
+                _student.CohortName = student.CohortName;
+                _testScheduleModel.selectedStudents.push(_student);
+
+            });
+        }
+
+        return _testScheduleModel;
     }
 }
