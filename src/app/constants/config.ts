@@ -1,7 +1,7 @@
 export const links = {
     api: {
         local: {
-            server: "http://localhost/"
+            server:  "https://qa-nursing.kaptest.com/"
         },
         dev: {
             server: "https://dev01-nursing.kaptest.com/"
@@ -31,7 +31,11 @@ export const links = {
                 openintegratedtests: "scheduling/OpenIntegratedTests",
                 cohorts: "scheduling/institutions/§institutionid/activeCohorts?windowStart=§windowstart&windowEnd=§windowend",
                 cohortstudents: "scheduling/cohorts/§cohortid/students?testId=§testid",
-                faculty:"scheduling/institutions/§institutionid/faculty"
+                faculty: "scheduling/institutions/§institutionid/faculty",
+                retesters: "scheduling/checkForRetesters",
+                scheduletest: "scheduling/testingSessions",
+                viewtest: "scheduling/testingSessions/§scheduleId",
+                deleteSchedule :"scheduling/testingSessions/§scheduleId"
             }
         }
     },
@@ -99,7 +103,8 @@ export const TestShedulingPages = {
     CHOOSETEST: 'CHOOSE-TEST',
     SCHEDULETEST: 'SCHEDULE-TEST',
     ADDSTUDENTS: 'ADD-STUDENTS',
-    REVIEWTEST: 'REVIEW'
+    REVIEWTEST: 'REVIEW',
+    CONFIRMATION:'CONFIRMATION'
 };
   
   

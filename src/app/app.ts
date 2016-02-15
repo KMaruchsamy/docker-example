@@ -1,6 +1,6 @@
-import {Component, provide, enableProdMode} from 'angular2/core';
+import {Component, provide, enableProdMode, ComponentRef} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
-import {RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy, APP_BASE_HREF} from 'angular2/router';
+import {Router, RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy, APP_BASE_HREF, ROUTER_PRIMARY_COMPONENT} from 'angular2/router';
 import {HTTP_PROVIDERS, Http} from 'angular2/http';
 import {Home} from './components/home/home';
 import {Login} from './components/login/login';
@@ -24,6 +24,8 @@ import {AddStudents} from './components/tests/add-students';
 import {ReviewTest} from './components/tests/review-test';
 import {PageNotFound} from './components/errors/pagenotfound';
 import {UnhandledException} from './components/errors/unhandledexception';
+import {Confirmation} from './components/tests/confirmation';
+import {ViewTest} from './components/tests/view-test';
 
 @Component({
     selector: 'app',
@@ -49,11 +51,13 @@ import {UnhandledException} from './components/errors/unhandledexception';
     // { path: '/tests/:action/schedule-test', component: ScheduleTest, as: 'ModifyScheduleTest' },
     { path: '/tests/add-students', component: AddStudents, name: 'AddStudents' },
     { path: '/tests/review', component: ReviewTest, name: 'ReviewTest' },
-    { path: '/error', component: UnhandledException },
-    { path: '/*wildcard', component: PageNotFound }
+    { path: '/tests/confirmation', component: Confirmation, name: 'Confirmation' },
+    { path: '/tests/view', component: ViewTest, name: 'ViewTest' },
+    { path: '/error', component: UnhandledException, name: 'UnhandledException' },
+    { path: '/*wildcard', component: PageNotFound, name: 'PageNotFound' }
 ])
 export class App {
-    constructor() {
+    constructor(public router: Router) {
     }
 }
 
@@ -63,5 +67,6 @@ bootstrap(App, [
     ROUTER_PROVIDERS,
     HTTP_PROVIDERS,
     provide(ExceptionHandler, { useClass: MyExceptionHandler }),
+    provide(ROUTER_PRIMARY_COMPONENT, { useValue: App }),
     provide(LocationStrategy, { useClass: HashLocationStrategy })
 ]);

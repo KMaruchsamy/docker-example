@@ -1,0 +1,18 @@
+<page-header></page-header>
+<main role="main" class="app-main">
+    <test-header scheduleStep='Schedule a test' [testSchedule]="testScheduleModel"></test-header>
+    <div class="section">
+    <div class="container-medium-width">
+        <h4>Success! Your test has been scheduled.
+              <!--This will be added in post-MVP <br>You will receive an email confirmation soon. -->
+        </h4>
+        <div class="margin-2em-top">
+            <a [routerLink]="['/ViewTest']">View/print this testing session</a>
+        </div>
+        <p class="margin-2em-top-bottom">Need to make changes? <a href="choose-test-modify.html">Modify this testing session</a></p>
+        <a href="tests.html">Go to Manage Tests main page</a>
+    </div>
+</div>
+</main>
+
+<page-footer></page-footer>
