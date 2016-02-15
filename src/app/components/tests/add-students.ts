@@ -4,6 +4,7 @@ import {NgFor} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {links} from '../../constants/config';
+import {Common} from '../../services/common';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
@@ -23,7 +24,7 @@ import '../../plugins/dataTables.responsive.js';
     selector: 'add-students',
     templateUrl: '../../templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
-    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel],
+    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common],
     directives: [PageHeader, TestHeader, PageFooter, ExceptionModalPopup, NgFor],
     pipes: [RemoveWhitespacePipe]
 })
@@ -33,7 +34,6 @@ export class AddStudents implements OnInit, OnDeactivate {
     apiServer: string;
     lastSelectedCohortID: number;
     lastSelectedCohortName: string;
-    testTypeID: number;
     cohorts: Object[] = [];
     cohortStudentlist: Object[] = [];
     selectedStudents: Object[] = [];
@@ -42,20 +42,33 @@ export class AddStudents implements OnInit, OnDeactivate {
     windowStart: string;
     windowEnd: string;
     selectedStudentCount: number = 0;
-    constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel) {
+    constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common) {
+        this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else
             this.initialize();
     }
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.urlPath)));
+        if (outOfTestScheduling)
+            this.sStorage.removeItem('testschedule');
         if (this.testsTable)
             this.testsTable.destroy();
         $('.selectpicker').val('').selectpicker('refresh');
+        $('#testSchedulingSelectedStudentsList').empty();
+        $('#cohortStudents button').each(function () {
+            $(this).removeAttr('disabled','disabled');
+        });
+        this.selectedStudents = [];
+        this.ShowHideSelectedStudentContainer();
+        this.EnableDisableButtonForDetailReview();
     }
 
     ngOnInit() {
         // console.log('on init');
+        $('#addAllStudents').addClass('hidden');
+        $('#cohortStudentList').addClass('hidden');
     }
 
     initialize(): void {
@@ -64,9 +77,8 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.testScheduleModel = savedSchedule;
         this.testScheduleModel.currentStep = 3;
         this.testScheduleModel.activeStep = 3;
-        this.testTypeID = 1;
-        this.windowStart = '01.01.14'; //new Date(this.testScheduleModel.scheduleStartTime);
-        this.windowEnd = '12.12.16'; //new Date(this.testScheduleModel.scheduleEndTime);
+        this.windowStart = moment(this.testScheduleModel.scheduleStartTime).format("MM.DD.YY"); //'01.01.14'
+        this.windowEnd = moment(this.testScheduleModel.scheduleEndTime).format("MM.DD.YY"); //'12.12.16'; 
         this.apiServer = this.auth.common.getApiServer();
         this.loadActiveCohorts();
 
@@ -104,7 +116,7 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
 
     resolveCohortStudentsURL(url: string): string {
-        return url.replace('§cohortid', this.lastSelectedCohortID.toString()).replace('§testid', this.testTypeID.toString());
+        return url.replace('§cohortid', this.lastSelectedCohortID.toString()).replace('§testid', this.testScheduleModel.testId.toString());
     }
 
     loadStudentsByCohort(btnAddAllStudent, tblCohortStudentList, selectedcohort: any, event): void {
@@ -120,35 +132,48 @@ export class AddStudents implements OnInit, OnDeactivate {
                 return response.json();
             })
                 .then((json) => {
-                    if (this.testsTable)
+                    if (this.testsTable) 
                         this.testsTable.destroy();
+                    let _self = this;
                     $('#' + btnAddAllStudent.id).removeClass('hidden');
                     $('#' + tblCohortStudentList.id).removeClass('hidden');
-                    this.cohortStudentlist = json;
-                    setTimeout(json=> {
-                        this.testsTable = $('#cohortStudents').DataTable({
-                            "paging": false,
-                            "responsive": true,
-                            "info": false,
-                            "scrollY": 551,
-                            "dom": 't<"add-students-table-search"f>',
-                            "language": {
-                                search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
-                                //search: "Find student in cohort",
-                                searchPlaceholder: "Find student in cohort",
-                                "zeroRecords": "No matching students in this cohort",
-                            },
-                            columnDefs: [{
-                                targets: [2, 4],
-                                orderable: false,
-                                searchable: false
-                            }],
+                    if (typeof (json.msg) != "undefined")
+                        this.cohortStudentlist = [];
+                    else
+                        this.cohortStudentlist = json;
 
+                        setTimeout(json=> {
+                            this.testsTable = $('#cohortStudents').DataTable({
+                                "retrieve": true,
+                                "paging": false,
+                                "responsive": true,
+                                "info": false,
+                                "scrollY": 551,
+                                "dom": 't<"add-students-table-search"f>',
+                                "language": {
+                                    search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
+                                    searchPlaceholder: "Find student in cohort",
+                                    "zeroRecords": "No matching students in this cohort",
+                                    "emptyTable":"No students for this cohort",
+                                },
+                                columnDefs: [{
+                                    targets: [2, 4],
+                                    orderable: false,
+                                    searchable: false
+                                }],
+
+                            });
+                            
+                            if (_self.cohortStudentlist.length > 0) {
+                                this.SearchFilterOptions();
+                                this.DisableAddButton();
+                                $('#cohortStudentList .add-students-table-search').removeClass('invisible');
+                            }
+                            else {
+                                $('#cohortStudentList .add-students-table-search').addClass('invisible');
+                            }
+                           this.CheckForAllStudentSelected();
                         });
-                        this.SearchFilterOptions();
-                        this.DisableAddButton();
-                        this.CheckForAllStudentSelected();
-                    });
                 })
                 .catch((error) => {
                     console.log(error);
@@ -190,7 +215,8 @@ export class AddStudents implements OnInit, OnDeactivate {
             var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
             if (rows.length > 0) {
                 for (var i = 0; i < rows.length; i++) {
-                    var buttonId = eval($(rows[i])[4].split("id=")[1].split('>')[0]);
+                    var data = $(rows[i])[4].split("id=")[1].split('>')[0].split("ada=");
+                    var buttonId = eval(data[0]);
                     if (!$('#' + buttonId).prop('disabled')) {
                         $('#addAllStudents').removeAttr('disabled', 'disabled');
                     }
@@ -213,7 +239,8 @@ export class AddStudents implements OnInit, OnDeactivate {
             var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
             if (rows.length > 0) {
                 for (var i = 0; i < rows.length; i++) {
-                    var buttonId = eval($(rows[i])[4].split("id=")[1].split('>')[0]);
+                    var data = $(rows[i])[4].split("id=")[1].split('>')[0].split("ada=");
+                    var buttonId = eval(data[0]);
                     if (!$('#' + buttonId).prop('disabled')) {
                         $('#addAllStudents').removeAttr('disabled', 'disabled');
                     }
@@ -239,24 +266,35 @@ export class AddStudents implements OnInit, OnDeactivate {
         if (rows.length > 0) {
             for (var i = 0; i < rows.length; i++) {
                 var student = {};
-                var buttonId = eval($(rows[i])[4].split("id=")[1].split('>')[0]);
+                var data = $(rows[i])[4].split("id=")[1].split('>')[0].split("ada=");
+                var attrs = data[1].split("email=");
+                var buttonId = eval(data[0]);
                 if (!$('#' + buttonId).prop('disabled')) {
                     student.LastName = $(rows[i])[0];
                     student.FirstName = $(rows[i])[1];
-                    student.Retester = $(rows[i])[3];
+                    student.Retester = $(rows[i])[3] === "Yes"?true:false;
                     student.StudentId = parseInt(buttonId.split('-')[1]);
+                    student.Email = eval(attrs[1]);
+                    student.CohortId = this.lastSelectedCohortID;
+                    student.CohortName = this.FindCohortName(student.CohortId);
+                    student.StudentTestId = this.testScheduleModel.testId;
+                    student.StudentTestName = this.testScheduleModel.testName;
+                    student.Ada = (eval(attrs[0])) == "true" ? true : false;
+                    student.NormingId = 0;
+                    student.NormingStatus = "";
                     this.selectedStudents.push(student);
                     $('#' + buttonId).attr('disabled', 'disabled');
                     var retesting = "";
-                    if (student.Retester) {
+                    if (student.retester) {
                         retesting = "RETESTING";
                     }
-                    studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ',' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
+                    studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
                 }
             }
         }
         return studentlist;
     }
+    
 
     EnableAddButton(buttonid: string): void {
         var rows = $("#cohortStudents").dataTable().fnGetNodes();
@@ -288,12 +326,15 @@ export class AddStudents implements OnInit, OnDeactivate {
         var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
         if (rows.length > 0) {
             for (var i = 0; i < rows.length; i++) {
-                var buttonId = eval($(rows[i])[4].split("id=")[1].split('>')[0]);
+                var data = $(rows[i])[4].split("id=")[1].split('>')[0].split("ada=");
+                var buttonId = eval(data[0]);
                 if (!$('#' + buttonId).prop('disabled')) {
                     $('#addAllStudents').removeAttr('disabled', 'disabled');
                 }
             }
         }
+        else
+            $('#addAllStudents').attr('disabled', 'disabled');
     }
 
    RemoveSelectedStudents(): void {
@@ -307,6 +348,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                 _self.EnableAddButton("cohort-" + rowId);
                 _self.UpdateSelectedStudentCount(rowId);
                 _self.displaySelectedStudentFilter();
+                _self.CheckForAdaStatus();
                 if (_self.selectedStudentCount < 1) {
                     _self.ShowHideSelectedStudentContainer();
                     _self.EnableDisableButtonForDetailReview();
@@ -330,13 +372,30 @@ export class AddStudents implements OnInit, OnDeactivate {
         event.preventDefault();
         $('#cohort-' + student.StudentId.toString()).attr('disabled', 'disabled');
         student.CohortId = this.lastSelectedCohortID;
+        student.CohortName = this.FindCohortName(student.CohortId);
+        student.StudentTestId = this.testScheduleModel.testId;
+        student.StudentTestName = this.testScheduleModel.testName;
+        student.NormingId = 0;
+        student.NormingStatus = "";
         this.selectedStudents.push(student);
         var retesting = "";
         if (student.Retester) {
             retesting = "RETESTING";
         }
-        var studentli = '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ',' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
+        var studentli = '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
         $('#testSchedulingSelectedStudentsList').append(studentli);
+        var counter = 0;
+        var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
+        if (rows.length > 0) {
+            for (var i = 0; i < rows.length; i++) {
+                var data = $(rows[i])[4].split("id=")[1].split('>')[0].split("ada=");
+                var buttonId = eval(data[0]);
+                if (!$('#' + buttonId).prop('disabled')) { counter = counter + 1; }
+            }
+        }
+        if (counter===0) {
+            $('#addAllStudents').attr('disabled', 'disabled');
+        }
         this.ShowHideSelectedStudentContainer();
         this.displaySelectedStudentFilter();
         this.EnableDisableButtonForDetailReview();
@@ -371,7 +430,6 @@ export class AddStudents implements OnInit, OnDeactivate {
             $('.top-section').addClass('active');
             $('#selectedStudentsContainer').addClass('hidden');
             $('#testSchedulingSelectedStudents').removeClass('hidden');
-           // $('#addAllStudents').attr('disabled', 'true');
         }
     }
     displaySelectedStudentFilter(): void {
@@ -380,14 +438,36 @@ export class AddStudents implements OnInit, OnDeactivate {
            $('#filterSelectedStudents').attr('style', 'visibility:visible');
            this.filterSelectedStudents();
         }
-        else {
+       else {
+           if (this.selectedStudentCount > 0) {
+               $('#filterSelectedStudents').val("");
+               $('#testSchedulingSelectedStudents li').each(function () {
+                   $(this).show();
+               });
+           }
             $('#filterSelectedStudents').attr('style', 'visibility:hidden');
+        }
+    }
+
+    CheckForAdaStatus(): void {
+        if (this.selectedStudents.length > 0)
+        {
+            for (var i = 0; i < this.selectedStudents.length; i++)
+            {
+                var student = this.selectedStudents[i];
+                if (student.Ada) {
+                    $('#accommadationNote').removeClass('hidden');
+                    break;
+                }
+                else
+                    $('#accommadationNote').addClass('hidden');
+            }
         }
     }
 
     EnableDisableButtonForDetailReview(): void {
         if (this.selectedStudentCount > 0) {
-            $('#accommadationNote').removeClass('hidden');
+            this.CheckForAdaStatus();
             $('#studentScheduleNote').removeClass('hidden');
             $('#reviewDetails').removeAttr('disabled', 'disabled');
         }
@@ -436,26 +516,7 @@ export class AddStudents implements OnInit, OnDeactivate {
     DetailReviewTestClick(event): void {
         event.preventDefault();
         let studentId = [];
-        let selectedStudentModelList = [];
-        if (this.selectedStudents.length > 0) {
-            for (var i = 0; i < this.selectedStudents.length; i++) {
-                let _student = this.selectedStudents[i];
-                this.selectedStudentModel.resetData();
-                let _selectedStudentModel = this.selectedStudentModel;
-                _selectedStudentModel.studentId = _student.StudentId;
-                _selectedStudentModel.firstName = _student.FirstName;
-                _selectedStudentModel.lastName = _student.LastName;
-                _selectedStudentModel.studentTestId = this.testScheduleModel.testId;
-                _selectedStudentModel.studentTestName = this.testScheduleModel.testName;
-                _selectedStudentModel.studentCohortId = _student.CohortId;
-                _selectedStudentModel.studentCohortName = this.FindCohortName(_student.CohortId);
-                _selectedStudentModel.studentEmail = _student.Email;
-                _selectedStudentModel.retester = _student.Retester;
-                _selectedStudentModel.ADA = _student.Ada;
-                selectedStudentModelList.push(_selectedStudentModel);
-                studentId.push(_student.StudentId);
-            }
-        }
+        let selectedStudentModelList = this.selectedStudents;        
         this.testScheduleModel.selectedStudents = selectedStudentModelList;
         this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));

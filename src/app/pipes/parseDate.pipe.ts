@@ -9,8 +9,8 @@ export class ParseDatePipe implements PipeTransform {
             return null;
 
         switch (args[0]) {
-            case 'EEE':
-                return moment(value).format('MMM');
+            case 'ddd':
+                return moment(value).format('ddd');
                 break;
 
             case 'MM/dd/yy':
@@ -18,7 +18,7 @@ export class ParseDatePipe implements PipeTransform {
                 break;
 
             case 'hh:mm a':
-                return moment(value).format('hh:mm a');
+                return moment(value).format('h:mma');
                 break;
 
             default:
