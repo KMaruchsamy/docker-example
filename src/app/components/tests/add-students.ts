@@ -56,6 +56,13 @@ export class AddStudents implements OnInit, OnDeactivate {
         if (this.testsTable)
             this.testsTable.destroy();
         $('.selectpicker').val('').selectpicker('refresh');
+        $('#testSchedulingSelectedStudentsList').empty();
+        $('#cohortStudents button').each(function () {
+            $(this).removeAttr('disabled','disabled');
+        });
+        this.selectedStudents = [];
+        this.ShowHideSelectedStudentContainer();
+        this.EnableDisableButtonForDetailReview();
     }
 
     ngOnInit() {
@@ -125,7 +132,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                 return response.json();
             })
                 .then((json) => {
-                    if (this.testsTable)
+                    if (this.testsTable) 
                         this.testsTable.destroy();
                     let _self = this;
                     $('#' + btnAddAllStudent.id).removeClass('hidden');
@@ -137,6 +144,7 @@ export class AddStudents implements OnInit, OnDeactivate {
 
                         setTimeout(json=> {
                             this.testsTable = $('#cohortStudents').DataTable({
+                                "retrieve": true,
                                 "paging": false,
                                 "responsive": true,
                                 "info": false,
@@ -156,10 +164,13 @@ export class AddStudents implements OnInit, OnDeactivate {
 
                             });
                             
-                           if (_self.cohortStudentlist.length > 0) {
+                            if (_self.cohortStudentlist.length > 0) {
                                 this.SearchFilterOptions();
                                 this.DisableAddButton();
-                                
+                                $('#cohortStudentList .add-students-table-search').removeClass('invisible');
+                            }
+                            else {
+                                $('#cohortStudentList .add-students-table-search').addClass('invisible');
                             }
                            this.CheckForAllStudentSelected();
                         });
@@ -373,6 +384,18 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
         var studentli = '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
         $('#testSchedulingSelectedStudentsList').append(studentli);
+        var counter = 0;
+        var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
+        if (rows.length > 0) {
+            for (var i = 0; i < rows.length; i++) {
+                var data = $(rows[i])[4].split("id=")[1].split('>')[0].split("ada=");
+                var buttonId = eval(data[0]);
+                if (!$('#' + buttonId).prop('disabled')) { counter = counter + 1; }
+            }
+        }
+        if (counter===0) {
+            $('#addAllStudents').attr('disabled', 'disabled');
+        }
         this.ShowHideSelectedStudentContainer();
         this.displaySelectedStudentFilter();
         this.EnableDisableButtonForDetailReview();
@@ -415,7 +438,13 @@ export class AddStudents implements OnInit, OnDeactivate {
            $('#filterSelectedStudents').attr('style', 'visibility:visible');
            this.filterSelectedStudents();
         }
-        else {
+       else {
+           if (this.selectedStudentCount > 0) {
+               $('#filterSelectedStudents').val("");
+               $('#testSchedulingSelectedStudents li').each(function () {
+                   $(this).show();
+               });
+           }
             $('#filterSelectedStudents').attr('style', 'visibility:hidden');
         }
     }
@@ -439,7 +468,6 @@ export class AddStudents implements OnInit, OnDeactivate {
     EnableDisableButtonForDetailReview(): void {
         if (this.selectedStudentCount > 0) {
             this.CheckForAdaStatus();
-           // $('#accommadationNote').removeClass('hidden');
             $('#studentScheduleNote').removeClass('hidden');
             $('#reviewDetails').removeAttr('disabled', 'disabled');
         }
