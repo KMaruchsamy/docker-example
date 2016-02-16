@@ -32,7 +32,6 @@ export class RetesterNoAlternatePopup implements OnInit {
             let savedSchedule = JSON.parse(this.sStorage.getItem('testschedule'));
             if (savedSchedule) {
                 var removedStudents = _.remove(savedSchedule.selectedStudents, function(student) {
-                    console.log(self.studentRepeaters);
                     return _.some(self.studentRepeaters, { 'StudentId':student.studentId })
                 });
                 this.retesterNoAlternatePopupOK.emit(savedSchedule);               

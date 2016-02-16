@@ -43,6 +43,7 @@ import {ViewTest} from './components/tests/view-test';
     { path: '/userguide', component: UserGuide, name: 'UserGuide' },
     { path: '/set-password-first-time', component: SetPasswordFirstTime, name: 'SetPasswordFirstTime' },
     { path: '/account', component: Account, name: 'Account' },
+    { path: '/account/:scroll', component: Account, name: 'AccountScroll' },
     { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, name: 'ChooseInstitution' },
     { path: '/profiles/:id', component: ProfileDescription, name: 'Profiles' },
     { path: '/tests/choose-test/:institutionId', component: ChooseTest, name: 'ChooseTest' },

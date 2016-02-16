@@ -8,7 +8,6 @@ import {Common} from '../../services/common';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
-import {ExceptionModalPopup} from './exception-modal-popup';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
@@ -25,7 +24,7 @@ import '../../plugins/dataTables.responsive.js';
     templateUrl: '../../templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
     providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common],
-    directives: [PageHeader, TestHeader, PageFooter, ExceptionModalPopup, NgFor],
+    directives: [PageHeader, TestHeader, PageFooter, NgFor],
     pipes: [RemoveWhitespacePipe]
 })
 
@@ -36,7 +35,7 @@ export class AddStudents implements OnInit, OnDeactivate {
     lastSelectedCohortName: string;
     cohorts: Object[] = [];
     cohortStudentlist: Object[] = [];
-    selectedStudents: Object[] = [];
+    selectedStudents: selectedStudentModel[] = [];
     testsTable: any;
     sStorage: any;
     windowStart: string;
@@ -285,10 +284,10 @@ export class AddStudents implements OnInit, OnDeactivate {
                     this.selectedStudents.push(student);
                     $('#' + buttonId).attr('disabled', 'disabled');
                     var retesting = "";
-                    if (student.retester) {
+                    if (student.Retester) {
                         retesting = "RETESTING";
                     }
-                    studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
+                    studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light testing-remove-students-button" data-id="' + student.StudentId + '">Remove</button></li>';
                 }
             }
         }
@@ -382,7 +381,7 @@ export class AddStudents implements OnInit, OnDeactivate {
         if (student.Retester) {
             retesting = "RETESTING";
         }
-        var studentli = '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light" data-id="' + student.StudentId + '">Remove</button></li>';
+        var studentli = '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light testing-remove-students-button" data-id="' + student.StudentId + '">Remove</button></li>';
         $('#testSchedulingSelectedStudentsList').append(studentli);
         var counter = 0;
         var rows = $("#cohortStudents").dataTable()._('tr', { "filter": "applied" });
@@ -516,11 +515,12 @@ export class AddStudents implements OnInit, OnDeactivate {
     DetailReviewTestClick(event): void {
         event.preventDefault();
         let studentId = [];
-        let selectedStudentModelList = this.selectedStudents;        
+        let selectedStudentModelList = this.selectedStudents;
         this.testScheduleModel.selectedStudents = selectedStudentModelList;
         this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         console.log('TestScheduleModel with Selected student' + this.testScheduleModel);
+        this.router.parent.navigateByUrl('/tests/review');
     }
 
     FindCohortName(cohortid: number): string {
