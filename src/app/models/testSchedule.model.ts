@@ -15,7 +15,12 @@ export class TestScheduleModel{
     institutionId: number =0;
     lastselectedcohortId: number = 0;
     selectedStudents: SelectedStudentModel[] = [];
+    adminId: number = 0;
+    adminFirstName: string = '';
+    adminLastName: string = '';
     facultyMemberId: number = 0;
+    facultyFirstName: string = '';
+    facultyLastName: string = '';
     pageSavedOn: string = '';
     constructor(){}
 }

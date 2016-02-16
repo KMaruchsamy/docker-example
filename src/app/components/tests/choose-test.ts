@@ -23,7 +23,7 @@ import '../../lib/modal.js';
     selector: 'choose-test',
     templateUrl: '../../templates/tests/choose-test.html',
     providers: [TestService, Auth, TestScheduleModel, Utility, Common],
-    directives: [PageHeader, TestHeader, PageFooter,ConfirmationPopup],
+    directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup],
     pipes: [RemoveWhitespacePipe, RoundPipe]
 })
 
@@ -51,9 +51,11 @@ export class ChooseTest implements OnDeactivate, CanDeactivate {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
-                this.attemptedRoute = next.urlPath;
-                $('#confirmationPopup').modal('show');
-                return false;
+                if (this.testScheduleModel.testId) {
+                    this.attemptedRoute = next.urlPath;
+                    $('#confirmationPopup').modal('show');
+                    return false;
+                }
             }
         }
         if (outOfTestScheduling)
@@ -102,7 +104,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate {
         })
             .then((json) => {
                 this.subjects = json;
-                console.log(this.subjects);
                 this.loadSchedule();
                 setTimeout(json => {
                     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
@@ -136,7 +137,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate {
                 if (this.testsTable)
                     this.testsTable.destroy();
                 this.tests = json;
-                console.log(this.tests);
                 setTimeout(json=> {
                     this.testsTable = $('#chooseTestTable').DataTable({
                         "paging": false,

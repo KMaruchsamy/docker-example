@@ -16,13 +16,13 @@
                             <span class="text-larger"> Please assign another version of this test to these students or remove them from this testing session.</span>
                         </div>
                         <div class="test-exeptions-student section-thin border-top" *ngFor="#student of testTakenStudents">
-                            <p class="text-larger-purple"><b>{{student.StudentId}}</b></p>
+                            <p class="text-larger-purple"><b>{{student.LastName}}, {{student.FirstName}}</b></p>
 
                             <div *ngFor="#test of student.AlternateTests">
-                                <input type="radio" class="checkbox-image" (change)="onChangeTestTaken(student.StudentId, $event);" [attr.name]="'testTaken' + student.StudentId" [attr.id]="'rdbTestTaken' + student.StudentId" [disabled]="test.ErrorCode>0">
+                                <input type="radio" class="checkbox-image" (change)="onChangeTestTaken(student.StudentId,false,test.TestId,test.TestName, $event);" [attr.name]="'testTaken' + student.StudentId" [attr.id]="'rdbTestTaken' + student.StudentId" [disabled]="test.ErrorCode>0">
                                 <label [attr.for]="'rdbTestTaken' + student.StudentId"><span class="text-purple">{{test.TestName}}</span> ({{test.NormingStatus}})</label>
                             </div>
-                            <input type="radio" class="checkbox-image" [attr.name]="'testTaken' + student.StudentId" [attr.id]="'rdbTestTakenRemove' + student.StudentId" [checked]="!student.Enabled" (change)="onChangeTestTaken(student.StudentId, $event);">
+                            <input type="radio" class="checkbox-image" [attr.name]="'testTaken' + student.StudentId" [attr.id]="'rdbTestTakenRemove' + student.StudentId" [checked]="!student.Enabled" (change)="onChangeTestTaken(student.StudentId,true,0,'', $event);">
                             <label [attr.for]="'rdbTestTakenRemove' + student.StudentId"><span class="text-purple">Remove from testing session</span></label>
                         </div>
                         <span class="text-purple">*recommended</span>
@@ -34,12 +34,12 @@
                             <span>Please assign another version of this test to these students or remove them from this testing session.</span>
                         </div>
                         <div class="test-exeptions-student section-thin border-top" *ngFor="#student of testScheduledSudents">
-                            <p class="text-larger-purple"><b>{{student.StudentId}}</b></p>
+                            <p class="text-larger-purple"><b>{{student.LastName}}, {{student.FirstName}}</b></p>
                             <div *ngFor="#test of student.AlternateTests">
-                                <input type="radio" class="checkbox-image" [attr.name]="'testScheduled' + student.StudentId" [attr.id]="'rdbTestScheduled' + student.StudentId" (change)="onChangeTestScheduled(student.StudentId, $event);">
+                                <input type="radio" class="checkbox-image" [attr.name]="'testScheduled' + student.StudentId" [attr.id]="'rdbTestScheduled' + student.StudentId" (change)="onChangeTestScheduled(student.StudentId,false,test.TestId,test.TestName,$event);">
                                 <label [attr.for]="'rdbTestScheduled' + student.StudentId"><span class="text-purple">{{test.TestName}}</span> ({{test.NormingStatus}})</label>
                             </div>
-                            <input type="radio" class="checkbox-image" [attr.name]="'testScheduled' + student.StudentId" [attr.id]="'rdbTestScheduledRemove' + student.StudentId" (change)="onChangeTestScheduled(student.StudentId, $event);">
+                            <input type="radio" class="checkbox-image" [attr.name]="'testScheduled' + student.StudentId" [attr.id]="'rdbTestScheduledRemove' + student.StudentId" (change)="onChangeTestScheduled(student.StudentId,true,0,'',$event);">
                             <label [attr.for]="'rdbTestScheduledRemove' + student.StudentId"><span class="text-purple">Remove from testing session</span></label>
                         </div>
                         <span class="text-purple">*recommended</span>

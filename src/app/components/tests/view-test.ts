@@ -38,44 +38,68 @@ export class ViewTest implements OnDeactivate {
     }
 
     loadTestSchedule(): void {
-        let __this = this;
-        let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`);
-        let schedulePromise = this.testService.getScheduleById(scheduleURL);
-        let schedule =
-            schedulePromise.then((response) => {
-                return response.json();
-            })
-                .then((json) => {
-                    __this.schedule = __this.testService.mapTestScheduleObjects(json);
-                    setTimeout(() => {
-                        this.studentsTable = $('#studentsInTestingSessionTable').DataTable({
-                            "paging": false,
-                            "searching": false,
-                            "responsive": true,
-                            "info": false,
-                            "ordering": false
-                        });
+        let __this = this;        
+        this.schedule = this.testService.getTestSchedule();
+        setTimeout(() => {
+            this.studentsTable = $('#studentsInTestingSessionTable').DataTable({
+                "paging": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                "ordering": false
+            });
 
 
-                        $('#studentsInTestingSessionTable').on('responsive-display.dt', function() {
-                            $(this).find('.child .dtr-title br').remove();
-                        });
+            $('#studentsInTestingSessionTable').on('responsive-display.dt', function() {
+                $(this).find('.child .dtr-title br').remove();
+            });
 
-                    });
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+        });
+        
+        
+        // let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`);
+        // let schedulePromise = this.testService.getScheduleById(scheduleURL);
+
+        //         schedulePromise.then((response) => {
+        //             return response.json();
+        //         })
+        //             .then((json) => {
+        //                 __this.schedule = __this.testService.mapTestScheduleObjects(json);
+        //                 setTimeout(() => {
+        //                     this.studentsTable = $('#studentsInTestingSessionTable').DataTable({
+        //                         "paging": false,
+        //                         "searching": false,
+        //                         "responsive": true,
+        //                         "info": false,
+        //                         "ordering": false
+        //                     });
+        // 
+        // 
+        //                     $('#studentsInTestingSessionTable').on('responsive-display.dt', function() {
+        //                         $(this).find('.child .dtr-title br').remove();
+        //                     });
+        // 
+        //                 });
+        //             })
+        //             .catch((error) => {
+        //                 console.log(error);
+        //             });
     }
 
 
     resolveScheduleURL(url: string): string {
         return url.replace('§scheduleId', this.scheduleId.toString());
     }
-    
-    print(e): void{
+
+    print(e): void {
         e.preventDefault();
         window.print();
-        
+
+    }
+
+    
+    deleteSchedule(): void {
+        let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.deleteSchedule}`);
+        this.testService.deleteSchedule(scheduleURL);
     }
 }
