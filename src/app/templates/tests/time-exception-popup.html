@@ -1,0 +1,33 @@
+﻿<div class="modal modal-full-overlay fade" id="modalTimingException" tabindex="-1" role="dialog" aria-labelledby="timingExceptionModal">
+    <div role="document">
+        <button aria-label="Close" class="close close-large-icon prototype-dismiss" data-dismiss="modal" type="button"></button>
+        <div class="modal-full-overlay-content">
+            <div class="modal-header">
+                <p class="icon clock-alert-icon center"></p>
+                <h4 class="attention center" id="timingExceptionModal">Timing Exceptions — Action Required</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="margin-1em-bottom">
+                    <span class="text-larger-teal">
+                        <b>
+                            The following student accounts are not active during
+                            the date and time window selected for your testing session ({{testSchedule.scheduleStartTime|parseDate:'ddd'}} {{testSchedule.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testSchedule.scheduleEndTime|parseDate:'h:mma'}}).
+                        </b>
+                    </span>
+                    <span class="text-larger"> Please go back and modify your selections.</span>
+                </div>
+                <div class="section-thin border-top-bottom">
+                    <ul class="list-extra-spacing js-repeaters-list" *ngFor="#student of studentWindowException">
+                        <li class="text-larger-purple"><b>{{student.StudentFirstName}}, {{student.StudentLastName}}</b></li>
+                    </ul>
+                </div>
+            </div><!--end modal body-->
+
+            <div class="modal-footer section-thin">
+                <button type="button" class="button prototype-dismiss" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div> 
