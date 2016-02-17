@@ -6,11 +6,11 @@
                 <div class="modify-testing-session-left">
                     <h2 class="page-sm-heading-teal">Manage Tests</h2>
                     <h3 class="page-lg-heading">View Testing Session</h3>
-                    <a href="tests.html" class="block margin-1em-top-bottom">Go to Manage Tests main page</a>
+                    <a [routerLink]="['/ManageTests']" class="block margin-1em-top-bottom">Go to Manage Tests main page</a>
                 </div>
                 <div class="modify-testing-session-right">
                     <a href="choose-test-modify.html" class="button button-mobile-block">Modify this testing session</a>
-                    <button class="anchor-button margin-1em-top" data-toggle="modal" data-target="#myModal">Delete this testing session</button>
+                    <button class="anchor-button margin-1em-top"  (click)="showConfirmation($event);" >Delete this testing session</button>
                 </div>
             </div>
             <button id="printButton" (click)="print($event);" class="anchor-button icon print-icon margin-1em-top">Print this page</button>
@@ -19,27 +19,27 @@
                 <table class="review-details-table table-with-cell-padding justified-ends">
                     <tr>
                         <th scope="row">Testing Session</th>
-                        <td>{{schedule.scheduleName}}</td>
+                        <td>{{schedule?.scheduleName}}</td>
                     </tr>
                     <tr>
                         <th scope="row">Test</th>
-                        <td>{{schedule.testName}}</td>
+                        <td>{{schedule?.testName}}</td>
                     </tr>
                     <tr>
                         <th scope="row">Faculty</th>
-                        <td>{{schedule.facultyFirstName}} {{schedule.facultyLastName}}</td>
+                        <td>{{schedule?.facultyFirstName}} {{schedule?.facultyLastName}}</td>
                     </tr>
                     <tr>
                         <th scope="row">Scheduled by</th>
-                        <td>{{schedule.adminFirstName}} {{schedule.adminLastName}}</td>
+                        <td>{{schedule?.adminFirstName}} {{schedule?.adminLastName}}</td>
                     </tr>
                     <tr>
                         <th scope="row">Date</th>
-                        <td>{{schedule.scheduleStartTime|parseDate:'dddd'}}, {{schedule.scheduleStartTime|parseDate:'MM/DD/YY'}}</td>
+                        <td>{{schedule?.scheduleStartTime|parseDate:'dddd'}}, {{schedule?.scheduleStartTime|parseDate:'MM/DD/YY'}}</td>
                     </tr>
                     <tr>
                         <th scope="row">Time</th>
-                        <td>From {{schedule.scheduleStartTime|parseDate:'h:mma'}} to {{schedule.scheduleEndTime|parseDate:'h:mma'}}</td>
+                        <td>From {{schedule?.scheduleStartTime|parseDate:'h:mma'}} to {{schedule?.scheduleEndTime|parseDate:'h:mma'}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -59,12 +59,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="#student of schedule.selectedStudents">
+                    <tr *ngFor="#student of schedule?.selectedStudents">
                         <td>{{student.LastName}}</td>
                         <td>{{student.FirstName}}</td>
                         <td>{{student.CohortName}}</td>
                         <td>{{student.StudentTestName}}</td>
-                        <td>--|--</td>
+                        <td>{{student.NormingStatus ? student.NormingStatus : schedule.testNormingStatus}}</td>
                     </tr>
 
                 </tbody>
@@ -76,11 +76,11 @@
 
             <div class="margin-2em-top">
                 <div class="modify-testing-session-left margin-2em-bottom">
-                    <a href="tests.html" class="block">Go to Manage Tests main page</a>
+                    <a [routerLink]="['/ManageTests']" class="block">Go to Manage Tests main page</a>
                 </div>
                 <div class="modify-testing-session-right">
                     <a href="choose-test-modify.html" class="button button-mobile-block">Modify this testing session</a>
-                    <button class="anchor-button margin-1em-top" (click)="deleteSchedule($event);">Delete this testing session</button>
+                    <button class="anchor-button margin-1em-top" (click)="showConfirmation($event);">Delete this testing session</button>
                     <!--/*data-toggle="modal" data-target="#myModal"*/-->
                 </div>
             </div>

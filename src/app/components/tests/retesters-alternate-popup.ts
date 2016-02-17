@@ -1,6 +1,6 @@
 ﻿import {Component, Input, Output, EventEmitter} from 'angular2/core';
 import {NgIf, NgFor} from 'angular2/common';
-import {RouterLink} from 'angular2/router';
+import {RouterLink, OnDeactivate} from 'angular2/router';
 import {Common} from '../../services/common';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
@@ -12,7 +12,7 @@ import {SelectedStudentModel} from '../../models/selectedStudent-model';
     directives: [RouterLink, NgIf, NgFor]
 })
 
-export class RetesterAlternatePopup {
+export class RetesterAlternatePopup implements OnDeactivate {
     @Input() testScheduledSudents: Object[];
     @Input() testTakenStudents: Object[];
     @Input() testSchedule: TestScheduleModel;
@@ -22,6 +22,12 @@ export class RetesterAlternatePopup {
     sStorage: any;
     constructor(public common: Common) {
         console.log(moment().format('h:mm:ss:sss'));
+    }
+    
+    routerOnDeactivate(): void{
+        console.log('deactivating....');
+        this.testScheduledSudents = null;
+        this.testTakenStudents = null;
     }
 
     ngOnInit(): void {

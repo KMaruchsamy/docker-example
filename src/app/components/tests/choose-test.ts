@@ -27,7 +27,7 @@ import '../../lib/modal.js';
     pipes: [RemoveWhitespacePipe, RoundPipe]
 })
 
-export class ChooseTest implements OnDeactivate, CanDeactivate {
+export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     institutionID: number;
     apiServer: string;
     subjectId: number;
@@ -45,6 +45,10 @@ export class ChooseTest implements OnDeactivate, CanDeactivate {
             this.router.navigateByUrl('/');
         else
             this.initialize();
+    }
+    
+    ngOnInit(): void{
+        $(document).scrollTop(0);
     }
 
     routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
@@ -91,6 +95,9 @@ export class ChooseTest implements OnDeactivate, CanDeactivate {
         else {
             this.testScheduleModel.currentStep = 1;
             this.testScheduleModel.institutionId = this.institutionID;
+            this.testScheduleModel.adminId = this.auth.userid;
+            this.testScheduleModel.adminFirstName = this.auth.firstname;
+            this.testScheduleModel.adminLastName = this.auth.lastname;
         }
         this.testScheduleModel.activeStep = 1;
 

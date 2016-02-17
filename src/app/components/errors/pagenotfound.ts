@@ -1,9 +1,12 @@
 import {Component} from 'angular2/core';
-import {Router,RouterLink} from 'angular2/router';
+import {Router, RouterLink} from 'angular2/router';
+import {PageHeader} from '../shared/page-header';
 @Component({
     selector: 'notfound',
-    directives:[RouterLink],
-    template: `<main role="main" class="app-main">
+    directives:[RouterLink,PageHeader],
+    template: `
+    <page-header [hideDropdown]=true></page-header>
+    <main role="main" class="app-main">
                     <div class="section">
                         <div class="container-medium-width center">
                             <i class="icon question-mark-icon"></i>

@@ -26,6 +26,7 @@ import {PageNotFound} from './components/errors/pagenotfound';
 import {UnhandledException} from './components/errors/unhandledexception';
 import {Confirmation} from './components/tests/confirmation';
 import {ViewTest} from './components/tests/view-test';
+import {ManageTests} from './components/tests/manage-tests';
 
 @Component({
     selector: 'app',
@@ -46,6 +47,7 @@ import {ViewTest} from './components/tests/view-test';
     { path: '/account/:scroll', component: Account, name: 'AccountScroll' },
     { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, name: 'ChooseInstitution' },
     { path: '/profiles/:id', component: ProfileDescription, name: 'Profiles' },
+    { path: '/tests', component: ManageTests, name: 'ManageTests' },
     { path: '/tests/choose-test/:institutionId', component: ChooseTest, name: 'ChooseTest' },
     { path: '/tests/schedule-test', component: ScheduleTest, name: 'ScheduleTest' },
     // { path: '/tests/:action/choose-test/:institutionId/:scheduleId', component: ChooseTest, as: 'ModifyChooseTest' },
@@ -57,9 +59,10 @@ import {ViewTest} from './components/tests/view-test';
     { path: '/error', component: UnhandledException, name: 'UnhandledException' },
     { path: '/*wildcard', component: PageNotFound, name: 'PageNotFound' }
 ])
-export class App {
+export class App{
     constructor(public router: Router) {
     }
+
 }
 
 // enableProdMode();

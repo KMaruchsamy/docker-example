@@ -1,5 +1,6 @@
 import {Injectable, Inject} from 'angular2/core';
 import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "angular2/http";
+import {Observable} from 'rxjs/Rx';
 import {Auth} from './auth';
 import * as _ from '../lib/index';
 import {TestScheduleModel} from '../models/testSchedule.model';
@@ -169,7 +170,7 @@ export class TestService {
         return _testScheduleModel;
     }
 
-    deleteSchedule(url: string): any {
+    deleteSchedule(url: string): Observable<Response> {
         let self = this;
         let headers: Headers = new Headers();
         headers.append('Authorization', self.auth.authheader);
@@ -177,9 +178,7 @@ export class TestService {
         headers.append('Content-Type', 'application/json');
         let options: RequestOptions = new RequestOptions();
         options.headers = headers;
-        this.http.delete(url, options)
-            .subscribe((res: Response) => {
-                console.log(res.json());
-            });
+        return this.http.delete(url, options);          
     }
+
 }
