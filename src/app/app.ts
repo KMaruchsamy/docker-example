@@ -27,6 +27,8 @@ import {UnhandledException} from './components/errors/unhandledexception';
 import {Confirmation} from './components/tests/confirmation';
 import {ViewTest} from './components/tests/view-test';
 import {ManageTests} from './components/tests/manage-tests';
+import {Rosters} from './components/rosters/rosters';
+import {Groups} from './components/groups/groups';
 
 @Component({
     selector: 'app',
@@ -47,6 +49,8 @@ import {ManageTests} from './components/tests/manage-tests';
     { path: '/account/:scroll', component: Account, name: 'AccountScroll' },
     { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, name: 'ChooseInstitution' },
     { path: '/profiles/:id', component: ProfileDescription, name: 'Profiles' },
+    { path: '/rosters', component: Rosters, name: 'Rosters' },
+    { path: '/groups', component: Groups, name: 'Groups' },
     { path: '/tests', component: ManageTests, name: 'ManageTests' },
     { path: '/tests/choose-test/:institutionId', component: ChooseTest, name: 'ChooseTest' },
     { path: '/tests/schedule-test', component: ScheduleTest, name: 'ScheduleTest' },
@@ -59,7 +63,7 @@ import {ManageTests} from './components/tests/manage-tests';
     { path: '/error', component: UnhandledException, name: 'UnhandledException' },
     { path: '/*wildcard', component: PageNotFound, name: 'PageNotFound' }
 ])
-export class App{
+export class App {
     constructor(public router: Router) {
     }
 
