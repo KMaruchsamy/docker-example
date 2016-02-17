@@ -27,6 +27,7 @@ import {UnhandledException} from './components/errors/unhandledexception';
 import {Confirmation} from './components/tests/confirmation';
 import {ViewTest} from './components/tests/view-test';
 import {ManageTests} from './components/tests/manage-tests';
+import {Reports} from './components/reports/reports';
 import {Rosters} from './components/rosters/rosters';
 import {Groups} from './components/groups/groups';
 
@@ -49,6 +50,7 @@ import {Groups} from './components/groups/groups';
     { path: '/account/:scroll', component: Account, name: 'AccountScroll' },
     { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, name: 'ChooseInstitution' },
     { path: '/profiles/:id', component: ProfileDescription, name: 'Profiles' },
+    { path: '/reports', component: Reports, name: 'Reports' },
     { path: '/rosters', component: Rosters, name: 'Rosters' },
     { path: '/groups', component: Groups, name: 'Groups' },
     { path: '/tests', component: ManageTests, name: 'ManageTests' },
