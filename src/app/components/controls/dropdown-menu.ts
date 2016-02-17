@@ -7,13 +7,13 @@ import '../../plugins/dropdown.js';
     selector: 'dropdown-menu',
     inputs: ['ariaDisabled'],
     templateUrl: '../../templates/controls/dropdown-menu.html',
+    providers:[Auth],
     directives: [RouterLink]
 })
 export class DropdownMenu implements OnInit {
     @Input() ariaDisabled;
     @Input() hideDropdown;
     constructor(public router: Router, public auth: Auth) {
-        this.auth = new Auth();
     }
 
     ngOnInit() {
