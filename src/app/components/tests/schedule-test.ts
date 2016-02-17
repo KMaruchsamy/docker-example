@@ -79,6 +79,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         this.initialize();
         this.initializeControls();
         this.set8HourRule();
+        $(document).scrollTop(0);
     }
 
     initialize() {
@@ -142,16 +143,22 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                     startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
                     if (startTime && moment(startTime).isValid()) {
                         __this.startTime = startTime;
-                        __this.$endTime.timepicker('option', 'minTime', __this.startTime);
+
+                        if (moment(__this.startTime).isAfter(new Date()))
+                            __this.$endTime.timepicker('option', 'minTime', new Date(moment(__this.startTime).add(30, 'minutes').format()));
+
                         if (!__this.endTime) {
-                            __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
+                            if (moment(__this.startTime).isAfter(new Date()))
+                                __this.endTime = moment(__this.startTime).add(3, 'hours').format();
+                            else
+                                __this.endTime = moment(new Date()).add(3, 'hours').format();
                             __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                             __this.endDate = moment(new Date(__this.endTime)).format('L');
                             __this.$endDate.datepicker('update', __this.endDate);
                         }
                         else {
                             if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
-                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                                __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
                                 __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                             }
                         }
@@ -166,14 +173,23 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                     startTime = __this.$startTime.timepicker('getTime', new Date());
                     if (startTime && moment(startTime).isValid()) {
                         __this.startTime = startTime;
-                        __this.$endTime.timepicker('option', 'minTime', __this.startTime);
+
+                        if (moment(__this.startTime).isAfter(new Date()))
+                            __this.$endTime.timepicker('option', 'minTime', new Date(moment(__this.startTime).add(30, 'minutes').format()));
+
                         if (!__this.endTime) {
-                            __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
+                            if (moment(__this.startTime).isAfter(new Date()))
+                                __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
+                            else
+                                __this.endTime = moment(new Date()).add(3, 'hours').format();
                             __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                         }
                         else {
                             if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
-                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                                if (moment(__this.startTime).isAfter(new Date()))
+                                    __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
+                                else
+                                    __this.endTime = moment(new Date()).add(30, 'minutes').format();
                                 __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                             }
                         }
@@ -197,24 +213,45 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         this.$endTime.timepicker({
             'showDuration': true,
             'timeFormat': 'g:ia',
-            'minTime': '8:00am',
+            'minTime': new Date(moment(new Date()).add(30, 'minutes').format()),
             'disableTouchKeyboard': true
         }).on('change', function(e) {
             if (e.currentTarget.value) {
                 let endTime;
+                let minEndTime = moment(new Date()).add(30, 'minutes').format();
                 if (__this.endDate) {
                     endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
+                    // if (moment(endTime).isBefore(minEndTime))
+                    //     endTime =new Date(minEndTime);
+                    
                     if (endTime && moment(endTime).isValid()) {
                         __this.endTime = endTime;
                         if (!__this.startTime) {
-                            __this.startTime = moment(new Date(__this.endTime)).subtract(3, 'hours').format();
+                            if (moment(__this.endTime).isBefore(minEndTime)) {
+                                __this.endTime = minEndTime;
+                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                            }
+                            __this.startTime = moment(__this.endTime).subtract(3, 'hours').format();
                             __this.$startTime.timepicker('setTime', new Date(__this.startTime));
                             __this.$endTime.timepicker('option', 'minTime', __this.startTime);
                         }
                         else {
                             if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
-                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
-                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                if (moment(__this.endTime).isBefore(minEndTime)) {
+                                    __this.endTime = minEndTime;
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
+                                else {
+                                    __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
+
+                            }
+                            else {
+                                if (moment(__this.endTime).isBefore(minEndTime)) {
+                                    __this.endTime = minEndTime;
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
                             }
                         }
                     } else {
@@ -223,19 +260,38 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                         else
                             __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                     }
+
                 } else {
                     endTime = __this.$endTime.timepicker('getTime', new Date());
+                    //  if (moment(endTime).isBefore(minEndTime))
+                    //     endTime =new Date(minEndTime);
                     if (endTime && moment(endTime).isValid()) {
                         __this.endTime = endTime;
                         if (!__this.startTime) {
+                            if (moment(__this.endTime).isBefore(minEndTime)) {
+                                __this.endTime = minEndTime;
+                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                            }
                             __this.startTime = moment(new Date(__this.endTime)).subtract(3, 'hours').format();
                             __this.$startTime.timepicker('setTime', new Date(__this.startTime));
                             __this.$endTime.timepicker('option', 'minTime', __this.startTime);
                         }
                         else {
                             if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
-                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
-                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                if (moment(__this.endTime).isBefore(minEndTime)) {
+                                    __this.endTime = minEndTime;
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
+                                else {
+                                    __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
+                            }
+                            else {
+                                if (moment(__this.endTime).isBefore(minEndTime)) {
+                                    __this.endTime = minEndTime;
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
                             }
                         }
                     }
@@ -379,6 +435,12 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                     __this.$endDate.datepicker('update', __this.endDate);
                     // have to change the date part of the time because the date is changed ..
                     __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
+                    let minEndTime = moment(new Date()).add(30, 'minutes').format();
+                    if (moment(__this.endTime).isBefore(minEndTime)) {
+                        __this.endTime = minEndTime;
+                        __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                    }
+
 
 
                 } else {
@@ -396,6 +458,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
             __this.validate(__this);
         });
+
     }
 
 

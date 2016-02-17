@@ -13,15 +13,17 @@ import '../../lib/modal.js';
 @Component({
     selector: 'confirmation',
     templateUrl: '../../templates/tests/confirmation.html',
-    providers: [Common, TestService,TestScheduleModel, Auth],
-    directives: [RouterLink,PageHeader,PageFooter,TestHeader]
+    providers: [Common, TestService, TestScheduleModel, Auth],
+    directives: [RouterLink, PageHeader, PageFooter, TestHeader]
 })
 export class Confirmation {
     sStorage: any;
 
     constructor(public testScheduleModel: TestScheduleModel, public common: Common, public testService: TestService) {
         this.sStorage = this.common.getStorage();
-        this.testScheduleModel = this.testService.getTestSchedule();
+        let savedSchedule: TestScheduleModel = this.testService.getTestSchedule();
+        if (savedSchedule)
+            this.testScheduleModel = savedSchedule;
         this.testScheduleModel.currentStep = 5;
         this.testScheduleModel.activeStep = 5;
     }

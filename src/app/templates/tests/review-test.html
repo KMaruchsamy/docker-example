@@ -8,7 +8,7 @@
             <form class="clearfix name-testing-session">
                 <div class="one-half-grid">
                     <label class="label-bold label-larger" for="txtSessionName">Name your testing session</label>
-                    <input type="text" id="txtSessionName" maxlength="75" #testsessionname (input)="onInput(testsessionname.value,ddlfaculty.value);" >
+                    <input type="text" id="txtSessionName" [value]="testSchedule?.scheduleName" maxlength="75" #testsessionname (input)="onInput(testsessionname.value,ddlfaculty.value);">
                 </div>
                 <div class="one-half-grid lightbulb-icon-container">
                     <p class="icon lightbulb-icon">Your testing session contains all the details related to the test you are scheduling. Name it for easy
@@ -16,10 +16,10 @@
                 </div>
                 <div class="one-half-grid">
                     <label class="label-bold label-larger" for="ddlFaculty">Assign faculty member</label>
-                    <select id="ddlFaculty" #ddlfaculty class="selectpicker" (change)="facultyChange(ddlfaculty.value);"  >
-                        <option *ngFor="#admin of faculty" [value]="admin.AdminId" [selected]="admin.AdminId == testScheduleModel.facultyMemberId">{{admin.LastName}}, {{admin.FirstName}}</option>                     
+                    <select id="ddlFaculty" #ddlfaculty class="selectpicker" (change)="facultyChange(ddlfaculty.value,$event);" data-size="6">
+                        <option *ngFor="#admin of faculty" [value]="admin.AdminId" [selected]="admin.AdminId == testScheduleModel.facultyMemberId">{{admin.LastName}}, {{admin.FirstName}}</option>
                     </select>
-                    
+
                 </div>
                 <div class="one-half-grid lightbulb-icon-container">
                     <p class="icon lightbulb-icon">Both you and the faculty member you assign will be able to make changes to this testing session later
@@ -44,15 +44,15 @@
                 </tr>
                 <tr>
                     <th scope="row">Date</th>
-                    <td>{{testScheduleDates}}  </td>
+                    <td>{{testScheduleDates}} </td>
                     <td><a [routerLink]="['/ScheduleTest']">Change</a>
-                    
+
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">Time</th>
                     <td>{{testScheduleTimes}} ({{testScheduleWindow}})</td>
-                    <td><a [routerLink]="['/ScheduleTest']" >Change</a></td>
+                    <td><a [routerLink]="['/ScheduleTest']">Change</a></td>
                 </tr>
                 </tbody>
             </table>
@@ -72,14 +72,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="#student of testScheduleModel.selectedStudents">
+                <tr *ngFor="#student of testScheduleModel.selectedStudents;  #_student=student" [hidden]="resolveMarked(student)" >
                     <td>{{student.LastName}}</td>
                     <td>{{student.FirstName}}</td>
                     <td>{{student.CohortName}}</td>
                     <td>{{student.StudentTestName}}</td>
                     <td>{{student.NormingStatus ? student.NormingStatus : testScheduleModel.testNormingStatus}}</td>
                 </tr>
-               
+
             </tbody>
         </table>
     </div>
@@ -88,21 +88,18 @@
         <div class="info-icon-yellow-container-flush-text clearfix">
             <p class="icon info-icon-yellow">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
             <!--<a href="confirmation.html" id="chooseDate" class="button right margin-2em-top button-mobile-block" aria-disabled="true" disabled>Confirm info and schedule test</a>-->
-               <button type="submit" (click)="scheduleTest();" id="btnScheduleTest" class="button right margin-2em-top button-mobile-block" [disabled]="!valid">
-                    Confirm info and schedule test
-                </button>
+            <button type="submit" (click)="scheduleTest();" id="btnScheduleTest" class="button right margin-2em-top button-mobile-block"
+            [disabled]="!valid">
+                Confirm info and schedule test
+            </button>
         </div>
-       
+
     </div>
 
 </main>
 
 
-<confirmation-popup 
-    [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'" 
-    [okButtonText] = "'Yes, leave this page'" 
-    [cancelButtonText] = "'No, stay on this page'" 
-    (onOK)="onOKConfirmation()" 
-    (onCancel)="onCancelConfirmation()"
-    [hideClose]="true" >
+<confirmation-popup [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
+[okButtonText]="'Yes, leave this page'" [cancelButtonText]="'No, stay on this page'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation()"
+[hideClose]="true">
 </confirmation-popup>

@@ -1,7 +1,9 @@
 ﻿import {Component, Input, Output, EventEmitter} from 'angular2/core';
 import {NgIf, NgFor} from 'angular2/common';
-import {RouterLink} from 'angular2/router';
+import {RouterLink, OnDeactivate} from 'angular2/router';
 import {Common} from '../../services/common';
+import {TestScheduleModel} from '../../models/testSchedule.model';
+import {SelectedStudentModel} from '../../models/selectedStudent-model';
 
 @Component({
     selector: 'retesters-alternate',
@@ -10,16 +12,22 @@ import {Common} from '../../services/common';
     directives: [RouterLink, NgIf, NgFor]
 })
 
-export class RetesterAlternatePopup {
+export class RetesterAlternatePopup implements OnDeactivate {
     @Input() testScheduledSudents: Object[];
     @Input() testTakenStudents: Object[];
-    @Input() testSchedule: any;
+    @Input() testSchedule: TestScheduleModel;
     @Output() retesterAlternatePopupOK = new EventEmitter();
     @Output() retesterAlternatePopupCancel = new EventEmitter();
     valid: boolean = false;
     sStorage: any;
     constructor(public common: Common) {
         console.log(moment().format('h:mm:ss:sss'));
+    }
+    
+    routerOnDeactivate(): void{
+        console.log('deactivating....');
+        this.testScheduledSudents = null;
+        this.testTakenStudents = null;
     }
 
     ngOnInit(): void {
@@ -34,17 +42,7 @@ export class RetesterAlternatePopup {
     resolve(e): void {
         e.preventDefault();
         let self = this;
-        this.sStorage = this.common.getStorage();
-        if (this.sStorage) {
-            let savedSchedule = JSON.parse(this.sStorage.getItem('testschedule'));
-            if (savedSchedule) {
-                // var removedStudents = _.remove(savedSchedule.selectedStudents, function(student) {
-                //     console.log(self.studentRepeaters);
-                //     return _.some(self.studentRepeaters, { 'StudentId': student.studentId })
-                // });
-                this.retesterAlternatePopupOK.emit(savedSchedule);
-            }
-        }
+        this.retesterAlternatePopupOK.emit(this.testSchedule);
     }
 
 
@@ -53,35 +51,55 @@ export class RetesterAlternatePopup {
         this.retesterAlternatePopupCancel.emit(e);
     }
 
-    onChangeTestTaken(studentId: number, e): void {
+    onChangeTestTaken(studentId: number, mark: boolean, testId: number, testName: string, e): void {
         let student: any = _.find(this.testTakenStudents, { 'StudentId': studentId });
         if (student)
             student.Checked = true;
 
+        this.markForRemoval(studentId, mark, testId, testName);
+
         console.log(this.testTakenStudents);
+        console.log(this.testSchedule);
         this.validate();
     }
 
-    onChangeTestScheduled(studentId: number, e): void {
+    onChangeTestScheduled(studentId: number, mark: boolean, testId: number, testName: string, e): void {
         let student: any = _.find(this.testScheduledSudents, { 'StudentId': studentId });
         if (student)
             student.Checked = true;
 
+        this.markForRemoval(studentId, mark, testId, testName);
+
         console.log(this.testScheduledSudents);
         this.validate();
     }
-    
-    validate(): boolean{
+
+    markForRemoval(_studentId: number, mark: boolean, testId: number, testName: string) {
+        let studentToMark: SelectedStudentModel = _.find(this.testSchedule.selectedStudents, { 'StudentId': _studentId });
+        studentToMark.MarkedToRemove = mark;
+        if (!mark) {
+            studentToMark.StudentTestId = testId;
+            studentToMark.StudentTestName = testName;
+        }
+        else {
+            studentToMark.StudentTestId = this.testSchedule.testId;
+            studentToMark.StudentTestName = this.testSchedule.testName;
+        }
+        console.log(this.testSchedule);
+    }
+
+    validate(): boolean {
         let unselectedTestsTaken = _.some(this.testTakenStudents, { 'Checked': false });
         let unselectedTestsScheduled = _.some(this.testScheduledSudents, { 'Checked': false });
         console.log(unselectedTestsTaken, unselectedTestsScheduled);
-        if (unselectedTestsTaken || unselectedTestsScheduled)
-        {
+        if (unselectedTestsTaken || unselectedTestsScheduled) {
             this.valid = false;
             return false;
-        }    
-        
+        }
+
         this.valid = true;
         return true;
     }
+
+
 }

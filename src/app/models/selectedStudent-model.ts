@@ -14,6 +14,7 @@ export class SelectedStudentModel {
     Ada: boolean;
     NormingId: number;
     NormingStatus: string;
+    MarkedToRemove: boolean = false;
     constructor() {
     }
     resetData(): void {
@@ -29,5 +30,6 @@ export class SelectedStudentModel {
         this.Ada = false;
         this.NormingId = 0;
         this.NormingStatus = "";
+        this.MarkedToRemove = false;
     }
 }

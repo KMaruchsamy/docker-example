@@ -26,7 +26,8 @@ export class Login {
   resize($event) {
 }  
   initialize(): void {
-    $('title').html('Faculty Sign In &ndash; Kaplan Nursing');
+      $('title').html('Faculty Sign In &ndash; Kaplan Nursing');
+    $(document).scrollTop(0);  
   }
 
   reset(): void {

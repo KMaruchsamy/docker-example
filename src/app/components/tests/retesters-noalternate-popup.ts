@@ -1,6 +1,7 @@
 import {Component, Input, OnInit, Output, EventEmitter} from 'angular2/core';
 import {RouterLink} from 'angular2/router';
 import {Common} from '../../services/common';
+import {TestScheduleModel} from '../../models/testSchedule.model';
 
 @Component({
     selector: 'retesters-noalternate',
@@ -32,7 +33,6 @@ export class RetesterNoAlternatePopup implements OnInit {
             let savedSchedule = JSON.parse(this.sStorage.getItem('testschedule'));
             if (savedSchedule) {
                 var removedStudents = _.remove(savedSchedule.selectedStudents, function(student) {
-                    console.log(self.studentRepeaters);
                     return _.some(self.studentRepeaters, { 'StudentId':student.studentId })
                 });
                 this.retesterNoAlternatePopupOK.emit(savedSchedule);               

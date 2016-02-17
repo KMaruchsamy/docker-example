@@ -23,11 +23,11 @@ import '../../lib/modal.js';
     selector: 'choose-test',
     templateUrl: '../../templates/tests/choose-test.html',
     providers: [TestService, Auth, TestScheduleModel, Utility, Common],
-    directives: [PageHeader, TestHeader, PageFooter,ConfirmationPopup],
+    directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup],
     pipes: [RemoveWhitespacePipe, RoundPipe]
 })
 
-export class ChooseTest implements OnDeactivate, CanDeactivate {
+export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     institutionID: number;
     apiServer: string;
     subjectId: number;
@@ -46,14 +46,20 @@ export class ChooseTest implements OnDeactivate, CanDeactivate {
         else
             this.initialize();
     }
+    
+    ngOnInit(): void{
+        $(document).scrollTop(0);
+    }
 
     routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
-                this.attemptedRoute = next.urlPath;
-                $('#confirmationPopup').modal('show');
-                return false;
+                if (this.testScheduleModel.testId) {
+                    this.attemptedRoute = next.urlPath;
+                    $('#confirmationPopup').modal('show');
+                    return false;
+                }
             }
         }
         if (outOfTestScheduling)
@@ -89,6 +95,9 @@ export class ChooseTest implements OnDeactivate, CanDeactivate {
         else {
             this.testScheduleModel.currentStep = 1;
             this.testScheduleModel.institutionId = this.institutionID;
+            this.testScheduleModel.adminId = this.auth.userid;
+            this.testScheduleModel.adminFirstName = this.auth.firstname;
+            this.testScheduleModel.adminLastName = this.auth.lastname;
         }
         this.testScheduleModel.activeStep = 1;
 
@@ -102,7 +111,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate {
         })
             .then((json) => {
                 this.subjects = json;
-                console.log(this.subjects);
                 this.loadSchedule();
                 setTimeout(json => {
                     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
@@ -136,7 +144,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate {
                 if (this.testsTable)
                     this.testsTable.destroy();
                 this.tests = json;
-                console.log(this.tests);
                 setTimeout(json=> {
                     this.testsTable = $('#chooseTestTable').DataTable({
                         "paging": false,

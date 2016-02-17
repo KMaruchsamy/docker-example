@@ -1,5 +1,6 @@
 import {Injectable, Inject} from 'angular2/core';
 import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "angular2/http";
+import {Observable} from 'rxjs/Rx';
 import {Auth} from './auth';
 import * as _ from '../lib/index';
 import {TestScheduleModel} from '../models/testSchedule.model';
@@ -143,6 +144,11 @@ export class TestService {
         _testScheduleModel.lastselectedcohortId = objTestScheduleModel.LastCohortSelectedId;
         _testScheduleModel.facultyMemberId = objTestScheduleModel.FacultyMemberId;
         _testScheduleModel.pageSavedOn = objTestScheduleModel.PageSavedOn;
+        _testScheduleModel.adminId = objTestScheduleModel.AdminId;
+        _testScheduleModel.adminFirstName = objTestScheduleModel.AdminFirstName;
+        _testScheduleModel.adminLastName = objTestScheduleModel.AdminLastName;
+        _testScheduleModel.facultyFirstName = objTestScheduleModel.FacultyFirstName;
+        _testScheduleModel.facultyLastName = objTestScheduleModel.FacultyLastName;
         if (objTestScheduleModel.Students.length > 0) {
             _.forEach(objTestScheduleModel.Students, function(student, key) {
                 let _student = new SelectedStudentModel();
@@ -163,4 +169,16 @@ export class TestService {
 
         return _testScheduleModel;
     }
+
+    deleteSchedule(url: string): Observable<Response> {
+        let self = this;
+        let headers: Headers = new Headers();
+        headers.append('Authorization', self.auth.authheader);
+        headers.append('Accept', 'application/json');
+        headers.append('Content-Type', 'application/json');
+        let options: RequestOptions = new RequestOptions();
+        options.headers = headers;
+        return this.http.delete(url, options);          
+    }
+
 }

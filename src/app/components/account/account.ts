@@ -1,5 +1,5 @@
 ﻿import {Component} from 'angular2/core';
-import {Router} from 'angular2/router';
+import {Router, RouteParams} from 'angular2/router';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {Auth} from '../../services/auth';
@@ -19,7 +19,7 @@ import {manage_account, general, reset_password_after_login, reset_student_passw
 export class Account {
     apiServer: string;
     sStorage: any;
-    constructor(public router: Router, public auth: Auth, public common: Common, public validations: Validations) {
+    constructor(public router: Router, public auth: Auth, public common: Common, public validations: Validations, public routeParams: RouteParams) {
         this.sStorage = this.common.getStorage();
         // this.errorMessages = "";
         // this.successMessage = "";
@@ -28,9 +28,15 @@ export class Account {
         this.apiServer = this.common.getApiServer();
         // this.getConfig();
         this.initialize();
-
+        let scroll = this.routeParams.get('scroll');
+        if (scroll) {
+            this.scroll(scroll);
+        }
+        else {
+            $(document).scrollTop(0);
+        }
     }
-        
+
     getInitialize() {
         // this.sStorage = this.common.sStorage;
         if (this.auth.isAuth()) {
@@ -44,6 +50,21 @@ export class Account {
         }
         else {
             this.redirectToLogin();
+        }
+
+    }
+
+    scroll(scroll: string): void {
+        switch (scroll) {
+            case "send-student-info":
+                $('html, body').animate({
+                    scrollTop: $("#btnClearResetStudentPassword").offset().top
+                }, 1000);
+                break;
+
+            default:
+                $(document).scrollTop(0);
+                break;
         }
     }
 

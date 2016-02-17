@@ -11,12 +11,13 @@ import {TestHeader} from './test-header';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
-
+import {ConfirmationPopup} from '../shared/confirmation.popup';
 import * as _ from '../../lib/index';
 import '../../plugins/dropdown.js';
 import '../../plugins/bootstrap-select.min.js';
 import '../../plugins/jquery.dataTables.min.js';
 import '../../plugins/dataTables.responsive.js';
+import '../../lib/modal.js';
 //import '../../plugins/dataTables.bootstrap.min.js';
 
 @Component({
@@ -24,7 +25,7 @@ import '../../plugins/dataTables.responsive.js';
     templateUrl: '../../templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
     providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common],
-    directives: [PageHeader, TestHeader, PageFooter, NgFor],
+    directives: [PageHeader, TestHeader, PageFooter, NgFor,ConfirmationPopup],
     pipes: [RemoveWhitespacePipe]
 })
 
@@ -41,6 +42,8 @@ export class AddStudents implements OnInit, OnDeactivate {
     windowStart: string;
     windowEnd: string;
     selectedStudentCount: number = 0;
+    attemptedRoute: string;
+    overrideRouteCheck: boolean = false;
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common) {
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
@@ -48,10 +51,26 @@ export class AddStudents implements OnInit, OnDeactivate {
         else
             this.initialize();
     }
-    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.urlPath)));
+    
+        routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+        if (!this.overrideRouteCheck) {
+            if (outOfTestScheduling) {
+                if (this.testScheduleModel.testId) {
+                    this.attemptedRoute = next.urlPath;
+                    $('#confirmationPopup').modal('show');
+                    return false;
+                }
+            }
+        }
         if (outOfTestScheduling)
             this.sStorage.removeItem('testschedule');
+        this.overrideRouteCheck = false;
+        return true;
+    }
+    
+    
+    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         if (this.testsTable)
             this.testsTable.destroy();
         $('.selectpicker').val('').selectpicker('refresh');
@@ -529,5 +548,15 @@ export class AddStudents implements OnInit, OnDeactivate {
                 return this.cohorts[i].CohortName;
             }
         }
+    }
+    
+    onCancelConfirmation(e: any): void {
+        $('#confirmationPopup').modal('hide');
+        this.attemptedRoute = '';
+    }
+    onOKConfirmation(e: any): void {
+        $('#confirmationPopup').modal('hide');
+        this.overrideRouteCheck = true;
+        this.router.navigateByUrl(this.attemptedRoute);
     }
 }
