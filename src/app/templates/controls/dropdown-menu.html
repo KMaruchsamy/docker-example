@@ -3,7 +3,7 @@
 		<a href="javascript:void(0)"  id="lnkMenu"  role="button" class="dropdown-button" data-toggle="dropdown"  [attr.aria-disabled]="ariaDisabled" aria-haspopup="true">Main Menu</a>
 		<ul class="dropdown-menu dropdown-select">
 			<li><a [routerLink]="['/Home']" class="menu-icon home-icon" >Home</a></li>
-			<li><a href="#" class="menu-icon reporting-icon" >View Reports</a></li>
+			<li><a [routerLink]="['/Reports']" class="menu-icon reporting-icon" >View Reports</a></li>
 			<li><a [routerLink]="['/Rosters']" class="menu-icon student-icon" >View Rosters</a></li>
 			<li><a  [routerLink]="['/Groups']" class="menu-icon group-icon" >Manage Groups</a></li>
 			<li><a [routerLink]="['/ManageTests']" class="menu-icon test-icon" >Manage Tests</a></li>

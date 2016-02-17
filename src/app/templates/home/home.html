@@ -26,7 +26,7 @@
             <ul class="nav-items">
                 <li class="nav-icon schedule-icon"><a href="#" (click)="redirectToRoute('choose-test');">Schedule an Integrated Test</a></li>
                 <li class="nav-icon email-icon-outline"><a [routerLink]="['/AccountScroll',{scroll:'send-student-info'}]">Send student sign in info</a></li>
-                <li class="nav-icon info-icon-white"><a href="#">View user guide</a></li>
+                <li class="nav-icon info-icon-white"><a [routerLink]="['/UserGuide']">View user guide</a></li>
             </ul>
         </nav>
     </div>
