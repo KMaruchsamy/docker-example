@@ -79,6 +79,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         this.initialize();
         this.initializeControls();
         this.set8HourRule();
+        $(document).scrollTop(0);
     }
 
     initialize() {

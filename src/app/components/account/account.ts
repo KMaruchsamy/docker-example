@@ -28,6 +28,13 @@ export class Account {
         this.apiServer = this.common.getApiServer();
         // this.getConfig();
         this.initialize();
+        let scroll = this.routeParams.get('scroll');
+        if (scroll) {
+            this.scroll(scroll);
+        }
+        else {
+            $(document).scrollTop(0);
+        }
     }
 
     getInitialize() {
@@ -45,11 +52,6 @@ export class Account {
             this.redirectToLogin();
         }
 
-        let scroll = this.routeParams.get('scroll');
-        if (scroll) {
-            this.scroll(scroll);
-        }
-
     }
 
     scroll(scroll: string): void {
@@ -61,6 +63,7 @@ export class Account {
                 break;
 
             default:
+                $(document).scrollTop(0);
                 break;
         }
     }

@@ -1,6 +1,7 @@
 import {Component, Input, OnInit, Output, EventEmitter} from 'angular2/core';
 import {RouterLink} from 'angular2/router';
 import {Common} from '../../services/common';
+import {TestScheduleModel} from '../../models/testSchedule.model';
 
 @Component({
     selector: 'retesters-noalternate',
