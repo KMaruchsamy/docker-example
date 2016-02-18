@@ -598,6 +598,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                     
                     retester.instance.windowExceptionPopupClose.subscribe((e) => {
                         $('#modalTimingException').modal('hide');
+                        this.router.navigateByUrl('/tests/review');
                     });
 
                 });

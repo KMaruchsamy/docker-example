@@ -1,5 +1,5 @@
 ﻿import {Component, Input, OnInit, Output, EventEmitter} from 'angular2/core';
-import {Router, RouteParams,RouterLink} from 'angular2/router';
+import {RouterLink} from 'angular2/router';
 import {Common} from '../../services/common';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 
@@ -16,7 +16,7 @@ export class TimeExceptionPopup implements OnInit {
     @Input() studentWindowException: any;
     @Output() windowExceptionPopupClose = new EventEmitter();
     sStorage: any;
-    constructor(public common: Common, public router: Router) {
+    constructor(public common: Common) {
         this.sStorage = this.common.getStorage();
     }
 
@@ -43,7 +43,6 @@ export class TimeExceptionPopup implements OnInit {
         e.preventDefault();
         this.removeStudents();
         this.windowExceptionPopupClose.emit(e);
-        this.router.navigateByUrl('/tests/review');
     }
 
 }
