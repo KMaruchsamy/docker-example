@@ -1,5 +1,5 @@
 ﻿import {Component, Input, OnInit, Output, EventEmitter} from 'angular2/core';
-import {RouterLink} from 'angular2/router';
+import {Router, RouteParams,RouterLink} from 'angular2/router';
 import {Common} from '../../services/common';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 
@@ -9,42 +9,41 @@ import {ParseDatePipe} from '../../pipes/parsedate.pipe';
     directives: [RouterLink],
     providers: [Common],
     inputs: ['studentWindowException'],
-    pipes: [ParseDatePipe]
+    pipes: [ParseDatePipe],
 })
 
-export class RetesterNoAlternatePopup implements OnInit {
+export class TimeExceptionPopup implements OnInit {
     @Input() studentWindowException: any;
-    //@Output() retesterNoAlternatePopupOK = new EventEmitter();
-    @Output() windowExceptionPopupCancel = new EventEmitter();
+    @Output() windowExceptionPopupClose = new EventEmitter();
     sStorage: any;
-    constructor(public common: Common) {
-
+    constructor(public common: Common, public router: Router) {
+        this.sStorage = this.common.getStorage();
     }
 
     ngOnInit(): void {
         // console.log(this.studentRepeaters);
     }
 
-    removeStudents(e): void {
-        e.preventDefault();
+    removeStudents(): void {
         let self = this;
-        this.sStorage = this.common.getStorage();
         if (this.sStorage) {
             let savedSchedule = JSON.parse(this.sStorage.getItem('testschedule'));
             if (savedSchedule) {
                 var removedStudents = _.remove(savedSchedule.selectedStudents, function (student) {
-                    console.log(self.studentRepeaters);
-                    return _.some(self.studentRepeaters, { 'StudentId': student.studentId })
+                    console.log(self.studentWindowException);
+                    return _.some(self.studentWindowException, { 'StudentId': student.StudentId })
                 });
-               // this.retesterNoAlternatePopupOK.emit(savedSchedule);
             }
+            this.sStorage.setItem('testschedule', JSON.stringify(savedSchedule));
         }
     }
 
 
-    cancel(e): void {
+    close(e): void {
         e.preventDefault();
-        this.windowExceptionPopupCancel.emit(e);
+        this.removeStudents();
+        this.windowExceptionPopupClose.emit(e);
+        this.router.navigateByUrl('/tests/review');
     }
 
 }

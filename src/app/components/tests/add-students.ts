@@ -1,4 +1,4 @@
-﻿import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef, EventEmitter} from 'angular2/core';
+﻿import {Component, OnInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
 import {Router, RouteParams, OnDeactivate, ComponentInstruction} from 'angular2/router';
 import {NgFor} from 'angular2/common';
 import {TestService} from '../../services/test.service';
@@ -12,6 +12,8 @@ import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
+import {TimeExceptionPopup} from './time-exception-popup';
+
 import * as _ from '../../lib/index';
 import '../../plugins/dropdown.js';
 import '../../plugins/bootstrap-select.min.js';
@@ -24,7 +26,7 @@ import '../../lib/modal.js';
     selector: 'add-students',
     templateUrl: '../../templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
-    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common],
+    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, TimeExceptionPopup],
     directives: [PageHeader, TestHeader, PageFooter, NgFor,ConfirmationPopup],
     pipes: [RemoveWhitespacePipe]
 })
@@ -44,7 +46,9 @@ export class AddStudents implements OnInit, OnDeactivate {
     selectedStudentCount: number = 0;
     attemptedRoute: string;
     overrideRouteCheck: boolean = false;
-    constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common) {
+    valid: boolean = false;
+    constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
+        public dynamicComponentLoader: DynamicComponentLoader) {
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
@@ -539,7 +543,7 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         console.log('TestScheduleModel with Selected student' + this.testScheduleModel);
-        this.router.parent.navigateByUrl('/tests/review');
+        this.valid=this.AnyException();
     }
 
     FindCohortName(cohortid: number): string {
@@ -548,6 +552,59 @@ export class AddStudents implements OnInit, OnDeactivate {
                 return this.cohorts[i].CohortName;
             }
         }
+    }
+
+    GetStudentIDList(): Object[] {
+        let studentsid = [];
+        if (this.testScheduleModel.selectedStudents.length > 0) {
+            for (let i = 0; i < this.testScheduleModel.selectedStudents.length; i++) {
+                let student = this.testScheduleModel.selectedStudents[i];
+                studentsid[i] = student.StudentId;
+            }
+        }
+        return studentsid;
+    }
+    AnyException(): boolean {
+        debugger;
+        let __this = this;
+        let windowExceptionURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.windowexception}`;
+        let input = {
+            "SessionTestId": this.testScheduleModel.testId,
+            "StudentIds": __this.GetStudentIDList(),  // [459, 460, 462, 463, 464, 467, 468, 497, 537, 839, 60224, 69156, 69157, 69158, 69159, 69160, 69161, 69162, 71355, 118355, 231254, 297049, 297051, 313195, 357048, 115156],
+            "TestingSessionWindowStart": moment(this.testScheduleModel.scheduleStartTime).format(),// "2016-02-08T13:07:19.811Z",
+            "TestingSessionWindowEnd": moment(this.testScheduleModel.scheduleEndTime).format()
+        }
+        //this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
+        let exceptionPromise = this.testService.scheduleTests(windowExceptionURL, JSON.stringify(input));
+        exceptionPromise.then((response) => {
+            return response.json();
+        })
+            .then((json) => {
+                this.valid = __this.HasWindowException(json);
+                
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        return this.valid;
+    }
+    HasWindowException(_studentWindowException: any): boolean {
+        if (_studentWindowException != null) {
+            this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopup, this.elementRef)
+                .then(retester=> {
+                    $('#modalTimingException').modal('show');
+                    retester.instance.studentWindowException = _studentWindowException;
+                    retester.instance.testSchedule = this.testScheduleModel;
+                    
+                    retester.instance.windowExceptionPopupClose.subscribe((e) => {
+                        $('#modalTimingException').modal('hide');
+                    });
+
+                });
+            return false;
+        }
+        else
+            return true;
     }
     
     onCancelConfirmation(e: any): void {

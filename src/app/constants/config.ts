@@ -33,6 +33,7 @@ export const links = {
                 cohortstudents: "scheduling/cohorts/§cohortid/students?testId=§testid",
                 faculty: "scheduling/institutions/§institutionid/faculty",
                 retesters: "scheduling/checkForRetesters",
+                windowexception: "scheduling/checkForTestingWindowExceptions",
                 scheduletest: "scheduling/testingSessions",
                 viewtest: "scheduling/testingSessions/§scheduleId",
                 deleteSchedule :"scheduling/testingSessions/§scheduleId"
