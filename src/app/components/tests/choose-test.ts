@@ -1,5 +1,5 @@
 import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef} from 'angular2/core';
-import {Router, RouteParams, OnDeactivate, ComponentInstruction} from 'angular2/router';
+import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction} from 'angular2/router';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -8,6 +8,7 @@ import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
 import {TestScheduleModel} from '../../models/testSchedule.model';
+import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';
 import {Utility} from '../../scripts/utility';
@@ -16,18 +17,17 @@ import '../../plugins/dropdown.js';
 import '../../plugins/bootstrap-select.min.js';
 import '../../plugins/jquery.dataTables.min.js';
 import '../../plugins/dataTables.responsive.js';
-
+import '../../lib/modal.js';
 
 @Component({
     selector: 'choose-test',
     templateUrl: '../../templates/tests/choose-test.html',
-    // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
     providers: [TestService, Auth, TestScheduleModel, Utility, Common],
-    directives: [PageHeader, TestHeader, PageFooter],
+    directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup],
     pipes: [RemoveWhitespacePipe, RoundPipe]
 })
 
-export class ChooseTest implements OnDeactivate {
+export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     institutionID: number;
     apiServer: string;
     subjectId: number;
@@ -36,6 +36,8 @@ export class ChooseTest implements OnDeactivate {
     tests: Object[] = [];
     testsTable: any;
     sStorage: any;
+    attemptedRoute: string;
+    overrideRouteCheck: boolean = false;
     constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams) {
         this.sStorage = this.common.getStorage();
@@ -44,11 +46,29 @@ export class ChooseTest implements OnDeactivate {
         else
             this.initialize();
     }
+    
+    ngOnInit(): void{
+        $(document).scrollTop(0);
+    }
 
-    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        let outOfTestScheduling = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+    routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+        if (!this.overrideRouteCheck) {
+            if (outOfTestScheduling) {
+                if (this.testScheduleModel.testId) {
+                    this.attemptedRoute = next.urlPath;
+                    $('#confirmationPopup').modal('show');
+                    return false;
+                }
+            }
+        }
         if (outOfTestScheduling)
             this.sStorage.removeItem('testschedule');
+        this.overrideRouteCheck = false;
+        return true;
+    }
+
+    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         if (this.testsTable)
             this.testsTable.destroy();
         $('.selectpicker').val('').selectpicker('refresh');
@@ -75,6 +95,9 @@ export class ChooseTest implements OnDeactivate {
         else {
             this.testScheduleModel.currentStep = 1;
             this.testScheduleModel.institutionId = this.institutionID;
+            this.testScheduleModel.adminId = this.auth.userid;
+            this.testScheduleModel.adminFirstName = this.auth.firstname;
+            this.testScheduleModel.adminLastName = this.auth.lastname;
         }
         this.testScheduleModel.activeStep = 1;
 
@@ -143,17 +166,27 @@ export class ChooseTest implements OnDeactivate {
     }
 
     saveChooseTest(): void {
-        this.testScheduleModel.scheduleId = this.utitlity.generateUUID();       
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         this.router.parent.navigateByUrl('/tests/schedule-test');
     }
 
 
 
-    selectTest(testId: number, testName: string, subjectId: number): void {
+    selectTest(testId: number, testName: string, subjectId: number, normingStatusName): void {
         this.testScheduleModel.subjectId = subjectId;
         this.testScheduleModel.testId = testId;
         this.testScheduleModel.testName = testName;
+        this.testScheduleModel.testNormingStatus = normingStatusName;
+    }
+
+    onCancelConfirmation(e: any): void {
+        $('#confirmationPopup').modal('hide');
+        this.attemptedRoute = '';
+    }
+    onOKConfirmation(e: any): void {
+        $('#confirmationPopup').modal('hide');
+        this.overrideRouteCheck = true;
+        this.router.navigateByUrl(this.attemptedRoute);
     }
 
 

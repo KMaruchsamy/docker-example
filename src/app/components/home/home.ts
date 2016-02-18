@@ -1,4 +1,4 @@
-import {Component, Injector, Inject} from 'angular2/core';
+import {Component, Injector, Inject, OnInit} from 'angular2/core';
 import {NgIf} from 'angular2/common';
 import {Router, RouterLink, Location, CanActivate} from 'angular2/router';
 import {PageHeader} from '../shared/page-header';
@@ -28,7 +28,7 @@ import {links} from '../../constants/config';
     // return auth.isAuth();
     return true;
 })
-export class Home {
+export class Home implements OnInit{
     // profiles: Array<ProfileModel>;
     institutionRN: number;
     institutionPN: number;
@@ -53,6 +53,11 @@ export class Home {
         this.nurseConsultantProfile = {};
         this.loadProfiles(self);
         this.checkInstitutions();
+    }
+    
+    
+    ngOnInit(): void{
+        $(document).scrollTop(0);
     }
 
     loadProfiles(self): void {

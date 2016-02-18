@@ -2,39 +2,50 @@ body .datepicker, body .ui-timepicker-wrapper {
   z-index: 2001 !important;
 }
 
-@media (max-width: 768px) and (min-width: 551px) {
-  body .datepicker {
+@media (max-width: 768px) {
+  body .datepicker, body .ui-timepicker-wrapper {
+    border-radius: 0;
     width: 100% !important;
+    position: fixed !important;
+    right: 0 !important;
+    bottom: 0 !important;
     left: 0 !important;
-    top: 73px !important;
-    padding: .25em 1em;
-    }
+  }
+
+  body .ui-timepicker-wrapper {
+    height: auto;
+  }
+
+  body .ui-timepicker-wrapper li {
+    padding: 1em 2em;
+    border-bottom: 1px solid #eee;
+  }
+
+  body .ui-timepicker-wrapper li {
+    padding-left: 3em;
+  }
+
   body .datepicker-dropdown:before, body .datepicker-dropdown:after {
     display: none;
   }
 }
 
-@media (max-width: 550px) {
+@media (width: 768px) {
   body .datepicker, body .ui-timepicker-wrapper {
-    border-radius: 0;
-    width: 100% !important;
-    position: fixed !important;
-    top: 57px !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    left: 0 !important;
+    top: 73px !important;
+  }
+
+  body .datepicker {
     padding-top: 20px;
-    }
+  }
+}
+
+@media (max-width: 767px) {
+  body .datepicker {
+    top: 56px !important;
+    padding: .25em 1em;
+  }
   body .ui-timepicker-wrapper {
-    height: auto;
-    padding-top: 0;
     top: 46px !important;
-  }
-  body .ui-timepicker-wrapper li {
-    padding: 1em 2em;
-    border-bottom: 1px solid #eee;
-  }
-  body .datepicker-dropdown:before, body .datepicker-dropdown:after {
-    display: none;
   }
 }

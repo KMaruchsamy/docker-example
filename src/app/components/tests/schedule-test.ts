@@ -1,5 +1,5 @@
 import {Component, OnInit} from 'angular2/core';
-import {Router, OnDeactivate, ComponentInstruction} from 'angular2/router';
+import {Router, CanDeactivate, OnDeactivate, ComponentInstruction} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -10,16 +10,18 @@ import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
 import * as _ from '../../lib/index';
 import {TestScheduleModel} from '../../models/testSchedule.model';
+import {ConfirmationPopup} from '../shared/confirmation.popup';
 import '../../plugins/bootstrap-datepicker-1.5.min.js';
 import '../../plugins/jquery.timepicker.js';
+import '../../lib/modal.js';
 
 @Component({
     selector: 'schedule-test',
     templateUrl: '../../templates/tests/schedule-test.html',
     providers: [TestService, Auth, TestScheduleModel, Common],
-    directives: [PageHeader, TestHeader, PageFooter, NgIf]
+    directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup]
 })
-export class ScheduleTest implements OnInit, OnDeactivate {
+export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     valid: boolean = false;
     invalid8hours: boolean = false;
     ignore8HourRule: boolean = false;
@@ -33,6 +35,8 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     $endTime: any;
     dontPropogate: boolean = false;
     sStorage: any;
+    attemptedRoute: string;
+    overrideRouteCheck: boolean = false;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public router: Router, public common: Common) {
         this.sStorage = this.common.getStorage();
@@ -46,11 +50,28 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         }
     }
 
-    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.auth.common.removeWhitespace(next.urlPath)));
-        if (outOfTestScheduling)
+    routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+        if (!this.overrideRouteCheck) {
+            if (outOfTestScheduling) {
+                this.attemptedRoute = next.urlPath;
+                $('#confirmationPopup').modal('show');
+                return false;
+            }
+        }
+        if (outOfTestScheduling) {
+            this.startDate = null;
+            this.endDate = null;
             this.sStorage.removeItem('testschedule');
+            this.$startDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
+            this.$endDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
+        }
 
+        this.overrideRouteCheck = false;
+        return true;
+    }
+
+    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
     }
 
     ngOnInit(): void {
@@ -58,7 +79,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         this.initialize();
         this.initializeControls();
         this.set8HourRule();
-
+        $(document).scrollTop(0);
     }
 
     initialize() {
@@ -84,17 +105,25 @@ export class ScheduleTest implements OnInit, OnDeactivate {
     initializeControls() {
         if (this.startDate)
             this.$startDate.datepicker('update', this.startDate);
-        else
+        else {
+            this.$startDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
             this.$startDate.datepicker('update', '');
+            this.$endDate.datepicker('setStartDate', moment(new Date()).format('L'));
+        }
+
 
         if (this.endDate)
             this.$endDate.datepicker('update', this.endDate);
-        else
+        else {
+            this.$endDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
             this.$endDate.datepicker('update', '');
+        }
+
         if (this.startTime)
             this.$startTime.timepicker('setTime', new Date(this.startTime));
         else
             this.$startTime.timepicker('setTime', '');
+        
         if (this.endTime)
             this.$endTime.timepicker('setTime', new Date(this.endTime));
         else
@@ -106,7 +135,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         let __this = this;
         this.$startTime.timepicker({
             'timeFormat': 'g:ia',
-            'minTime': '8:00am',
+            'minTime': new Date(),
             'disableTouchKeyboard': true
         }).on('change', function(e) {
             if (e.currentTarget.value) {
@@ -115,16 +144,22 @@ export class ScheduleTest implements OnInit, OnDeactivate {
                     startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
                     if (startTime && moment(startTime).isValid()) {
                         __this.startTime = startTime;
-                        __this.$endTime.timepicker('option', 'minTime', __this.startTime);
+
+                        if (moment(__this.startTime).isAfter(new Date()))
+                            __this.$endTime.timepicker('option', 'minTime', new Date(moment(__this.startTime).add(30, 'minutes').format()));
+
                         if (!__this.endTime) {
-                            __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
+                            if (moment(__this.startTime).isAfter(new Date()))
+                                __this.endTime = moment(__this.startTime).add(3, 'hours').format();
+                            else
+                                __this.endTime = moment(new Date()).add(3, 'hours').format();
                             __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                             __this.endDate = moment(new Date(__this.endTime)).format('L');
                             __this.$endDate.datepicker('update', __this.endDate);
                         }
                         else {
                             if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
-                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                                __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
                                 __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                             }
                         }
@@ -139,14 +174,23 @@ export class ScheduleTest implements OnInit, OnDeactivate {
                     startTime = __this.$startTime.timepicker('getTime', new Date());
                     if (startTime && moment(startTime).isValid()) {
                         __this.startTime = startTime;
-                        __this.$endTime.timepicker('option', 'minTime', __this.startTime);
+
+                        if (moment(__this.startTime).isAfter(new Date()))
+                            __this.$endTime.timepicker('option', 'minTime', new Date(moment(__this.startTime).add(30, 'minutes').format()));
+
                         if (!__this.endTime) {
-                            __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
+                            if (moment(__this.startTime).isAfter(new Date()))
+                                __this.endTime = moment(new Date(__this.startTime)).add(3, 'hours').format();
+                            else
+                                __this.endTime = moment(new Date()).add(3, 'hours').format();
                             __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                         }
                         else {
                             if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
-                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                                if (moment(__this.startTime).isAfter(new Date()))
+                                    __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
+                                else
+                                    __this.endTime = moment(new Date()).add(30, 'minutes').format();
                                 __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                             }
                         }
@@ -170,24 +214,45 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         this.$endTime.timepicker({
             'showDuration': true,
             'timeFormat': 'g:ia',
-            'minTime': '8:00am',
+            'minTime': new Date(moment(new Date()).add(30, 'minutes').format()),
             'disableTouchKeyboard': true
         }).on('change', function(e) {
             if (e.currentTarget.value) {
                 let endTime;
+                let minEndTime = moment(new Date()).add(30, 'minutes').format();
                 if (__this.endDate) {
                     endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
+                    // if (moment(endTime).isBefore(minEndTime))
+                    //     endTime =new Date(minEndTime);
+                    
                     if (endTime && moment(endTime).isValid()) {
                         __this.endTime = endTime;
                         if (!__this.startTime) {
-                            __this.startTime = moment(new Date(__this.endTime)).subtract(3, 'hours').format();
+                            if (moment(__this.endTime).isBefore(minEndTime)) {
+                                __this.endTime = minEndTime;
+                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                            }
+                            __this.startTime = moment(__this.endTime).subtract(3, 'hours').format();
                             __this.$startTime.timepicker('setTime', new Date(__this.startTime));
                             __this.$endTime.timepicker('option', 'minTime', __this.startTime);
                         }
                         else {
                             if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
-                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
-                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                if (moment(__this.endTime).isBefore(minEndTime)) {
+                                    __this.endTime = minEndTime;
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
+                                else {
+                                    __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
+
+                            }
+                            else {
+                                if (moment(__this.endTime).isBefore(minEndTime)) {
+                                    __this.endTime = minEndTime;
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
                             }
                         }
                     } else {
@@ -196,19 +261,38 @@ export class ScheduleTest implements OnInit, OnDeactivate {
                         else
                             __this.$endTime.timepicker('setTime', new Date(__this.endTime));
                     }
+
                 } else {
                     endTime = __this.$endTime.timepicker('getTime', new Date());
+                    //  if (moment(endTime).isBefore(minEndTime))
+                    //     endTime =new Date(minEndTime);
                     if (endTime && moment(endTime).isValid()) {
                         __this.endTime = endTime;
                         if (!__this.startTime) {
+                            if (moment(__this.endTime).isBefore(minEndTime)) {
+                                __this.endTime = minEndTime;
+                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                            }
                             __this.startTime = moment(new Date(__this.endTime)).subtract(3, 'hours').format();
                             __this.$startTime.timepicker('setTime', new Date(__this.startTime));
                             __this.$endTime.timepicker('option', 'minTime', __this.startTime);
                         }
                         else {
                             if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
-                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
-                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                if (moment(__this.endTime).isBefore(minEndTime)) {
+                                    __this.endTime = minEndTime;
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
+                                else {
+                                    __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
+                            }
+                            else {
+                                if (moment(__this.endTime).isBefore(minEndTime)) {
+                                    __this.endTime = minEndTime;
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
                             }
                         }
                     }
@@ -352,6 +436,12 @@ export class ScheduleTest implements OnInit, OnDeactivate {
                     __this.$endDate.datepicker('update', __this.endDate);
                     // have to change the date part of the time because the date is changed ..
                     __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
+                    let minEndTime = moment(new Date()).add(30, 'minutes').format();
+                    if (moment(__this.endTime).isBefore(minEndTime)) {
+                        __this.endTime = minEndTime;
+                        __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                    }
+
 
 
                 } else {
@@ -369,6 +459,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
 
             __this.validate(__this);
         });
+
     }
 
 
@@ -377,8 +468,11 @@ export class ScheduleTest implements OnInit, OnDeactivate {
         if (institution)
             this.ignore8HourRule = !institution.IsIpBlank;
 
-        if (this.ignore8HourRule)
+        if (this.ignore8HourRule) {
+            this.validate(this);
             return;
+        }
+
 
         let __this = this;
         let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
@@ -392,6 +486,7 @@ export class ScheduleTest implements OnInit, OnDeactivate {
             })
             .catch((error) => {
                 console.log(error);
+                __this.validate(__this);
             });
     }
 
@@ -529,6 +624,17 @@ export class ScheduleTest implements OnInit, OnDeactivate {
 
         return day + '/' + month + '/' + year;
 
+    }
+
+
+    onCancelConfirmation(e: any): void {
+        $('#confirmationPopup').modal('hide');
+        this.attemptedRoute = '';
+    }
+    onOKConfirmation(e: any): void {
+        $('#confirmationPopup').modal('hide');
+        this.overrideRouteCheck = true;
+        this.router.navigateByUrl(this.attemptedRoute);
     }
 
 }

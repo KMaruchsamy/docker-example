@@ -1,6 +1,6 @@
-import {Component, provide, enableProdMode} from 'angular2/core';
+import {Component, provide, enableProdMode, ComponentRef} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
-import {RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy, APP_BASE_HREF} from 'angular2/router';
+import {Router, RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy, APP_BASE_HREF, ROUTER_PRIMARY_COMPONENT} from 'angular2/router';
 import {HTTP_PROVIDERS, Http} from 'angular2/http';
 import {Home} from './components/home/home';
 import {Login} from './components/login/login';
@@ -24,6 +24,12 @@ import {AddStudents} from './components/tests/add-students';
 import {ReviewTest} from './components/tests/review-test';
 import {PageNotFound} from './components/errors/pagenotfound';
 import {UnhandledException} from './components/errors/unhandledexception';
+import {Confirmation} from './components/tests/confirmation';
+import {ViewTest} from './components/tests/view-test';
+import {ManageTests} from './components/tests/manage-tests';
+import {Reports} from './components/reports/reports';
+import {Rosters} from './components/rosters/rosters';
+import {Groups} from './components/groups/groups';
 
 @Component({
     selector: 'app',
@@ -41,20 +47,28 @@ import {UnhandledException} from './components/errors/unhandledexception';
     { path: '/userguide', component: UserGuide, name: 'UserGuide' },
     { path: '/set-password-first-time', component: SetPasswordFirstTime, name: 'SetPasswordFirstTime' },
     { path: '/account', component: Account, name: 'Account' },
+    { path: '/account/:scroll', component: Account, name: 'AccountScroll' },
     { path: '/choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution, name: 'ChooseInstitution' },
     { path: '/profiles/:id', component: ProfileDescription, name: 'Profiles' },
+    { path: '/reports', component: Reports, name: 'Reports' },
+    { path: '/rosters', component: Rosters, name: 'Rosters' },
+    { path: '/groups', component: Groups, name: 'Groups' },
+    { path: '/tests', component: ManageTests, name: 'ManageTests' },
     { path: '/tests/choose-test/:institutionId', component: ChooseTest, name: 'ChooseTest' },
     { path: '/tests/schedule-test', component: ScheduleTest, name: 'ScheduleTest' },
     // { path: '/tests/:action/choose-test/:institutionId/:scheduleId', component: ChooseTest, as: 'ModifyChooseTest' },
     // { path: '/tests/:action/schedule-test', component: ScheduleTest, as: 'ModifyScheduleTest' },
     { path: '/tests/add-students', component: AddStudents, name: 'AddStudents' },
     { path: '/tests/review', component: ReviewTest, name: 'ReviewTest' },
-    { path: '/error', component: UnhandledException },
-    { path: '/*wildcard', component: PageNotFound }
+    { path: '/tests/confirmation', component: Confirmation, name: 'Confirmation' },
+    { path: '/tests/view', component: ViewTest, name: 'ViewTest' },
+    { path: '/error', component: UnhandledException, name: 'UnhandledException' },
+    { path: '/*wildcard', component: PageNotFound, name: 'PageNotFound' }
 ])
 export class App {
-    constructor() {
+    constructor(public router: Router) {
     }
+
 }
 
 // enableProdMode();
@@ -63,5 +77,6 @@ bootstrap(App, [
     ROUTER_PROVIDERS,
     HTTP_PROVIDERS,
     provide(ExceptionHandler, { useClass: MyExceptionHandler }),
+    provide(ROUTER_PRIMARY_COMPONENT, { useValue: App }),
     provide(LocationStrategy, { useClass: HashLocationStrategy })
 ]);

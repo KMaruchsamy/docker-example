@@ -24,8 +24,10 @@ module.exports = function () {
                 'node_modules/lodash/index.js',
                 'src/app/webworkers/logging-worker.js',
                 'node_modules/angular2/bundles/angular2.min.js',
+                'node_modules/angular2/bundles/angular2.dev.js',
                 'node_modules/angular2/bundles/router.dev.js',
                 'node_modules/angular2/bundles/http.js',
+                   'node_modules/angular2/bundles/http.dev.js',
                 'node_modules/jasmine-core/lib/jasmine-core/jasmine.css',
                 'node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
                 'node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js',
@@ -37,6 +39,7 @@ module.exports = function () {
                 'node_modules/bootstrap-select/dist/js/bootstrap-select.min.js',
                 'src/app/plugins/bootstrap-select.js',
                 'node_modules/moment/min/moment.min.js',
+                'node_modules/bootstrap/js/modal.js'
                 // 'src/app/plugins/bootstrap-datepicker.min.js',
                 // 'src/app/plugins/jquery.timepicker.js',
                 // 'src/app/plugins/date.js'
