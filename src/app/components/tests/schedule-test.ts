@@ -123,6 +123,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             this.$startTime.timepicker('setTime', new Date(this.startTime));
         else
             this.$startTime.timepicker('setTime', '');
+        
         if (this.endTime)
             this.$endTime.timepicker('setTime', new Date(this.endTime));
         else
@@ -134,7 +135,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         let __this = this;
         this.$startTime.timepicker({
             'timeFormat': 'g:ia',
-            'minTime': '8:00am',
+            'minTime': new Date(),
             'disableTouchKeyboard': true
         }).on('change', function(e) {
             if (e.currentTarget.value) {
