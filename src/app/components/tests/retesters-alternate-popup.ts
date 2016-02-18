@@ -13,36 +13,52 @@ import {SelectedStudentModel} from '../../models/selectedStudent-model';
 })
 
 export class RetesterAlternatePopup implements OnDeactivate {
+    @Input() retesterExceptions: Object[];
     @Input() testScheduledSudents: Object[];
     @Input() testTakenStudents: Object[];
     @Input() testSchedule: TestScheduleModel;
     @Output() retesterAlternatePopupOK = new EventEmitter();
     @Output() retesterAlternatePopupCancel = new EventEmitter();
+    changes: Object[] = [];
     valid: boolean = false;
     sStorage: any;
     constructor(public common: Common) {
-        console.log(moment().format('h:mm:ss:sss'));
     }
-    
-    routerOnDeactivate(): void{
-        console.log('deactivating....');
+
+    routerOnDeactivate(): void {
         this.testScheduledSudents = null;
         this.testTakenStudents = null;
     }
 
     ngOnInit(): void {
-        console.log('<<>>');
-        console.log(JSON.stringify(this.testScheduledSudents));
-        console.log('<<>>');
-        console.log(JSON.stringify(this.testTakenStudents));
-        console.log('<<>>');
-        console.log(JSON.stringify(this.testSchedule));
+        this.sStorage = this.common.getStorage();
+        let self = this;
+        if (this.retesterExceptions) {
+            _.forEach(self.retesterExceptions, function(student: any, key) {
+                if (!student.Enabled) {
+                    self.changes.push({
+                        studentId: student.StudentId,
+                        mark: true,
+                        testId: 0,
+                        testName: ''
+                    });
+                }
+            });
+        }
+        
+        this.validate();
     }
 
     resolve(e): void {
         e.preventDefault();
         let self = this;
-        this.retesterAlternatePopupOK.emit(this.testSchedule);
+        if (this.changes && this.changes.length > 0) {
+            _.forEach(this.changes, function(change: any, key) {
+                self.markForRemoval(change.studentId, change.mark, change.testId, change.testName)
+            });
+        }
+        this.sStorage.setItem('testschedule', JSON.stringify(this.testSchedule));
+        this.retesterAlternatePopupOK.emit(this.retesterExceptions);        
     }
 
 
@@ -56,42 +72,61 @@ export class RetesterAlternatePopup implements OnDeactivate {
         if (student)
             student.Checked = true;
 
-        this.markForRemoval(studentId, mark, testId, testName);
-
-        console.log(this.testTakenStudents);
-        console.log(this.testSchedule);
+        this.addChanges(studentId, mark, testId, testName);
         this.validate();
+    }
+
+    addChanges(studentId: number, mark: boolean, testId: number, testName: string): void {
+        let change: any = _.find(this.changes, { 'studentId': studentId });
+        if (change) {
+            change.testId = testId;
+            change.testName = testName;
+            change.mark = mark;
+        } else {
+            this.changes.push({
+                studentId: studentId,
+                mark: mark,
+                testId: testId,
+                testName: testName
+            });
+        }
     }
 
     onChangeTestScheduled(studentId: number, mark: boolean, testId: number, testName: string, e): void {
         let student: any = _.find(this.testScheduledSudents, { 'StudentId': studentId });
         if (student)
             student.Checked = true;
+        this.addChanges(studentId, mark, testId, testName);
 
-        this.markForRemoval(studentId, mark, testId, testName);
-
-        console.log(this.testScheduledSudents);
         this.validate();
     }
 
     markForRemoval(_studentId: number, mark: boolean, testId: number, testName: string) {
         let studentToMark: SelectedStudentModel = _.find(this.testSchedule.selectedStudents, { 'StudentId': _studentId });
+        let retesterStudent: any = _.find(this.retesterExceptions, { 'StudentId': _studentId });
+        if (retesterStudent)
+            retesterStudent.Enabled = !mark;
         studentToMark.MarkedToRemove = mark;
+        let previouslySelectedTest: any = _.find(retesterStudent.AlternateTests, { Checked: true });
+        if (previouslySelectedTest)
+            previouslySelectedTest.Checked = false;
+
         if (!mark) {
             studentToMark.StudentTestId = testId;
             studentToMark.StudentTestName = testName;
+            let selectedTest: any = _.find(retesterStudent.AlternateTests, { TestId: testId });
+            if (selectedTest)
+                selectedTest.Checked = true;
         }
         else {
             studentToMark.StudentTestId = this.testSchedule.testId;
             studentToMark.StudentTestName = this.testSchedule.testName;
         }
-        console.log(this.testSchedule);
     }
 
     validate(): boolean {
         let unselectedTestsTaken = _.some(this.testTakenStudents, { 'Checked': false });
         let unselectedTestsScheduled = _.some(this.testScheduledSudents, { 'Checked': false });
-        console.log(unselectedTestsTaken, unselectedTestsScheduled);
         if (unselectedTestsTaken || unselectedTestsScheduled) {
             this.valid = false;
             return false;
@@ -100,6 +135,8 @@ export class RetesterAlternatePopup implements OnDeactivate {
         this.valid = true;
         return true;
     }
+
+
 
 
 }

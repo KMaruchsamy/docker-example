@@ -1,0 +1,88 @@
+<page-header></page-header>
+<main role="main" class="app-main">
+
+      <section>
+        <div class="section-top-padding-only">
+          <div class="container-medium-width edit-info">
+            <h2 class="page-sm-heading-teal">View Reports</h2>
+            <h3 class="page-lg-heading">Sample University of Health Sciences</h3>
+            <p class="margin-1em-top text-larger">Your Kaplan reports give you detailed information on your students’
+              performance on Integrated Tests, use of remediation resources, and NCLEX® prep materials.
+            </p>
+          </div>
+            </div>
+      </section>
+
+      <section>
+       <div class="container-medium-width section-thin section-bottom-padding-only">
+          <div class="section section-beige container-dull-yellow-top text-larger">
+            <p><b>We’re working hard to make your reports more user-friendly and easier to access.</b><br>
+              All of your reports are still accessible through the current reporting interface.
+            </p>
+            <ol class="default-ol default-ol-indented list-extra-spacing">
+              <li>Click on a report you’d like to view.</li>
+              <li>The report will open up in a new tab in your browser.</li>
+              <li>The page you are on right now will stay open as a tab on your browser.<br>You can click back to it at any time.</li>
+            </ol>
+            <p>Thank you for your patience as we work to bring you an improved reporting experience!</p>
+          </div>
+       </div>
+     </section>
+
+     <section>
+        <div class="container-medium-width section-bottom">
+          <div class="reporting-links-grid">
+            <div class="margin-2em-bottom">
+                <!--href="http://nursing.kaplan.com/Admin/ReportStudentReportCard.aspx?Type=2" -->
+               <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToReports('StudentReportCard',myform,hdtoken,hdpage);" href="javascript:void(0)" target="_blank">Student Report Card</a></h3>
+               <p>Review your students’ performance at a glance</p>
+             </div>
+             <div class="margin-2em-bottom">
+               <h3 class="h4 text-smaller-margin"><a class="mobile-button" href="http://nursing.kaplan.com/Admin/ReportCohortTestByQuestion.aspx?Mode=1" target="_blank">Test Result by Question</a></h3>
+               <p>Review performance by topic and difficulty level</p>
+             </div>
+             <div class="margin-2em-bottom">
+               <h3 class="h4 text-smaller-margin"><a class="mobile-button" href="http://nursing.kaplan.com/Admin/ReportCohortByTest.aspx?Mode=1" target="_blank">Cohort by Test</a></h3>
+               <p>Review an entire cohort’s performance</p>
+             </div>
+             <div class="margin-2em-bottom">
+               <h3 class="h4 text-smaller-margin"><a class="mobile-button" href="http://nursing.kaplan.com/Admin/UtilizationReport.aspx" target="_blank">Utilization Report</a></h3>
+               <p>Review how your students are using their resources</p>
+             </div>
+             <div class="margin-2em-bottom">
+               <h3 class="h4 text-smaller-margin"><a class="mobile-button" href="http://nursing.kaplan.com/Admin/ReportCohortComparisons.aspx" target="_blank">Category Comparisons</a></h3>
+               <p>Compare cohort performance in over 80 categories</p>
+             </div>
+          </div>
+
+          <div class="reporting-links-grid">
+            <div class="margin-2em-bottom">
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" href="https://nursing.kaplan.com/Admin/ReportTestsScheduledbyDate.aspx" target="_blank">Tests Scheduled by Date</a></h3>
+              <p>View upcoming tests that have been scheduled in our legacy system</p>
+            </div>
+            <div class="margin-2em-bottom">
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button" href="https://nursing.kaplan.com/Admin/ReportCaseWestern.aspx" target="_blank">Skills Demonstration Video Utilization</a></h3>
+              <p>Review when and how often your students are watching these videos</p>
+            </div>
+            <div>
+               <h3 class="h4 base-font-color">Client Simulations (Mid-Fidelity) Reports</h3>
+               <ul class="list-extra-spacing">
+                 <li><a href="https://nursing.kaplan.com/Admin/ReportStudentReportCardByModule.aspx" target="_blank" class="margin-1em-bottom mobile-button">Individual Student Results by Module</a></li>
+                 <li><a href="https://nursing.kaplan.com/Admin/ReportCohortResultByModule.aspx" target="_blank" class="margin-1em-bottom mobile-button">Overall Cohort Results and Cohort Results by Module</a></li>
+                 <li><a href="https://nursing.kaplan.com/Admin/ReportCaseComparisonByModule.aspx" target="_blank" class="margin-1em-bottom mobile-button">Module Result Comparisons by Cohort</a></li>
+               </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+<page-footer></page-footer>
+
+<form #myform ACTION="http://localhost/s_login.aspx?facultylogin=1" method="POST" target="_blank">
+    <input #hdinstitution type="hidden" id="institutionID" name="institutionID">
+    <input #hdtoken type="hidden" id="jwtToken" name="jwtToken">
+    <input #hdpage type="hidden" id="redirectPage" name="redirectPage">
+</form>
