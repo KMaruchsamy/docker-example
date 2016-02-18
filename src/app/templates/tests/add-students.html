@@ -42,7 +42,7 @@
                                                 <td title="{{student.Email}}">{{student.LastName}}</td>
                                                 <td>{{student.FirstName}}</td>
                                                 <td>{{lastSelectedCohortName}}</td>
-                                                <td>{{student.Retester?"Yes":"No"}}</td>
+                                                <td [class]="getClassName(student.Retester)" >{{student.Retester?"Yes":"No"}}</td>
                                                 <td>
                                                     <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" [attr.ada]="student.Ada" [attr.email]="student.Email" (click)="AddStudent(student,$event)" >Add</button>
                                                 </td>
