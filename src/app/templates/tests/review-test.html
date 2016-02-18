@@ -57,9 +57,9 @@
                 </tbody>
             </table>
         </div>
-        <h4 class="teal" id="studentsInTestingSessionConfirmation">Students in Testing Session ({{testScheduleModel?.selectedStudents?.length}})</h4>
+        <h4 class="teal" id="studentsInTestingSessionConfirmation">Students in Testing Session ({{unmarkedStudentsCount()}})</h4>
         <a [routerLink]="['/AddStudents']">Change</a>
-        <button class="right anchor-button" data-toggle="modal" data-target="#modalAllRepeaters">Change alternate test assignments</button>
+        <button class="right anchor-button" *ngIf="retesterExceptions?.length>0 && hasAlternateTests" (click)="changeAlternateAssignments($event)" >Change alternate test assignments</button>
 
         <table id="studentsInTestingSessionTable" class="dataTable-bordered table-with-cell-padding table-striped last-row-no-border">
             <thead>
@@ -79,7 +79,6 @@
                     <td>{{student.StudentTestName}}</td>
                     <td>{{student.NormingStatus ? student.NormingStatus : testScheduleModel.testNormingStatus}}</td>
                 </tr>
-
             </tbody>
         </table>
     </div>

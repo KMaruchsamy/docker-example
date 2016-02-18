@@ -67,36 +67,6 @@ export class ViewTest implements OnInit, OnDeactivate {
 
              });
         }
-       
-        
-        
-        // let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`);
-        // let schedulePromise = this.testService.getScheduleById(scheduleURL);
-
-        //         schedulePromise.then((response) => {
-        //             return response.json();
-        //         })
-        //             .then((json) => {
-        //                 __this.schedule = __this.testService.mapTestScheduleObjects(json);
-        //                 setTimeout(() => {
-        //                     this.studentsTable = $('#studentsInTestingSessionTable').DataTable({
-        //                         "paging": false,
-        //                         "searching": false,
-        //                         "responsive": true,
-        //                         "info": false,
-        //                         "ordering": false
-        //                     });
-        // 
-        // 
-        //                     $('#studentsInTestingSessionTable').on('responsive-display.dt', function() {
-        //                         $(this).find('.child .dtr-title br').remove();
-        //                     });
-        // 
-        //                 });
-        //             })
-        //             .catch((error) => {
-        //                 console.log(error);
-        //             });
     }
 
 

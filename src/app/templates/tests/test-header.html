@@ -4,7 +4,7 @@
         <h3 class="page-lg-heading">Schedule a Test</h3>
     </div>
 </div>
-<div *ngIf="testSchedule.currentStep>1 && testSchedule.activeStep!==1" class="section-thin test-summary-heading">
+<div *ngIf="testSchedule.currentStep>1 && testSchedule.activeStep!==1 && testSchedule.activeStep!==5" class="section-thin test-summary-heading">
     <div class="container-medium-width" [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
         <div *ngIf="testSchedule.currentStep>1 " class="test-summary-heading-details"><span>Test: <b>{{testSchedule.testName}}</b></span>
             <a href="#" [routerLink]="['/ChooseTest' , {institutionId : testSchedule.institutionId}]" class="link-darker">Change test</a></div>
