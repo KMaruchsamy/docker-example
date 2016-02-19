@@ -16,6 +16,7 @@ import {RetesterAlternatePopup} from './retesters-alternate-popup';
 import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
+import {Loader} from '../shared/loader';
 import '../../plugins/dropdown.js';
 import '../../plugins/bootstrap-select.min.js';
 import '../../plugins/jquery.dataTables.min.js';
@@ -26,7 +27,7 @@ import '../../lib/modal.js';
     selector: "review-test",
     templateUrl: "../../templates/tests/review-test.html",
     providers: [TestService, Auth, TestScheduleModel, Common],
-    directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, RouterLink, RetesterAlternatePopup, RetesterNoAlternatePopup, ConfirmationPopup,TimeExceptionPopup],
+    directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, RouterLink, RetesterAlternatePopup, RetesterNoAlternatePopup, ConfirmationPopup, TimeExceptionPopup, Loader],
     pipes: [ParseDatePipe]
 })
 
@@ -91,12 +92,15 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         this.sStorage = this.common.getStorage();
         this.$ddlfacultyMember = $('#ddlFaculty');
         this.$txtScheduleName = $('#txtSessionName');
+
         let savedSchedule = this.testService.getTestSchedule();
         if (savedSchedule) {
             this.testScheduleModel = savedSchedule;
+            console.log(this.testScheduleModel);
+            if (this.studentsTable)
+                this.studentsTable.destroy();
             setTimeout(() => {
-                if (this.studentsTable)
-                    this.studentsTable.destroy();
+
                 this.studentsTable = $('#studentsInTestingSessionTable').DataTable({
                     "paging": false,
                     "searching": false,
@@ -170,10 +174,19 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
 
     validate(): void {
+        if (this.testScheduleModel.scheduleName !== '')
+            console.log(this.testScheduleModel.scheduleName);
+
         if (this.testScheduleModel) {
-            if (this.testScheduleModel.scheduleName && this.testScheduleModel.scheduleName != '' && this.testScheduleModel.facultyMemberId && this.testScheduleModel.facultyMemberId > 0)
+            if (this.testScheduleModel.scheduleName && this.testScheduleModel.scheduleName !== ''
+                && this.testScheduleModel.facultyMemberId && this.testScheduleModel.facultyMemberId > 0
+                && this.unmarkedStudentsCount() > 0) {
                 this.valid = true;
+                return;
+            }
+
         }
+        this.valid = false;
     }
 
     convertName(_name: string): string[] {
@@ -211,6 +224,9 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     scheduleTest(): void {
+        let loaderTimer = setTimeout(function() {
+            $('#loader').modal('show');
+        }, 1000);
 
         let __this = this;
         this.valid = false;
@@ -240,6 +256,8 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         })
             .then((json) => {
                 __this.valid = true;
+                clearTimeout(loaderTimer);
+                $('#loader').modal('hide');
                 let result = json;
                 console.log(json);
                 if (result.TestingSessionId && result.TestingSessionId > 0) {
@@ -250,9 +268,11 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                 else {
                     __this.resolveExceptions(json, __this);
                 }
+
             })
             .catch((error) => {
                 __this.valid = true;
+                $('#loader').modal('hide');
                 console.log(error);
             });
 
@@ -294,7 +314,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                 alternateTests = repeaterExceptions.AlternateTestInfo;
             }
 
-            if (studentAlternateTests.length === 0 && studentRepeaterExceptions.length === 0 && alternateTests.length === 0 && this.windowExceptions.length===0)
+            if (studentAlternateTests.length === 0 && studentRepeaterExceptions.length === 0 && alternateTests.length === 0 && this.windowExceptions.length === 0)
                 return true;
 
 
@@ -337,7 +357,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
             }
             else {
                 if (this.windowExceptions.length > 0)
-                    this.loadWindowExceptions(this.windowExceptions);    
+                    this.loadWindowExceptions(this.windowExceptions);
             }
         }
         return false;
@@ -382,6 +402,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                         if (this.windowExceptions && this.windowExceptions.length > 0) {
                             this.loadWindowExceptions(this.windowExceptions);
                         }
+                        this.rebindTable();
                     }
                 });
                 retester.instance.retesterNoAlternatePopupCancel.subscribe((e) => {
@@ -402,14 +423,46 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                         $('#modalTimingException').modal('hide');
                         this.testScheduleModel = JSON.parse(this.sStorage.getItem('testschedule'));
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
-                        
+                        this.removeWindowExceptionStudentsFromRetesters(_windowExceptions);
                         console.log('WINDOW');
                         console.log(JSON.stringify(this.testScheduleModel));
                         console.log(JSON.stringify(this.retesterExceptions));
+                        this.rebindTable();
                     }
-                });            
+                });
 
             });
+    }
+
+    removeWindowExceptionStudentsFromRetesters(_windowExceptions: any): void {
+        let self = this;
+        if (this.sStorage) {
+            if (this.retesterExceptions) {
+                var removedStudents = _.remove(this.retesterExceptions, function(student) {
+                    return _.some(_windowExceptions, { 'StudentId': student.StudentId })
+                });
+            }
+        }
+        console.log(this.retesterExceptions);
+    }
+
+    rebindTable(): void {
+        if (this.studentsTable)
+            this.studentsTable.destroy();
+        
+        setTimeout(() => {
+            this.studentsTable = $('#studentsInTestingSessionTable').DataTable({
+                "paging": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                "ordering": false
+            });
+            $('#studentsInTestingSessionTable').on('responsive-display.dt', function() {
+                $(this).find('.child .dtr-title br').remove();
+            });
+
+        });
     }
 
 
@@ -437,10 +490,11 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                         console.log('ALTERNATE');
                         console.log(JSON.stringify(this.testScheduleModel));
                         console.log(JSON.stringify(this.retesterExceptions));
-                        
-                         if (this.windowExceptions && this.windowExceptions.length > 0) {
+
+                        if (this.windowExceptions && this.windowExceptions.length > 0) {
                             this.loadWindowExceptions(this.windowExceptions);
                         }
+                        this.rebindTable();
                     }
                 });
                 retester.instance.retesterAlternatePopupCancel.subscribe((e) => {

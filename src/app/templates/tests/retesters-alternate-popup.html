@@ -10,7 +10,7 @@
 
                 <form class="form-group-block">
                     <!--this section OR the second section OR BOTH SECTIONS could appear within form depending on logic-->
-                    <section>
+                    <section *ngIf="testTakenStudents?.length>0">
                         <div class="margin-2em-top margin-1em-bottom">
                             <span class="text-larger-teal"><b>The following students have already taken {{testSchedule.testName}}.</b></span>
                             <span class="text-larger"> Please assign another version of this test to these students or remove them from this testing session.</span>
@@ -31,7 +31,7 @@
                         <span class="text-purple">*recommended</span>
                     </section>
 
-                    <section>
+                    <section *ngIf="testScheduledSudents?.length>0">
                         <div class="margin-2em-top margin-1em-bottom">
                             <span class="text-larger-teal"><b>The following students have been scheduled to take {{testSchedule.testName}} in another testing session.</b></span>
                             <span>Please assign another version of this test to these students or remove them from this testing session.</span>

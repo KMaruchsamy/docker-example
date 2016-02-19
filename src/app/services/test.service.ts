@@ -25,7 +25,8 @@ export class TestService {
             || routeName.indexOf(TestShedulingPages.SCHEDULETEST) > -1
             || routeName.indexOf(TestShedulingPages.ADDSTUDENTS) > -1
             || routeName.indexOf(TestShedulingPages.REVIEWTEST) > -1
-            || routeName.indexOf(TestShedulingPages.CONFIRMATION) > -1)
+            || routeName.indexOf(TestShedulingPages.CONFIRMATION) > -1
+            || routeName.indexOf('ERROR')>-1)
             return false;
         return true;
     }
@@ -178,7 +179,7 @@ export class TestService {
         headers.append('Content-Type', 'application/json');
         let options: RequestOptions = new RequestOptions();
         options.headers = headers;
-        return this.http.delete(url, options);          
+        return this.http.delete(url, options);
     }
 
 }
