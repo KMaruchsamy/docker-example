@@ -627,7 +627,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                     $('#modalTimingException').modal('show');
                     retester.instance.studentWindowException = _studentWindowException;
                     retester.instance.testSchedule = this.testScheduleModel;
-
+                    retester.instance.canRemoveStudents = false;
                     retester.instance.windowExceptionPopupClose.subscribe((e) => {
                         $('#modalTimingException').modal('hide');
                     });
