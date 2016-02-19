@@ -38,38 +38,38 @@
                <p>Review your students’ performance at a glance</p>
              </div>
              <div class="margin-2em-bottom">
-               <h3 class="h4 text-smaller-margin"><a class="mobile-button" href="http://nursing.kaplan.com/Admin/ReportCohortTestByQuestion.aspx?Mode=1" target="_blank">Test Result by Question</a></h3>
+               <h3 class="h4 text-smaller-margin"><a class="mobile-button"  #linkReportCohortByQuestion (click)="prepareRedirectToReports('ReportCohortByQuestion',myform,hdtoken,hdpage);" href="javascript:void(0)">Test Result by Question</a></h3>
                <p>Review performance by topic and difficulty level</p>
              </div>
              <div class="margin-2em-bottom">
-               <h3 class="h4 text-smaller-margin"><a class="mobile-button" href="http://nursing.kaplan.com/Admin/ReportCohortByTest.aspx?Mode=1" target="_blank">Cohort by Test</a></h3>
+               <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportCohortByTest (click)="prepareRedirectToReports('ReportCohortByTest',myform,hdtoken,hdpage);" href="javascript:void(0)">Cohort by Test</a></h3>
                <p>Review an entire cohort’s performance</p>
              </div>
              <div class="margin-2em-bottom">
-               <h3 class="h4 text-smaller-margin"><a class="mobile-button" href="http://nursing.kaplan.com/Admin/UtilizationReport.aspx" target="_blank">Utilization Report</a></h3>
+               <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkUtilizationReport (click)="prepareRedirectToReports('UtilizationReport',myform,hdtoken,hdpage);"  href="javascript:void(0)">Utilization Report</a></h3>
                <p>Review how your students are using their resources</p>
              </div>
              <div class="margin-2em-bottom">
-               <h3 class="h4 text-smaller-margin"><a class="mobile-button" href="http://nursing.kaplan.com/Admin/ReportCohortComparisons.aspx" target="_blank">Category Comparisons</a></h3>
+               <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkCohortComparision (click)="prepareRedirectToReports('CohortComparisonsReport',myform,hdtoken,hdpage);" href="javascript:void(0)">Category Comparisons</a></h3>
                <p>Compare cohort performance in over 80 categories</p>
              </div>
           </div>
-
+            
           <div class="reporting-links-grid">
             <div class="margin-2em-bottom">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" href="https://nursing.kaplan.com/Admin/ReportTestsScheduledbyDate.aspx" target="_blank">Tests Scheduled by Date</a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button"#linkReportTestsScheduledbyDate (click)="prepareRedirectToReports('ReportTestsScheduledbyDate',myform,hdtoken,hdpage);" href="javascript:void(0)">Tests Scheduled by Date</a></h3>
               <p>View upcoming tests that have been scheduled in our legacy system</p>
             </div>
             <div class="margin-2em-bottom">
-              <h3 class="h4 text-smaller-margin"><a class="mobile-button" href="https://nursing.kaplan.com/Admin/ReportCaseWestern.aspx" target="_blank">Skills Demonstration Video Utilization</a></h3>
+              <h3 class="h4 text-smaller-margin"><a class="mobile-button"  #linkReportCaseWestern (click)="prepareRedirectToReports('CaseWesternReport',myform,hdtoken,hdpage);" href="javascript:void(0)">Skills Demonstration Video Utilization</a></h3>
               <p>Review when and how often your students are watching these videos</p>
             </div>
             <div>
                <h3 class="h4 base-font-color">Client Simulations (Mid-Fidelity) Reports</h3>
                <ul class="list-extra-spacing">
-                 <li><a href="https://nursing.kaplan.com/Admin/ReportStudentReportCardByModule.aspx" target="_blank" class="margin-1em-bottom mobile-button">Individual Student Results by Module</a></li>
-                 <li><a href="https://nursing.kaplan.com/Admin/ReportCohortResultByModule.aspx" target="_blank" class="margin-1em-bottom mobile-button">Overall Cohort Results and Cohort Results by Module</a></li>
-                 <li><a href="https://nursing.kaplan.com/Admin/ReportCaseComparisonByModule.aspx" target="_blank" class="margin-1em-bottom mobile-button">Module Result Comparisons by Cohort</a></li>
+                 <li><a  #linkReportStudentReportCardByModule (click)="prepareRedirectToReports('ReportStudentReportCardByModule',myform,hdtoken,hdpage);" href="javascript:void(0)" class="margin-1em-bottom mobile-button">Individual Student Results by Module</a></li>
+                 <li><a  #linkReportCohortResultByModule (click)="prepareRedirectToReports('ReportCohortResultByModule',myform,hdtoken,hdpage);" href="javascript:void(0)" class="margin-1em-bottom mobile-button">Overall Cohort Results and Cohort Results by Module</a></li>
+                 <li><a  #linkReportCaseComparisonByModule (click)="prepareRedirectToReports('ReportCaseComparisonByModule',myform,hdtoken,hdpage);" href="javascript:void(0)" class="margin-1em-bottom mobile-button">Module Result Comparisons by Cohort</a></li>
                </ul>
             </div>
           </div>
