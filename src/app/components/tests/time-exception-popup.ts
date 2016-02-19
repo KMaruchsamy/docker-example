@@ -8,12 +8,13 @@ import {ParseDatePipe} from '../../pipes/parsedate.pipe';
     templateUrl: '../../templates/tests/time-exception-popup.html',
     directives: [RouterLink],
     providers: [Common],
-    inputs: ['studentWindowException'],
-    pipes: [ParseDatePipe],
+    inputs: ['studentWindowException','canRemoveStudents'],
+    pipes: [ParseDatePipe]
 })
 
 export class TimeExceptionPopup implements OnInit {
     @Input() studentWindowException: any;
+    @Input() canRemoveStudents: boolean;
     @Output() windowExceptionPopupClose = new EventEmitter();
     sStorage: any;
     constructor(public common: Common) {
@@ -29,7 +30,7 @@ export class TimeExceptionPopup implements OnInit {
         if (this.sStorage) {
             let savedSchedule = JSON.parse(this.sStorage.getItem('testschedule'));
             if (savedSchedule) {
-                var removedStudents = _.remove(savedSchedule.selectedStudents, function (student) {
+                var removedStudents = _.remove(savedSchedule.selectedStudents, function(student) {
                     console.log(self.studentWindowException);
                     return _.some(self.studentWindowException, { 'StudentId': student.StudentId })
                 });
@@ -41,7 +42,8 @@ export class TimeExceptionPopup implements OnInit {
 
     close(e): void {
         e.preventDefault();
-        this.removeStudents();
+        if (this.canRemoveStudents)
+            this.removeStudents();
         this.windowExceptionPopupClose.emit(e);
     }
 

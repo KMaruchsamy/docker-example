@@ -417,7 +417,8 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
             .then(window=> {
                 $('#modalTimingException').modal('show');
                 window.instance.studentWindowException = _windowExceptions;
-                window.instance.testSchedule = this.testScheduleModel;
+                window.instance.canRemoveStudents = true;
+                window.instance.testSchedule = this.testScheduleModel;               
                 window.instance.windowExceptionPopupClose.subscribe(e => {
                     if (e) {
                         $('#modalTimingException').modal('hide');
