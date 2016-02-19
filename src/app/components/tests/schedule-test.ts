@@ -123,7 +123,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             this.$startTime.timepicker('setTime', new Date(this.startTime));
         else
             this.$startTime.timepicker('setTime', '');
-        
+
         if (this.endTime)
             this.$endTime.timepicker('setTime', new Date(this.endTime));
         else
@@ -370,6 +370,17 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                 __this.startDate = '';
                 __this.startTime = __this.$startTime.timepicker('getTime', new Date());
             }
+
+
+            if (moment(__this.startDate).isAfter(new Date())) {
+                __this.$startTime.timepicker('option', 'minTime', '8:00am');
+                __this.$endTime.timepicker('option', 'minTime', '8:30am');
+            }
+            else {
+                __this.$startTime.timepicker('option', 'minTime', new Date());
+                __this.$endTime.timepicker('option', 'minTime', moment(new Date()).add(30, 'minutes').toDate());
+            }
+
 
             __this.validate(__this);
         });
