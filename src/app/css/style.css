@@ -468,6 +468,9 @@ ol.bullet {
   ul.bullet-indented,
   ol.bullet-indented {
     padding-left: 1em; }
+  ul.bullet-with-link,
+  ol.bullet-with-link {
+    color: #C85300; }
 
 ul.list-extra-spacing > li,
 ol.list-extra-spacing > li {
@@ -983,6 +986,9 @@ b, strong, .bolded {
 
 .text-link-color {
   color: #C85300; }
+
+.white-link:active, .white-link:focus, .white-link:hover {
+  color: #fff; }
 
 hr {
   display: block;
@@ -4501,28 +4507,68 @@ table.dataTable tbody td {
 
 .faculty-user-guide-header {
   width: 100%; }
+  @media (max-width: 47.9375em) {
+    .faculty-user-guide-header .user-guide-heading {
+      font-size: 1.5em; }
+    .faculty-user-guide-header .smaller {
+      padding: 0; } }
 
-.faculty-user-guide {
-  padding-top: 90px; }
-
-.faculty-user-guide-menu {
-  max-width: 260px; }
-  @media (min-width: 48em) {
-    .faculty-user-guide-menu {
-      width: 19.64286%;
-      float: left;
-      margin-right: 7.14286%; } }
+.faculty-user-guide .text-purple-bold {
+  color: #5A5EA9;
+  font-weight: 600; }
 
 @media (min-width: 48em) {
-  .faculty-user-guide-content {
-    width: 73.21429%;
-    float: left;
-    margin-right: 7.14286%;
-    float: right;
-    margin-right: 0; } }
+  .faculty-user-guide {
+    padding-top: 70px; } }
+
+.faculty-user-guide-menu {
+  padding-top: 7em;
+  padding-bottom: 1em;
+  text-align: center; }
+  @media (min-width: 471px) and (max-width: 767px) {
+    .faculty-user-guide-menu {
+      padding-top: 5em; } }
+  @media (min-width: 48em) {
+    .faculty-user-guide-menu {
+      width: 28.57143%;
+      float: left;
+      margin-right: 7.14286%;
+      max-width: 280px;
+      padding: 0;
+      position: fixed;
+      text-align: left; } }
+
+.faculty-user-guide-content {
+  margin-top: -1.5em; }
+  @media (min-width: 48em) {
+    .faculty-user-guide-content {
+      width: 64.28571%;
+      float: left;
+      margin-right: 7.14286%;
+      float: right;
+      margin-right: 0; } }
+  .faculty-user-guide-content section.selected {
+    top: 10px;
+    position: relative;
+    z-index: -1; }
+    @media (min-width: 48em) {
+      .faculty-user-guide-content section.selected {
+        margin-top: 12em; } }
+  .faculty-user-guide-content section {
+    padding-top: 1.5em; }
+
+.back-to-top-arrow {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: 39px; }
 
 .hidden {
   display: none; }
+
+.hidden-important {
+  display: none !important; }
 
 .show {
   display: block; }
