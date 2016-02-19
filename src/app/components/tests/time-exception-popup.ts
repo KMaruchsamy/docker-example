@@ -41,7 +41,6 @@ export class TimeExceptionPopup implements OnInit {
 
     close(e): void {
         e.preventDefault();
-        this.removeStudents();
         this.windowExceptionPopupClose.emit(e);
     }
 

@@ -573,7 +573,6 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
 
     GetRepeaterException(): void {
-        debugger;
         let __this = this;
         let repeaterExceptionURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.retesters}`;
         let input = {
@@ -600,7 +599,6 @@ export class AddStudents implements OnInit, OnDeactivate {
             });
     }
     WindowException(): void {
-        debugger;
         let __this = this;
         let windowExceptionURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.windowexception}`;
         let input = {
@@ -623,7 +621,7 @@ export class AddStudents implements OnInit, OnDeactivate {
             });
     }
     HasWindowException(_studentWindowException: any): void {
-        if (_studentWindowException != null) {
+        if (_studentWindowException.length !=0) {
             this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopup, this.elementRef)
                 .then(retester=> {
                     $('#modalTimingException').modal('show');
@@ -632,7 +630,6 @@ export class AddStudents implements OnInit, OnDeactivate {
 
                     retester.instance.windowExceptionPopupClose.subscribe((e) => {
                         $('#modalTimingException').modal('hide');
-                        this.router.navigateByUrl('/tests/review');
                     });
 
                 });
