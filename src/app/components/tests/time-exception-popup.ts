@@ -17,8 +17,21 @@ export class TimeExceptionPopup implements OnInit {
     @Input() canRemoveStudents: boolean;
     @Output() windowExceptionPopupClose = new EventEmitter();
     sStorage: any;
+    endDate: Date;
+    startDate: Date;
+    endTestDate: Date;
     constructor(public common: Common) {
+        debugger;
+        this.initialize();
+    }
+    initialize(): void {
         this.sStorage = this.common.getStorage();
+        let savedSchedule = JSON.parse(this.sStorage.getItem('testschedule'));
+        this.startDate = moment(savedSchedule.scheduleStartTime).format('MM/DD/YY');
+        this.endDate = moment(savedSchedule.scheduleEndTime).format('MM/DD/YY');
+        if (!moment(this.startDate).isSame(this.endDate, 'day')) {
+            this.endTestDate = this.endDate;
+        }
     }
 
     ngOnInit(): void {

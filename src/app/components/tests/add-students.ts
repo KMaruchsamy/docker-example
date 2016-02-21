@@ -28,8 +28,8 @@ import '../../lib/modal.js';
     selector: 'add-students',
     templateUrl: '../../templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
-    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup,TimeExceptionPopup],
-    directives: [PageHeader, TestHeader, PageFooter, NgFor,ConfirmationPopup],
+    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup],
+    directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup],
     pipes: [RemoveWhitespacePipe]
 })
 
@@ -59,8 +59,8 @@ export class AddStudents implements OnInit, OnDeactivate {
         else
             this.initialize();
     }
-    
-        routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+
+    routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
@@ -76,28 +76,32 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.overrideRouteCheck = false;
         return true;
     }
-    
-    
+
+
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         if (this.testsTable)
             this.testsTable.destroy();
         $('.selectpicker').val('').selectpicker('refresh');
-        //let selectedStudent = JSON.parse(this.sStorage.getItem('testschedule')).selectedStudents.length;
-        //if (selectedStudent > 0) {
-            $('#testSchedulingSelectedStudentsList').empty();
-            $('#cohortStudents button').each(function () {
-                $(this).removeAttr('disabled', 'disabled');
-            });
-            this.selectedStudents = [];
-            this.ShowHideSelectedStudentContainer();
-            this.EnableDisableButtonForDetailReview();
-       // }
-    }
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+        if (outOfTestScheduling) {
+            this.ResetData();
+        }
 
+    }
+    ResetData(): void {
+        $('#testSchedulingSelectedStudentsList').empty();
+        $('#cohortStudents button').each(function () {
+            $(this).removeAttr('disabled', 'disabled');
+        });
+        this.selectedStudents = [];
+        this.ShowHideSelectedStudentContainer();
+        this.EnableDisableButtonForDetailReview();
+    }
     ngOnInit() {
         // console.log('on init');
         $('#addAllStudents').addClass('hidden');
         $('#cohortStudentList').addClass('hidden');
+
     }
 
     initialize(): void {
@@ -108,6 +112,10 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.testScheduleModel.activeStep = 3;
         this.windowStart = moment(this.testScheduleModel.scheduleStartTime).format("MM.DD.YY"); //'01.01.14'
         this.windowEnd = moment(this.testScheduleModel.scheduleEndTime).format("MM.DD.YY"); //'12.12.16'; 
+        if (this.testScheduleModel.selectedStudents.length <= 0) {
+            this.ResetData();
+            this.RefreshSelectedStudentCount();
+        }
         this.apiServer = this.auth.common.getApiServer();
         this.loadActiveCohorts();
 
@@ -125,7 +133,6 @@ export class AddStudents implements OnInit, OnDeactivate {
             return response.json();
         })
             .then((json) => {
-                console.log('Cohorts=' + json);
                 _this.cohorts = json;
                 setTimeout(json => {
                     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
@@ -161,7 +168,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                 return response.json();
             })
                 .then((json) => {
-                    if (this.testsTable) 
+                    if (this.testsTable)
                         this.testsTable.destroy();
                     let _self = this;
                     $('#' + btnAddAllStudent.id).removeClass('hidden');
@@ -171,38 +178,38 @@ export class AddStudents implements OnInit, OnDeactivate {
                     else
                         this.cohortStudentlist = json;
 
-                        setTimeout(json=> {
-                            this.testsTable = $('#cohortStudents').DataTable({
-                                "retrieve": true,
-                                "paging": false,
-                                "responsive": true,
-                                "info": false,
-                                "scrollY": 551,
-                                "dom": 't<"add-students-table-search"f>',
-                                "language": {
-                                    search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
-                                    searchPlaceholder: "Find student in cohort",
-                                    "zeroRecords": "No matching students in this cohort",
-                                    "emptyTable":"No students for this cohort",
-                                },
-                                columnDefs: [{
-                                    targets: [2, 4],
-                                    orderable: false,
-                                    searchable: false
-                                }],
+                    setTimeout(json=> {
+                        this.testsTable = $('#cohortStudents').DataTable({
+                            "retrieve": true,
+                            "paging": false,
+                            "responsive": true,
+                            "info": false,
+                            "scrollY": 551,
+                            "dom": 't<"add-students-table-search"f>',
+                            "language": {
+                                search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
+                                searchPlaceholder: "Find student in cohort",
+                                "zeroRecords": "No matching students in this cohort",
+                                "emptyTable": "No students for this cohort",
+                            },
+                            columnDefs: [{
+                                targets: [2, 4],
+                                orderable: false,
+                                searchable: false
+                            }],
 
-                            });
-                            
-                            if (_self.cohortStudentlist.length > 0) {
-                                this.SearchFilterOptions();
-                                this.DisableAddButton();
-                                $('#cohortStudentList .add-students-table-search').removeClass('invisible');
-                            }
-                            else {
-                                $('#cohortStudentList .add-students-table-search').addClass('invisible');
-                            }
-                           this.CheckForAllStudentSelected();
                         });
+
+                        if (_self.cohortStudentlist.length > 0) {
+                            this.SearchFilterOptions();
+                            this.DisableAddButton();
+                            $('#cohortStudentList .add-students-table-search').removeClass('invisible');
+                        }
+                        else {
+                            $('#cohortStudentList .add-students-table-search').addClass('invisible');
+                        }
+                        this.CheckForAllStudentSelected();
+                    });
                 })
                 .catch((error) => {
                     console.log(error);
@@ -211,12 +218,11 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
 
     resetAllAddButtonsOnCohortSelection(): void {
-        if (this.selectedStudents.length > 0)
-        {
-            for (var i = 0; i < this.selectedStudents.length; i++)
-            {
+        if (this.selectedStudents.length > 0) {
+            for (var i = 0; i < this.selectedStudents.length; i++) {
                 var studentid = "cohort-" + this.selectedStudents[i].StudentId.toString();
-                this.EnableAddButton(studentid);
+                $(rows[i]).find("td:eq(4) button").removeAttr('disabled', 'disabled');
+                // this.EnableAddButton(studentid);
             }
         }
     }
@@ -230,7 +236,7 @@ export class AddStudents implements OnInit, OnDeactivate {
         $('#cohortStudentList .add-students-table-search').append(checkboxfilters);
         $('#cohortRepeatersOnly').on('click', function () {
             var $excludeRepeaters = $('#cohortExcludeRepeaters');
-            
+
             if ($(this).is(':checked')) {
                 $excludeRepeaters.prop('checked', false);
                 $('#cohortStudents').DataTable().column(3)
@@ -301,7 +307,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                 if (!$('#' + buttonId).prop('disabled')) {
                     student.LastName = $(rows[i])[0];
                     student.FirstName = $(rows[i])[1];
-                    student.Retester = $(rows[i])[3] === "Yes"?true:false;
+                    student.Retester = $(rows[i])[3] === "Yes" ? true : false;
                     student.StudentId = parseInt(buttonId.split('-')[1]);
                     student.Email = eval(attrs[1]);
                     student.CohortId = this.lastSelectedCohortID;
@@ -323,22 +329,28 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
         return studentlist;
     }
-    
+
+    ResetAddButton(): void {
+        var rows = $("#cohortStudents").dataTable().fnGetNodes();
+        for (var i = 0; i < rows.length; i++) {
+            var button = $(rows[i]).find("td:eq(4) button").attr('id');
+            $(rows[i]).find("td:eq(4) button").removeAttr('disabled', 'disabled');
+        }
+    }
 
     EnableAddButton(buttonid: string): void {
         var rows = $("#cohortStudents").dataTable().fnGetNodes();
         for (var i = 0; i < rows.length; i++) {
             var button = $(rows[i]).find("td:eq(4) button").attr('id');
-            if (button === buttonid)
-            {
-                $(rows[i]).find("td:eq(4) button").removeAttr('disabled','disabled');
+            if (button === buttonid) {
+                $(rows[i]).find("td:eq(4) button").removeAttr('disabled', 'disabled');
             }
         }
     }
 
     DisableAddButton(): void {
         if (this.selectedStudents.length > 0) {
-            for (var j = 0; j <this.selectedStudents.length; j++) {
+            for (var j = 0; j < this.selectedStudents.length; j++) {
                 var buttonid = "cohort-" + this.selectedStudents[j].StudentId.toString();
                 var rows = $("#cohortStudents").dataTable().fnGetNodes();
                 for (var i = 0; i < rows.length; i++) {
@@ -366,35 +378,41 @@ export class AddStudents implements OnInit, OnDeactivate {
             $('#addAllStudents').attr('disabled', 'disabled');
     }
 
-   RemoveSelectedStudents(): void {
+    RemoveSelectedStudents(): void {
         let _self = this;
         $('#testSchedulingSelectedStudentsList button').on('click', function (e) {
             e.preventDefault();
             var rowId = $(this).attr('data-id');
             $(this).parent().remove();
-            if (_self.selectedStudents.length > 0) {
-                $('#addAllStudents').removeAttr('disabled', 'disabled');
-                _self.EnableAddButton("cohort-" + rowId);
-                _self.UpdateSelectedStudentCount(rowId);
-                _self.displaySelectedStudentFilter();
-                _self.CheckForAdaStatus();
-                if (_self.selectedStudentCount < 1) {
-                    _self.ShowHideSelectedStudentContainer();
-                    _self.EnableDisableButtonForDetailReview();
-                }
-            }
-
+            _self.RemoveStudentFromList(rowId);
         });
     }
+    RemoveStudentFromList(buttonid: number): void {
+        if (this.selectedStudents.length > 0) {
+            $('#addAllStudents').removeAttr('disabled', 'disabled');
+            this.EnableAddButton("cohort-" + buttonid);
+            this.UpdateSelectedStudentCount(buttonid);
+            this.displaySelectedStudentFilter();
+            this.CheckForAdaStatus();
+            if (this.selectedStudentCount < 1) {
+                this.ShowHideSelectedStudentContainer();
+                this.EnableDisableButtonForDetailReview();
+            }
+        }
+    }
 
-    UpdateSelectedStudentCount(studentid: number): void {        
+    UpdateSelectedStudentCount(studentid: number): void {
         for (var i = 0; i < this.selectedStudents.length; i++) {
             if (this.selectedStudents[i].StudentId.toString() === studentid) {
-                this.selectedStudents.splice(i,1);
+                this.selectedStudents.splice(i, 1);
                 this.selectedStudentCount = this.selectedStudentCount - 1;
                 break;
             }
         }
+    }
+
+    RefreshSelectedStudentCount(): void {
+        this.selectedStudentCount = this.selectedStudents.length;
     }
 
     AddStudent(student: Object, event): void {
@@ -422,7 +440,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                 if (!$('#' + buttonId).prop('disabled')) { counter = counter + 1; }
             }
         }
-        if (counter===0) {
+        if (counter === 0) {
             $('#addAllStudents').attr('disabled', 'disabled');
         }
         this.ShowHideSelectedStudentContainer();
@@ -437,7 +455,7 @@ export class AddStudents implements OnInit, OnDeactivate {
         $('#addAllStudents').removeAttr('disabled', 'disabled');
         if (this.selectedStudents.length > 0) {
             for (var i = 0; i < this.selectedStudents.length; i++) {
-                var studentId = "cohort-"+ this.selectedStudents[i].StudentId.toString();
+                var studentId = "cohort-" + this.selectedStudents[i].StudentId.toString();
                 this.EnableAddButton(studentId);
             }
             this.selectedStudents = [];
@@ -449,7 +467,7 @@ export class AddStudents implements OnInit, OnDeactivate {
 
     ShowHideSelectedStudentContainer(): void {
         this.selectedStudentCount = this.selectedStudents.length;
-        if (this.selectedStudentCount <1) {
+        if (this.selectedStudentCount < 1) {
             $('.top-section').removeClass('active');
             $('#selectedStudentsContainer').removeClass('hidden');
             $('#testSchedulingSelectedStudentsList').empty();
@@ -463,26 +481,24 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
     displaySelectedStudentFilter(): void {
         this.selectedStudentCount = this.selectedStudents.length;
-       if (this.selectedStudentCount >= 10) {
-           $('#filterSelectedStudents').attr('style', 'visibility:visible');
-           this.filterSelectedStudents();
+        if (this.selectedStudentCount >= 10) {
+            $('#filterSelectedStudents').attr('style', 'visibility:visible');
+            this.filterSelectedStudents();
         }
-       else {
-           if (this.selectedStudentCount > 0) {
-               $('#filterSelectedStudents').val("");
-               $('#testSchedulingSelectedStudents li').each(function () {
-                   $(this).show();
-               });
-           }
+        else {
+            if (this.selectedStudentCount > 0) {
+                $('#filterSelectedStudents').val("");
+                $('#testSchedulingSelectedStudents li').each(function () {
+                    $(this).show();
+                });
+            }
             $('#filterSelectedStudents').attr('style', 'visibility:hidden');
         }
     }
 
     CheckForAdaStatus(): void {
-        if (this.selectedStudents.length > 0)
-        {
-            for (var i = 0; i < this.selectedStudents.length; i++)
-            {
+        if (this.selectedStudents.length > 0) {
+            for (var i = 0; i < this.selectedStudents.length; i++) {
                 var student = this.selectedStudents[i];
                 if (student.Ada) {
                     $('#accommadationNote').removeClass('hidden');
@@ -533,7 +549,7 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
 
     sortAlpha(): void {
-       // return a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase() ? 1 : -1;
+        // return a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase() ? 1 : -1;
         var mylist = $('#testSchedulingSelectedStudentsList');
         var listitems = mylist.children('li').get();
         listitems.sort(function (a, b) {
@@ -550,7 +566,8 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         console.log('TestScheduleModel with Selected student' + this.testScheduleModel);
-        this.GetRepeaterException();
+        this.WindowException();
+
     }
 
     FindCohortName(cohortid: number): string {
@@ -581,18 +598,17 @@ export class AddStudents implements OnInit, OnDeactivate {
             "TestingSessionWindowStart": moment(this.testScheduleModel.scheduleStartTime).format(),
             "TestingSessionWindowEnd": moment(this.testScheduleModel.scheduleEndTime).format()
         }
-        //this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         let exceptionPromise = this.testService.scheduleTests(repeaterExceptionURL, JSON.stringify(input));
         exceptionPromise.then((response) => {
             return response.json();
         })
             .then((json) => {
-              
-                    if (json != null){
-                        __this.resolveExceptions(json, __this);
-                    }
-                    else
-                        __this.WindowException();
+
+                if (json != null) {
+                    __this.resolveExceptions(json, __this);
+                }
+                else
+                    this.router.navigateByUrl('/tests/review');
             })
             .catch((error) => {
                 console.log(error);
@@ -603,27 +619,30 @@ export class AddStudents implements OnInit, OnDeactivate {
         let windowExceptionURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.windowexception}`;
         let input = {
             "SessionTestId": this.testScheduleModel.testId,
-            "StudentIds": __this.GetStudentIDList(),  
+            "StudentIds": __this.GetStudentIDList(),
             "TestingSessionWindowStart": moment(this.testScheduleModel.scheduleStartTime).format(),
             "TestingSessionWindowEnd": moment(this.testScheduleModel.scheduleEndTime).format()
         }
-        //this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         let exceptionPromise = this.testService.scheduleTests(windowExceptionURL, JSON.stringify(input));
         exceptionPromise.then((response) => {
             return response.json();
         })
             .then((json) => {
-               __this.HasWindowException(json);
-                
+                __this.HasWindowException(json);
+
             })
             .catch((error) => {
                 console.log(error);
             });
     }
     HasWindowException(_studentWindowException: any): void {
-        if (_studentWindowException.length !=0) {
+        if (_studentWindowException.length != 0) {
+            if (this.loader)
+                this.loader.dispose();
+
             this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopup, this.elementRef)
                 .then(retester=> {
+                    this.loader = retester;
                     $('#modalTimingException').modal('show');
                     retester.instance.studentWindowException = _studentWindowException;
                     retester.instance.testSchedule = this.testScheduleModel;
@@ -635,7 +654,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                 });
         }
         else {
-            this.router.navigateByUrl('/tests/review');
+            this.GetRepeaterException();
         }
     }
 
@@ -746,7 +765,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                         this.sStorage.setItem('testschedule', JSON.stringify(testSchedule));
                         this.testScheduleModel = testSchedule;
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
-                        this.WindowException();
+                        this.router.navigateByUrl('/tests/review');
                     }
                 });
                 retester.instance.retesterNoAlternatePopupCancel.subscribe((e) => {
@@ -778,7 +797,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                         this.testScheduleModel = JSON.parse(this.sStorage.getItem('testschedule'));
                         this.retesterExceptions = retesters;
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
-                        this.WindowException();
+                        this.router.navigateByUrl('/tests/review');
                     }
                 });
                 retester.instance.retesterAlternatePopupCancel.subscribe((e) => {
@@ -787,7 +806,7 @@ export class AddStudents implements OnInit, OnDeactivate {
 
             });
     }
-    
+
     onCancelConfirmation(e: any): void {
         $('#confirmationPopup').modal('hide');
         this.attemptedRoute = '';
