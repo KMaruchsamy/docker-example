@@ -40,8 +40,11 @@ export class LoginContent {
     onSignIn(txtUserName, txtPassword, rdFaculty, rdStudent, errorContainer, btnSignIn, event) {
         event.preventDefault();
         let self = this;
-        let useremail = txtUserName.value;
-        let password = txtPassword.value;
+        let useremail = '';
+        let password = '';
+        if (txtUserName.value !== undefined && txtUserName.value !== '')
+            useremail = txtUserName.value.toString().trim();
+        password = txtPassword.value;
         if (this.validate(useremail, password, errorContainer)) {
             let userType = '';
             if (rdFaculty.checked)

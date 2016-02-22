@@ -1,7 +1,7 @@
 export const links = {
     api: {
         local: {
-            server:  "https://qa-nursing.kaptest.com/"
+            server: "http://localhost:3000/"
         },
         dev: {
             server: "https://dev01-nursing.kaptest.com/"
@@ -36,7 +36,7 @@ export const links = {
                 windowexception: "scheduling/checkForTestingWindowExceptions",
                 scheduletest: "scheduling/testingSessions",
                 viewtest: "scheduling/testingSessions/§scheduleId",
-                deleteSchedule :"scheduling/testingSessions/§scheduleId"
+                deleteSchedule: "scheduling/testingSessions/§scheduleId"
             }
         }
     },
@@ -105,8 +105,16 @@ export const TestShedulingPages = {
     SCHEDULETEST: 'TESTS/SCHEDULE-TEST',
     ADDSTUDENTS: 'TESTS/ADD-STUDENTS',
     REVIEWTEST: 'TESTS/REVIEW',
+    MODIFYCHOOSETEST: 'TESTS/MODIFY/CHOOSE-TEST',
+    MODIFYSCHEDULETEST: 'TESTS/MODIFY/SCHEDULE-TEST',
+    MODIFYADDSTUDENTS: 'TESTS/MODIFY/ADD-STUDENTS',
+    MODIFYREVIEWTEST: 'TESTS/MODIFY/REVIEW',
     CONFIRMATION: 'TESTS/CONFIRMATION',
-    VIEW:'TESTS/VIEW'
+    VIEW: 'TESTS/VIEW'
 };
+
+export const constants = {
+    USERGUIDEMODIFICATIONDATE: '03/01/2016'
+}
   
   

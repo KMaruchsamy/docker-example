@@ -8,33 +8,46 @@
     <div class="container-medium-width" [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
         <div *ngIf="testSchedule.currentStep>1 " class="test-summary-heading-details"><span>Test: <b>{{testSchedule.testName}}</b></span>
             <a href="#" [routerLink]="['/ChooseTest' , {institutionId : testSchedule.institutionId}]" class="link-darker">Change test</a></div>
-        <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>{{testSchedule.scheduleStartTime|parseDate:'ddd'}} {{testSchedule.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testSchedule.scheduleEndTime|parseDate:'h:mma'}} {{testSchedule.scheduleEndTime|parseDate:'ddd'}} {{testSchedule.scheduleEndTime|parseDate:'MM/DD/YY'}}</b></span><a [routerLink]="['/ScheduleTest']"  class="link-darker">Change date or time</a></div>
+        <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>
+            <!--{{testSchedule.scheduleStartTime|parseDate:'ddd'}} {{testSchedule.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testSchedule.scheduleEndTime|parseDate:'h:mma'}} {{testSchedule.scheduleEndTime|parseDate:'ddd'}} {{testSchedule.scheduleEndTime|parseDate:'MM/DD/YY'}}-->
+            <template [ngIf]="!nextDay">
+                {{testSchedule?.scheduleStartTime|parseDate:'ddd'}} {{testSchedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule?.scheduleStartTime|parseDate:'h:mma'}}
+                &ndash; {{testSchedule?.scheduleEndTime|parseDate:'h:mma'}}
+            </template>
+            <template [ngIf]="nextDay">
+                {{testSchedule?.scheduleStartTime|parseDate:'ddd'}} {{testSchedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule?.scheduleStartTime|parseDate:'h:mma'}}
+                &ndash; {{testSchedule?.scheduleEndTime|parseDate:'h:mma'}} {{testSchedule?.scheduleEndTime|parseDate:'ddd'}}
+                {{testSchedule?.scheduleEndTime|parseDate:'MM/DD/YY'}}
+            </template>
+            </b></span>
+            <a [routerLink]="['/ScheduleTest']" class="link-darker">Change date or time</a>
+        </div>
     </div>
 </div>
 <div class="section-thin section-gray">
     <div [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)" class="manage-test-breadcrumb">
         <div class="grid">
-            <div [class.completed-step]="(testSchedule.currentStep>1)" [class.success-icon]="(testSchedule.currentStep>1)" [class.active]="testSchedule.activeStep ===1"
-            class="breadcrumb-number">1</div>
+            <div [class.completed-step]="(testSchedule.currentStep>1 && testSchedule.activeStep !==1)" [class.success-icon]="(testSchedule.currentStep>1 && testSchedule.activeStep !==1)"
+            [class.active]="testSchedule.activeStep ===1" class="breadcrumb-number">1</div>
             <span>Choose a test</span>
         </div>
         <div class="grid">
-            <div [class.completed-step]="(testSchedule.currentStep>2)" [class.success-icon]="(testSchedule.currentStep>2)" [class.active]="testSchedule.activeStep ===2"
-            class="breadcrumb-number">2</div>
+            <div [class.completed-step]="(testSchedule.currentStep>2 && testSchedule.activeStep !==2)" [class.success-icon]="(testSchedule.currentStep>2 && testSchedule.activeStep !==2)"
+            [class.active]="testSchedule.activeStep ===2" class="breadcrumb-number">2</div>
             <span>Choose date and time</span>
         </div>
         <div class="grid">
-            <div [class.completed-step]="(testSchedule.currentStep>3)" [class.success-icon]="(testSchedule.currentStep>3)" [class.active]="testSchedule.activeStep ===3"
-            class="breadcrumb-number">3</div>
+            <div [class.completed-step]="(testSchedule.currentStep>3  && testSchedule.activeStep !==3)" [class.success-icon]="(testSchedule.currentStep>3  && testSchedule.activeStep !==3)"
+            [class.active]="testSchedule.activeStep ===3" class="breadcrumb-number">3</div>
             <span>Add students</span>
         </div>
         <div class="grid">
-            <div [class.completed-step]="(testSchedule.currentStep>4)" [class.success-icon]="(testSchedule.currentStep>4)" [class.active]="testSchedule.activeStep ===4"
-            class="breadcrumb-number">4</div>
+            <div [class.completed-step]="(testSchedule.currentStep>4  && testSchedule.activeStep !==4)" [class.success-icon]="(testSchedule.currentStep>4  && testSchedule.activeStep !==4)"
+            [class.active]="testSchedule.activeStep ===4" class="breadcrumb-number">4</div>
             <span>Add details and review</span>
         </div>
         <div class="grid">
-            <div class="breadcrumb-number" [class.active]="testSchedule.currentStep ===5" >5</div>
+            <div class="breadcrumb-number" [class.active]="testSchedule.currentStep ===5">5</div>
             <span>Confirmation</span>
         </div>
     </div>
