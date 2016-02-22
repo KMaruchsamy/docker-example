@@ -1,5 +1,5 @@
 ﻿import {Component, OnInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
-import {Router, RouteParams, OnDeactivate, ComponentInstruction} from 'angular2/router';
+import {Router, RouterLink, RouteParams, OnDeactivate, ComponentInstruction } from 'angular2/router';
 import {NgFor} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -29,7 +29,7 @@ import '../../lib/modal.js';
     templateUrl: '../../templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
     providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup,TimeExceptionPopup],
-    directives: [PageHeader, TestHeader, PageFooter, NgFor,ConfirmationPopup],
+    directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, RouterLink ],
     pipes: [RemoveWhitespacePipe]
 })
 
@@ -96,6 +96,8 @@ export class AddStudents implements OnInit, OnDeactivate {
 
     ngOnInit() {
         // console.log('on init');
+        $('#ddlCohort').addClass('hidden');
+        $('#noCohort').addClass('hidden');
         $('#addAllStudents').addClass('hidden');
         $('#cohortStudentList').addClass('hidden');
     }
@@ -133,6 +135,15 @@ export class AddStudents implements OnInit, OnDeactivate {
                     else
                         $('.selectpicker').selectpicker('refresh');
                 });
+
+                if (_this.cohorts.length == 0) {
+                    $('#ddlCohort').addClass('hidden');
+                    $('#noCohort').removeClass('hidden');
+                   }
+                else {
+                    $('#noCohort').addClass('hidden');
+                    $('#ddlCohort').removeClass('hidden');
+                } 
             })
             .catch((error) => {
                 console.log(error);
@@ -183,7 +194,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                                     search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
                                     searchPlaceholder: "Find student in cohort",
                                     "zeroRecords": "No matching students in this cohort",
-                                    "emptyTable":"No students for this cohort",
+                                    "emptyTable":"We’re sorry, there are no students in this cohort.",
                                 },
                                 columnDefs: [{
                                     targets: [2, 4],
