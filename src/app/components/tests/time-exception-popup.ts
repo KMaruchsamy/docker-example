@@ -1,5 +1,5 @@
 ﻿import {Component, Input, OnInit, Output, EventEmitter} from 'angular2/core';
-import {RouterLink} from 'angular2/router';
+import {RouterLink, OnDeactivate} from 'angular2/router';
 import {Common} from '../../services/common';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 
@@ -12,7 +12,7 @@ import {ParseDatePipe} from '../../pipes/parsedate.pipe';
     pipes: [ParseDatePipe]
 })
 
-export class TimeExceptionPopup implements OnInit {
+export class TimeExceptionPopup implements OnInit, OnDeactivate {
     @Input() studentWindowException: any;
     @Input() canRemoveStudents: boolean;
     @Output() windowExceptionPopupClose = new EventEmitter();
@@ -23,6 +23,9 @@ export class TimeExceptionPopup implements OnInit {
     constructor(public common: Common) {
         debugger;
         this.initialize();
+    }
+    routerOnDeactivate(): void {
+        this.studentWindowException = null;
     }
     initialize(): void {
         this.sStorage = this.common.getStorage();
