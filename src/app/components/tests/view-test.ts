@@ -28,44 +28,56 @@ import '../../lib/modal.js';
 export class ViewTest implements OnInit, OnDeactivate {
     studentsTable: any;
     sStorage: any;
+    nextDay: boolean = false;
     constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router) {
 
     }
 
     ngOnInit(): void {
+        this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else {
             this.loadTestSchedule();
-            this.sStorage = this.common.getStorage();
         }
         $(document).scrollTop(0);
     }
 
-    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+
+    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction): void {
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+        if (outOfTestScheduling)
+            this.sStorage.removeItem('testschedule');
         if (this.studentsTable)
             this.studentsTable.destroy();
     }
+
 
     loadTestSchedule(): void {
         let __this = this;
         this.schedule = this.testService.getTestSchedule();
         if (this.schedule) {
-             setTimeout(() => {
-            this.studentsTable = $('#studentsInTestingSessionTable').DataTable({
-                "paging": false,
-                "searching": false,
-                "responsive": true,
-                "info": false,
-                "ordering": false
-                 });
+            let startTime = this.schedule.scheduleStartTime;
+            let endTime = this.schedule.scheduleEndTime;
+            if (moment(endTime).isAfter(startTime, 'day'))
+                this.nextDay = true;
+        }
+        if (this.schedule) {
+            setTimeout(() => {
+                this.studentsTable = $('#studentsInTestingSessionTable').DataTable({
+                    "paging": false,
+                    "searching": false,
+                    "responsive": true,
+                    "info": false,
+                    "ordering": false
+                });
 
 
-                 $('#studentsInTestingSessionTable').on('responsive-display.dt', function() {
-                     $(this).find('.child .dtr-title br').remove();
-                 });
+                $('#studentsInTestingSessionTable').on('responsive-display.dt', function() {
+                    $(this).find('.child .dtr-title br').remove();
+                });
 
-             });
+            });
         }
     }
 

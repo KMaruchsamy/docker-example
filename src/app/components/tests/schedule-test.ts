@@ -39,15 +39,9 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     overrideRouteCheck: boolean = false;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public router: Router, public common: Common) {
-        this.sStorage = this.common.getStorage();
-        if (!this.auth.isAuth())
-            this.router.navigateByUrl('/');
-        else {
-            this.$startDate = $('#startDate');
-            this.$endDate = $('#endDate');
-            this.$startTime = $('#startTime');
-            this.$endTime = $('#endTime');
-        }
+
+
+
     }
 
     routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
@@ -75,6 +69,17 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     }
 
     ngOnInit(): void {
+        this.sStorage = this.common.getStorage();
+        if (!this.auth.isAuth())
+            this.router.navigateByUrl('/');
+        else {
+            this.$startDate = $('#startDate');
+            this.$endDate = $('#endDate');
+            this.$startTime = $('#startTime');
+            this.$endTime = $('#endTime');
+        }
+
+
         this.bindEvents();
         this.initialize();
         this.initializeControls();
@@ -130,12 +135,33 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             this.$endTime.timepicker('setTime', '');
     }
 
+
+    roundMinTime(dtDate: Date): Date {
+        let hour = moment(dtDate).hour();
+        let minute = moment(dtDate).minute();
+        if (minute >= 30)
+            minute = 30
+        else
+            minute = 0
+        return moment(dtDate)
+            .hour(hour)
+            .minute(minute)
+            .second(0)
+            .toDate();
+    }
+
+
     bindEvents(): void {
+
+
+
+
 
         let __this = this;
         this.$startTime.timepicker({
             'timeFormat': 'g:ia',
-            'minTime': new Date(),
+            'minTime': this.roundMinTime(new Date()),
+            'maxTime': moment(this.roundMinTime(new Date())).endOf('day').toDate(),
             'disableTouchKeyboard': true
         }).on('change', function(e) {
             if (e.currentTarget.value) {
@@ -214,7 +240,8 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         this.$endTime.timepicker({
             'showDuration': true,
             'timeFormat': 'g:ia',
-            'minTime': new Date(moment(new Date()).add(30, 'minutes').format()),
+            'minTime': this.roundMinTime(moment(new Date()).add(30, 'minutes').toDate()),
+            'maxTime': moment(this.roundMinTime(moment(new Date()).add(30, 'minutes').toDate())).endOf('day').toDate(),
             'disableTouchKeyboard': true
         }).on('change', function(e) {
             if (e.currentTarget.value) {
@@ -374,11 +401,17 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
             if (moment(__this.startDate).isAfter(new Date())) {
                 __this.$startTime.timepicker('option', 'minTime', '8:00am');
-                __this.$endTime.timepicker('option', 'minTime', '8:30am');
+                if (__this.startTime && __this.endTime && moment(__this.startTime).isSame(__this.endTime, 'day'))
+                    __this.$endTime.timepicker('option', 'minTime', __this.roundMinTime(moment(__this.startTime).add(30, 'minutes').toDate()));
+                else
+                    __this.$endTime.timepicker('option', 'minTime', '8:30am');
             }
             else {
-                __this.$startTime.timepicker('option', 'minTime', new Date());
-                __this.$endTime.timepicker('option', 'minTime', moment(new Date()).add(30, 'minutes').toDate());
+                __this.$startTime.timepicker('option', 'minTime', __this.roundMinTime(new Date()));
+                if (__this.startTime)
+                    __this.$endTime.timepicker('option', 'minTime', __this.roundMinTime(moment(__this.startTime).add(30, 'minutes').toDate()));
+                else
+                    __this.$endTime.timepicker('option', 'minTime', __this.roundMinTime(moment(new Date()).add(30, 'minutes').toDate()));
             }
 
 
@@ -467,7 +500,24 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                 __this.endTime = __this.$endTime.timepicker('getTime', new Date());
             }
 
+            if (moment(__this.endDate).isAfter(new Date())) {
+                if (__this.startTime && moment(__this.startTime).isSame(__this.endTime, 'day'))
+                    __this.$endTime.timepicker('option', 'minTime', __this.roundMinTime(moment(__this.startTime).add(30, 'minutes').toDate()));
+                else {
+                    if (__this.startDate && moment(__this.startDate).isAfter(new Date(), 'day'))
+                        __this.$startTime.timepicker('option', 'minTime', '8:00am');
+                    else
+                        __this.$startTime.timepicker('option', 'minTime', __this.roundMinTime(new Date()));
+                    __this.$endTime.timepicker('option', 'minTime', '8:30am');
+                }
 
+            }
+            else {
+                if (__this.startTime)
+                    __this.$endTime.timepicker('option', 'minTime', __this.roundMinTime(moment(__this.startTime).add(30, 'minutes').toDate()));
+                else
+                    __this.$endTime.timepicker('option', 'minTime', __this.roundMinTime(moment(new Date()).add(30, 'minutes').toDate()));
+            }
             __this.validate(__this);
         });
 

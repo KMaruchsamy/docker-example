@@ -30,6 +30,7 @@ import {ManageTests} from './components/tests/manage-tests';
 import {Reports} from './components/reports/reports';
 import {Rosters} from './components/rosters/rosters';
 import {Groups} from './components/groups/groups';
+import {Logout} from './components/shared/logout';
 
 @Component({
     selector: 'app',
@@ -39,6 +40,7 @@ import {Groups} from './components/groups/groups';
 
 @RouteConfig([
     { path: '/', component: Login, name: 'Login' },
+    { path: '/logout', component: Logout, name: 'Logout' },
     { path: '/home', component: Home, name: 'Home' },
     { path: '/reset-password/:id/:expirytime', component: ResetPassword, name: 'ResetPassword' },
     { path: '/forgot-password', component: ForgotPassword, name: 'ForgotPassword' },
@@ -56,20 +58,28 @@ import {Groups} from './components/groups/groups';
     { path: '/tests', component: ManageTests, name: 'ManageTests' },
     { path: '/tests/choose-test/:institutionId', component: ChooseTest, name: 'ChooseTest' },
     { path: '/tests/schedule-test', component: ScheduleTest, name: 'ScheduleTest' },
-    // { path: '/tests/:action/choose-test/:institutionId/:scheduleId', component: ChooseTest, as: 'ModifyChooseTest' },
-    // { path: '/tests/:action/schedule-test', component: ScheduleTest, as: 'ModifyScheduleTest' },
     { path: '/tests/add-students', component: AddStudents, name: 'AddStudents' },
     { path: '/tests/review', component: ReviewTest, name: 'ReviewTest' },
     { path: '/tests/confirmation', component: Confirmation, name: 'Confirmation' },
     { path: '/tests/view', component: ViewTest, name: 'ViewTest' },
+    { path: '/tests/:action/choose-test/:institutionId', component: ChooseTest, name: 'ModifyChooseTest' },
+    { path: '/tests/:action/schedule-test', component: ScheduleTest, name: 'ModifyScheduleTest' },
+    { path: '/tests/:action/add-students', component: AddStudents, name: 'ModifyAddStudents' },
+    { path: '/tests/:action/review', component: ReviewTest, name: 'ModifyReviewTest' },
     { path: '/error', component: UnhandledException, name: 'UnhandledException' },
     { path: '/*wildcard', component: PageNotFound, name: 'PageNotFound' }
 ])
 export class App {
     constructor(public router: Router) {
+        // $(window).bind("popstate", function(event) {
+        //     // console.log(event);
+        //     // alert('sss');
+        //     // window.history.forward();
+        // });
     }
 
 }
+
 
 // enableProdMode();
 

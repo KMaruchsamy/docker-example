@@ -49,6 +49,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     overrideRouteCheck: boolean = false;
     retesterExceptions: any;
     windowExceptions: Object[];
+    nextDay: boolean = false;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public common: Common,
         public router: Router, public dynamicComponentLoader: DynamicComponentLoader, public elementRef: ElementRef) {
@@ -136,6 +137,11 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
             if (this.testScheduleModel.scheduleEndTime && moment(this.testScheduleModel.scheduleEndTime).isValid()) {
                 this.testScheduleTimes = 'From ' + this.testScheduleTimes + ' to ' + moment(this.testScheduleModel.scheduleEndTime).format('LT');
             }
+            
+            let startTime = this.testScheduleModel.scheduleStartTime;
+            let endTime = this.testScheduleModel.scheduleEndTime;
+            if (moment(endTime).isAfter(startTime, 'day'))
+                this.nextDay = true;
 
         }
 

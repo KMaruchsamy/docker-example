@@ -25,9 +25,13 @@ export class TestService {
             || routeName.indexOf(TestShedulingPages.SCHEDULETEST) > -1
             || routeName.indexOf(TestShedulingPages.ADDSTUDENTS) > -1
             || routeName.indexOf(TestShedulingPages.REVIEWTEST) > -1
+            || routeName.indexOf(TestShedulingPages.MODIFYCHOOSETEST) > -1
+            || routeName.indexOf(TestShedulingPages.MODIFYSCHEDULETEST) > -1
+            || routeName.indexOf(TestShedulingPages.MODIFYADDSTUDENTS) > -1
+            || routeName.indexOf(TestShedulingPages.MODIFYREVIEWTEST) > -1
             || routeName.indexOf(TestShedulingPages.CONFIRMATION) > -1
             || routeName.indexOf(TestShedulingPages.VIEW) > -1
-            || routeName.indexOf('ERROR')>-1)
+            || routeName.indexOf('ERROR') > -1)
             return false;
         return true;
     }
