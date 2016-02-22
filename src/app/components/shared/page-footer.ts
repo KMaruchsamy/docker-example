@@ -13,7 +13,8 @@ export class PageFooter {
         
     }
     
-    signout(): void{
+    signout(e): void{
+        e.preventDefault();
         this.auth.logout();
         this.router.parent.navigateByUrl('/');
     }

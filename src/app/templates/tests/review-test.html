@@ -45,10 +45,18 @@
                 <tr>
                     <th scope="row">Date</th>
                     <td>
-                        {{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from
+                        <!--{{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from
                         {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}}
-                        {{testScheduleModel?.scheduleEndTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleEndTime|parseDate:'MM/DD/YY'}}
-
+                        {{testScheduleModel?.scheduleEndTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleEndTime|parseDate:'MM/DD/YY'}}-->
+                        <template [ngIf]="!nextDay">
+                            {{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}}
+                            &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}}
+                        </template>
+                        <template [ngIf]="nextDay">
+                            {{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}}
+                            &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}} {{testScheduleModel?.scheduleEndTime|parseDate:'ddd'}}
+                            {{testScheduleModel?.scheduleEndTime|parseDate:'MM/DD/YY'}}
+                        </template>
 
                     </td>
                     <td><a [routerLink]="['/ScheduleTest']">Change</a>
@@ -78,6 +86,10 @@
                 </tr>
             </thead>
             <tbody>
+                <!--<template ngFor #student [ngForOf]="testScheduleModel.selectedStudents">
+                    <tr *ngIf="resolveMarked(student)">
+                        <tr>
+                </template>-->
                 <tr *ngFor="#student of testScheduleModel.selectedStudents;  #_student=student" [hidden]="resolveMarked(student)">
                     <td>{{student.LastName}}</td>
                     <td>{{student.FirstName}}</td>
