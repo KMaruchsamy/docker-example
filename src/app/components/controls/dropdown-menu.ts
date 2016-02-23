@@ -80,8 +80,9 @@ export class DropdownMenu implements OnInit {
             .on('keydown.bs.dropdown.data-api', toggle + ', [role=menu]', $.fn.dropdown.Constructor.prototype.keydown)
     }
 
-    logout() {
-        this.auth.logout();
-        this.router.parent.navigateByUrl('/');
+    logout(e) {
+        // this.auth.logout();
+        e.preventDefault();
+        this.router.parent.navigateByUrl('/logout');
     }
 }

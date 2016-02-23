@@ -44,22 +44,36 @@
                 </tr>
                 <tr>
                     <th scope="row">Date</th>
-                    <td>{{testScheduleDates}} </td>
+                    <td>
+                        <!--{{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from
+                        {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}}
+                        {{testScheduleModel?.scheduleEndTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleEndTime|parseDate:'MM/DD/YY'}}-->
+                        <template [ngIf]="!nextDay">
+                            {{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}}
+                            &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}}
+                        </template>
+                        <template [ngIf]="nextDay">
+                            {{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}}
+                            &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}} {{testScheduleModel?.scheduleEndTime|parseDate:'ddd'}}
+                            {{testScheduleModel?.scheduleEndTime|parseDate:'MM/DD/YY'}}
+                        </template>
+
+                    </td>
                     <td><a [routerLink]="['/ScheduleTest']">Change</a>
 
                     </td>
                 </tr>
-                <tr>
+                <!--<tr>
                     <th scope="row">Time</th>
                     <td>{{testScheduleTimes}} ({{testScheduleWindow}})</td>
                     <td><a [routerLink]="['/ScheduleTest']">Change</a></td>
-                </tr>
+                </tr>-->
                 </tbody>
             </table>
         </div>
         <h4 class="teal" id="studentsInTestingSessionConfirmation">Students in Testing Session ({{unmarkedStudentsCount()}})</h4>
         <a [routerLink]="['/AddStudents']">Change</a>
-        <button class="right anchor-button" *ngIf="retesterExceptions?.length>0 && hasAlternateTests" (click)="changeAlternateAssignments($event)" >Change alternate test assignments</button>
+        <button class="right anchor-button" *ngIf="retesterExceptions?.length>0 && hasAlternateTests" (click)="changeAlternateAssignments($event)">Change alternate test assignments</button>
 
         <table id="studentsInTestingSessionTable" class="dataTable-bordered table-with-cell-padding table-striped last-row-no-border">
             <thead>
@@ -72,7 +86,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="#student of testScheduleModel.selectedStudents;  #_student=student" [hidden]="resolveMarked(student)" >
+                <!--<template ngFor #student [ngForOf]="testScheduleModel.selectedStudents">
+                    <tr *ngIf="resolveMarked(student)">
+                        <tr>
+                </template>-->
+                <tr *ngFor="#student of testScheduleModel.selectedStudents;  #_student=student" [hidden]="resolveMarked(student)">
                     <td>{{student.LastName}}</td>
                     <td>{{student.FirstName}}</td>
                     <td>{{student.CohortName}}</td>
@@ -92,13 +110,18 @@
                 Confirm info and schedule test
             </button>
         </div>
-
+        <div class="delete-draft section-medium-thin clearfix invisible">
+            <hr>
+            <button class="anchor-button smaller">Delete this draft</button>
+            <p class="saved-draft-info smaller teal">Saving draft…</p>
+        </div>
     </div>
 
 </main>
 
-
+<page-footer></page-footer>
 <confirmation-popup [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
 [okButtonText]="'Yes, leave this page'" [cancelButtonText]="'No, stay on this page'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation()"
 [hideClose]="true">
 </confirmation-popup>
+<loader [loaderMessage]="'Scheduling your testing session…'" [greetingMessage]="'Thank you for your patience!'"></loader>

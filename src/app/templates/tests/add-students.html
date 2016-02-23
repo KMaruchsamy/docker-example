@@ -18,12 +18,18 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="addByCohort">
                             <div id="chooseCohortContainer">
-                                <div class="top-section">
+
+                                <div class="top-section " id="ddlCohort" >
                                     <select id="chooseCohort" #selectcohort class="selectpicker" title="Choose a Cohort" data-width="65%" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,selectcohort,$event);">
                                         <option *ngFor="#cohort of cohorts;#i=index;" [selected]="cohort.CohortId==lastSelectedCohortID" [value]="cohort.CohortId">{{cohort.CohortName}}</option>
                                     </select>
                                     <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort($event)">Add all students</button>
                                 </div>
+
+                                <div id="noCohort" >
+                                    <p class="text-larger section-medium-thin container-narrow ">We're sorry, there are no active cohorts in your institution. Please contact your Account Manager for further assistance. You can find your Account Manager's contact info on the <a [routerLink]="['/Home']">Home page</a>.</p>
+                                 </div>  
+                                                                   
 
                                 <div class="hidden" id="cohortStudentList" #cohortstudentlist>
                                     <!--contains table and sets a max height so that it scrolls-->
