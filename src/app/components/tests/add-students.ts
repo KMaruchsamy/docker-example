@@ -122,7 +122,6 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
         this.apiServer = this.auth.common.getApiServer();
         this.loadActiveCohorts();
-
     }
     ReloadData(): void {
         let studentlist = "";
@@ -155,7 +154,10 @@ export class AddStudents implements OnInit, OnDeactivate {
         let subjectsPromise = this.testService.getActiveCohorts(cohortURL);
         let _this = this;
         subjectsPromise.then((response) => {
-            return response.json();
+            if (response.status !== 400) {
+                return response.json();
+            }
+            return [];
         })
             .then((json) => {
                 _this.cohorts = json;
@@ -166,7 +168,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                         $('.selectpicker').selectpicker('refresh');
                 });
 
-                if (_this.cohorts.length == 0) {
+                if (_this.cohorts.length === 0) {
                     $('#ddlCohort').addClass('hidden');
                     $('#noCohort').removeClass('hidden');
                 }
@@ -640,9 +642,11 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
     HasWindowException(_studentWindowException: any): void {
         if (_studentWindowException.length != 0) {
-
+            if (this.loader)
+                this.loader.dispose();
             this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopup, this.elementRef)
                 .then(retester=> {
+                    this.loader = retester;
                     $('#modalTimingException').modal('show');
                     retester.instance.studentWindowException = _studentWindowException;
                     retester.instance.testSchedule = this.testScheduleModel;
