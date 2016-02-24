@@ -141,9 +141,10 @@ export class TestService {
         let _testScheduleModel = new TestScheduleModel();
         _testScheduleModel.scheduleId = objTestScheduleModel.TestingSessionId;
         _testScheduleModel.scheduleName = objTestScheduleModel.SessionName;
-        _testScheduleModel.subjectId = objTestScheduleModel.LastSubjectSelectedId;
+        _testScheduleModel.subjectId = objTestScheduleModel.SubjectTestId;
         _testScheduleModel.testId = objTestScheduleModel.SessionTestId;
         _testScheduleModel.testName = objTestScheduleModel.SessionTestName;
+        _testScheduleModel.testNormingStatus = objTestScheduleModel.NormingStatusName;
         _testScheduleModel.scheduleStartTime = objTestScheduleModel.TestingWindowStart;
         _testScheduleModel.scheduleEndTime = objTestScheduleModel.TestingWindowEnd;
         _testScheduleModel.institutionId = objTestScheduleModel.InstitutionId;
@@ -168,6 +169,7 @@ export class TestService {
                 _student.Retester = student.Retester;
                 _student.CohortId = student.CohortId;
                 _student.CohortName = student.CohortName;
+                _student.NormingStatus = student.StudentNormingStatusName;
                 _testScheduleModel.selectedStudents.push(_student);
 
             });
@@ -185,6 +187,32 @@ export class TestService {
         let options: RequestOptions = new RequestOptions();
         options.headers = headers;
         return this.http.delete(url, options);
+    }
+
+
+    getAllScheduleTests(url: string) {
+        let self = this;
+        return fetch(url, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': self.auth.authheader
+            }
+        });
+    }
+
+
+    renameSession(url: string, input: string): any {
+        let self = this;
+        return fetch(url, {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': self.auth.authheader
+            },
+            body: input
+        });
     }
 
 }

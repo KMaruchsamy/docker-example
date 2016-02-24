@@ -27,7 +27,7 @@ module.exports = function () {
                 'node_modules/angular2/bundles/angular2.dev.js',
                 'node_modules/angular2/bundles/router.dev.js',
                 'node_modules/angular2/bundles/http.js',
-                   'node_modules/angular2/bundles/http.dev.js',
+                'node_modules/angular2/bundles/http.dev.js',
                 'node_modules/jasmine-core/lib/jasmine-core/jasmine.css',
                 'node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
                 'node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js',
@@ -39,29 +39,34 @@ module.exports = function () {
                 'node_modules/bootstrap-select/dist/js/bootstrap-select.min.js',
                 'src/app/plugins/bootstrap-select.js',
                 'node_modules/moment/min/moment.min.js',
-                'node_modules/bootstrap/js/modal.js'
+                'node_modules/bootstrap/js/modal.js',
+                'node_modules/bootstrap/js/tooltip.js',
+                  'node_modules/bootstrap/js/popover.js',
+                'src/app/plugins/bootstrap-editable.min.js',
+                'src/app/plugins/tablesaw.js',
+                'src/app/plugins/tablesaw-init.js'
                 // 'src/app/plugins/bootstrap-datepicker.min.js',
                 // 'src/app/plugins/jquery.timepicker.js',
                 // 'src/app/plugins/date.js'
-			],
-			jsreview: [
-				'./src/app/app/*.js',
-				'./src/app/components/**/*.js',
-				'./src/app/services/*.js'
-			]	
-		},
-		deploy: {
-			DEV: {
-				backupFolder: '//DWNUXWEB01.kaplaninc.com/d$/Site_Build',
-				liveFolder: '//DWNUXWEB01.kaplaninc.com/d$/NursingAdminWeb'
-			},
-			QA: {
-				backupFolder: '//DWNUXWEB01.kaplaninc.com/e$/Site_Build',
-				liveFolder: '//DWNUXWEB01.kaplaninc.com/e$/NursingAdminWeb'
-			}
-		},
+            ],
+            jsreview: [
+                './src/app/app/*.js',
+                './src/app/components/**/*.js',
+                './src/app/services/*.js'
+            ]
+        },
+        deploy: {
+            DEV: {
+                backupFolder: '//DWNUXWEB01.kaplaninc.com/d$/Site_Build',
+                liveFolder: '//DWNUXWEB01.kaplaninc.com/d$/NursingAdminWeb'
+            },
+            QA: {
+                backupFolder: '//DWNUXWEB01.kaplaninc.com/e$/Site_Build',
+                liveFolder: '//DWNUXWEB01.kaplaninc.com/e$/NursingAdminWeb'
+            }
+        },
         ebsSource: './ebs/',
         ebExtensions: './.ebextensions/'
-	};
-	return config;
+    };
+    return config;
 }

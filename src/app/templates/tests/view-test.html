@@ -8,8 +8,8 @@
                     <h3 class="page-lg-heading">View Testing Session</h3>
                     <a [routerLink]="['/ManageTests']" class="block margin-1em-top-bottom">Go to Manage Tests main page</a>
                 </div>
-                <div class="modify-testing-session-right">
-                    <a href="choose-test-modify.html" class="button button-mobile-block">Modify this testing session</a>
+                <div class="modify-testing-session-right" *ngIf="modify">
+                    <a [routerLink]="['/ModifyChooseTest',{action:'modify',institutionId:schedule.institutionId}]" class="button button-mobile-block">Modify this testing session</a>
                     <button class="anchor-button margin-1em-top" (click)="showConfirmation($event);">Delete this testing session</button>
                 </div>
             </div>
@@ -84,10 +84,9 @@
                 <div class="modify-testing-session-left margin-2em-bottom">
                     <a [routerLink]="['/ManageTests']" class="block">Go to Manage Tests main page</a>
                 </div>
-                <div class="modify-testing-session-right">
-                    <a href="choose-test-modify.html" class="button button-mobile-block">Modify this testing session</a>
+                <div class="modify-testing-session-right" *ngIf="modify">
+                    <a [routerLink]="['/ModifyChooseTest',{action:'modify',institutionId:schedule.institutionId}]" class="button button-mobile-block">Modify this testing session</a>
                     <button class="anchor-button margin-1em-top" (click)="showConfirmation($event);">Delete this testing session</button>
-                    <!--/*data-toggle="modal" data-target="#myModal"*/-->
                 </div>
             </div>
 
