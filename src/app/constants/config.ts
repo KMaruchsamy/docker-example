@@ -36,7 +36,9 @@ export const links = {
                 windowexception: "scheduling/checkForTestingWindowExceptions",
                 scheduletest: "scheduling/testingSessions",
                 viewtest: "scheduling/testingSessions/§scheduleId",
-                deleteSchedule: "scheduling/testingSessions/§scheduleId"
+                deleteSchedule: "scheduling/testingSessions/§scheduleId",
+                scheduletests: "scheduling/testingSessions",
+                renamesession:"scheduling/testingSessions/§scheduleId/renameSession"
             }
         }
     },
