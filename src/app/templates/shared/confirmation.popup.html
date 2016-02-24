@@ -2,7 +2,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button [class.hidden]="hideClose" type="button" class="close close-medium-icon-grey" aria-label="Close" data-dismiss="modal"></button>
+                <button [class.hidden]="hideClose" type="button" class="close close-medium-icon-grey" aria-label="Close" (click)="onCancel($event);"></button>
                 <p class="icon red-triangle-alert-large center"></p>
                 <h4 class="attention center" id="loseWorkWarningLabel">
              <span [innerHTML]="message"></span>
