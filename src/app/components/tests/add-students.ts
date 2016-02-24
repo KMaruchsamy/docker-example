@@ -811,31 +811,32 @@ export class AddStudents implements OnInit, OnDeactivate {
 
             });
     }
-    CheckForRetesters(_studentRepeaterExceptions): Object[] {
+    CheckForRetesters(_testScheduledSudents): Object[] {
         debugger;
-        let retesters = JSON.parse(this.sStorage.getItem('retesters'));
-        if (retesters != null) {
-            if (retesters.length === 0) {
-                return _studentRepeaterExceptions;
-            }
-            else {
-                let _repeterExceptions = [];
-                if (_studentRepeaterExceptions.length > 0) {
-                    for (let i = 0; i < retesters.length; i++) {
-                        let _retester = retesters[i];
-                        let _retesterStudent = _.filter(_studentRepeaterExceptions, { 'StudentId': _retester.StudentId });
-                        if (_retesterStudent !== null)
+        if (_testScheduledSudents.length !== 0) {
+            let retesters = JSON.parse(this.sStorage.getItem('retesters'));
+            if (retesters != null) {
+                if (retesters.length === 0) {
+                    return _testScheduledSudents;
+                }
+                else {
+                    let _repeterExceptions = [];
+                    for (let i = 0; i < _testScheduledSudents.length; i++) {
+                        let _retester = _testScheduledSudents[i];
+                        let _retesterStudent = _.filter(retesters, { 'StudentId': _retester.StudentId });
+                        if (_retesterStudent.length>0)
                             _repeterExceptions.push(_retester);
                         else
-                            _repeterExceptions.push(_studentRepeaterExceptions[i]);
+                            _repeterExceptions.push(_testScheduledSudents[i]);
+                        return _repeterExceptions;
                     }
-                    return _repeterExceptions;
                 }
-                else
-                    return _studentRepeaterExceptions;
             }
+            else
+                return _testScheduledSudents;
         }
-        return _studentRepeaterExceptions;
+        else
+            return _testScheduledSudents;
     }
 
     onCancelConfirmation(e: any): void {
