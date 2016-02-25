@@ -719,6 +719,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                 });
             }
             if (studentRepeaterExceptions.length > 0) {
+                debugger;
                 if (!this.retesterExceptions)
                     this.retesterExceptions = studentRepeaterExceptions;
 
@@ -781,6 +782,7 @@ export class AddStudents implements OnInit, OnDeactivate {
 
 
     loadRetesterAlternatePopup(_studentRepeaterExceptions: any): void {
+        _studentRepeaterExceptions = this.CheckForRetesters(_studentRepeaterExceptions); 
         let testScheduledSudents: Object[] = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 2 });
         let testTakenStudents: Object[] = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 1 });
 
@@ -791,7 +793,7 @@ export class AddStudents implements OnInit, OnDeactivate {
             .then(retester=> {
                 this.loader = retester;
                 $('#modalAlternateTest').modal('show');
-                retester.instance.retesterExceptions = this.CheckForRetesters(_studentRepeaterExceptions);
+                retester.instance.retesterExceptions = _studentRepeaterExceptions;
                 retester.instance.testTakenStudents = testTakenStudents;
                 retester.instance.testScheduledSudents = testScheduledSudents;
                 retester.instance.testSchedule = this.testScheduleModel;
@@ -811,32 +813,32 @@ export class AddStudents implements OnInit, OnDeactivate {
 
             });
     }
-    CheckForRetesters(_testScheduledSudents): Object[] {
+    CheckForRetesters(_studentRepeaterExceptions: any): Object[] {
         debugger;
-        if (_testScheduledSudents.length !== 0) {
+        if (_studentRepeaterExceptions.length !== 0) {
             let retesters = JSON.parse(this.sStorage.getItem('retesters'));
             if (retesters != null) {
                 if (retesters.length === 0) {
-                    return _testScheduledSudents;
+                    return _studentRepeaterExceptions;
                 }
                 else {
-                    let _repeterExceptions = [];
-                    for (let i = 0; i < _testScheduledSudents.length; i++) {
-                        let _retester = _testScheduledSudents[i];
-                        let _retesterStudent = _.filter(retesters, { 'StudentId': _retester.StudentId });
-                        if (_retesterStudent.length>0)
-                            _repeterExceptions.push(_retester);
+                    let _repeterExceptions: Object[]=[];
+                    for (let i = 0; i < _studentRepeaterExceptions.length; i++) {
+                        let _retester = _studentRepeaterExceptions[i];
+                        let _retesterStudent: Object = _.filter(retesters, { 'StudentId': _retester.StudentId });
+                        if (_retesterStudent !== null)
+                            _repeterExceptions.push(_retesterStudent[0]);
                         else
-                            _repeterExceptions.push(_testScheduledSudents[i]);
-                        return _repeterExceptions;
+                            _repeterExceptions.push(_retester);
                     }
+                    return _repeterExceptions;
                 }
             }
             else
-                return _testScheduledSudents;
+                return _studentRepeaterExceptions;
         }
         else
-            return _testScheduledSudents;
+            return _studentRepeaterExceptions;
     }
 
     onCancelConfirmation(e: any): void {
