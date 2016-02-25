@@ -38,16 +38,20 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     sStorage: any;
     attemptedRoute: string;
     overrideRouteCheck: boolean = false;
+    modify: boolean = false;
     constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams) {
+    }
+
+    ngOnInit(): void {
+        let action = this.routeParams.get('action');
+        if (action != undefined && action.trim() === 'modify')
+            this.modify = true;    
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else
             this.initialize();
-    }
-    
-    ngOnInit(): void{
         $(document).scrollTop(0);
     }
 

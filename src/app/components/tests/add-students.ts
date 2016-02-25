@@ -122,7 +122,6 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
         this.apiServer = this.auth.common.getApiServer();
         this.loadActiveCohorts();
-
     }
     ReloadData(): void {
         let studentlist = "";
@@ -155,7 +154,10 @@ export class AddStudents implements OnInit, OnDeactivate {
         let subjectsPromise = this.testService.getActiveCohorts(cohortURL);
         let _this = this;
         subjectsPromise.then((response) => {
-            return response.json();
+            if (response.status !== 400) {
+                return response.json();
+            }
+            return [];
         })
             .then((json) => {
                 _this.cohorts = json;
@@ -166,7 +168,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                         $('.selectpicker').selectpicker('refresh');
                 });
 
-                if (_this.cohorts.length == 0) {
+                if (_this.cohorts.length === 0) {
                     $('#ddlCohort').addClass('hidden');
                     $('#noCohort').removeClass('hidden');
                 }
@@ -640,9 +642,11 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
     HasWindowException(_studentWindowException: any): void {
         if (_studentWindowException.length != 0) {
-
+            if (this.loader)
+                this.loader.dispose();
             this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopup, this.elementRef)
                 .then(retester=> {
+                    this.loader = retester;
                     $('#modalTimingException').modal('show');
                     retester.instance.studentWindowException = _studentWindowException;
                     retester.instance.testSchedule = this.testScheduleModel;
@@ -715,6 +719,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                 });
             }
             if (studentRepeaterExceptions.length > 0) {
+                debugger;
                 if (!this.retesterExceptions)
                     this.retesterExceptions = studentRepeaterExceptions;
 
@@ -777,6 +782,7 @@ export class AddStudents implements OnInit, OnDeactivate {
 
 
     loadRetesterAlternatePopup(_studentRepeaterExceptions: any): void {
+        _studentRepeaterExceptions = this.CheckForRetesters(_studentRepeaterExceptions); 
         let testScheduledSudents: Object[] = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 2 });
         let testTakenStudents: Object[] = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 1 });
 
@@ -796,6 +802,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                         $('#modalAlternateTest').modal('hide');
                         this.testScheduleModel = JSON.parse(this.sStorage.getItem('testschedule'));
                         this.retesterExceptions = retesters;
+                        this.sStorage.setItem('retesters', JSON.stringify(retesters));
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
                         this.router.navigateByUrl('/tests/review');
                     }
@@ -805,6 +812,33 @@ export class AddStudents implements OnInit, OnDeactivate {
                 });
 
             });
+    }
+    CheckForRetesters(_studentRepeaterExceptions: any): Object[] {
+        debugger;
+        if (_studentRepeaterExceptions.length !== 0) {
+            let retesters = JSON.parse(this.sStorage.getItem('retesters'));
+            if (retesters != null) {
+                if (retesters.length === 0) {
+                    return _studentRepeaterExceptions;
+                }
+                else {
+                    let _repeterExceptions: Object[]=[];
+                    for (let i = 0; i < _studentRepeaterExceptions.length; i++) {
+                        let _retester = _studentRepeaterExceptions[i];
+                        let _retesterStudent: Object = _.filter(retesters, { 'StudentId': _retester.StudentId });
+                        if (_retesterStudent !== null)
+                            _repeterExceptions.push(_retesterStudent[0]);
+                        else
+                            _repeterExceptions.push(_retester);
+                    }
+                    return _repeterExceptions;
+                }
+            }
+            else
+                return _studentRepeaterExceptions;
+        }
+        else
+            return _studentRepeaterExceptions;
     }
 
     onCancelConfirmation(e: any): void {

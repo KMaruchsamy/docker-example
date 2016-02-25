@@ -1,5 +1,5 @@
 import {Component, OnInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
-import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction} from 'angular2/router';
+import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams} from 'angular2/router';
 import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {Observable} from 'rxjs/Rx';
 import {NgIf, NgFor} from 'angular2/common';
@@ -29,7 +29,8 @@ export class ViewTest implements OnInit, OnDeactivate {
     studentsTable: any;
     sStorage: any;
     nextDay: boolean = false;
-    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router) {
+    modify: boolean = false;
+    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams:RouteParams) {
 
     }
 
@@ -38,7 +39,11 @@ export class ViewTest implements OnInit, OnDeactivate {
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else {
+            let action = this.routeParams.get('action');
+            if (action != undefined && action.trim() !== '')
+                this.modify = true;    
             this.loadTestSchedule();
+            
         }
         $(document).scrollTop(0);
     }

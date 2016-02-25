@@ -7,7 +7,7 @@
               <!--This will be added in post-MVP <br>You will receive an email confirmation soon. -->
         </h4>
         <div class="margin-2em-top">
-            <a [routerLink]="['/ViewTest']">View/print this testing session</a>
+            <a [routerLink]="['/ModifyViewTest',{action:'modify'}]">View/print this testing session</a>
         </div>
         <p class="margin-2em-top-bottom">Need to make changes? <a [routerLink]="['/ModifyChooseTest',{action:'modify',institutionId:testScheduleModel.institutionId}]">Modify this testing session</a></p>
         <a [routerLink]="['/ManageTests']">Go to Manage Tests main page</a>
