@@ -117,12 +117,21 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.windowEnd = moment(this.testScheduleModel.scheduleEndTime).format("MM.DD.YY"); //'12.12.16'; 
         
         if (this.testScheduleModel.selectedStudents.length > 0) {
+            this.UpdateTestName();
             this.ReloadData();
             this.RefreshSelectedStudentCount();
         }
         this.apiServer = this.auth.common.getApiServer();
         this.loadActiveCohorts();
     }
+    UpdateTestName(): void {
+        let _selectedStudent = this.testScheduleModel.selectedStudents;
+        for (let i = 0; i < _selectedStudent.length; i++) {
+            this.testScheduleModel.selectedStudents[i].StudentTestId = this.testScheduleModel.testId;
+            this.testScheduleModel.selectedStudents[i].StudentTestName= this.testScheduleModel.testName;
+        }
+    }
+
     ReloadData(): void {
         let studentlist = "";
         let _selectedStudent = this.testScheduleModel.selectedStudents;
@@ -564,6 +573,7 @@ export class AddStudents implements OnInit, OnDeactivate {
     }
 
     DetailReviewTestClick(event): void {
+        debugger;
         event.preventDefault();
         let studentId = [];
         let selectedStudentModelList = this.selectedStudents;
