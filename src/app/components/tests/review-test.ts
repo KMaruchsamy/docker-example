@@ -171,7 +171,6 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
 
     validate(): void {
-        debugger;
         if (this.testScheduleModel.scheduleName !== '')
             console.log(this.testScheduleModel.scheduleName);
 
@@ -545,7 +544,10 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         e.preventDefault();
         this.loadRetesterAlternatePopup(this.retesterExceptions);
     }
-
+    ChangeTest(e: any): void {
+        e.preventDefault();
+        this.sStorage.removeItem('retesters');
+    }
 
 
 

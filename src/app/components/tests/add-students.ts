@@ -135,9 +135,26 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     UpdateTestName(): void {
         let _selectedStudent = this.testScheduleModel.selectedStudents;
-        for (let i = 0; i < _selectedStudent.length; i++) {
-            this.testScheduleModel.selectedStudents[i].StudentTestId = this.testScheduleModel.testId;
-            this.testScheduleModel.selectedStudents[i].StudentTestName= this.testScheduleModel.testName;
+        let retesters = JSON.parse(this.sStorage.getItem('retesters'));
+        for (let i = 0; i < _selectedStudent.length; i++) {            
+            if (retesters != null) {
+                if (retesters.length > 0) {
+                    let _retesterStudent: Object = _.filter(retesters, { 'StudentId': _selectedStudent[i].StudentId });
+                    if (_retesterStudent.length >0) { }
+                    else {
+                        this.testScheduleModel.selectedStudents[i].StudentTestId = this.testScheduleModel.testId;
+                        this.testScheduleModel.selectedStudents[i].StudentTestName = this.testScheduleModel.testName;
+                    }
+                }
+                else {
+                    this.testScheduleModel.selectedStudents[i].StudentTestId = this.testScheduleModel.testId;
+                    this.testScheduleModel.selectedStudents[i].StudentTestName = this.testScheduleModel.testName;
+                }
+            }
+            else {
+                this.testScheduleModel.selectedStudents[i].StudentTestId = this.testScheduleModel.testId;
+                this.testScheduleModel.selectedStudents[i].StudentTestName = this.testScheduleModel.testName;
+            }
         }
     }
 
@@ -582,7 +599,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     DetailReviewTestClick(event): void {
-        debugger;
         event.preventDefault();
         let studentId = [];
         let selectedStudentModelList = this.selectedStudents;
@@ -739,7 +755,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 });
             }
             if (studentRepeaterExceptions.length > 0) {
-                debugger;
                 if (!this.retesterExceptions)
                     this.retesterExceptions = studentRepeaterExceptions;
 
@@ -834,7 +849,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             });
     }
     CheckForRetesters(_studentRepeaterExceptions: any): Object[] {
-        debugger;
         if (_studentRepeaterExceptions.length !== 0) {
             let retesters = JSON.parse(this.sStorage.getItem('retesters'));
             if (retesters != null) {
@@ -846,7 +860,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     for (let i = 0; i < _studentRepeaterExceptions.length; i++) {
                         let _retester = _studentRepeaterExceptions[i];
                         let _retesterStudent: Object = _.filter(retesters, { 'StudentId': _retester.StudentId });
-                        if (_retesterStudent !== null)
+                        if (_retesterStudent.length>0)
                             _repeterExceptions.push(_retesterStudent[0]);
                         else
                             _repeterExceptions.push(_retester);
