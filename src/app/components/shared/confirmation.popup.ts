@@ -10,6 +10,7 @@ import {Router, RouterLink} from 'angular2/router';
 })
 
 export class ConfirmationPopup implements OnInit {
+    @Input() popupId: number;
     @Input() cancelButtonText:string;
     @Input() okButtonText:string;
     @Input() message: string;

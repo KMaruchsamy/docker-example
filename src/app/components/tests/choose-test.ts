@@ -46,7 +46,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     ngOnInit(): void {
         let action = this.routeParams.get('action');
         if (action != undefined && action.trim() === 'modify')
-            this.modify = true;    
+            this.modify = true;
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
@@ -55,19 +55,31 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $(document).scrollTop(0);
     }
 
+    onCancelChanges(): void {
+        this.overrideRouteCheck = true;
+        this.testService.clearTestScheduleObjects();
+        this.router.parent.navigate(['/ManageTests']);
+    }
+
+    onContinueMakingChanges(): void {
+        // continue making changes after confirmation popup..
+    }
+
     routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
-        if (!this.overrideRouteCheck) {
-            if (outOfTestScheduling) {
-                if (this.testScheduleModel.testId) {
-                    this.attemptedRoute = next.urlPath;
-                    $('#confirmationPopup').modal('show');
-                    return false;
+        if (!this.modify) {
+            if (!this.overrideRouteCheck) {
+                if (outOfTestScheduling) {
+                    if (this.testScheduleModel.testId) {
+                        this.attemptedRoute = next.urlPath;
+                        $('#confirmationPopup').modal('show');
+                        return false;
+                    }
                 }
             }
         }
         if (outOfTestScheduling)
-            this.sStorage.removeItem('testschedule');
+            this.testService.clearTestScheduleObjects();
         this.overrideRouteCheck = false;
         return true;
     }
@@ -171,7 +183,10 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
 
     saveChooseTest(): void {
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
-        this.router.parent.navigateByUrl('/tests/schedule-test');
+        if (this.modify)
+            this.router.navigate(['/ModifyScheduleTest',{action:'modify'}]);
+        else
+            this.router.navigate(['/ScheduleTest']);
     }
 
 

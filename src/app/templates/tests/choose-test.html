@@ -1,6 +1,6 @@
 <page-header></page-header>
 <main role="main" class="app-main">
-    <test-header scheduleStep='Choose a test' [testSchedule]="testScheduleModel"></test-header>
+    <test-header (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Choose a test' [testSchedule]="testScheduleModel"></test-header>
     <div class="section-thin">
         <div class="container-medium-width">
             <p class="text-link-color margin-1em-top"><b><h4 class="margin-1em-top h6">Choose by subject</h4>  </b></p>
@@ -69,6 +69,7 @@
 <page-footer></page-footer>
 
 <confirmation-popup 
+    [popupId]="'confirmationPopup'"
     [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'" 
     [okButtonText] = "'Yes, leave this page'" 
     [cancelButtonText] = "'No, stay on this page'" 

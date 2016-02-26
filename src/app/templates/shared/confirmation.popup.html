@@ -1,16 +1,17 @@
-<div class="modal fade" id="confirmationPopup" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="confirmationPopup">
+<div class="modal fade" id="confirmationPopup" [attr.id]="popupId" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
+aria-labelledby="confirmationPopup">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button [class.hidden]="hideClose" type="button" class="close close-medium-icon-grey" aria-label="Close" (click)="onCancel($event);"></button>
                 <p class="icon red-triangle-alert-large center"></p>
-                <h4 class="attention center" id="loseWorkWarningLabel">
+                <h5 class="attention center" id="loseWorkWarningLabel">
              <span [innerHTML]="message"></span>
-           </h4>
+           </h5>
             </div>
             <div class="modal-footer">
                 <a href="javascript:void(0)" (click)="onCancel($event);" class="anchor-button anchor-button-left center">{{cancelButtonText}}</a>
-                <button class="button" (click)="onOK($event);" >{{okButtonText}}</button>
+                <button class="button" (click)="onOK($event);">{{okButtonText}}</button>
             </div>
         </div>
     </div>

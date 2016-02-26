@@ -1,5 +1,5 @@
 import {Component, OnInit} from 'angular2/core';
-import {Router, CanDeactivate, OnDeactivate, ComponentInstruction} from 'angular2/router';
+import {Router, CanDeactivate, OnDeactivate, ComponentInstruction, RouteParams} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -37,8 +37,9 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     sStorage: any;
     attemptedRoute: string;
     overrideRouteCheck: boolean = false;
+    modify: boolean = false;
     constructor(public testScheduleModel: TestScheduleModel,
-        public testService: TestService, public auth: Auth, public router: Router, public common: Common) {
+        public testService: TestService, public auth: Auth, public router: Router, public common: Common, public routeParams: RouteParams) {
 
 
 
@@ -77,6 +78,9 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             this.$endDate = $('#endDate');
             this.$startTime = $('#startTime');
             this.$endTime = $('#endTime');
+            let action = this.routeParams.get('action');
+            if (action != undefined && action.trim() === 'modify')
+                this.modify = true;
         }
 
 
@@ -233,7 +237,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             else {
                 __this.startTime = '';
             }
-
+            __this.$endTime.timepicker('option', 'durationTime', moment(__this.startTime).toDate());
             __this.validate(__this);
         });
 
@@ -334,6 +338,9 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             else {
                 __this.endTime = '';
             }
+
+            if (__this.startTime)
+                __this.$endTime.timepicker('option', 'durationTime', moment(__this.startTime).toDate());
             __this.validate(__this);
         });
 
@@ -398,7 +405,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                 __this.startTime = __this.$startTime.timepicker('getTime', new Date());
             }
 
-
+            debugger;
             if (moment(__this.startDate).isAfter(new Date())) {
                 __this.$startTime.timepicker('option', 'minTime', '8:00am');
                 if (__this.startTime && __this.endTime && moment(__this.startTime).isSame(__this.endTime, 'day'))
@@ -624,7 +631,10 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             this.testScheduleModel.scheduleStartTime = new Date(this.startTime);
             this.testScheduleModel.scheduleEndTime = new Date(this.endTime);
             this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
-            this.router.parent.navigateByUrl('/tests/add-students');
+            if (this.modify)
+                this.router.navigate(['/ModifyAddStudents', { action: 'modify' }]);
+            else
+                this.router.navigate(['/AddStudents']);
             return false;
         }
     }

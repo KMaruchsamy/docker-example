@@ -1,5 +1,5 @@
 ﻿import {Component, OnInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
-import {Router, RouterLink, RouteParams, OnDeactivate, ComponentInstruction } from 'angular2/router';
+import {Router, RouterLink, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction } from 'angular2/router';
 import {NgFor} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -33,7 +33,7 @@ import '../../lib/modal.js';
     pipes: [RemoveWhitespacePipe]
 })
 
-export class AddStudents implements OnInit, OnDeactivate {
+export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     //  institutionID: number;
     apiServer: string;
     lastSelectedCohortID: number;
@@ -51,13 +51,10 @@ export class AddStudents implements OnInit, OnDeactivate {
     valid: boolean = false;
     loader: any;
     retesterExceptions: any;
+    modify: boolean = false;
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
         public dynamicComponentLoader: DynamicComponentLoader) {
-        this.sStorage = this.common.getStorage();
-        if (!this.auth.isAuth())
-            this.router.navigateByUrl('/');
-        else
-            this.initialize();
+       
     }
 
     routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
@@ -71,8 +68,10 @@ export class AddStudents implements OnInit, OnDeactivate {
                 }
             }
         }
-        if (outOfTestScheduling)
+        if (outOfTestScheduling) {
             this.sStorage.removeItem('testschedule');
+            this.sStorage.removeItem('retesters');
+        }
         this.overrideRouteCheck = false;
         return true;
     }
@@ -88,22 +87,21 @@ export class AddStudents implements OnInit, OnDeactivate {
         }
 
     }
-    ResetData(): void {
-        $('#testSchedulingSelectedStudentsList').empty();
-        $('#cohortStudents button').each(function () {
-            $(this).removeAttr('disabled', 'disabled');
-        });
-        this.selectedStudents = [];
-        this.ShowHideSelectedStudentContainer();
-        this.EnableDisableButtonForDetailReview();
-    }
+   
     ngOnInit() {
+        let action = this.routeParams.get('action');
+        if (action != undefined && action.trim() === 'modify')
+            this.modify = true; 
         // console.log('on init');
         $('#ddlCohort').addClass('hidden');
         $('#noCohort').addClass('hidden');
         $('#addAllStudents').addClass('hidden');
         $('#cohortStudentList').addClass('hidden');
-
+        this.sStorage = this.common.getStorage();
+        if (!this.auth.isAuth())
+            this.router.navigateByUrl('/');
+        else
+            this.initialize();
     }
 
     initialize(): void {
@@ -124,6 +122,17 @@ export class AddStudents implements OnInit, OnDeactivate {
         this.apiServer = this.auth.common.getApiServer();
         this.loadActiveCohorts();
     }
+
+    ResetData(): void {
+        $('#testSchedulingSelectedStudentsList').empty();
+        $('#cohortStudents button').each(function () {
+            $(this).removeAttr('disabled', 'disabled');
+        });
+        this.selectedStudents = [];
+        this.ShowHideSelectedStudentContainer();
+        this.EnableDisableButtonForDetailReview();
+    }
+
     UpdateTestName(): void {
         let _selectedStudent = this.testScheduleModel.selectedStudents;
         for (let i = 0; i < _selectedStudent.length; i++) {
@@ -722,6 +731,7 @@ export class AddStudents implements OnInit, OnDeactivate {
                             let _alternateTests = _.find(alternateTests, { 'TestId': studentAlternate.TestId });
                             studentAlternate.TestName = _alternateTests.TestName;
                             studentAlternate.NormingStatus = _alternateTests.NormingStatusName;
+                            studentAlternate.Recommended = _alternateTests.Recommended;
                             if (!_.has(studentAlternate, 'Checked'))
                                 studentAlternate.Checked = false;
                         });

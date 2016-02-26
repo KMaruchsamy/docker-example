@@ -31,6 +31,7 @@ export class TestService {
             || routeName.indexOf(TestShedulingPages.MODIFYREVIEWTEST) > -1
             || routeName.indexOf(TestShedulingPages.CONFIRMATION) > -1
             || routeName.indexOf(TestShedulingPages.VIEW) > -1
+            || routeName.indexOf(TestShedulingPages.MODIFYVIEW) > -1
             || routeName.indexOf('ERROR') > -1)
             return false;
         return true;
@@ -40,6 +41,12 @@ export class TestService {
     getTestSchedule(): TestScheduleModel {
         if (this.sStorage.getItem('testschedule'))
             return this.testSchedule = JSON.parse(this.sStorage.getItem('testschedule'));
+        else null;
+    }
+    
+    getSavedRetesterExceptions(): any{
+         if (this.sStorage.getItem('retesters'))
+            return this.testSchedule = JSON.parse(this.sStorage.getItem('retesters'));
         else null;
     }
 
@@ -124,6 +131,21 @@ export class TestService {
             body: input
         });
     }
+
+    modifyScheduleTests(url: string, input: string): any {
+        let self = this;
+        return fetch(url, {
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': self.auth.authheader
+            },
+            body: input
+        });
+    }
+
+
 
     getScheduleById(url: string): any {
         let self = this;
@@ -214,5 +236,27 @@ export class TestService {
             body: input
         });
     }
+    
+    sortSchedule(schedule:TestScheduleModel):TestScheduleModel {
+        if (schedule != undefined && schedule.selectedStudents!=undefined && schedule.selectedStudents.length>0) {
+             let __selectedStudents: SelectedStudentModel[] = schedule.selectedStudents.sort(function(a, b) {
+                var nameA = a.LastName.toLowerCase(), nameB = b.LastName.toLowerCase()
+                if (nameA < nameB) //sort string ascending
+                    return -1
+                if (nameA > nameB)
+                    return 1
+                return 0 //default return value (no sorting)
+            });
+            schedule.selectedStudents = __selectedStudents;
+        }        
+        return schedule;
+    }
+    
+    
+    clearTestScheduleObjects(): void{
+        this.sStorage.removeItem('testschedule');
+        this.sStorage.removeItem('retesters');
+    }
+    
 
 }
