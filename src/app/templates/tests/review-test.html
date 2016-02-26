@@ -1,6 +1,6 @@
 <page-header></page-header>
 <main role="main" class="app-main">
-    <test-header scheduleStep='Add details and review' [testSchedule]="testScheduleModel"></test-header>
+    <test-header (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Add details and review' [testSchedule]="testScheduleModel"></test-header>
 
     <div class="section">
         <div class="container-medium-width">
