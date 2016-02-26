@@ -59,6 +59,17 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
     }
 
+    onCancelChanges(): void {
+        this.overrideRouteCheck = true;
+        this.testService.clearTestScheduleObjects();
+        this.router.parent.navigate(['/ManageTests']);
+    }
+
+    onContinueMakingChanges(): void {
+        // continue making changes after confirmation popup..
+    }
+
+
     routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         if (!this.overrideRouteCheck) {
@@ -128,7 +139,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                 });
                 __this.validate();
             });
-            
+
             let startTime = this.testScheduleModel.scheduleStartTime;
             let endTime = this.testScheduleModel.scheduleEndTime;
             if (moment(endTime).isAfter(startTime, 'day'))
@@ -171,7 +182,6 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
 
     validate(): void {
-        debugger;
         if (this.testScheduleModel.scheduleName !== '')
             console.log(this.testScheduleModel.scheduleName);
 
@@ -543,9 +553,41 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
     changeAlternateAssignments(e: any): void {
         e.preventDefault();
+        debugger;
+        if (this.modify) {
+            let retesterExceptionsURL: string = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.retesters}`
+
+            let studentIds: number[];
+            studentIds = _.pluck(this.removeMarked(this.testScheduleModel.selectedStudents), 'StudentId');
+            let input = {
+                SessionTestId: this.testScheduleModel.scheduleId,
+                StudentIds: [
+                    studentIds.join('')
+                ],
+                TestingSessionWindowStart: this.testScheduleModel.scheduleStartTime,
+                TestingSessionWindowEnd: this.testScheduleModel.scheduleEndTime
+            };
+            let retesterExceptionsPromise: any = this.testService.getRetesters(retesterExceptionsURL, JSON.stringify(input));
+
+            retesterExceptionsPromise.then((response) => {
+                return response.json();
+            })
+                .then((json) => {
+                    console.log(JSON.stringify(json));
+
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+
+        }
+        else
         this.loadRetesterAlternatePopup(this.retesterExceptions);
     }
-
+    ChangeTest(e: any): void {
+        e.preventDefault();
+        this.sStorage.removeItem('retesters');
+    }
 
 
 

@@ -37,7 +37,7 @@
                                     </template>
                                 </td>
                                 <td class="tablesaw-stacked-hidden">
-                                    <button [attr.sessionId]="inProgressTest?.TestingSessionId" class="js-rename-session unstyled-button">{{inProgressTest?.SessionName}}<img *ngIf="adminId==inProgressTest?.AdminId || adminId==inProgressTest?.FacultyMemberId"
+                                    <button [attr.sessionId]="inProgressTest?.TestingSessionId" [disabled]="adminId!=inProgressTest?.AdminId && adminId!=inProgressTest?.FacultyMemberId" class="js-rename-session unstyled-button">{{inProgressTest?.SessionName}}<img *ngIf="adminId==inProgressTest?.AdminId || adminId==inProgressTest?.FacultyMemberId"
                                         src="/images/edit-pencil-icon_2x.png" alt="edit">
                                     </button>
                                 </td>
@@ -80,7 +80,7 @@
                                 </template>
                             </td>
                             <td class="tablesaw-stacked-hidden">
-                                <button [attr.sessionId]="scheduleTest?.TestingSessionId" class="js-rename-session unstyled-button">{{scheduleTest.SessionName}}<img *ngIf="adminId==scheduleTest?.AdminId || adminId==scheduleTest?.FacultyMemberId"
+                                <button [attr.sessionId]="scheduleTest?.TestingSessionId" [disabled]="adminId!=scheduleTest?.AdminId && adminId!=scheduleTest?.FacultyMemberId" class="js-rename-session unstyled-button">{{scheduleTest.SessionName}}<img *ngIf="adminId==scheduleTest?.AdminId || adminId==scheduleTest?.FacultyMemberId"
                                     src="/images/edit-pencil-icon_2x.png" alt="edit">
                                 </button>
                             </td>
@@ -143,7 +143,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <p *ngIf="completedTests?.length==0">There are no completed tests.</p>
+                <p *ngIf="completedTests?.length==0">There have been no completed tests over the last three months.</p>
                 <div *ngIf="completedTests?.length==0" class="section-medium-thin section-beige container">
                     <p class="no-margin-bottom"><b>Please note:</b> All tests scheduled through our new process will appear here as soon as they are
                         completed. They will be listed for up to three months after their end date. Information on tests

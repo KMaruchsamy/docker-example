@@ -1,6 +1,6 @@
 <page-header></page-header>
 <main role="main" class="app-main">
-    <test-header scheduleStep='Add details and review' [testSchedule]="testScheduleModel"></test-header>
+    <test-header (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Add details and review' [testSchedule]="testScheduleModel"></test-header>
 
     <div class="section">
         <div class="container-medium-width">
@@ -40,7 +40,7 @@
                 <tr>
                     <th scope="row">Test</th>
                     <td>{{testScheduleModel.testName}}</td>
-                    <td><a [routerLink]="modify ? ['/ModifyChooseTest' , {action:'modify',institutionId : testScheduleModel.institutionId}] : ['/ChooseTest' , {institutionId : testScheduleModel.institutionId}]">Change</a></td>
+                    <td><a [routerLink]="modify ? ['/ModifyChooseTest' , {action:'modify',institutionId : testScheduleModel.institutionId}] : ['/ChooseTest' , {institutionId : testScheduleModel.institutionId}]" (click)="ChangeTest($event);">Change</a></td>
                 </tr>
                 <tr>
                     <th scope="row">Date and Time</th>

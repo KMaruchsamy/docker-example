@@ -44,6 +44,16 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
 
     }
+    
+     onCancelChanges(): void {
+        this.overrideRouteCheck = true;
+        this.testService.clearTestScheduleObjects();
+        this.router.parent.navigate(['/ManageTests']);
+    }
+
+    onContinueMakingChanges(): void {
+        // continue making changes after confirmation popup..
+    }
 
     routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));

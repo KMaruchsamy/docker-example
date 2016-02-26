@@ -135,9 +135,26 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     UpdateTestName(): void {
         let _selectedStudent = this.testScheduleModel.selectedStudents;
-        for (let i = 0; i < _selectedStudent.length; i++) {
-            this.testScheduleModel.selectedStudents[i].StudentTestId = this.testScheduleModel.testId;
-            this.testScheduleModel.selectedStudents[i].StudentTestName= this.testScheduleModel.testName;
+        let retesters = JSON.parse(this.sStorage.getItem('retesters'));
+        for (let i = 0; i < _selectedStudent.length; i++) {            
+            if (retesters != null) {
+                if (retesters.length > 0) {
+                    let _retesterStudent: Object = _.filter(retesters, { 'StudentId': _selectedStudent[i].StudentId });
+                    if (_retesterStudent.length >0) { }
+                    else {
+                        this.testScheduleModel.selectedStudents[i].StudentTestId = this.testScheduleModel.testId;
+                        this.testScheduleModel.selectedStudents[i].StudentTestName = this.testScheduleModel.testName;
+                    }
+                }
+                else {
+                    this.testScheduleModel.selectedStudents[i].StudentTestId = this.testScheduleModel.testId;
+                    this.testScheduleModel.selectedStudents[i].StudentTestName = this.testScheduleModel.testName;
+                }
+            }
+            else {
+                this.testScheduleModel.selectedStudents[i].StudentTestId = this.testScheduleModel.testId;
+                this.testScheduleModel.selectedStudents[i].StudentTestName = this.testScheduleModel.testName;
+            }
         }
     }
 
@@ -582,7 +599,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     DetailReviewTestClick(event): void {
-        debugger;
         event.preventDefault();
         let studentId = [];
         let selectedStudentModelList = this.selectedStudents;
@@ -739,7 +755,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 });
             }
             if (studentRepeaterExceptions.length > 0) {
-                debugger;
                 if (!this.retesterExceptions)
                     this.retesterExceptions = studentRepeaterExceptions;
 
@@ -777,6 +792,21 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             return !_.has(student, 'MarkedToRemove') || !student.MarkedToRemove;
         }).length;
     }
+    studentCountInSession(): number {
+        let _count: number = 0;
+        let _selectedStudent = this.testScheduleModel.selectedStudents;
+        if (_selectedStudent.length > 0) {
+            for (let i = 0; i < _selectedStudent.length; i++) {
+                let student = _selectedStudent[i];
+                if (typeof (student.MarkedToRemove) === 'undefined' || student.MarkedToRemove) {
+                    if (student.MarkedToRemove)
+                        _count = _count + 1;
+                }
+            }
+            _count = this.selectedStudentCount - _count;
+        }
+        return _count;
+    }
 
     loadRetesterNoAlternatePopup(_studentRepeaterExceptions: any): void {
         this.dynamicComponentLoader.loadNextToLocation(RetesterNoAlternatePopup, this.elementRef)
@@ -790,7 +820,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         this.sStorage.setItem('testschedule', JSON.stringify(testSchedule));
                         this.testScheduleModel = testSchedule;
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
-                        this.router.navigateByUrl('/tests/review');
+                        if (this.studentCountInSession())
+                            this.router.navigateByUrl('/tests/review');
+                        else
+                            this.router.navigateByUrl('/tests/add-students');
                     }
                 });
                 retester.instance.retesterNoAlternatePopupCancel.subscribe((e) => {
@@ -823,8 +856,12 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         this.testScheduleModel = JSON.parse(this.sStorage.getItem('testschedule'));
                         this.retesterExceptions = retesters;
                         this.sStorage.setItem('retesters', JSON.stringify(retesters));
-                        this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
-                        this.router.navigateByUrl('/tests/review');
+                        this.valid = this.unmarkedStudentsCount() > 0 ? true : false;                        
+                       // let studentCountInSession = this.markedStudentsCount();
+                        if (this.studentCountInSession())
+                            this.router.navigateByUrl('/tests/review');
+                        else
+                            this.router.navigateByUrl('/tests/add-students');
                     }
                 });
                 retester.instance.retesterAlternatePopupCancel.subscribe((e) => {
@@ -833,8 +870,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
             });
     }
+
     CheckForRetesters(_studentRepeaterExceptions: any): Object[] {
-        debugger;
         if (_studentRepeaterExceptions.length !== 0) {
             let retesters = JSON.parse(this.sStorage.getItem('retesters'));
             if (retesters != null) {
@@ -846,7 +883,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     for (let i = 0; i < _studentRepeaterExceptions.length; i++) {
                         let _retester = _studentRepeaterExceptions[i];
                         let _retesterStudent: Object = _.filter(retesters, { 'StudentId': _retester.StudentId });
-                        if (_retesterStudent !== null)
+                        if (_retesterStudent.length>0)
                             _repeterExceptions.push(_retesterStudent[0]);
                         else
                             _repeterExceptions.push(_retester);
