@@ -124,12 +124,16 @@ export class RetesterAlternatePopup implements OnDeactivate {
             studentToMark.StudentTestId = testId;
             studentToMark.StudentTestName = testName;
             let selectedTest: any = _.find(retesterStudent.AlternateTests, { TestId: testId });
-            if (selectedTest)
+            if (selectedTest) {
                 selectedTest.Checked = true;
+                studentToMark.NormingStatus = selectedTest.NormingStatus;
+            }
+                
         }
         else {
             studentToMark.StudentTestId = this.testSchedule.testId;
             studentToMark.StudentTestName = this.testSchedule.testName;
+             studentToMark.NormingStatus = this.testSchedule.testNormingStatus;
         }
     }
 
