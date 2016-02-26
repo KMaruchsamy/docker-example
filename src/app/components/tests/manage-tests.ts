@@ -54,7 +54,7 @@ export class ManageTests implements OnInit {
 
     ngOnInit(): void {
         this.sStorage = this.common.getStorage();
-        this.sStorage.removeItem('testschedule');
+        this.testService.clearTestScheduleObjects();
         this.apiServer = this.common.getApiServer();
         this.testDate = moment(new Date()).subtract(3, 'month').format('L');
         this.adminId = this.auth.userid;

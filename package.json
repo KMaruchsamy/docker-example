@@ -30,7 +30,7 @@
         "robocopy": "^0.1.15",
         "serve-static": "~1.8.1",
         "yargs": "^3.15.0",
-        "gulp-typescript": "^2.9.2",
+        "gulp-typescript": "2.9.2",
         "jasmine": "2.3.2",
         "karma": "^0.12.23",
         "karma-chrome-launcher": "^0.1.4",
@@ -45,19 +45,19 @@
     "dependencies": {
         "angular2": "2.0.0-beta.0",
         "reflect-metadata": "0.1.2",
-        "jwt-decode": "~1.1.0",
+        "jwt-decode": "1.1.0",
         "systemjs": "0.19.6",
-        "whatwg-fetch": "~0.7.0",
-        "when": "~3.7.3",
-        "jquery": "^2.1.4",
+        "whatwg-fetch": "0.7.0",
+        "when": "3.7.3",
+        "jquery": "2.2.0",
         "lodash": "^3.10.1",
         "bootstrap": "^3.3.5",
         "moment": "2.3.1",
-        "es6-shim": "^0.33.12",
-        "crypto-js": "^3.1.5",
-        "es6-promise": "^3.0.2",
+        "es6-shim": "0.33.12",
+        "crypto-js": "3.1.5",
+        "es6-promise": "3.0.2",
         "rxjs": "5.0.0-beta.0",
         "zone.js": "0.5.10",
-        "bootstrap-select": "^1.9.3"
+        "bootstrap-select": "1.9.3"
     }
 }

@@ -731,6 +731,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                             let _alternateTests = _.find(alternateTests, { 'TestId': studentAlternate.TestId });
                             studentAlternate.TestName = _alternateTests.TestName;
                             studentAlternate.NormingStatus = _alternateTests.NormingStatusName;
+                            studentAlternate.Recommended = _alternateTests.Recommended;
                             if (!_.has(studentAlternate, 'Checked'))
                                 studentAlternate.Checked = false;
                         });

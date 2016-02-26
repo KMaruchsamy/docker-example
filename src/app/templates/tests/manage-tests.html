@@ -4,15 +4,16 @@
         <div class="container-medium-width">
             <h2 class="page-sm-heading-teal">Manage Tests</h2>
             <h3 class="page-lg-heading block">{{institutionName}}</h3>
+            <p><b>Please note:</b> All times listed are local based on your school’s time zone.</p>
             <a href="javascript:void(0)" (click)="redirectToRoute('choose-test')" class="button button-mobile-block center margin-1em-top-bottom">Schedule a test</a>
         </div>
 
-
         <div class="section-medium-thin section-clearfix">
-            <div class="section-thin section-light-pink">
+            <div class="section-thin" [class.section-light-pink]="!inProgressTests?.length==0">
                 <div class="container-medium-width">
                     <h4 class="section-heading-purple normal">Tests In Progress</h4>
-                    <table *ngIf="!inProgressTests?.length==0" class="table-fixed tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none" data-tablesaw-mode="stack">
+                    <table *ngIf="!inProgressTests?.length==0" class="table-fixed tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none"
+                    data-tablesaw-mode="stack">
                         <thead class="smaller">
                             <tr>
                                 <th class="date-time-col" scope="col">Date and Time</th>
@@ -26,11 +27,11 @@
                             <tr class="tablesaw-stacked-hidden-border" *ngFor="#inProgressTest of inProgressTests">
                                 <td>
                                     <template [ngIf]="!inProgressTest?.nextDay">
-                                        {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} from {{inProgressTest?.TestingWindowStart|parseDate:'h:mma'}}
+                                        {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} {{inProgressTest?.TestingWindowStart|parseDate:'h:mma'}}
                                         &ndash; {{inProgressTest?.TestingWindowEnd|parseDate:'h:mma'}}
                                     </template>
                                     <template [ngIf]="inProgressTest?.nextDay">
-                                        {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} from {{inProgressTest?.TestingWindowStart|parseDate:'h:mma'}}
+                                        {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} {{inProgressTest?.TestingWindowStart|parseDate:'h:mma'}}
                                         &ndash; {{inProgressTest?.TestingWindowEnd|parseDate:'h:mma'}} {{inProgressTest?.TestingWindowEnd|parseDate:'ddd'}}
                                         {{inProgressTest?.TestingWindowEnd|parseDate:'MM/DD/YY'}}
                                     </template>
@@ -47,7 +48,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p *ngIf="inProgressTests?.length==0">There are no tests in progress.</p>
+                    <p *ngIf="inProgressTests?.length==0">There are no tests in progress at this time.</p>
                 </div>
             </div>
         </div>
@@ -55,8 +56,7 @@
         <div class="section-medium-thin">
             <div class="container-medium-width">
                 <h4 class="section-heading-teal normal">Scheduled Tests</h4>
-                <table *ngIf="!scheduleTests?.length==0" class="table-fixed tablesaw tablesaw-stack"  data-tablesaw-mode="stack"
-                id="tblScheduledTests">
+                <table *ngIf="!scheduleTests?.length==0" class="table-fixed tablesaw tablesaw-stack" data-tablesaw-mode="stack" id="tblScheduledTests">
                     <thead class="smaller">
                         <tr>
                             <th id="dateTH" class="date-time-col" scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col>Date and Time</th>
@@ -65,22 +65,23 @@
                             <th id="adminTH" scope="col" data-tablesaw-sortable-col>Scheduled by</th>
                             <th scope="col"></th>
                         </tr>
-                    </thead>                                        
+                    </thead>
                     <tbody>
                         <tr class="tablesaw-stacked-hidden-border" *ngFor="#scheduleTest of scheduleTests">
                             <td [attr.starttime]="scheduleTest?.TestingWindowStart">
                                 <template [ngIf]="!scheduleTest?.nextDay">
-                                    {{scheduleTest?.TestingWindowStart|parseDate:'ddd'}} {{scheduleTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} from {{scheduleTest?.TestingWindowStart|parseDate:'h:mma'}}
+                                    {{scheduleTest?.TestingWindowStart|parseDate:'ddd'}} {{scheduleTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} {{scheduleTest?.TestingWindowStart|parseDate:'h:mma'}}
                                     &ndash; {{scheduleTest?.TestingWindowEnd|parseDate:'h:mma'}}
                                 </template>
                                 <template [ngIf]="scheduleTest?.nextDay">
-                                    {{scheduleTest?.TestingWindowStart|parseDate:'ddd'}} {{scheduleTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} from {{scheduleTest?.TestingWindowStart|parseDate:'h:mma'}}
+                                    {{scheduleTest?.TestingWindowStart|parseDate:'ddd'}} {{scheduleTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} {{scheduleTest?.TestingWindowStart|parseDate:'h:mma'}}
                                     &ndash; {{scheduleTest?.TestingWindowEnd|parseDate:'h:mma'}} {{scheduleTest?.TestingWindowEnd|parseDate:'ddd'}}
                                     {{scheduleTest?.TestingWindowEnd|parseDate:'MM/DD/YY'}}
                                 </template>
                             </td>
                             <td class="tablesaw-stacked-hidden">
-                                <button [attr.sessionId]="scheduleTest?.TestingSessionId" class="js-rename-session unstyled-button">{{scheduleTest.SessionName}}<img src="/images/edit-pencil-icon_2x.png" alt="edit">
+                                <button [attr.sessionId]="scheduleTest?.TestingSessionId" class="js-rename-session unstyled-button">{{scheduleTest.SessionName}}<img *ngIf="adminId==scheduleTest?.AdminId || adminId==scheduleTest?.FacultyMemberId"
+                                    src="/images/edit-pencil-icon_2x.png" alt="edit">
                                 </button>
                             </td>
                             <td class="tablesaw-stacked-hidden">{{scheduleTest.FacultyFirstName}} {{scheduleTest.FacultyLastName}}</td>
@@ -95,7 +96,14 @@
                         </tr>
                     </tbody>
                 </table>
-                <p *ngIf="scheduleTests?.length==0">There are no tests scheduled.</p>
+                <p *ngIf="scheduleTests?.length==0">There are no tests scheduled at this time.</p>
+                <div *ngIf="scheduleTests?.length==0" class="section-medium-thin section-beige container">
+                    <p class="no-margin-bottom"><b>Please note:</b> All upcoming tests scheduled through our new process will appear here. There may
+                        still be upcoming tests for your school that have been scheduled through our old process. Please
+                        contact your Account Manager if you have any questions. You can find your Account Manager’s contact
+                        details on the <a [routerLink]="['/Home']">Home page</a>.
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -103,8 +111,7 @@
         <div class="section-medium-thin">
             <div class="container-medium-width">
                 <h4 class="section-heading-teal normal">Completed Tests</h4>
-                <table *ngIf="!completedTests?.length==0" class="table-fixed tablesaw tablesaw-stack" data-tablesaw-mode="stack"
-                id="tblCompletedTests">
+                <table *ngIf="!completedTests?.length==0" class="table-fixed tablesaw tablesaw-stack" data-tablesaw-mode="stack" id="tblCompletedTests">
                     <thead class="smaller">
                         <tr>
                             <th id="dateTH" class="date-time-col" scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col>Date and Time</th>
@@ -118,11 +125,11 @@
                         <tr class="tablesaw-stacked-hidden-border" *ngFor="#completedTest of completedTests">
                             <td [attr.starttime]="completedTest?.TestingWindowStart">
                                 <template [ngIf]="!completedTest?.nextDay">
-                                    {{completedTest?.TestingWindowStart|parseDate:'ddd'}} {{completedTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} from {{completedTest?.TestingWindowStart|parseDate:'h:mma'}}
+                                    {{completedTest?.TestingWindowStart|parseDate:'ddd'}} {{completedTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} {{completedTest?.TestingWindowStart|parseDate:'h:mma'}}
                                     &ndash; {{completedTest?.TestingWindowEnd|parseDate:'h:mma'}}
                                 </template>
                                 <template [ngIf]="completedTest?.nextDay">
-                                    {{completedTest?.TestingWindowStart|parseDate:'ddd'}} {{completedTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} from {{completedTest?.TestingWindowStart|parseDate:'h:mma'}}
+                                    {{completedTest?.TestingWindowStart|parseDate:'ddd'}} {{completedTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} {{completedTest?.TestingWindowStart|parseDate:'h:mma'}}
                                     &ndash; {{completedTest?.TestingWindowEnd|parseDate:'h:mma'}} {{completedTest?.TestingWindowEnd|parseDate:'ddd'}}
                                     {{completedTest?.TestingWindowEnd|parseDate:'MM/DD/YY'}}
                                 </template>
@@ -137,12 +144,20 @@
                     </tbody>
                 </table>
                 <p *ngIf="completedTests?.length==0">There are no completed tests.</p>
+                <div *ngIf="completedTests?.length==0" class="section-medium-thin section-beige container">
+                    <p class="no-margin-bottom"><b>Please note:</b> All tests scheduled through our new process will appear here as soon as they are
+                        completed. They will be listed for up to three months after their end date. Information on tests
+                        scheduled through our old process will not appear here. Please contact your Account Manager if you
+                        have any questions. You can find your Account Manager’s contact details on the <a [routerLink]="['/Home']">Home page</a>.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 </main>
 <page-footer></page-footer>
 
-<confirmation-popup [message]="'Are you sure you want to delete this testing session? This cannot be undone.'" [okButtonText]="'Yes, delete'"
-[cancelButtonText]="'Cancel'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation()" [hideClose]="false">
+<confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to delete this testing session? This cannot be undone.'"
+[okButtonText]="'Yes, delete'" [cancelButtonText]="'Cancel'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation()"
+[hideClose]="false">
 </confirmation-popup>
