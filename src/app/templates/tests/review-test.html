@@ -73,7 +73,7 @@
         </div>
         <h4 class="teal" id="studentsInTestingSessionConfirmation">Students in Testing Session ({{unmarkedStudentsCount()}})</h4>
         <a [routerLink]="modify ? ['/ModifyAddStudents',{action:'modify'}] : ['/AddStudents']">Change</a>
-        <button class="right anchor-button" *ngIf="(retesterExceptions?.length>0 && hasAlternateTests) || (retesterExceptions?.length>0 && hasSavedRetesterExceptions)" (click)="changeAlternateAssignments($event)">Change alternate test assignments</button>
+        <button class="right anchor-button" *ngIf="(retesterExceptions?.length>0 && hasAlternateTests) || (retesterExceptions?.length>0 && hasSavedRetesterExceptions) || (modify && retesterExceptionsModify?.length>0)" (click)="changeAlternateAssignments($event)">Change alternate test assignments</button>
 
         <table id="studentsInTestingSessionTable" class="dataTable-bordered table-with-cell-padding table-striped last-row-no-border">
             <thead>
@@ -103,9 +103,9 @@
 
     <div class="container-medium-width section-thin">
         <div class="info-icon-yellow-container-flush-text clearfix">
-            <p class="icon info-icon-yellow">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
+            <p class="icon info-icon-yellow" *ngIf="hasADA">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
             <!--<a href="confirmation.html" id="chooseDate" class="button right margin-2em-top button-mobile-block" aria-disabled="true" disabled>Confirm info and schedule test</a>-->
-            <button type="submit" (click)="scheduleTest();" id="btnScheduleTest" class="button right margin-2em-top button-mobile-block"
+            <button type="submit" (click)="scheduleTest($event);" id="btnScheduleTest" class="button right margin-2em-top button-mobile-block"
             [disabled]="!valid">
                 Confirm info and schedule test
             </button>
@@ -125,3 +125,11 @@
 [hideClose]="true">
 </confirmation-popup>
 <loader [loaderMessage]="'Scheduling your testing session…'" [greetingMessage]="'Thank you for your patience!'"></loader>
+
+<alert-popup 
+    [popupId]="'alertPopup'"
+    [message]="'We’re sorry! You can no longer make changes to this testing session because it has already started or has passed. Click “OK” to go back to the Manage Tests main page.'" 
+    [okButtonText] = "'OK'"     
+    (onOK)="onOKAlert()"    
+    [hideClose]="false">
+</alert-popup>

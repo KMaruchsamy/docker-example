@@ -33,6 +33,14 @@ import '../../lib/tablesaw.js';
     host: {
         '(window:resize)': 'resize($event)'
     },
+    styles: [
+        `#dateTH,
+        #sessionTH,
+        #facultyTH,
+        #adminTH:hover {
+    cursor:pointer;
+}`
+    ],
     directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup, RouterLink],
     pipes: [RemoveWhitespacePipe, RoundPipe, ParseDatePipe]
 })
@@ -100,12 +108,12 @@ export class ManageTests implements OnInit {
                         _test.nextDay = moment(_test.TestingWindowStart).isBefore(_test.TestingWindowEnd, 'day');
                         return moment(_test.TestingWindowStart).toDate()
                     });
-                    
+
                     setTimeout((json) => {
                         $(document).trigger("enhance.tablesaw");
                         // $('#tblScheduledTests').table().data("table").refresh();
                         //$('#tblScheduledTests').table().data("table").init()
-                         $('.js-rename-session').editable("destroy");
+                        $('.js-rename-session').editable("destroy");
                         __this.configureEditor(__this);
                         // __this.bindSort('#tblScheduledTests');
                         // __this.bindSort('#tblCompletedTests'); 
@@ -192,7 +200,7 @@ export class ManageTests implements OnInit {
                         }
                         // $(e.currentTarget).html(_newName).append('<img src="images/edit-pencil-icon_2x.png" alt="edit">');
                        
-                        __this.bindTests();
+                        //__this.bindTests();
 
                     }
 
@@ -289,12 +297,12 @@ export class ManageTests implements OnInit {
 
     addColumnStyle($table) {
         $table.find('tbody td:nth-child(1)').addClass('column-striped');
-        $table.find('thead th button').click(function() {
-            $table.find('thead th button').removeClass('sorted');
-            $(this).focus().addClass('sorted');
+        $table.find('thead th').click(function() {
+            // $table.find('thead th button').removeClass('sorted');
+            //$(this).focus().addClass('sorted');
 
             var tableId = $table.attr('id');
-            var index = $(this).index('table#' + tableId + ' thead th button') + 1;
+            var index = $(this).index('table#' + tableId + ' thead th') + 1;
             $table.find('tbody td').removeClass('column-striped');
             $table.find('tbody td:nth-child(' + index + ')').addClass('column-striped');
         });
@@ -449,7 +457,31 @@ export class ManageTests implements OnInit {
         //                 }
         //             };
         //         });
+        
+        
+        
+    
 
 
+    }
+
+    sort(tablename: string, columnname: string): void {
+        if (tablename === '#tblScheduledTests')
+            this.scheduleTests = this.testService.sortTests(this.scheduleTests, tablename, columnname);
+        else if (tablename === '#tblCompletedTests')
+            this.completedTests = this.testService.sortTests(this.completedTests, tablename, columnname);
+
+        let __this = this;
+        // setTimeout((json) => {
+        //     $(document).trigger("enhance.tablesaw");
+        //     // $('#tblScheduledTests').table().data("table").refresh();
+        //     //$('#tblScheduledTests').table().data("table").init()
+        //     $('.js-rename-session').editable("destroy");
+        //     __this.configureEditor(__this);
+        //     // __this.bindSort('#tblScheduledTests');
+        //     // __this.bindSort('#tblCompletedTests'); 
+        //     // __this.addColumnStyle($('table#tblCompletedTests'));
+        //     // __this.addColumnStyle($('table#tblScheduledTests'));
+        // })
     }
 }

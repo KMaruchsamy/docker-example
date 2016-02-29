@@ -5,7 +5,7 @@
         "server": "http://localhost/"
       },
       "dev": {
-        "server": "http://dev.nursing.ktp.io/"
+        "server": "https://dev.nursing.ktp.io/"
       },
       "qa": {
         "server" : "https://nursingqa-test.kaplan.com/"
@@ -27,7 +27,7 @@
         "server": "http://localhost/"
       },
       "dev": {
-        "server": "http://nursing.dev.kaplan.com/"
+        "server": "https://nursing.dev.kaplan.com/"
       },
       "qa": {
         "server": "https://nursingqa.kaplan.com/"
