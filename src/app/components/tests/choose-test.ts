@@ -229,6 +229,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         this.testScheduleModel.testId = testId;
         this.testScheduleModel.testName = testName;
         this.testScheduleModel.testNormingStatus = normingStatusName;
+        this.sStorage.removeItem('retesters');
     }
 
     onCancelConfirmation(e: any): void {

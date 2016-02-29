@@ -291,6 +291,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     SearchFilterOptions(__this: any): void {
         $('#cohortStudentList .dataTables_filter :input').addClass('small-search-box');
+        __this.filterTableSearch();
         var checkboxfilters = '<div class="form-group hidden-small-down"><input type="checkbox" class="small-checkbox-image" id="cohortRepeatersOnly" name="filterADA" value="repeatersOnly">' +
             '<label class="smaller" for="cohortRepeatersOnly">Retesting only</label>' +
             '<input type="checkbox" class="small-checkbox-image"  id="cohortExcludeRepeaters" name="filterADA" value="excludeRepeaters">' +
@@ -423,13 +424,15 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     CheckForAllStudentSelected(): void {
-        var rows = $("#cohortStudents button");
+        var rows = $("#cohortStudents tbody tr button");
         if (rows.length > 0) {
-            $('#cohortStudents button').each(function (index, el) {
+            $('#cohortStudents tbody tr button').each(function (index, el) {
                 let buttonId = $(el).attr('id');
                 if (!$('#' + buttonId).prop('disabled')) {
                     $('#addAllStudents').removeAttr('disabled', 'disabled');
                 }
+                else
+                    $('#addAllStudents').attr('disabled', 'disabled');
             });
         }
         else
@@ -571,6 +574,29 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             $('#studentScheduleNote').addClass('hidden');
             $('#reviewDetails').attr('disabled', 'true');
         }
+    }
+    filterTableSearch(): void {
+        debugger;
+        let __this = this;
+        $('#cohortStudentList :input').on('keyup', function () {
+            var that = this;
+            var _count = 0;
+            $('#cohortStudents tbody tr').each(function (index, el) {
+                var firstName = $(el).find('td:eq(1)').text().toUpperCase();
+                var lastName = $(el).find('td:eq(0)').text().toUpperCase();
+                var searchString = $(that).val().toUpperCase();
+                if (!(_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)))
+                    $(this).hide();
+                else {
+                    $(this).show();
+                    _count = _count + 1;
+                }
+            });
+            if (_count) 
+                __this.CheckForAllStudentSelected();            
+            else
+                $('#addAllStudents').attr('disabled', 'disabled');
+        });
     }
 
     filterSelectedStudents(): void {
@@ -859,10 +885,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         $('#modalAlternateTest').modal('hide');
                         this.testScheduleModel = JSON.parse(this.sStorage.getItem('testschedule'));
                         this.retesterExceptions = retesters;
-                        this.sStorage.setItem('retesters', JSON.stringify(retesters));
-                        this.RemoveDeletedStudentFromSession();
+                        this.DeleteRemovedStudentFromSession(retesters);
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;                        
-                       // let studentCountInSession = this.markedStudentsCount();
                         if (this.studentCountInSession())
                             this.router.navigateByUrl('/tests/review');
                         else
@@ -876,20 +900,23 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
             });
     }
-    RemoveDeletedStudentFromSession(): void {
-        let retesters = JSON.parse(this.sStorage.getItem('retesters'));
-        if (retesters != null) {
-            if (retesters.length >0) {
-                let _repeterExceptions: Object[] = [];
-                for (let i = 0; i < retesters.length; i++) {
-                    let _retesters = retesters[i];
-                    if (typeof (!_retesters.MarkedToRemove)) {
-                        _repeterExceptions.push(_retesters);
+    DeleteRemovedStudentFromSession(_retesters: any): void {
+        if (_retesters.length > 0) {
+            let _selectedStudent = this.testScheduleModel.selectedStudents;
+            if (_selectedStudent.length > 0) {
+                for (let i = 0; i < _selectedStudent.length; i++) {
+                    let student = _selectedStudent[i];
+                    if (student.MarkedToRemove && typeof (student.MarkedToRemove) !== 'undefined') {
+                        $.each(_retesters, function (index, el) {
+                            if (el.StudentId === student.StudentId) {
+                                _retesters.splice(index, 1);
+                            }
+                        });
                     }
                 }
-                this.sStorage.setItem('retesters', JSON.stringify(retesters));
             }
         }
+        this.sStorage.setItem('retesters', JSON.stringify(_retesters));
     }
 
     CheckForRetesters(_studentRepeaterExceptions: any): Object[] {
