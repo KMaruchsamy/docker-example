@@ -26,9 +26,26 @@ export class Reports {
     hdpage: any;
     apiServer: string;
     nursingITServer: string;
+    institutionName: string;
     constructor(public auth: Auth, public router: Router, public common: Common) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
+    }
+    
+      ngOnInit(): void {
+        if (!this.auth.isAuth())
+            this.router.navigateByUrl('/');
+        else
+            this.institutionName = this.getLatestInstitution();
+    }
+
+    getLatestInstitution(): string {
+        if (this.auth.institutions != null && this.auth.institutions != 'undefined') {
+            let latestInstitution = _.first(_.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
+            if (latestInstitution)
+                return latestInstitution.InstitutionName;
+        }
+        return '';
     }
 
     prepareRedirectToReports(page, form, hdToken, hdpage): boolean {

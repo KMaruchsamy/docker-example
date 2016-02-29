@@ -59,10 +59,10 @@
                 <table *ngIf="!scheduleTests?.length==0" class="table-fixed tablesaw tablesaw-stack" data-tablesaw-mode="stack" id="tblScheduledTests">
                     <thead class="smaller">
                         <tr>
-                            <th id="dateTH" class="date-time-col" scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col>Date and Time</th>
-                            <th id="sessionTH" class="testing-session-col" scope="col" data-tablesaw-sortable-col>Testing Session</th>
-                            <th id="facultyTH" scope="col" data-tablesaw-sortable-col>Faculty Name</th>
-                            <th id="adminTH" scope="col" data-tablesaw-sortable-col>Scheduled by</th>
+                            <th (click)="sort('#tblScheduledTests','#dateTH')"  order="1" id="dateTH" class="date-time-col" scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col>Date and Time</th>
+                            <th (click)="sort('#tblScheduledTests','#sessionTH')"  order="1" id="sessionTH" class="testing-session-col" scope="col" data-tablesaw-sortable-col>Testing Session</th>
+                            <th (click)="sort('#tblScheduledTests','#facultyTH')"  order="1" id="facultyTH" scope="col" data-tablesaw-sortable-col>Faculty Name</th>
+                            <th (click)="sort('#tblScheduledTests','#adminTH')"  order="1" id="adminTH" scope="col" data-tablesaw-sortable-col>Scheduled by</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -114,10 +114,10 @@
                 <table *ngIf="!completedTests?.length==0" class="table-fixed tablesaw tablesaw-stack" data-tablesaw-mode="stack" id="tblCompletedTests">
                     <thead class="smaller">
                         <tr>
-                            <th id="dateTH" class="date-time-col" scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col>Date and Time</th>
-                            <th id="sessionTH" class="testing-session-col" scope="col" data-tablesaw-sortable-col>Testing Session</th>
-                            <th id="facultyTH" scope="col" data-tablesaw-sortable-col>Faculty Name</th>
-                            <th id="adminTH" scope="col" data-tablesaw-sortable-col>Scheduled by</th>
+                            <th (click)="sort('#tblCompletedTests','#dateTH')" order="1" id="dateTH" class="date-time-col" scope="col" data-tablesaw-sortable-col data-tablesaw-sortable-default-col>Date and Time</th>
+                            <th (click)="sort('#tblCompletedTests','#sessionTH')" order="1" id="sessionTH" class="testing-session-col" scope="col" data-tablesaw-sortable-col>Testing Session</th>
+                            <th (click)="sort('#tblCompletedTests','#facultyTH')" order="1" id="facultyTH" scope="col" data-tablesaw-sortable-col>Faculty Name</th>
+                            <th (click)="sort('#tblCompletedTests','#adminTH')" order="1" id="adminTH" scope="col" data-tablesaw-sortable-col>Scheduled by</th>
                             <th></th>
                         </tr>
                     </thead>
