@@ -859,10 +859,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         $('#modalAlternateTest').modal('hide');
                         this.testScheduleModel = JSON.parse(this.sStorage.getItem('testschedule'));
                         this.retesterExceptions = retesters;
-                        this.sStorage.setItem('retesters', JSON.stringify(retesters));
-                        this.RemoveDeletedStudentFromSession();
+                        this.DeleteRemovedStudentFromSession(retesters);
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;                        
-                       // let studentCountInSession = this.markedStudentsCount();
                         if (this.studentCountInSession())
                             this.router.navigateByUrl('/tests/review');
                         else
@@ -876,20 +874,24 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
             });
     }
-    RemoveDeletedStudentFromSession(): void {
-        let retesters = JSON.parse(this.sStorage.getItem('retesters'));
-        if (retesters != null) {
-            if (retesters.length >0) {
-                let _repeterExceptions: Object[] = [];
-                for (let i = 0; i < retesters.length; i++) {
-                    let _retesters = retesters[i];
-                    if (typeof (!_retesters.MarkedToRemove)) {
-                        _repeterExceptions.push(_retesters);
+    DeleteRemovedStudentFromSession(_retesters: any): void {
+        debugger;
+        if (_retesters.length > 0) {
+            let _selectedStudent = this.testScheduleModel.selectedStudents;
+            if (_selectedStudent.length > 0) {
+                for (let i = 0; i < _selectedStudent.length; i++) {
+                    let student = _selectedStudent[i];
+                    if (student.MarkedToRemove && typeof (student.MarkedToRemove) !== 'undefined') {
+                        $.each(_retesters, function (index, el) {
+                            if (el.StudentId === student.StudentId) {
+                                _retesters.splice(index, 1);
+                            }
+                        });
                     }
                 }
-                this.sStorage.setItem('retesters', JSON.stringify(retesters));
             }
         }
+        this.sStorage.setItem('retesters', JSON.stringify(_retesters));
     }
 
     CheckForRetesters(_studentRepeaterExceptions: any): Object[] {

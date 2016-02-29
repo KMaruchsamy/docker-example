@@ -591,12 +591,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         else
             this.loadRetesterAlternatePopup(this.retesterExceptions);
     }
-    ChangeTest(e: any): void {
-        e.preventDefault();
-        this.sStorage.removeItem('retesters');
-    }
-
-
+   
     loadAlternateAssignmentsModify(): void {
         let __this = this;
 
