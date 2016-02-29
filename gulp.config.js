@@ -41,10 +41,13 @@ module.exports = function () {
                 'node_modules/moment/min/moment.min.js',
                 'node_modules/bootstrap/js/modal.js',
                 'node_modules/bootstrap/js/tooltip.js',
-                  'node_modules/bootstrap/js/popover.js',
+                'node_modules/bootstrap/js/popover.js',
                 'src/app/plugins/bootstrap-editable.min.js',
                 'src/app/plugins/tablesaw.js',
-                'src/app/plugins/tablesaw-init.js'
+                'src/app/plugins/tablesaw-init.js',
+                'src/app/plugins/moment-2.11.js',
+                'src/app/plugins/moment-timezone.min.js',
+                'src/app/plugins/moment-timezone-gmtdata.js'
                 // 'src/app/plugins/bootstrap-datepicker.min.js',
                 // 'src/app/plugins/jquery.timepicker.js',
                 // 'src/app/plugins/date.js'

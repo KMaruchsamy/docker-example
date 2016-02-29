@@ -31,6 +31,7 @@ export class ViewTest implements OnInit, OnDeactivate {
     sStorage: any;
     nextDay: boolean = false;
     modify: boolean = false;
+    hasADA: boolean = false;
     constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams) {
 
     }
@@ -75,6 +76,7 @@ export class ViewTest implements OnInit, OnDeactivate {
 
         }
         this.schedule = _schedule;
+        this.hasADA = _.some(this.schedule.selectedStudents, { 'Ada': true });
         console.log('>>>>>>>>>>>>>>>>>>');
         console.log(JSON.stringify(this.schedule));
 

@@ -16,6 +16,7 @@ import {RetesterAlternatePopup} from './retesters-alternate-popup';
 import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
+import {AlertPopup} from '../shared/alert.popup';
 import {Loader} from '../shared/loader';
 import '../../plugins/dropdown.js';
 import '../../plugins/bootstrap-select.min.js';
@@ -27,7 +28,7 @@ import '../../lib/modal.js';
     selector: "review-test",
     templateUrl: "../../templates/tests/review-test.html",
     providers: [TestService, Auth, TestScheduleModel, Common],
-    directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, RouterLink, RetesterAlternatePopup, RetesterNoAlternatePopup, ConfirmationPopup, TimeExceptionPopup, Loader],
+    directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, RouterLink, RetesterAlternatePopup, RetesterNoAlternatePopup, ConfirmationPopup, TimeExceptionPopup, Loader, AlertPopup],
     pipes: [ParseDatePipe]
 })
 
@@ -52,6 +53,8 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     nextDay: boolean = false;
     modify: boolean = false;
     hasSavedRetesterExceptions: boolean = true;
+    hasADA: boolean = false;
+    retesterExceptionsModify: any;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public common: Common,
         public router: Router, public dynamicComponentLoader: DynamicComponentLoader,
@@ -89,6 +92,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         if (this.studentsTable)
             this.studentsTable.destroy();
         $('#ddlFaculty').val('').selectpicker('refresh');
+        this.testService.removeRestestersExceptionForModify();
     }
 
     ngOnInit() {
@@ -121,6 +125,20 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
             this.testScheduleModel = this.testService.sortSchedule(savedSchedule);
             console.log(this.testScheduleModel);
+
+            if (this.modify) {
+                let retestersExceptionsModify = this.testService.getAlternateExceptionsModify();
+                if (retestersExceptionsModify != undefined && retestersExceptionsModify.length > 0) {
+                    this.retesterExceptionsModify = retestersExceptionsModify;
+                    this.checkAndResolveNewExceptionsOnModify(this);
+                }
+                else
+                    this.loadAlternateAssignmentsModify();
+
+            }
+
+            this.resolveADA();
+
             if (this.studentsTable)
                 this.studentsTable.destroy();
             setTimeout(() => {
@@ -237,8 +255,12 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         return url.replace('§scheduleId', (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0).toString());
     }
 
-    scheduleTest(): void {
-        debugger;
+    scheduleTest(e): void {
+
+        e.preventDefault();
+        if (!this.validateDates())
+            return;
+
         let loaderTimer = setTimeout(function() {
             $('#loader').modal('show');
         }, 1000);
@@ -280,7 +302,6 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
             return response.json();
         })
             .then((json) => {
-                debugger;
                 __this.valid = true;
                 clearTimeout(loaderTimer);
                 $('#loader').modal('hide');
@@ -315,7 +336,6 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
 
     resolveExceptions(objException: any, __this: any): boolean {
-        debugger;
         let repeaterExceptions: any;
 
         if (objException.repeaterExceptions)
@@ -353,7 +373,6 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                 this.loadWindowExceptions(this.windowExceptions);
             else if (studentRepeaterExceptions.length > 0) {
                 _.forEach(studentRepeaterExceptions, function(student, key) {
-                    debugger;
                     let studentId = student.StudentId;
                     student.TestName = __this.testScheduleModel.testName;
                     student.NormingStatus = __this.testScheduleModel.testNormingStatus;
@@ -425,12 +444,13 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                         $('#modalNoAlternateTest').modal('hide');
                         this.sStorage.setItem('testschedule', JSON.stringify(testSchedule));
                         this.testScheduleModel = this.testService.sortSchedule(testSchedule);
+                        this.resolveADA();
                         this.validate();
                         //this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
 
-                        if (this.windowExceptions && this.windowExceptions.length > 0) {
-                            this.loadWindowExceptions(this.windowExceptions);
-                        }
+                        // if (this.windowExceptions && this.windowExceptions.length > 0) {
+                        //     this.loadWindowExceptions(this.windowExceptions);
+                        // }
                         this.rebindTable();
                     }
                 });
@@ -439,6 +459,10 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                 });
 
             });
+    }
+
+    resolveADA(): void {
+        this.hasADA = _.some(this.testScheduleModel.selectedStudents, { 'Ada': true });
     }
 
     loadWindowExceptions(_windowExceptions: any): void {
@@ -520,17 +544,26 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                     if (retesters) {
                         $('#modalAlternateTest').modal('hide');
                         this.testScheduleModel = this.testService.sortSchedule(this.testService.getTestSchedule());
-                        this.sStorage.setItem('retesters', JSON.stringify(retesters));
-                        this.retesterExceptions = retesters;
+                        this.resolveADA();
+                        if (this.modify) {
+                            this.sStorage.setItem('retestersModify', JSON.stringify(retesters));
+                            this.retesterExceptionsModify = retesters;
+                            this.updateRemovedStudentsToRetesters(this);
+                        }
+                        else {
+                            this.sStorage.setItem('retesters', JSON.stringify(retesters));
+                            this.retesterExceptions = retesters;
+                        }
+
                         this.validate();
                         //this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
                         console.log('ALTERNATE');
                         console.log(JSON.stringify(this.testScheduleModel));
                         console.log(JSON.stringify(this.retesterExceptions));
 
-                        if (this.windowExceptions && this.windowExceptions.length > 0) {
-                            this.loadWindowExceptions(this.windowExceptions);
-                        }
+                        // if (this.windowExceptions && this.windowExceptions.length > 0) {
+                        //     this.loadWindowExceptions(this.windowExceptions);
+                        // }
                         this.rebindTable();
                     }
                 });
@@ -553,36 +586,10 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
     changeAlternateAssignments(e: any): void {
         e.preventDefault();
-        debugger;
-        if (this.modify) {
-            let retesterExceptionsURL: string = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.retesters}`
-
-            let studentIds: number[];
-            studentIds = _.pluck(this.removeMarked(this.testScheduleModel.selectedStudents), 'StudentId');
-            let input = {
-                SessionTestId: this.testScheduleModel.scheduleId,
-                StudentIds: [
-                    studentIds.join('')
-                ],
-                TestingSessionWindowStart: this.testScheduleModel.scheduleStartTime,
-                TestingSessionWindowEnd: this.testScheduleModel.scheduleEndTime
-            };
-            let retesterExceptionsPromise: any = this.testService.getRetesters(retesterExceptionsURL, JSON.stringify(input));
-
-            retesterExceptionsPromise.then((response) => {
-                return response.json();
-            })
-                .then((json) => {
-                    console.log(JSON.stringify(json));
-
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-
-        }
+        if (this.modify)
+            this.loadRetesterAlternatePopup(this.retesterExceptionsModify);
         else
-        this.loadRetesterAlternatePopup(this.retesterExceptions);
+            this.loadRetesterAlternatePopup(this.retesterExceptions);
     }
     ChangeTest(e: any): void {
         e.preventDefault();
@@ -590,5 +597,176 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     }
 
 
+    loadAlternateAssignmentsModify(): void {
+        let __this = this;
+
+        let retesterExceptionsURL: string = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.retesters}?institutionId=${this.testScheduleModel.institutionId}&testingSessionId=${this.testScheduleModel.scheduleId}`;
+
+        let studentIds: number[];
+        // studentIds = _.pluck(this.removeMarked(_schedule.selectedStudents), 'StudentId');
+        studentIds = _.chain(__this.testScheduleModel.selectedStudents)
+            .map(c => c.StudentId)
+            .value();
+        let input = {
+            SessionTestId: __this.testScheduleModel.testId,
+            StudentIds: studentIds,
+            TestingSessionWindowStart: __this.testScheduleModel.scheduleStartTime,
+            TestingSessionWindowEnd: __this.testScheduleModel.scheduleEndTime
+        };
+        let retesterExceptionsPromise: any = this.testService.getRetesters(retesterExceptionsURL, JSON.stringify(input));
+
+        retesterExceptionsPromise.then((response) => {
+            return response.json();
+        })
+            .then((json) => {
+                console.log(JSON.stringify(json));
+                __this.resolveAlternateExceptionsForModify(json, __this);
+                __this.checkAndResolveNewExceptionsOnModify(__this);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    }
+
+    resolveAlternateExceptionsForModify(objException: any, __this: any): any {
+        let repeaterExceptions: any;
+
+        if (!objException)
+            return false;
+
+
+
+        if (objException) {
+
+            let studentRepeaterExceptions: Object[] = [];
+            let alternateTests: Object[] = [];
+            let studentAlternateTests: Object[] = [];
+
+
+            if (objException.StudentRepeaterExceptions && objException.StudentRepeaterExceptions.length > 0) {
+                studentRepeaterExceptions = objException.StudentRepeaterExceptions;
+            }
+            if (objException.StudentAlternateTestInfo && objException.StudentAlternateTestInfo.length > 0) {
+                studentAlternateTests = objException.StudentAlternateTestInfo;
+            }
+            if (objException.AlternateTestInfo && objException.AlternateTestInfo.length > 0) {
+                alternateTests = objException.AlternateTestInfo;
+            }
+
+            if (studentAlternateTests.length === 0 && studentRepeaterExceptions.length === 0 && alternateTests.length === 0)
+                return true;
+
+
+            if (alternateTests.length > 0)
+                __this.hasAlternateTests = true;
+            else
+                return true;
+
+
+            if (studentRepeaterExceptions.length > 0) {
+                _.forEach(studentRepeaterExceptions, function(student, key) {
+                    let studentId = student.StudentId;
+                    student.TestName = __this.testScheduleModel.testName;
+                    student.NormingStatus = __this.testScheduleModel.testNormingStatus;
+                    if (__this.hasAlternateTests) {
+                        student.AlternateTests = _.filter(studentAlternateTests, { 'StudentId': student.StudentId });
+                        student.Enabled = _.some(student.AlternateTests, { 'ErrorCode': 0 });
+                        student.Checked = !student.Enabled;
+                        student.Modify = true;
+                        // if (!student.Enabled)
+                        //     __this.markForRemoval(student.StudentId, true);
+                        _.forEach(student.AlternateTests, function(studentAlternate, key) {
+                            let _alternateTests = _.find(alternateTests, { 'TestId': studentAlternate.TestId });
+                            studentAlternate.TestName = _alternateTests.TestName;
+                            studentAlternate.NormingStatus = _alternateTests.NormingStatusName;
+                            studentAlternate.Recommended = _alternateTests.Recommended;
+                            // if (!_.has(studentAlternate, 'Checked'))
+                            studentAlternate.Checked = _.some(__this.testScheduleModel.selectedStudents, {
+                                'StudentId': student.StudentId,
+                                'StudentTestId': studentAlternate.TestId,
+                                'MarkedToRemove': false
+                            });
+                            if (studentAlternate.Checked)
+                                student.Checked = true;
+                        });
+                    }
+                });
+            }
+
+            this.retesterExceptionsModify = studentRepeaterExceptions; 
+         
+        }
+        return false;
+    }
+
+
+    updateRemovedStudentsToRetesters(__this:any): void {
+        if (__this.retesterExceptions && __this.retesterExceptions.length > 0 && __this.retesterExceptionsModify && __this.retesterExceptionsModify.length > 0) {
+            let removedRetesters = _.filter(__this.retesterExceptionsModify, { 'Enabled': false });
+            _.forEach(removedRetesters, function(student, key) {
+                let toDisableRetester = _.find(__this.retesterExceptions, { 'StudentId': student.StudentId });
+                if (toDisableRetester) {
+                    toDisableRetester.Enabled = false;
+                }
+            });
+            
+            __this.sStorage.setItem('retesters', JSON.stringify(__this.retesterExceptions));
+        }
+    }
+
+
+    checkAndResolveNewExceptionsOnModify(__this: any): void {
+        if (this.retesterExceptions && this.retesterExceptions.length > 0) {
+            _.forEach(this.retesterExceptions, function(student, key) {
+                let retesterModifyStudent = _.find(this.retesterExceptionsModify, { 'StudentId': student.StudentId });
+                if (retesterModifyStudent) {
+                    retesterModifyStudent.Enabled = student.Enabled;
+                    retesterModifyStudent.Checked = retesterModifyStudent.Enabled;
+                    _.forEach(student.AlternateTests, function(newAlternate, key) {
+                        let modifyAlternateTest = _.find(retesterModifyStudent.AlternateTests, { 'TestId': newAlternate.TestId });
+                        if (modifyAlternateTest) {
+                            modifyAlternateTest.Checked = newAlternate.Checked;
+                            if (newAlternate.Checked)
+                                retesterModifyStudent.Ckecked = true;
+                        }
+                        else {
+                            retesterModifyStudent.AlternateTests.push(newAlternate);
+                        }
+                    });
+                }
+                else {
+                    this.retesterExceptionsModify.push(student);
+                }
+            });
+        }
+    }
+
+
+    validateDates(): boolean {
+        if (this.testScheduleModel) {
+            if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
+                if (this.modify) {
+                    if (moment(this.testScheduleModel.scheduleStartTime).isBefore(new Date())) {
+                        $('#alertPopup').modal('show');
+                        return false;
+                    }
+                }
+                else {
+                    if (moment(this.testScheduleModel.scheduleEndTime).isBefore(new Date())) {
+                        $('#alertPopup').modal('show');
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    onOKAlert(): void {
+        $('#alertPopup').modal('hide');
+        this.overrideRouteCheck = true;
+        this.router.navigate(['ManageTests']);
+    }
 
 }

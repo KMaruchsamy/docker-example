@@ -11,6 +11,7 @@ import {TestHeader} from './test-header';
 import * as _ from '../../lib/index';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
+import {AlertPopup} from '../shared/alert.popup';
 import '../../plugins/bootstrap-datepicker-1.5.min.js';
 import '../../plugins/jquery.timepicker.js';
 import '../../lib/modal.js';
@@ -19,7 +20,7 @@ import '../../lib/modal.js';
     selector: 'schedule-test',
     templateUrl: '../../templates/tests/schedule-test.html',
     providers: [TestService, Auth, TestScheduleModel, Common],
-    directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup]
+    directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup, AlertPopup]
 })
 export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     valid: boolean = false;
@@ -40,12 +41,9 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     modify: boolean = false;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public router: Router, public common: Common, public routeParams: RouteParams) {
-
-
-
     }
-    
-     onCancelChanges(): void {
+
+    onCancelChanges(): void {
         this.overrideRouteCheck = true;
         this.testService.clearTestScheduleObjects();
         this.router.parent.navigate(['/ManageTests']);
@@ -166,10 +164,6 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
 
     bindEvents(): void {
-
-
-
-
 
         let __this = this;
         this.$startTime.timepicker({
@@ -705,6 +699,33 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
         return day + '/' + month + '/' + year;
 
+    }
+
+
+    validateDates(): boolean {
+        if (this.testScheduleModel) {
+            if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
+                if (this.modify) {
+                    if (moment(this.testScheduleModel.scheduleStartTime).isBefore(new Date())) {
+                        $('#alertPopup').modal('show');
+                        return false;
+                    }
+                }
+                else {
+                    if (moment(this.testScheduleModel.scheduleEndTime).isBefore(new Date())) {
+                        $('#alertPopup').modal('show');
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    onOKAlert(): void {
+        $('#alertPopup').modal('hide');
+        this.overrideRouteCheck = true;
+        this.router.navigate(['ManageTests']);
     }
 
 

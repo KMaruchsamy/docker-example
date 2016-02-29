@@ -112,4 +112,17 @@ export class Common {
             return '';
         return value.replace(/\s/g, "");
     }
+    
+    
+    getOffsetInstitutionTimeZone(institutionId: number):number {
+        let sStorage = this.getStorage();
+        let institutions = sStorage.getItem('institutions');
+        if (institutions) {
+            let selectedInstitution = _.find(institutions, { 'InstitutionId': institutionId });
+            if (selectedInstitution) {
+                return selectedInstitution.HourOffset;
+            }
+        }
+        return 0;
+    }
 }
