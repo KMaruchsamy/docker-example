@@ -5,7 +5,7 @@
         <div class="section-top-padding-only">
           <div class="container-medium-width edit-info">
             <h2 class="page-sm-heading-teal">View Reports</h2>
-            <h3 class="page-lg-heading">Sample University of Health Sciences</h3>
+            <h3 class="page-lg-heading">{{institutionName}}</h3>
             <p class="margin-1em-top text-larger">Your Kaplan reports give you detailed information on your students’
               performance on Integrated Tests, use of remediation resources, and NCLEX® prep materials.
             </p>
@@ -81,7 +81,7 @@
     </main>
 <page-footer></page-footer>
 
-<form #myform ACTION="http://localhost/s_login.aspx?facultylogin=1" method="POST" target="_blank">
+<form #myform  method="POST" target="_blank">
     <input #hdinstitution type="hidden" id="institutionID" name="institutionID">
     <input #hdtoken type="hidden" id="jwtToken" name="jwtToken">
     <input #hdpage type="hidden" id="redirectPage" name="redirectPage">

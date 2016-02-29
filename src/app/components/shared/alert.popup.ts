@@ -2,20 +2,18 @@ import {Component, Input, Output, EventEmitter, OnInit} from 'angular2/core';
 import {Router, RouterLink} from 'angular2/router';
 
 @Component({
-    selector: 'confirmation-popup',
-    providers: [],
-    templateUrl: '../../templates/shared/confirmation.popup.html',
-    directives: [RouterLink],
-    inputs: ['cancelButtonText', 'okButtonText', 'message']
+    selector: 'alert-popup',
+    templateUrl: '../../templates/shared/alert.popup.html',
+    directives: [RouterLink]
 })
 
-export class ConfirmationPopup implements OnInit {
+export class AlertPopup implements OnInit {
     @Input() popupId: number;
-    @Input() cancelButtonText:string;
+    // @Input() cancelButtonText:string;
     @Input() okButtonText:string;
     @Input() message: string;
     @Input() hideClose: boolean;
-    @Output('onCancel') cancelEvent = new EventEmitter();
+    // @Output('onCancel') cancelEvent = new EventEmitter();
     @Output('onOK') okEvent = new EventEmitter();
     constructor(public router: Router) {
 
@@ -28,11 +26,9 @@ export class ConfirmationPopup implements OnInit {
         this.okEvent.emit(e);
     }
     
-    onCancel(e): void{
-        this.cancelEvent.emit(e);
-    }
+    // onCancel(e): void{
+    //     this.cancelEvent.emit(e);
+    // }
     
 
 }
-
-	

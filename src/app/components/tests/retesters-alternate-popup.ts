@@ -23,6 +23,7 @@ export class RetesterAlternatePopup implements OnDeactivate {
     valid: boolean = false;
     sStorage: any;
     constructor(public common: Common) {
+
     }
 
     routerOnDeactivate(): void {
@@ -31,6 +32,11 @@ export class RetesterAlternatePopup implements OnDeactivate {
     }
 
     ngOnInit(): void {
+        console.log('------------------------------------------------');
+        console.log(this.testSchedule);
+        console.log('------------------------------------------------');
+
+        console.log(JSON.stringify(this.retesterExceptions));
         this.sStorage = this.common.getStorage();
         let self = this;
         if (this.retesterExceptions) {
@@ -45,7 +51,7 @@ export class RetesterAlternatePopup implements OnDeactivate {
                 }
             });
         }
-        
+
         this.validate();
     }
 
@@ -57,8 +63,11 @@ export class RetesterAlternatePopup implements OnDeactivate {
                 self.markForRemoval(change.studentId, change.mark, change.testId, change.testName)
             });
         }
+        console.log('------------------------------------------------');
+        console.log(this.testSchedule);
+        console.log('------------------------------------------------');
         this.sStorage.setItem('testschedule', JSON.stringify(this.testSchedule));
-        this.retesterAlternatePopupOK.emit(this.retesterExceptions);        
+        this.retesterAlternatePopupOK.emit(this.retesterExceptions);
     }
 
 
@@ -115,12 +124,16 @@ export class RetesterAlternatePopup implements OnDeactivate {
             studentToMark.StudentTestId = testId;
             studentToMark.StudentTestName = testName;
             let selectedTest: any = _.find(retesterStudent.AlternateTests, { TestId: testId });
-            if (selectedTest)
+            if (selectedTest) {
                 selectedTest.Checked = true;
+                studentToMark.NormingStatus = selectedTest.NormingStatus;
+            }
+                
         }
         else {
             studentToMark.StudentTestId = this.testSchedule.testId;
             studentToMark.StudentTestName = this.testSchedule.testName;
+             studentToMark.NormingStatus = this.testSchedule.testNormingStatus;
         }
     }
 

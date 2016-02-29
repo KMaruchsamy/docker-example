@@ -1,6 +1,6 @@
 <page-header></page-header>
 <main role="main" class="app-main">
-    <test-header scheduleStep='Add details and review' [testSchedule]="testScheduleModel"></test-header>
+    <test-header (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Add details and review' [testSchedule]="testScheduleModel"></test-header>
 
     <div class="section">
         <div class="container-medium-width">
@@ -8,7 +8,7 @@
             <form class="clearfix name-testing-session">
                 <div class="one-half-grid">
                     <label class="label-bold label-larger" for="txtSessionName">Name your testing session</label>
-                    <input type="text" id="txtSessionName" [value]="testSchedule?.scheduleName" maxlength="75" #testsessionname (input)="onInput(testsessionname.value,ddlfaculty.value);">
+                    <input type="text" id="txtSessionName" [value]="testScheduleModel?.scheduleName" maxlength="75" #testsessionname (input)="onInput(testsessionname.value,ddlfaculty.value);">
                 </div>
                 <div class="one-half-grid lightbulb-icon-container">
                     <p class="icon lightbulb-icon">Your testing session contains all the details related to the test you are scheduling. Name it for easy
@@ -40,7 +40,7 @@
                 <tr>
                     <th scope="row">Test</th>
                     <td>{{testScheduleModel.testName}}</td>
-                    <td><a [routerLink]="['/ChooseTest' , {institutionId : testScheduleModel.institutionId}]">Change</a></td>
+                    <td><a [routerLink]="modify ? ['/ModifyChooseTest' , {action:'modify',institutionId : testScheduleModel.institutionId}] : ['/ChooseTest' , {institutionId : testScheduleModel.institutionId}]" (click)="ChangeTest($event);">Change</a></td>
                 </tr>
                 <tr>
                     <th scope="row">Date and Time</th>
@@ -49,17 +49,17 @@
                         {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}}
                         {{testScheduleModel?.scheduleEndTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleEndTime|parseDate:'MM/DD/YY'}}-->
                         <template [ngIf]="!nextDay">
-                            {{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}}
-                            &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}}
+                            {{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from
+                            {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}}
                         </template>
                         <template [ngIf]="nextDay">
-                            {{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}}
-                            &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}} {{testScheduleModel?.scheduleEndTime|parseDate:'ddd'}}
-                            {{testScheduleModel?.scheduleEndTime|parseDate:'MM/DD/YY'}}
+                            {{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from
+                            {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}}
+                            {{testScheduleModel?.scheduleEndTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleEndTime|parseDate:'MM/DD/YY'}}
                         </template>
 
                     </td>
-                    <td><a [routerLink]="['/ScheduleTest']">Change</a>
+                    <td><a [routerLink]="modify ? ['/ModifyScheduleTest',{action:'modify'}] : ['/ScheduleTest']">Change</a>
 
                     </td>
                 </tr>
@@ -72,8 +72,8 @@
             </table>
         </div>
         <h4 class="teal" id="studentsInTestingSessionConfirmation">Students in Testing Session ({{unmarkedStudentsCount()}})</h4>
-        <a [routerLink]="['/AddStudents']">Change</a>
-        <button class="right anchor-button" *ngIf="retesterExceptions?.length>0 && hasAlternateTests" (click)="changeAlternateAssignments($event)">Change alternate test assignments</button>
+        <a [routerLink]="modify ? ['/ModifyAddStudents',{action:'modify'}] : ['/AddStudents']">Change</a>
+        <button class="right anchor-button" *ngIf="(retesterExceptions?.length>0 && hasAlternateTests) || (retesterExceptions?.length>0 && hasSavedRetesterExceptions) || (modify && retesterExceptionsModify?.length>0)" (click)="changeAlternateAssignments($event)">Change alternate test assignments</button>
 
         <table id="studentsInTestingSessionTable" class="dataTable-bordered table-with-cell-padding table-striped last-row-no-border">
             <thead>
@@ -103,9 +103,9 @@
 
     <div class="container-medium-width section-thin">
         <div class="info-icon-yellow-container-flush-text clearfix">
-            <p class="icon info-icon-yellow">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
+            <p class="icon info-icon-yellow" *ngIf="hasADA">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
             <!--<a href="confirmation.html" id="chooseDate" class="button right margin-2em-top button-mobile-block" aria-disabled="true" disabled>Confirm info and schedule test</a>-->
-            <button type="submit" (click)="scheduleTest();" id="btnScheduleTest" class="button right margin-2em-top button-mobile-block"
+            <button type="submit" (click)="scheduleTest($event);" id="btnScheduleTest" class="button right margin-2em-top button-mobile-block"
             [disabled]="!valid">
                 Confirm info and schedule test
             </button>
@@ -120,8 +120,16 @@
 </main>
 
 <page-footer></page-footer>
-<confirmation-popup [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
+<confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
 [okButtonText]="'Yes, leave this page'" [cancelButtonText]="'No, stay on this page'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation()"
 [hideClose]="true">
 </confirmation-popup>
 <loader [loaderMessage]="'Scheduling your testing session…'" [greetingMessage]="'Thank you for your patience!'"></loader>
+
+<alert-popup 
+    [popupId]="'alertPopup'"
+    [message]="'We’re sorry! You can no longer make changes to this testing session because it has already started or has passed. Click “OK” to go back to the Manage Tests main page.'" 
+    [okButtonText] = "'OK'"     
+    (onOK)="onOKAlert()"    
+    [hideClose]="false">
+</alert-popup>

@@ -29,6 +29,7 @@
             </ul>
             <p class="js-bolded section-medium-thin" [innerHTML]='profile.bio'>
             </p>
+              <p *ngIf="profile.kaplanAdminTypeName === 'AccountManager'">Use these external forms to submit requests directly to {{profile.firstName}}:</p>
               <ul class="action-links">
                 <li *ngFor="#link of profile.linksForFrontEnd"><a [href]='link.LinkUrl' target="_blank" class="icon action-color-link-icon">{{link.LinkTextToDisplay}}</a></li>  
               </ul>

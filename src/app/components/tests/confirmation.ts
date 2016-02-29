@@ -32,6 +32,6 @@ export class Confirmation implements OnInit, OnDeactivate {
     routerOnDeactivate(next: ComponentInstruction ,prev: ComponentInstruction): void {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         if (outOfTestScheduling)
-            this.sStorage.removeItem('testschedule');    
+            this.testService.clearTestScheduleObjects(); 
     }
 }

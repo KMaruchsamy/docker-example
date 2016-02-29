@@ -1,15 +1,18 @@
 <div class="section section-bottom-thin">
     <div [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
         <h2 class="page-sm-heading-teal">Manage Tests</h2>
-        <h3 class="page-lg-heading">Schedule a Test</h3>
+        <h3 class="page-lg-heading" [class.modify-testing-session-left]="modify">{{ modify ? 'Modify a Testing Session' : 'Schedule a Test' }}</h3>
+        <div *ngIf="modify" class="modify-testing-session-right text-larger">
+            <button class="anchor-button" (click)="confirmCancelChanges($event)">Cancel changes</button>
+        </div>
     </div>
 </div>
-<div *ngIf="testSchedule.currentStep>1 && testSchedule.activeStep!==1 && testSchedule.activeStep!==5" class="section-thin test-summary-heading" [class.test-summary-heading-modify]="modify">
+<div *ngIf="testSchedule.currentStep>1 && testSchedule.activeStep!==1 && testSchedule.activeStep!==5" class="section-thin test-summary-heading"
+[class.test-summary-heading-modify]="modify">
     <div class="container-medium-width" [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
         <div *ngIf="testSchedule.currentStep>1 " class="test-summary-heading-details"><span>Test: <b>{{testSchedule.testName}}</b></span>
-            <a href="#" [routerLink]="['/ChooseTest' , {institutionId : testSchedule.institutionId}]" class="link-darker">Change test</a></div>
-        <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>
-            <!--{{testSchedule.scheduleStartTime|parseDate:'ddd'}} {{testSchedule.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testSchedule.scheduleEndTime|parseDate:'h:mma'}} {{testSchedule.scheduleEndTime|parseDate:'ddd'}} {{testSchedule.scheduleEndTime|parseDate:'MM/DD/YY'}}-->
+            <a href="#" [routerLink]="modify ? ['/ModifyChooseTest' , {action:'modify',institutionId : testSchedule.institutionId}] :  ['/ChooseTest' , {institutionId : testSchedule.institutionId}]" class="link-darker">Change test</a></div>
+        <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>            
             <template [ngIf]="!nextDay">
                 {{testSchedule?.scheduleStartTime|parseDate:'ddd'}} {{testSchedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule?.scheduleStartTime|parseDate:'h:mma'}}
                 &ndash; {{testSchedule?.scheduleEndTime|parseDate:'h:mma'}}
@@ -20,7 +23,7 @@
                 {{testSchedule?.scheduleEndTime|parseDate:'MM/DD/YY'}}
             </template>
             </b></span>
-            <a [routerLink]="['/ScheduleTest']" class="link-darker">Change date or time</a>
+            <a [routerLink]="modify ? ['/ModifyScheduleTest',{action:'modify'}] : ['/ScheduleTest']" class="link-darker">Change date or time</a>
         </div>
     </div>
 </div>
@@ -53,3 +56,8 @@
     </div>
     <div class="mobile-breadcrumb-name hidden-small-phone-up">{{scheduleStep}}</div>
 </div>
+
+<confirmation-popup [popupId]="'cancelChangesPopup'" [message]="'Cancel changes to testing session and return to Manage Tests main page?'"
+[okButtonText]="'Yes'" [cancelButtonText]="'No, continue making changes'" (onOK)="cancelChanges()" (onCancel)="continueMakingChanges()"
+[hideClose]="true">
+</confirmation-popup>

@@ -13,6 +13,7 @@ import {TestHeader} from './test-header';
 import * as _ from '../../lib/index';
 import {ParseDatePipe} from '../../pipes/parseDate.pipe';
 import {TestScheduleModel} from '../../models/testSchedule.model';
+import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import '../../plugins/jquery.dataTables.min.js';
 import '../../plugins/dataTables.responsive.js';
@@ -30,7 +31,8 @@ export class ViewTest implements OnInit, OnDeactivate {
     sStorage: any;
     nextDay: boolean = false;
     modify: boolean = false;
-    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams:RouteParams) {
+    hasADA: boolean = false;
+    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams) {
 
     }
 
@@ -41,9 +43,9 @@ export class ViewTest implements OnInit, OnDeactivate {
         else {
             let action = this.routeParams.get('action');
             if (action != undefined && action.trim() !== '')
-                this.modify = true;    
+                this.modify = true;
             this.loadTestSchedule();
-            
+
         }
         $(document).scrollTop(0);
     }
@@ -52,7 +54,7 @@ export class ViewTest implements OnInit, OnDeactivate {
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction): void {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         if (outOfTestScheduling)
-            this.sStorage.removeItem('testschedule');
+            this.testService.clearTestScheduleObjects();
         if (this.studentsTable)
             this.studentsTable.destroy();
     }
@@ -60,7 +62,24 @@ export class ViewTest implements OnInit, OnDeactivate {
 
     loadTestSchedule(): void {
         let __this = this;
-        this.schedule = this.testService.getTestSchedule();
+        let _schedule: TestScheduleModel = this.testService.getTestSchedule();     
+        if (_schedule.selectedStudents && _schedule.selectedStudents.length > 0) {
+            let __selectedStudents: SelectedStudentModel[] = _schedule.selectedStudents.sort(function(a, b) {
+                var nameA = a.LastName.toLowerCase(), nameB = b.LastName.toLowerCase()
+                if (nameA < nameB) //sort string ascending
+                    return -1
+                if (nameA > nameB)
+                    return 1
+                return 0 //default return value (no sorting)
+            });
+            _schedule.selectedStudents = __selectedStudents;
+
+        }
+        this.schedule = _schedule;
+        this.hasADA = _.some(this.schedule.selectedStudents, { 'Ada': true });
+        console.log('>>>>>>>>>>>>>>>>>>');
+        console.log(JSON.stringify(this.schedule));
+
         if (this.schedule) {
             let startTime = this.schedule.scheduleStartTime;
             let endTime = this.schedule.scheduleEndTime;
@@ -118,7 +137,7 @@ export class ViewTest implements OnInit, OnDeactivate {
         let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.deleteSchedule}`);
         let deleteObdervable: Observable<Response> = this.testService.deleteSchedule(scheduleURL);
         deleteObdervable.subscribe((res: Response) => {
-            __this.sStorage.removeItem('testschedule');
+            __this.testService.clearTestScheduleObjects();
             __this.router.navigate(['/ManageTests']);
         });
     }
