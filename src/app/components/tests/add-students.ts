@@ -628,10 +628,13 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         }
         return studentsid;
     }
+    resolveRepeaterURL(url: string): string {
+        return url.replace('§institutionid', this.testScheduleModel.institutionId.toString());
+    }
 
     GetRepeaterException(): void {
         let __this = this;
-        let repeaterExceptionURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.retesters}`;
+        let repeaterExceptionURL = this.resolveRepeaterURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.retesters}`);
         let input = {
             "SessionTestId": this.testScheduleModel.testId,
             "StudentIds": __this.GetStudentIDList(),
@@ -823,7 +826,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         if (this.studentCountInSession())
                             this.router.navigateByUrl('/tests/review');
                         else
-                            this.router.navigateByUrl('/tests/add-students');
+                            // this.router.navigateByUrl('/tests/add-students');
+                            this.initialize();
                     }
                 });
                 retester.instance.retesterNoAlternatePopupCancel.subscribe((e) => {
@@ -856,12 +860,14 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         this.testScheduleModel = JSON.parse(this.sStorage.getItem('testschedule'));
                         this.retesterExceptions = retesters;
                         this.sStorage.setItem('retesters', JSON.stringify(retesters));
+                        this.RemoveDeletedStudentFromSession();
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;                        
                        // let studentCountInSession = this.markedStudentsCount();
                         if (this.studentCountInSession())
                             this.router.navigateByUrl('/tests/review');
                         else
-                            this.router.navigateByUrl('/tests/add-students');
+                            // this.router.navigateByUrl('/tests/add-students');
+                            this.initialize();
                     }
                 });
                 retester.instance.retesterAlternatePopupCancel.subscribe((e) => {
@@ -869,6 +875,21 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 });
 
             });
+    }
+    RemoveDeletedStudentFromSession(): void {
+        let retesters = JSON.parse(this.sStorage.getItem('retesters'));
+        if (retesters != null) {
+            if (retesters.length >0) {
+                let _repeterExceptions: Object[] = [];
+                for (let i = 0; i < retesters.length; i++) {
+                    let _retesters = retesters[i];
+                    if (typeof (!_retesters.MarkedToRemove)) {
+                        _repeterExceptions.push(_retesters);
+                    }
+                }
+                this.sStorage.setItem('retesters', JSON.stringify(retesters));
+            }
+        }
     }
 
     CheckForRetesters(_studentRepeaterExceptions: any): Object[] {
