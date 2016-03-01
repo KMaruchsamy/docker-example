@@ -225,6 +225,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
 
 
     selectTest(testId: number, testName: string, subjectId: number, normingStatusName): void {
+        this.sStorage.setItem('previousTest', this.testScheduleModel.testId);
         this.testScheduleModel.subjectId = subjectId;
         this.testScheduleModel.testId = testId;
         this.testScheduleModel.testName = testName;

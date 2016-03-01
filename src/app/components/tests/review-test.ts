@@ -582,7 +582,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                     let student = _selectedStudent[i];
                     if (student.MarkedToRemove && typeof (student.MarkedToRemove) !== 'undefined') {
                         $.each(_retesters, function (index, el) {
-                            if (el.StudentId === student.StudentId) {
+                            if ($(el).StudentId === student.StudentId) {
                                 _retesters.splice(index, 1);
                             }
                         });
