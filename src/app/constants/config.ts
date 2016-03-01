@@ -39,7 +39,8 @@ export const links = {
                 deleteSchedule: "scheduling/testingSessions/§scheduleId",
                 scheduletests: "scheduling/testingSessions",
                 modifyscheduletest:"scheduling/testingSessions/§scheduleId",
-                renamesession: "scheduling/testingSessions/§scheduleId/renameSession"
+                renamesession: "scheduling/testingSessions/§scheduleId/renameSession",
+                refreshTestingStatus: "scheduling/refreshRetestingStatus"
             }
         }
     },

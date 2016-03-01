@@ -544,6 +544,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                     if (retesters) {
                         $('#modalAlternateTest').modal('hide');
                         this.testScheduleModel = this.testService.sortSchedule(this.testService.getTestSchedule());
+                        retesters = this.DeleteRemovedStudentFromSession(retesters);
                         this.resolveADA();
                         if (this.modify) {
                             this.sStorage.setItem('retestersModify', JSON.stringify(retesters));
@@ -572,6 +573,24 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                 });
 
             });
+    }
+    DeleteRemovedStudentFromSession(_retesters: any): any {
+        if (_retesters.length > 0) {
+            let _selectedStudent = this.testScheduleModel.selectedStudents;
+            if (_selectedStudent.length > 0) {
+                for (let i = 0; i < _selectedStudent.length; i++) {
+                    let student = _selectedStudent[i];
+                    if (student.MarkedToRemove && typeof (student.MarkedToRemove) !== 'undefined') {
+                        $.each(_retesters, function (index, el) {
+                            if ($(el).StudentId === student.StudentId) {
+                                _retesters.splice(index, 1);
+                            }
+                        });
+                    }
+                }
+            }
+        }
+        return _retesters;
     }
 
     onCancelConfirmation(e: any): void {
