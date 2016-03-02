@@ -173,6 +173,10 @@ form.editableform .editable-buttons > button {
   width: 16px;
 }
 
+.editable-unsaved {
+  font-weight: normal;
+}
+
 .editableform .editable-cancel:focus, .editableform .editable-cancel:hover {
   background-color: #EEEEEE;
 }
@@ -194,5 +198,4 @@ button.js-rename-session {
   background: url(images/clear.png) center center no-repeat;
   background-size: 13px 12px;
   margin-top: -8px;
-\
 }
