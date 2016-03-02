@@ -137,12 +137,12 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         }
 
         if (this.startTime)
-            this.$startTime.timepicker('setTime', new Date(this.startTime.replace('T', ' ')));
+            this.$startTime.timepicker('setTime', new Date(this.startTime));
         else
             this.$startTime.timepicker('setTime', '');
 
         if (this.endTime)
-            this.$endTime.timepicker('setTime', new Date(this.endTime.replace('T', ' ')));
+            this.$endTime.timepicker('setTime', new Date(this.endTime));
         else
             this.$endTime.timepicker('setTime', '');
     }
