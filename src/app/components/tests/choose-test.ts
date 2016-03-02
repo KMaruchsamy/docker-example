@@ -195,8 +195,12 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         if (!this.validateDates())
             return;
 
-        this.testScheduleModel.scheduleStartTime = new Date(this.testScheduleModel.scheduleStartTime.replace('T', ' '));
-        this.testScheduleModel.scheduleEndTime = new Date(this.testScheduleModel.scheduleEndTime.replace('T', ' '));
+        if (this.testScheduleModel.scheduleStartTime != null && this.testScheduleModel.scheduleStartTime != 'undefined' &&
+            this.testScheduleModel.scheduleEndTime != null && this.testScheduleModel.scheduleEndTime != 'undefined')
+        {
+            this.testScheduleModel.scheduleStartTime = new Date(this.testScheduleModel.scheduleStartTime.replace('T', ' '));
+            this.testScheduleModel.scheduleEndTime = new Date(this.testScheduleModel.scheduleEndTime.replace('T', ' '));
+        }
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         if (this.modify)
             this.router.navigate(['/ModifyScheduleTest', { action: 'modify' }]);
