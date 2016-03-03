@@ -47,7 +47,8 @@ module.exports = function () {
                 'src/app/plugins/tablesaw-init.js',
                 'src/app/plugins/moment-2.11.js',
                 'src/app/plugins/moment-timezone.min.js',
-                'src/app/plugins/moment-timezone-gmtdata.js'
+                'src/app/plugins/moment-timezone-gmtdata.js',
+                'src/app/scripts/hotjar.js'
                 // 'src/app/plugins/bootstrap-datepicker.min.js',
                 // 'src/app/plugins/jquery.timepicker.js',
                 // 'src/app/plugins/date.js'
