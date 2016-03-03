@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, OnInit} from 'angular2/core';
-import {RouterLink, OnDeactivate,ComponentInstruction} from 'angular2/router';
+import {RouterLink, OnDeactivate,ComponentInstruction, RouteParams, Router} from 'angular2/router';
 import {Common} from '../../services/common';
 import {Auth} from '../../services/auth';
 import {TestScheduleModel} from '../../models/testSchedule.model';
@@ -18,15 +18,23 @@ import '../../lib/modal.js';
 })
 export class Confirmation implements OnInit, OnDeactivate {
     sStorage: any;
-    constructor(public testScheduleModel: TestScheduleModel, public common: Common, public testService: TestService) { }
+    modify: boolean = false;
+    constructor(public testScheduleModel: TestScheduleModel, public common: Common, public testService: TestService, public routeParams:RouteParams, public router:Router, public auth:Auth) { }
 
     ngOnInit(): void {
         this.sStorage = this.common.getStorage();
-        let savedSchedule: TestScheduleModel = this.testService.getTestSchedule();
-        if (savedSchedule)
-            this.testScheduleModel = savedSchedule;
-        this.testScheduleModel.currentStep = 5;
-        this.testScheduleModel.activeStep = 5;
+        if (!this.auth.isAuth())
+            this.router.navigateByUrl('/');
+        else {
+            let action = this.routeParams.get('action');
+            if (action != undefined && action.trim() !== '')
+                this.modify = true;
+            let savedSchedule: TestScheduleModel = this.testService.getTestSchedule();
+            if (savedSchedule)
+                this.testScheduleModel = savedSchedule;
+            this.testScheduleModel.currentStep = 5;
+            this.testScheduleModel.activeStep = 5;
+        }
     }
 
     routerOnDeactivate(next: ComponentInstruction ,prev: ComponentInstruction): void {

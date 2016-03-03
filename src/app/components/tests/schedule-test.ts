@@ -631,6 +631,9 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
 
     saveDateTime(): boolean {
+          if (!this.validateDates())
+            return;
+        
         if (this.startTime !== undefined && moment(this.startTime).isValid() && this.endTime != undefined && moment(this.endTime).isValid()) {
             this.testScheduleModel.scheduleStartTime = new Date(this.startTime);
             this.testScheduleModel.scheduleEndTime = new Date(this.endTime);
@@ -704,15 +707,47 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
     validateDates(): boolean {
         if (this.testScheduleModel) {
+
             if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
+
+                let institutionOffset = 0;
+                if (this.testScheduleModel.institutionId && this.testScheduleModel.institutionId > 0) {
+                    institutionOffset = this.common.getOffsetInstitutionTimeZone(this.testScheduleModel.institutionId);
+                }
+
+                let scheduleStartTime = moment(new Date(
+                    moment(this.testScheduleModel.scheduleStartTime).year(),
+                    moment(this.testScheduleModel.scheduleStartTime).month(),
+                    moment(this.testScheduleModel.scheduleStartTime).date(),
+                    moment(this.testScheduleModel.scheduleStartTime).hour(),
+                    moment(this.testScheduleModel.scheduleStartTime).minute(),
+                    moment(this.testScheduleModel.scheduleStartTime).second()
+                )).format('YYYY-MM-DD HH:mm:ss');
+
+
+                let scheduleEndTime = moment(new Date(
+                    moment(this.testScheduleModel.scheduleEndTime).year(),
+                    moment(this.testScheduleModel.scheduleEndTime).month(),
+                    moment(this.testScheduleModel.scheduleEndTime).date(),
+                    moment(this.testScheduleModel.scheduleEndTime).hour(),
+                    moment(this.testScheduleModel.scheduleEndTime).minute(),
+                    moment(this.testScheduleModel.scheduleEndTime).second()
+                )).format('YYYY-MM-DD HH:mm:ss');
+
+
+                if (institutionOffset !== 0) {
+                    scheduleStartTime = moment(scheduleStartTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
+                    scheduleEndTime = moment(scheduleEndTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
+                }                
+                
                 if (this.modify) {
-                    if (moment(this.testScheduleModel.scheduleStartTime).isBefore(new Date())) {
+                    if (moment(scheduleStartTime).isBefore(new Date())) {
                         $('#alertPopup').modal('show');
                         return false;
                     }
                 }
                 else {
-                    if (moment(this.testScheduleModel.scheduleEndTime).isBefore(new Date())) {
+                    if (moment(scheduleStartTime).isBefore(new Date())) {
                         $('#alertPopup').modal('show');
                         return false;
                     }

@@ -2,7 +2,7 @@
     <div [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
         <h2 class="page-sm-heading-teal">Manage Tests</h2>
         <h3 class="page-lg-heading" [class.modify-testing-session-left]="modify">{{ modify ? 'Modify a Testing Session' : 'Schedule a Test' }}</h3>
-        <div *ngIf="modify" class="modify-testing-session-right text-larger">
+        <div *ngIf="modify && !hideCancelButton" class="modify-testing-session-right text-larger">
             <button class="anchor-button" (click)="confirmCancelChanges($event)">Cancel changes</button>
         </div>
     </div>

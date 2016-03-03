@@ -30,6 +30,7 @@ export class TestService {
             || routeName.indexOf(TestShedulingPages.MODIFYADDSTUDENTS) > -1
             || routeName.indexOf(TestShedulingPages.MODIFYREVIEWTEST) > -1
             || routeName.indexOf(TestShedulingPages.CONFIRMATION) > -1
+            || routeName.indexOf(TestShedulingPages.MODIFYCONFIRMATION) > -1
             || routeName.indexOf(TestShedulingPages.VIEW) > -1
             || routeName.indexOf(TestShedulingPages.MODIFYVIEW) > -1
             || routeName.indexOf('ERROR') > -1)

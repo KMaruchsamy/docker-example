@@ -66,7 +66,8 @@ import {Logout} from './components/shared/logout';
     { path: '/tests/:action/schedule-test', component: ScheduleTest, name: 'ModifyScheduleTest' },
     { path: '/tests/:action/add-students', component: AddStudents, name: 'ModifyAddStudents' },
     { path: '/tests/:action/review', component: ReviewTest, name: 'ModifyReviewTest' },
-     { path: '/tests/:action/view', component: ViewTest, name: 'ModifyViewTest' },
+    { path: '/tests/:action/view', component: ViewTest, name: 'ModifyViewTest' },
+    { path: '/tests/:action/confirmation', component: Confirmation, name: 'ModifyConfirmation' },
     { path: '/error', component: UnhandledException, name: 'UnhandledException' },
     { path: '/*wildcard', component: PageNotFound, name: 'PageNotFound' }
 ])

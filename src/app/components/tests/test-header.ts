@@ -8,14 +8,15 @@ import {Common} from '../../services/common';
 @Component({
     selector: 'test-header',
     templateUrl: '../../templates/tests/test-header.html',
-    inputs: ['testSchedule', 'scheduleStep'],
-    directives: [RouterLink, NgIf , ConfirmationPopup],
+    inputs: ['testSchedule', 'scheduleStep','hideCancelButton'],
+    directives: [RouterLink, NgIf, ConfirmationPopup],
     pipes: [ParseDatePipe]
 })
 
 export class TestHeader implements OnInit {
     nextDay: boolean = false;
     @Input() testSchedule;
+    @Input() hideCancelButton;
     @Output('cancelChanges') cancelChangesEvent = new EventEmitter();
     @Output('continueMakingChanges') continueMakingChangesEvent = new EventEmitter();
     modify: boolean = false;
@@ -52,7 +53,7 @@ export class TestHeader implements OnInit {
         this.continueMakingChangesEvent.emit('');
         return false;
     }
-    
-    
-    
+
+
+
 }

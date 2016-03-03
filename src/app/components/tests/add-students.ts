@@ -683,17 +683,19 @@ sortAlpha(): void {
         $.each(listitems, function (idx, itm) { mylist.append(itm); });
 }
 
-DetailReviewTestClick(event): void {
-    event.preventDefault();
-    let studentId = [];
-    let selectedStudentModelList = this.selectedStudents;
-    this.testScheduleModel.selectedStudents = selectedStudentModelList;
-    this.sStorage = this.auth.common.getStorage();
-    this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
-    console.log('TestScheduleModel with Selected student' + this.testScheduleModel);
-    this.WindowException();
+    DetailReviewTestClick(event): void {
+        event.preventDefault();
+        if (!this.validateDates())
+            return;
+        let studentId = [];
+        let selectedStudentModelList = this.selectedStudents;
+        this.testScheduleModel.selectedStudents = selectedStudentModelList;
+        this.sStorage = this.auth.common.getStorage();
+        this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
+        console.log('TestScheduleModel with Selected student' + this.testScheduleModel);
+        this.WindowException();
 
-}
+    }
 
 FindCohortName(cohortid: number): string {
     for (var i = 0; i < this.cohorts.length; i++) {
@@ -1064,4 +1066,74 @@ getClassName(isRetester: boolean): string {
     else
         return "";
 }
+
+    onOKAlert(): void {
+        $('#alertPopup').modal('hide');
+        this.overrideRouteCheck = true;
+        this.router.navigate(['ManageTests']);
+}
+    
+     onCancelChanges(): void {
+        this.overrideRouteCheck = true;
+        this.testService.clearTestScheduleObjects();
+        this.router.parent.navigate(['/ManageTests']);
+    }
+
+    onContinueMakingChanges(): void {
+        // continue making changes after confirmation popup..
+    }
+
+
+    validateDates(): boolean {
+        if (this.testScheduleModel) {
+
+            if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
+
+                let institutionOffset = 0;
+                if (this.testScheduleModel.institutionId && this.testScheduleModel.institutionId > 0) {
+                    institutionOffset = this.common.getOffsetInstitutionTimeZone(this.testScheduleModel.institutionId);
+                }
+
+                let scheduleStartTime = moment(new Date(
+                    moment(this.testScheduleModel.scheduleStartTime).year(),
+                    moment(this.testScheduleModel.scheduleStartTime).month(),
+                    moment(this.testScheduleModel.scheduleStartTime).date(),
+                    moment(this.testScheduleModel.scheduleStartTime).hour(),
+                    moment(this.testScheduleModel.scheduleStartTime).minute(),
+                    moment(this.testScheduleModel.scheduleStartTime).second()
+                )).format('YYYY-MM-DD HH:mm:ss');
+
+
+                let scheduleEndTime = moment(new Date(
+                    moment(this.testScheduleModel.scheduleEndTime).year(),
+                    moment(this.testScheduleModel.scheduleEndTime).month(),
+                    moment(this.testScheduleModel.scheduleEndTime).date(),
+                    moment(this.testScheduleModel.scheduleEndTime).hour(),
+                    moment(this.testScheduleModel.scheduleEndTime).minute(),
+                    moment(this.testScheduleModel.scheduleEndTime).second()
+                )).format('YYYY-MM-DD HH:mm:ss');
+
+
+                if (institutionOffset !== 0) {
+                    scheduleStartTime = moment(scheduleStartTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
+                    scheduleEndTime = moment(scheduleEndTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
+                }                
+                
+                if (this.modify) {
+                    if (moment(scheduleStartTime).isBefore(new Date())) {
+                        $('#alertPopup').modal('show');
+                        return false;
+                    }
+                }
+                else {
+                    if (moment(scheduleStartTime).isBefore(new Date())) {
+                        $('#alertPopup').modal('show');
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }    
+    
 }

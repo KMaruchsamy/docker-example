@@ -14,7 +14,7 @@ import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';
 import {Utility} from '../../scripts/utility';
 import * as _ from '../../lib/index';
-import '../../plugins/dropdown.js'; 
+import '../../plugins/dropdown.js';
 import '../../plugins/bootstrap-select.min.js';
 import '../../plugins/jquery.dataTables.min.js';
 import '../../plugins/dataTables.responsive.js';
@@ -42,7 +42,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     modify: boolean = false;
     saveTriggered: boolean = false;
     constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
-        public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public aLocation:Location) {
+        public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public aLocation: Location) {
     }
 
     ngOnInit(): void {
@@ -55,11 +55,11 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         else
             this.initialize();
         $(document).scrollTop(0);
-        
+
         this.aLocation.subscribe((onNext: any) => {
             console.log(onNext);
         });
-        
+
     }
 
     onCancelChanges(): void {
@@ -72,7 +72,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         // continue making changes after confirmation popup..
     }
 
-    routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {       
+    routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         // if (!this.modify) {
         if (!this.overrideRouteCheck) {
@@ -83,7 +83,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                     return false;
                 }
             }
-            
+
         }
         // }
         if (outOfTestScheduling)
@@ -201,8 +201,8 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             moment(this.testScheduleModel.scheduleStartTime).date(),
             moment(this.testScheduleModel.scheduleStartTime).hour(),
             moment(this.testScheduleModel.scheduleStartTime).minute(),
-            moment(this.testScheduleModel.scheduleStartTime).second() 
-            )).format('YYYY/MM/DD HH:mm:ss');
+            moment(this.testScheduleModel.scheduleStartTime).second()
+        )).format('YYYY/MM/DD HH:mm:ss');
         var myNewEndDateTime2 = moment(new Date(
             moment(this.testScheduleModel.scheduleEndTime).year(),
             moment(this.testScheduleModel.scheduleEndTime).month(),
@@ -210,8 +210,8 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             moment(this.testScheduleModel.scheduleEndTime).hour(),
             moment(this.testScheduleModel.scheduleEndTime).minute(),
             moment(this.testScheduleModel.scheduleEndTime).second()
-            )).format('YYYY/MM/DD HH:mm:ss');
-      
+        )).format('YYYY/MM/DD HH:mm:ss');
+
         if (this.testScheduleModel.scheduleStartTime != null && this.testScheduleModel.scheduleStartTime != 'undefined' &&
             this.testScheduleModel.scheduleEndTime != null && this.testScheduleModel.scheduleEndTime != 'undefined') {
 
@@ -224,18 +224,50 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         else
             this.router.navigate(['/ScheduleTest']);
     }
-    
+
     validateDates(): boolean {
         if (this.testScheduleModel) {
+
             if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
+
+                let institutionOffset = 0;
+                if (this.testScheduleModel.institutionId && this.testScheduleModel.institutionId > 0) {
+                    institutionOffset = this.common.getOffsetInstitutionTimeZone(this.testScheduleModel.institutionId);
+                }
+
+                let scheduleStartTime = moment(new Date(
+                    moment(this.testScheduleModel.scheduleStartTime).year(),
+                    moment(this.testScheduleModel.scheduleStartTime).month(),
+                    moment(this.testScheduleModel.scheduleStartTime).date(),
+                    moment(this.testScheduleModel.scheduleStartTime).hour(),
+                    moment(this.testScheduleModel.scheduleStartTime).minute(),
+                    moment(this.testScheduleModel.scheduleStartTime).second()
+                )).format('YYYY-MM-DD HH:mm:ss');
+
+
+                let scheduleEndTime = moment(new Date(
+                    moment(this.testScheduleModel.scheduleEndTime).year(),
+                    moment(this.testScheduleModel.scheduleEndTime).month(),
+                    moment(this.testScheduleModel.scheduleEndTime).date(),
+                    moment(this.testScheduleModel.scheduleEndTime).hour(),
+                    moment(this.testScheduleModel.scheduleEndTime).minute(),
+                    moment(this.testScheduleModel.scheduleEndTime).second()
+                )).format('YYYY-MM-DD HH:mm:ss');
+
+
+                if (institutionOffset !== 0) {
+                    scheduleStartTime = moment(scheduleStartTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
+                    scheduleEndTime = moment(scheduleEndTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
+                }                
+                
                 if (this.modify) {
-                    if (moment(this.testScheduleModel.scheduleStartTime).isBefore(new Date())) {
+                    if (moment(scheduleStartTime).isBefore(new Date())) {
                         $('#alertPopup').modal('show');
                         return false;
                     }
                 }
                 else {
-                    if (moment(this.testScheduleModel.scheduleEndTime).isBefore(new Date())) {
+                    if (moment(scheduleStartTime).isBefore(new Date())) {
                         $('#alertPopup').modal('show');
                         return false;
                     }
