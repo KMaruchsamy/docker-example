@@ -289,6 +289,28 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
         let scheduleTestPromise: any;
         let scheduleTestURL = '';
+
+        var myNewStartDateTime2 = moment(new Date(
+            moment(input.TestingWindowStart).year(),
+            moment(input.TestingWindowStart).month(),
+            moment(input.TestingWindowStart).date(),
+            moment(input.TestingWindowStart).hour(),
+            moment(input.TestingWindowStart).minute(),
+            moment(input.TestingWindowStart).second()
+            )).format('YYYY/MM/DD HH:mm:ss');
+
+        var myNewEndDateTime2 = moment(new Date(
+            moment(input.TestingWindowEnd).year(),
+            moment(input.TestingWindowEnd).month(),
+            moment(input.TestingWindowEnd).date(),
+            moment(input.TestingWindowEnd).hour(),
+            moment(input.TestingWindowEnd).minute(),
+            moment(input.TestingWindowEnd).second()
+            )).format('YYYY/MM/DD HH:mm:ss');
+
+        input.TestingWindowStart = myNewStartDateTime2;
+        input.TestingWindowEnd = myNewEndDateTime2;
+
         if (this.modify) {
             scheduleTestURL = this.resolveModifyTestingSessionURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.modifyscheduletest}`);
             scheduleTestPromise = this.testService.modifyScheduleTests(scheduleTestURL, JSON.stringify(input));
