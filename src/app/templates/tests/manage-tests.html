@@ -7,6 +7,21 @@
             <p><b>Please note:</b> All times listed are local based on your school’s time zone.</p>
             <a href="javascript:void(0)" (click)="redirectToRoute('choose-test')" class="button button-mobile-block center margin-1em-top-bottom">Schedule a test</a>
         </div>
+        
+        <div class="container-medium-width section-thin margin-1em-top">
+          <div class="section section-beige container-dull-yellow-top text-larger">
+            <p><strong>Please note:</strong> All upcoming tests scheduled through our new process will appear on this page. However, 
+            there may still be upcoming tests for your school that have been scheduled through our old process. <b>Information on tests scheduled through our 
+            old process will not appear here.</b>  
+            </p>
+            <p>You can view upcoming tests that have been scheduled through our old process by accessing the ​<b>Tests Scheduled by Date</b> report from the <a [routerLink]="['/Reports']">View Reports</a> page.
+            </p>
+            <p class="no-margin-bottom">
+              If you have any questions, please contact your Account Manager. You can find your Account Manager’s contact details on 
+              the <a [routerLink]="['/Home']">Home page</a>.
+            </p>
+          </div>
+        </div>
 
         <div class="section-medium-thin section-clearfix">
             <div class="section-thin" [class.section-light-pink]="!inProgressTests?.length==0">
@@ -97,13 +112,6 @@
                     </tbody>
                 </table>
                 <p *ngIf="scheduleTests?.length==0">There are no tests scheduled at this time.</p>
-                <div *ngIf="scheduleTests?.length==0" class="section-medium-thin section-beige container">
-                    <p class="no-margin-bottom"><b>Please note:</b> All upcoming tests scheduled through our new process will appear here. There may
-                        still be upcoming tests for your school that have been scheduled through our old process. Please
-                        contact your Account Manager if you have any questions. You can find your Account Manager’s contact
-                        details on the <a [routerLink]="['/Home']">Home page</a>.
-                    </p>
-                </div>
             </div>
         </div>
 
@@ -144,13 +152,6 @@
                     </tbody>
                 </table>
                 <p *ngIf="completedTests?.length==0">There have been no completed tests over the last three months.</p>
-                <div *ngIf="completedTests?.length==0" class="section-medium-thin section-beige container">
-                    <p class="no-margin-bottom"><b>Please note:</b> All tests scheduled through our new process will appear here as soon as they are
-                        completed. They will be listed for up to three months after their end date. Information on tests
-                        scheduled through our old process will not appear here. Please contact your Account Manager if you
-                        have any questions. You can find your Account Manager’s contact details on the <a [routerLink]="['/Home']">Home page</a>.
-                    </p>
-                </div>
             </div>
         </div>
     </div>
