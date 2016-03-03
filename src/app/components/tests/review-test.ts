@@ -334,7 +334,10 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                 if (result.TestingSessionId && result.TestingSessionId > 0) {
                     __this.testScheduleModel.scheduleId = result.TestingSessionId;
                     __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
-                    __this.router.navigate(['/Confirmation']);
+                    if (__this.modify)
+                        __this.router.navigate(['/ModifyConfirmation', { action: 'modify' }]);
+                    else
+                        __this.router.navigate(['/Confirmation']);
                 }
                 else {
                     __this.resolveExceptions(json, __this);
@@ -607,24 +610,24 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
             });
     }
-    DeleteRemovedStudentFromSession(_retesters: any): any {
-        if (_retesters.length > 0) {
-            let _selectedStudent = this.testScheduleModel.selectedStudents;
-            if (_selectedStudent.length > 0) {
-                for (let i = 0; i < _selectedStudent.length; i++) {
-                    let student = _selectedStudent[i];
-                    if (student.MarkedToRemove && typeof (student.MarkedToRemove) !== 'undefined') {
-                        $.each(_retesters, function (index, el) {
-                            if ($(el).StudentId === student.StudentId) {
-                                _retesters.splice(index, 1);
-                            }
-                        });
-                    }
-                }
-            }
-        }
-        return _retesters;
-    }
+    // DeleteRemovedStudentFromSession(_retesters: any): any {
+    //     if (_retesters.length > 0) {
+    //         let _selectedStudent = this.testScheduleModel.selectedStudents;
+    //         if (_selectedStudent.length > 0) {
+    //             for (let i = 0; i < _selectedStudent.length; i++) {
+    //                 let student = _selectedStudent[i];
+    //                 if (student.MarkedToRemove && typeof (student.MarkedToRemove) !== 'undefined') {
+    //                     $.each(_retesters, function (index, el) {
+    //                         if ($(el).StudentId === student.StudentId) {
+    //                             _retesters.splice(index, 1);
+    //                         }
+    //                     });
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return _retesters;
+    // }
 
     onCancelConfirmation(e: any): void {
         $('#confirmationPopup').modal('hide');
@@ -826,15 +829,47 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
     validateDates(): boolean {
         if (this.testScheduleModel) {
+
             if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
+
+                let institutionOffset = 0;
+                if (this.testScheduleModel.institutionId && this.testScheduleModel.institutionId > 0) {
+                    institutionOffset = this.common.getOffsetInstitutionTimeZone(this.testScheduleModel.institutionId);
+                }
+
+                let scheduleStartTime = moment(new Date(
+                    moment(this.testScheduleModel.scheduleStartTime).year(),
+                    moment(this.testScheduleModel.scheduleStartTime).month(),
+                    moment(this.testScheduleModel.scheduleStartTime).date(),
+                    moment(this.testScheduleModel.scheduleStartTime).hour(),
+                    moment(this.testScheduleModel.scheduleStartTime).minute(),
+                    moment(this.testScheduleModel.scheduleStartTime).second()
+                )).format('YYYY-MM-DD HH:mm:ss');
+
+
+                let scheduleEndTime = moment(new Date(
+                    moment(this.testScheduleModel.scheduleEndTime).year(),
+                    moment(this.testScheduleModel.scheduleEndTime).month(),
+                    moment(this.testScheduleModel.scheduleEndTime).date(),
+                    moment(this.testScheduleModel.scheduleEndTime).hour(),
+                    moment(this.testScheduleModel.scheduleEndTime).minute(),
+                    moment(this.testScheduleModel.scheduleEndTime).second()
+                )).format('YYYY-MM-DD HH:mm:ss');
+
+
+                if (institutionOffset !== 0) {
+                    scheduleStartTime = moment(scheduleStartTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
+                    scheduleEndTime = moment(scheduleEndTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
+                }                
+                
                 if (this.modify) {
-                    if (moment(this.testScheduleModel.scheduleStartTime).isBefore(new Date())) {
+                    if (moment(scheduleStartTime).isBefore(new Date())) {
                         $('#alertPopup').modal('show');
                         return false;
                     }
                 }
                 else {
-                    if (moment(this.testScheduleModel.scheduleEndTime).isBefore(new Date())) {
+                    if (moment(scheduleStartTime).isBefore(new Date())) {
                         $('#alertPopup').modal('show');
                         return false;
                     }
