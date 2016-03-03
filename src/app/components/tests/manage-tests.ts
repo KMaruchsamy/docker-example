@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/Rx';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
-import {links, errorcodes} from '../../constants/config';
+import {links, errorcodes, teststatus} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
@@ -87,24 +87,26 @@ export class ManageTests implements OnInit {
                 if (__this.tests && __this.tests.length > 0) {
 
                     let unsortedCompletedTests = _.filter(__this.tests, function(test) {
-                        return moment(new Date()).isAfter(test.TestingWindowEnd);
+                        return (test.Status == teststatus.Completed);
                     });
                     __this.completedTests = _.sortBy(unsortedCompletedTests, function(_test) {
                         _test.nextDay = moment(_test.TestingWindowStart).isBefore(_test.TestingWindowEnd, 'day');
                         return moment(_test.TestingWindowStart).toDate()
                     });
 
-                    let unsortedScheduledTests = _.filter(__this.tests, function(test) {
+                    let unsortedScheduledTests = _.filter(__this.tests, function (test) {
                         test.nextDay = moment(test.TestingWindowStart).isBefore(test.TestingWindowEnd, 'day');
-                        return moment(new Date()).isBefore(test.TestingWindowStart);
+                        return (test.Status == teststatus.Scheduled);
                     });
-                    __this.scheduleTests = _.sortBy(unsortedScheduledTests, function(_test) { return moment(_test.TestingWindowStart).toDate() });
+                    __this.scheduleTests = _.sortBy(unsortedScheduledTests, function (_test) {
+                        return moment(_test.TestingWindowStart).toDate()
+                    });
 
-                    let unsortedInProgressTests = _.filter(__this.tests, function(test) {
-                        return (moment(new Date()).isAfter(test.TestingWindowStart) || moment(new Date()).isSame(test.TestingWindowStart))
-                            && (moment(new Date()).isBefore(test.TestingWindowEnd) || moment(new Date()).isSame(test.TestingWindowEnd));
+                    let unsortedInProgressTests = _.filter(__this.tests, function (test) {
+                        return (test.Status == teststatus.InProgress);
                     });
-                    __this.inProgressTests = _.sortBy(unsortedInProgressTests, function(_test) {
+
+                    __this.inProgressTests = _.sortBy(unsortedInProgressTests, function (_test) {
                         _test.nextDay = moment(_test.TestingWindowStart).isBefore(_test.TestingWindowEnd, 'day');
                         return moment(_test.TestingWindowStart).toDate()
                     });

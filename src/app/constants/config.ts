@@ -121,5 +121,12 @@ export const TestShedulingPages = {
 export const constants = {
     USERGUIDEMODIFICATIONDATE: '03/01/2016'
 }
+
+export const teststatus = {
+    Completed: 'Completed',
+    Scheduled: 'Scheduled',
+    InProgress: 'InProgress'
+}
+  
   
   
