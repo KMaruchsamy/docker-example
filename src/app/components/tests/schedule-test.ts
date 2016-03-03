@@ -135,7 +135,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             this.$endDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
             this.$endDate.datepicker('update', '');
         }
-
+     
         if (this.startTime)
             this.$startTime.timepicker('setTime', new Date(this.startTime));
         else

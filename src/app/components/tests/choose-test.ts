@@ -201,8 +201,8 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             moment(this.testScheduleModel.scheduleStartTime).date(),
             moment(this.testScheduleModel.scheduleStartTime).hour(),
             moment(this.testScheduleModel.scheduleStartTime).minute(),
-            moment(this.testScheduleModel.scheduleStartTime).second()
-            )).format();
+            moment(this.testScheduleModel.scheduleStartTime).second() 
+            )).format('YYYY/MM/DD HH:mm:ss');
         var myNewEndDateTime2 = moment(new Date(
             moment(this.testScheduleModel.scheduleEndTime).year(),
             moment(this.testScheduleModel.scheduleEndTime).month(),
@@ -210,7 +210,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             moment(this.testScheduleModel.scheduleEndTime).hour(),
             moment(this.testScheduleModel.scheduleEndTime).minute(),
             moment(this.testScheduleModel.scheduleEndTime).second()
-            )).format();
+            )).format('YYYY/MM/DD HH:mm:ss');
       
         if (this.testScheduleModel.scheduleStartTime != null && this.testScheduleModel.scheduleStartTime != 'undefined' &&
             this.testScheduleModel.scheduleEndTime != null && this.testScheduleModel.scheduleEndTime != 'undefined') {
