@@ -12,7 +12,6 @@ import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
-import {AlertPopup} from '../shared/alert.popup';
 import {RetesterAlternatePopup} from './retesters-alternate-popup';
 import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
@@ -29,7 +28,7 @@ import '../../lib/modal.js';
     selector: 'add-students',
     templateUrl: '../../templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
-    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup],
+    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup],
     directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, RouterLink],
     pipes: [RemoveWhitespacePipe]
 })
@@ -133,8 +132,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         this.loadActiveCohorts();
     }
     InitializePage(): void {
-        if (!this.modify)
-            this.UpdateTestName();
+        this.UpdateTestName();
         this.ReloadData();
         this.RefreshSelectedStudentCount();
     }
@@ -717,46 +715,16 @@ resolveRepeaterURL(url: string): string {
     return url.replace('§institutionid', this.testScheduleModel.institutionId.toString());
 }
 
-
-prepareInputForModify():any{
-    let input = {
-            TestingSessionId: (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0),
-            SessionName: this.testScheduleModel.scheduleName,
-            AdminId: this.auth.userid,
-            InstitutionId: this.testScheduleModel.institutionId,
-            SessionTestId: this.testScheduleModel.testId,
-            SessionTestName: this.testScheduleModel.testName,
-            TestingWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
-            TestingWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format(),
-            FacultyMemberId: this.testScheduleModel.facultyMemberId,
-            Students: this.testScheduleModel.selectedStudents,
-            LastCohortSelectedId: this.testScheduleModel.lastselectedcohortId,
-            LastSubjectSelectedId: this.testScheduleModel.subjectId,
-            PageSavedOn: ''//TODO need to add the logic for this one ..
-    };
-    
-    return input;
-}    
-
 GetRepeaterException(): void {
     let __this = this;
-    let repeaterExceptionURL: string
-    let input: any;
-    if (this.modify) {
-        repeaterExceptionURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.retestersModify}`;
-        input = this.prepareInputForModify();
+    let repeaterExceptionURL = this.resolveRepeaterURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.retesters}`);
+    let input = {
+        "SessionTestId": this.testScheduleModel.testId,
+        "StudentIds": __this.GetStudentIDList(),
+        "TestingSessionWindowStart": moment(this.testScheduleModel.scheduleStartTime).format(),
+        "TestingSessionWindowEnd": moment(this.testScheduleModel.scheduleEndTime).format()
     }
-    else {
-        repeaterExceptionURL = this.resolveRepeaterURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.retesters}`);
-        input = {
-            "SessionTestId": this.testScheduleModel.testId,
-            "StudentIds": __this.GetStudentIDList(),
-            "TestingSessionWindowStart": moment(this.testScheduleModel.scheduleStartTime).format(),
-            "TestingSessionWindowEnd": moment(this.testScheduleModel.scheduleEndTime).format()
-        }
-    }
-
-    let exceptionPromise = this.testService.scheduleTests(repeaterExceptionURL, JSON.stringify(input));
+        let exceptionPromise = this.testService.scheduleTests(repeaterExceptionURL, JSON.stringify(input));
     exceptionPromise.then((response) => {
         return response.json();
     })
@@ -765,19 +733,13 @@ GetRepeaterException(): void {
             if (json != null) {
                 __this.resolveExceptions(json, __this);
             }
-            else {
-                if (this.modify)
-                    this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
-                else
-                    this.router.navigate(['ReviewTest']);
-            }
-                // this.router.navigateByUrl('/tests/review');
+            else
+                this.router.navigateByUrl('/tests/review');
         })
         .catch((error) => {
             console.log(error);
         });
 }
-    
 WindowException(): void {
     let __this = this;
     let windowExceptionURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.windowexception}`;
@@ -944,13 +906,8 @@ loadRetesterNoAlternatePopup(_studentRepeaterExceptions: any): void {
                     this.sStorage.setItem('testschedule', JSON.stringify(testSchedule));
                     this.testScheduleModel = testSchedule;
                     this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
-                    if (this.studentCountInSession()) {
-                        if (this.modify)
-                            this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
-                        else
-                            this.router.navigate(['ReviewTest']);
-                        // this.router.navigateByUrl('/tests/review');
-                    }                      
+                    if (this.studentCountInSession())
+                        this.router.navigateByUrl('/tests/review');
                     else
                         // this.router.navigateByUrl('/tests/add-students');
                         this.initialize();
@@ -987,13 +944,8 @@ loadRetesterAlternatePopup(_studentRepeaterExceptions: any): void {
                     this.retesterExceptions = retesters;
                     this.DeleteRemovedStudentFromSession(retesters);
                     this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
-                    if (this.studentCountInSession()) {
-                         if (this.modify)
-                            this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
-                        else
-                            this.router.navigate(['ReviewTest']);
-                        // this.router.navigateByUrl('/tests/review');                        
-                    }
+                    if (this.studentCountInSession())
+                        this.router.navigateByUrl('/tests/review');
                     else
                         // this.router.navigateByUrl('/tests/add-students');
                         this.initialize();
@@ -1067,22 +1019,4 @@ getClassName(isRetester: boolean): string {
     else
         return "";
 }
-
-
-    onOKAlert(): void {
-        $('#alertPopup').modal('hide');
-        this.overrideRouteCheck = true;
-        this.router.navigate(['ManageTests']);
-}
-    
-     onCancelChanges(): void {
-        this.overrideRouteCheck = true;
-        this.testService.clearTestScheduleObjects();
-        this.router.parent.navigate(['/ManageTests']);
-    }
-
-    onContinueMakingChanges(): void {
-        // continue making changes after confirmation popup..
-    }
-    
 }

@@ -33,13 +33,12 @@ export const links = {
                 cohortstudents: "scheduling/cohorts/§cohortid/students?testId=§testid",
                 faculty: "scheduling/institutions/§institutionid/faculty",
                 retesters: "scheduling/checkForRetesters?institutionId=§institutionid",
-                retestersModify: "scheduling/checkForRetestersModify",
                 windowexception: "scheduling/checkForTestingWindowExceptions",
                 scheduletest: "scheduling/testingSessions",
                 viewtest: "scheduling/testingSessions/§scheduleId",
                 deleteSchedule: "scheduling/testingSessions/§scheduleId",
                 scheduletests: "scheduling/testingSessions",
-                modifyscheduletest: "scheduling/testingSessions/§scheduleId",
+                modifyscheduletest:"scheduling/testingSessions/§scheduleId",
                 renamesession: "scheduling/testingSessions/§scheduleId/renameSession",
                 refreshTestingStatus: "scheduling/refreshRetestingStatus"
             }
@@ -122,5 +121,12 @@ export const TestShedulingPages = {
 export const constants = {
     USERGUIDEMODIFICATIONDATE: '03/01/2016'
 }
+
+export const teststatus = {
+    Completed: 'Completed',
+    Scheduled: 'Scheduled',
+    InProgress: 'InProgress'
+}
+  
   
   
