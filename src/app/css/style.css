@@ -226,6 +226,9 @@ body {
 .margin-2em-top {
   margin-top: 2em; }
 
+.margin-1em-left {
+  margin-left: 1em; }
+
 .margin-1em-bottom {
   margin-bottom: 1em; }
 
@@ -442,6 +445,10 @@ ol {
     list-style-type: disc;
     margin-bottom: 0.66667em;
     padding-left: 1.5em; }
+    @media (min-width: 34.4375em) {
+      ul.default-ul-indented,
+      ol.default-ul-indented {
+        padding-left: 1.5em; } }
   ul.default-ol,
   ol.default-ol {
     list-style-type: decimal;
@@ -450,7 +457,7 @@ ol {
     @media (min-width: 34.4375em) {
       ul.default-ol-indented,
       ol.default-ol-indented {
-        padding-left: 3em; } }
+        padding-left: 1.5em; } }
 
 ul.bullet,
 ol.bullet {
@@ -465,16 +472,30 @@ ol.bullet {
     margin-bottom: .3em;
     padding-left: 1em;
     text-indent: -.85em; }
+  ul.bullet ul,
+  ol.bullet ul {
+    list-style-type: circle;
+    padding-left: 1em; }
   ul.bullet-indented,
   ol.bullet-indented {
-    padding-left: 1em; }
-  ul.bullet-with-link,
-  ol.bullet-with-link {
+    padding-left: 1.5em; }
+  ul.bullet-link,
+  ol.bullet-link {
     color: #C85300; }
 
 ul.list-extra-spacing > li,
 ol.list-extra-spacing > li {
   margin-bottom: .5em; }
+
+ul.paragraph-spacing-bottom-list,
+ol.paragraph-spacing-bottom-list {
+  margin-bottom: 0.75em; }
+
+ul.list-pdf-download-icon, ol.list-pdf-download-icon {
+  line-height: 1;
+  margin-left: 26px; }
+  ul.list-pdf-download-icon li, ol.list-pdf-download-icon li {
+    text-indent: -26px; }
 
 dl {
   margin-bottom: 0.66667em; }
@@ -922,9 +943,9 @@ a {
 .link-base-color {
   color: #6c6c6c; }
 
-.link-darker {
+a.link-darker {
   color: #B35300; }
-  .link-darker:active, .link-darker:focus, .link-darker:hover {
+  a.link-darker:active, a.link-darker:focus, a.link-darker:hover {
     color: #c27533; }
 
 .block-span {
@@ -989,6 +1010,9 @@ b, strong, .bolded {
 
 .white-link:active, .white-link:focus, .white-link:hover {
   color: #fff; }
+
+section .text-section:not(:last-child) > p:last-child, section .text-section:not(:last-child) > ul:last-child, section .text-section:not(:last-child) > ol:last-child, section .text-section:not(:last-child) > span:last-child, section .text-section:not(:last-child) > a.block:last-child {
+  margin-bottom: 1.5em; }
 
 hr {
   display: block;
@@ -1218,9 +1242,8 @@ picture {
   display: inline-block;
   vertical-align: middle; }
 
-.img-responive {
+.img-responsive {
   height: auto;
-  margin: 0;
   max-width: 100%; }
 
 .img-right {
@@ -1249,6 +1272,9 @@ picture {
 
 .img-round {
   border-radius: 50%; }
+
+.img-bordered-gray {
+  border: 2px solid #e3e3e3; }
 
 .icon::before {
   background-repeat: no-repeat;
@@ -1293,14 +1319,14 @@ picture {
 
 .action-color-link-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -214px -201px;
+  background-position: -227px -201px;
   width: 14px;
   height: 14px;
   margin-right: 1em; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .action-color-link-icon:before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 /*.green-reminder-flag:before {
   @include retina-sprite ($green-reminder-flag-group);
@@ -1308,18 +1334,18 @@ picture {
 }*/
 .red-triangle-alert-large:before {
   background-image: url(../images/sprite.png);
-  background-position: 0px -201px;
+  background-position: -58px -201px;
   width: 56px;
   height: 49px;
   margin-right: 0; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .red-triangle-alert-large:before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .lightbulb-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -281px -54px;
+  background-position: -283px -54px;
   width: 31px;
   height: 41px;
   float: left;
@@ -1328,11 +1354,11 @@ picture {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .lightbulb-icon:before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .small-gray-search-icon::before {
   background-image: url(../images/sprite.png);
-  background-position: -197px -201px;
+  background-position: -210px -201px;
   width: 15px;
   height: 14px;
   float: left;
@@ -1341,11 +1367,11 @@ picture {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .small-gray-search-icon::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .info-icon-yellow::before {
   background-image: url(../images/sprite.png);
-  background-position: -306px -221px;
+  background-position: -308px -221px;
   width: 22px;
   height: 22px;
   float: left;
@@ -1354,11 +1380,11 @@ picture {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .info-icon-yellow::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .sun-icon::before {
   background-image: url(../images/sprite.png);
-  background-position: -91px -125px;
+  background-position: -221px 0px;
   width: 60px;
   height: 60px;
   display: block;
@@ -1367,11 +1393,11 @@ picture {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .sun-icon::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .path-icon::before {
   background-image: url(../images/sprite.png);
-  background-position: -153px -125px;
+  background-position: -159px -125px;
   width: 60px;
   height: 60px;
   display: block;
@@ -1380,21 +1406,21 @@ picture {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .path-icon::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .print-icon::before {
   background-image: url(../images/sprite.png);
-  background-position: -58px -223px;
+  background-position: -202px -222px;
   width: 19px;
   height: 17px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .print-icon::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .print-icon-white::before {
   background-image: url(../images/sprite.png);
-  background-position: -79px -223px;
+  background-position: -181px -222px;
   width: 19px;
   height: 17px;
   margin-bottom: 0;
@@ -1402,7 +1428,7 @@ picture {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .print-icon-white::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .clock-alert-icon::before {
   background-image: url(../images/sprite.png);
@@ -1413,40 +1439,40 @@ picture {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .clock-alert-icon::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .clock-signed-out-icon::before {
   background-image: url(../images/sprite.png);
-  background-position: -221px -120px;
+  background-position: 0px -201px;
   width: 56px;
   height: 56px;
   margin-right: 0; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .clock-signed-out-icon::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .broken-heart-icon::before {
   background-image: url(../images/sprite.png);
-  background-position: -221px 0px;
+  background-position: -221px -62px;
   width: 58px;
   height: 58px;
   margin-right: 0; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .broken-heart-icon::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .question-mark-icon::before {
   background-image: url(../images/sprite.png);
-  background-position: -221px -60px;
+  background-position: -221px -122px;
   width: 58px;
   height: 58px;
   margin-right: 0; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .question-mark-icon::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .under-construction-icon::before {
   background-image: url(../images/sprite.png);
@@ -1457,7 +1483,7 @@ picture {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .under-construction-icon::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 @-webkit-keyframes spinning-icon {
   100% {
@@ -1480,7 +1506,28 @@ picture {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .loading-icon::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
+
+.pdf-download-icon::before {
+  background-image: url(../images/sprite.png);
+  background-position: -316px -54px;
+  width: 18px;
+  height: 21px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .pdf-download-icon::before {
+      background-image: url(../images/sprite_2x.png);
+      background-size: 335px 257px; } }
+
+.account-alert-icon::before {
+  background-image: url(../images/sprite.png);
+  background-position: -91px -125px;
+  width: 66px;
+  height: 66px;
+  margin-right: 0; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .account-alert-icon::before {
+      background-image: url(../images/sprite_2x.png);
+      background-size: 335px 257px; } }
 
 .pdf-icon {
   width: 19px;
@@ -1791,7 +1838,7 @@ main .right-grid ::-webkit-scrollbar {
         padding: 0; } }
     .dropdown .dropdown-button:after {
       background-image: url(../images/sprite.png);
-      background-position: -91px -187px;
+      background-position: -283px -246px;
       width: 21px;
       height: 11px;
       content: " ";
@@ -1800,7 +1847,7 @@ main .right-grid ::-webkit-scrollbar {
       @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
         .dropdown .dropdown-button:after {
           background-image: url(../images/sprite_2x.png);
-          background-size: 333px 250px; } }
+          background-size: 335px 257px; } }
   .dropdown .dropdown-menu {
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
@@ -1863,76 +1910,76 @@ main .right-grid ::-webkit-scrollbar {
 
 .home-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -195px -90px;
+  background-position: -140px -201px;
   width: 21px;
   height: 18px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .home-icon:before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .reporting-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -125px -90px;
+  background-position: -149px -90px;
   width: 21px;
   height: 21px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .reporting-icon:before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .student-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -313px -130px;
+  background-position: -315px -130px;
   width: 20px;
   height: 21px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .student-icon:before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .group-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -174px -201px;
+  background-position: -187px -201px;
   width: 21px;
   height: 14px;
   margin-top: 4px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .group-icon:before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .test-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -150px -201px;
+  background-position: -163px -201px;
   width: 22px;
   height: 15px;
   margin-top: 4px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .test-icon:before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .manage-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -314px -54px;
+  background-position: -160px -222px;
   width: 19px;
   height: 19px;
   margin-top: 3px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .manage-icon:before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .sign-out-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -58px -201px;
+  background-position: -116px -222px;
   width: 20px;
   height: 20px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .sign-out-icon:before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .nav-items {
   color: #fff;
@@ -1961,33 +2008,33 @@ main .right-grid ::-webkit-scrollbar {
     position: relative; }
   .nav-items .schedule-icon::before {
     background-image: url(../images/sprite.png);
-    background-position: -221px -178px;
+    background-position: -125px -90px;
     width: 22px;
     height: 21px;
     top: 0.1em; }
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
       .nav-items .schedule-icon::before {
         background-image: url(../images/sprite_2x.png);
-        background-size: 333px 250px; } }
+        background-size: 335px 257px; } }
   .nav-items .email-icon-outline::before {
     background-image: url(../images/sprite.png);
-    background-position: -125px -201px;
+    background-position: -244px -182px;
     width: 23px;
     height: 15px; }
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
       .nav-items .email-icon-outline::before {
         background-image: url(../images/sprite_2x.png);
-        background-size: 333px 250px; } }
+        background-size: 335px 257px; } }
   .nav-items .info-icon-white::before {
     background-image: url(../images/sprite.png);
-    background-position: -311px -190px;
+    background-position: -313px -190px;
     width: 22px;
     height: 22px;
     top: 0.2em; }
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
       .nav-items .info-icon-white::before {
         background-image: url(../images/sprite_2x.png);
-        background-size: 333px 250px; } }
+        background-size: 335px 257px; } }
 
 /*header {
   flex: none;
@@ -2081,14 +2128,14 @@ main::before {
 
 .radio-large input[type="radio"]:checked + label:before {
   background-image: url(../images/sprite.png);
-  background-position: -281px -130px;
+  background-position: -283px -130px;
   width: 30px;
   height: 30px;
   content: " "; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .radio-large input[type="radio"]:checked + label:before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
   .radio-large input[type="radio"]:checked + label:before + input[type="radio"]:focus {
     outline: 1px solid black; }
 
@@ -2127,7 +2174,7 @@ input[type="checkbox"] + label, .checkbox-image + label {
   position: relative; }
   input[type="checkbox"] + label::before, .checkbox-image + label::before {
     background-image: url(../images/sprite.png);
-    background-position: -148px -90px;
+    background-position: -172px -90px;
     width: 21px;
     height: 21px;
     content: " ";
@@ -2138,7 +2185,7 @@ input[type="checkbox"] + label, .checkbox-image + label {
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
       input[type="checkbox"] + label::before, .checkbox-image + label::before {
         background-image: url(../images/sprite_2x.png);
-        background-size: 333px 250px; } }
+        background-size: 335px 257px; } }
   input[type="checkbox"] + label::after, .checkbox-image + label::after {
     content: '';
     position: absolute;
@@ -2152,7 +2199,7 @@ input[type="checkbox"]:disabled + label::before, .checkbox-image:disabled + labe
 
 input[type="checkbox"]:checked + label::before, .checkbox-image:checked + label::before {
   background-image: url(../images/sprite.png);
-  background-position: -245px -178px;
+  background-position: -195px -90px;
   width: 21px;
   height: 21px;
   content: " ";
@@ -2163,7 +2210,7 @@ input[type="checkbox"]:checked + label::before, .checkbox-image:checked + label:
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     input[type="checkbox"]:checked + label::before, .checkbox-image:checked + label::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 input[type="checkbox"]:checked + label::after, .checkbox-image:checked + label::after {
   content: '';
@@ -2188,7 +2235,7 @@ input.small-checkbox-image {
 
 input.small-checkbox-image + label::before {
   background-image: url(../images/sprite.png);
-  background-position: -119px -223px;
+  background-position: -223px -222px;
   width: 17px;
   height: 17px;
   content: " ";
@@ -2199,14 +2246,14 @@ input.small-checkbox-image + label::before {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     input.small-checkbox-image + label::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 input.small-checkbox-image:disabled + label::before {
   opacity: .4; }
 
 input.small-checkbox-image:checked + label::before {
   background-image: url(../images/sprite.png);
-  background-position: -100px -223px;
+  background-position: -242px -222px;
   width: 17px;
   height: 17px;
   content: " ";
@@ -2217,71 +2264,11 @@ input.small-checkbox-image:checked + label::before {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     input.small-checkbox-image:checked + label::before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 input.checkbox-small-image:focus + label::before {
   box-shadow: inset 0px 0px 3px rgba(90, 94, 169, 0.9), 0 0 3px rgba(80, 84, 153, 0.9);
   outline: none; }
-
-.expander {
-  margin-bottom: 2em; }
-  .expander::after {
-    clear: both;
-    content: "";
-    display: table; }
-  .expander-half {
-    float: left;
-    padding-right: 2em;
-    width: 50%; }
-    @media (max-width: 74.9375em) {
-      .expander-half {
-        width: 100%; } }
-  .expander .expander-trigger {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border-bottom: 1px solid #e3e3e3;
-    color: #C85300;
-    cursor: pointer;
-    display: block;
-    font-size: 1em;
-    margin-bottom: 1em;
-    padding-left: 2em;
-    padding-bottom: 0.25em;
-    position: relative;
-    text-decoration: none; }
-    .expander .expander-trigger:before {
-      background-image: url(../images/sprite.png);
-      background-position: -268px -178px;
-      width: 7px;
-      height: 13px;
-      background-repeat: no-repeat;
-      content: " ";
-      position: absolute;
-      top: 5px;
-      left: 6px;
-      right: 0;
-      bottom: 0;
-      -webkit-transform: rotate(90deg);
-          -ms-transform: rotate(90deg);
-              transform: rotate(90deg); }
-      @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
-        .expander .expander-trigger:before {
-          background-image: url(../images/sprite_2x.png);
-          background-size: 333px 250px; } }
-    .expander .expander-trigger.expander-hidden:before {
-      top: 5px;
-      left: 10px;
-      width: 12px;
-      -webkit-transform: rotate(0deg);
-          -ms-transform: rotate(0deg);
-              transform: rotate(0deg); }
-  .expander .expander-content p {
-    color: #6c6c6c;
-    line-height: 1.5; }
-  .expander .expander-hidden + .expander-content {
-    display: none; }
 
 .accordion-tabs-minimal {
   line-height: 1.5;
@@ -2340,12 +2327,12 @@ input.checkbox-small-image:focus + label::before {
         float: left; } }
 
 .expander {
-  margin-bottom: 2em; }
+  margin-bottom: 0.66667em; }
   .expander::after {
     clear: both;
     content: "";
     display: table; }
-  .expander .expander-trigger {
+  .expander-trigger {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -2360,9 +2347,9 @@ input.checkbox-small-image:focus + label::before {
     padding-bottom: 0.25em;
     position: relative;
     text-decoration: none; }
-    .expander .expander-trigger:before {
+    .expander-trigger:before {
       background-image: url(../images/sprite.png);
-      background-position: -268px -178px;
+      background-position: -269px -182px;
       width: 7px;
       height: 13px;
       content: " ";
@@ -2375,10 +2362,10 @@ input.checkbox-small-image:focus + label::before {
           -ms-transform: rotate(90deg);
               transform: rotate(90deg); }
       @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
-        .expander .expander-trigger:before {
+        .expander-trigger:before {
           background-image: url(../images/sprite_2x.png);
-          background-size: 333px 250px; } }
-    .expander .expander-trigger.collapsed:before {
+          background-size: 335px 257px; } }
+    .expander-trigger.collapsed:before {
       top: 5px;
       left: 10px;
       width: 12px;
@@ -2573,8 +2560,14 @@ input.checkbox-small-image:focus + label::before {
   outline: 0;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2); }
   .modal-content .close {
-    right: -.75em;
-    top: -10px; }
+    position: absolute;
+    right: 15px;
+    top: 15px; }
+  .modal-content .OK-button-centered {
+    display: block;
+    float: none;
+    margin: 0 auto;
+    width: 65px; }
 
 .modal-dialog {
   position: relative;
@@ -2588,37 +2581,29 @@ input.checkbox-small-image:focus + label::before {
   .modal-dialog {
     width: 600px;
     margin: 90px auto; }
-    .modal-dialog-wide {
-      width: 738px;
-      margin: 20px auto; } }
-    @media (min-width: 48em) and (min-width: 62em) {
-      .modal-dialog-wide {
-        width: 815px; } }
-
-@media (min-width: 48em) {
-      .modal-dialog-wide .modal-content {
-        box-shadow: none; } }
+    .modal-dialog-narrow {
+      width: 550px; }
+    .modal-dialog .modal-content {
+      box-shadow: none; } }
 
 .modal-header {
   min-height: 16.43px;
-  padding: 1.5em 2em;
-  padding-bottom: 0; }
-  .modal-header h4 {
-    line-height: 1.5; }
+  padding: 1.5em 2em 0; }
+  @media (min-width: 25.9375em) {
+    .modal-header {
+      padding: 1.5em 3.5em 0; } }
 
 .modal-body {
   position: relative;
   padding: 1em 2em;
-  /*@include breakpoint($small-screen-up) {
-      padding: 1.5em 5em;
-  }*/ }
+  padding-bottom: 0; }
   .modal-body::after {
     clear: both;
     content: "";
     display: table; }
   @media (min-width: 25.9375em) {
     .modal-body {
-      padding: 1.5em 2em 1em; } }
+      padding: 1.5em 3.5em 1em; } }
   .modal-body-no-padding-top {
     padding-top: 0; }
 
@@ -2630,6 +2615,9 @@ input.checkbox-small-image:focus + label::before {
     clear: both;
     content: "";
     display: table; }
+  @media (min-width: 25.9375em) {
+    .modal-footer {
+      padding: 1.5em 3.5em 2em; } }
   @media (max-width: 25.875em) {
     .modal-footer {
       padding-bottom: 5em; }
@@ -2679,13 +2667,13 @@ input.checkbox-small-image:focus + label::before {
   .datepicker th, .datepicker td {
     padding: .5em 0; }
   .datepicker table tr td.active, .datepicker table tr td.active:hover, .datepicker table tr td.active.disabled, .datepicker table tr td.active.disabled:hover {
-    background-color: #4A7B71 !important; }
+    background: #4A7B71 !important; }
   .datepicker table tr td.today, .datepicker table tr td.today:hover, .datepicker table tr td.today:hover:hover {
-    background-color: #E9F0EF; }
+    background: #E9F0EF; }
   .datepicker table tr td.today.disabled, .datepicker table tr td.today:hover.disabled, .datepicker table tr td.today:hover.disabled:hover, .datepicker table tr td.today.disabled:hover, .datepicker table tr td.today.disabled.disabled, .datepicker table tr td.today.disabled:hover.disabled:hover, .datepicker table tr td.today.disabled:hover.disabled {
-    background-color: #e3e3e3; }
+    background: #e3e3e3; }
   .datepicker table tr td span.active, .datepicker table tr td span.active:hover, .datepicker table tr td span.active.disabled, .datepicker table tr td span.active.disabled:hover {
-    background-color: #4A7B71 !important; }
+    background: #4A7B71 !important; }
 
 form.search-bar {
   position: relative; }
@@ -2889,40 +2877,40 @@ input[type=search].small-search-box {
   top: 4px; }
   .close-red {
     background-image: url(../images/sprite.png);
-    background-position: -138px -223px;
+    background-position: -261px -222px;
     width: 15px;
     height: 15px; }
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
       .close-red {
         background-image: url(../images/sprite_2x.png);
-        background-size: 333px 250px; } }
+        background-size: 335px 257px; } }
   .close-white {
     background-image: url(../images/sprite.png);
-    background-position: -314px -97px;
+    background-position: -316px -77px;
     width: 18px;
     height: 18px; }
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
       .close-white {
         background-image: url(../images/sprite_2x.png);
-        background-size: 333px 250px; } }
+        background-size: 335px 257px; } }
   .close-large-icon {
     background-image: url(../images/sprite.png);
-    background-position: -281px -97px;
+    background-position: -283px -97px;
     width: 31px;
     height: 31px; }
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
       .close-large-icon {
         background-image: url(../images/sprite_2x.png);
-        background-size: 333px 250px; } }
+        background-size: 335px 257px; } }
   .close-medium-icon-grey {
     background-image: url(../images/sprite.png);
-    background-position: -281px -221px;
+    background-position: -283px -221px;
     width: 23px;
     height: 23px; }
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
       .close-medium-icon-grey {
         background-image: url(../images/sprite_2x.png);
-        background-size: 333px 250px; } }
+        background-size: 335px 257px; } }
   .close:hover, .closefocus {
     opacity: 1; }
 
@@ -2931,7 +2919,7 @@ input[type=search].small-search-box {
 }*/
 .help-link:before {
   background-image: url(../images/sprite.png);
-  background-position: -314px -75px;
+  background-position: -316px -97px;
   width: 19px;
   height: 19px;
   content: " ";
@@ -2942,7 +2930,7 @@ input[type=search].small-search-box {
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .help-link:before {
       background-image: url(../images/sprite_2x.png);
-      background-size: 333px 250px; } }
+      background-size: 335px 257px; } }
 
 .footer-logged-in {
   background-color: #ACB5C0;
@@ -3010,7 +2998,7 @@ input[type=search].small-search-box {
   position: relative; }
   .success-icon::before {
     background-image: url(../images/sprite.png);
-    background-position: -281px -162px;
+    background-position: -283px -162px;
     width: 33px;
     height: 26px;
     content: " ";
@@ -3019,7 +3007,7 @@ input[type=search].small-search-box {
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
       .success-icon::before {
         background-image: url(../images/sprite_2x.png);
-        background-size: 333px 250px; } }
+        background-size: 335px 257px; } }
   .success-icon + a {
     clear: both;
     display: block;
@@ -4245,7 +4233,7 @@ input.page-lg-heading {
   max-width: 74em;
   margin-left: auto;
   margin-right: auto;
-  border: 2px solid #e3e3e3;
+  box-shadow: 0 0 0 2px #e3e3e3;
   border-radius: 4px;
   position: relative; }
   .testing-add-students-container:after {
@@ -4256,18 +4244,19 @@ input.page-lg-heading {
     .testing-add-students-container {
       display: table;
       table-layout: fixed;
-      width: 100%; } }
+      width: 1135px; } }
   .testing-add-students-container .tab-content > .tab-pane {
     padding: 0; }
   .testing-add-students-container .grid .top-section {
     padding: 0.66667em; }
   .testing-add-students-container .left-grid {
     background: #fff;
-    width: 66.66667%;
+    width: 757px;
     border-right: 2px solid #e3e3e3;
     min-height: 400px; }
     @media (min-width: 75em) {
       .testing-add-students-container .left-grid {
+        border-radius: 4px 0 0 4px;
         display: table-cell;
         float: none;
         vertical-align: top; } }
@@ -4277,7 +4266,7 @@ input.page-lg-heading {
         min-height: 100px;
         width: 100%; } }
   .testing-add-students-container .right-grid {
-    width: 33.33333%; }
+    width: 378px; }
     @media (min-width: 75em) {
       .testing-add-students-container .right-grid {
         display: table-cell;
@@ -4446,7 +4435,7 @@ input.page-lg-heading {
     height: auto !important; } }
 
 .test-scheduling-selected-students-container {
-  height: 602px;
+  height: 606px;
   overflow-y: auto; }
   @media (max-width: 74.9375em) {
     .test-scheduling-selected-students-container {
@@ -4540,7 +4529,8 @@ table.dataTable tbody td {
         font-weight: bold; } }
 
 .faculty-user-guide-header {
-  width: 100%; }
+  width: 100%;
+  z-index: 3; }
   @media (max-width: 47.9375em) {
     .faculty-user-guide-header .user-guide-heading {
       font-size: 1.5em; }
@@ -4590,13 +4580,28 @@ table.dataTable tbody td {
         margin-top: 12em; } }
   .faculty-user-guide-content section {
     padding-top: 1.5em; }
+  .faculty-user-guide-content h3 {
+    margin-bottom: .4em; }
 
 .back-to-top-arrow {
+  background: #F9F9F9;
+  border-radius: 4px 0 0 4px;
   display: none;
+  padding: 4px;
   position: fixed;
-  bottom: 10px;
-  right: 10px;
-  width: 39px; }
+  bottom: 0;
+  right: 0;
+  width: 47px; }
+  @media (min-width: 62em) {
+    .back-to-top-arrow {
+      background: transparent;
+      bottom: 10px;
+      padding: 0;
+      right: 5px;
+      width: 39px; } }
+  @media (min-width: 75em) {
+    .back-to-top-arrow {
+      right: 15px; } }
 
 .hidden {
   display: none; }
@@ -4736,15 +4741,20 @@ table.dataTable tbody td {
   position: relative; }
 
 @media print {
+  @page {
+    size: auto;
+    margin: 25mm; }
   body {
     display: block; }
+  h2, h3, h4 {
+    page-break-after: avoid; }
   .dataTables_wrapper {
     width: auto;
     position: relative;
     display: block;
     float: none; }
-  header, footer, .print-icon {
-    display: none; }
+  header, footer, .print-icon, .faculty-user-guide-menu, .back-to-top-arrow, .video {
+    display: none !important; }
   main::before {
     display: block; }
   .app-main {
@@ -4756,6 +4766,18 @@ table.dataTable tbody td {
     .view-testing-session-main a {
       display: none; }
   .modify-testing-session-left a, .modify-testing-session-left button, .modify-testing-session-right a, .modify-testing-session-right button {
-    display: none !important; } }
+    display: none !important; }
+  .section-light-gray {
+    background: none; }
+  .faculty-user-guide-header {
+    background: none;
+    position: relative;
+    top: 16px; }
+    .faculty-user-guide-header h2, .faculty-user-guide-header span {
+      color: #4A7B71; }
+  .faculty-user-guide-content {
+    width: 100%; }
+    .faculty-user-guide-content .collapse {
+      display: block; } }
 
 /*# sourceMappingURL=style.css.map */
