@@ -194,14 +194,37 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         e.preventDefault();
         if (!this.validateDates())
             return;
+
+        var myNewStartDateTime2 = moment(new Date(
+            moment(this.testScheduleModel.scheduleStartTime).year(),
+            moment(this.testScheduleModel.scheduleStartTime).month(),
+            moment(this.testScheduleModel.scheduleStartTime).date(),
+            moment(this.testScheduleModel.scheduleStartTime).hour(),
+            moment(this.testScheduleModel.scheduleStartTime).minute(),
+            moment(this.testScheduleModel.scheduleStartTime).second() 
+            )).format('YYYY/MM/DD HH:mm:ss');
+        var myNewEndDateTime2 = moment(new Date(
+            moment(this.testScheduleModel.scheduleEndTime).year(),
+            moment(this.testScheduleModel.scheduleEndTime).month(),
+            moment(this.testScheduleModel.scheduleEndTime).date(),
+            moment(this.testScheduleModel.scheduleEndTime).hour(),
+            moment(this.testScheduleModel.scheduleEndTime).minute(),
+            moment(this.testScheduleModel.scheduleEndTime).second()
+            )).format('YYYY/MM/DD HH:mm:ss');
+      
+        if (this.testScheduleModel.scheduleStartTime != null && this.testScheduleModel.scheduleStartTime != 'undefined' &&
+            this.testScheduleModel.scheduleEndTime != null && this.testScheduleModel.scheduleEndTime != 'undefined') {
+
+            this.testScheduleModel.scheduleStartTime = myNewStartDateTime2;
+            this.testScheduleModel.scheduleEndTime = myNewEndDateTime2;
+        }
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         if (this.modify)
             this.router.navigate(['/ModifyScheduleTest', { action: 'modify' }]);
         else
             this.router.navigate(['/ScheduleTest']);
     }
-
-
+    
     validateDates(): boolean {
         if (this.testScheduleModel) {
             if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
