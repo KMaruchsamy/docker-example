@@ -133,7 +133,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         this.loadActiveCohorts();
     }
     InitializePage(): void {
-        this.UpdateTestName();
+        if (!this.modify)
+            this.UpdateTestName();
         this.ReloadData();
         this.RefreshSelectedStudentCount();
     }
