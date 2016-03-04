@@ -317,4 +317,33 @@ export class TestService {
     }
 
 
+  
+    getTestStatus(url: string):string {
+        let self = this;
+        let status = 'scheduled';
+        $.ajax({
+            url: url,
+            type: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': self.auth.authheader
+            },
+            success: function(json) {
+                if (json) {
+                    if (json.Status)
+                        status = json.Status.toLowerCase();    
+                }
+               
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            },
+            async: false
+        });
+
+        return status;
+    }
+
+
 }

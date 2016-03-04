@@ -1,5 +1,5 @@
 import {Component, OnInit} from 'angular2/core';
-import {CanActivate} from 'angular2/router';
+import {RouterLink, CanActivate} from 'angular2/router';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {links, constants} from '../../constants/config';
@@ -13,7 +13,7 @@ import {ParseDatePipe} from '../../pipes/parseDate.pipe';
     host: {
         '(window:scroll)': 'onScroll($event)'
     },
-    directives: [PageHeader, PageFooter],
+    directives: [PageHeader, PageFooter, RouterLink],
     pipes: [ParseDatePipe]
 })
 export class UserGuide implements OnInit {
