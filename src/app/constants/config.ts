@@ -121,7 +121,7 @@ export const TestShedulingPages = {
 };
 
 export const constants = {
-    USERGUIDEMODIFICATIONDATE: '03/01/2016'
+    USERGUIDEMODIFICATIONDATE: '03/15/2016'
 }
 
 export const teststatus = {
