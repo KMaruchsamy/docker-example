@@ -21,8 +21,8 @@
                     <li><a [class.text-purple-bold]="activeId==='#eBooks'" href="javascript:void(0)" (click)="scroll('#eBooks',$event)">Student eBooks</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#successTutorials'" href="javascript:void(0)" (click)="scroll('#successTutorials',$event)">Nursing School Success Tutorials</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#reports'" href="javascript:void(0)" (click)="scroll('#reports',$event)">Creating and Viewing Reports</a></li>
-                    <li><a [class.text-purple-bold]="activeId==='#research'" href="javascript:void(0)" (click)="scroll('#research',$event)">Research and White Papers</a></li>
-                    <li><a [class.text-purple-bold]="activeId==='needHelp'" href="javascript:void(0)" (click)="scroll('#needHelp',$event)">Need Help?</a></li>
+                    <li><a [class.text-purple-bold]="activeId==='#whitePapers'" href="javascript:void(0)" (click)="scroll('#research',$event)">Research and White Papers</a></li>
+                    <li><a [class.text-purple-bold]="activeId==='#needHelp'" href="javascript:void(0)" (click)="scroll('#needHelp',$event)">Need Help?</a></li>
                 </ul>
             </div>
 
@@ -52,11 +52,9 @@
 
                     <div class="text-section">
                         <h3 class="h5 teal">Upcoming Faculty Orientations</h3>
-                        <p>Learn everything you need to know about the Kaplan resources and materials available
-                        to you and your students through live, online orientations conducted by our nurse educator
-                        consultants. These orientations include a general overview of the student site, faculty site,
-                        and an opportunity for Q&A with a Kaplan Nurse Consultant. You can participate from anywhere
-                        you have an Internet connection. Our next scheduled orientations are:
+                        <p>Learn everything you need to know about the Kaplan resources and materials available to you and your students through live, online orientations. These 
+                           orientations include a general overview of the student site, faculty site, and an opportunity for Q&A with a Kaplan Nurse Consultant. You can participate from 
+                           anywhere you have an Internet connection. Our next scheduled orientations are:
                         </p>
                         <ul class="bullet paragraph-spacing-bottom-list">
                         <li><b>Tuesday, April 12,</b> 2:00 PM - 3:00 PM EST</li>
@@ -90,7 +88,7 @@
 
                     <div class="text-section">
                         <h3 class="h5 teal">Video: Inside Kaplan's 2016 NCLEX RN<sup>®</sup> Review Course</h3>
-                        <p>Learn more about Kaplan Nursing’s NCLEX-RN<sup>®</sup> review course revisions which go into effect with classes starting after April 1, 2016.
+                        <p>Learn more about Kaplan Nursing’s NCLEX-RN<sup>®</sup> review course revisions which go into effect with classes starting after March 1, 2016.
                         In <a href="https://www.youtube.com/watch?v=WDqTWxi3eQ4" target="_blank">this video</a>, <b>Susan Sanders</b>, DNP, RN, NEA-BC, Vice President of Kaplan Nursing,
                         interviews <b>Barbara Irwin</b>, MSN, RN, Executive Director of
                         Kaplan Nursing and an expert on the NCLEX<sup>®</sup>.
@@ -132,7 +130,7 @@
                     </p>
                     <p><strong>Please note:</strong> The Nursing Admission Test is administered through a separate website. If you would like access to
                         this test, please contact your Account Manager to receive sign-in information and an orientation. You can find your Account
-                        Manager’s contact information on the Home page.
+                        Manager’s contact information on the <a [routerLink]="['/Home']">Home page</a>.
                     </p>
                     <p>A comprehensive remediation program is included so early intervention improves student outcomes.
                         Remediation is available 24 hours a day, seven days a week, in multiple formats so students can correct knowledge
@@ -212,7 +210,7 @@
                         <p>Your Kaplan Nurse Consultant can provide custom faculty training sessions that can also be held live and online for maximum schedule flexibility. To
                         schedule a faculty orientation and/or visit, please contact your Nurse Consultant. You can find your Nurse Consultant’s contact info on your
                         <a [routerLink]="['/Home']">Home page</a>.
-                        Please see the What’s New section of this user guide for a list of upcoming live and online general orientations.
+                        Please see the <a href="#whatsNew">What’s New</a> section of this user guide for a list of upcoming live and online general orientations.
                         </p>
                         <p>For more information on rosters, orientations and other aspects of the Kaplan program, please see our Service Plan.</p>
                         <a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Kaplan_Service_Plan_Updated_03-15-16.pdf" class="icon pdf-download-icon block">Kaplan Service Plan</a>
@@ -249,7 +247,7 @@
                     <div class="text-section">
                         <h3 class="h5 teal">Other Accommodations Provided by Kaplan</h3>
                         <ul class="bullet paragraph-spacing-bottom-list">
-                        <li>Our Orientation and NCLEX<sup>®</sup> Review Prep videos are captioned.</li>
+                        <li>Our NCLEX<sup>®</sup> Review Prep videos are captioned.</li>
                         <li>The student’s syllabus image content contains alternate text.</li>
                         <li>The student’s syllabus content can be read without page styles (as plain text).</li>
                         <li>Assessment result tables have column headers for identification.</li>
@@ -296,11 +294,12 @@
                         <p>The <b>Integrated Tests</b> are developed by groups of nursing faculty selected by Kaplan Nursing. The purpose of the tests is to evaluate knowledge of key concepts
                             and major topics taught in a basic nursing curriculum. Constructs, such as critical thinking and making nursing judgments, are essential themes embedded in all tests.
                             After development, each Integrated Test is reviewed by a panel of nursing faculty to determine the degree to which the items on the test reflect a course’s content
-                            domain. Changes are made as needed to make the tests reflective of a basic nursing curriculum leading to RN licensure.
+                            domain. Changes are made as needed to make the tests reflective of a basic nursing curriculum leading to licensure.
                         </p>
                         <p>To ensure the usefulness and effectiveness of the tests as evaluation tools, Kaplan Nursing conducts research studies to determine the reliability and validity of
-                            the tests. The Integrated Tests are administered to groups of students enrolled in associate degree (ADN) and baccalaureate degree (BSN) nursing programs. A small
-                            number of students enrolled in nursing diploma programs participate in the study. The schools of nursing participating in the study are geographically dispersed across
+                            the tests. The Integrated Tests are administered to groups of students enrolled in associate degree (ADN) and baccalaureate degree (BSN) nursing programs for the RN 
+                            Integrated Tests and to groups of practical nursing and vocational nursing students for the PN Integrated Tests. A small
+                            number of students enrolled in nursing diploma programs participate in the RN study. The schools of nursing participating in the study are geographically dispersed across
                             the United States. Every effort is made to ensure that the sample that participates in the study accurately represents the population of students enrolled in nursing schools.
                         </p>
                         <p>The Integrated Tests are administered by the faculty of the nursing schools under proctored conditions. Nursing faculty monitor the security of the test questions. Because
@@ -344,7 +343,7 @@
                             <img src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/order_match.png" alt="order match example screenshot" class="img-responsive img-bordered-gray margin-1em-bottom">
                             </li>
                         </ol>
-                        <p>The Integrated Tests question interface is similar to the test interface used on the NCLEX-RN<sup>®</sup> exam. Students see a question stem with answer choices, a pop-up calculator,
+                        <p>The Integrated Tests question interface is similar to the test interface used on the NCLEX-RN<sup>®</sup> and PN exams. Students see a question stem with answer choices, a pop-up calculator,
                             and a countdown clock. Students progress forward through the test and are not able to return to questions they already answered. Students click the radio button next to their
                             selected answer choice. To move to the next question, students select the Next tab. To finish the test, students select the Quit tab.
                         </p>
@@ -779,12 +778,12 @@
 
                         <div class="text-section">
                         <h4 id="customizationOfTests" class="h6">Customization of Tests</h4>
-                        <p>If the standard specialty end-of-course tests don’t match the curriculum of your nursing school course, one end-of-course test can be customized to map to your individual
+                        <p>If the standard specialty end-of-course tests do not match the curriculum of your nursing school course, one end-of-course test can be customized to map to your individual
                             course syllabus. To arrange for development of a customized test, please contact your nurse consultant.
                         </p>
-                        <p><strong>Please note: A minimum of 12 weeks is needed to complete development of a customized test.</strong> Only one customized end-of-course test per course will be developed without
+                        <p><strong>A minimum of 12 weeks is needed to complete development of a customized test.</strong> Only one customized end-of-course test per course will be developed without
                             additional charge. Faculty are requested to review custom tests prior to administering to students. Revisions to custom tests may be discussed/requested via an email to
-                            your nurse consultant.
+                            your nurse consultant. Custom tests will have no norming data because they are created for your own curriculum.
                         </p>
                         </div>
 
@@ -1043,10 +1042,10 @@
 
                     <div class="text-section">
                         <h3 class="h5 teal">Summary of Resources</h3>
-                        <p><b>NCLEX<sup>®</sup> Review Course:</b>  A live 4-day review, held in the classroom or online and taught by a specially-trained Kaplan nurse educator, covering the specific
+                        <p><b>NCLEX<sup>®</sup> Review Course:</b>  A live 4-day review for RN or 2-day for PN, held in the classroom or online and taught by a specially-trained Kaplan nurse educator, covering the specific
                         strategies and critical thinking needed to address passing level questions on the NCLEX<sup>®</sup> examination.
                         </p>
-                        <p><b>NCLEX<sup>®</sup> Review Resources:</b> A suite of tests: Qbank, Question Trainers, Sample NCLEX<sup>®</sup> Tests, NCLEX<sup>®</sup>
+                        <p><b>NCLEX<sup>®</sup> Review Resources:</b> A suite of tests: Qbank, Question Trainers (RN only), Sample NCLEX<sup>®</sup> Tests, NCLEX<sup>®</sup>
                         Predictor Tests, as well as workshops, Video Content Review, Video Question(lesson) Review, and classroom posters for reference.
                         </p>
                     </div>
@@ -1156,8 +1155,8 @@
                         </p>
                         <img class="img-responsive img-bordered-gray block margin-1em-bottom" src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/student-report-card.jpg" alt="student report card sample screenshot">
 
-                        <p>The <b>Remediation Time by Question</b> report, accessible by clicking on a student’s remediation time on the far right of their performance row, will show you that student’s
-                        remediation time by question.
+                        <p>The <b>Remediation Time by Question</b> report, accessible by clicking on a student’s remediation time within the student report card, will show you that student’s
+                        remediation time by question. The screenshot below shows an Integrated Test Report.
                         </p>
                         <img class="img-responsive img-bordered-gray block margin-1em-bottom" src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/remediation-time-by-question.jpg" alt="remediation time by question report sample screenshot">
 
@@ -1168,11 +1167,11 @@
                         <img class="img-responsive img-bordered-gray block margin-1em-bottom" src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/student-performance-by-test.jpg" alt="student performance by test report sample screenshot">
 
                         <p>Answer changing behavior is detailed on the right mid screen.</p>
-                        <p>The student’s performance according to level of difficulty, nursing process, clinical concept, and demographic is provided in easy-to-understand bar graphs. The checkmark
+                        <p>The student’s performance according to level of difficulty, nursing process, clinical concept, demographic, and client need category is provided in easy-to-understand bar graphs. The checkmark
                         indicates the number of questions that were answered correctly. The blue line indicates the number of questions that were omitted. N indicates the total number of questions
                         for each category.
                         </p>
-                        <p>To see a specific student’s remediation by test question click on the remediation time (active link). This link will take you to the <b>Remediation Time by Question</b> report.<p>
+
                         <p><strong>Please note:</strong> You can select each student individually or select all students to review an entire cohort or multiple cohorts.</p>
                         <p>To view <b>Test Results by Question</b>, select the cohort and group (if applicable) from which you would like to view results, using
                         the dropdown menus in the center of your screen.
@@ -1216,9 +1215,7 @@
                         is available from 8:00am to 8:00pm Monday through Friday and from 9:00am to 5:45pm on Saturdays. All times are Eastern.
                     </p>
                     <p>If your students need help with their resources, please have them call our Customer Care center at <a href="tel:+1-877-572-8457">1-877-572-8457</a> (outside the U.S. and Canada,
-                        dial <a href="tel:+1-213-452-5700">+1-213-452-5700</a>).
-                    </p>
-                    <p>Our Customer Care center hours are 9:00am to 9:00pm Monday through Friday and 8:30am to 5:30pm Saturdays and Sundays. All times are Eastern.</p>
+                        dial <a href="tel:+1-213-452-5700">+1-213-452-5700</a>). Our Customer Care center hours are 9:00am to 9:00pm Monday through Friday and 8:30am to 5:30pm Saturdays and Sundays. All times are Eastern.</p>
                     <p>Students can also send an email to <a href="mailto:integrated.support@kaplan.com">integrated.support@kaplan.com</a>.</p>
                 </section>
 
