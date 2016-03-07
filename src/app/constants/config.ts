@@ -75,10 +75,10 @@ export const links = {
             server: "https://qa-nit.kaptest.com/ "
         },
         stg: {
-            server: "https://stg-nit.kaplan.com/faculty"
+            server: "https://stg-nit.kaplan.com/"
         },
         prod: {
-            server: "https://nit.kaplan.com/faculty"
+            server: "https://nit.kaplan.com/"
         },
     },
     resetemailexpire: {
