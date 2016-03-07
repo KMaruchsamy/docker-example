@@ -85,12 +85,12 @@
                         <tr class="tablesaw-stacked-hidden-border" *ngFor="#scheduleTest of scheduleTests">
                             <td [attr.starttime]="scheduleTest?.TestingWindowStart">
                                 <template [ngIf]="!scheduleTest?.nextDay">
-                                    {{scheduleTest?.TestingWindowStart|parseDate:'ddd'}} {{scheduleTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} {{scheduleTest?.TestingWindowStart|parseDate:'h:mma'}}
+                                    {{scheduleTest?.TestingWindowStart|parseDate:'ddd'}} {{scheduleTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} <br> {{scheduleTest?.TestingWindowStart|parseDate:'h:mma'}}
                                     &ndash; {{scheduleTest?.TestingWindowEnd|parseDate:'h:mma'}}
                                 </template>
                                 <template [ngIf]="scheduleTest?.nextDay">
-                                    {{scheduleTest?.TestingWindowStart|parseDate:'ddd'}} {{scheduleTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} {{scheduleTest?.TestingWindowStart|parseDate:'h:mma'}}
-                                    &ndash; {{scheduleTest?.TestingWindowEnd|parseDate:'h:mma'}} {{scheduleTest?.TestingWindowEnd|parseDate:'ddd'}}
+                                    {{scheduleTest?.TestingWindowStart|parseDate:'ddd'}} {{scheduleTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} <br> {{scheduleTest?.TestingWindowStart|parseDate:'h:mma'}}
+                                    &ndash; {{scheduleTest?.TestingWindowEnd|parseDate:'h:mma'}} <br> {{scheduleTest?.TestingWindowEnd|parseDate:'ddd'}}
                                     {{scheduleTest?.TestingWindowEnd|parseDate:'MM/DD/YY'}}
                                 </template>
                             </td>
@@ -133,12 +133,12 @@
                         <tr class="tablesaw-stacked-hidden-border" *ngFor="#completedTest of completedTests">
                             <td [attr.starttime]="completedTest?.TestingWindowStart">
                                 <template [ngIf]="!completedTest?.nextDay">
-                                    {{completedTest?.TestingWindowStart|parseDate:'ddd'}} {{completedTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} {{completedTest?.TestingWindowStart|parseDate:'h:mma'}}
+                                    {{completedTest?.TestingWindowStart|parseDate:'ddd'}} {{completedTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} <br> {{completedTest?.TestingWindowStart|parseDate:'h:mma'}}
                                     &ndash; {{completedTest?.TestingWindowEnd|parseDate:'h:mma'}}
                                 </template>
                                 <template [ngIf]="completedTest?.nextDay">
-                                    {{completedTest?.TestingWindowStart|parseDate:'ddd'}} {{completedTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} {{completedTest?.TestingWindowStart|parseDate:'h:mma'}}
-                                    &ndash; {{completedTest?.TestingWindowEnd|parseDate:'h:mma'}} {{completedTest?.TestingWindowEnd|parseDate:'ddd'}}
+                                    {{completedTest?.TestingWindowStart|parseDate:'ddd'}} {{completedTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} <br> {{completedTest?.TestingWindowStart|parseDate:'h:mma'}}
+                                    &ndash; {{completedTest?.TestingWindowEnd|parseDate:'h:mma'}} <br> {{completedTest?.TestingWindowEnd|parseDate:'ddd'}}
                                     {{completedTest?.TestingWindowEnd|parseDate:'MM/DD/YY'}}
                                 </template>
                             </td>
