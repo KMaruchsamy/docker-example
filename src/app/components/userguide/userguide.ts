@@ -52,6 +52,16 @@ export class UserGuide implements OnInit {
             $('.back-to-top-arrow').fadeOut();
         }
     }
+    
+    expand(element: string) {
+        $(element).toggleClass('in').prev('a').toggleClass('collapsed');
+
+       if ($(element).hasClass('in')) {
+        $(element).prev('a').attr('aria-expanded', true);
+    } else  {
+        $(element).prev('a').attr('aria-expanded', false);
+    }
+   }
 
 
 }
