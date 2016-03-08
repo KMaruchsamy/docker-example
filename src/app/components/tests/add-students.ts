@@ -689,12 +689,29 @@ sortAlpha(): void {
             return;
         let studentId = [];
         let selectedStudentModelList = this.selectedStudents;
-        this.testScheduleModel.selectedStudents = selectedStudentModelList;
+        if (this.testScheduleModel.selectedStudents.length > 0) {
+            this.CheckForPreviousAlternateSelection(selectedStudentModelList);
+        }
+        else
+            this.testScheduleModel.selectedStudents = selectedStudentModelList;
         this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         console.log('TestScheduleModel with Selected student' + this.testScheduleModel);
         this.WindowException();
 
+}
+    CheckForPreviousAlternateSelection(selectedStudentModelList: any[]): void {
+        let prevStudentList = this.testScheduleModel.selectedStudents;
+        let _studentList: SelectedStudentModel[]=[];
+        for (let i = 0; i < selectedStudentModelList.length; i++) {
+            let _retester = selectedStudentModelList[i];
+            let _retesterStudent: SelectedStudentModel = _.filter(prevStudentList, { 'StudentId': _retester.StudentId });
+            if (_retesterStudent.length > 0)
+                _studentList.push(_retesterStudent[0]);
+            else
+                _studentList.push(_retester);
+        }
+        this.testScheduleModel.selectedStudents = _studentList;
     }
 
 FindCohortName(cohortid: number): string {

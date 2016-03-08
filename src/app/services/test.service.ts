@@ -260,6 +260,7 @@ export class TestService {
     clearTestScheduleObjects(): void {
         this.sStorage.removeItem('testschedule');
         this.sStorage.removeItem('retesters');
+        this.sStorage.removeItem('previousTest');
     }
 
     getAlternateExceptionsModify(): any {
