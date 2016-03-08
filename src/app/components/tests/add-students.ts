@@ -783,6 +783,7 @@ prepareInputForModify(): any {
                 __this.resolveExceptions(json, __this);
             }
             else {
+                this.sStorage.removeItem('retesters');
                 if (this.modify)
                     this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
                 else
@@ -1037,7 +1038,10 @@ DeleteRemovedStudentFromSession(_retesters: any): void {
             }
         }
     }
+    if (_retesters.length > 0)
         this.sStorage.setItem('retesters', JSON.stringify(_retesters));
+    else
+        this.sStorage.removeItem('retesters');
 }
 
 CheckForRetesters(_studentRepeaterExceptions: any): Object[] {
