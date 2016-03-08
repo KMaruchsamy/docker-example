@@ -1011,7 +1011,7 @@ b, strong, .bolded {
 .white-link:active, .white-link:focus, .white-link:hover {
   color: #fff; }
 
-section .text-section:not(:last-child) > p:last-child, section .text-section:not(:last-child) > ul:last-child, section .text-section:not(:last-child) > ol:last-child, section .text-section:not(:last-child) > span:last-child, section .text-section:not(:last-child) > a.block:last-child {
+section .text-section {
   margin-bottom: 1.5em; }
 
 hr {
@@ -3511,7 +3511,7 @@ select.mobile-device {
 
 .for-help-list {
   padding-left: 2em;
-  margin: 0 auto;
+  margin: 0 auto 1em;
   max-width: 20em; }
 
 .individual-profile {
@@ -4324,6 +4324,7 @@ input.page-lg-heading {
   width: 33.33333%; }
   @media (max-width: 74.9375em) {
     .search-added-students {
+      position: relative;
       width: 100%; } }
 
 .one-half-width {
@@ -4473,8 +4474,8 @@ table.dataTable tbody td {
     }
   }
 }*/
-.dataTables_scrollHeadInner .dataTable thead .sorting, .dataTables_scrollHeadInner .dataTable thead .sorting_asc, .dataTables_scrollHeadInner .dataTable thead .sorting_desc {
-  background-image: none;
+table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc {
+  background: none;
   position: relative; }
 
 .dataTables_scrollHeadInner .dataTable thead .sorting:after, .dataTables_scrollHeadInner .dataTable thead .sorting_asc::after, .dataTables_scrollHeadInner .dataTable thead .sorting_desc::after {
@@ -4743,7 +4744,7 @@ table.dataTable tbody td {
 @media print {
   @page {
     size: auto;
-    margin: 25mm; }
+    margin: 15mm; }
   body {
     display: block; }
   h2, h3, h4 {
@@ -4753,7 +4754,7 @@ table.dataTable tbody td {
     position: relative;
     display: block;
     float: none; }
-  header, footer, .print-icon, .faculty-user-guide-menu, .back-to-top-arrow, .video {
+  header, footer, .print-icon, .faculty-user-guide-menu, .back-to-top-arrow, .video, a[href="#focusedReview"], a[href="#integratedTesting"] {
     display: none !important; }
   main::before {
     display: block; }
@@ -4776,6 +4777,7 @@ table.dataTable tbody td {
     .faculty-user-guide-header h2, .faculty-user-guide-header span {
       color: #4A7B71; }
   .faculty-user-guide-content {
+    font-size: 90%;
     width: 100%; }
     .faculty-user-guide-content .collapse {
       display: block; } }
