@@ -10,7 +10,7 @@ export const links = {
             server: "https://qa-nursing.kaptest.com/"
         },
         stg: {
-            server: "https://stg-nursing.kaplan.com/"
+            server: "https://stg-nursing.kaptest.com/"
         },
         prod: {
             server: "https://nursing.kaplan.com/"
@@ -56,7 +56,7 @@ export const links = {
             server: "https://qa-nursing.kaptest.com/"
         },
         stg: {
-            server: "https://stg-nursing.kaplan.com/"
+            server: "https://stg-nursing.kaptest.com/"
         },
         prod: {
             server: "https://nursing.kaplan.com/"
