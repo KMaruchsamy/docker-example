@@ -117,6 +117,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         this.sStorage = this.common.getStorage();
         this.$ddlfacultyMember = $('#ddlFaculty');
         this.$txtScheduleName = $('#txtSessionName');
+        this.$txtScheduleName.val('');
         let __this = this;
         let savedSchedule = this.testService.getTestSchedule();
         if (savedSchedule) {
@@ -127,8 +128,8 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
             }
 
             this.testScheduleModel = this.testService.sortSchedule(savedSchedule);
-            console.log(this.testScheduleModel);
-
+            if (this.testScheduleModel.scheduleName)
+                this.$txtScheduleName.val(this.testScheduleModel.scheduleName);    
             if (this.modify) {
                 let retestersExceptionsModify = this.testService.getAlternateExceptionsModify();
                 if (retestersExceptionsModify != undefined && retestersExceptionsModify.length > 0) {
