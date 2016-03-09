@@ -32,6 +32,9 @@ export class UserGuide implements OnInit {
         e.preventDefault();
         let __this = this;
         let offset = $('.faculty-user-guide-header').position().top + parseInt($('.faculty-user-guide-header').outerHeight());
+        if ($(element).is('.h5, .h6')) { //if element is a subelement add 15px margin (may want to refactor and add specific classes)
+          offset = offset + 15;
+        }
         $('html, body').animate({
             scrollTop: $(element).offset().top - offset
         }, 500, 'swing',function () {
