@@ -21,7 +21,6 @@ export class TimeExceptionPopup implements OnInit, OnDeactivate {
     startDate: Date;
     endTestDate: Date;
     constructor(public common: Common) {
-        debugger;
         this.initialize();
     }
     routerOnDeactivate(): void {
