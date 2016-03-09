@@ -105,6 +105,33 @@ export class TestService {
         });
     }
 
+    getFacultySync(url: string): any {
+        let self = this;
+        let facultyJson: any;
+        $.ajax({
+            url: url,
+            type: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': self.auth.authheader
+            },
+            success: function(json) {
+                if (json) {
+                    facultyJson =json;
+                }
+
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            },
+            async: false
+        });
+
+        return facultyJson;
+    }
+
+
 
     getRetesters(url: string, input: string): any {
         let self = this;
@@ -318,8 +345,8 @@ export class TestService {
     }
 
 
-  
-    getTestStatus(url: string):string {
+
+    getTestStatus(url: string): string {
         let self = this;
         let status = 'scheduled';
         $.ajax({
@@ -332,9 +359,9 @@ export class TestService {
             success: function(json) {
                 if (json) {
                     if (json.Status)
-                        status = json.Status.toLowerCase();    
+                        status = json.Status.toLowerCase();
                 }
-               
+
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);
