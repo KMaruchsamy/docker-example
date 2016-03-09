@@ -409,7 +409,6 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                 __this.startTime = __this.$startTime.timepicker('getTime', new Date());
             }
 
-            debugger;
             if (moment(__this.startDate).isAfter(new Date())) {
                 __this.$startTime.timepicker('option', 'minTime', '8:00am');
                 if (__this.startTime && __this.endTime && moment(__this.startTime).isSame(__this.endTime, 'day'))
