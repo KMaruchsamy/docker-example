@@ -24,6 +24,8 @@ export class Groups implements OnInit {
             this.router.navigateByUrl('/');
         else
             this.institutionName = this.getLatestInstitution();
+        $(document).scrollTop(0);
+        $('title').html('Manage Groups &ndash; Kaplan Nursing');
     }
 
     getLatestInstitution(): string {

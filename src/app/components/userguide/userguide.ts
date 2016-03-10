@@ -23,6 +23,7 @@ export class UserGuide implements OnInit {
     }
 
     ngOnInit(): void {
+        $(document).scrollTop(0);
         this.activeId = '#whatsNew';
         $('title').html('Faculty User Guide &ndash; Kaplan Nursing');
         this.modifiedDate = new Date(constants.USERGUIDEMODIFICATIONDATE);

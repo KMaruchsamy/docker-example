@@ -97,6 +97,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         this.initializeControls();
         this.set8HourRule();
         $(document).scrollTop(0);
+        $('title').html('Schedule Test &ndash; Kaplan Nursing');
     }
 
     initialize() {

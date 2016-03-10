@@ -92,6 +92,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     ngOnInit() {
+        $(document).scrollTop(0);
+        $('title').html('Add Students &ndash; Kaplan Nursing');
         this.prevStudentList = [];
         let action = this.routeParams.get('action');
         if (action != undefined && action.trim() === 'modify')

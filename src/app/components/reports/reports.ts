@@ -37,6 +37,8 @@ export class Reports {
             this.router.navigateByUrl('/');
         else
             this.institutionName = this.getLatestInstitution();
+        $(document).scrollTop(0);
+        $('title').html('View Reports &ndash; Kaplan Nursing');
     }
 
     getLatestInstitution(): string {

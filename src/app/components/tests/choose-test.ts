@@ -55,6 +55,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         else
             this.initialize();
         $(document).scrollTop(0);
+        $('title').html('Choose Test &ndash; Kaplan Nursing');
 
         this.aLocation.subscribe((onNext: any) => {
             console.log(onNext);
