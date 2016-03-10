@@ -32,11 +32,6 @@ export class RetesterAlternatePopup implements OnDeactivate {
     }
 
     ngOnInit(): void {
-        console.log('------------------------------------------------');
-        console.log(this.testSchedule);
-        console.log('------------------------------------------------');
-
-        console.log(JSON.stringify(this.retesterExceptions));
         this.sStorage = this.common.getStorage();
         let self = this;
         if (this.retesterExceptions) {
@@ -63,9 +58,6 @@ export class RetesterAlternatePopup implements OnDeactivate {
                 self.markForRemoval(change.studentId, change.mark, change.testId, change.testName)
             });
         }
-        console.log('------------------------------------------------');
-        console.log(this.testSchedule);
-        console.log('------------------------------------------------');
         this.sStorage.setItem('testschedule', JSON.stringify(this.testSchedule));
         this.retesterAlternatePopupOK.emit(this.retesterExceptions);
     }
