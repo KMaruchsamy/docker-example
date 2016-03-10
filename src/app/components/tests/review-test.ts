@@ -102,14 +102,18 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
             this.initialize();
         }
         $(document).scrollTop(0);
-        $('title').html('Review Testing Session &ndash; Kaplan Nursing');
     }
 
 
     initialize() {
         let action = this.routeParams.get('action');
-        if (action != undefined && action.trim() === 'modify')
-            this.modify = true;
+        if (action != undefined && action.trim() === 'modify') {
+           this.modify = true;
+           $('title').html('Modify: Review Testing Session &ndash; Kaplan Nursing');
+        } else {         
+           $('title').html('Review Testing Session &ndash; Kaplan Nursing');
+        }
+
         this.valid = false;
         this.sStorage = this.common.getStorage();
         this.$ddlfacultyMember = $('#ddlFaculty');

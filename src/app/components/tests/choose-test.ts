@@ -46,16 +46,20 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     }
 
     ngOnInit(): void {
-        let action = this.routeParams.get('action');
-        if (action != undefined && action.trim() === 'modify')
-            this.modify = true;
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
-        else
+        else {
             this.initialize();
-        $(document).scrollTop(0);
-        $('title').html('Choose Test &ndash; Kaplan Nursing');
+            $(document).scrollTop(0);
+            let action = this.routeParams.get('action');
+            if (action != undefined && action.trim() === 'modify') {
+                this.modify = true;
+                $('title').html('Modify: Choose Test &ndash; Kaplan Nursing');
+            } else {
+                $('title').html('Choose Test &ndash; Kaplan Nursing');
+            }
+        }
 
         this.aLocation.subscribe((onNext: any) => {
             console.log(onNext);

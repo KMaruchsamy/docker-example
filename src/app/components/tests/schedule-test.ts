@@ -87,8 +87,12 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             this.$startTime = $('#startTime');
             this.$endTime = $('#endTime');
             let action = this.routeParams.get('action');
-            if (action != undefined && action.trim() === 'modify')
+            if (action != undefined && action.trim() === 'modify') {
                 this.modify = true;
+                $('title').html('Modify: Schedule Test &ndash; Kaplan Nursing');
+           } else {
+                $('title').html('Schedule Test &ndash; Kaplan Nursing');
+            }
         }
 
 
@@ -97,7 +101,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         this.initializeControls();
         this.set8HourRule();
         $(document).scrollTop(0);
-        $('title').html('Schedule Test &ndash; Kaplan Nursing');
+
     }
 
     initialize() {
