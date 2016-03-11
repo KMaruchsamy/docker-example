@@ -55,11 +55,12 @@ export class Account {
     }
 
     scroll(scroll: string): void {
+        var headerHeight = $('header').outerHeight(true) + 15;
         switch (scroll) {
             case "send-student-info":
                 $('html, body').animate({
-                    scrollTop: $("#btnClearResetStudentPassword").offset().top
-                }, 1000);
+                    scrollTop: $("#sendStudentInfo").offset().top-headerHeight
+                }, 750, 'swing');
                 break;
 
             default:
