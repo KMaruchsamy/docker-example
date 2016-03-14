@@ -840,7 +840,7 @@
 
                         <ul class="bullet bullet-indented bullet-link margin-1em-bottom">
                         <li><a href="javascript:void(0)" (click)="scroll('#overviewAndPurposeITUnsecure',$event)">Overview and Purpose</a></li>
-                        <li><a href="javascript:void(0)" (click)="scroll('#availableTestsITUnsecure',$event)">Available Tests</a></li>
+                        <li><a href="javascript:void(0)" (click)="scroll('#availableTestsITUnsecure',$event)">Available Test Blueprints</a></li>
                         <li><a href="javascript:void(0)" (click)="scroll('#customizationOfTestsITUnsecure',$event)">Create Your Own Test</a></li>
                         </ul>
 
@@ -857,112 +857,260 @@
                         </div>
 
                         <div class="text-section">
-                            <h4 id="availableTestsITUnsecure" class="h6">Available Tests</h4>
+                            <h4 id="availableTestsITUnsecure" class="h6">Available Test Blueprints</h4>
                             <!--RN IT tests section-->
                             <div class="expander">
-                            <a  href="javascript:void(0)" (click)="expand('#RNITTests')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNITTests">
-                                <b>RN Focused Review Tests</b>
+                            <a  href="javascript:void(0)" (click)="expand('#RNFocusedReview')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNFocusedReview">
+                                <span class="teal h6"><b>RN Focused Review Tests</b></span>
                             </a>
-                            <div class="collapse" id="RNITTests">
-                            <ul class="bullet paragraph-spacing-bottom-list">
-                                <li>Cardiovascular System A</li>
-                                <li>Cardiovascular System B</li>
-                                <li>Community A</li>
-                                <li>Endocrine System A</li>
-                                <li>Fluid and Electrolyte Balance A</li>
-                                <li>Fundamentals of Nursing A</li>
-                                <li>Fundamentals of Nursing B</li>
-                                <li>Gastrointestinal System A</li>
-                                <li>Gastrointestinal System B</li>
-                                <li>Health Assessment A</li>
-                                <li>Hematology/Immune A</li>
-                                <li>Management of Care A</li>
-                                <li>Management of Care B</li>
-                                <li>Management of Care C</li>
-                                <li>Maternity/Gynecological Nursing A</li>
-                                <li>Maternity/Gynecological Nursing B</li>
-                                <li>Maternity/Gynecological Nursing C</li>
-                                <li>Musculoskeletal System A</li>
-                                <li>Neurology A</li>
-                                <li>Oncology A</li>
-                                <li>Pathophysiology A</li>
-                                <li>Pediatrics Test A</li>
-                                <li>Pediatrics Test B</li>
-                                <li>Pediatrics Test C</li>
-                                <li>Pharmacological/Parenteral Therapy A</li>
-                                <li>Pharmacological/Parenteral Therapy B</li>
-                                <li>Pharmacological/Parenteral Therapy C</li>
-                                <li>Psychiatric Nursing A</li>
-                                <li>Psychiatric Nursing B</li>
-                                <li>Psychiatric Nursing C</li>
-                                <li>Renal/Urological System A</li>
-                                <li>Respiratory Test A</li>
-                                <li>Respiratory Test B</li>
-                                <li>Sensory A</li>
-                                <li>Basic Math</li>
-                                <li>Pediatric Math</li>
-                                <li>Critical-Care Math</li>
-                                <li>Level II Math</li>
-                            </ul>
-                            <p>For a list of topics contained in each Focused Review test, download our blueprint document below:</p>
-                            <a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/RN_Kaplan_Focused_Review_Blueprint_9-27-2015.xlsx" class="block link-darker margin-1em-bottom">Kaplan RN Focused Review Tests (as of September 2015)</a>
-                        </div>
+                            <div class="collapse" id="RNFocusedReview">
+                            
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNCardiovascular')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNCardiovascular">
+                                    <b>Cardiovascular</b>
+                                </a>
+                                    <div class="collapse" id="RNCardiovascular">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Cardiovascular_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Cardiovascular System A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Cardiovascular_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Cardiovascular System A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNCommunity')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNCommunity">
+                                    <b>Community</b>
+                                </a>
+                                    <div class="collapse" id="RNCommunity">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                         <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Community_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Community A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNEndocrineSystem')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNEndocrineSystem">
+                                    <b>Endocrine System</b>
+                                </a>
+                                    <div class="collapse" id="RNEndocrineSystem">
+                                            <ul class="list-pdf-download-icon list-extra-spacing">
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Endocrine_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Endocrine System A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNFluid')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNFluid">
+                                    <b>Fluid and Electrolyte Balance</b>
+                                </a>
+                                    <div class="collapse" id="RNFluid">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                         <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Fluid_and_Electrolytes_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Fluid and Electrolyte Balance A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNFundamentals')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNFundamentals">
+                                    <b>Fundamentals of Nursing</b>
+                                </a>
+                                    <div class="collapse" id="RNFundamentals">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Fundamentals_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Fundamentals of Nursing A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Fundamentals_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Fundamentals of Nursing B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNGastrointestinalSystem')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNGastrointestinalSystem">
+                                    <b>Gastrointestinal System</b>
+                                </a>
+                                    <div class="collapse" id="RNGastrointestinalSystem">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Gastorintestinal_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Gastrointestinal System A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Gastorintestinal_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Gastrointestinal System B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNHealthAssessment')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNHealthAssessment">
+                                    <b>Health Assessment</b>
+                                </a>
+                                    <div class="collapse" id="RNHealthAssessment">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Health_Assessment_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Health Assessment A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNHematologyImmune')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNHematologyImmune">
+                                    <b>Hematology/Immune</b>
+                                </a>
+                                    <div class="collapse" id="RNHematologyImmune">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Hematology_Immune_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Hematology/Immune A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNManagementOfCare')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNManagementOfCare">
+                                    <b>Management of Care</b>
+                                </a>
+                                    <div class="collapse" id="RNManagementOfCare">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Management_of_Care_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Management of Care A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Management_of_Care_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Management of Care B Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Management_of_Care_C.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Management of Care C Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNMaternityNursing')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNMaternityNursing">
+                                    <b>Maternity/Gynecological Nursing</b>
+                                </a>
+                                    <div class="collapse" id="RNMaternityNursing">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Maternity_Gynecological_Nursing_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Maternity/Gynecological Nursing A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Maternity_Gynecological_Nursing_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Maternity/Gynecological Nursing B Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Maternity_Gynecological_Nursing_C.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Maternity/Gynecological Nursing C Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNMusculoskeletalSystem')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNMusculoskeletalSystem">
+                                    <b>Musculoskeletal System</b>
+                                </a>
+                                    <div class="collapse" id="RNMusculoskeletalSystem">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Musculoskeletal_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Musculoskeletal System A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNNeurology')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNNeurology">
+                                    <b>Neurology</b>
+                                </a>
+                                    <div class="collapse" id="RNNeurology">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Neurology_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Neurology A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNOncology')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNOncology">
+                                    <b>Oncology</b>
+                                </a>
+                                    <div class="collapse" id="RNOncology">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Oncology_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Oncology A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNPathophysiology')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNPsychosocial">
+                                    <b>Pathophysiology</b>
+                                </a>
+                                    <div class="collapse" id="RNPathophysiology">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/Pathophysiology_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Pathophysiology A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNPediatrics')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNPediatrics">
+                                    <b>Pediatrics Test</b>
+                                </a>
+                                    <div class="collapse" id="RNPediatrics">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Pediatrics_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Pediatrics Test A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Pediatrics_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Pediatrics Test B Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Pediatrics_C.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Pediatrics Test C Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNPharmacological')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNPharmacological">
+                                    <b>Pharmacological/Parenteral</b>
+                                </a>
+                                    <div class="collapse" id="RNPharmacological">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Pharmacological_Parenteral_Therapies_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Pharmacological/Parenteral A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Pharmacological_Parenteral_Therapies_C.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Pharmacological/Parenteral C Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNPsychiatricNursing')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNPsychiatricNursing">
+                                    <b>Psychiatric Nursing</b>
+                                </a>
+                                    <div class="collapse" id="RNPsychiatricNursing">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Psychiatric_Nursing_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Psychiatric Nursing A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Psychiatric_Nursing_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Psychiatric Nursing B Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Psychiatric_Nursing_C.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Psychiatric Nursing C Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNRenalUrological')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNRenalUrological">
+                                    <b>Renal/Urological System</b>
+                                </a>
+                                    <div class="collapse" id="RNRenalUrological">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Renal_Urulogical_System_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Renal/Urological System A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNRespiratory')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNRespiratory">
+                                    <b>Respiratory Test</b>
+                                </a>
+                                    <div class="collapse" id="RNRespiratory">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Respiratory_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Respiratory Test A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Respiratory_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Respiratory Test B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNSensory')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="RNSensory">
+                                    <b>Sensory</b>
+                                </a>
+                                    <div class="collapse" id="RNSensory">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Sensory_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Sensory A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
                         </div><!--End RN Tests section-->
                         <!--PN IT Tests section-->
                         <div class="expander">
                             <a href="javascript:void(0)" (click)="expand('#PNITTests')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNITTests">
-                            <b>PN Focused Review Tests</b>
                             </a>
                             <div class="collapse" id="PNITTests">
-                            <ul class="bullet paragraph-spacing-bottom-list">
-                                <li>Basic Medication Dosage Calculation A</li>
-                                <li>Cardiovascular A</li>
-                                <li>Cardiovascular B</li>
-                                <li>Endocrine A</li>
-                                <li>Endocrine B</li>
-                                <li>Fluid and Electrolytes A</li>
-                                <li>Fluid and Electrolytes B</li>
-                                <li>Fundamentals of Nursing A</li>
-                                <li>Fundamentals of Nursing B</li>
-                                <li>Gerontology A</li>
-                                <li>GI A</li>
-                                <li>GI B</li>
-                                <li>Immune/Hematology A</li>
-                                <li>Immune/Hematology B</li>
-                                <li>Maternity A</li>
-                                <li>Maternity B</li>
-                                <li>Musculoskeletal A</li>
-                                <li>Musculoskeletal B</li>
-                                <li>Neurological A</li>
-                                <li>Neurological B</li>
-                                <li>Nutrition A</li>
-                                <li>Nutrition B</li>
-                                <li>Oncology A</li>
-                                <li>Oncology B</li>
-                                <li>Pediatrics A</li>
-                                <li>Pediatrics B</li>
-                                <li>Pharmacology 1 A</li>
-                                <li>Pharmacology 1 B</li>
-                                <li>Pharmacology 2 A</li>
-                                <li>Pharmacology 2 B</li>
-                                <li>Pharmacology 3 A</li>
-                                <li>Pharmacology 3 B</li>
-                                <li>Psych/Mental Health A</li>
-                                <li>Psych/Mental Health B</li>
-                                <li>Renal A</li>
-                                <li>Renal B</li>
-                                <li>Reproductive A</li>
-                                <li>Reproductive B</li>
-                                <li>Respiratory A</li>
-                                <li>Respiratory B</li>
-                                <li>Sensory A</li>
-                                <li>Sensory B</li>
-                            </ul>
-                            <p>For a list of topics contained in each Focused Review test, download our blueprint document below:</p>
-                            <a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/PN_Focused_Review_Blueprint_9-27-2015.xlsx" class="block link-darker margin-1em-bottom">Kaplan PN Focused Review Tests (as of September 2015)</a>
-                            </div>
-                        </div>
-                        </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                </a>
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
 
                         <div class="text-section">
                         <h4 id="customizationOfTestsITUnsecure" class="h6">Create Your Own Test</h4>
