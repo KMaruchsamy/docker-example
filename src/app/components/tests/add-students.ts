@@ -92,6 +92,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     ngOnInit() {
+        this.common.disabledforward();
         $(document).scrollTop(0);
         this.prevStudentList = [];
         let action = this.routeParams.get('action');

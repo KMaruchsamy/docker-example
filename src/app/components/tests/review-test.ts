@@ -96,6 +96,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     ngOnInit() {
+        this.common.disabledforward();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else {

@@ -32,6 +32,7 @@ export class RetesterAlternatePopup implements OnDeactivate {
     }
 
     ngOnInit(): void {
+        this.common.disabledforward();
         this.sStorage = this.common.getStorage();
         let self = this;
         if (this.retesterExceptions) {
