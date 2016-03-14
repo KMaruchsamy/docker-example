@@ -48,6 +48,7 @@ export class ViewTest implements OnInit, OnDeactivate {
 
         }
         $(document).scrollTop(0);
+        $('title').html('View Testing Session &ndash; Kaplan Nursing');
     }
 
 

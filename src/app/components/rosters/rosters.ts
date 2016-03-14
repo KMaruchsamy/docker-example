@@ -24,6 +24,8 @@ export class Rosters implements OnInit {
             this.router.navigateByUrl('/');
         else
             this.institutionName = this.getLatestInstitution();
+        $(document).scrollTop(0);
+        $('title').html('View Rosters &ndash; Kaplan Nursing');
     }
 
     getLatestInstitution(): string {

@@ -27,6 +27,7 @@ export class ResetPassword {
     }
 
     initialize() {
+        $(document).scrollTop(0);
         $('title').html('Reset Password &ndash; Kaplan Nursing');
     }
     

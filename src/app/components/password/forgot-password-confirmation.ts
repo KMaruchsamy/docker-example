@@ -16,6 +16,7 @@ export class ForgotPasswordConfirmation {
     }
 
     initialize() {
+        $(document).scrollTop(0);
         $('title').html('Kaplan Nursing &ndash; Forgot Password Confirmation');
     }
 }

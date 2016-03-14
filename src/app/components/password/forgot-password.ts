@@ -28,6 +28,7 @@ export class ForgotPassword {
     }
 
     initialize():void {
+        $(document).scrollTop(0);
         $('title').html('Forgot Password &ndash; Kaplan Nursing');
         let self = this;
         $('#forgotPassword').bind('input', function() {

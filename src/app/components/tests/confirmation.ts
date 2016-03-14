@@ -22,13 +22,18 @@ export class Confirmation implements OnInit, OnDeactivate {
     constructor(public testScheduleModel: TestScheduleModel, public common: Common, public testService: TestService, public routeParams:RouteParams, public router:Router, public auth:Auth) { }
 
     ngOnInit(): void {
+        $(document).scrollTop(0);
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else {
             let action = this.routeParams.get('action');
-            if (action != undefined && action.trim() !== '')
+            if (action != undefined && action.trim() !== '') {
                 this.modify = true;
+                $('title').html('Modify: Confirmation &ndash; Kaplan Nursing');
+            } else {
+               $('title').html('Confirmation &ndash; Kaplan Nursing');
+            }
             let savedSchedule: TestScheduleModel = this.testService.getTestSchedule();
             if (savedSchedule)
                 this.testScheduleModel = savedSchedule;
