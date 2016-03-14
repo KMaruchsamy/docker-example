@@ -21,7 +21,7 @@
                     <li><a [class.text-purple-bold]="activeId==='#eBooks'" href="javascript:void(0)" (click)="scroll('#eBooks',$event)">Student eBooks</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#successTutorials'" href="javascript:void(0)" (click)="scroll('#successTutorials',$event)">Nursing School Success Tutorials</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#reports'" href="javascript:void(0)" (click)="scroll('#reports',$event)">Creating and Viewing Reports</a></li>
-                    <li><a [class.text-purple-bold]="activeId==='#whitePapers'" href="javascript:void(0)" (click)="scroll('#research',$event)">Research and White Papers</a></li>
+                    <li><a [class.text-purple-bold]="activeId==='#whitePapers'" href="javascript:void(0)" (click)="scroll('#whitePapers',$event)">Research and White Papers</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#needHelp'" href="javascript:void(0)" (click)="scroll('#needHelp',$event)">Need Help?</a></li>
                 </ul>
             </div>
@@ -103,7 +103,7 @@
                     <div class="text-section">
                         <h3 class="h5 teal">New Test Scheduling Process: Video Walkthrough</h3>
                         <p>Watch this short video to learn more about how to schedule and manage your own Integrated Tests using our new five-step process.</p>
-                        <div class="video">
+                        <div class="video img-bordered-gray">
                         <div class="video-wrapper">
                             <video src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/test_scheduling_tour_video.mp4" controls>
                             Your browser does not support the video tag.
@@ -801,7 +801,7 @@
                         <p>Our statistical manuals contain all statistical information for the Integrated Tests and Admissions Test. Information includes descriptive statistics, reliability and
                             validity, and item statistics.
                         </p>
-                        <ul class="list-extra-spacing paragraph-spacing-bottom-list">
+                        <ul class="list-pdf-download-icon list-extra-spacing paragraph-spacing-bottom-list">
                             <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Kaplan_Integrated_Test-Statistical_Analysis_Results.pdf" target="_blank" class="icon pdf-download-icon link-darker">Kaplan RN Integrated Testing Statistical Information Manual</a></li>
                             <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Kaplan_PN_Integrated_Testing_Statistical_Reports_061014.pdf" target="_blank" class="icon pdf-download-icon link-darker">Kaplan PN Integrated Testing Statistical Information Manual</a></li>
                             <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Kaplan_Research_RN_Integrated_Test-Statistical_Report.pdf" target="_blank" class="icon pdf-download-icon link-darker">Kaplan Research RN Integrated Test: Statistical Report</a></li>
@@ -816,7 +816,7 @@
                             click on “Schedule an Integrated Tests” from the green “Quick Links” bar on your <a [routerLink]="['/Home']">Home</a> page.
                         </p>
                         <p>For a more detailed walkthrough, watch our Test Scheduling video below.</p>
-                        <div class="video margin-1em-bottom">
+                        <div class="video img-bordered-gray margin-1em-bottom">
                             <div class="video-wrapper">
                             <video src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/test_scheduling_tour_video.mp4" controls>
                                 Your browser does not support the video tag.
