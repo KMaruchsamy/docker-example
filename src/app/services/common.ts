@@ -125,4 +125,8 @@ export class Common {
         }
         return 0;
     }
+
+    disabledforward(): void {
+        window.history.forward(-1);
+    }
 }

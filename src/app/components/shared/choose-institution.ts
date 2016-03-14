@@ -23,6 +23,7 @@ export class ChooseInstitution {
     nursingITServer: string;
     isTest: boolean = false;
     constructor(public router: Router, public routeParams: RouteParams, public common: Common, public auth: Auth) {
+        this.common.disabledforward();
         this.nursingITServer = this.common.getNursingITServer();
         this.fromPage = this.routeParams.get('frompage');
         this.page = this.routeParams.get('redirectpage');

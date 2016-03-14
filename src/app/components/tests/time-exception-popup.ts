@@ -37,6 +37,7 @@ export class TimeExceptionPopup implements OnInit, OnDeactivate {
     }
 
     ngOnInit(): void {
+        this.common.disabledforward();
         // console.log(this.studentRepeaters);
     }
 

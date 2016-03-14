@@ -24,6 +24,7 @@ export class RetesterNoAlternatePopup implements OnInit {
     }
 
     ngOnInit(): void {
+        this.common.disabledforward();
     }
 
     removeStudents(e): void {
