@@ -960,8 +960,11 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     loadRetesterNoAlternatePopup(_studentRepeaterExceptions: any): void {
+        if (this.loader)
+            this.loader.dispose();
         this.dynamicComponentLoader.loadNextToLocation(RetesterNoAlternatePopup, this.elementRef)
             .then(retester=> {
+                this.loader = retester;
                 $('#modalNoAlternateTest').modal('show');
                 retester.instance.studentRepeaters = _studentRepeaterExceptions;
                 retester.instance.testSchedule = this.testScheduleModel;
