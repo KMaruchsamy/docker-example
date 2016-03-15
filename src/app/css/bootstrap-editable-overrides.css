@@ -195,11 +195,23 @@ button.js-rename-session {
 }
 
 .editable-clear-x {
-  background: url('../images/clear.png') center center no-repeat;
+  background: url(../images/clear.png) center center no-repeat;
   background-size: 13px 12px;
   margin-top: -8px;
 }
 
 .editableform-loading {
-    background: url('../images/loading.gif') center center no-repeat;   
+    background: url('../img/loading.gif') center center no-repeat;
+}
+
+@media (max-width: 414px) {
+.editable-container.popover {
+  left: 50% !important;
+  transform: translateX(-50%);
+}
+.popover-title, .popover-content {
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
 }
