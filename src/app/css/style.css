@@ -4612,6 +4612,10 @@ table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTa
     .back-to-top-arrow {
       right: 15px; } }
 
+@media (min-width: 48em) {
+  .js-top-100 {
+    top: 100px; } }
+
 .hidden {
   display: none; }
 
