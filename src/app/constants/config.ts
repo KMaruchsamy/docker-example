@@ -39,9 +39,12 @@ export const links = {
                 viewtest: "scheduling/testingSessions/§scheduleId",
                 deleteSchedule: "scheduling/testingSessions/§scheduleId",
                 scheduletests: "scheduling/testingSessions",
-                modifyscheduletest:"scheduling/testingSessions/§scheduleId",
+                modifyscheduletest: "scheduling/testingSessions/§scheduleId",
                 renamesession: "scheduling/testingSessions/§scheduleId/renameSession",
                 refreshTestingStatus: "scheduling/refreshRetestingStatus"
+            },
+            logging: {
+                error: 'error/Log'
             }
         }
     },
@@ -129,6 +132,5 @@ export const teststatus = {
     Scheduled: 'Scheduled',
     InProgress: 'InProgress'
 }
-  
-  
-  
+
+
