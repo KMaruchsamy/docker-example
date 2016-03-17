@@ -1,4 +1,4 @@
-module.exports = function () {
+module.exports = function() {
     var config = {
         app: {
             src: {
@@ -12,14 +12,14 @@ module.exports = function () {
                 build: 'build/app'
             },
             lib: [
-            // 'node_modules/gulp-traceur/node_modules/traceur/bin/traceur-runtime.js',
+                // 'node_modules/gulp-traceur/node_modules/traceur/bin/traceur-runtime.js',
                 'node_modules/systemjs/dist/system.js',
                 'node_modules/systemjs/dist/system-polyfills.js',
                 'node_modules/reflect-metadata/Reflect.js',
                 'node_modules/whatwg-fetch/fetch.js',
                 'node_modules/jwt-decode/build/jwt-decode.js',
                 'node_modules/jquery/dist/jquery.min.js',
-            // 'node_modules/jquery/dist/jquery.min.map',
+                // 'node_modules/jquery/dist/jquery.min.map',
                 'src/app/polyfills/sessionstorage.js',
                 'node_modules/lodash/index.js',
                 'src/app/webworkers/logging-worker.js',
@@ -48,7 +48,11 @@ module.exports = function () {
                 'src/app/plugins/moment-2.11.js',
                 'src/app/plugins/moment-timezone.min.js',
                 'src/app/plugins/moment-timezone-gmtdata.js',
-                'src/app/scripts/hotjar.js'
+                'src/app/scripts/hotjar.js',
+                'src/app/plugins/ng-ga.js',
+                'src/app/plugins/angulartics2.js',
+                'src/app/plugins/angulartics2On.js',
+                'src/app/plugins/angulartics2-google-analytics.js'
                 // 'src/app/plugins/bootstrap-datepicker.min.js',
                 // 'src/app/plugins/jquery.timepicker.js',
                 // 'src/app/plugins/date.js'

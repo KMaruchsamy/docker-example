@@ -492,10 +492,7 @@ ol.paragraph-spacing-bottom-list {
   margin-bottom: 0.75em; }
 
 ul.list-pdf-download-icon, ol.list-pdf-download-icon {
-  line-height: 1;
   margin-left: 26px; }
-  ul.list-pdf-download-icon li, ol.list-pdf-download-icon li {
-    text-indent: -26px; }
 
 dl {
   margin-bottom: 0.66667em; }
@@ -1518,6 +1515,11 @@ picture {
       background-image: url(../images/sprite_2x.png);
       background-size: 335px 257px; } }
 
+li .pdf-download-icon::before {
+  position: absolute;
+  margin-left: -26px;
+  margin-top: 0; }
+
 .account-alert-icon::before {
   background-image: url(../images/sprite.png);
   background-position: -91px -125px;
@@ -1528,6 +1530,12 @@ picture {
     .account-alert-icon::before {
       background-image: url(../images/sprite_2x.png);
       background-size: 335px 257px; } }
+
+.clear-input-values::before {
+  background: url("../images/clear.png") right center no-repeat;
+  background-size: 13px 13px;
+  width: 13px;
+  height: 13px; }
 
 .pdf-icon {
   width: 19px;

@@ -3,7 +3,7 @@
     <test-header scheduleStep='Schedule a test' [testSchedule]="testScheduleModel" [hideCancelButton]=true></test-header>
     <div class="section">
     <div class="container-medium-width">
-        <h4>Success! Your test has been scheduled.
+        <h4>{{ modify ? 'Success! Your scheduled test has been modified.' : 'Success! Your test has been scheduled.' }}
               <!--This will be added in post-MVP <br>You will receive an email confirmation soon. -->
         </h4>
         <div class="margin-2em-top">
