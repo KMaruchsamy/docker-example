@@ -5,6 +5,6 @@
  
 if (window.location.hostname === 'nit.kaplan.com')
     ga('create', 'UA-72468900-1', 'auto');
-else if (window.location.hostname === 'qa-nit.kaplan.com')
+else if (window.location.hostname === 'qa-nit.kaptest.com')
     ga('create', 'UA-72468900-2', 'auto');
 //   ga('send', 'pageview');
