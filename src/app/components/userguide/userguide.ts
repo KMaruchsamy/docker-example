@@ -89,6 +89,5 @@ export class UserGuide implements OnInit {
     }
 
 }
-
-
-}
+   
+   
