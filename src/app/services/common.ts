@@ -61,62 +61,71 @@ export class Common {
     }
 
     getApiServer(): string {
+        let apiServer = '';
         switch (location.hostname) {
             case this.getHostName(links.faculty.local.server):
-                return links.api.local.server;
+                apiServer = links.api.local.server;
                 break;
             case this.getHostName(links.faculty.dev.server):
-                return links.api.dev.server;
+                apiServer = links.api.dev.server;
                 break;
             case this.getHostName(links.faculty.qa.server):
-                return links.api.qa.server;
+                apiServer = links.api.qa.server;
                 break;
             case this.getHostName(links.faculty.stg.server):
-                return links.api.stg.server;
+                apiServer = links.api.stg.server;
                 break;
             case this.getHostName(links.faculty.prod.server):
-                return links.api.prod.server;
+                apiServer = links.api.prod.server;
                 break;
             default:
-                return links.api.local.server;
+                apiServer = links.api.local.server;
                 break;
         }
+        return apiServer;
     }
 
     getNursingITServer() {
+        let ITServer = '';
         switch (location.hostname) {
             case this.getHostName(links.faculty.local.server):
-                return links.nursingit.local.server;
+                ITServer = links.nursingit.local.server;
                 break;
             case this.getHostName(links.faculty.dev.server):
-                return links.nursingit.dev.server;
+                ITServer = links.nursingit.dev.server;
                 break;
             case this.getHostName(links.faculty.qa.server):
-                return links.nursingit.qa.server;
+                ITServer = links.nursingit.qa.server;
                 break;
             case this.getHostName(links.faculty.stg.server):
-                return links.nursingit.stg.server;
+                ITServer = links.nursingit.stg.server;
                 break;
             case this.getHostName(links.faculty.prod.server):
-                return links.nursingit.prod.server;
+                ITServer = links.nursingit.prod.server;
                 break;
             default:
-                return links.nursingit.local.server;
+                ITServer = links.nursingit.local.server;
                 break;
-        }        
+        }
+        return ITServer;
     }
-    
-    
+
+    isProduction(): boolean {
+        let apiServer = this.getApiServer();
+        return apiServer === links.api.prod.server;
+    }
+
+
     removeWhitespace(value: string): string {
         if (!value)
             return '';
         return value.replace(/\s/g, "");
     }
-    
-    
-    getOffsetInstitutionTimeZone(institutionId: number):number {
+
+
+    getOffsetInstitutionTimeZone(institutionId: number): number {
         let sStorage = this.getStorage();
-        let institutions = sStorage.getItem('institutions');        
+        let institutions = sStorage.getItem('institutions');
         if (institutions) {
             let selectedInstitution = _.find(JSON.parse(institutions), { 'InstitutionId': institutionId });
             if (selectedInstitution) {

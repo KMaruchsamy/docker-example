@@ -12,7 +12,6 @@ export class MyExceptionHandler implements ExceptionHandler {
     }
 
     call(error, stackTrace = null, reason = null) {
-        debugger;
         console.log("ERROR >> " + error);
         console.log("STACKTRACE >> " + stackTrace);
         console.log("REASON >> " + reason);
