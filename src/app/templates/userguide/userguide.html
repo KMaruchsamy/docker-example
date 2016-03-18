@@ -12,7 +12,7 @@
         <div class="container-medium-width faculty-user-guide">
             <div class="faculty-user-guide-menu">
                 <ul class="list-extra-spacing">
-                    <li><a [class.text-purple-bold]="activeId==='#whatsNew'" href="javascript:void(0)" (click)="scroll('#whatsNew',$event)">What’s New</a></li>
+                    <li><a id="whatsNewLink" [class.text-purple-bold]="activeId==='#whatsNew'" href="javascript:void(0)" (click)="scroll('#whatsNew',$event)">What’s New</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#programOverview'" href="javascript:void(0)" (click)="scroll('#programOverview',$event)">Program Overview</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#gettingStarted'" href="javascript:void(0)" (click)="scroll('#gettingStarted',$event)">Getting Started with Kaplan</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#testingResources'" href="javascript:void(0)" (click)="scroll('#testingResources',$event)">Testing and Remediation Resources</a></li>
@@ -102,10 +102,10 @@
 
                     <div class="text-section">
                         <h3 class="h5 teal">New Test Scheduling Process: Video Walkthrough</h3>
-                        <p>Watch this short video to learn more about how to schedule and manage your own Integrated Tests using our new five-step process.</p>
+                        <p>Our new test scheduling process is quick and easy. If you’d like a detailed walkthrough of the new process, watch the video below.</p>
                         <div class="video img-bordered-gray">
                         <div class="video-wrapper">
-                            <video src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/test_scheduling_tour_video.mp4" controls>
+                            <video src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/test_scheduling_tour_video.mp4" controls poster="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/test_scheduling.png">
                             Your browser does not support the video tag.
                             </video>
                         </div>
@@ -818,7 +818,7 @@
                         <p>For a more detailed walkthrough, watch our Test Scheduling video below.</p>
                         <div class="video img-bordered-gray margin-1em-bottom">
                             <div class="video-wrapper">
-                            <video src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/test_scheduling_tour_video.mp4" controls>
+                            <video src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/test_scheduling_tour_video.mp4" controls poster="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/test_scheduling.png">
                                 Your browser does not support the video tag.
                             </video>
                             </div>
@@ -1046,6 +1046,7 @@
                                     <div class="collapse" id="RNPharmacological">
                                         <ul class="list-pdf-download-icon list-extra-spacing">
                                             <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Pharmacological_Parenteral_Therapies_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Pharmacological/Parenteral A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Pharmacological_Parenteral_Therapies_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Pharmacological/Parenteral B Blueprint</a></li>
                                             <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/RN_Pharmacological_Parenteral_Therapies_C.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Pharmacological/Parenteral C Blueprint</a></li>
                                         </ul>
                                     </div>
@@ -1098,19 +1099,250 @@
                                     </div>
                                 </div>
                                 
+                            </div><!--closes outer collapse div-->
                         </div><!--End RN Tests section-->
+                        
                         <!--PN IT Tests section-->
                         <div class="expander">
                             <a href="javascript:void(0)" (click)="expand('#PNITTests')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNITTests">
+                            <span class="teal h6"><b>PN Focused Review Tests</b></span>
                             </a>
                             <div class="collapse" id="PNITTests">
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNCardiovascular')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNCardiovascular">
+                                    <b>Cardiovascular</b>
+                                </a>
+                                    <div class="collapse" id="PNCardiovascular">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Cardiovascular_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Cardiovascular A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Cardiovascular_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Cardiovascular B Blueprint</a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 
                                 <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNEndocrine')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNEndocrine">
+                                    <b>Endocrine</b>
                                 </a>
+                                    <div class="collapse" id="PNEndocrine">
                                         <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Endocrine_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Endocrine A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Endocrine_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Endocrine B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNFluidandElectrolytes')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNFluidandElectrolytes">
+                                    <b>Fluid and Electrolytes</b>
+                                </a>
+                                    <div class="collapse" id="PNFluidandElectrolytes">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Fluid_and_Electrolytes_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Fluid and Electrolytes A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Fluid_and_Electrolytes_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Fluid and Electrolytes B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNFundamentalsofNursing')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNFundamentalsofNursings">
+                                    <b>Fundamentals of Nursing</b>
+                                </a>
+                                    <div class="collapse" id="PNFundamentalsofNursing">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Fundamentals_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Fundamentals of Nursing A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Fundamentals_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Fundamentals of Nursing B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNGerontologyFR')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNGerontologyFR">
+                                    <b>Gerontology</b>
+                                </a>
+                                    <div class="collapse" id="PNGerontologyFR">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Gerontology_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">RN Gerontology A Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNGastro')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNGastro">
+                                    <b>Gastrointestinal</b>
+                                </a>
+                                    <div class="collapse" id="PNGastro">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Gastrointestinal_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN GI A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Gastrointestinal_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN GI B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNImmuneHematology')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNImmune/Hematology">
+                                    <b>Immune/Hematology</b>
+                                </a>
+                                    <div class="collapse" id="PNImmuneHematology">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Hemoatology_Immunity_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Immune/Hematology A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Hemoatology_Immunity_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Immune/Hematology B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNMaternity')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNMaternity">
+                                    <b>Maternity</b>
+                                </a>
+                                    <div class="collapse" id="PNMaternity">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Maternity_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Maternity A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Maternity_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Maternity B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNMusculoskeletal')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNMusculoskeletal">
+                                    <b>Musculoskeletal</b>
+                                </a>
+                                    <div class="collapse" id="PNMusculoskeletal">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Musculoskeletal_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Musculoskeletal A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Musculoskeletal_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Musculoskeletal B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNNeurological')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNNeurological">
+                                    <b>Neurological</b>
+                                </a>
+                                    <div class="collapse" id="PNNeurological">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Neurological_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Neurological A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Neurological_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Neurological B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNNutritionFR')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNNutritionFR">
+                                    <b>Nutrition</b>
+                                </a>
+                                    <div class="collapse" id="PNNutritionFR">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Nutrition_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Nutrition A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Nutrition_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Nutrition B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNOncology')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNOncology">
+                                    <b>Oncology</b>
+                                </a>
+                                    <div class="collapse" id="PNOncology">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Oncology_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Oncology A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Oncology_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Oncology B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNPediatrics')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNPediatrics">
+                                    <b>Pediatrics</b>
+                                </a>
+                                    <div class="collapse" id="PNPediatrics">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Pediatrics_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Pediatrics A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Pediatrics_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Pediatrics B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNPharmacologyFR')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNPharmacologyFR">
+                                    <b>Pharmacology</b>
+                                </a>
+                                    <div class="collapse" id="PNPharmacologyFR">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Pharmacology_1A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Pharmacology 1 A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Pharmacology_1B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Pharmacology 1 B Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Pharmacology_2A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Pharmacology 2 A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Pharmacology_2B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Pharmacology 2 B Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Pharmacology_3A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Pharmacology 3 A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Pharmacology_3B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Pharmacology 3 B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNPsychMental')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNPsychMental">
+                                    <b>Psych/Mental Health</b>
+                                </a>
+                                    <div class="collapse" id="PNPsychMental">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Psychology_Mental_Health_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Psych/Mental Health A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Psychology_Mental_Health_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Psych/Mental Health B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNRenal')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNRenal">
+                                    <b>Renal</b>
+                                </a>
+                                    <div class="collapse" id="PNRenal">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Renal_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Renal A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Renal_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Renal B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNReproductive')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNReproductive">
+                                    <b>Reproductive</b>
+                                </a>
+                                    <div class="collapse" id="PNReproductive">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Reproductive_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Reproductive A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Reproductive_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Reproductive B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNRespiratory')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNRespiratory">
+                                    <b>Respiratory</b>
+                                </a>
+                                    <div class="collapse" id="PNRespiratory">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Respiratory_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Respiratory A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Respiratory_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Respiratory B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNSensory')" class="expander-trigger collapsed link-darker" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="PNSensory">
+                                    <b>Sensory</b>
+                                </a>
+                                    <div class="collapse" id="PNSensory">
+                                        <ul class="list-pdf-download-icon list-extra-spacing">
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Sensory_A.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Sensory A Blueprint</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/blueprints/PN_Sensory_B.pdf" target="_blank" class="icon pdf-download-icon link-darker">PN Sensory B Blueprint</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div><!--closes outer collapse div-->
+                            </div><!--closes PN FR section-->
+                        </div><!--closes text-section-->
 
                         <div class="text-section">
                         <h4 id="customizationOfTestsITUnsecure" class="h6">Create Your Own Test</h4>
@@ -1381,7 +1613,7 @@
             </div>
             <!--end faculty-user-guide-content-->
 
-            <a href="javascript:void(0)" (click)="scroll('#whatsNew',$event)"><img src="images/green-arrow-large-transparent.png" class="back-to-top-arrow" alt="back to top arrow icon"></a>
+            <a href="javascript:void(0)" (click)="scroll('#whatsNew',$event)"><img src="images/green-arrow-large-transparent.png" id="backToTop" class="back-to-top-arrow" alt="back to top arrow icon"></a>
 
         </div>
 

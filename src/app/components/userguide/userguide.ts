@@ -29,10 +29,22 @@ export class UserGuide implements OnInit {
         this.modifiedDate = new Date(constants.USERGUIDEMODIFICATIONDATE);
     }
     
+    //on click event added to elements in html template
     scroll(element: string, e: any) {
         e.preventDefault();
         let __this = this;
-        let offset = $('.faculty-user-guide-header').position().top + parseInt($('.faculty-user-guide-header').outerHeight());
+        let offset = 0;
+            offset = $('header').outerHeight(true) 
+        if (element === '#whatsNew') {  // Includes whats New link and Back to Top link
+            offset = $('header').outerHeight(true) + $('.faculty-user-guide-header').outerHeight(true);
+            if ($(window).width() < 768 && $(e.target).attr('id') === 'backToTop') {
+             offset += $('.faculty-user-guide-menu ul').outerHeight(true) + 10;
+            }
+            if ($(window).width() < 768 && $(e.target).attr('id') === 'whatsNewLink') {
+             offset = $('header').outerHeight(true) 
+            }
+         } 
+         
         if ($(element).is('.h5, .h6')) { //if element is a subelement add 15px margin (may want to refactor and add specific classes)
           offset = offset + 15;
         }
@@ -43,19 +55,22 @@ export class UserGuide implements OnInit {
         });
     }
 
-
-    print(e: any): void {
-        window.print();
-        e.preventDefault();
-    }
-
     onScroll(e) {
         if ($(window).scrollTop() > 100) {
             $('.back-to-top-arrow').fadeIn();
+            $('.faculty-user-guide-header').slideUp('fast');
+            setTimeout(function () {
+                $('.faculty-user-guide-menu').addClass('js-top-100');
+            }, 200);
         } else {
             $('.back-to-top-arrow').fadeOut();
+            $('.faculty-user-guide-header').slideDown('fast');
+            setTimeout(function () {
+                $('.faculty-user-guide-menu').removeClass('js-top-100');
+            }, 200);
         }
     }
+    
     
     expand(element: string) {
         $(element).toggleClass('in').prev('a').toggleClass('collapsed');
@@ -66,6 +81,13 @@ export class UserGuide implements OnInit {
         $(element).prev('a').attr('aria-expanded', false);
     }
    }
-
+   
+   
+    print(e: any): void {
+        window.print();
+        e.preventDefault();
+    }
 
 }
+   
+   
