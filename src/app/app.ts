@@ -32,10 +32,14 @@ import {Rosters} from './components/rosters/rosters';
 import {Groups} from './components/groups/groups';
 import {Logout} from './components/shared/logout';
 import {AccountError} from './components/errors/accounterror';
+import {Log} from './services/log';
+import {Angulartics2, Angulartics2On} from './lib/ng-ga';
+import {Angulartics2GoogleAnalytics} from './lib/angulartics2-google-analytics';
 
 @Component({
     selector: 'app',
     template: `<router-outlet></router-outlet>`,
+    providers: [Angulartics2GoogleAnalytics,Log, Auth],
     directives: [ROUTER_DIRECTIVES, RouterOutlet, RouterLink]
 })
 
@@ -74,7 +78,7 @@ import {AccountError} from './components/errors/accounterror';
     { path: '/accounterror', component: AccountError, name: 'AccountError' }
 ])
 export class App {
-    constructor(public router: Router) {
+    constructor(public router: Router, angulartics2: Angulartics2, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {
         // $(window).bind("popstate", function(event) {
         //     // console.log(event);
         //     // alert('sss');
@@ -85,12 +89,13 @@ export class App {
 }
 
 
-// enableProdMode();
+//enableProdMode();
 
 bootstrap(App, [
     ROUTER_PROVIDERS,
     HTTP_PROVIDERS,
     provide(ExceptionHandler, { useClass: MyExceptionHandler }),
     provide(ROUTER_PRIMARY_COMPONENT, { useValue: App }),
-    provide(LocationStrategy, { useClass: HashLocationStrategy })
+    provide(LocationStrategy, { useClass: HashLocationStrategy }),
+    Angulartics2
 ]);
