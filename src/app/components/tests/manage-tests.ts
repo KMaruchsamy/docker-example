@@ -70,6 +70,7 @@ export class ManageTests implements OnInit {
         this.checkInstitutions();
         this.setLatestInstitution();
         this.bindTests();
+        $('title').html('Manage Tests &ndash; Kaplan Nursing');
     }
 
     resize(): void {

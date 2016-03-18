@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component, OnInit} from 'angular2/core';
 import {Router, RouterLink, RouteParams} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {PageHeader} from './page-header';
@@ -32,6 +32,10 @@ export class ChooseInstitution {
         this.institutionRN = this.routeParams.get('idRN');
         this.institutionPN = this.routeParams.get('idPN');
         this.setBackMessage();
+    }
+    
+    ngOnInit(): void {
+        $('title').html('Choose a Program &ndash; Kaplan Nursing');
     }
 
     setBackMessage() {
