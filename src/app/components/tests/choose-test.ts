@@ -1,5 +1,6 @@
-import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef} from 'angular2/core';
+import {Component, OnInit, OnChanges, AfterViewChecked, OnDestroy, ElementRef} from 'angular2/core';
 import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, Location} from 'angular2/router';
+import {AuthService} from '../services/auth.service';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -28,7 +29,7 @@ import '../../lib/modal.js';
     pipes: [RemoveWhitespacePipe, RoundPipe]
 })
 
-export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
+export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit, OnDestroy{
     institutionID: number;
     apiServer: string;
     subjectId: number;
@@ -44,9 +45,19 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public aLocation: Location) {
     }
-
+    ngOnDestroy(): void {
+      //  this.common.disabledforward();
+        this.aLocation.subscribe((onNext: any) => {
+            alert('location= ' + JSON.stringify(onNext) + '\n' + 'path= ' + this.aLocation.path());
+            if (onNext.type === 'hashchange')
+                this.aLocation.replaceState(this.aLocation.path(), '');
+            console.log(onNext);
+        }, (onReturn: any) => {
+            alert('return= ' + this.aLocation.path());
+        });
+    }
     ngOnInit(): void {
-        this.common.disabledforward();
+       // this.common.disabledforward();
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
@@ -62,9 +73,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             }
         }
 
-        this.aLocation.subscribe((onNext: any) => {
-            console.log(onNext);
-        });
+        
 
     }
 

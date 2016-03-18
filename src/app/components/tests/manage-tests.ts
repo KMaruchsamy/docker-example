@@ -61,7 +61,6 @@ export class ManageTests implements OnInit {
     constructor(public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel) { }
 
     ngOnInit(): void {
-        this.common.disabledforward();
         this.sStorage = this.common.getStorage();
         this.testService.clearTestScheduleObjects();
         this.apiServer = this.common.getApiServer();

@@ -23,7 +23,6 @@ export class ConfirmationPopup implements OnInit {
     }
     
     ngOnInit(): void{
-        this.common.disabledforward();
     }
 
     onOK(e): void {

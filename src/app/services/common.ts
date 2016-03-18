@@ -125,8 +125,25 @@ export class Common {
         }
         return 0;
     }
+    noBack() {
+        var nHist = window.history.length;
+        if (window.history[nHist] != window.location) {
+            window.history.forward(-1);
+            return false;
+        }
+       // window.history.back();
+    }
 
     disabledforward(): void {
-        window.history.forward(-1);
+        //alert('back');
+        let __this = this;
+        __this.noBack();
+        window.onload = function () { __this.noBack(); alert('load'); };
+        window.onpageshow = function (evt) {
+            if (evt.persisted) { __this.noBack(); alert('pageshow inside'); }
+            else
+                alert('pageshow outside');
+        }
+        window.onunload = function () { void (0); alert('pageshow onunload'); }
     }
 }

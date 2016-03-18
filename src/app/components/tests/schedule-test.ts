@@ -1,5 +1,5 @@
-import {Component, OnInit} from 'angular2/core';
-import {Router, CanDeactivate, OnDeactivate, ComponentInstruction, RouteParams} from 'angular2/router';
+import {Component, OnInit, AfterViewInit, OnDestroy} from 'angular2/core';
+import {Router, CanDeactivate, OnDeactivate, ComponentInstruction, RouteParams, Location} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -22,7 +22,7 @@ import '../../lib/modal.js';
     providers: [TestService, Auth, TestScheduleModel, Common],
     directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup, AlertPopup]
 })
-export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
+export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate, OnDestroy {
     valid: boolean = false;
     invalid8hours: boolean = false;
     ignore8HourRule: boolean = false;
@@ -40,9 +40,19 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     overrideRouteCheck: boolean = false;
     modify: boolean = false;
     constructor(public testScheduleModel: TestScheduleModel,
-        public testService: TestService, public auth: Auth, public router: Router, public common: Common, public routeParams: RouteParams) {
+        public testService: TestService, public auth: Auth, public router: Router, public common: Common, public routeParams: RouteParams, public aLocation: Location) {
     }
-
+    ngOnDestroy(): void {
+       // this.common.disabledforward();
+        this.aLocation.subscribe((onNext: any) => {
+            alert('location= ' + JSON.stringify(onNext) + '\n' + 'path= ' + this.aLocation.path());
+            if (onNext.type === 'hashchange')
+                this.aLocation.replaceState(this.aLocation.path(), '');
+            console.log(onNext);
+        }, (onReturn: any) => {
+            alert('return= ' + this.aLocation.path());
+        });
+    }
     onCancelChanges(): void {
         this.overrideRouteCheck = true;
         this.testService.clearTestScheduleObjects();
@@ -78,7 +88,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     }
 
     ngOnInit(): void {
-        this.common.disabledforward();
+   //    this.common.disabledforward();
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
@@ -103,6 +113,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         this.set8HourRule();
         $(document).scrollTop(0);
 
+       
     }
 
     initialize() {

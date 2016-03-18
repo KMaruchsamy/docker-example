@@ -37,7 +37,6 @@ export class ViewTest implements OnInit, OnDeactivate {
     }
 
     ngOnInit(): void {
-        this.common.disabledforward();
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');

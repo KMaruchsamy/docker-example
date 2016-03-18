@@ -1,5 +1,5 @@
-import {Component} from 'angular2/core';
-import {Router, RouterLink, RouteParams} from 'angular2/router';
+import {Component,OnDestroy} from 'angular2/core';
+import {Router, RouterLink, RouteParams, Location} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {PageHeader} from './page-header';
 import {Auth} from '../../services/auth';
@@ -14,7 +14,7 @@ import {links} from '../../constants/config';
     directives: [PageHeader, RouterLink, NgIf]
 })
 
-export class ChooseInstitution {
+export class ChooseInstitution implements OnDestroy {
     fromPage: string;
     page: string;
     institutionRN: string;
@@ -22,8 +22,7 @@ export class ChooseInstitution {
     backMessage: string;
     nursingITServer: string;
     isTest: boolean = false;
-    constructor(public router: Router, public routeParams: RouteParams, public common: Common, public auth: Auth) {
-        this.common.disabledforward();
+    constructor(public router: Router, public routeParams: RouteParams, public common: Common, public auth: Auth, public aLocation: Location) {
         this.nursingITServer = this.common.getNursingITServer();
         this.fromPage = this.routeParams.get('frompage');
         this.page = this.routeParams.get('redirectpage');
@@ -33,7 +32,15 @@ export class ChooseInstitution {
         this.institutionPN = this.routeParams.get('idPN');
         this.setBackMessage();
     }
-
+    ngOnDestroy(): void {
+        //  this.common.disabledforward();
+        this.aLocation.subscribe((onNext: any) => {
+            alert('location= ' + JSON.stringify(onNext) + '\n' + 'path= ' + this.aLocation.path());
+            if (history.state === null)
+                this.aLocation.replaceState('/');
+            console.log(onNext);
+        });
+    }
     setBackMessage() {
         switch (this.fromPage.toUpperCase()) {
             case "LOGIN":
