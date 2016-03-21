@@ -435,7 +435,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate, OnDestr
                     student.CohortName = __this.FindCohortName(student.CohortId);
                     student.StudentTestId = __this.testScheduleModel.testId;
                     student.StudentTestName = __this.testScheduleModel.testName;
-                    student.Ada = (eval($(el).find('td:eq(4) button').attr('ada'))) == "true" ? true : false;
+                    student.Ada = $(el).find('td:eq(4) button').attr('ada') === "true" ? true : false;
                     student.NormingId = 0;
                     student.NormingStatus = "";
                     __this.selectedStudents.push(student);
@@ -447,7 +447,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate, OnDestr
                     studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light testing-remove-students-button" data-id="' + student.StudentId + '">Remove</button></li>';
                 }
             });
-            //  }
         }
         return studentlist;
     }
