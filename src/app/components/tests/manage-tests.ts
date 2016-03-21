@@ -96,19 +96,19 @@ export class ManageTests implements OnInit {
                         return moment(_test.TestingWindowStart).toDate()
                     });
 
-                    let unsortedScheduledTests = _.filter(__this.tests, function (test) {
+                    let unsortedScheduledTests = _.filter(__this.tests, function(test) {
                         test.nextDay = moment(test.TestingWindowStart).isBefore(test.TestingWindowEnd, 'day');
                         return (test.Status == teststatus.Scheduled);
                     });
-                    __this.scheduleTests = _.sortBy(unsortedScheduledTests, function (_test) {
+                    __this.scheduleTests = _.sortBy(unsortedScheduledTests, function(_test) {
                         return moment(_test.TestingWindowStart).toDate()
                     });
 
-                    let unsortedInProgressTests = _.filter(__this.tests, function (test) {
+                    let unsortedInProgressTests = _.filter(__this.tests, function(test) {
                         return (test.Status == teststatus.InProgress);
                     });
 
-                    __this.inProgressTests = _.sortBy(unsortedInProgressTests, function (_test) {
+                    __this.inProgressTests = _.sortBy(unsortedInProgressTests, function(_test) {
                         _test.nextDay = moment(_test.TestingWindowStart).isBefore(_test.TestingWindowEnd, 'day');
                         return moment(_test.TestingWindowStart).toDate()
                     });
@@ -188,6 +188,7 @@ export class ManageTests implements OnInit {
 
         $('.js-rename-session').on('save', function(e, params) {
             let _sessionId = e.currentTarget.attributes['sessionId'].textContent;
+            let type = e.currentTarget.attributes['type'].textContent;
             let _newName = params.newValue;
             let renameSessionPromise = __this.renameSession(_sessionId, _newName);
 
@@ -198,12 +199,21 @@ export class ManageTests implements OnInit {
                     if (status.toString() === errorcodes.SUCCESS) {
                         // e.currentTarget.textContent = _newName;
                         let renamedTest: any;
-                        renamedTest = _.find(__this.scheduleTests, { 'TestingSessionId': parseInt(_sessionId) });
-                        if (renamedTest) {
-                            renamedTest.SessionName = _newName;
+                        if (type === 'scheduled') {
+                            renamedTest = _.find(__this.scheduleTests, { 'TestingSessionId': parseInt(_sessionId) });
+                            if (renamedTest) {
+                                renamedTest.SessionName = _newName;
+                            }
                         }
+                        else {
+                            renamedTest = _.find(__this.inProgressTests, { 'TestingSessionId': parseInt(_sessionId) });
+                            if (renamedTest) {
+                                renamedTest.SessionName = _newName;
+                            }
+                        }
+
                         // $(e.currentTarget).html(_newName).append('<img src="images/edit-pencil-icon_2x.png" alt="edit">');
-                       
+
                         //__this.bindTests();
 
                     }
@@ -426,8 +436,8 @@ export class ManageTests implements OnInit {
             });
 
         });
-        
-       
+
+
         //         $("#tblScheduledTests th#customSort").data("tablesaw-sort", function(ascending) {
         //             alert(ascending);
         //             // return a function
@@ -461,10 +471,10 @@ export class ManageTests implements OnInit {
         //                 }
         //             };
         //         });
-        
-        
-        
-    
+
+
+
+
 
 
     }
