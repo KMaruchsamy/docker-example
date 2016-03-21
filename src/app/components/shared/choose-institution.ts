@@ -41,6 +41,11 @@ export class ChooseInstitution implements OnDestroy {
             console.log(onNext);
         });
     }
+    
+    ngOnInit(): void {
+        $('title').html('Choose a Program &ndash; Kaplan Nursing');
+    }
+
     setBackMessage() {
         switch (this.fromPage.toUpperCase()) {
             case "LOGIN":
