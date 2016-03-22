@@ -1,12 +1,14 @@
 ﻿import * as _ from '../../lib/index';
 import {links} from '../constants/config';
 import {Injectable} from 'angular2/core';
+import {Router,Location} from 'angular2/router';
+
 
 @Injectable()
 export class Common {
     apiServer: string;
     nitServer: string;
-    constructor() {
+    constructor(public router: Router, public aLocation: Location) {
         this.apiServer = this.getApiServer();
         this.nitServer = this.getNursingITServer();
     }
@@ -134,25 +136,18 @@ export class Common {
         }
         return 0;
     }
-    noBack() {
-        var nHist = window.history.length;
-        if (window.history[nHist] != window.location) {
-            window.history.forward(-1);
-            return false;
-        }
-       // window.history.back();
-    }
-
+   
     disabledforward(): void {
-        //alert('back');
         let __this = this;
-        __this.noBack();
-        window.onload = function () { __this.noBack(); alert('load'); };
-        window.onpageshow = function (evt) {
-            if (evt.persisted) { __this.noBack(); alert('pageshow inside'); }
-            else
-                alert('pageshow outside');
-        }
-        window.onunload = function () { void (0); alert('pageshow onunload'); }
+        $(window).on('popstate', function (event) {
+            if (event.originalEvent.state != null) {
+                // alert("location: " + __this.aLocation.path());
+                //history.replaceState('');
+            }
+            else {
+                history.replaceState(__this.aLocation.path(), '');
+                __this.router.navigateByUrl(__this.aLocation.path());
+            }
+        });
     }
 }

@@ -1,4 +1,4 @@
-﻿import {Component, OnInit, AfterViewInit, DynamicComponentLoader, ElementRef, OnDestroy} from 'angular2/core';
+﻿import {Component, OnInit, AfterViewInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
 import {Router, RouterLink, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, Location } from 'angular2/router';
 import {NgFor} from 'angular2/common';
 import {TestService} from '../../services/test.service';
@@ -34,7 +34,7 @@ import '../../lib/modal.js';
     pipes: [RemoveWhitespacePipe]
 })
 
-export class AddStudents implements OnInit, OnDeactivate, CanDeactivate, OnDestroy {
+export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     //  institutionID: number;
     apiServer: string;
     lastSelectedCohortID: number;
@@ -58,17 +58,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate, OnDestr
         public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location) {
 
     }
-    ngOnDestroy(): void {
-        //  this.common.disabledforward();
-        this.aLocation.subscribe((onNext: any) => {
-            alert('location= ' + JSON.stringify(onNext) + '\n' + 'path= ' + this.aLocation.path());
-            if (onNext.type === 'hashchange')
-                this.aLocation.replaceState(this.aLocation.path(), '');
-            console.log(onNext);
-        }, (onReturn: any) => {
-            alert('return= ' + this.aLocation.path());
-        });
-    }
+  
     routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         if (!this.overrideRouteCheck) {
@@ -102,7 +92,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate, OnDestr
     }
 
     ngOnInit() {
-      //  this.common.disabledforward();
+        this.common.disabledforward();
         $(document).scrollTop(0);
         this.prevStudentList = [];
         let action = this.routeParams.get('action');

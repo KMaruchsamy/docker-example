@@ -1,4 +1,4 @@
-import {Component, OnInit, DynamicComponentLoader, ElementRef, OnDestroy} from 'angular2/core';
+import {Component, OnInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
 import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams, Location} from 'angular2/router';
 import {NgIf, NgFor} from 'angular2/common';
 import {TestService} from '../../services/test.service';
@@ -32,7 +32,7 @@ import '../../lib/modal.js';
     pipes: [ParseDatePipe]
 })
 
-export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate, OnDestroy {
+export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     testScheduleWindow: string = '';
     isScheduleDatesSame: boolean = true;
     testScheduleDates: string = '';
@@ -60,15 +60,6 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate, OnDestro
         public router: Router, public dynamicComponentLoader: DynamicComponentLoader,
         public elementRef: ElementRef, public routeParams: RouteParams, public aLocation: Location) {
 
-    }
-    ngOnDestroy(): void {
-        //  this.common.disabledforward();
-        this.aLocation.subscribe((onNext: any) => {
-            alert('location= ' + JSON.stringify(onNext) + '\n' + 'path= ' + this.aLocation.path());
-            console.log(onNext);
-        }, (onReturn: any) => {
-            alert('return= ' + this.aLocation.path());
-        });
     }
 
     onCancelChanges(): void {

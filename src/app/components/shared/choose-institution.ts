@@ -1,4 +1,4 @@
-import {Component,OnDestroy} from 'angular2/core';
+import {Component} from 'angular2/core';
 import {Router, RouterLink, RouteParams, Location} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {PageHeader} from './page-header';
@@ -14,7 +14,7 @@ import {links} from '../../constants/config';
     directives: [PageHeader, RouterLink, NgIf]
 })
 
-export class ChooseInstitution implements OnDestroy {
+export class ChooseInstitution {
     fromPage: string;
     page: string;
     institutionRN: string;
@@ -32,18 +32,9 @@ export class ChooseInstitution implements OnDestroy {
         this.institutionPN = this.routeParams.get('idPN');
         this.setBackMessage();
     }
-    ngOnDestroy(): void {
-        //  this.common.disabledforward();
-        this.aLocation.subscribe((onNext: any) => {
-            alert('location= ' + JSON.stringify(onNext) + '\n' + 'path= ' + this.aLocation.path());
-            if (history.state === null)
-                this.aLocation.replaceState('/');
-            console.log(onNext);
-        });
-    }
-    
     ngOnInit(): void {
         $('title').html('Choose a Program &ndash; Kaplan Nursing');
+        this.common.disabledforward();
     }
 
     setBackMessage() {
