@@ -13,7 +13,7 @@ import {TestScheduleModel} from '../../models/testSchedule.model';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';
-import {ParseDatePipe} from '../../pipes/parseDate.pipe';
+import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {Utility} from '../../scripts/utility';
 import * as _ from '../../lib/index';
 import '../../plugins/dropdown.js';

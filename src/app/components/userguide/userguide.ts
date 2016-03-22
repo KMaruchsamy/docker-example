@@ -5,7 +5,7 @@ import {Common} from '../../services/common';
 import {links, constants} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
-import {ParseDatePipe} from '../../pipes/parseDate.pipe';
+import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 
 @Component({
     selector: 'userguide',
