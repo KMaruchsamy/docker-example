@@ -91,7 +91,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             if (action != undefined && action.trim() === 'modify') {
                 this.modify = true;
                 $('title').html('Modify: Schedule Test &ndash; Kaplan Nursing');
-           } else {
+            } else {
                 $('title').html('Schedule Test &ndash; Kaplan Nursing');
             }
         }
@@ -142,7 +142,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             this.$endDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
             this.$endDate.datepicker('update', '');
         }
-     
+
         if (this.startTime)
             this.$startTime.timepicker('setTime', new Date(this.startTime));
         else
@@ -177,7 +177,9 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             'timeFormat': 'g:ia',
             'minTime': this.roundMinTime(new Date()),
             'maxTime': moment(this.roundMinTime(new Date())).endOf('day').toDate(),
-            'disableTouchKeyboard': true
+            'disableTouchKeyboard': true,
+            'selectOnBlur': false,
+            'typeaheadHighlight': false
         }).on('change', function(e) {
             if (e.currentTarget.value) {
                 let startTime;
@@ -257,7 +259,9 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             'timeFormat': 'g:ia',
             'minTime': this.roundMinTime(moment(new Date()).add(30, 'minutes').toDate()),
             'maxTime': moment(this.roundMinTime(moment(new Date()).add(30, 'minutes').toDate())).endOf('day').toDate(),
-            'disableTouchKeyboard': true
+            'disableTouchKeyboard': true,
+            'selectOnBlur': false,
+            'typeaheadHighlight': false
         }).on('change', function(e) {
             if (e.currentTarget.value) {
                 let endTime;
@@ -266,7 +270,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                     endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
                     // if (moment(endTime).isBefore(minEndTime))
                     //     endTime =new Date(minEndTime);
-                    
+
                     if (endTime && moment(endTime).isValid()) {
                         __this.endTime = endTime;
                         if (!__this.startTime) {
@@ -380,8 +384,8 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                         __this.startDate = outputString;
 
                     __this.$startDate.datepicker('update', __this.startDate);
-                
-                
+
+
                     // have to change the date part of the time because the date is changed ..
                     __this.startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
 
@@ -400,7 +404,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                         // have to change the date part of the time because the date is changed ..
                         __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
                     }
-                
+
                     //setting the start date of end datepicker with the start date so that we cannot select a date less than than the start date.
                     __this.$endDate.datepicker('setStartDate', __this.startDate);
                 }
@@ -484,7 +488,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                         else {
                             __this.endDate = moment(outputString).format('L');
                         }
-                            
+
                         //Auto populate the startdate only if it is null or the very first time . 
                         __this.startDate = __this.endDate;
                         __this.$startDate.datepicker('update', __this.startDate);
@@ -637,9 +641,9 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
 
     saveDateTime(): boolean {
-          if (!this.validateDates())
+        if (!this.validateDates())
             return;
-        
+
         if (this.startTime !== undefined && moment(this.startTime).isValid() && this.endTime != undefined && moment(this.endTime).isValid()) {
             this.testScheduleModel.scheduleStartTime = new Date(this.startTime);
             this.testScheduleModel.scheduleEndTime = new Date(this.endTime);
@@ -711,57 +715,57 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     }
 
 
-//     validateDates(): boolean {
-//         if (this.testScheduleModel) {
-// 
-//             if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
-// 
-//                 let institutionOffset = 0;
-//                 if (this.testScheduleModel.institutionId && this.testScheduleModel.institutionId > 0) {
-//                     institutionOffset = this.common.getOffsetInstitutionTimeZone(this.testScheduleModel.institutionId);
-//                 }
-// 
-//                 let scheduleStartTime = moment(new Date(
-//                     moment(this.testScheduleModel.scheduleStartTime).year(),
-//                     moment(this.testScheduleModel.scheduleStartTime).month(),
-//                     moment(this.testScheduleModel.scheduleStartTime).date(),
-//                     moment(this.testScheduleModel.scheduleStartTime).hour(),
-//                     moment(this.testScheduleModel.scheduleStartTime).minute(),
-//                     moment(this.testScheduleModel.scheduleStartTime).second()
-//                 )).format('YYYY-MM-DD HH:mm:ss');
-// 
-// 
-//                 let scheduleEndTime = moment(new Date(
-//                     moment(this.testScheduleModel.scheduleEndTime).year(),
-//                     moment(this.testScheduleModel.scheduleEndTime).month(),
-//                     moment(this.testScheduleModel.scheduleEndTime).date(),
-//                     moment(this.testScheduleModel.scheduleEndTime).hour(),
-//                     moment(this.testScheduleModel.scheduleEndTime).minute(),
-//                     moment(this.testScheduleModel.scheduleEndTime).second()
-//                 )).format('YYYY-MM-DD HH:mm:ss');
-// 
-// 
-//                 if (institutionOffset !== 0) {
-//                     scheduleStartTime = moment(scheduleStartTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
-//                     scheduleEndTime = moment(scheduleEndTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
-//                 }                
-//                 
-//                 if (this.modify) {
-//                     if (moment(scheduleStartTime).isBefore(new Date())) {
-//                         $('#alertPopup').modal('show');
-//                         return false;
-//                     }
-//                 }
-//                 else {
-//                     if (moment(scheduleStartTime).isBefore(new Date())) {
-//                         $('#alertPopup').modal('show');
-//                         return false;
-//                     }
-//                 }
-//             }
-//         }
-//         return true;
-//     }
+    //     validateDates(): boolean {
+    //         if (this.testScheduleModel) {
+    // 
+    //             if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
+    // 
+    //                 let institutionOffset = 0;
+    //                 if (this.testScheduleModel.institutionId && this.testScheduleModel.institutionId > 0) {
+    //                     institutionOffset = this.common.getOffsetInstitutionTimeZone(this.testScheduleModel.institutionId);
+    //                 }
+    // 
+    //                 let scheduleStartTime = moment(new Date(
+    //                     moment(this.testScheduleModel.scheduleStartTime).year(),
+    //                     moment(this.testScheduleModel.scheduleStartTime).month(),
+    //                     moment(this.testScheduleModel.scheduleStartTime).date(),
+    //                     moment(this.testScheduleModel.scheduleStartTime).hour(),
+    //                     moment(this.testScheduleModel.scheduleStartTime).minute(),
+    //                     moment(this.testScheduleModel.scheduleStartTime).second()
+    //                 )).format('YYYY-MM-DD HH:mm:ss');
+    // 
+    // 
+    //                 let scheduleEndTime = moment(new Date(
+    //                     moment(this.testScheduleModel.scheduleEndTime).year(),
+    //                     moment(this.testScheduleModel.scheduleEndTime).month(),
+    //                     moment(this.testScheduleModel.scheduleEndTime).date(),
+    //                     moment(this.testScheduleModel.scheduleEndTime).hour(),
+    //                     moment(this.testScheduleModel.scheduleEndTime).minute(),
+    //                     moment(this.testScheduleModel.scheduleEndTime).second()
+    //                 )).format('YYYY-MM-DD HH:mm:ss');
+    // 
+    // 
+    //                 if (institutionOffset !== 0) {
+    //                     scheduleStartTime = moment(scheduleStartTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
+    //                     scheduleEndTime = moment(scheduleEndTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
+    //                 }                
+    //                 
+    //                 if (this.modify) {
+    //                     if (moment(scheduleStartTime).isBefore(new Date())) {
+    //                         $('#alertPopup').modal('show');
+    //                         return false;
+    //                     }
+    //                 }
+    //                 else {
+    //                     if (moment(scheduleStartTime).isBefore(new Date())) {
+    //                         $('#alertPopup').modal('show');
+    //                         return false;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         return true;
+    //     }
 
 
 
@@ -782,17 +786,17 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                     moment(this.testScheduleModel.scheduleEndTime).minute(),
                     moment(this.testScheduleModel.scheduleEndTime).second()
                 )).format('YYYY-MM-DD HH:mm:ss');
-                
+
                 if (this.modify) {
                     let scheduleURL = this.resolveScheduleURL(`${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.test.viewtest}`, this.testScheduleModel.scheduleId);
                     let status = this.testService.getTestStatus(scheduleURL);
-                    if (status==='completed' || status === 'inprogress') {
+                    if (status === 'completed' || status === 'inprogress') {
                         $('#alertPopup').modal('show');
                         return false;
                     }
                 }
                 else {
-                    if (moment(scheduleEndTime).isBefore(new Date(),'day')) {
+                    if (moment(scheduleEndTime).isBefore(new Date(), 'day')) {
                         $('#alertPopup').modal('show');
                         return false;
                     }
@@ -802,7 +806,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         return true;
     }
 
-    
+
     onOKAlert(): void {
         $('#alertPopup').modal('hide');
         this.overrideRouteCheck = true;

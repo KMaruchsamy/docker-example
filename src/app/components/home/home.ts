@@ -28,7 +28,7 @@ import {links} from '../../constants/config';
     // return auth.isAuth();
     return true;
 })
-export class Home implements OnInit{
+export class Home implements OnInit {
     // profiles: Array<ProfileModel>;
     institutionRN: number;
     institutionPN: number;
@@ -38,6 +38,7 @@ export class Home implements OnInit{
     hdToken: any;
     hdURL: any;
     hdpage: any;
+    hdExceptionURL: any;
     apiServer: string;
     nursingITServer: string;
     accountManagerProfile: ProfileModel;
@@ -54,9 +55,9 @@ export class Home implements OnInit{
         this.loadProfiles(self);
         this.checkInstitutions();
     }
-    
-    
-    ngOnInit(): void{
+
+
+    ngOnInit(): void {
         $(document).scrollTop(0);
     }
 
@@ -137,12 +138,13 @@ export class Home implements OnInit{
         return false;
     }
 
-    prepareRedirectToStudentSite(page, form, hdInstitution, hdToken, hdURL): boolean {
+    prepareRedirectToStudentSite(page, form, hdInstitution, hdToken, hdURL, hdExceptionURL): boolean {
         this.page = page;
         this.form = form;
         this.hdInstitution = hdInstitution;
         this.hdToken = hdToken;
         this.hdURL = hdURL;
+        this.hdExceptionURL = hdExceptionURL;
         // this.checkInstitutions();
 
         if (this.institutionRN > 0 && this.institutionPN > 0) {
@@ -159,12 +161,18 @@ export class Home implements OnInit{
         return false
     }
 
+    resolveExceptionPage(url): string { 
+        let resolvedURL = url.replace('§environment', this.common.getOrigin());
+        return resolvedURL;
+    }
+
 
     redirectToStudentSite(): void {
         var serverURL = this.nursingITServer + links.nursingit.landingpage;
         this.hdInstitution.value = (this.institutionRN > 0) ? this.institutionRN : this.institutionPN;
         this.hdToken.value = this.auth.token
         this.hdURL.value = this.page;
+        this.hdExceptionURL.value = this.resolveExceptionPage(links.nursingit.exceptionpage);
         $(this.form).attr('ACTION', serverURL).submit();
     }
 
@@ -189,7 +197,7 @@ export class Home implements OnInit{
         }
     }
 
-    prepareRedirectToReports(page, form, hdToken, hdpage): boolean {
+    prepareRedirectToReports(page, form, hdToken, hdpage, hdExceptionURL): boolean {
         this.page = page;
         this.form = form;
         this.hdToken = hdToken;
@@ -202,6 +210,7 @@ export class Home implements OnInit{
         var serverURL = this.nursingITServer + links.nursingit.ReportingLandingPage;
         this.hdToken.value = this.auth.token;
         this.hdpage.value = this.page;
+        this.hdExceptionURL.value = this.resolveExceptionPage(links.nursingit.exceptionpage);
         $(this.form).attr('ACTION', serverURL).submit();
     }
 

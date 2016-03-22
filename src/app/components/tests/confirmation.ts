@@ -37,6 +37,8 @@ export class Confirmation implements OnInit, OnDeactivate {
             let savedSchedule: TestScheduleModel = this.testService.getTestSchedule();
             if (savedSchedule)
                 this.testScheduleModel = savedSchedule;
+            else
+                this.router.navigate(['/LastTestingSession']);                
             this.testScheduleModel.currentStep = 5;
             this.testScheduleModel.activeStep = 5;
         }

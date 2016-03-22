@@ -32,6 +32,7 @@ import {Rosters} from './components/rosters/rosters';
 import {Groups} from './components/groups/groups';
 import {Logout} from './components/shared/logout';
 import {AccountError} from './components/errors/accounterror';
+import {LastTestingSession} from './components/tests/last-testing-session';
 import {Log} from './services/log';
 import {Angulartics2, Angulartics2On} from './lib/ng-ga';
 import {Angulartics2GoogleAnalytics} from './lib/angulartics2-google-analytics';
@@ -39,7 +40,7 @@ import {Angulartics2GoogleAnalytics} from './lib/angulartics2-google-analytics';
 @Component({
     selector: 'app',
     template: `<router-outlet></router-outlet>`,
-    providers: [Angulartics2GoogleAnalytics,Log, Auth],
+    providers: [Angulartics2GoogleAnalytics, Log, Auth],
     directives: [ROUTER_DIRECTIVES, RouterOutlet, RouterLink]
 })
 
@@ -75,7 +76,8 @@ import {Angulartics2GoogleAnalytics} from './lib/angulartics2-google-analytics';
     { path: '/tests/:action/confirmation', component: Confirmation, name: 'ModifyConfirmation' },
     { path: '/error', component: UnhandledException, name: 'UnhandledException' },
     { path: '/*wildcard', component: PageNotFound, name: 'PageNotFound' },
-    { path: '/accounterror', component: AccountError, name: 'AccountError' }
+    { path: '/accounterror', component: AccountError, name: 'AccountError' },
+    { path: '/testing-session-expired', component: LastTestingSession, name: 'LastTestingSession' }
 ])
 export class App {
     constructor(public router: Router, angulartics2: Angulartics2, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {

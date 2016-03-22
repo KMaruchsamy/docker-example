@@ -38,23 +38,23 @@
                     <h2>Reporting Tools</h2>
                     <div class="faculty-links">
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportStudentCard (click)="prepareRedirectToReports('StudentReportCard',myform,hdtoken,hdpage);" href="javascript:void(0)">Student Report Card</a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportStudentCard (click)="prepareRedirectToReports('StudentReportCard',myform,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Student Report Card</a></h3>
                             <span>Review your students’ performance at a glance</span>
                         </div>
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportCohortByQuestion (click)="prepareRedirectToReports('ReportCohortByQuestion',myform,hdtoken,hdpage);" href="javascript:void(0)">Test Result by Question</a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportCohortByQuestion (click)="prepareRedirectToReports('ReportCohortByQuestion',myform,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Test Result by Question</a></h3>
                             <span>Review performance by topic and difficulty level</span>
                         </div>
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportCohortByTest (click)="prepareRedirectToReports('ReportCohortByTest',myform,hdtoken,hdpage);"  href="javascript:void(0)">Cohort by Test</a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportCohortByTest (click)="prepareRedirectToReports('ReportCohortByTest',myform,hdtoken,hdpage,hdexceptionurl);"  href="javascript:void(0)">Cohort by Test</a></h3>
                             <span>Review an entire cohort’s performance</span>
                         </div>
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkUtilizationReport (click)="prepareRedirectToReports('UtilizationReport',myform,hdtoken,hdpage);"  href="javascript:void(0)">Utilization Report</a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkUtilizationReport (click)="prepareRedirectToReports('UtilizationReport',myform,hdtoken,hdpage,hdexceptionurl);"  href="javascript:void(0)">Utilization Report</a></h3>
                             <span>Review how your students are using their resources</span>
                         </div>
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkCohortComparision (click)="prepareRedirectToReports('CohortComparisonsReport',myform,hdtoken,hdpage);" href="javascript:void(0)">Category Comparisons</a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkCohortComparision (click)="prepareRedirectToReports('CohortComparisonsReport',myform,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Category Comparisons</a></h3>
                             <span>Compare cohort performance in over 80 categories</span>
                         </div>
 
@@ -64,7 +64,7 @@
                     <h2>Teaching Tools (Student Site)</h2>
                     <div class="faculty-links">
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('TestReview',myform,hdinstitution,hdtoken,hdpage);" href="javascript:void(0)">Focused Review Tests</a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('TestReview',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Focused Review Tests</a></h3>
                             <p>For content mastery</p>
                             <ul class="bullet">
                                 <li>Access standard tests or help students create their own</li>
@@ -72,12 +72,12 @@
                             </ul>
                         </div>
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin" *ngIf="(institutionRN>0)"><a class="mobile-button" (click)="prepareRedirectToStudentSite('CaseStudies',myform,hdinstitution,hdtoken,hdpage);" href="javascript:void(0)">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('SkillsModules',myform,hdinstitution,hdtoken,hdpage);" href="javascript:void(0)">Skills Demonstration Videos</a></h3>
+                            <h3 class="h4 text-smaller-margin" *ngIf="(institutionRN>0)"><a class="mobile-button" (click)="prepareRedirectToStudentSite('CaseStudies',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('SkillsModules',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Skills Demonstration Videos</a></h3>
                             <p>For practical learning simulation</p>
                         </div>
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('Nclex',myform,hdinstitution,hdtoken,hdpage);" href="javascript:void(0)">NCLEX Resources</a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('Nclex',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">NCLEX Resources</a></h3>
                             <p>For standardized test mastery</p>
                             <ul class="bullet">
                                 <li>Access diagnostic tests and Question Trainers</li>
@@ -138,4 +138,5 @@
     <input #hdinstitution type="hidden" id="institutionID" name="institutionID">
     <input #hdtoken type="hidden" id="jwtToken" name="jwtToken">
     <input #hdpage type="hidden" id="redirectPage" name="redirectPage">
+    <input #hdexceptionurl type="hidden" id="exceptionURL" name="exceptionURL">
 </form>

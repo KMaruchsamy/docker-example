@@ -24,6 +24,7 @@ export class Reports {
     hdToken: any;
     hdURL: any;
     hdpage: any;
+    hdExceptionURL: any;
     apiServer: string;
     nursingITServer: string;
     institutionName: string;
@@ -31,8 +32,8 @@ export class Reports {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
     }
-    
-      ngOnInit(): void {
+
+    ngOnInit(): void {
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else
@@ -50,19 +51,26 @@ export class Reports {
         return '';
     }
 
-    prepareRedirectToReports(page, form, hdToken, hdpage): boolean {
+    prepareRedirectToReports(page, form, hdToken, hdpage, hdExceptionURL): boolean {
         this.page = page;
         this.form = form;
         this.hdToken = hdToken;
         this.hdpage = hdpage;
+        this.hdExceptionURL = hdExceptionURL;
         this.redirectToReports();
         return false;
+    }
+
+    resolveExceptionPage(url): string {
+        let resolvedURL = url.replace('§environment', this.common.getOrigin());
+        return resolvedURL;
     }
 
     redirectToReports(): void {
         var serverURL = this.nursingITServer + links.nursingit.ReportingLandingPage;
         this.hdToken.value = this.auth.token;
         this.hdpage.value = this.page;
+        this.hdExceptionURL.value = this.resolveExceptionPage(links.nursingit.exceptionpage);
         $(this.form).attr('ACTION', serverURL).submit();
     }
 
