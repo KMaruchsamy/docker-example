@@ -114,14 +114,9 @@ export class ManageTests implements OnInit {
 
                     setTimeout((json) => {
                         $(document).trigger("enhance.tablesaw");
-                        // $('#tblScheduledTests').table().data("table").refresh();
-                        //$('#tblScheduledTests').table().data("table").init()
                         $('.js-rename-session').editable("destroy");
                         __this.configureEditor(__this);
-                        // __this.bindSort('#tblScheduledTests');
-                        // __this.bindSort('#tblCompletedTests'); 
-                        // __this.addColumnStyle($('table#tblCompletedTests'));
-                        // __this.addColumnStyle($('table#tblScheduledTests'));
+                        __this.toggleTd();
                     })
 
                 }
