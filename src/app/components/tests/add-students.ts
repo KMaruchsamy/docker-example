@@ -54,6 +54,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     loader: any;
     retesterExceptions: any;
     modify: boolean = false;
+    noStudentInCohort: string = "No matching students in this cohort";
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
         public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location) {
 
@@ -232,7 +233,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             let student = _selectedStudent[i];
             if (typeof (student.MarkedToRemove) === 'undefined' || !student.MarkedToRemove) {
                 this.selectedStudents.push(student);
-                var retesting = "";
+                let retesting = "";
                 if (student.Retester) {
                     retesting = "RETESTING";
                 }
@@ -327,7 +328,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                             "language": {
                                 search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
                                 searchPlaceholder: "Find student in cohort",
-                                "zeroRecords": "No matching students in this cohort",
+                                "zeroRecords": this.noStudentInCohort,
                                 "emptyTable": "We’re sorry, there are no students in this cohort.",
                             },
                             columnDefs: [{
@@ -359,7 +360,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     SearchFilterOptions(__this: any): void {
         $('#cohortStudentList .dataTables_filter :input').addClass('small-search-box');
         __this.filterTableSearch();
-        var checkboxfilters = '<div class="form-group hidden-small-down"><input type="checkbox" class="small-checkbox-image" id="cohortRepeatersOnly" name="filterADA" value="repeatersOnly">' +
+        let checkboxfilters = '<div class="form-group hidden-small-down"><input type="checkbox" class="small-checkbox-image" id="cohortRepeatersOnly" name="filterADA" value="repeatersOnly">' +
             '<label class="smaller" for="cohortRepeatersOnly">Retesting only</label>' +
             '<input type="checkbox" class="small-checkbox-image"  id="cohortExcludeRepeaters" name="filterADA" value="excludeRepeaters">' +
             '<label class="smaller" for="cohortExcludeRepeaters">Exclude retesting students</label></div>';
@@ -381,7 +382,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             __this.IncludeExcludeRetesterFromList();
         });
         $('#cohortExcludeRepeaters').on('click', function () {
-            var $Repeaters = $('#cohortRepeatersOnly');
+            let $Repeaters = $('#cohortRepeatersOnly');
 
             if ($(this).is(':checked')) {
                 $Repeaters.prop('checked', false);
@@ -430,7 +431,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     student.NormingStatus = "";
                     __this.selectedStudents.push(student);
                     $('#' + buttonId).attr('disabled', 'disabled');
-                    var retesting = "";
+                    let retesting = "";
                     if (student.Retester) {
                         retesting = "RETESTING";
                     }
@@ -452,11 +453,11 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         let _counter = 0;
         if (_selectedStudents.length > 0) {
             this.ResetAddButton();
-            for (var j = 0; j < _selectedStudents.length; j++) {
+            for (let j = 0; j < _selectedStudents.length; j++) {
                 if (typeof (_selectedStudents[j].MarkedToRemove) === 'undefined' || !_selectedStudents[j].MarkedToRemove) {
-                    var buttonid = "cohort-" + _selectedStudents[j].StudentId.toString();
+                    let buttonid = "cohort-" + _selectedStudents[j].StudentId.toString();
                     $("#cohortStudents button").each(function (index, el) {
-                        var button = $(el).attr('id');
+                        let button = $(el).attr('id');
                         if (button === buttonid) {
                             $(el).attr('disabled', 'disabled');
                             _counter = _counter + 1;
@@ -477,10 +478,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     DisableAddButton(): void {
         if (this.selectedStudents.length > 0) {
-            for (var j = 0; j < this.selectedStudents.length; j++) {
-                var buttonid = "cohort-" + this.selectedStudents[j].StudentId.toString();
+            for (let j = 0; j < this.selectedStudents.length; j++) {
+                let buttonid = "cohort-" + this.selectedStudents[j].StudentId.toString();
                 $("#cohortStudents button").each(function (index, el) {
-                    var button = $(el).attr('id');
+                    let button = $(el).attr('id');
                     if (button === buttonid) {
                         $(el).attr('disabled', 'disabled');
                     }
@@ -490,7 +491,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     CheckForAllStudentSelected(): void {
-        var rows = $("#cohortStudents tbody tr button");
+        let rows = $("#cohortStudents tbody tr button");
         if (rows.length > 0) {
             $('#cohortStudents tbody tr button').each(function (index, el) {
                 let buttonId = $(el).attr('id');
@@ -510,7 +511,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         let _self = this;
         $('#testSchedulingSelectedStudentsList button').on('click', function (e) {
             e.preventDefault();
-            var rowId = $(this).attr('data-id');
+            let rowId = $(this).attr('data-id');
             $(this).parent().remove();
             _self.RemoveStudentFromList(rowId);
         });
@@ -531,7 +532,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     UpdateSelectedStudentCount(studentid: number): void {
-        for (var i = 0; i < this.selectedStudents.length; i++) {
+        for (let i = 0; i < this.selectedStudents.length; i++) {
             if (this.selectedStudents[i].StudentId.toString() === studentid) {
                 this.selectedStudents.splice(i, 1);
                 this.selectedStudentCount = this.selectedStudentCount - 1;
@@ -554,13 +555,13 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         student.NormingId = 0;
         student.NormingStatus = "";
         this.selectedStudents.push(student);
-        var retesting = "";
+        let retesting = "";
         if (student.Retester) {
             retesting = "RETESTING";
         }
-        var studentli = '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light testing-remove-students-button" data-id="' + student.StudentId + '">Remove</button></li>';
+        let studentli = '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light testing-remove-students-button" data-id="' + student.StudentId + '">Remove</button></li>';
         $('#testSchedulingSelectedStudentsList').append(studentli);
-        var counter = 0;
+        let counter = 0;
         $("#cohortStudents button").each(function (index, el) {
             let buttonid = $(el).attr('id');
             if (!$('#' + buttonid).prop('disabled')) { counter = counter + 1; }
@@ -618,8 +619,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     CheckForAdaStatus(): void {
         if (this.selectedStudents.length > 0) {
-            for (var i = 0; i < this.selectedStudents.length; i++) {
-                var student = this.selectedStudents[i];
+            for (let i = 0; i < this.selectedStudents.length; i++) {
+                let student = this.selectedStudents[i];
                 if (student.Ada) {
                     $('#accommadationNote').removeClass('hidden');
                     break;
@@ -644,18 +645,20 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
     filterTableSearch(): void {
         let __this = this;
-        $('#cohortStudentList :input').on('keyup', function () {
-            var that = this;
-            var _count = 0;
+        $('#cohortStudentList .dataTables_filter :input').on('keyup', function () {
+            let that = this;
+            let _count = 0;
             $('#cohortStudents tbody tr').each(function (index, el) {
-                var firstName = $(el).find('td:eq(1)').text().toUpperCase();
-                var lastName = $(el).find('td:eq(0)').text().toUpperCase();
-                var searchString = $(that).val().toUpperCase();
-                if (!(_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)))
-                    $(this).hide();
-                else {
-                    $(this).show();
-                    _count = _count + 1;
+                let firstName = $(el).find('td:eq(1)').text().toUpperCase();
+                let lastName = $(el).find('td:eq(0)').text().toUpperCase();
+                let searchString = $(that).val().toUpperCase();
+                if (lastName !== __this.noStudentInCohort.toUpperCase()) { 
+                    if (!(_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)))
+                        $(this).hide();
+                    else {
+                        $(this).show();
+                        _count = _count + 1;
+                    }
                 }
             });
             if (_count)
@@ -667,12 +670,12 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     filterSelectedStudents(): void {
         $('#filterSelectedStudents').on('keyup', function () {
-            var that = this;
+            let that = this;
             $('#testSchedulingSelectedStudents li').each(function () {
-                var $span = $(this).find('span.js-selected-student');
-                var firstName = $span.text().split(',')[0].toUpperCase();
-                var lastName = $span.text().split(',')[1].replace(' ', '').toUpperCase();
-                var searchString = $(that).val().toUpperCase();
+                let $span = $(this).find('span.js-selected-student');
+                let firstName = $span.text().split(',')[0].toUpperCase();
+                let lastName = $span.text().split(',')[1].replace(' ', '').toUpperCase();
+                let searchString = $(that).val().toUpperCase();
                 if (!(_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)))
                     $(this).hide();
                 else
@@ -682,8 +685,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     sortAlpha(): void {
-        var mylist = $('#testSchedulingSelectedStudentsList');
-        var listitems = mylist.children('li').get();
+        let mylist = $('#testSchedulingSelectedStudentsList');
+        let listitems = mylist.children('li').get();
         listitems.sort(function (a, b) {
             return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
         })
@@ -724,7 +727,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     FindCohortName(cohortid: number): string {
-        for (var i = 0; i < this.cohorts.length; i++) {
+        for (let i = 0; i < this.cohorts.length; i++) {
             if (this.cohorts[i].CohortId === cohortid) {
                 return this.cohorts[i].CohortName;
             }
