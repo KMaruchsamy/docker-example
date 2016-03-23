@@ -1,5 +1,5 @@
-import {Component, OnInit} from 'angular2/core';
-import {Router, RouterLink, RouteParams} from 'angular2/router';
+import {Component} from 'angular2/core';
+import {Router, RouterLink, RouteParams, Location} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {PageHeader} from './page-header';
 import {Auth} from '../../services/auth';
@@ -22,8 +22,7 @@ export class ChooseInstitution {
     backMessage: string;
     nursingITServer: string;
     isTest: boolean = false;
-    constructor(public router: Router, public routeParams: RouteParams, public common: Common, public auth: Auth) {
-        this.common.disabledforward();
+    constructor(public router: Router, public routeParams: RouteParams, public common: Common, public auth: Auth, public aLocation: Location) {
         this.nursingITServer = this.common.getNursingITServer();
         this.fromPage = this.routeParams.get('frompage');
         this.page = this.routeParams.get('redirectpage');
@@ -33,9 +32,9 @@ export class ChooseInstitution {
         this.institutionPN = this.routeParams.get('idPN');
         this.setBackMessage();
     }
-    
     ngOnInit(): void {
         $('title').html('Choose a Program &ndash; Kaplan Nursing');
+        this.common.disabledforward();
     }
 
     setBackMessage() {

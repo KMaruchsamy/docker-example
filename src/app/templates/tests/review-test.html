@@ -8,7 +8,7 @@
             <form class="clearfix name-testing-session">
                 <div class="one-half-grid">
                     <label class="label-bold label-larger" for="txtSessionName">Name your testing session</label>
-                    <input type="text" id="txtSessionName" maxlength="75" #testsessionname (input)="onInput(testsessionname.value,ddlfaculty.value);">
+                    <input type="text" id="txtSessionName" maxlength="75" autocomplete="off" #testsessionname (input)="onInput(testsessionname.value,ddlfaculty.value);">
                 </div>
                 <div class="one-half-grid lightbulb-icon-container">
                     <p class="icon lightbulb-icon">Your testing session contains all the details related to the test you are scheduling. Name it for easy
@@ -60,7 +60,6 @@
 
                     </td>
                     <td><a [routerLink]="modify ? ['/ModifyScheduleTest',{action:'modify'}] : ['/ScheduleTest']">Change</a>
-
                     </td>
                 </tr>
                 <!--<tr>

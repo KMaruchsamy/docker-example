@@ -117,7 +117,7 @@ export class TestService {
             },
             success: function(json) {
                 if (json) {
-                    facultyJson =json;
+                    facultyJson = json;
                 }
 
             },
@@ -338,7 +338,21 @@ export class TestService {
                 });
             }
 
-            $(tableName).find(columnName).attr('order', asc == 1 ? "0" : "1");
+            let $table = $(tableName);            
+            $table.find('button.sorted').removeClass('sorted');
+
+            let $clickedColumn = $(tableName).find(columnName);
+            $clickedColumn.attr('order', asc == 1 ? "0" : "1").find('button').addClass('sorted');
+            let columnIndex: number = $clickedColumn.index() + 1;
+            $table.find('th').not($clickedColumn).attr('order', "1").removeClass('tablesaw-sortable-descending').addClass('tablesaw-sortable-ascending');
+
+            if (asc == 1)
+                $clickedColumn.removeClass('tablesaw-sortable-ascending').addClass('tablesaw-sortable-descending');
+            else
+                $clickedColumn.removeClass('tablesaw-sortable-descending').addClass('tablesaw-sortable-ascending');
+
+            $table.find('tbody td').removeClass('column-striped');
+            $table.find('tbody td:nth-child(' + columnIndex + ')').addClass('column-striped');
             return sortedTests;
         }
         return null;

@@ -1,5 +1,6 @@
-import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef} from 'angular2/core';
+import {Component, OnInit, OnChanges, AfterViewChecked, ElementRef} from 'angular2/core';
 import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, Location} from 'angular2/router';
+import {AuthService} from '../services/auth.service';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -28,7 +29,7 @@ import '../../lib/modal.js';
     pipes: [RemoveWhitespacePipe, RoundPipe]
 })
 
-export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
+export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit{
     institutionID: number;
     apiServer: string;
     subjectId: number;
@@ -44,7 +45,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public aLocation: Location) {
     }
-
+  
     ngOnInit(): void {
         this.common.disabledforward();
         this.sStorage = this.common.getStorage();
@@ -62,9 +63,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             }
         }
 
-        this.aLocation.subscribe((onNext: any) => {
-            console.log(onNext);
-        });
+        
 
     }
 

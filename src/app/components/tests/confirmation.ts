@@ -20,9 +20,8 @@ export class Confirmation implements OnInit, OnDeactivate {
     sStorage: any;
     modify: boolean = false;
     constructor(public testScheduleModel: TestScheduleModel, public common: Common, public testService: TestService, public routeParams:RouteParams, public router:Router, public auth:Auth) { }
-
+    
     ngOnInit(): void {
-        this.common.disabledforward();
         $(document).scrollTop(0);
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
@@ -38,6 +37,8 @@ export class Confirmation implements OnInit, OnDeactivate {
             let savedSchedule: TestScheduleModel = this.testService.getTestSchedule();
             if (savedSchedule)
                 this.testScheduleModel = savedSchedule;
+            else
+                this.router.navigate(['/LastTestingSession']);                
             this.testScheduleModel.currentStep = 5;
             this.testScheduleModel.activeStep = 5;
         }

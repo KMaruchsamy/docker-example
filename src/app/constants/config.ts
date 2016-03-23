@@ -65,7 +65,8 @@ export const links = {
             server: "https://nursing.kaplan.com/"
         },
         landingpage: "NewSiteLandingPage.aspx?facultylogin=1",
-        ReportingLandingPage: "UX_ALogin.aspx"
+        ReportingLandingPage: "UX_ALogin.aspx",
+        exceptionpage:"§environment/accounterror"
     },
     faculty: {
         local: {

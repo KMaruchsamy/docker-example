@@ -1,5 +1,5 @@
 import {Component, OnInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
-import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams} from 'angular2/router';
+import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams, Location} from 'angular2/router';
 import {NgIf, NgFor} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -58,7 +58,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public common: Common,
         public router: Router, public dynamicComponentLoader: DynamicComponentLoader,
-        public elementRef: ElementRef, public routeParams: RouteParams) {
+        public elementRef: ElementRef, public routeParams: RouteParams, public aLocation: Location) {
 
     }
 

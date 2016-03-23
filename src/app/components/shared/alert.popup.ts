@@ -22,7 +22,6 @@ export class AlertPopup implements OnInit {
     }
     
     ngOnInit(): void{
-        this.common.disabledforward();
     }
 
     onOK(e): void {

@@ -1,7 +1,7 @@
 import {Injectable} from 'angular2/core';
 import {Http, Headers, RequestOptions, Response} from 'angular2/http';
 import {Observable} from 'rxjs/Rx';
-import {Auth} from './Auth';
+import {Auth} from './auth';
 import {links} from '../constants/config';
 import {Common} from './common';
 

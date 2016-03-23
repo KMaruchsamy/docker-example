@@ -11,7 +11,7 @@ import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
 import * as _ from '../../lib/index';
-import {ParseDatePipe} from '../../pipes/parseDate.pipe';
+import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
@@ -37,7 +37,6 @@ export class ViewTest implements OnInit, OnDeactivate {
     }
 
     ngOnInit(): void {
-        this.common.disabledforward();
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
@@ -64,23 +63,32 @@ export class ViewTest implements OnInit, OnDeactivate {
 
     loadTestSchedule(): void {
         let __this = this;
-        let _schedule: TestScheduleModel = this.testService.getTestSchedule();     
-        if (_schedule.selectedStudents && _schedule.selectedStudents.length > 0) {
-            let __selectedStudents: SelectedStudentModel[] = _schedule.selectedStudents.sort(function(a, b) {
-                var nameA = a.LastName.toLowerCase(), nameB = b.LastName.toLowerCase()
-                if (nameA < nameB) //sort string ascending
-                    return -1
-                if (nameA > nameB)
-                    return 1
-                return 0 //default return value (no sorting)
-            });
-            _schedule.selectedStudents = __selectedStudents;
+        let _schedule: TestScheduleModel = this.testService.getTestSchedule();
+        if (_schedule) {
+            if (_schedule.selectedStudents && _schedule.selectedStudents.length > 0) {
+                let __selectedStudents: SelectedStudentModel[] = _schedule.selectedStudents.sort(function(a, b) {
+                    var nameA = a.LastName.toLowerCase(), nameB = b.LastName.toLowerCase()
+                    if (nameA < nameB) //sort string ascending
+                        return -1
+                    if (nameA > nameB)
+                        return 1
+                    return 0 //default return value (no sorting)
+                });
+                _schedule.selectedStudents = __selectedStudents;
+
+            }
+            this.schedule = _schedule;
+            this.hasADA = _.some(this.schedule.selectedStudents, { 'Ada': true });
+            console.log('>>>>>>>>>>>>>>>>>>');
+            console.log(JSON.stringify(this.schedule));
 
         }
-        this.schedule = _schedule;
-        this.hasADA = _.some(this.schedule.selectedStudents, { 'Ada': true });
-        console.log('>>>>>>>>>>>>>>>>>>');
-        console.log(JSON.stringify(this.schedule));
+        else
+            this.router.navigate(['/LastTestingSession']);
+
+
+
+
 
         if (this.schedule) {
             let startTime = this.schedule.scheduleStartTime;

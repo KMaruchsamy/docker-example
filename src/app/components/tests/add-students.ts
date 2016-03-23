@@ -1,5 +1,5 @@
-﻿import {Component, OnInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
-import {Router, RouterLink, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction } from 'angular2/router';
+﻿import {Component, OnInit, AfterViewInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
+import {Router, RouterLink, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, Location } from 'angular2/router';
 import {NgFor} from 'angular2/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -55,10 +55,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     retesterExceptions: any;
     modify: boolean = false;
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
-        public dynamicComponentLoader: DynamicComponentLoader) {
+        public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location) {
 
     }
-
+  
     routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         if (!this.overrideRouteCheck) {
@@ -425,7 +425,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     student.CohortName = __this.FindCohortName(student.CohortId);
                     student.StudentTestId = __this.testScheduleModel.testId;
                     student.StudentTestName = __this.testScheduleModel.testName;
-                    student.Ada = (eval($(el).find('td:eq(4) button').attr('ada'))) == "true" ? true : false;
+                    student.Ada = $(el).find('td:eq(4) button').attr('ada') === "true" ? true : false;
                     student.NormingId = 0;
                     student.NormingStatus = "";
                     __this.selectedStudents.push(student);
@@ -437,7 +437,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light testing-remove-students-button" data-id="' + student.StudentId + '">Remove</button></li>';
                 }
             });
-            //  }
         }
         return studentlist;
     }
