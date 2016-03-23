@@ -1,7 +1,7 @@
 ﻿import * as _ from '../../lib/index';
 import {links} from '../constants/config';
 import {Injectable} from 'angular2/core';
-import {Router,Location} from 'angular2/router';
+import {Router, Location} from 'angular2/router';
 
 
 @Injectable()
@@ -136,16 +136,19 @@ export class Common {
         }
         return 0;
     }
-   
+
     disabledforward(): void {
         let __this = this;
         $(window).on('popstate', function (event) {
             if (event.originalEvent.state != null) {
-                // alert("location: " + __this.aLocation.path());
-                //history.replaceState('');
+                //alert("location if !null: " + __this.aLocation.path());
+                history.replaceState(__this.aLocation.path(),"","");
+                __this.router.navigateByUrl(__this.aLocation.path());
             }
             else {
-                history.replaceState(__this.aLocation.path(), '');
+                //alert("location: " + __this.aLocation.path());
+                //history.replaceState(__this.aLocation.path(),"","");
+                history.pushState(__this.aLocation.path(), "", "");
                 __this.router.navigateByUrl(__this.aLocation.path());
             }
         });
@@ -153,8 +156,8 @@ export class Common {
 
     getOrigin(): string {
         if (!window.location.origin) {
-           return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+            return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
         }
-        return window.location.origin;        
+        return window.location.origin;
     }
 }
