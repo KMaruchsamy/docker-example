@@ -648,13 +648,17 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         $('#cohortStudentList .dataTables_filter :input').on('keyup', function () {
             let that = this;
             let _count = 0;
+            let _lname = "";
             $('#cohortStudents tbody tr').each(function (index, el) {
                 let firstName = $(el).find('td:eq(1)').text().toUpperCase();
                 let lastName = $(el).find('td:eq(0)').text().toUpperCase();
+                _lname = lastName;
                 let searchString = $(that).val().toUpperCase();
                 if (lastName !== __this.noStudentInCohort.toUpperCase()) { 
                     if (!(_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)))
+                    {
                         $(this).hide();
+                    }
                     else {
                         $(this).show();
                         _count = _count + 1;
@@ -663,8 +667,12 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             });
             if (_count)
                 __this.CheckForAllStudentSelected();
-            else
+            else {
+                if (_lname !== __this.noStudentInCohort.toUpperCase()) {
+                    $('#cohortStudents tbody').append('<tr class="odd"><td style="text-align:center" colspan="5" >' + __this.noStudentInCohort + '</td></tr>');
+                }
                 $('#addAllStudents').attr('disabled', 'disabled');
+            }
         });
     }
 

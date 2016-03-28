@@ -4152,7 +4152,7 @@ input.page-lg-heading {
       width: 20%; }
     .review-details-table tr td:nth-child(2) {
       width: 65%; }
-    .review-details-table tr td:nth-child(last) {
+    .review-details-table tr td:last-child {
       width: 15%; } }
 
 @media (min-width: 62em) {
