@@ -703,7 +703,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         });
     }
     
-    //coral's test code
      addClearIcon(): void {
         $('.testing-add-students-container').on('keyup','.small-search-box', function () {
             if ($(this).val().length > 0) {
@@ -715,13 +714,13 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
     
     clearTableSearch(): void {
-        var $that = $('#cohortStudentList :input');
+        var $that = $('.tab-pane.active :input');
         $that.val('');
         $that.next('span').removeClass('clear-input-values');
         
        this.filterTableSearch()
           
-        $('#cohortStudents tbody tr').each(function () {
+        $('table tbody tr').each(function () {
             $(this).removeClass('hidden');
             $('#noMatchingStudents').addClass('hidden');
         });
@@ -729,8 +728,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         //Right now necessary because table is empty of rows except for no matching student row after more than one letter entered
         //When only only letter has been entered table rows are simply hidden
         $that.on( 'click', function () {
-            var $table = $('#cohortStudents');
-            var table = $('#cohortStudents').DataTable();
+            var $table = $('.tab-pane.active table');
+            var table = $('.tab-pane.active table').DataTable();
             table.search(this.value).draw();
             $table.find('tr').each(function () {
                 $(this).removeClass('hidden');
@@ -746,7 +745,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             $(this).removeClass('hidden');
         });
     }
-    //end coral's test code
 
     sortAlpha(): void {
         let mylist = $('#testSchedulingSelectedStudentsList');
