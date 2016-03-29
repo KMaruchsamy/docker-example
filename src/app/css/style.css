@@ -717,10 +717,10 @@ table.dataTable.table-with-cell-padding td:first-child {
   height: 10px;
   width: 7px; }
 
-/*.tablesaw-sortable .tablesaw-sortable-head.tablesaw-sortable-ascending button::after {
-  @include triangle(12px, $teal, up);
-  content: ' ' !important;
-}*/
+.tablesaw-sortable .tablesaw-sortable-head button {
+  outline: none;
+  text-transform: none; }
+
 .tablesaw-sortable .tablesaw-sortable-head.tablesaw-sortable-descending button::after {
   margin-top: 5px;
   -webkit-transform: rotate(180deg);
@@ -739,28 +739,17 @@ table.dataTable.table-with-cell-padding td:first-child {
 .tablesaw thead {
   border: 0;
   background-image: none; }
+  .tablesaw thead th {
+    font-weight: bold; }
+  .tablesaw thead button {
+    padding: .5em .7em; }
 
-.tablesaw thead th {
-  font-weight: bold; }
-
-.tablesaw thead button {
-  padding: .5em .7em; }
-
-.tablesaw-sortable .tablesaw-sortable-head button {
-  outline: none;
-  text-transform: none;
-  /*&:first-child {
-    padding-left: 0;
-  }
-  &:last-child {
-    padding-right: 0;
-  }*/ }
-
-.tablesaw td:first-child {
-  padding-left: 0; }
-
-.tablesaw td:last-child {
-  padding-right: 0; }
+.tablesaw td {
+  word-wrap: break-word; }
+  .tablesaw td:first-child {
+    padding-left: 0; }
+  .tablesaw td:last-child {
+    padding-right: 0; }
 
 .tablesaw tbody a, .tablesaw tbody button {
   margin-right: 2em; }
@@ -1895,6 +1884,11 @@ main .right-grid ::-webkit-scrollbar {
         padding: 0;
         position: static;
         width: 100%; } }
+    @media (max-height: 476px) and (orientation: landscape) {
+      .dropdown .dropdown-menu {
+        height: 200px;
+        overflow-y: auto;
+        position: absolute; } }
   .dropdown .dropdown-menu li {
     color: #fff;
     list-style: none;
@@ -1912,6 +1906,10 @@ main .right-grid ::-webkit-scrollbar {
       @media (max-width: 34.375em) {
         .dropdown .dropdown-menu li a {
           padding: .825em 4em; } }
+      @media (max-height: 476px) and (orientation: landscape) {
+        .dropdown .dropdown-menu li a {
+          padding-top: 0.66667em;
+          padding-bottom: 0.66667em; } }
       .dropdown .dropdown-menu li a:hover, .dropdown .dropdown-menu li a:focus {
         background: #555555; }
   .dropdown .show-menu {
