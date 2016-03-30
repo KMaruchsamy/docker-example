@@ -113,6 +113,12 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             this.router.navigateByUrl('/');
         else
             this.initialize();
+            
+        this.addClearIcon();  
+        let __this = this;
+        $('#chooseCohortContainer').on('click', '#cohortStudentList .clear-input-values', function() {
+            __this.clearTableSearch();
+        });
     }
 
     initialize(): void {
@@ -358,7 +364,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     SearchFilterOptions(__this: any): void {
-        $('#cohortStudentList .dataTables_filter :input').addClass('small-search-box');
+        $('#cohortStudentList .dataTables_filter :input').addClass('small-search-box').after('<span class="icon"></span>');
         __this.filterTableSearch();
         let checkboxfilters = '<div class="form-group hidden-small-down"><input type="checkbox" class="small-checkbox-image" id="cohortRepeatersOnly" name="filterADA" value="repeatersOnly">' +
             '<label class="smaller" for="cohortRepeatersOnly">Retesting only</label>' +
@@ -643,9 +649,12 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             $('#reviewDetails').attr('disabled', 'true');
         }
     }
+    
     filterTableSearch(): void {
         let __this = this;
-        $('#cohortStudentList .dataTables_filter :input').on('keyup', function () {
+        $('#cohortStudentList .dataTables_filter :input').on('keyup click', function () {
+           $('#noMatchingStudents').removeClass('hidden');
+
             let that = this;
             let _count = 0;
             let _lname = "";
@@ -657,10 +666,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 if (lastName !== __this.noStudentInCohort.toUpperCase()) { 
                     if (!(_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)))
                     {
-                        $(this).hide();
+                        $(this).addClass('hidden');
                     }
                     else {
-                        $(this).show();
+                        $(this).removeClass('hidden');
                         _count = _count + 1;
                     }
                 }
@@ -669,7 +678,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 __this.CheckForAllStudentSelected();
             else {
                 if (_lname !== __this.noStudentInCohort.toUpperCase()) {
-                    $('#cohortStudents tbody').append('<tr class="odd"><td style="text-align:center" colspan="5" >' + __this.noStudentInCohort + '</td></tr>');
+                    $('#cohortStudents tbody').append('<tr class="odd" id="noMatchingStudents"><td class="not-collapsed" style="text-align:center" colspan="5" >' + __this.noStudentInCohort + '</td></tr>');
+                    var $table =  $('#cohortStudents tbody').parent('table')
                 }
                 $('#addAllStudents').attr('disabled', 'disabled');
             }
@@ -685,10 +695,54 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 let lastName = $span.text().split(',')[1].replace(' ', '').toUpperCase();
                 let searchString = $(that).val().toUpperCase();
                 if (!(_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)))
-                    $(this).hide();
-                else
-                    $(this).show();
+                    $(this).addClass('hidden');
+                else {
+                    $(this).removeClass('hidden');
+                }
             });
+        });
+    }
+    
+     addClearIcon(): void {
+        $('.testing-add-students-container').on('keyup','.small-search-box', function () {
+            if ($(this).val().length > 0) {
+            $(this).next('span').addClass('clear-input-values');
+            } else {
+            $(this).next('span').removeClass('clear-input-values');
+            }
+        });
+    }
+    
+    clearTableSearch(): void {
+        var $that = $('.tab-pane.active :input');
+        $that.val('');
+        $that.next('span').removeClass('clear-input-values');
+        
+       this.filterTableSearch()
+          
+        $('table tbody tr').each(function () {
+            $(this).removeClass('hidden');
+            $('#noMatchingStudents').addClass('hidden');
+        });
+        
+        //Right now necessary because table is empty of rows except for no matching student row after more than one letter entered
+        //When only only letter has been entered table rows are simply hidden
+        $that.on( 'click', function () {
+            var $table = $('.tab-pane.active table');
+            var table = $('.tab-pane.active table').DataTable();
+            table.search(this.value).draw();
+            $table.find('tr').each(function () {
+                $(this).removeClass('hidden');
+            });
+        });
+    }
+    
+    invokeFilterSelectedStudents(): void {
+        var $that =  $('#filterSelectedStudents');
+        $that.val('').next().removeClass('clear-input-values');
+        
+        $('#testSchedulingSelectedStudents li').each(function () {
+            $(this).removeClass('hidden');
         });
     }
 
