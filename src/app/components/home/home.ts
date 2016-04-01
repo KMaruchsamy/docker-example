@@ -15,7 +15,6 @@ import {ProfileModel} from '../../models/profile-model';
 import {Profile} from './profile';
 import {HomeService} from '../../services/home-service';
 import {links} from '../../constants/config';
-import {Angulartics2On} from './lib/ng-ga';
 
 @Component({
     selector: 'home',
