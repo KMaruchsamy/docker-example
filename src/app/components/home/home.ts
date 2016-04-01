@@ -20,7 +20,7 @@ import {links} from '../../constants/config';
     selector: 'home',
     providers: [Auth, Common, HomeService],
     templateUrl: '../../templates/home/home.html',
-    directives: [PageHeader, PageFooter, NgIf, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile, RouterLink, Angulartics2On]
+    directives: [PageHeader, PageFooter, NgIf, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile, RouterLink]
 })
 @CanActivate((next, prev) => {
     // let authInjector = Injector.resolveAndCreate([Auth]);
