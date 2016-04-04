@@ -211,9 +211,11 @@ export class Home implements OnInit {
         this.form = form;
         this.hdToken = hdToken;
         this.hdpage = hdpage;
+        this.hdExceptionURL = hdExceptionURL;
         this.redirectToReports();
         return false;
     }
+    
 
     redirectToReports(): void {
         var serverURL = this.nursingITServer + links.nursingit.ReportingLandingPage;
