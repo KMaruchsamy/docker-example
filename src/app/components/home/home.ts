@@ -30,6 +30,7 @@ import {links} from '../../constants/config';
 })
 export class Home implements OnInit {
     // profiles: Array<ProfileModel>;
+    programId: number;
     institutionRN: number;
     institutionPN: number;
     page: string;
@@ -112,6 +113,7 @@ export class Home implements OnInit {
 
     initialize(): void {
         $('title').html('Faculty Home &ndash; Kaplan Nursing');
+        this.programId = 0;
         this.institutionRN = 0;
         this.institutionPN = 0;
         this.page = null;
@@ -129,12 +131,16 @@ export class Home implements OnInit {
 
     redirectToRoute(route: string): boolean {
         // this.checkInstitutions();
-        if (this.institutionRN > 0 && this.institutionPN > 0) {
-            this.router.parent.navigateByUrl(`/choose-institution/Home/${route}/${this.institutionRN}/${this.institutionPN}`);
+        if (this.programId > 0) {
+            if (this.institutionRN > 0 && this.institutionPN > 0) {
+                this.router.parent.navigateByUrl(`/choose-institution/Home/${route}/${this.institutionRN}/${this.institutionPN}`);
+            }
+            else {
+                this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
+            }
+            return false;
         }
-        else {
-            this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
-        }
+        window.open('/#/accounterror');
         return false;
     }
 
@@ -190,6 +196,9 @@ export class Home implements OnInit {
         if (institutions != null && institutions != 'undefined') {
             let institutionsRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
             let institutionsPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
+            let programId = _.pluck(institutions, 'ProgramId');
+            if (programId.length > 0)
+                this.programId = programId[0];
             if (institutionsRN.length > 0)
                 this.institutionRN = institutionsRN[0];
             if (institutionsPN.length > 0)
@@ -202,9 +211,11 @@ export class Home implements OnInit {
         this.form = form;
         this.hdToken = hdToken;
         this.hdpage = hdpage;
+        this.hdExceptionURL = hdExceptionURL;
         this.redirectToReports();
         return false;
     }
+    
 
     redirectToReports(): void {
         var serverURL = this.nursingITServer + links.nursingit.ReportingLandingPage;
