@@ -132,7 +132,7 @@ export class Home implements OnInit {
 
     redirectToRoute(route: string): boolean {
         // this.checkInstitutions();
-        if (this.programId > 0) {
+        // if (this.programId > 0) {
             if (this.institutionRN > 0 && this.institutionPN > 0) {
                 this.router.parent.navigateByUrl(`/choose-institution/Home/${route}/${this.institutionRN}/${this.institutionPN}`);
             }
@@ -140,9 +140,9 @@ export class Home implements OnInit {
                 this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
             }
             return false;
-        }
-        window.open('/#/accounterror');
-        return false;
+        // }
+        // window.open('/#/accounterror');
+        // return false;
     }
 
     prepareRedirectToStudentSite(page, form, hdInstitution, hdToken, hdURL, hdExceptionURL): boolean {
