@@ -20,9 +20,10 @@
                 <input #enddate type="text" class="date end required-entry" placeholder="Date" autocomplete="off" id="endDate" (keyup)="onKeyUpDate(enddate,$event);"
                 />
             </div>
-            <p *ngIf="invalid8hours" class="error" role="alert" aria-live="assertive" aria-atomic="true">
-                For security reasons, your testing window cannot be longer than 8 hours.
+            <p class="error" role="alert" aria-live="assertive" aria-atomic="true">
+                <span *ngIf="invalid8hours">For security reasons, your testing window cannot be longer than 8 hours.
                 <br> Please specify a shorter testing window.
+                </span>
             </p>
 
             <div class="margin-2em-top form-narrow lightbulb-icon-container-flush-text">
