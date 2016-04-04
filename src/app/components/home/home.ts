@@ -15,12 +15,13 @@ import {ProfileModel} from '../../models/profile-model';
 import {Profile} from './profile';
 import {HomeService} from '../../services/home-service';
 import {links} from '../../constants/config';
+import {Angulartics2On} from '../../lib/ng-ga'
 
 @Component({
     selector: 'home',
     providers: [Auth, Common, HomeService],
     templateUrl: '../../templates/home/home.html',
-    directives: [PageHeader, PageFooter, NgIf, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile, RouterLink]
+    directives: [PageHeader, PageFooter, NgIf, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile, RouterLink, Angulartics2On]
 })
 @CanActivate((next, prev) => {
     // let authInjector = Injector.resolveAndCreate([Auth]);
