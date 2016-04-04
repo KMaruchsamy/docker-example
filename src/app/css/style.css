@@ -492,7 +492,7 @@ ol.paragraph-spacing-bottom-list {
   margin-bottom: 0.75em; }
 
 ul.list-pdf-download-icon, ol.list-pdf-download-icon {
-  margin-left: 28px; }
+  margin-left: 26px; }
 
 dl {
   margin-bottom: 0.66667em; }
@@ -1305,7 +1305,7 @@ picture {
 
 .action-color-link-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -65px -261px;
+  background-position: -82px -261px;
   width: 14px;
   height: 14px;
   margin-right: 1em; }
@@ -1344,7 +1344,7 @@ picture {
 
 .small-gray-search-icon::before {
   background-image: url(../images/sprite.png);
-  background-position: -269px -224px;
+  background-position: -65px -261px;
   width: 15px;
   height: 14px;
   float: left;
@@ -1496,9 +1496,9 @@ picture {
 
 .pdf-download-icon::before {
   background-image: url(../images/sprite.png);
-  background-position: -318px -130px;
-  width: 20px;
-  height: 24px; }
+  background-position: -319px -54px;
+  width: 18px;
+  height: 21px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .pdf-download-icon::before {
       background-image: url(../images/sprite_2x.png);
@@ -1506,7 +1506,7 @@ picture {
 
 li .pdf-download-icon::before {
   position: absolute;
-  margin-left: -28px;
+  margin-left: -26px;
   margin-top: 0; }
 
 .account-alert-icon::before {
@@ -1934,7 +1934,7 @@ main .right-grid ::-webkit-scrollbar {
 
 .home-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -222px -201px;
+  background-position: -200px -201px;
   width: 21px;
   height: 18px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
@@ -1954,7 +1954,7 @@ main .right-grid ::-webkit-scrollbar {
 
 .student-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -176px -201px;
+  background-position: -318px -130px;
   width: 20px;
   height: 21px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
@@ -1975,7 +1975,7 @@ main .right-grid ::-webkit-scrollbar {
 
 .test-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -245px -224px;
+  background-position: -241px -222px;
   width: 22px;
   height: 15px;
   margin-top: 4px; }
@@ -1986,7 +1986,7 @@ main .right-grid ::-webkit-scrollbar {
 
 .manage-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -319px -75px;
+  background-position: -220px -222px;
   width: 19px;
   height: 19px;
   margin-top: 3px; }
@@ -1997,7 +1997,7 @@ main .right-grid ::-webkit-scrollbar {
 
 .sign-out-icon:before {
   background-image: url(../images/sprite.png);
-  background-position: -176px -224px;
+  background-position: -176px -222px;
   width: 20px;
   height: 20px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
@@ -2042,7 +2042,7 @@ main .right-grid ::-webkit-scrollbar {
         background-size: 338px 297px; } }
   .nav-items .email-icon-outline::before {
     background-image: url(../images/sprite.png);
-    background-position: -220px -224px;
+    background-position: -246px -201px;
     width: 23px;
     height: 15px; }
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
@@ -2901,7 +2901,7 @@ input[type=search].small-search-box {
   top: 4px; }
   .close-red {
     background-image: url(../images/sprite.png);
-    background-position: -268px -201px;
+    background-position: -265px -222px;
     width: 15px;
     height: 15px; }
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
@@ -2910,7 +2910,7 @@ input[type=search].small-search-box {
         background-size: 338px 297px; } }
   .close-white {
     background-image: url(../images/sprite.png);
-    background-position: -319px -97px;
+    background-position: -319px -77px;
     width: 18px;
     height: 18px; }
     @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
@@ -2943,7 +2943,7 @@ input[type=search].small-search-box {
 }*/
 .help-link:before {
   background-image: url(../images/sprite.png);
-  background-position: -319px -54px;
+  background-position: -319px -97px;
   width: 19px;
   height: 19px;
   content: " ";
