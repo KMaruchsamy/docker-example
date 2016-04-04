@@ -52,6 +52,7 @@ export class ManageTests implements OnInit {
     scheduleTests: Object[] = [];
     inProgressTests: Object[] = [];
     scheduleIdToDelete: number = 0;
+    programId: number = 0;
     institutionRN: number = 0;
     institutionPN: number = 0;
     institutionId: number = 0;
@@ -285,6 +286,9 @@ export class ManageTests implements OnInit {
         if (institutions != null && institutions != 'undefined') {
             let institutionsRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
             let institutionsPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
+            let programId = _.pluck(institutions, 'ProgramId');
+            if (programId.length > 0)
+                this.programId = programId[0];
             if (institutionsRN.length > 0)
                 this.institutionRN = institutionsRN[0];
             if (institutionsPN.length > 0)
@@ -294,12 +298,16 @@ export class ManageTests implements OnInit {
 
     redirectToRoute(route: string): boolean {
         // this.checkInstitutions();
-        if (this.institutionRN > 0 && this.institutionPN > 0) {
-            this.router.parent.navigateByUrl(`/choose-institution/Test/${route}/${this.institutionRN}/${this.institutionPN}`);
+        if (this.programId >= 0) {
+            if (this.institutionRN > 0 && this.institutionPN > 0) {
+                this.router.parent.navigateByUrl(`/choose-institution/Test/${route}/${this.institutionRN}/${this.institutionPN}`);
+            }
+            else {
+                this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
+            }
+            return false;
         }
-        else {
-            this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
-        }
+        window.open('/#/accounterror');
         return false;
     }
 
