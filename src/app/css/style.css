@@ -1532,17 +1532,30 @@ li .pdf-download-icon::before {
       background-size: 338px 297px; } }
 
 .small-search-box + .icon {
-  position: absolute; }
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  opacity: 0.6;
+  top: 50%;
+  right: 7px;
+  margin-top: -6px; }
 
 .clear-input-values::before {
   background: url("../images/clear.png") right center no-repeat;
   background-size: 13px 13px;
   width: 13px;
   height: 13px;
-  left: -34px;
-  top: 11px;
+  bottom: 8px;
   position: relative;
   cursor: pointer; }
+
+.clear-input-values::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  left: -10px;
+  bottom: -10px; }
 
 .pdf-icon {
   width: 19px;
@@ -2738,53 +2751,32 @@ input[type=search].small-search-box {
   font-size: 0.875em;
   font-weight: normal;
   margin: .7em;
+  margin-right: 0;
+  margin-left: 0;
   padding: .5em;
-  vertical-align: middle; }
+  vertical-align: middle;
+  box-sizing: border-box;
+  padding-right: 18px; }
   input[type=search].small-search-box::-webkit-input-placeholder {
-    text-align: center; }
+    content: " ";
+    padding-left: 18px;
+    text-align: center;
+    vertical-align: middle; }
   input[type=search].small-search-box::-moz-placeholder {
-    text-align: center; }
+    content: " ";
+    padding-left: 18px;
+    text-align: center;
+    vertical-align: middle; }
   input[type=search].small-search-box:-ms-input-placeholder {
-    text-align: center; }
+    content: " ";
+    padding-left: 18px;
+    text-align: center;
+    vertical-align: middle; }
   input[type=search].small-search-box::placeholder {
-    text-align: center; }
-    input[type=search].small-search-box::-webkit-input-placeholder::before {
-      background-image: url("../images/small-gray-search-icon.png");
-      background-repeat: no-repeat;
-      content: " ";
-      padding-right: 18px;
-      vertical-align: middle; }
-    input[type=search].small-search-box::-moz-placeholder::before {
-      background-image: url("../images/small-gray-search-icon.png");
-      background-repeat: no-repeat;
-      content: " ";
-      padding-right: 18px;
-      vertical-align: middle; }
-    input[type=search].small-search-box:-ms-input-placeholder::before {
-      background-image: url("../images/small-gray-search-icon.png");
-      background-repeat: no-repeat;
-      content: " ";
-      padding-right: 18px;
-      vertical-align: middle; }
-    input[type=search].small-search-box::placeholder::before {
-      background-image: url("../images/small-gray-search-icon.png");
-      background-repeat: no-repeat;
-      content: " ";
-      padding-right: 18px;
-      vertical-align: middle; }
-      @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
-        input[type=search].small-search-box::-webkit-input-placeholder::before {
-          background-image: url("../images/small-gray-search-icon_2x.png");
-          background-size: 13px 13px; }
-        input[type=search].small-search-box::-moz-placeholder::before {
-          background-image: url("../images/small-gray-search-icon_2x.png");
-          background-size: 13px 13px; }
-        input[type=search].small-search-box:-ms-input-placeholder::before {
-          background-image: url("../images/small-gray-search-icon_2x.png");
-          background-size: 13px 13px; }
-        input[type=search].small-search-box::placeholder::before {
-          background-image: url("../images/small-gray-search-icon_2x.png");
-          background-size: 13px 13px; } }
+    content: " ";
+    padding-left: 18px;
+    text-align: center;
+    vertical-align: middle; }
 
 .button-group {
   margin: 2em 0 2.5em; }
@@ -4368,6 +4360,7 @@ input.page-lg-heading {
 
 .add-students-table-search {
   background-color: whitesmoke;
+  border-top: 2px solid #e3e3e3 !important;
   height: 53px; }
   @media (min-width: 75em) {
     .add-students-table-search {
@@ -4375,6 +4368,7 @@ input.page-lg-heading {
   @media (min-width: 48em) {
     .add-students-table-search .dataTables_filter {
       float: left !important;
+      margin-left: 10px;
       margin-right: 25px;
       text-align: left !important; } }
   .add-students-table-search .form-group {
@@ -4387,9 +4381,6 @@ input.page-lg-heading {
 
 .dataTables_wrapper.no-footer .dataTables_scrollBody {
   border-bottom: 0; }
-
-.add-students-table-search {
-  border-top: 2px solid #e3e3e3 !important; }
 
 #individualStudents .dataTables_scrollBody {
   border-bottom: 0; }
@@ -4411,35 +4402,34 @@ input.page-lg-heading {
     margin-bottom: 0.66667em;
     width: 100% !important; } }
 
-@media (max-width: 74.9375em) {
-  #RemoveAllStudents {
-    position: absolute;
-    right: 0.66667em;
-    top: 50%;
-    -webkit-transform: translate(0, -50%);
-        -ms-transform: translate(0, -50%);
-            transform: translate(0, -50%); } }
+#RemoveAllStudents {
+  position: absolute;
+  right: 0.66667em;
+  top: 50%;
+  -webkit-transform: translate(0, -50%);
+      -ms-transform: translate(0, -50%);
+          transform: translate(0, -50%); }
+  @media (min-width: 34.375em) and (max-width: 74.9375em) {
+    #RemoveAllStudents {
+      margin-right: 3em; } }
+  @media (max-width: 34.375em) {
+    #RemoveAllStudents {
+      font-size: inherit;
+      width: 97% !important;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+          -ms-transform: translate(-50%, -50%);
+              transform: translate(-50%, -50%); } }
 
-@media (min-width: 34.375em) and (max-width: 74.9375em) {
-  #RemoveAllStudents {
-    margin-right: 3em; } }
-
-@media (max-width: 34.375em) {
-  #RemoveAllStudents {
-    font-size: inherit;
-    width: 97% !important;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%); } }
-
-#filterSelectedStudents {
+.filter-students-container {
+  left: 10px;
+  position: relative;
   width: 52%; }
   @media (max-width: 74.9375em) {
-    #filterSelectedStudents {
+    .filter-students-container {
       width: 255px; } }
   @media (max-width: 61.9375em) {
-    #filterSelectedStudents {
+    .filter-students-container {
       width: 255px; } }
 
 .add-students-table-search label.smaller {
@@ -4475,7 +4465,7 @@ table.dataTable thead th {
   text-align: center; }
 
 .dataTables_filter label {
-  width: 100%; }
+  position: relative; }
 
 table.dataTable tbody td {
   white-space: nowrap; }
