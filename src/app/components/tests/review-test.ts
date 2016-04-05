@@ -45,6 +45,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     loaderPromise: any;
     $ddlfacultyMember: any;
     $txtScheduleName: any;
+    //$divfacultyLightbulbContainer: any;
     loader: any;
     attemptedRoute: string;
     overrideRouteCheck: boolean = false;
@@ -112,7 +113,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
            this.modify = true;
            $('title').html('Modify: Review Testing Session &ndash; Kaplan Nursing');
         } else {         
-           $('title').html('Review Testing Session &ndash; Kaplan Nursing');
+            $('title').html('Review Testing Session &ndash; Kaplan Nursing');
         }
 
         this.valid = false;
@@ -120,6 +121,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         this.$ddlfacultyMember = $('#ddlFaculty');
         this.$txtScheduleName = $('#txtSessionName');
         this.$txtScheduleName.val('');
+      //  this.$divfacultyLightbulbContainer = $('#facultyLightbulbContainer');
         let __this = this;
         let savedSchedule = this.testService.getTestSchedule();
         if (savedSchedule) {
@@ -135,6 +137,10 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
             if (this.testScheduleModel.scheduleName)
                 this.$txtScheduleName.val(this.testScheduleModel.scheduleName);
             if (this.modify) {
+                //if (this.testScheduleModel.facultyMemberId !== this.testScheduleModel.adminId && eval(this.auth.userid) !== this.testScheduleModel.adminId) {
+                //    this.$ddlfacultyMember.attr("disabled", true);
+                //    this.$divfacultyLightbulbContainer.css("visibility", "hidden");
+                //}                
                 let retestersExceptionsModify = this.testService.getAlternateExceptionsModify();
                 if (retestersExceptionsModify != undefined && retestersExceptionsModify.length > 0) {
                     this.retesterExceptionsModify = retestersExceptionsModify;
@@ -144,7 +150,10 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                     this.loadAlternateAssignmentsModify();
 
             }
-
+            //else {
+            //    this.$ddlfacultyMember.removeAttr('disabled', 'disabled');
+            //    this.$divfacultyLightbulbContainer.css("visibility", "visible");
+            //}
             this.resolveADA();
 
             if (this.studentsTable)

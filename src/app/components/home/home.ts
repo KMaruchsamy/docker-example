@@ -15,12 +15,13 @@ import {ProfileModel} from '../../models/profile-model';
 import {Profile} from './profile';
 import {HomeService} from '../../services/home-service';
 import {links} from '../../constants/config';
+import {Angulartics2On} from '../../lib/ng-ga'
 
 @Component({
     selector: 'home',
     providers: [Auth, Common, HomeService],
     templateUrl: '../../templates/home/home.html',
-    directives: [PageHeader, PageFooter, NgIf, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile, RouterLink]
+    directives: [PageHeader, PageFooter, NgIf, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile, RouterLink, Angulartics2On]
 })
 @CanActivate((next, prev) => {
     // let authInjector = Injector.resolveAndCreate([Auth]);
@@ -30,6 +31,7 @@ import {links} from '../../constants/config';
 })
 export class Home implements OnInit {
     // profiles: Array<ProfileModel>;
+    programId: number;
     institutionRN: number;
     institutionPN: number;
     page: string;
@@ -112,6 +114,7 @@ export class Home implements OnInit {
 
     initialize(): void {
         $('title').html('Faculty Home &ndash; Kaplan Nursing');
+        this.programId = 0;
         this.institutionRN = 0;
         this.institutionPN = 0;
         this.page = null;
@@ -129,13 +132,17 @@ export class Home implements OnInit {
 
     redirectToRoute(route: string): boolean {
         // this.checkInstitutions();
-        if (this.institutionRN > 0 && this.institutionPN > 0) {
-            this.router.parent.navigateByUrl(`/choose-institution/Home/${route}/${this.institutionRN}/${this.institutionPN}`);
-        }
-        else {
-            this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
-        }
-        return false;
+        // if (this.programId > 0) {
+            if (this.institutionRN > 0 && this.institutionPN > 0) {
+                this.router.parent.navigateByUrl(`/choose-institution/Home/${route}/${this.institutionRN}/${this.institutionPN}`);
+            }
+            else {
+                this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
+            }
+            return false;
+        // }
+        // window.open('/#/accounterror');
+        // return false;
     }
 
     prepareRedirectToStudentSite(page, form, hdInstitution, hdToken, hdURL, hdExceptionURL): boolean {
@@ -190,6 +197,9 @@ export class Home implements OnInit {
         if (institutions != null && institutions != 'undefined') {
             let institutionsRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
             let institutionsPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
+            let programId = _.pluck(institutions, 'ProgramId');
+            if (programId.length > 0)
+                this.programId = programId[0];
             if (institutionsRN.length > 0)
                 this.institutionRN = institutionsRN[0];
             if (institutionsPN.length > 0)
@@ -202,9 +212,11 @@ export class Home implements OnInit {
         this.form = form;
         this.hdToken = hdToken;
         this.hdpage = hdpage;
+        this.hdExceptionURL = hdExceptionURL;
         this.redirectToReports();
         return false;
     }
+    
 
     redirectToReports(): void {
         var serverURL = this.nursingITServer + links.nursingit.ReportingLandingPage;

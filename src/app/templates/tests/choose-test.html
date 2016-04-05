@@ -16,15 +16,9 @@
                         <tr>
                             <th class="all" scope="col">Test Name</th>
                             <th scope="col">Length</th>
-                            <th scope="col" class="center">
-                                No. of
-                                <br> Questions
-                            </th>
+                            <th scope="col" class="center">No. of <br>Questions</th>
                             <th scope="col">Norming Status</th>
-                            <th scope="col" class="center">
-                                View Topical
-                                <br> Blueprint (PDF)
-                            </th>
+                            <th scope="col" class="center">Test Blueprint <br>(Faculty Use Only)</th>
                             <th scope="col" class="all center">Select</th>
                         </tr>
                     </thead>
@@ -35,7 +29,7 @@
                             <td class="center">{{test.NumberOfQuestionsInTest}}</td>
                             <td>{{test.NormingStatusName}}</td>
                             <td class="center">
-                                <a [attr.href]='test.TopicalBlueprintLink' target="_blank"><img src="images/pdf-icon@2x.png" style="width:19px; height:23px; " class="pdf-icon" alt="open {{test.TestName}} Blueprint PDF"></a>
+                                <a [attr.href]='test.TopicalBlueprintLink' target="_blank"><img src="images/pdf-green-icon_2x.png" width="20" height="24" alt="open {{test.TestName}} Blueprint PDF"></a>
                             </td>
                             <td class="center">
                                 <input type="radio" [attr.testid]="test.TestId" [attr.testname]="test.TestName" [checked]="test.TestId === testScheduleModel.testId"
@@ -47,7 +41,8 @@
 
                     </tbody>
                 </table>
-                <button type="submit" (click)="saveChooseTest($event)" id="chooseDate" class="button right margin-2em-top button-mobile-block"
+                <p [class.hidden]="tests?.length===0" class="icon info-icon-yellow section-medium-thin"><strong>Please note:</strong> Test blueprints are for faculty use only and should not be shared with students.</p>
+                <button type="submit" (click)="saveChooseTest($event)" id="chooseDate" class="button right button-mobile-block"
                 [disabled]=!testScheduleModel.testId>
                     Next step: Choose date and time
                 </button>
