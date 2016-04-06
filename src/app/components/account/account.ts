@@ -89,7 +89,7 @@ export class Account {
             self.initializeResetPassword();
             self.initializeResetStudentPassword();
 
-            $('#divNewPasswordInfo').hide().addClass('hidden');
+            $('#divNewPasswordInfo').addClass('hidden');
 
             $('#firstName').bind('input', function() {
                 self.checkfirstnamelastname();
@@ -187,8 +187,7 @@ export class Account {
 
     resetProfileFields() {
         $('#profilecancel').removeClass('hidden');
-        $('#successmsg').removeProp('display');
-        $('#successmsg').css('display', 'none');
+        $('#successmsg').addClass('hidden');
     }
 
     onSubmitChangeEmail(txtNewEmailId, txtPassword, btnChangeEmail, resetEmailSave, SuccessEmailContainer, EmailErrorContainer, PasswordErrorContainer, event) {
@@ -250,7 +249,7 @@ export class Account {
     }
 
     showChangeEmail(btnShowChangeEmail, txtNewEmailId, txtPassword, btnChangeEmail, $event) {
-        $('#successemailmsg').hide();
+        $('#successemailmsg').addClass('hidden');
         // $('#changeEmailFormSubmittable').show().removeClass('hidden');
         $('#changeEmailFormSubmittable').slideDown('fast', function() {
             $(this).removeClass('hidden');
@@ -267,10 +266,9 @@ export class Account {
     }
 
     HideChangeEmail() {
-        $('#changeEmailFormSubmittable').hide().addClass('hidden');
+        $('#changeEmailFormSubmittable').addClass('hidden');
         $('#showChangeEmail').removeClass('hidden');
-        $('#successemailmsg').removeProp('display');
-        $('#successemailmsg').css('display', 'none');
+        $('#successemailmsg').addClass('hidden');
     }
 
     onCancelChangeEmail(txtNewEmailId, txtPassword, btnChangeEmail, event) {
@@ -341,8 +339,8 @@ export class Account {
     initializeResetPassword() {
         $('#spnCurrentPasswordErrorMessage').text('');
         $('#spnResetPasswordErrorMessage').text('');
-        $('#errorResetPasswordContainer').hide();
-        $('#successResetPasswordContainer').hide();
+        $('#errorResetPasswordContainer').addClass('hidden');
+        $('#successResetPasswordContainer').addClass('hidden');
         $('#currentPassword').val('');
         $('#newPassword').val('');
         $('#confirmPassword').val('');
@@ -375,15 +373,15 @@ export class Account {
         let $btnStudentReset = $('#btnStudentReset');
         let $btnClearResetStudentPassword = $('#btnClearResetStudentPassword');
         let $spnResetStudentPasswordErrorMessage = $('#spnResetStudentPasswordErrorMessage');
-        let $resetstudentpasswordErrorcontainer = $spnResetStudentPasswordErrorMessage.parent('p.error');
+        let $resetstudentpasswordErrorcontainer = $spnResetStudentPasswordErrorMessage.parent('.error');
         $btnStudentReset.attr("disabled", "true");
         $btnStudentReset.attr("aria-disabled", "true");
         $btnClearResetStudentPassword.removeClass('hidden');
         $('#resetStudentPassword').val('');
         $spnResetStudentPasswordErrorMessage.text('');
         if ($resetstudentpasswordErrorcontainer.length > 0)
-            $resetstudentpasswordErrorcontainer.hide();
-        $('#successResetStudentPasswordContainer').hide();
+            $resetstudentpasswordErrorcontainer.addClass('hidden');
+        $('#successResetStudentPasswordContainer').addClass('hidden');
     }
 
     onSubmitResetStudentPassword(txtResetStudentPassword, btnResetStudentPassword, resetStudentPasswordErrorContainer, successResetStudentPasswordContainer, btnClearResetStudentPassword, event) {
@@ -540,65 +538,65 @@ export class Account {
     }
 
     clearError(errorContainer, successContainer, fieldcount) {
-        $(successContainer).css("display", "none");
+        $(successContainer).addClass("hidden");
         let $container;
         switch (fieldcount) {
             case 1:
-                $container = $(errorContainer).find('span#spnEmailErrorMessage');
+                $container = $(errorContainer).find('#spnEmailErrorMessage');
                 break;
             case 2:
-                $container = $(errorContainer).find('span#spnPasswordErrorMessage');
+                $container = $(errorContainer).find('#spnPasswordErrorMessage');
                 break;
             case 3:
-                $container = $(errorContainer).find('span#spnCurrentPasswordErrorMessage');
+                $container = $(errorContainer).find('#spnCurrentPasswordErrorMessage');
                 break;
             case 4:
-                $container = $(errorContainer).find('span#spnResetPasswordErrorMessage');
+                $container = $(errorContainer).find('#spnResetPasswordErrorMessage');
                 break;
             case 5:
-                $container = $(errorContainer).find('span#spnResetStudentPasswordErrorMessage');
+                $container = $(errorContainer).find('#spnResetStudentPasswordErrorMessage');
                 break;
         }
         let $outerContainer = $(errorContainer);
         $container.html('');
-        $outerContainer.hide();
+        $outerContainer.addClass('hidden');
     }
 
     showError(errorMessage, errorContainer, fieldcount) {
         let $container = "";
         switch (fieldcount) {
             case 1:
-                $container = $(errorContainer).find('span#spnEmailErrorMessage');
+                $container = $(errorContainer).find('#spnEmailErrorMessage');
                 break;
             case 2:
-                $container = $(errorContainer).find('span#spnPasswordErrorMessage');
+                $container = $(errorContainer).find('#spnPasswordErrorMessage');
                 break;
             case 3:
-                $container = $(errorContainer).find('span#spnCurrentPasswordErrorMessage');
+                $container = $(errorContainer).find('#spnCurrentPasswordErrorMessage');
                 break;
             case 4:
-                $container = $(errorContainer).find('span#spnResetPasswordErrorMessage');
+                $container = $(errorContainer).find('#spnResetPasswordErrorMessage');
                 break;
             case 5:
-                $container = $(errorContainer).find('span#spnResetStudentPasswordErrorMessage');
+                $container = $(errorContainer).find('#spnResetStudentPasswordErrorMessage');
                 break;
         }
 
         let $outerContainer = $(errorContainer);
         $container.html(errorMessage);
-        $outerContainer.show();
+        $outerContainer.removeClass('hidden');
     }
 
     resetSuccess($resetLink, $successContainer) {
         $resetLink.removeClass('hidden');
-        $successContainer.hide();
+        $successContainer.addClass('hidden');
     }
 
     showSuccess(resetLink, successContainer, btnSave) {
         $(resetLink).addClass('hidden');
         $(btnSave).attr("disabled", "true");
         $(btnSave).attr("aria-disabled", "true");
-        $(successContainer).css("display", "inline-block");
+        $(successContainer).removeClass('hidden');
     }
 
     saveProfile(url, authheader, userid, fname, lname, title, email) {

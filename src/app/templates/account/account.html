@@ -21,31 +21,45 @@
                         <button class="button  button-with-validation button-mobile-block" id="btnProfileSave" type="submit" aria-disabled="true"
                         disabled #profilesave (click)="onSubmitSaveProfile(firstname,lastname,title,profilesave,profilecancel,successcontainer,$event)">Save changes</button>
                         <input type="reset" id="profilecancel" class="reset-input" value="Cancel changes" #profilecancel (click)="onCancelSaveProfile(profilesave,$event)">
-                        <p #successcontainer class="success success-icon" style="display:none" id="successmsg">Your changes have been saved.</p>
+                        <span role="status" aria-live="assertive" aria-atomic="true">
+                            <span #successcontainer id="successmsg" class="success success-icon hidden">Your changes have been saved.</span>
+                        </span>
                     </div>
                 </form>
 
                 <form class="form-medium-width margin-2em-top" id="changeEmailForm" role="form" label="change email">
                     <p class="teal-label">Email Address</p>
                     <p class="text-larger"><span id="emailId"></span></p>
+                    
                     <div class="hidden" id="changeEmailFormSubmittable">
                         <div>
                             <label class="teal-label" for="emailAddress">New Email Address</label>
                             <input type="email" id="emailAddress" #newemailid aria-required="true">
-                            <p class="error" #emailerrorconainer><span id="spnEmailErrorMessage"></span></p>
+                            <p class="error" #emailerrorconainer role="alert" aria-live="assertive" aria-atomic="true">
+                                <span id="spnEmailErrorMessage"></span>
+                            </p>
                             <label class="teal-label" for="password">Current Password</label>
                             <input type="password" id="txtPassword" #txtpassword oncopy="return false" onpaste="return false" aria-required="true">
-                            <p class="error" #passworderrorconainer><span id="spnPasswordErrorMessage"></span></p>
+                            <p class="error" #passworderrorconainer role="alert" aria-live="assertive" aria-atomic="true">
+                                <span id="spnPasswordErrorMessage"></span>
+                            </p>
                         </div>
                         <div class="margin-1em-top">
                             <button class="button  button-with-validation button-mobile-block" type="submit" id="ChangeEmail" aria-disabled="true" disabled
-                            #changeemail (click)="onSubmitChangeEmail(newemailid,txtpassword,changeemail,resetemailsave,successemailcontainer,emailerrorconainer,passworderrorconainer,$event)">Change email address</button>
+                                #changeemail (click)="onSubmitChangeEmail(newemailid,txtpassword,changeemail,resetemailsave,successemailcontainer,emailerrorconainer,passworderrorconainer,$event)">
+                                Change email address
+                            </button>
                             <input type="reset" id="resetEmailSave" #resetemailsave class="hidden reset-input" value="Cancel" (click)="onCancelChangeEmail(newemailid,txtpassword,changeemail,$event)">
-                            <p #successemailcontainer class="success success-icon" style="display:none" id="successemailmsg">You have successfully changed your email address.</p>
+                            <span role="status" aria-live="assertive" aria-atomic="true">
+                                <span #successemailcontainer class="success success-icon hidden" id="successemailmsg">You have successfully changed your email address.</span>
+                            </span>
                         </div>
                     </div>
+                    
                     <div class="margin-1em-top">
-                        <button class="button  button-with-validation button-mobile-block" type="button" id="showChangeEmail" #showchangeemail (click)="showChangeEmail(showchangeemail,newemailid,txtpassword,changeemail,$event);">Change email address</button>
+                        <button class="button  button-with-validation button-mobile-block" type="button" id="showChangeEmail" #showchangeemail (click)="showChangeEmail(showchangeemail,newemailid,txtpassword,changeemail,$event);">
+                            Change email address
+                        </button>
                     </div>
                 </form>
 
@@ -57,11 +71,13 @@
                 <form role="form" class="form-medium-width" label="reset password">
                     <label class="teal-label" for="currentPassword">Current Password</label>
                     <input type="password" id="currentPassword" #currentpassword oncopy="return false" onpaste="return false" aria-required="true">
-                    <p class="error" #currentpasswordcontainer><span id="spnCurrentPasswordErrorMessage"></span></p>
+                    <p class="error" #currentpasswordcontainer role="alert" aria-live="assertive" aria-atomic="true">
+                        <span id="spnCurrentPasswordErrorMessage"></span>
+                    </p>
                     <label class="teal-label" for="newPassword">New Password</label>
                     <input type="password" id="newPassword" #newpassword oncopy="return false" onpaste="return false" aria-required="true">
-                    <div id="divNewPasswordInfo" class="section-medium-thin lightbulb-icon-container-flush-text hidden">
-                        <p class="icon lightbulb-icon">
+                    <div class="lightbulb-icon-container-flush-text" role="alert" aria-live="assertive" aria-atomic="true">
+                        <p  id="divNewPasswordInfo" class="icon lightbulb-icon section-medium-thin hidden">
                             Your new password must be different than your last five passwords, at least 8 characters long, and contain at least one number
                             and at least one special character. @, !, #, $, % are examples of special characters. Choose
                             something easy for you to remember but difficult for others to figure out.
@@ -69,13 +85,17 @@
                     </div>
                     <label class="teal-label" for="confirmNewPassword">Confirm New Password</label>
                     <input type="password" id="confirmNewPassword" #confirmpassword oncopy="return false" onpaste="return false" aria-required="true">
-                    <p class="error" id="errorResetPasswordContainer" #resetpasswordcontainer><span id="spnResetPasswordErrorMessage"></span></p>
+                    <p class="error" id="errorResetPasswordContainer" #resetpasswordcontainer role="alert" aria-live="assertive" aria-atomic="true">
+                        <span id="spnResetPasswordErrorMessage"></span>
+                    </p>
                     <div class="margin-1em-top">
                         <button class="button button-with-validation button-mobile-block" id="btnResetPassword" type="submit" aria-disabled="true"
                         disabled #resetpassword (click)="onSubmitResetPassword(currentpassword,newpassword,confirmpassword,resetpassword,resetresetpassword,currentpasswordcontainer,resetpasswordcontainer,successresetpasswordcontainer,$event)">Reset your password</button>
                         <!--reset input would be replaced by success paragraph after successful submission of form-->
                         <input type="reset" #resetresetpassword id="btnResetResetPassword" class="reset-input" value="Cancel" (click)="onCancelResetPassword(currentpassword,newpassword,confirmpassword,resetpassword,$event)">
-                        <p #successresetpasswordcontainer class="success success-icon" style="display:none" id="successResetPasswordContainer"></p>
+                        <span role="status" aria-live="assertive" aria-atomic="true">
+                            <span #successresetpasswordcontainer class="success success-icon" id="successResetPasswordContainer"></span>
+                        </span>
                     </div>
                 </form>
             </div>
@@ -88,13 +108,17 @@
                     <div class="form-medium-width">
                         <label class="teal-label" for="resetStudentPassword">Student Email Address</label>
                         <input type="email" id="resetStudentPassword" #resetstudentpassword aria-required="true">
-                        <p class="error" #resetstudentpasswordcontainer><span id="spnResetStudentPasswordErrorMessage"></span></p>
+                        <p class="error" #resetstudentpasswordcontainer role="alert" aria-live="assertive" aria-atomic="true">
+                            <span id="spnResetStudentPasswordErrorMessage"></span>
+                        </p>
                         <div class="margin-1em-top">
                             <button id="btnStudentReset" class="button button-with-validation button-mobile-block" type="submit" aria-disabled="true"
                             disabled #btnresetstudentpassword (click)="onSubmitResetStudentPassword(resetstudentpassword,btnresetstudentpassword,resetstudentpasswordcontainer,successresetstudentpasswordcontainer,btnclearresetstudentpassword,$event)">Send sign in info to student</button>
                             <input id="btnClearResetStudentPassword" type="reset" #btnclearresetstudentpassword class="reset-input reset-input-mobile-block"
                             value="Cancel" (click)="onCancelResetStudentPassword(resetstudentpassword,btnresetstudentpassword,$event)">
-                            <p #successresetstudentpasswordcontainer class="success success-icon" style="display:none" id="successResetStudentPasswordContainer"></p>
+                            <span role="alert" aria-live="assertive" aria-atomic="true">
+                                <span #successresetstudentpasswordcontainer class="success success-icon hidden" id="successResetStudentPasswordContainer"></span>
+                            </span>
                         </div>
                     </div>
                 </form>
