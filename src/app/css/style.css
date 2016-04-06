@@ -2758,25 +2758,50 @@ input[type=search].small-search-box {
   box-sizing: border-box;
   padding-right: 18px; }
   input[type=search].small-search-box::-webkit-input-placeholder {
+    background-image: url("../images/small-gray-search-icon.png");
+    background-position: 2px 1px;
+    background-repeat: no-repeat;
     content: " ";
     padding-left: 18px;
     text-align: center;
     vertical-align: middle; }
   input[type=search].small-search-box::-moz-placeholder {
+    background-image: url("../images/small-gray-search-icon.png");
+    background-position: 2px 1px;
+    background-repeat: no-repeat;
     content: " ";
     padding-left: 18px;
     text-align: center;
     vertical-align: middle; }
   input[type=search].small-search-box:-ms-input-placeholder {
+    background-image: url("../images/small-gray-search-icon.png");
+    background-position: 2px 1px;
+    background-repeat: no-repeat;
     content: " ";
     padding-left: 18px;
     text-align: center;
     vertical-align: middle; }
   input[type=search].small-search-box::placeholder {
+    background-image: url("../images/small-gray-search-icon.png");
+    background-position: 2px 1px;
+    background-repeat: no-repeat;
     content: " ";
     padding-left: 18px;
     text-align: center;
     vertical-align: middle; }
+    @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+      input[type=search].small-search-box::-webkit-input-placeholder {
+        background-image: url("../images/small-gray-search-icon_2x.png");
+        background-size: 13px 13px; }
+      input[type=search].small-search-box::-moz-placeholder {
+        background-image: url("../images/small-gray-search-icon_2x.png");
+        background-size: 13px 13px; }
+      input[type=search].small-search-box:-ms-input-placeholder {
+        background-image: url("../images/small-gray-search-icon_2x.png");
+        background-size: 13px 13px; }
+      input[type=search].small-search-box::placeholder {
+        background-image: url("../images/small-gray-search-icon_2x.png");
+        background-size: 13px 13px; } }
 
 .button-group {
   margin: 2em 0 2.5em; }
