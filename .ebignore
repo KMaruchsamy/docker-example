@@ -1,0 +1,17 @@
+node_modules/
+dist/
+src/
+.js*
+*.js
+*.json
+!Dockerrun.aws.json
+!.ebextensions
+*.md
+*.log
+build/
+docker_conf/
+nginx_conf/
+ebs/
+.git/
+.dockerignore
+.gitignore
