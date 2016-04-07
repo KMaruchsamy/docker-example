@@ -66,7 +66,7 @@ export const links = {
         },
         landingpage: "NewSiteLandingPage.aspx?facultylogin=1",
         ReportingLandingPage: "UX_ALogin.aspx",
-        exceptionpage:"§environment/accounterror"
+        exceptionpage:"§environment/#/accounterror"
     },
     faculty: {
         local: {

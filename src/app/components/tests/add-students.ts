@@ -1045,8 +1045,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                                 this.router.navigate(['ReviewTest']);
                             // this.router.navigateByUrl('/tests/review');
                         }
-                        else
+                        else {
                             this.initialize();
+                            this.CheckForAllStudentSelected();
+                        }
                     }
                 });
                 retester.instance.retesterNoAlternatePopupCancel.subscribe((e) => {
@@ -1088,8 +1090,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                                 this.router.navigate(['ReviewTest']);
                             // this.router.navigateByUrl('/tests/review');                        
                         }
-                        else
+                        else {
                             this.initialize();
+                            this.CheckForAllStudentSelected();
+                        }
                     }
                 });
                 retester.instance.retesterAlternatePopupCancel.subscribe((e) => {
