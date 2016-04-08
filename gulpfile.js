@@ -114,7 +114,7 @@ gulp.task('build', function (done) {
         );
 });
 
-// To run: NODE_ENV=production gulp prepare_config
+// To run: NODE_ENV=staging gulp prepare_config
 gulp.task('prepare_config', function () {
     gulp.src('ebs/resources_' + env + '.config')
         .pipe(plugins.rename({

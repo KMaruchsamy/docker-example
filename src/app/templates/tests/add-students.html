@@ -79,9 +79,11 @@
                             <ul id="testSchedulingSelectedStudentsList"></ul>
                         </form>
                         <div class="search-added-students">
-                            <label class="screen-reader-only" for="filterSelectedStudents">Find Student</label>
-                            <input type="search" role="search" id="filterSelectedStudents" placeholder="Find student" class="small-search-box">
-                            <span class="icon" #selectedStudentsFilter (click)="invokeFilterSelectedStudents()"></span>
+                            <div class="filter-students-container">
+                                <label class="screen-reader-only" for="filterSelectedStudents">Find Student</label>
+                                <input type="search" role="search" id="filterSelectedStudents" placeholder="Find student" class="small-search-box">
+                                <span class="icon" #selectedStudentsFilter (click)="invokeFilterSelectedStudents()"></span>
+                            </div>
                             <button class="button button-small button-light" id="RemoveAllStudents" (click)="RemoveAllSelectedStudents($event)">Remove all students</button>
                         </div>
                         <!--closes search for student-->
