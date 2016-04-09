@@ -40,6 +40,8 @@
     "robocopy": "^0.1.15",
     "run-sequence": "^1.1.5",
     "serve-static": "~1.8.1",
+    "tslint": "^3.7.1",
+    "typescript": "^1.8.9",
     "typings": "^0.7.12",
     "yargs": "^3.15.0"
   },
