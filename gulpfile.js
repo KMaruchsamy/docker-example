@@ -26,6 +26,9 @@ var runSequence = require('run-sequence');
 var plugins = require('gulp-load-plugins')({ lazy: true });
 var env = process.env.NODE_ENV || 'qa';
 var app_version = process.env.app_version || 'stg_v0';
+var csso = require('gulp-csso');
+var uglify = require('gulp-uglify');
+var minifyHTML = require('gulp-htmlmin');
 
 gulp.task('clean', function (done) {
     del([config.app.src.build], done);
@@ -37,33 +40,19 @@ gulp.task('ts', function () {
         .pipe(sourcemaps.init())
         .pipe(typescript(tscConfig.compilerOptions));
     return tsResult.js
-        .pipe(sourcemaps.write('.'))
+        .pipe(uglify({mangle:false}))
+        .pipe(sourcemaps.write('.'))       
         .pipe(gulp.dest(config.app.src.build));
 });
 
 gulp.task('js', function () {
     var tsResult = gulp
-        .src([config.app.src.js])
+        .src([config.app.src.js])        
         .pipe(typescript(tscConfig.compilerOptions));
     return tsResult.js
+        .pipe(uglify({mangle:false}))
         .pipe(gulp.dest(config.app.src.build));
 });
-
-
-// gulp.task('js', function () {
-//     return gulp.src(config.app.src.js)
-//       .pipe(rename({ extname: '' })) //hack, see: https://github.com/sindresorhus/gulp-traceur/issues/54
-//       .pipe(plumber())
-//       .pipe(traceur({
-//           modules: 'instantiate',
-//           moduleName: true,
-//           annotations: true,
-//           types: true,
-//           memberVariables: true
-//       }))
-//       .pipe(rename({ extname: '.js' })) //hack, see: https://github.com/sindresorhus/gulp-traceur/issues/54
-//       .pipe(gulp.dest(config.app.src.build));
-// });
 
 gulp.task('images', function () {
     return gulp.src(config.app.src.images)
@@ -77,7 +66,8 @@ gulp.task('favicons', function () {
 
 gulp.task('html', function () {
     return gulp.src(config.app.src.html)
-        .pipe(gulp.dest(config.app.src.build));
+    //   .pipe(minifyHTML({collapseWhitespace: true}))
+      .pipe(gulp.dest(config.app.src.build));
 });
 
 gulp.task('json', function () {
@@ -88,7 +78,8 @@ gulp.task('json', function () {
 
 gulp.task('css', function () {
     return gulp.src(config.app.src.css)
-        .pipe(gulp.dest(config.app.src.build));
+    .pipe(csso())
+    .pipe(gulp.dest(config.app.src.build));
 });
 
 gulp.task('libs', function () {
@@ -96,6 +87,7 @@ gulp.task('libs', function () {
     var size = require('gulp-size');
     return gulp.src(config.app.lib)
         .pipe(size({ showFiles: true, gzip: true }))
+        .pipe(uglify({mangle:false}))
         .pipe(gulp.dest('build/app/lib'));
 });
 
