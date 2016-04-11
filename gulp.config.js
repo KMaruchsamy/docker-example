@@ -28,7 +28,7 @@ module.exports = function() {
                 'node_modules/angular2/bundles/router.dev.js',
                 'node_modules/angular2/bundles/http.js',
                 'node_modules/angular2/bundles/http.dev.js',
-                'node_modules/jasmine-core/lib/jasmine-core/jasmine.css',
+                //'node_modules/jasmine-core/lib/jasmine-core/jasmine.css',
                 'node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
                 'node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js',
                 'node_modules/jasmine-core/lib/jasmine-core/boot.js',
@@ -52,7 +52,13 @@ module.exports = function() {
                 'src/app/plugins/ng-ga.js',
                 'src/app/plugins/angulartics2.js',
                 'src/app/plugins/angulartics2On.js',
-                'src/app/plugins/angulartics2-google-analytics.js'
+                'src/app/plugins/angulartics2-google-analytics.js',
+                'src/app/plugins/aes-min.js',
+                'src/app/plugins/enc-base64-min.js',
+                'src/app/plugins/mode-cfb-min.js',
+                'src/app/plugins/pad-ansix923-min.js',
+                'src/app/plugins/core-min.js',
+                'node_modules/crypto-js/crypto-js.js'
                 // 'src/app/plugins/bootstrap-datepicker.min.js',
                 // 'src/app/plugins/jquery.timepicker.js',
                 // 'src/app/plugins/date.js'
