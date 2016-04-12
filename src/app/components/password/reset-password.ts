@@ -50,7 +50,9 @@ export class ResetPassword {
             let status = '';
 
             if (isExpire < 0)
-            { alert('Page has been expired!'); }
+            {
+                this.router.parent.navigateByUrl('/reset-password-expired');
+            }
             else if (isExpire.toString() === "NaN")
             { alert('Please refresh the page and try once again.'); }
             else {
