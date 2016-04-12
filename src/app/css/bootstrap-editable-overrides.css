@@ -215,3 +215,9 @@ button.js-rename-session {
 }
 
 }
+
+/* Datepicker overrides */
+.datepicker table tr td, .datepicker table tr th {
+    width: 30px;
+    height: 30px;
+}
