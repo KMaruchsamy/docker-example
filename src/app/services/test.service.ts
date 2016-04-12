@@ -304,7 +304,7 @@ export class TestService {
 
         if (tests != undefined && tests.length > 0) {
             let sortedTests: any;
-            if (columnName === '#dateTH') {
+            if (columnName === '#schDateTH' || columnName === '#cmpDateTH') {
                 sortedTests = tests.sort(function(a, b) {
                     if (moment(a.TestingWindowStart).isBefore(b.TestingWindowStart)) //sort string ascending
                         return asc == 1 ? 1 : -1
@@ -317,15 +317,15 @@ export class TestService {
                 sortedTests = tests.sort(function(a, b) {
                     let strA: string;
                     let strB: string;
-                    if (columnName === '#sessionTH') {
+                    if (columnName === '#schSessionTH' || columnName === '#cmpSessionTH') {
                         strA = a.SessionName.toLowerCase();
                         strB = b.SessionName.toLowerCase();
                     }
-                    else if (columnName === '#facultyTH') {
+                    else if (columnName === '#schFacultyTH' || columnName === '#cmpFacultyTH') {
                         strA = a.FacultyFirstName.toLowerCase();
                         strB = b.FacultyFirstName.toLowerCase();
                     }
-                    else if (columnName === '#adminTH') {
+                    else if (columnName === '#schAdminTH' || columnName === '#cmpAdminTH') {
                         strA = a.AdminFirstName.toLowerCase();
                         strB = b.AdminFirstName.toLowerCase();
                     }

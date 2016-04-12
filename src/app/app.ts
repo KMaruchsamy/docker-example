@@ -8,6 +8,7 @@ import {Auth} from './services/auth';
 import {ResetPassword} from './components/password/reset-password';
 import {ForgotPassword} from './components/password/forgot-password';
 import {ForgotPasswordConfirmation} from './components/password/forgot-password-confirmation';
+import {ResetPasswordExpired} from './components/password/reset-password-expired';
 import {Help} from './components/help/help';
 import {UserGuide} from './components/userguide/userguide';
 import {SetPasswordFirstTime} from './components/password/set-password-first-time';
@@ -51,6 +52,7 @@ import {Angulartics2GoogleAnalytics} from './lib/angulartics2-google-analytics';
     { path: '/reset-password/:id/:expirytime', component: ResetPassword, name: 'ResetPassword' },
     { path: '/forgot-password', component: ForgotPassword, name: 'ForgotPassword' },
     { path: '/forgot-password-confirmation', component: ForgotPasswordConfirmation, name: 'ForgotPasswordConfirmation' },
+    { path: '/reset-password-expired', component: ResetPasswordExpired, name: 'ResetPasswordExpired' },
     { path: '/help', component: Help, name: 'Help' },
     { path: '/userguide', component: UserGuide, name: 'UserGuide' },
     { path: '/set-password-first-time', component: SetPasswordFirstTime, name: 'SetPasswordFirstTime' },

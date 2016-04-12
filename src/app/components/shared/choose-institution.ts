@@ -19,6 +19,8 @@ export class ChooseInstitution {
     page: string;
     institutionRN: string;
     institutionPN: string;
+    programRN: number = 0;
+    programPN: number = 0;
     backMessage: string;
     nursingITServer: string;
     isTest: boolean = false;
@@ -35,6 +37,7 @@ export class ChooseInstitution {
     ngOnInit(): void {
         $('title').html('Choose a Program &ndash; Kaplan Nursing');
         this.common.disabledforward();
+        this.checkInstitutions();
     }
 
     setBackMessage() {
@@ -56,8 +59,32 @@ export class ChooseInstitution {
 
     redirectToRoute(program: string): boolean {   
         let institutionId = (program === 'RN' ? this.institutionRN : this.institutionPN);
-        this.router.parent.navigateByUrl(`/tests/${this.page}/${institutionId}`);
+        let ProgramId = (program === 'RN' ? this.programRN : this.programPN);
+        if (ProgramId > 0) {
+            this.router.parent.navigateByUrl(`/tests/${this.page}/${institutionId}`);
+        }
+        else {
+            window.open('/#/accounterror');
+        }
         return false;
+    }
+
+    checkInstitutions(): void {
+        let institutions = _.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
+        if (institutions != null && institutions != 'undefined') {
+            let institutionsRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
+            let institutionsPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
+            let programIdRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'ProgramId');
+            let programIdPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'ProgramId');
+            if (programIdRN.length > 0)
+                this.programRN = programIdRN[0];
+            if (programIdPN.length > 0)
+                this.programPN = programIdPN[0];
+            if (institutionsRN.length > 0)
+                this.institutionRN = institutionsRN[0];
+            if (institutionsPN.length > 0)
+                this.institutionPN = institutionsPN[0];
+        }
     }
 
     triggerRedirect(programType, myform, hdInstitution, hdToken, hdPage, event) {
