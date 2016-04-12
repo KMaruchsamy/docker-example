@@ -173,6 +173,9 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit{
                 if (this.testsTable)
                     this.testsTable.destroy();
                 this.tests = json;
+                if (json.length == 0) {
+                    this.checkTestForSubjects();
+                }
                 setTimeout(json=> {
                     this.testsTable = $('#chooseTestTable').DataTable({
                         "paging": false,
@@ -192,6 +195,12 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit{
             .catch((error) => {
                 console.log(error);
             });
+    }
+
+
+    checkTestForSubjects(): boolean {
+        window.open('/#/accounterror');
+        return false;
     }
 
     saveChooseTest(e): void {
