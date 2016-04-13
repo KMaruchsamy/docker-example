@@ -86,7 +86,7 @@ export const links = {
         },
     },
     resetemailexpire: {
-        expirytime: "2"
+        expirytime: "8"
     },
     profile: {
         accountmanager: {
