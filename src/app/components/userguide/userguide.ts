@@ -1,11 +1,12 @@
 import {Component, OnInit} from 'angular2/core';
-import {RouterLink, CanActivate} from 'angular2/router';
+import {Router, RouterLink, CanActivate} from 'angular2/router';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {links, constants} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
+import {Utility} from '../../scripts/utility';
 
 @Component({
     selector: 'userguide',
@@ -13,20 +14,31 @@ import {ParseDatePipe} from '../../pipes/parsedate.pipe';
     host: {
         '(window:scroll)': 'onScroll($event)'
     },
+
+    providers: [Auth, Utility, Common],
     directives: [PageHeader, PageFooter, RouterLink],
     pipes: [ParseDatePipe]
 })
 export class UserGuide implements OnInit {
     modifiedDate: Date;
     activeId: string;
-    constructor() {
+    constructor(public router: Router, public auth: Auth, public common: Common) {
     }
 
     ngOnInit(): void {
-        $(document).scrollTop(0);
-        this.activeId = '#whatsNew';
+        if (this.auth.isAuth()) {
         $('title').html('Faculty User Guide &ndash; Kaplan Nursing');
         this.modifiedDate = new Date(constants.USERGUIDEMODIFICATIONDATE);
+        $(document).scrollTop(0);
+        this.activeId = '#whatsNew';
+        }
+        else {
+            this.redirectToLogin();
+        }
+    }
+    
+     redirectToLogin() {
+        this.router.parent.navigateByUrl('/');
     }
     
     //on click event added to elements in html template
