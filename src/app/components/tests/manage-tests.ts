@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef} from 'angular2/core';
+import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef, ViewEncapsulation} from 'angular2/core';
 import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, RouterLink} from 'angular2/router';
 import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "angular2/http";
 import {Observable} from 'rxjs/Rx';
@@ -33,14 +33,8 @@ import '../../lib/tablesaw.js';
     host: {
         '(window:resize)': 'resize($event)'
     },
-    styles: [
-        `#dateTH,
-        #sessionTH,
-        #facultyTH,
-        #adminTH:hover {
-    cursor:pointer;
-}`
-    ],
+    styleUrls: ['../../css/tablesaw.bare.css','../../css/tablesaw.overrides.css',' ../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css'],
+    encapsulation: ViewEncapsulation.None,
     directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup, RouterLink],
     pipes: [RemoveWhitespacePipe, RoundPipe, ParseDatePipe]
 })
