@@ -76,7 +76,7 @@ export const links = {
             server: "https://dev-nit.kaptest.com/"
         },
         qa: {
-            server: "https://qa-nit.kaptest.com/ "
+            server: "https://qa-nit.kaplan.com/"
         },
         stg: {
             server: "https://stg-nit.kaplan.com/"
