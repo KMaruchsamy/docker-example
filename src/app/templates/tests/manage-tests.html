@@ -43,11 +43,13 @@
                             <tr class="tablesaw-stacked-hidden-border" *ngFor="#inProgressTest of inProgressTests">
                                 <td>
                                     <template [ngIf]="!inProgressTest?.nextDay">
-                                        {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} {{inProgressTest?.TestingWindowStart|parseDate:'h:mma'}}
+                                        {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} 
+                                         <br>{{inProgressTest?.TestingWindowStart|parseDate:'h:mma'}}
                                         &ndash; {{inProgressTest?.TestingWindowEnd|parseDate:'h:mma'}}
                                     </template>
                                     <template [ngIf]="inProgressTest?.nextDay">
-                                        {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} {{inProgressTest?.TestingWindowStart|parseDate:'h:mma'}}
+                                        {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} 
+                                         <br>{{inProgressTest?.TestingWindowStart|parseDate:'h:mma'}}
                                         &ndash; {{inProgressTest?.TestingWindowEnd|parseDate:'h:mma'}} {{inProgressTest?.TestingWindowEnd|parseDate:'ddd'}}
                                         {{inProgressTest?.TestingWindowEnd|parseDate:'MM/DD/YY'}}
                                     </template>

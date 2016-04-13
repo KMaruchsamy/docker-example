@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit} from 'angular2/core';
+import {Component, OnInit, AfterViewInit, ViewEncapsulation} from 'angular2/core';
 import {Router, CanDeactivate, OnDeactivate, ComponentInstruction, RouteParams, Location} from 'angular2/router';
 import {NgIf} from 'angular2/common';
 import {TestService} from '../../services/test.service';
@@ -19,6 +19,8 @@ import '../../lib/modal.js';
 @Component({
     selector: 'schedule-test',
     templateUrl: '../../templates/tests/schedule-test.html',
+    styleUrls:['../../css/jquery.timepicker.css', '../../css/schedule.css'],
+    encapsulation: ViewEncapsulation.None,
     providers: [TestService, Auth, TestScheduleModel, Common],
     directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup, AlertPopup]
 })
