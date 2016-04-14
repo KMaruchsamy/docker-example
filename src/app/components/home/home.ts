@@ -31,7 +31,7 @@ import {Angulartics2On} from '../../lib/ng-ga'
 })
 export class Home implements OnInit {
     // profiles: Array<ProfileModel>;
-    programId: number;
+  //  programId: number;
     institutionRN: number;
     institutionPN: number;
     page: string;
@@ -114,7 +114,7 @@ export class Home implements OnInit {
 
     initialize(): void {
         $('title').html('Faculty Home &ndash; Kaplan Nursing');
-        this.programId = 0;
+      //  this.programId = 0;
         this.institutionRN = 0;
         this.institutionPN = 0;
         this.page = null;
@@ -136,12 +136,12 @@ export class Home implements OnInit {
                 this.router.parent.navigateByUrl(`/choose-institution/Home/${route}/${this.institutionRN}/${this.institutionPN}`);
             }
             else {
-                if (this.programId > 0) {
+               // if (this.programId > 0) {
                     this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
-                }
-                else {
-                    window.open('/#/accounterror');
-                }
+               // }
+               // else {
+                //    window.open('/#/accounterror');
+               // }
             }
             return false;
     }
@@ -198,9 +198,9 @@ export class Home implements OnInit {
         if (institutions != null && institutions != 'undefined') {
             let institutionsRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
             let institutionsPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
-            let programId = _.pluck(institutions, 'ProgramId');
-            if (programId.length > 0)
-                this.programId = programId[0];
+           // let programId = _.pluck(institutions, 'ProgramId');
+          //  if (programId.length > 0)
+            //    this.programId = programId[0];
             if (institutionsRN.length > 0)
                 this.institutionRN = institutionsRN[0];
             if (institutionsPN.length > 0)
