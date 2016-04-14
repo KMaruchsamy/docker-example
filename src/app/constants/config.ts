@@ -76,7 +76,7 @@ export const links = {
             server: "https://dev-nit.kaptest.com/"
         },
         qa: {
-            server: "https://qa-nit.kaptest.com/ "
+            server: "https://qa-nit.kaplan.com/"
         },
         stg: {
             server: "https://stg-nit.kaplan.com/"
@@ -86,7 +86,7 @@ export const links = {
         },
     },
     resetemailexpire: {
-        expirytime: "2"
+        expirytime: "8"
     },
     profile: {
         accountmanager: {

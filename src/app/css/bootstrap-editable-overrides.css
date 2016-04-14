@@ -221,3 +221,24 @@ button.js-rename-session {
     width: 30px;
     height: 30px;
 }
+
+.datepicker {
+  padding: 2px;
+  position: absolute !important;
+  width: 265px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: -0.75em;
+  box-shadow: 3px 6px 6px rgba(0, 0, 0, 0.2);
+  border: 2px solid #e3e3e3; }
+  .datepicker th, .datepicker td {
+    padding: .5em 0; }
+  .datepicker table tr td.active, .datepicker table tr td.active:hover, .datepicker table tr td.active.disabled, .datepicker table tr td.active.disabled:hover {
+    background: #4A7B71 !important; }
+  .datepicker table tr td.today, .datepicker table tr td.today:hover, .datepicker table tr td.today:hover:hover {
+    background: #E9F0EF; }
+  .datepicker table tr td.today.disabled, .datepicker table tr td.today:hover.disabled, .datepicker table tr td.today:hover.disabled:hover, .datepicker table tr td.today.disabled:hover, .datepicker table tr td.today.disabled.disabled, .datepicker table tr td.today.disabled:hover.disabled:hover, .datepicker table tr td.today.disabled:hover.disabled {
+    background: #e3e3e3; }
+  .datepicker table tr td span.active, .datepicker table tr td span.active:hover, .datepicker table tr td span.active.disabled, .datepicker table tr td span.active.disabled:hover {
+    background: #4A7B71 !important; }

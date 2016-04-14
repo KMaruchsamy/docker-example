@@ -281,7 +281,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         let input = {
             TestingSessionId: (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0),
             SessionName: this.testScheduleModel.scheduleName,
-            AdminId: this.auth.userid,
+            AdminId: (this.testScheduleModel.adminId ? this.testScheduleModel.adminId: this.auth.userid),
             InstitutionId: this.testScheduleModel.institutionId,
             SessionTestId: this.testScheduleModel.testId,
             SessionTestName: this.testScheduleModel.testName,
