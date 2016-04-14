@@ -946,13 +946,6 @@ textarea {
 textarea {
   resize: vertical; }
 
-input[type="search"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
-  appearance: none; }
-
 input[type="checkbox"],
 input[type="radio"] {
   display: inline;
@@ -2569,36 +2562,33 @@ input.checkbox-small-image:focus + label::before {
 .manage {
   margin: 2em 0; }
 
+input[type=search] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none; }
+  input[type=search]::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0; }
+  input[type=search]::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0; }
+
 form.search-bar {
   position: relative; }
   form.search-bar .search-input {
     position: relative;
     max-width: 450px; }
   form.search-bar input[type=search] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    -o-appearance: none;
-    appearance: none;
-    -webkit-transition: border-color;
-    transition: border-color;
-    background-color: #fff;
-    border-radius: 4px;
-    border: 1px solid #e3e3e3;
     display: block;
     font-size: 1em;
     margin: 0;
     padding: 0.5em 0.5em;
     position: relative;
     width: 100%; }
-    form.search-bar input[type=search]::-ms-clear {
-      display: none;
-      width: 0;
-      height: 0; }
-    form.search-bar input[type=search]::-ms-reveal {
-      display: none;
-      width: 0;
-      height: 0; }
   form.search-bar button[type=submit] {
     position: absolute;
     top: 0em;
