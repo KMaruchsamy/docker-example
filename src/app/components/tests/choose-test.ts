@@ -47,7 +47,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit{
     }
   
     ngOnInit(): void {
-        this.common.disabledforward();
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');

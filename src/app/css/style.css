@@ -491,9 +491,6 @@ ul.paragraph-spacing-bottom-list,
 ol.paragraph-spacing-bottom-list {
   margin-bottom: 0.75em; }
 
-ul.list-pdf-download-icon, ol.list-pdf-download-icon {
-  margin-left: 28px; }
-
 dl {
   margin-bottom: 0.66667em; }
   dl dt {
@@ -501,6 +498,11 @@ dl {
     margin-top: 0.66667em; }
   dl dd {
     margin: 0; }
+
+ul.list-pdf-download-icon, ol.list-pdf-download-icon {
+  margin-left: 28px; }
+  ul.list-pdf-download-icon > li, ol.list-pdf-download-icon > li {
+    margin-bottom: .5em; }
 
 table {
   -webkit-font-feature-settings: "kern", "liga", "tnum";
@@ -946,13 +948,6 @@ textarea {
 textarea {
   resize: vertical; }
 
-input[type="search"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
-  appearance: none; }
-
 input[type="checkbox"],
 input[type="radio"] {
   display: inline;
@@ -1162,25 +1157,6 @@ picture {
       background-image: url("../images/calendar_2x.png");
       background-size: 28px 28px; } }
 
-.green-checkmark-icon {
-  height: 12px;
-  width: 16px; }
-
-.attention-icon {
-  height: 18px;
-  vertical-align: text-bottom;
-  width: 18px; }
-
-.email-icon {
-  height: 17px;
-  width: 21px;
-  margin-right: .25em; }
-
-.telephone-icon {
-  height: 20px;
-  width: 20px;
-  margin-right: .25em; }
-
 .action-color-link-icon:before {
   background-image: url(../images/sprite.png);
   background-position: -65px -261px;
@@ -1189,21 +1165,6 @@ picture {
   margin-right: 1em; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .action-color-link-icon:before {
-      background-image: url(../images/sprite_2x.png);
-      background-size: 338px 297px; } }
-
-/*.green-reminder-flag:before {
-  @include retina-sprite ($green-reminder-flag-group);
-  margin-right: 1em;
-}*/
-.red-triangle-alert-large:before {
-  background-image: url(../images/sprite.png);
-  background-position: -118px -201px;
-  width: 56px;
-  height: 49px;
-  margin-right: 0; }
-  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
-    .red-triangle-alert-large:before {
       background-image: url(../images/sprite_2x.png);
       background-size: 338px 297px; } }
 
@@ -1220,19 +1181,6 @@ picture {
       background-image: url(../images/sprite_2x.png);
       background-size: 338px 297px; } }
 
-.small-gray-search-icon::before {
-  background-image: url(../images/sprite.png);
-  background-position: -269px -224px;
-  width: 15px;
-  height: 14px;
-  float: left;
-  margin: 0;
-  margin-right: 1em; }
-  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
-    .small-gray-search-icon::before {
-      background-image: url(../images/sprite_2x.png);
-      background-size: 338px 297px; } }
-
 .info-icon-yellow::before {
   background-image: url(../images/sprite.png);
   background-position: -316px -190px;
@@ -1243,32 +1191,6 @@ picture {
   margin-right: 1em; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .info-icon-yellow::before {
-      background-image: url(../images/sprite_2x.png);
-      background-size: 338px 297px; } }
-
-.sun-icon::before {
-  background-image: url(../images/sprite.png);
-  background-position: -221px -62px;
-  width: 60px;
-  height: 60px;
-  display: block;
-  float: none;
-  margin: 0 auto; }
-  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
-    .sun-icon::before {
-      background-image: url(../images/sprite_2x.png);
-      background-size: 338px 297px; } }
-
-.path-icon::before {
-  background-image: url(../images/sprite.png);
-  background-position: -221px -124px;
-  width: 60px;
-  height: 60px;
-  display: block;
-  float: none;
-  margin: 0 auto; }
-  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
-    .path-icon::before {
       background-image: url(../images/sprite_2x.png);
       background-size: 338px 297px; } }
 
@@ -1291,6 +1213,54 @@ picture {
   margin-top: 0; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .print-icon-white::before {
+      background-image: url(../images/sprite_2x.png);
+      background-size: 338px 297px; } }
+
+.pdf-download-icon::before {
+  background-image: url(../images/sprite.png);
+  background-position: -318px -130px;
+  width: 20px;
+  height: 24px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .pdf-download-icon::before {
+      background-image: url(../images/sprite_2x.png);
+      background-size: 338px 297px; } }
+
+li .pdf-download-icon::before {
+  position: absolute;
+  margin-left: -28px;
+  margin-top: 0; }
+
+.red-triangle-alert-large:before {
+  background-image: url(../images/sprite.png);
+  background-position: -118px -201px;
+  width: 56px;
+  height: 49px;
+  margin-right: 0; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .red-triangle-alert-large:before {
+      background-image: url(../images/sprite_2x.png);
+      background-size: 338px 297px; } }
+
+.sun-icon::before {
+  background-image: url(../images/sprite.png);
+  background-position: -221px -62px;
+  width: 60px;
+  height: 60px;
+  margin-right: 0; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .sun-icon::before {
+      background-image: url(../images/sprite_2x.png);
+      background-size: 338px 297px; } }
+
+.path-icon::before {
+  background-image: url(../images/sprite.png);
+  background-position: -221px -124px;
+  width: 60px;
+  height: 60px;
+  margin-right: 0; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .path-icon::before {
       background-image: url(../images/sprite_2x.png);
       background-size: 338px 297px; } }
 
@@ -1372,21 +1342,6 @@ picture {
       background-image: url(../images/sprite_2x.png);
       background-size: 338px 297px; } }
 
-.pdf-download-icon::before {
-  background-image: url(../images/sprite.png);
-  background-position: -318px -130px;
-  width: 20px;
-  height: 24px; }
-  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
-    .pdf-download-icon::before {
-      background-image: url(../images/sprite_2x.png);
-      background-size: 338px 297px; } }
-
-li .pdf-download-icon::before {
-  position: absolute;
-  margin-left: -28px;
-  margin-top: 0; }
-
 .account-alert-icon::before {
   background-image: url(../images/sprite.png);
   background-position: -91px -125px;
@@ -1409,36 +1364,6 @@ li .pdf-download-icon::before {
       background-image: url(../images/sprite_2x.png);
       background-size: 338px 297px; } }
 
-.small-search-box + .icon {
-  width: 13px;
-  height: 13px;
-  position: absolute;
-  opacity: 0.6;
-  top: 50%;
-  right: 7px;
-  margin-top: -6px; }
-
-.clear-input-values::before {
-  background: url("../images/clear.png") right center no-repeat;
-  background-size: 13px 13px;
-  width: 13px;
-  height: 13px;
-  bottom: 8px;
-  position: relative;
-  cursor: pointer; }
-
-.clear-input-values::after {
-  content: '';
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  left: -10px;
-  bottom: -10px; }
-
-.pdf-icon {
-  width: 19px;
-  height: 23px; }
-
 .caret {
   display: inline-block;
   width: 0;
@@ -1448,6 +1373,25 @@ li .pdf-download-icon::before {
   border-top: 7px dashed;
   border-right: 7px solid transparent;
   border-left: 7px solid transparent; }
+
+.green-checkmark-icon {
+  height: 12px;
+  width: 16px; }
+
+.attention-icon {
+  height: 18px;
+  vertical-align: text-bottom;
+  width: 18px; }
+
+.email-icon {
+  height: 17px;
+  width: 21px;
+  margin-right: .25em; }
+
+.telephone-icon {
+  height: 20px;
+  width: 20px;
+  margin-right: .25em; }
 
 /*main ::-webkit-scrollbar {
   width: 1rem;
@@ -2569,36 +2513,33 @@ input.checkbox-small-image:focus + label::before {
 .manage {
   margin: 2em 0; }
 
+input[type=search] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none; }
+  input[type=search]::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0; }
+  input[type=search]::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0; }
+
 form.search-bar {
   position: relative; }
   form.search-bar .search-input {
     position: relative;
     max-width: 450px; }
   form.search-bar input[type=search] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -ms-appearance: none;
-    -o-appearance: none;
-    appearance: none;
-    -webkit-transition: border-color;
-    transition: border-color;
-    background-color: #fff;
-    border-radius: 4px;
-    border: 1px solid #e3e3e3;
     display: block;
     font-size: 1em;
     margin: 0;
     padding: 0.5em 0.5em;
     position: relative;
     width: 100%; }
-    form.search-bar input[type=search]::-ms-clear {
-      display: none;
-      width: 0;
-      height: 0; }
-    form.search-bar input[type=search]::-ms-reveal {
-      display: none;
-      width: 0;
-      height: 0; }
   form.search-bar button[type=submit] {
     position: absolute;
     top: 0em;
@@ -2667,6 +2608,45 @@ input[type=search].small-search-box {
       input[type=search].small-search-box::placeholder {
         background-image: url("../images/small-gray-search-icon_2x.png");
         background-size: 13px 13px; } }
+
+.small-gray-search-icon::before {
+  background-image: url(../images/sprite.png);
+  background-position: -269px -224px;
+  width: 15px;
+  height: 14px;
+  float: left;
+  margin: 0;
+  margin-right: 1em; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .small-gray-search-icon::before {
+      background-image: url(../images/sprite_2x.png);
+      background-size: 338px 297px; } }
+
+.small-search-box + .icon {
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  opacity: 0.6;
+  top: 50%;
+  right: 7px;
+  margin-top: -6px; }
+
+.clear-input-values::before {
+  background: url("../images/clear.png") right center no-repeat;
+  background-size: 13px 13px;
+  width: 13px;
+  height: 13px;
+  bottom: 8px;
+  position: relative;
+  cursor: pointer; }
+
+.clear-input-values::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  left: -10px;
+  bottom: -10px; }
 
 .button-group {
   margin: 2em 0 2.5em; }

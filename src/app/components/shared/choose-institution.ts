@@ -36,7 +36,6 @@ export class ChooseInstitution {
     }
     ngOnInit(): void {
         $('title').html('Choose a Program &ndash; Kaplan Nursing');
-        this.common.disabledforward();
         this.checkInstitutions();
     }
 

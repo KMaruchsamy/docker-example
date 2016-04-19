@@ -7,6 +7,7 @@ import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {Utility} from '../../scripts/utility';
+import {Angulartics2On} from '../../lib/ng-ga';
 
 @Component({
     selector: 'userguide',
@@ -16,7 +17,7 @@ import {Utility} from '../../scripts/utility';
     },
 
     providers: [Auth, Utility, Common],
-    directives: [PageHeader, PageFooter, RouterLink],
+    directives: [PageHeader, PageFooter, RouterLink, Angulartics2On],
     pipes: [ParseDatePipe]
 })
 export class UserGuide implements OnInit {
