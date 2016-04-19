@@ -80,7 +80,6 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     }
 
     ngOnInit(): void {
-        this.common.disabledforward();
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');

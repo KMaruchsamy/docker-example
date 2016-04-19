@@ -53,7 +53,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     windowExceptions: Object[];
     nextDay: boolean = false;
     modify: boolean = false;
-    hasSavedRetesterExceptions: boolean = true;
+    hasSavedRetesterExceptions: boolean = false;
     hasADA: boolean = false;
     retesterExceptionsModify: Object[] = [];
     constructor(public testScheduleModel: TestScheduleModel,
@@ -97,7 +97,6 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     ngOnInit() {
-        this.common.disabledforward();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else {
