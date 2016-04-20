@@ -138,7 +138,6 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                 this.$txtScheduleName.val(this.testScheduleModel.scheduleName);
             if (this.modify) {
                 if (this.testScheduleModel.facultyMemberId !== this.testScheduleModel.adminId && eval(this.auth.userid) !== this.testScheduleModel.adminId) {
-                    this.$ddlfacultyMember.attr("disabled", true);
                     this.facultyAssignable = false;
                 }                
                 let retestersExceptionsModify = this.testService.getAlternateExceptionsModify();
@@ -149,9 +148,6 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                 else
                     this.loadAlternateAssignmentsModify();
                     
-            }
-            else {
-                 this.$ddlfacultyMember.removeAttr('disabled', 'disabled');
             }
             this.resolveADA();
 

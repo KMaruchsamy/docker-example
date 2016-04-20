@@ -16,7 +16,7 @@
                 </div>
                 <div class="one-half-grid">
                     <label class="label-bold label-larger" for="ddlFaculty">Assign faculty member</label>
-                    <select id="ddlFaculty" #ddlfaculty class="selectpicker" (change)="facultyChange(ddlfaculty.value,$event);" data-size="6">
+                    <select id="ddlFaculty" #ddlfaculty class="selectpicker" (change)="facultyChange(ddlfaculty.value,$event);" data-size="6" [disabled]="!facultyAssignable">
                         <option *ngFor="#admin of faculty" [value]="admin.AdminId" [selected]="admin.AdminId == testScheduleModel.facultyMemberId">{{admin.LastName}}, {{admin.FirstName}}</option>
                     </select>
 
