@@ -1,0 +1,33 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "Authentication": {
+    "Bucket": "elasticbeanstalk-us-east-1-229683044909",
+    "Key": ".dockercfg"
+  },
+  "containerDefinitions": [
+    {
+      "name": "NIT Ux QA",
+      "image": "kaptest/nursing:qa",
+      "essential": false,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ]
+    },
+    {
+      "name": "NIT Ux Dev",
+      "image": "kaptest/nursing:dev",
+      "essential": false,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 9000
+        }
+      ]
+    }
+  ]
+}
