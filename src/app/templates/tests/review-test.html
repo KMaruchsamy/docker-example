@@ -16,12 +16,12 @@
                 </div>
                 <div class="one-half-grid">
                     <label class="label-bold label-larger" for="ddlFaculty">Assign faculty member</label>
-                    <select id="ddlFaculty" #ddlfaculty class="selectpicker" (change)="facultyChange(ddlfaculty.value,$event);" data-size="6">
+                    <select id="ddlFaculty" #ddlfaculty class="selectpicker" (change)="facultyChange(ddlfaculty.value,$event);" data-size="6" [disabled]="!facultyAssignable">
                         <option *ngFor="#admin of faculty" [value]="admin.AdminId" [selected]="admin.AdminId == testScheduleModel.facultyMemberId">{{admin.LastName}}, {{admin.FirstName}}</option>
                     </select>
 
                 </div>
-                <div class="one-half-grid lightbulb-icon-container" id="facultyLightbulbContainer">
+                <div *ngIf="facultyAssignable" class="one-half-grid lightbulb-icon-container" id="facultyLightbulbContainer">
                     <p class="icon lightbulb-icon">Both you and the faculty member you assign will be able to make changes to this testing session later
                         if needed.</p>
                 </div>
