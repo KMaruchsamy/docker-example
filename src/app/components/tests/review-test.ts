@@ -56,6 +56,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     hasSavedRetesterExceptions: boolean = false;
     hasADA: boolean = false;
     retesterExceptionsModify: Object[] = [];
+    facultyAssignable: boolean = true;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public common: Common,
         public router: Router, public dynamicComponentLoader: DynamicComponentLoader,
@@ -138,7 +139,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
             if (this.modify) {
                 if (this.testScheduleModel.facultyMemberId !== this.testScheduleModel.adminId && eval(this.auth.userid) !== this.testScheduleModel.adminId) {
                     this.$ddlfacultyMember.attr("disabled", true);
-                    this.$divfacultyLightbulbContainer.css("visibility", "hidden");
+                    this.facultyAssignable = false;
                 }                
                 let retestersExceptionsModify = this.testService.getAlternateExceptionsModify();
                 if (retestersExceptionsModify != undefined && retestersExceptionsModify.length > 0) {
@@ -147,11 +148,10 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                 }
                 else
                     this.loadAlternateAssignmentsModify();
-
+                    
             }
             else {
-                this.$ddlfacultyMember.removeAttr('disabled', 'disabled');
-                this.$divfacultyLightbulbContainer.css("visibility", "visible");
+                 this.$ddlfacultyMember.removeAttr('disabled', 'disabled');
             }
             this.resolveADA();
 
