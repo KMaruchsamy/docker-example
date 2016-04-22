@@ -149,6 +149,9 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                     this.loadAlternateAssignmentsModify();
                     
             }
+             else {
+                    this.facultyAssignable = true;
+            }
             this.resolveADA();
 
             if (this.studentsTable)
