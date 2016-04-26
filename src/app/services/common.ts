@@ -1,5 +1,5 @@
 ﻿import * as _ from '../../lib/index';
-import {links} from '../constants/config';
+import {links,Timezones} from '../constants/config';
 import {Injectable} from 'angular2/core';
 
 @Injectable()
@@ -140,5 +140,30 @@ export class Common {
             return window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
         }
         return window.location.origin;
+    }
+
+
+    getInstitutionTimeZoneOffsetName(institutionId: number): string {
+        let sStorage = this.getStorage();
+        let institutions = sStorage.getItem('institutions');
+        if (institutions) {
+            let selectedInstitution = _.find(JSON.parse(institutions), { 'InstitutionId': institutionId });
+            if (selectedInstitution) {
+                return selectedInstitution.TimeZoneName;
+            }
+        }
+        return '';
+    }
+
+    getTimezone(institutionId: number): string {
+        if (institutionId == undefined || institutionId===0)
+            return '';
+        let gmtOffset: string = '';
+        gmtOffset = this.getInstitutionTimeZoneOffsetName(institutionId);
+        if (gmtOffset === '')
+            return '';    
+        gmtOffset = gmtOffset.replace('+', 'plus').replace('-', 'minus');
+        console.log(gmtOffset);
+        return Timezones[gmtOffset];
     }
 }
