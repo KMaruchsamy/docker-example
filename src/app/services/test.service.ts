@@ -6,13 +6,13 @@ import * as _ from '../lib/index';
 import {TestScheduleModel} from '../models/testSchedule.model';
 import {SelectedStudentModel} from '../models/selectedStudent-model';
 import {TestShedulingPages} from '../constants/config';
-
+import {Common} from './common';
 
 @Injectable()
 export class TestService {
     // auth: Auth;
     sStorage: any;
-    constructor(public http: Http, public testSchedule: TestScheduleModel, public auth: Auth) {
+    constructor(public http: Http, public testSchedule: TestScheduleModel, public auth: Auth, public common:Common) {
         this.http = http;
         this.sStorage = this.auth.sStorage;
         this.auth.refresh();
@@ -386,6 +386,88 @@ export class TestService {
 
         return status;
     }
+
+
+
+
+validateDates(testScheduleModel:TestScheduleModel, institutionID:number, modify:boolean): boolean {
+    debugger;
+    if (testScheduleModel) {
+
+            if (testScheduleModel.scheduleStartTime && testScheduleModel.scheduleEndTime) {
+
+                console.log(new Date().toDateString());                
+                let institutionTimezone: string = this.common.getTimezone(institutionID);
+                let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
+
+                let scheduleEndTime = moment(new Date(
+                    moment(testScheduleModel.scheduleEndTime).year(),
+                    moment(testScheduleModel.scheduleEndTime).month(),
+                    moment(testScheduleModel.scheduleEndTime).date(),
+                    moment(testScheduleModel.scheduleEndTime).hour(),
+                    moment(testScheduleModel.scheduleEndTime).minute(),
+                    moment(testScheduleModel.scheduleEndTime).second()
+                )).format('YYYY-MM-DD HH:mm:ss');
+
+                console.log('Institution Current Time : ' + institutionCurrentTime);
+                console.log('Schedule endtime : ' + scheduleEndTime)
+
+                if (modify) {
+                    if (testScheduleModel.savedStartTime) {
+                        let savedStartTime = moment(new Date(
+                            moment(testScheduleModel.savedStartTime).year(),
+                            moment(testScheduleModel.savedStartTime).month(),
+                            moment(testScheduleModel.savedStartTime).date(),
+                            moment(testScheduleModel.savedStartTime).hour(),
+                            moment(testScheduleModel.savedStartTime).minute(),
+                            moment(testScheduleModel.savedStartTime).second()
+                        )).format('YYYY-MM-DD HH:mm:ss');
+
+                        let savedEndTime = moment(new Date(
+                            moment(testScheduleModel.savedEndTime).year(),
+                            moment(testScheduleModel.savedEndTime).month(),
+                            moment(testScheduleModel.savedEndTime).date(),
+                            moment(testScheduleModel.savedEndTime).hour(),
+                            moment(testScheduleModel.savedEndTime).minute(),
+                            moment(testScheduleModel.savedEndTime).second()
+                        )).format('YYYY-MM-DD HH:mm:ss');
+
+
+                        console.log('Saved Starttime : ' + savedStartTime);
+                        console.log('Saved End time : ' + savedEndTime);
+                        
+                        if (moment(savedEndTime).isBefore(institutionCurrentTime)) {
+                            $('#alertPopup').modal('show');
+                            return false;
+                        }
+
+                        if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
+                            if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                                $('#alertPopup').modal('show');
+                                return false;
+                            }
+                        }
+
+                    }
+                    else {
+                        if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                            $('#alertPopup').modal('show');
+                            return false;
+                        }
+                    }
+
+                }
+                else {
+                    if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                        $('#alertPopup').modal('show');
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }    
 
 
 }
