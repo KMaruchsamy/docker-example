@@ -6,10 +6,16 @@
   },
   "containerDefinitions": [
     {
-      "name": "NIT Ux QA",
+      "name": "nit-ux-qa",
       "image": "kaptest/nursing:qa",
       "essential": true,
-      "memory": 128,
+      "memory": 512,
+      "mountPoints": [
+        {
+          "containerPath": "/var/log/nginx", 
+          "sourceVolume": "awseb-logs-nit-ux-qa"
+        }
+      ],
       "portMappings": [
         {
           "hostPort": 8080,
@@ -18,10 +24,16 @@
       ]
     },
     {
-      "name": "NIT Ux Dev",
+      "name": "nit-ux-dev",
       "image": "kaptest/nursing:dev",
       "essential": true,
       "memory": 128,
+      "mountPoints": [
+        {
+          "containerPath": "/var/log/nginx", 
+          "sourceVolume": "awseb-logs-nit-ux-qa"
+        }
+      ],
       "portMappings": [
         {
           "hostPort": 9000,
