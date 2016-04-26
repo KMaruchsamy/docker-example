@@ -8,11 +8,11 @@
     {
       "name": "NIT Ux QA",
       "image": "kaptest/nursing:qa",
-      "essential": false,
+      "essential": true,
       "memory": 128,
       "portMappings": [
         {
-          "hostPort": 80,
+          "hostPort": 8080,
           "containerPort": 80
         }
       ]
@@ -20,12 +20,12 @@
     {
       "name": "NIT Ux Dev",
       "image": "kaptest/nursing:dev",
-      "essential": false,
+      "essential": true,
       "memory": 128,
       "portMappings": [
         {
-          "hostPort": 80,
-          "containerPort": 9000
+          "hostPort": 9000,
+          "containerPort": 80
         }
       ]
     }
