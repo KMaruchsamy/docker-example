@@ -19,7 +19,7 @@ import '../../lib/modal.js';
 @Component({
     selector: 'schedule-test',
     templateUrl: '../../templates/tests/schedule-test.html',
-    styleUrls:['../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css','../../css/jquery.timepicker.css', '../../css/schedule.css'],
+    styleUrls: ['../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css', '../../css/jquery.timepicker.css', '../../css/schedule.css'],
     encapsulation: ViewEncapsulation.None,
     providers: [TestService, Auth, TestScheduleModel, Common],
     directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup, AlertPopup]
@@ -44,7 +44,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public router: Router, public common: Common, public routeParams: RouteParams, public aLocation: Location) {
     }
-   
+
     onCancelChanges(): void {
         this.overrideRouteCheck = true;
         this.testService.clearTestScheduleObjects();
@@ -104,7 +104,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         this.set8HourRule();
         $(document).scrollTop(0);
 
-       
+
     }
 
     initialize() {
@@ -112,14 +112,18 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         if (savedSchedule) {
             this.testScheduleModel = savedSchedule;
             if (this.testScheduleModel.scheduleStartTime) {
-                if (this.modify)
-                    this.testScheduleModel.savedStartTime = this.testScheduleModel.scheduleStartTime;    
+                if (this.modify) {
+                    if (!this.testScheduleModel.savedStartTime || this.testScheduleModel.savedStartTime == '')
+                        this.testScheduleModel.savedStartTime = this.testScheduleModel.scheduleStartTime;
+                }
                 this.startDate = moment(this.testScheduleModel.scheduleStartTime).format('L');
                 this.startTime = this.testScheduleModel.scheduleStartTime;
             }
             if (this.testScheduleModel.scheduleEndTime) {
-                if (this.modify)
-                    this.testScheduleModel.savedEndTime = this.testScheduleModel.scheduleEndTime;    
+                if (this.modify) {
+                    if (!this.testScheduleModel.savedEndTime || this.testScheduleModel.savedEndTime == '')
+                        this.testScheduleModel.savedEndTime = this.testScheduleModel.scheduleEndTime;
+                }
                 this.endDate = moment(this.testScheduleModel.scheduleEndTime).format('L');
                 this.endTime = this.testScheduleModel.scheduleEndTime;
             }
@@ -185,7 +189,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             'disableTouchKeyboard': true,
             'selectOnBlur': false,
             'typeaheadHighlight': false
-        }).on('change', function(e) {
+        }).on('change', function (e) {
             if (e.currentTarget.value) {
                 let startTime;
                 if (__this.startDate) {
@@ -267,7 +271,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             'disableTouchKeyboard': true,
             'selectOnBlur': false,
             'typeaheadHighlight': false
-        }).on('change', function(e) {
+        }).on('change', function (e) {
             if (e.currentTarget.value) {
                 let endTime;
                 let minEndTime = moment(new Date()).add(30, 'minutes').format();
@@ -373,7 +377,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             startDate: new Date(),
             orientation: 'bottom',
             'disableTouchKeyboard': true
-        }).on('hide', function(e) {
+        }).on('hide', function (e) {
             let outputString = '';
 
             if (e.currentTarget.value !== '') {
@@ -452,7 +456,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             forceParse: false,
             orientation: 'bottom',
             'disableTouchKeyboard': true
-        }).on('hide', function(e) {
+        }).on('hide', function (e) {
             let outputString = '';
             if (e.currentTarget.value !== '') {
                 outputString = __this.parseDateString(e.currentTarget.value);
@@ -680,7 +684,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         if (inputArr.length < 3)
             return '';
 
-        _.forEach(inputArr, function(value) {
+        _.forEach(inputArr, function (value) {
             i++;
             let dateNumber: number;
             if (value === undefined || value === '') {
@@ -723,43 +727,90 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         return url.replace('§scheduleId', scheduleId.toString());
     }
 
-    validateDates(): boolean {
-        return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify);       
-    }
-
     // validateDates(): boolean {
-    //     if (this.testScheduleModel) {
-
-    //         if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
-
-    //             let scheduleEndTime = moment(new Date(
-    //                 moment(this.testScheduleModel.scheduleEndTime).year(),
-    //                 moment(this.testScheduleModel.scheduleEndTime).month(),
-    //                 moment(this.testScheduleModel.scheduleEndTime).date(),
-    //                 moment(this.testScheduleModel.scheduleEndTime).hour(),
-    //                 moment(this.testScheduleModel.scheduleEndTime).minute(),
-    //                 moment(this.testScheduleModel.scheduleEndTime).second()
-    //             )).format('YYYY-MM-DD HH:mm:ss');
-
-    //             if (this.modify) {
-    //                 let scheduleURL = this.resolveScheduleURL(`${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.test.viewtest}`, this.testScheduleModel.scheduleId);
-    //                 let status = this.testService.getTestStatus(scheduleURL);
-    //                 if (status === 'completed' || status === 'inprogress') {
-    //                     $('#alertPopup').modal('show');
-    //                     return false;
-    //                 }
-    //             }
-    //             else {
-    //                 if (moment(scheduleEndTime).isBefore(new Date(), 'day')) {
-    //                     $('#alertPopup').modal('show');
-    //                     return false;
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return true;
+    //     return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify);       
     // }
 
+
+
+    validateDates(): boolean {
+        debugger;
+        if (this.testScheduleModel) {
+
+            console.log(new Date().toTimeString());
+            let institutionTimezone: string = this.common.getTimezone(this.testScheduleModel.institutionId);
+            console.log('Timezone : ' + institutionTimezone);
+            let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
+
+            if (this.startTime && this.endTime) {
+
+                let scheduleEndTime = moment(new Date(
+                    moment(this.endTime).year(),
+                    moment(this.endTime).month(),
+                    moment(this.endTime).date(),
+                    moment(this.endTime).hour(),
+                    moment(this.endTime).minute(),
+                    moment(this.endTime).second()
+                )).format('YYYY-MM-DD HH:mm:ss');
+
+                console.log('Institution Current Time : ' + institutionCurrentTime);
+                console.log('Schedule endtime : ' + scheduleEndTime)
+
+                if (this.modify) {
+                    if (this.testScheduleModel.savedStartTime) {
+                        let savedStartTime = moment(new Date(
+                            moment(this.testScheduleModel.savedStartTime).year(),
+                            moment(this.testScheduleModel.savedStartTime).month(),
+                            moment(this.testScheduleModel.savedStartTime).date(),
+                            moment(this.testScheduleModel.savedStartTime).hour(),
+                            moment(this.testScheduleModel.savedStartTime).minute(),
+                            moment(this.testScheduleModel.savedStartTime).second()
+                        )).format('YYYY-MM-DD HH:mm:ss');
+
+                        let savedEndTime = moment(new Date(
+                            moment(this.testScheduleModel.savedEndTime).year(),
+                            moment(this.testScheduleModel.savedEndTime).month(),
+                            moment(this.testScheduleModel.savedEndTime).date(),
+                            moment(this.testScheduleModel.savedEndTime).hour(),
+                            moment(this.testScheduleModel.savedEndTime).minute(),
+                            moment(this.testScheduleModel.savedEndTime).second()
+                        )).format('YYYY-MM-DD HH:mm:ss');
+
+
+                        console.log('Saved Starttime : ' + savedStartTime);
+                        console.log('Saved End time : ' + savedEndTime);
+
+                        if (moment(savedEndTime).isBefore(institutionCurrentTime)) {
+                            $('#alertPopup').modal('show');
+                            return false;
+                        }
+
+                        if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
+                            if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                                $('#alertPopup').modal('show');
+                                return false;
+                            }
+                        }
+
+                    }
+                    else {
+                        if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                            $('#alertPopup').modal('show');
+                            return false;
+                        }
+                    }
+
+                }
+                else {
+                    if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                        $('#alertPopup').modal('show');
+                        return false;
+                    }
+                }
+            }           
+        }
+        return true;
+    }
 
     onOKAlert(): void {
         $('#alertPopup').modal('hide');

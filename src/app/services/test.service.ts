@@ -396,6 +396,7 @@ validateDates(testScheduleModel:TestScheduleModel, institutionID:number, modify:
 
             if (testScheduleModel.scheduleStartTime && testScheduleModel.scheduleEndTime) {
 
+                console.log(new Date().toDateString());                
                 let institutionTimezone: string = this.common.getTimezone(institutionID);
                 let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
 
@@ -408,6 +409,8 @@ validateDates(testScheduleModel:TestScheduleModel, institutionID:number, modify:
                     moment(testScheduleModel.scheduleEndTime).second()
                 )).format('YYYY-MM-DD HH:mm:ss');
 
+                console.log('Institution Current Time : ' + institutionCurrentTime);
+                console.log('Schedule endtime : ' + scheduleEndTime)
 
                 if (modify) {
                     if (testScheduleModel.savedStartTime) {
@@ -429,6 +432,10 @@ validateDates(testScheduleModel:TestScheduleModel, institutionID:number, modify:
                             moment(testScheduleModel.savedEndTime).second()
                         )).format('YYYY-MM-DD HH:mm:ss');
 
+
+                        console.log('Saved Starttime : ' + savedStartTime);
+                        console.log('Saved End time : ' + savedEndTime);
+                        
                         if (moment(savedEndTime).isBefore(institutionCurrentTime)) {
                             $('#alertPopup').modal('show');
                             return false;
