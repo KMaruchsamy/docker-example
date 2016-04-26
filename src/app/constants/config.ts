@@ -142,7 +142,7 @@ export let Timezones = {
     GMTminus8: 'US/Pacific',
     GMTminus7: 'US/Mountain',
     GMTminus6: 'Canada/Central',
-    GMTminus5: 'America/New York',
+    GMTminus5: 'America/New_York',
     GMTminus4: 'America/Dominica',
     GMTminus3: 'America/Cayenne',
     GMTminus2: 'America/Noronha',

@@ -763,8 +763,8 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
     onOKAlert(): void {
         $('#alertPopup').modal('hide');
-        this.overrideRouteCheck = true;
-        this.router.navigate(['ScheduleTest']);
+        //this.overrideRouteCheck = true;
+        //this.router.navigate(['ScheduleTest']);
     }
 
 

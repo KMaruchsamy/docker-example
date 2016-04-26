@@ -162,7 +162,7 @@ export class Common {
         gmtOffset = this.getInstitutionTimeZoneOffsetName(institutionId);
         if (gmtOffset === '')
             return '';    
-        gmtOffset = gmtOffset.replace('+', 'plus').replace('-', 'minus');
+        gmtOffset = gmtOffset.replace('+', 'plus').replace('-', 'minus').replace(' ', '');
         console.log(gmtOffset);
         return Timezones[gmtOffset];
     }
