@@ -25,7 +25,7 @@ export class Auth {
     this.useremail = this.sStorage.getItem('useremail');
     this.authheader = 'Bearer ' + this.token;
     this.istemppassword = this.sStorage.getItem('istemppassword');
-    this.userid = this.sStorage.getItem('userid');
+    this.userid = parseInt(this.sStorage.getItem('userid'));
     this.firstname = this.sStorage.getItem('firstname');
     this.lastname = this.sStorage.getItem('lastname');
     this.title = this.sStorage.getItem('title');
@@ -41,7 +41,7 @@ export class Auth {
     this.useremail = this.sStorage.getItem('useremail');
     this.authheader = 'Bearer ' + this.token;
     this.istemppassword = this.sStorage.getItem('istemppassword');
-    this.userid = this.sStorage.getItem('userid');
+    this.userid = parseInt(this.sStorage.getItem('userid'));
     this.firstname = this.sStorage.getItem('firstname');
     this.lastname = this.sStorage.getItem('lastname');
     this.title = this.sStorage.getItem('title');
