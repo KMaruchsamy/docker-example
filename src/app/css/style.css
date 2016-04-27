@@ -4015,7 +4015,7 @@ input.page-lg-heading {
       width: 20%; }
     .review-details-table tr td:nth-child(2) {
       width: 65%; }
-    .review-details-table tr td:last-child {
+    .review-details-table tr td:nth-child(3) {
       width: 15%; } }
 
 @media (min-width: 62em) {

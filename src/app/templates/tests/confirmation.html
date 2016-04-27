@@ -6,6 +6,13 @@
         <h4>{{ modify ? 'Success! Your scheduled test has been modified.' : 'Success! Your test has been scheduled.' }}
               <!--This will be added in post-MVP <br>You will receive an email confirmation soon. -->
         </h4>
+        <div class="section-thin margin-1em-top">
+            <div class="section section-beige container-dull-yellow-top text-larger">
+            <p class="no-margin-bottom"><strong>Please note:</strong> If there are students in your testing session who need testing accommodations, please submit their
+                names to your Account Manager <b>at least 48 hours prior to test day</b>. Students with testing accommodations receive untimed versions of their tests.
+            </p>
+            </div>
+        </div>
         <div class="margin-2em-top">
             <a [routerLink]="['/ModifyViewTest',{action:'modify'}]">View/print this testing session</a>
         </div>
