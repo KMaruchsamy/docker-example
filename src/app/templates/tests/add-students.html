@@ -19,14 +19,14 @@
                         <div class="tab-pane active" id="addByCohort">
                             <div id="chooseCohortContainer">
 
-                                <div class="top-section " id="ddlCohort">
+                                <div class="top-section " *ngIf="!noCohort">
                                     <select id="chooseCohort" #selectcohort class="selectpicker" title="Choose a Cohort" data-width="65%" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,selectcohort,$event);">
                                         <option *ngFor="#cohort of cohorts;#i=index;" [selected]="cohort.CohortId==lastSelectedCohortID" [value]="cohort.CohortId">{{cohort.CohortName}}</option>
                                     </select>
                                     <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort($event)">Add all students</button>
                                 </div>
 
-                                <div id="noCohort">
+                                <div *ngIf="noCohort">
                                     <p class="text-larger section-medium-thin container-narrow ">We're sorry, there are no active cohorts in your institution. Please contact your Account Manager for further assistance. You can find your Account Manager's contact info on the <a [routerLink]="['/Home']">Home page</a>.</p>
                                 </div>
 
@@ -69,12 +69,12 @@
                     <div class="top-section">
                         <h4 class="white-text h6 no-margin-bottom" id="studentAddedToTestingSession">Students in Testing Session ({{selectedStudentCount}})</h4>
                     </div>
-                    <div class="section-medium-thin container-narrow lightbulb-icon-container-flush-text" id="selectedStudentsContainer">
+                    <div class="section-medium-thin container-narrow lightbulb-icon-container-flush-text" *ngIf="selectedStudentCount === 0" id="selectedStudentsContainer">
                         <p class="icon lightbulb-icon">Students you add to your testing session by Cohort will appear here.</p>
                         <p class="icon lightbulb-icon">You will be able to assign alternate test versions to retesting students before moving to Step 4.</p>
                         <p class="icon lightbulb-icon">If a cohort you are expecting to see does not appear in the menu, please check your testing window in Step 2.</p>
                     </div>
-                    <div id="testSchedulingSelectedStudents" class="added-student-list hidden">
+                    <div id="testSchedulingSelectedStudents" class="added-student-list" [hidden]="selectedStudentCount === 0">
                         <form class="test-scheduling-selected-students-container">
                             <ul id="testSchedulingSelectedStudentsList"></ul>
                         </form>
@@ -96,8 +96,11 @@
 
         <div class="container add-students-outer-container">
             <div class="info-icon-yellow-container-flush-text">
-                <p class="icon info-icon-yellow margin-1em-top hidden" id="accommadationNote">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
-                <p class="icon info-icon-yellow margin-1em-top hidden" id="studentScheduleNote">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
+                <p class="icon info-icon-yellow margin-1em-top" *ngIf="!hasADA && selectedStudents.length > 0">Please contact your Account Manager if there are students in your testing session who need testing accommodations. 
+                    Students with testing accommodations receive untimed versions of their tests.</p>
+                <p class="icon info-icon-yellow margin-1em-top" *ngIf="hasADA && selectedStudents.length > 0">One or more of the students you have added have testing accommodations. Their test will be untimed. 
+                    For more information or to designate additional students who need testing accommodations, please contact your Account Manager.</p>
+                <p class="icon info-icon-yellow margin-1em-top" *ngIf="selectedStudents.length > 0">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
                 <!--  <div class="right margin-2em-top-bottom">-->
                 <button type="button" class="button button-mobile-block right margin-2em-top" id="reviewDetails" disabled (click)="DetailReviewTestClick($event)"><span class="hidden-extra-small-down">Next step: </span>Add details and review</button>
                 <!--</div>-->

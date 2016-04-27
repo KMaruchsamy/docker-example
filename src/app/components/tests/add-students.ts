@@ -54,6 +54,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     loader: any;
     retesterExceptions: any;
     modify: boolean = false;
+    hasADA: boolean = false;
+    noCohort: boolean = false;
     noStudentInCohort: string = "No matching students in this cohort";
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
         public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location) {
@@ -103,10 +105,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
              $('title').html('Add Students &ndash; Kaplan Nursing');
         }
         
-        $('#ddlCohort').addClass('hidden');
-        $('#noCohort').addClass('hidden');
-        $('#addAllStudents').addClass('hidden');
-        $('#cohortStudentList').addClass('hidden');
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
@@ -277,13 +275,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 });
 
                 if (_this.cohorts.length === 0) {
-                    $('#ddlCohort').addClass('hidden');
-                    $('#noCohort').removeClass('hidden');
-                }
-                else {
-                    $('#noCohort').addClass('hidden');
-                    $('#ddlCohort').removeClass('hidden');
-                }
+                    this.noCohort = true;
+                 }                  
             })
             .catch((error) => {
                 console.log(error);
@@ -357,7 +350,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     });
                 })
                 .catch((error) => {
-                    They (error);
+                    throw (error);
                 });
         }
     }
@@ -595,14 +588,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         this.selectedStudentCount = this.selectedStudents.length;
         if (this.selectedStudentCount < 1) {
             $('.top-section').removeClass('active');
-            $('#selectedStudentsContainer').removeClass('hidden');
             $('#testSchedulingSelectedStudentsList').empty();
-            $('#testSchedulingSelectedStudents').addClass('hidden');
         }
         else {
             $('.top-section').addClass('active');
-            $('#selectedStudentsContainer').addClass('hidden');
-            $('#testSchedulingSelectedStudents').removeClass('hidden');
         }
     }
     displaySelectedStudentFilter(): void {
@@ -627,11 +616,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             for (let i = 0; i < this.selectedStudents.length; i++) {
                 let student = this.selectedStudents[i];
                 if (student.Ada) {
-                    $('#accommadationNote').removeClass('hidden');
-                    break;
+                    this.hasADA = true; 
                 }
                 else
-                    $('#accommadationNote').addClass('hidden');
+                    this.hasADA = false;
             }
         }
     }
@@ -639,12 +627,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     EnableDisableButtonForDetailReview(): void {
         if (this.selectedStudentCount > 0) {
             this.CheckForAdaStatus();
-            $('#studentScheduleNote').removeClass('hidden');
             $('#reviewDetails').removeAttr('disabled', 'disabled');
         }
         else {
-            $('#accommadationNote').addClass('hidden');
-            $('#studentScheduleNote').addClass('hidden');
             $('#reviewDetails').attr('disabled', 'true');
         }
     }
