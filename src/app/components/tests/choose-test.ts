@@ -244,80 +244,80 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     }
 
     validateDates(): boolean {
-        return this.testService.validateDates(this.testScheduleModel, this.institutionID, this.modify);       
+        return this.testService.validateDates(this.testScheduleModel, this.institutionID, this.modify);
     }
 
 
     //validateDates(): boolean{
-     // if (this.testScheduleModel) {
+    // if (this.testScheduleModel) {
 
-        //     if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
+    //     if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
 
-        //         let institutionTimezone: string = this.common.getTimezone(this.institutionID);
-        //         let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
+    //         let institutionTimezone: string = this.common.getTimezone(this.institutionID);
+    //         let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
 
-        //         let scheduleEndTime = moment(new Date(
-        //             moment(this.testScheduleModel.scheduleEndTime).year(),
-        //             moment(this.testScheduleModel.scheduleEndTime).month(),
-        //             moment(this.testScheduleModel.scheduleEndTime).date(),
-        //             moment(this.testScheduleModel.scheduleEndTime).hour(),
-        //             moment(this.testScheduleModel.scheduleEndTime).minute(),
-        //             moment(this.testScheduleModel.scheduleEndTime).second()
-        //         )).format('YYYY-MM-DD HH:mm:ss');
+    //         let scheduleEndTime = moment(new Date(
+    //             moment(this.testScheduleModel.scheduleEndTime).year(),
+    //             moment(this.testScheduleModel.scheduleEndTime).month(),
+    //             moment(this.testScheduleModel.scheduleEndTime).date(),
+    //             moment(this.testScheduleModel.scheduleEndTime).hour(),
+    //             moment(this.testScheduleModel.scheduleEndTime).minute(),
+    //             moment(this.testScheduleModel.scheduleEndTime).second()
+    //         )).format('YYYY-MM-DD HH:mm:ss');
 
 
-        //         if (this.modify) {
-        //             if (this.testScheduleModel.savedStartTime) {
-        //                 let savedStartTime = moment(new Date(
-        //                     moment(this.testScheduleModel.savedStartTime).year(),
-        //                     moment(this.testScheduleModel.savedStartTime).month(),
-        //                     moment(this.testScheduleModel.savedStartTime).date(),
-        //                     moment(this.testScheduleModel.savedStartTime).hour(),
-        //                     moment(this.testScheduleModel.savedStartTime).minute(),
-        //                     moment(this.testScheduleModel.savedStartTime).second()
-        //                 )).format('YYYY-MM-DD HH:mm:ss');
+    //         if (this.modify) {
+    //             if (this.testScheduleModel.savedStartTime) {
+    //                 let savedStartTime = moment(new Date(
+    //                     moment(this.testScheduleModel.savedStartTime).year(),
+    //                     moment(this.testScheduleModel.savedStartTime).month(),
+    //                     moment(this.testScheduleModel.savedStartTime).date(),
+    //                     moment(this.testScheduleModel.savedStartTime).hour(),
+    //                     moment(this.testScheduleModel.savedStartTime).minute(),
+    //                     moment(this.testScheduleModel.savedStartTime).second()
+    //                 )).format('YYYY-MM-DD HH:mm:ss');
 
-        //                 let savedEndTime = moment(new Date(
-        //                     moment(this.testScheduleModel.savedEndTime).year(),
-        //                     moment(this.testScheduleModel.savedEndTime).month(),
-        //                     moment(this.testScheduleModel.savedEndTime).date(),
-        //                     moment(this.testScheduleModel.savedEndTime).hour(),
-        //                     moment(this.testScheduleModel.savedEndTime).minute(),
-        //                     moment(this.testScheduleModel.savedEndTime).second()
-        //                 )).format('YYYY-MM-DD HH:mm:ss');
+    //                 let savedEndTime = moment(new Date(
+    //                     moment(this.testScheduleModel.savedEndTime).year(),
+    //                     moment(this.testScheduleModel.savedEndTime).month(),
+    //                     moment(this.testScheduleModel.savedEndTime).date(),
+    //                     moment(this.testScheduleModel.savedEndTime).hour(),
+    //                     moment(this.testScheduleModel.savedEndTime).minute(),
+    //                     moment(this.testScheduleModel.savedEndTime).second()
+    //                 )).format('YYYY-MM-DD HH:mm:ss');
 
-        //                 if (moment(savedEndTime).isBefore(institutionCurrentTime)) {
-        //                     $('#alertPopup').modal('show');
-        //                     return false;
-        //                 }
+    //                 if (moment(savedEndTime).isBefore(institutionCurrentTime)) {
+    //                     $('#alertPopup').modal('show');
+    //                     return false;
+    //                 }
 
-        //                 if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
-        //                     if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
-        //                         $('#alertPopup').modal('show');
-        //                         return false;
-        //                     }
-        //                 }
+    //                 if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
+    //                     if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+    //                         $('#alertPopup').modal('show');
+    //                         return false;
+    //                     }
+    //                 }
 
-        //             }
-        //             else {
-        //                 if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
-        //                     $('#alertPopup').modal('show');
-        //                     return false;
-        //                 }
-        //             }
+    //             }
+    //             else {
+    //                 if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+    //                     $('#alertPopup').modal('show');
+    //                     return false;
+    //                 }
+    //             }
 
-        //         }
-        //         else {
-        //             if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
-        //                 $('#alertPopup').modal('show');
-        //                 return false;
-        //             }
-        //         }
-        //     }
-        // }
+    //         }
+    //         else {
+    //             if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+    //                 $('#alertPopup').modal('show');
+    //                 return false;
+    //             }
+    //         }
+    //     }
+    // }
 
-        // return true;
-//}    
+    // return true;
+    //}    
 
 
 
@@ -343,7 +343,10 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     onOKAlert(): void {
         $('#alertPopup').modal('hide');
         this.overrideRouteCheck = true;
-        this.router.navigate(['ScheduleTest']);
+        if (this.modify)
+            this.router.navigate(['/ModifyScheduleTest', { action: 'modify' }]);
+        else
+            this.router.navigate(['ScheduleTest']);
     }
 
 

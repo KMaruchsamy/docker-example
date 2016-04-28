@@ -753,6 +753,15 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                     moment(this.endTime).second()
                 )).format('YYYY-MM-DD HH:mm:ss');
 
+                let scheduleStartTime = moment(new Date(
+                    moment(this.startTime).year(),
+                    moment(this.startTime).month(),
+                    moment(this.startTime).date(),
+                    moment(this.startTime).hour(),
+                    moment(this.startTime).minute(),
+                    moment(this.startTime).second()
+                )).format('YYYY-MM-DD HH:mm:ss');
+
                 console.log('Institution Current Time : ' + institutionCurrentTime);
                 console.log('Schedule endtime : ' + scheduleEndTime)
 
@@ -780,21 +789,20 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                         console.log('Saved Starttime : ' + savedStartTime);
                         console.log('Saved End time : ' + savedEndTime);
 
-                        if (moment(savedEndTime).isBefore(institutionCurrentTime)) {
-                            $('#alertPopup').modal('show');
-                            return false;
-                        }
-
                         if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
                             if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
                                 $('#alertPopup').modal('show');
                                 return false;
                             }
                         }
+                        else {
+                            $('#alertPopup').modal('show');
+                            return false;
+                        }
 
                     }
                     else {
-                        if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                        if (moment(scheduleStartTime).isBefore(institutionCurrentTime)) {
                             $('#alertPopup').modal('show');
                             return false;
                         }
@@ -807,7 +815,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                         return false;
                     }
                 }
-            }           
+            }
         }
         return true;
     }
