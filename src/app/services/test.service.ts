@@ -12,7 +12,7 @@ import {Common} from './common';
 export class TestService {
     // auth: Auth;
     sStorage: any;
-    constructor(public http: Http, public testSchedule: TestScheduleModel, public auth: Auth, public common:Common) {
+    constructor(public http: Http, public testSchedule: TestScheduleModel, public auth: Auth, public common: Common) {
         this.http = http;
         this.sStorage = this.auth.sStorage;
         this.auth.refresh();
@@ -115,13 +115,13 @@ export class TestService {
                 'Accept': 'application/json',
                 'Authorization': self.auth.authheader
             },
-            success: function(json) {
+            success: function (json) {
                 if (json) {
                     facultyJson = json;
                 }
 
             },
-            error: function(xhr, ajaxOptions, thrownError) {
+            error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);
                 console.log(thrownError);
             },
@@ -208,7 +208,7 @@ export class TestService {
             _testScheduleModel.facultyFirstName = objTestScheduleModel.FacultyFirstName;
             _testScheduleModel.facultyLastName = objTestScheduleModel.FacultyLastName;
             if (objTestScheduleModel.Students && objTestScheduleModel.Students.length > 0) {
-                _.forEach(objTestScheduleModel.Students, function(student, key) {
+                _.forEach(objTestScheduleModel.Students, function (student, key) {
                     let _student = new SelectedStudentModel();
                     _student.StudentId = student.StudentId;
                     _student.LastName = student.LastName;
@@ -270,7 +270,7 @@ export class TestService {
 
     sortSchedule(schedule: TestScheduleModel): TestScheduleModel {
         if (schedule != undefined && schedule.selectedStudents != undefined && schedule.selectedStudents.length > 0) {
-            let __selectedStudents: SelectedStudentModel[] = schedule.selectedStudents.sort(function(a, b) {
+            let __selectedStudents: SelectedStudentModel[] = schedule.selectedStudents.sort(function (a, b) {
                 var nameA = a.LastName.toLowerCase(), nameB = b.LastName.toLowerCase()
                 if (nameA < nameB) //sort string ascending
                     return -1
@@ -305,7 +305,7 @@ export class TestService {
         if (tests != undefined && tests.length > 0) {
             let sortedTests: any;
             if (columnName === '#schDateTH' || columnName === '#cmpDateTH') {
-                sortedTests = tests.sort(function(a, b) {
+                sortedTests = tests.sort(function (a, b) {
                     if (moment(a.TestingWindowStart).isBefore(b.TestingWindowStart)) //sort string ascending
                         return asc == 1 ? 1 : -1
                     if (moment(a.TestingWindowStart).isAfter(b.TestingWindowStart))
@@ -314,7 +314,7 @@ export class TestService {
                 });
             }
             else {
-                sortedTests = tests.sort(function(a, b) {
+                sortedTests = tests.sort(function (a, b) {
                     let strA: string;
                     let strB: string;
                     if (columnName === '#schSessionTH' || columnName === '#cmpSessionTH') {
@@ -338,7 +338,7 @@ export class TestService {
                 });
             }
 
-            let $table = $(tableName);            
+            let $table = $(tableName);
             $table.find('button.sorted').removeClass('sorted');
 
             let $clickedColumn = $(tableName).find(columnName);
@@ -370,14 +370,14 @@ export class TestService {
                 'Accept': 'application/json',
                 'Authorization': self.auth.authheader
             },
-            success: function(json) {
+            success: function (json) {
                 if (json) {
                     if (json.Status)
                         status = json.Status.toLowerCase();
                 }
 
             },
-            error: function(xhr, ajaxOptions, thrownError) {
+            error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);
                 console.log(thrownError);
             },
@@ -390,13 +390,13 @@ export class TestService {
 
 
 
-validateDates(testScheduleModel:TestScheduleModel, institutionID:number, modify:boolean): boolean {
-    debugger;
-    if (testScheduleModel) {
+    validateDates(testScheduleModel: TestScheduleModel, institutionID: number, modify: boolean): boolean {
+        debugger;
+        if (testScheduleModel) {
 
             if (testScheduleModel.scheduleStartTime && testScheduleModel.scheduleEndTime) {
 
-                console.log(new Date().toDateString());                
+                console.log(new Date().toDateString());
                 let institutionTimezone: string = this.common.getTimezone(institutionID);
                 let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
 
@@ -408,6 +408,16 @@ validateDates(testScheduleModel:TestScheduleModel, institutionID:number, modify:
                     moment(testScheduleModel.scheduleEndTime).minute(),
                     moment(testScheduleModel.scheduleEndTime).second()
                 )).format('YYYY-MM-DD HH:mm:ss');
+
+                let scheduleStartTime = moment(new Date(
+                    moment(testScheduleModel.scheduleStartTime).year(),
+                    moment(testScheduleModel.scheduleStartTime).month(),
+                    moment(testScheduleModel.scheduleStartTime).date(),
+                    moment(testScheduleModel.scheduleStartTime).hour(),
+                    moment(testScheduleModel.scheduleStartTime).minute(),
+                    moment(testScheduleModel.scheduleStartTime).second()
+                )).format('YYYY-MM-DD HH:mm:ss');
+
 
                 console.log('Institution Current Time : ' + institutionCurrentTime);
                 console.log('Schedule endtime : ' + scheduleEndTime)
@@ -435,11 +445,8 @@ validateDates(testScheduleModel:TestScheduleModel, institutionID:number, modify:
 
                         console.log('Saved Starttime : ' + savedStartTime);
                         console.log('Saved End time : ' + savedEndTime);
-                        
-                        if (moment(savedEndTime).isBefore(institutionCurrentTime)) {
-                            $('#alertPopup').modal('show');
-                            return false;
-                        }
+
+
 
                         if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
                             if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
@@ -447,10 +454,14 @@ validateDates(testScheduleModel:TestScheduleModel, institutionID:number, modify:
                                 return false;
                             }
                         }
+                        else {
+                            $('#alertPopup').modal('show');
+                            return false;
+                        }
 
                     }
                     else {
-                        if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                        if (moment(scheduleStartTime).isBefore(institutionCurrentTime)) {
                             $('#alertPopup').modal('show');
                             return false;
                         }
@@ -467,7 +478,7 @@ validateDates(testScheduleModel:TestScheduleModel, institutionID:number, modify:
         }
 
         return true;
-    }    
+    }
 
 
 }

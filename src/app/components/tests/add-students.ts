@@ -1154,7 +1154,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     onOKAlert(): void {
         $('#alertPopup').modal('hide');
         this.overrideRouteCheck = true;
-        this.router.navigate(['ScheduleTest']);
+        if (this.modify)
+            this.router.navigate(['/ModifyScheduleTest', { action: 'modify' }]);
+        else
+            this.router.navigate(['ScheduleTest']);
     }
 
     onCancelChanges(): void {
