@@ -104,6 +104,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         } else {
              $('title').html('Add Students &ndash; Kaplan Nursing');
         }
+        this.CheckForAdaStatus();
         
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
@@ -613,13 +614,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     CheckForAdaStatus(): void {
         if (this.selectedStudents.length > 0) {
-            for (let i = 0; i < this.selectedStudents.length; i++) {
-                let student = this.selectedStudents[i];
-                if (student.Ada) {
-                    this.hasADA = true; 
-                }
-                else
-                    this.hasADA = false;
+            if (_.some(this.selectedStudents, {'Ada': true})) {
+                this.hasADA = true; 
+            } else {    
+                this.hasADA = false;
             }
         }
     }
