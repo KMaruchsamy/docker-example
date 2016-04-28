@@ -9,16 +9,10 @@
       "name": "nit-ux-qa",
       "image": "kaptest/nursing:qa",
       "essential": true,
-      "memory": 512,
-      "mountPoints": [
-        {
-          "containerPath": "/var/log/nginx", 
-          "sourceVolume": "awseb-logs-nit-ux-qa"
-        }
-      ],
+      "memory": 128,
       "portMappings": [
         {
-          "hostPort": 8080,
+          "hostPort": 80,
           "containerPort": 80
         }
       ]
@@ -28,12 +22,6 @@
       "image": "kaptest/nursing:dev",
       "essential": true,
       "memory": 128,
-      "mountPoints": [
-        {
-          "containerPath": "/var/log/nginx", 
-          "sourceVolume": "awseb-logs-nit-ux-qa"
-        }
-      ],
       "portMappings": [
         {
           "hostPort": 9000,
