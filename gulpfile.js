@@ -10,7 +10,7 @@ var fs = require('fs');
 var mkpath = require('mkpath');
 var config = require('./gulp.config')();
 var jshint = require('gulp-jshint');
-var jscs = require('gulp-jscs');    
+var jscs = require('gulp-jscs');
 var jsstylish = require('jshint-stylish');
 var util = require('gulp-util');
 var gulpprint = require('gulp-print');
@@ -40,17 +40,17 @@ gulp.task('ts', function () {
         .pipe(sourcemaps.init())
         .pipe(typescript(tscConfig.compilerOptions));
     return tsResult.js
-        .pipe(uglify({mangle:false}))
-        .pipe(sourcemaps.write('.'))       
+        //.pipe(uglify({mangle:false}))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(config.app.src.build));
 });
 
 gulp.task('js', function () {
     var tsResult = gulp
-        .src([config.app.src.js])        
+        .src([config.app.src.js])
         .pipe(typescript(tscConfig.compilerOptions));
     return tsResult.js
-        .pipe(uglify({mangle:false}))
+        //.pipe(uglify({mangle:false}))
         .pipe(gulp.dest(config.app.src.build));
 });
 
@@ -87,7 +87,7 @@ gulp.task('libs', function () {
     var size = require('gulp-size');
     return gulp.src(config.app.lib)
         .pipe(size({ showFiles: true, gzip: true }))
-        .pipe(uglify({mangle:false}))
+        //.pipe(uglify({mangle:false}))
         .pipe(gulp.dest('build/app/lib'));
 });
 
@@ -127,7 +127,7 @@ gulp.task('prepare_config', function () {
 
 // To run: app_version=qa_v4 gulp create_zip
 gulp.task('create_zip', function(){
-    gulp.src(['./Dockerrun.aws.json', 
+    gulp.src(['./Dockerrun.aws.json',
             config.ebExtensions + 'resources.config'], { base: "." })
         .pipe(plugins.zip('nursing-adminapp-' + app_version + '.zip'))
         .pipe(gulp.dest('dist'));
@@ -176,7 +176,7 @@ var backupFolder ='';
 
 gulp.task('backup',['build'], function() {
     log('Backuping the current build');
-    
+
     if (args.branch === "refs/heads/dev") {
         liveFolder=config.deploy.DEV.liveFolder;
         backupFolder = config.deploy.DEV.backupFolder;
@@ -185,7 +185,7 @@ gulp.task('backup',['build'], function() {
         liveFolder=config.deploy.QA.liveFolder;
         backupFolder = config.deploy.QA.backupFolder;
     }
-    
+
     util.log(liveFolder);
     util.log(backupFolder);
        return robocopy({
@@ -194,7 +194,7 @@ gulp.task('backup',['build'], function() {
         files: ['*.*'],
         copy: {
             subdirs:true,
-            emptySubdirs:true,            
+            emptySubdirs:true,
             mirror: true,
             multiThreaded:true
         },
@@ -210,7 +210,7 @@ gulp.task('backup',['build'], function() {
     .fail(function(e) {
           log('Backup failed ..');
     });
-   
+
 });
 
 gulp.task('copy',['backup'], function() {
@@ -223,7 +223,7 @@ gulp.task('copy',['backup'], function() {
         files: ['*.*'],
         copy: {
             subdirs:true,
-            emptySubdirs:true,            
+            emptySubdirs:true,
             mirror: true,
             multiThreaded:true
         },
@@ -297,9 +297,9 @@ function log(message){
     if(typeof(message)==='object'){
         for(var item in message){
             if(message.hasOwnProperty(item))
-                util.log(util.colors.green(message[item]));            
+                util.log(util.colors.green(message[item]));
         }
     }
     else
-        util.log(util.colors.green(message));       
+        util.log(util.colors.green(message));
 }
