@@ -15,7 +15,7 @@
                             <span class="text-larger-teal"><b>The following students have already taken {{testSchedule.testName}}.</b></span>
                             <span class="text-larger"> Please assign another version of this test to these students or remove them from this testing session.</span>
                         </div>
-                        <div class="test-exeptions-student section-thin border-top" *ngFor="#student of testTakenStudents">
+                        <div class="test-exeptions-student thin-section border-top" *ngFor="#student of testTakenStudents">
                             <p class="text-larger-purple"><b>{{student.LastName}}, {{student.FirstName}}</b></p>
 
                             <div *ngFor="#test of student.AlternateTests; #i = index">
@@ -36,7 +36,7 @@
                             <span class="text-larger-teal"><b>The following students have been scheduled to take {{testSchedule.testName}} in another testing session.</b></span>
                             <span>Please assign another version of this test to these students or remove them from this testing session.</span>
                         </div>
-                        <div class="test-exeptions-student section-thin border-top" *ngFor="#student of testScheduledSudents">
+                        <div class="test-exeptions-student thin-section border-top" *ngFor="#student of testScheduledSudents">
                             <p class="text-larger-purple"><b>{{student.LastName}}, {{student.FirstName}}</b></p>
                             <div *ngFor="#test of student.AlternateTests; #i = index">
                                 <input type="radio" class="checkbox-image" [attr.name]="'testScheduled' + student.StudentId" [attr.id]="'rdbTestScheduled' + student.StudentId + '_' + i"
@@ -51,7 +51,7 @@
                     </section>
                 </form>
 
-                <div class="section-thin section-gray please-note-section margin-1em-top margin-2em-bottom">
+                <div class="thin-section section-gray please-note-section margin-1em-top margin-2em-bottom">
                     <p class="attention"><strong>Please note:</strong>
                         <ol class="default-ol">
                             <li>If an alternate test option cannot be selected, the student has already taken that version of
