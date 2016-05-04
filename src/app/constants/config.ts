@@ -73,7 +73,7 @@ export const links = {
             server: "http://localhost:3000/"
         },
         dev: {
-            server: "https://dev-nit.kaptest.com/"
+            server: "https://dev-nit.kaplan.com/"
         },
         qa: {
             server: "https://qa-nit.kaplan.com/"
