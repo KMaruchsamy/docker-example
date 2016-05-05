@@ -103,7 +103,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             this.modify = true;
             $('title').html('Modify: Add Students &ndash; Kaplan Nursing');
         } else {
-            $('title').html('Add Students &ndash; Kaplan Nursing');
+             $('title').html('Add Students &ndash; Kaplan Nursing');
         }
         this.CheckForAdaStatus();
 
@@ -278,7 +278,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
                 if (_this.cohorts.length === 0) {
                     this.noCohort = true;
-                }
+                 }
             })
             .catch((error) => {
                 console.log(error);
@@ -415,28 +415,30 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             let __this = this;
             $("#cohortStudents tbody tr").each(function (index, el) {
                 let student = {};
-                    let buttonId = $(el).find('td:eq(4) button').attr('id');
-                    if (!$('#' + buttonId).prop('disabled')) {
-                        student.LastName = $(el).find('td:eq(0)').text();
-                        student.FirstName = $(el).find('td:eq(1)').text();
-                        student.Retester = $(el).find('td:eq(3)').text() === "Yes" ? true : false;
-                        student.StudentId = parseInt(buttonId.split('-')[1]);
-                        student.Email = $(el).find('td:eq(4) button').attr('email');
-                        student.CohortId = __this.lastSelectedCohortID;
-                        student.CohortName = __this.FindCohortName(student.CohortId);
-                        student.StudentTestId = __this.testScheduleModel.testId;
-                        student.StudentTestName = __this.testScheduleModel.testName;
-                        student.Ada = $(el).find('td:eq(4) button').attr('ada') === "true" ? true : false;
-                        student.NormingId = 0;
-                        student.NormingStatus = "";
-                        __this.selectedStudents.push(student);
-                        $('#' + buttonId).attr('disabled', 'disabled');
-                        let retesting = "";
-                        if (student.Retester) {
-                            retesting = "RETESTING";
-                        }
-                        studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light testing-remove-students-button" data-id="' + student.StudentId + '">Remove</button></li>';
+                if ($(el).attr('class').search('hidden') < 0) {
+                let buttonId = $(el).find('td:eq(4) button').attr('id');
+                if (!$('#' + buttonId).prop('disabled')) {
+                    student.LastName = $(el).find('td:eq(0)').text();
+                    student.FirstName = $(el).find('td:eq(1)').text();
+                    student.Retester = $(el).find('td:eq(3)').text() === "Yes" ? true : false;
+                    student.StudentId = parseInt(buttonId.split('-')[1]);
+                    student.Email = $(el).find('td:eq(4) button').attr('email');
+                    student.CohortId = __this.lastSelectedCohortID;
+                    student.CohortName = __this.FindCohortName(student.CohortId);
+                    student.StudentTestId = __this.testScheduleModel.testId;
+                    student.StudentTestName = __this.testScheduleModel.testName;
+                    student.Ada = $(el).find('td:eq(4) button').attr('ada') === "true" ? true : false;
+                    student.NormingId = 0;
+                    student.NormingStatus = "";
+                    __this.selectedStudents.push(student);
+                    $('#' + buttonId).attr('disabled', 'disabled');
+                    let retesting = "";
+                    if (student.Retester) {
+                        retesting = "RETESTING";
                     }
+                    studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light testing-remove-students-button" data-id="' + student.StudentId + '">Remove</button></li>';
+                }
+                }
             });
         }
         return studentlist;
@@ -636,7 +638,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     filterTableSearch(): void {
         let __this = this;
         $('#cohortStudentList .dataTables_filter :input').on('keyup click', function () {
-            $('#noMatchingStudents').removeClass('hidden');
+           $('#noMatchingStudents').removeClass('hidden');
 
             let that = this;
             let _count = 0;
@@ -685,22 +687,23 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         });
     }
 
-    addClearIcon(): void {
+     addClearIcon(): void {
         $('.testing-add-students-container').on('keyup', '.small-search-box', function () {
             if ($(this).val().length > 0) {
-                $(this).next('span').addClass('clear-input-values');
+            $(this).next('span').addClass('clear-input-values');
             } else {
-                $(this).next('span').removeClass('clear-input-values');
+            $(this).next('span').removeClass('clear-input-values');
             }
         });
     }
 
     clearTableSearch(): void {
+         let __this = this;
         var $that = $('.tab-pane.active :input');
         $that.val('');
         $that.next('span').removeClass('clear-input-values');
 
-        this.filterTableSearch()
+       this.filterTableSearch()
 
         $('table tbody tr').each(function () {
             $(this).removeClass('hidden');
@@ -717,6 +720,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             $table.find('tr').each(function () {
                 $(this).removeClass('hidden');
             });
+            __this.CheckForAllStudentSelected();
         });
     }
 
@@ -757,7 +761,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         this.WindowException();
     }
     CheckForPreviousAlternateSelection(selectedStudentModelList: any[]): void {
-        // let prevStudentList = this.testScheduleModel.selectedStudents;
+       // let prevStudentList = this.testScheduleModel.selectedStudents;
         let _studentList: SelectedStudentModel[] = [];
         for (let i = 0; i < selectedStudentModelList.length; i++) {
             let _retester = selectedStudentModelList[i];
