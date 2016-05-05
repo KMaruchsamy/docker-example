@@ -16,6 +16,7 @@ export const links = {
             server: "https://nursing.kaplan.com/"
         },
         baseurl: "api/v1/",
+        v2baseurl:"api/v2/",
         admin: {
             authenticationapi: "admin/login",
             forgotpasswordapi: "admin/forgetPassword",
