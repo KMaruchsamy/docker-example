@@ -16,6 +16,7 @@ export const links = {
             server: "https://nursing.kaplan.com/"
         },
         baseurl: "api/v1/",
+        v2baseurl:"api/v2/",
         admin: {
             authenticationapi: "admin/login",
             forgotpasswordapi: "admin/forgetPassword",
@@ -66,14 +67,14 @@ export const links = {
         },
         landingpage: "NewSiteLandingPage.aspx?facultylogin=1",
         ReportingLandingPage: "UX_ALogin.aspx",
-        exceptionpage: "§environment/#/accounterror"
+        exceptionpage: "§environment/accounterror"
     },
     faculty: {
         local: {
             server: "http://localhost:3000/"
         },
         dev: {
-            server: "https://dev-nit.kaptest.com/"
+            server: "https://dev-nit.kaplan.com/"
         },
         qa: {
             server: "https://qa-nit.kaplan.com/"

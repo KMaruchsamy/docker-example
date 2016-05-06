@@ -6,8 +6,8 @@
   },
   "containerDefinitions": [
     {
-      "name": "nit-ux-qa",
-      "image": "kaptest/nursing:qa",
+      "name": "nit-ux-dev",
+      "image": "kaptest/nursing:dev",
       "essential": true,
       "memory": 128,
       "portMappings": [
@@ -18,8 +18,8 @@
       ]
     },
     {
-      "name": "nit-ux-dev",
-      "image": "kaptest/nursing:dev",
+      "name": "nit-ux-qa",
+      "image": "kaptest/nursing:qa",
       "essential": true,
       "memory": 128,
       "portMappings": [

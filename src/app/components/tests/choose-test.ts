@@ -1,6 +1,5 @@
 import {Component, OnInit, OnChanges, AfterViewChecked, ElementRef} from 'angular2/core';
 import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, Location} from 'angular2/router';
-import {AuthService} from '../services/auth.service';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';

@@ -8,7 +8,7 @@
             <a href="javascript:void(0)" (click)="redirectToRoute('choose-test')" class="button button-mobile-block center margin-1em-top-bottom">Schedule a test</a>
         </div>
 
-        <div class="container-medium-width section-thin margin-1em-top">
+        <div class="container-medium-width thin-section margin-1em-top">
             <div class="section section-beige container-dull-yellow-top text-larger">
                 <p><strong>Please note:</strong> All upcoming tests scheduled through our new process will appear on this page.
                     However, there may still be upcoming tests for your school that have been scheduled through our old process.
@@ -25,7 +25,7 @@
         </div>
 
         <div class="section-medium-thin section-clearfix">
-            <div class="section-thin" [class.section-light-pink]="!inProgressTests?.length==0">
+            <div class="thin-section" [class.section-light-pink]="!inProgressTests?.length==0">
                 <div class="container-medium-width">
                     <h4 class="section-heading-purple normal">Tests In Progress</h4>
                     <table *ngIf="!inProgressTests?.length==0" class="table-fixed tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none"

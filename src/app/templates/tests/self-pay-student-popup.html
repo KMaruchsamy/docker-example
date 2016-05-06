@@ -1,0 +1,31 @@
+﻿<div class="modal modal-full-overlay fade" id="selfPayStudentModal" tabindex="-1" role="dialog" aria-labelledby="selfPayStudentWarning">
+    <div role="document">
+        <button aria-label="Close" class="close close-large-icon" data-dismiss="modal" type="button"></button>
+        <div class="modal-full-overlay-content">
+            <div class="modal-header">
+                <p class="icon red-triangle-alert-large center"></p>
+                <h4 class="attention center" id="selfPayStudentWarning">Test Exceptions — Action Required</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="margin-1em-bottom">
+                    <span class="text-larger-teal">
+                        <b>
+                            The following students have a past due account balance. These students will not be able to access their test
+                            during the specified testing window unless their balance is paid in full at least two business days prior to test day.
+                        </b>
+                    </span>
+                    <span class="text-larger"> Students should be encouraged to pay their past due balance as soon as possible.</span>
+                </div>
+                <div class="thin-section border-top-bottom">
+                    <ul class="list-extra-spacing js-repeaters-list" *ngFor="#student of selfPayStudentException">
+                        <li class="text-larger-purple"><b>{{student.StudentLastName}}, {{student.StudentFirstName}}</b></li>
+                    </ul>
+                </div>
+            </div><!--end modal body Student Pay-->
+            <div class="modal-footer thin-section">
+                <button type="button" id="selfPayButton" class="button" data-dismiss="modal" (click)="close($event);">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
