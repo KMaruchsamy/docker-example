@@ -18,8 +18,8 @@
       ]
     },
     {
-      "name": "nit-ux-qa",
-      "image": "kaptest/nursing:qa",
+      "name": "nit-ux-styleguide",
+      "image": "kaptest/nursing:styleguide",
       "essential": true,
       "memory": 128,
       "portMappings": [
