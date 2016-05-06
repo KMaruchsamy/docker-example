@@ -1595,6 +1595,10 @@ main .right-grid ::-webkit-scrollbar {
   .section-medium-thin, .container-dull-yellow-top {
     padding-bottom: 1.5em;
     padding-top: 1.5em; }
+  .section-bottom-medium-thin {
+    padding-bottom: 1.5em; }
+  .section-top-medium-thin {
+    padding-top: 1.5em; }
   .section-bottom-thin {
     padding-bottom: 0.75em; }
   .section-top-thin {
