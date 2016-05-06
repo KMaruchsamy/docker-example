@@ -1,6 +1,5 @@
 import {Component, OnInit, OnChanges, AfterViewChecked, ElementRef} from 'angular2/core';
 import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, Location} from 'angular2/router';
-import {AuthService} from '../services/auth.service';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -29,7 +28,7 @@ import '../../lib/modal.js';
     pipes: [RemoveWhitespacePipe, RoundPipe]
 })
 
-export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit{
+export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     institutionID: number;
     apiServer: string;
     subjectId: number;
@@ -45,7 +44,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit{
     constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public aLocation: Location) {
     }
-  
+
     ngOnInit(): void {
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
@@ -62,7 +61,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit{
             }
         }
 
-        
+
 
     }
 
@@ -175,7 +174,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit{
                 if (json.length == 0) {
                     this.checkTestForSubjects();
                 }
-                setTimeout(json=> {
+                setTimeout(json => {
                     this.testsTable = $('#chooseTestTable').DataTable({
                         "paging": false,
                         "searching": false,
@@ -185,7 +184,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit{
                     });
 
 
-                    $('#chooseTestTable').on('responsive-display.dt', function() {
+                    $('#chooseTestTable').on('responsive-display.dt', function () {
                         $(this).find('.child .dtr-title br').remove();
                     });
 
@@ -244,38 +243,80 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit{
     }
 
     validateDates(): boolean {
-        if (this.testScheduleModel) {
-
-            if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
-                
-                let scheduleEndTime = moment(new Date(
-                    moment(this.testScheduleModel.scheduleEndTime).year(),
-                    moment(this.testScheduleModel.scheduleEndTime).month(),
-                    moment(this.testScheduleModel.scheduleEndTime).date(),
-                    moment(this.testScheduleModel.scheduleEndTime).hour(),
-                    moment(this.testScheduleModel.scheduleEndTime).minute(),
-                    moment(this.testScheduleModel.scheduleEndTime).second()
-                )).format('YYYY-MM-DD HH:mm:ss');
-                
-                if (this.modify) {
-                    let scheduleURL = this.resolveScheduleURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`, this.testScheduleModel.scheduleId);
-                    let status = this.testService.getTestStatus(scheduleURL);
-                    console.log('STATUS' + status);
-                    if (status==='completed' || status === 'inprogress') {
-                        $('#alertPopup').modal('show');
-                        return false;
-                    }
-                }
-                else {
-                    if (moment(scheduleEndTime).isBefore(new Date(),'day')) {
-                        $('#alertPopup').modal('show');
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
+        return this.testService.validateDates(this.testScheduleModel, this.institutionID, this.modify);
     }
+
+
+    //validateDates(): boolean{
+    // if (this.testScheduleModel) {
+
+    //     if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
+
+    //         let institutionTimezone: string = this.common.getTimezone(this.institutionID);
+    //         let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
+
+    //         let scheduleEndTime = moment(new Date(
+    //             moment(this.testScheduleModel.scheduleEndTime).year(),
+    //             moment(this.testScheduleModel.scheduleEndTime).month(),
+    //             moment(this.testScheduleModel.scheduleEndTime).date(),
+    //             moment(this.testScheduleModel.scheduleEndTime).hour(),
+    //             moment(this.testScheduleModel.scheduleEndTime).minute(),
+    //             moment(this.testScheduleModel.scheduleEndTime).second()
+    //         )).format('YYYY-MM-DD HH:mm:ss');
+
+
+    //         if (this.modify) {
+    //             if (this.testScheduleModel.savedStartTime) {
+    //                 let savedStartTime = moment(new Date(
+    //                     moment(this.testScheduleModel.savedStartTime).year(),
+    //                     moment(this.testScheduleModel.savedStartTime).month(),
+    //                     moment(this.testScheduleModel.savedStartTime).date(),
+    //                     moment(this.testScheduleModel.savedStartTime).hour(),
+    //                     moment(this.testScheduleModel.savedStartTime).minute(),
+    //                     moment(this.testScheduleModel.savedStartTime).second()
+    //                 )).format('YYYY-MM-DD HH:mm:ss');
+
+    //                 let savedEndTime = moment(new Date(
+    //                     moment(this.testScheduleModel.savedEndTime).year(),
+    //                     moment(this.testScheduleModel.savedEndTime).month(),
+    //                     moment(this.testScheduleModel.savedEndTime).date(),
+    //                     moment(this.testScheduleModel.savedEndTime).hour(),
+    //                     moment(this.testScheduleModel.savedEndTime).minute(),
+    //                     moment(this.testScheduleModel.savedEndTime).second()
+    //                 )).format('YYYY-MM-DD HH:mm:ss');
+
+    //                 if (moment(savedEndTime).isBefore(institutionCurrentTime)) {
+    //                     $('#alertPopup').modal('show');
+    //                     return false;
+    //                 }
+
+    //                 if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
+    //                     if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+    //                         $('#alertPopup').modal('show');
+    //                         return false;
+    //                     }
+    //                 }
+
+    //             }
+    //             else {
+    //                 if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+    //                     $('#alertPopup').modal('show');
+    //                     return false;
+    //                 }
+    //             }
+
+    //         }
+    //         else {
+    //             if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+    //                 $('#alertPopup').modal('show');
+    //                 return false;
+    //             }
+    //         }
+    //     }
+    // }
+
+    // return true;
+    //}    
 
 
 
@@ -301,7 +342,10 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit{
     onOKAlert(): void {
         $('#alertPopup').modal('hide');
         this.overrideRouteCheck = true;
-        this.router.navigate(['ManageTests']);
+        if (this.modify)
+            this.router.navigate(['/ModifyScheduleTest', { action: 'modify' }]);
+        else
+            this.router.navigate(['ScheduleTest']);
     }
 
 

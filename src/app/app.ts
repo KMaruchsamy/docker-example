@@ -100,6 +100,5 @@ bootstrap(App, [
     HTTP_PROVIDERS,
     provide(ExceptionHandler, { useClass: MyExceptionHandler }),
     provide(ROUTER_PRIMARY_COMPONENT, { useValue: App }),
-    provide(LocationStrategy, { useClass: HashLocationStrategy }),
     Angulartics2
 ]);

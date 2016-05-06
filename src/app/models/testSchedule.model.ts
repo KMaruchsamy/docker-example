@@ -7,7 +7,9 @@ export class TestScheduleModel{
     testId: number = 0;
     testName: string = '';
     testNormingStatus: string = '';
-    scheduleStartTime: any ;
+    savedStartTime: any;
+    savedEndTime: any;
+    scheduleStartTime: any;
     scheduleEndTime: any;
     currentStep: number = 0;
     activeStep: number = 0; 

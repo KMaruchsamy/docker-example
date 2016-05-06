@@ -17,14 +17,14 @@
                     </span>
                     <span class="text-larger"> Please go back and modify your selections.</span>
                 </div>
-                <div class="section-thin border-top-bottom">
+                <div class="thin-section border-top-bottom">
                     <ul class="list-extra-spacing js-repeaters-list" *ngFor="#student of studentWindowException">
                         <li class="text-larger-purple"><b>{{student.StudentLastName}}, {{student.StudentFirstName}}</b></li>
                     </ul>
                 </div>
             </div><!--end modal body-->
 
-            <div class="modal-footer section-thin">
+            <div class="modal-footer thin-section">
                 <button type="button" class="button prototype-dismiss" (click)="close($event);">Close</button>
             </div>
 

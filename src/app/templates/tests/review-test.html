@@ -16,12 +16,12 @@
                 </div>
                 <div class="one-half-grid">
                     <label class="label-bold label-larger" for="ddlFaculty">Assign faculty member</label>
-                    <select id="ddlFaculty" #ddlfaculty class="selectpicker" (change)="facultyChange(ddlfaculty.value,$event);" data-size="6">
+                    <select id="ddlFaculty" #ddlfaculty class="selectpicker" (change)="facultyChange(ddlfaculty.value,$event);" data-size="6" [disabled]="!facultyAssignable">
                         <option *ngFor="#admin of faculty" [value]="admin.AdminId" [selected]="admin.AdminId == testScheduleModel.facultyMemberId">{{admin.LastName}}, {{admin.FirstName}}</option>
                     </select>
 
                 </div>
-                <div class="one-half-grid lightbulb-icon-container" id="facultyLightbulbContainer">
+                <div *ngIf="facultyAssignable" class="one-half-grid lightbulb-icon-container" id="facultyLightbulbContainer">
                     <p class="icon lightbulb-icon">Both you and the faculty member you assign will be able to make changes to this testing session later
                         if needed.</p>
                 </div>
@@ -100,9 +100,11 @@
         </table>
     </div>
 
-    <div class="container-medium-width section-thin">
+    <div class="container-medium-width thin-section">
         <div class="info-icon-yellow-container-flush-text clearfix">
-            <p class="icon info-icon-yellow" *ngIf="hasADA">One or more of the students you have added have testing accommodations. Their test will be untimed.</p>
+            <p class="icon info-icon-yellow margin-1em-top" *ngIf="hasADA">One or more of the students you have added have testing accommodations. Their test will be untimed. For more information or to designate additional students who need testing accommodations, please contact your Account Manager.</p>
+            <p class="icon info-icon-yellow margin-1em-top" *ngIf="!hasADA">Please contact your Account Manager if there are students in your testing session who need testing accommodations. Students with testing accommodations receive untimed versions of their tests.</p>
+            
             <!--<a href="confirmation.html" id="chooseDate" class="button right margin-2em-top button-mobile-block" aria-disabled="true" disabled>Confirm info and schedule test</a>-->
             <button type="submit" (click)="scheduleTest($event);" id="btnScheduleTest" class="button right margin-2em-top button-mobile-block"
             [disabled]="!valid">
@@ -127,7 +129,7 @@
 
 <alert-popup 
     [popupId]="'alertPopup'"
-    [message]="'We’re sorry! You can no longer make changes to this testing session because it has already started or has passed. Click “OK” to go back to the Manage Tests main page.'" 
+    [message]="'We’re sorry! The testing window you specified has expired and needs to be changed. Please specify a new testing window.'" 
     [okButtonText] = "'OK'"     
     (onOK)="onOKAlert()"    
     [hideClose]="false">

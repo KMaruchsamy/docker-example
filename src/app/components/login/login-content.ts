@@ -1,5 +1,3 @@
-/// <reference path="../../../typings/jquery/jquery.d.ts"/>
-
 import {Component} from 'angular2/core';
 import {Router, RouterLink} from 'angular2/router';
 import {Auth} from '../../services/auth';
@@ -29,6 +27,7 @@ export class LoginContent {
     hdInstitution: any;
     hdToken: any;
     hdURL: any;
+    hdExceptionURL: any;
     constructor(public router: Router, public auth: Auth, public common: Common) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
@@ -54,9 +53,9 @@ export class LoginContent {
 
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.authenticationapi;
             let promise = this.auth.login(apiURL, useremail, password, userType);
-            promise.then(function(response) {
+            promise.then(function (response) {
                 return response.json();
-            }).then(function(json) {
+            }).then(function (json) {
                 if (json.AccessToken != null && json.AccessToken != '') {
                     self.sStorage.setItem('jwt', json.AccessToken);
                     self.sStorage.setItem('useremail', json.Email);
@@ -85,7 +84,7 @@ export class LoginContent {
                     self.showError(login.auth_failed, errorContainer);
                     txtPassword.value = '';
                 }
-            }).catch(function(ex) {
+            }).catch(function (ex) {
                 self.showError(general.exception, errorContainer);
                 txtPassword.value = '';
             });
@@ -102,6 +101,7 @@ export class LoginContent {
         this.hdInstitution = document.getElementById('institutionID');
         this.hdToken = document.getElementById('jwtToken');
         this.hdURL = document.getElementById('redirectPage');
+        this.hdExceptionURL = document.getElementById('exceptionURL');
         this.checkInstitutions();
 
         if (this.institutionRN > 0 && this.institutionPN > 0) {
@@ -114,11 +114,17 @@ export class LoginContent {
         }
     }
 
+    resolveExceptionPage(url): string {
+        let resolvedURL = url.replace('§environment', this.common.getOrigin());
+        return resolvedURL;
+    }
+
     redirectToStudentSite() {
         var serverURL = this.nursingITServer + links.nursingit.landingpage;
         this.hdInstitution.value = (this.institutionRN > 0) ? this.institutionRN : this.institutionPN;
         this.hdToken.value = this.auth.token
         this.hdURL.value = this.page;
+        this.hdExceptionURL.value = this.resolveExceptionPage(links.nursingit.exceptionpage);
         this.auth.logout();
         $(this.form).attr('ACTION', serverURL).submit();
 
@@ -187,7 +193,7 @@ export class LoginContent {
     }
 
     closealert(btnClose) {
-        $(btnClose).closest('div.alert').fadeOut(function() {
+        $(btnClose).closest('div.alert').fadeOut(function () {
             $(this).addClass('hidden');
         });
     }

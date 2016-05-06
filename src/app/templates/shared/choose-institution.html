@@ -7,18 +7,18 @@
 			<div class="choose-program-module container-narrow hidden-extra-small-down">
 				<div class="choose-program-module-grid">
 					<h3 class="h1 center" id="RNProgram">RN</h3>
-					<button *ngIf = "!isTest" class="button centered" (click)="triggerRedirect('RN',myform,hdinstitution,hdtoken,hdpage,$event);" aria-labelledby="RNProgram">Select</button>
+					<button *ngIf = "!isTest" class="button centered" (click)="triggerRedirect('RN',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl,$event);" aria-labelledby="RNProgram">Select</button>
                     <button *ngIf = "isTest" class="button centered" (click)="redirectToRoute('RN');" aria-labelledby="RNProgram">Select</button>
 				</div>
 				<div class="choose-program-module-grid">
 					<h3 class="h1 center" id="PNProgram">PN</h3>
-					<button *ngIf = "!isTest" class="button centered" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,$event);" aria-labelledby="PNProgram">Select</button>
+					<button *ngIf = "!isTest" class="button centered" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl,$event);" aria-labelledby="PNProgram">Select</button>
                     <button *ngIf = "isTest" class="button centered" (click)="redirectToRoute('PN');" aria-labelledby="PNProgram">Select</button>
 				</div>
 			</div>
 			<div class="hidden-extra-small-up">
-				<button *ngIf = "!isTest" #btnrn class="button button-mobile-block margin-2em-top" (click)="triggerRedirect('RN',myform,hdinstitution,hdtoken,hdpage,$event);">RN Program</button>
-				<button *ngIf = "!isTest" #btnpn class="button button-mobile-block margin-2em-top-bottom" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,$event);">PN Program</button>
+				<button *ngIf = "!isTest" #btnrn class="button button-mobile-block margin-2em-top" (click)="triggerRedirect('RN',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl,$event);">RN Program</button>
+				<button *ngIf = "!isTest" #btnpn class="button button-mobile-block margin-2em-top-bottom" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl,$event);">PN Program</button>
                 
                 <button *ngIf = "isTest"  class="button button-mobile-block margin-2em-top" (click)="redirectToRoute('RN');">RN Program</button>
 				<button *ngIf = "isTest"  class="button button-mobile-block margin-2em-top-bottom" (click)="redirectToRoute('PN');">PN Program</button>
@@ -32,8 +32,9 @@
 		</div>
 </main>
 
-<form #myform  method="POST" target="_blank">
+<form #myform method="POST" target="_blank">
 	<input #hdinstitution type="hidden" id="institutionID" name="institutionID">
 	<input #hdtoken type="hidden" id="jwtToken" name="jwtToken">
 	<input #hdpage type="hidden" id="redirectPage" name="redirectPage">
+	<input #hdexceptionurl type="hidden" id="exceptionURL" name="exceptionURL">
 </form>

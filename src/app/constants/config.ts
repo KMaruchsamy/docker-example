@@ -16,6 +16,7 @@ export const links = {
             server: "https://nursing.kaplan.com/"
         },
         baseurl: "api/v1/",
+        v2baseurl:"api/v2/",
         admin: {
             authenticationapi: "admin/login",
             forgotpasswordapi: "admin/forgetPassword",
@@ -66,14 +67,14 @@ export const links = {
         },
         landingpage: "NewSiteLandingPage.aspx?facultylogin=1",
         ReportingLandingPage: "UX_ALogin.aspx",
-        exceptionpage:"§environment/#/accounterror"
+        exceptionpage: "§environment/accounterror"
     },
     faculty: {
         local: {
             server: "http://localhost:3000/"
         },
         dev: {
-            server: "https://dev-nit.kaptest.com/"
+            server: "https://dev-nit.kaplan.com/"
         },
         qa: {
             server: "https://qa-nit.kaplan.com/"
@@ -134,4 +135,32 @@ export const teststatus = {
     InProgress: 'InProgress'
 }
 
-
+export let Timezones = {
+    GMTminus12: 'Pacific/Midway', // need to investigate 
+    GMTminus11: 'US/Samoa',
+    GMTminus10: 'US/Hawaii',
+    GMTminus9: 'US/Alaska',
+    GMTminus8: 'US/Pacific',
+    GMTminus7: 'US/Mountain',
+    GMTminus6: 'Canada/Central',
+    GMTminus5: 'America/New_York',
+    GMTminus4: 'America/Dominica',
+    GMTminus3: 'America/Cayenne',
+    GMTminus2: 'America/Noronha',
+    GMTminus1: 'America/Scoresbysund',
+    GMT: 'Europe/London',
+    GMTplus1: 'Europe/Amsterdam',
+    GMTplus2: 'Europe/Athens',
+    GMTplus3: 'Asia/Baghdad',
+    GMTplus4: 'Asia/Dubai',
+    GMTplus5: 'Asia/Karachi',
+    GMTplus6: 'Asia/Dhaka',
+    GMTplus7: 'Asia/Bangkok',
+    GMTplus8: 'Asia/Singapore',
+    GMTplus9: 'Asia/Tokyo',
+    GMTplus10: 'Australia/Sydney',
+    GMTplus11: 'Antarctica/Macquarie',
+    GMTplus12: 'Pacific/Auckland',
+    GMTplus13: 'Pacific/Apia',
+    GMTplus14: 'Pacific/Kiritimati'
+}
