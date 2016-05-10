@@ -6,10 +6,13 @@ import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import * as _ from '../../lib/index';
 import {links} from '../../constants/config';
+import {TestService} from '../../services/test.service';
+import {TestScheduleModel} from '../../models/testSchedule.model';
+
 
 @Component({
     selector: 'choose-institution',
-    providers: [Common, Auth],
+    providers: [Common, Auth, TestService, TestScheduleModel],
     templateUrl: '../../templates/shared/choose-institution.html',
     directives: [PageHeader, RouterLink, NgIf]
 })
@@ -17,12 +20,17 @@ import {links} from '../../constants/config';
 export class ChooseInstitution {
     fromPage: string;
     page: string;
+    apiServer: string;
+    testTypeId: number = 1;
+    institutionID : string = null;
     institutionRN: string;
     institutionPN: string;
+    programRN: number = 0;
+    programPN: number = 0;
     backMessage: string;
     nursingITServer: string;
     isTest: boolean = false;
-    constructor(public router: Router, public routeParams: RouteParams, public common: Common, public auth: Auth, public aLocation: Location) {
+    constructor(public router: Router, public routeParams: RouteParams, public common: Common, public auth: Auth, public aLocation: Location, public testService: TestService, public testScheduleModel: TestScheduleModel) {
         this.nursingITServer = this.common.getNursingITServer();
         this.fromPage = this.routeParams.get('frompage');
         this.page = this.routeParams.get('redirectpage');
@@ -56,8 +64,32 @@ export class ChooseInstitution {
 
     redirectToRoute(program: string): boolean {
         let institutionId = (program === 'RN' ? this.institutionRN : this.institutionPN);
-        this.router.parent.navigateByUrl(`/tests/${this.page}/${institutionId}`);
+        this.institutionID = institutionId;
+           let ProgramId = (program === 'RN' ? this.programRN : this.programPN);
+         if (ProgramId > 0) {
+             this.apiServer = this.common.getApiServer();
+             let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
+             let subjectsPromise = this.testService.getSubjects(subjectsURL);
+             subjectsPromise.then((response) => {
+                 return response.json();
+             })
+                 .then((json) => {
+                     if (json.length == 0) {
+                         window.open('/accounterror');
+                     }
+                     else {
+                         this.router.parent.navigateByUrl(`/tests/${this.page}/${institutionId}`);
+                     }
+                 });
+         }
+        else {
+             window.open('/accounterror');
+         }
         return false;
+    }
+
+    resolveSubjectsURL(url: string): string {
+        return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeId.toString());
     }
 
     checkInstitutions(): void {
@@ -65,7 +97,12 @@ export class ChooseInstitution {
         if (institutions != null && institutions != 'undefined') {
             let institutionsRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
             let institutionsPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
-        
+            let programIdRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'ProgramId');
+            let programIdPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'ProgramId');
+            if (programIdRN.length > 0)
+                this.programRN = programIdRN[0];
+            if (programIdPN.length > 0)
+                this.programPN = programIdPN[0];
             if (institutionsRN.length > 0)
                 this.institutionRN = institutionsRN[0];
             if (institutionsPN.length > 0)

@@ -46,14 +46,16 @@ export class ManageTests implements OnInit {
     scheduleTests: Object[] = [];
     inProgressTests: Object[] = [];
     scheduleIdToDelete: number = 0;
-   // programId: number = 0;
+    programId: number = 0;
     institutionRN: number = 0;
     institutionPN: number = 0;
     institutionId: number = 0;
     institutionName: string = '';
     adminId: number = 0;
     sStorage: any;
-    constructor(public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel) { }
+    testTypeId: number = 1;
+    institutionID: number = 0;
+    constructor(public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public routeParams: RouteParams) { }
 
     ngOnInit(): void {
         this.sStorage = this.common.getStorage();
@@ -280,9 +282,9 @@ export class ManageTests implements OnInit {
         if (institutions != null && institutions != 'undefined') {
             let institutionsRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
             let institutionsPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
-           // let programId = _.pluck(institutions, 'ProgramId');
-          //  if (programId.length > 0)
-           //     this.programId = programId[0];
+            let programId = _.pluck(institutions, 'ProgramId');
+            if (programId.length > 0)
+                this.programId = programId[0];
             if (institutionsRN.length > 0)
                 this.institutionRN = institutionsRN[0];
             if (institutionsPN.length > 0)
@@ -291,21 +293,42 @@ export class ManageTests implements OnInit {
     }
 
     redirectToRoute(route: string): boolean {
-        // this.checkInstitutions();
             if (this.institutionRN > 0 && this.institutionPN > 0) {
                 this.router.parent.navigateByUrl(`/choose-institution/Test/${route}/${this.institutionRN}/${this.institutionPN}`);
             }
             else {
-                   // if (this.programId > 0) {
-                        this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
-                   // }
-                   // else {
-                   //     window.open('/#/accounterror');
-                  //  }
-            }
+                if (this.programId > 0) {
+                    if (this.institutionRN == 0) {
+                        this.institutionID = this.institutionPN;
+                    }
+                    else {
+                        this.institutionID = this.institutionRN;
+                    }
+                       this.apiServer = this.common.getApiServer();
+                       let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
+                       let subjectsPromise = this.testService.getSubjects(subjectsURL);
+                       subjectsPromise.then((response) => {
+                           return response.json();
+                       })
+                           .then((json) => {
+
+                               if (json.length == 0) {
+                                   window.open('/accounterror');
+                               }
+                               else {
+                                   this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
+                               }
+                           });
+                   }
+                   else {
+                       window.open('/accounterror');
+                   }
+                                }
             return false;
     }
-
+    resolveSubjectsURL(url: string): string {
+        return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeId.toString());
+    }
 
     addColumnStyle($table) {
         $table.find('tbody td:nth-child(1)').addClass('column-striped');
