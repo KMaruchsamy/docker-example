@@ -16,7 +16,7 @@ import {AlertPopup} from '../shared/alert.popup';
 import {RetesterAlternatePopup} from './retesters-alternate-popup';
 import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
-import {SelfPayStudentPopup} from './self-pay-student-popup';
+//import {SelfPayStudentPopup} from './self-pay-student-popup';
 
 import * as _ from '../../lib/index';
 import '../../plugins/dropdown.js';
@@ -30,7 +30,7 @@ import '../../lib/modal.js';
     selector: 'add-students',
     templateUrl: '../../templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
-    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup],
+    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup],
     directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, RouterLink, AlertPopup],
     pipes: [RemoveWhitespacePipe]
 })
@@ -858,7 +858,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
     WindowException(): void {
         let __this = this;
-        let windowExceptionURL = `${this.auth.common.apiServer}${links.api.v2baseurl}${links.api.admin.test.windowexception}`;
+        let windowExceptionURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.windowexception}`;
         let input = {
             "SessionTestId": this.testScheduleModel.testId,
             "StudentIds": __this.GetStudentIDList(),
@@ -870,7 +870,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             return response.json();
         })
             .then((json) => {
-                __this.SeperateOutSelfPayStudents(json);
+               // __this.SeperateOutSelfPayStudents(json);
+                __this.HasWindowException(json);
             })
             .catch((error) => {
                 console.log(error);
@@ -898,42 +899,42 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         }
     }
 
-    SeperateOutSelfPayStudents(_studentWindowException: any): void {
-        let _timingWindowStudents: Object[] = [];
-        if (_studentWindowException.length > 0) {
-            let _selfPayStudent: Object[] = [];
+    //SeperateOutSelfPayStudents(_studentWindowException: any): void {
+    //    let _timingWindowStudents: Object[] = [];
+    //    if (_studentWindowException.length > 0) {
+    //        let _selfPayStudent: Object[] = [];
             
-            $.each(_studentWindowException, function () {
-                if (this.IgnoreExceptionIfStudentPay)
-                    _selfPayStudent.push(this);
-                else
-                    _timingWindowStudents.push(this);
-            });
-            if (_selfPayStudent.length > 0) {
-                if (this.loader)
-                    this.loader.dispose();
-                this.dynamicComponentLoader.loadNextToLocation(SelfPayStudentPopup, this.elementRef)
-                    .then(retester=> {
-                        this.loader = retester;
-                        $('#selfPayStudentModal').modal('show');
-                        retester.instance.selfPayStudentException = _selfPayStudent;
-                        retester.instance.testSchedule = this.testScheduleModel;
-                        retester.instance.selfPayStudentExceptionPopupClose.subscribe((e) => {
-                            $('#selfPayStudentModal').modal('hide');
-                            this.HasWindowException(_timingWindowStudents);
-                        });
+    //        $.each(_studentWindowException, function () {
+    //            if (this.IgnoreExceptionIfStudentPay)
+    //                _selfPayStudent.push(this);
+    //            else
+    //                _timingWindowStudents.push(this);
+    //        });
+    //        if (_selfPayStudent.length > 0) {
+    //            if (this.loader)
+    //                this.loader.dispose();
+    //            this.dynamicComponentLoader.loadNextToLocation(SelfPayStudentPopup, this.elementRef)
+    //                .then(retester=> {
+    //                    this.loader = retester;
+    //                    $('#selfPayStudentModal').modal('show');
+    //                    retester.instance.selfPayStudentException = _selfPayStudent;
+    //                    retester.instance.testSchedule = this.testScheduleModel;
+    //                    retester.instance.selfPayStudentExceptionPopupClose.subscribe((e) => {
+    //                        $('#selfPayStudentModal').modal('hide');
+    //                        this.HasWindowException(_timingWindowStudents);
+    //                    });
 
-                    });
-            }   
-            else {
-                this.HasWindowException(_timingWindowStudents);
-            }        
-        }
-        else {
-            this.GetRepeaterException();
-        }
+    //                });
+    //        }   
+    //        else {
+    //            this.HasWindowException(_timingWindowStudents);
+    //        }        
+    //    }
+    //    else {
+    //        this.GetRepeaterException();
+    //    }
 
-    }
+    //}
 
     removeMarked(_students: SelectedStudentModel[]): SelectedStudentModel[] {
         let resolvedStudents: SelectedStudentModel[] = _.remove(_students, function (_student: SelectedStudentModel) {
