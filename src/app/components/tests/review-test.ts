@@ -316,11 +316,11 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         input.TestingWindowEnd = myNewEndDateTime2;
 
         if (this.modify) {
-            scheduleTestURL = this.resolveModifyTestingSessionURL(`${this.auth.common.apiServer}${links.api.v2baseurl}${links.api.admin.test.modifyscheduletest}`);
+            scheduleTestURL = this.resolveModifyTestingSessionURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.modifyscheduletest}`);
             scheduleTestPromise = this.testService.modifyScheduleTests(scheduleTestURL, JSON.stringify(input));
         }
         else {
-            scheduleTestURL = `${this.auth.common.apiServer}${links.api.v2baseurl}${links.api.admin.test.scheduletest}`;
+            scheduleTestURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.scheduletest}`;
             scheduleTestPromise = this.testService.scheduleTests(scheduleTestURL, JSON.stringify(input));
         }
 
