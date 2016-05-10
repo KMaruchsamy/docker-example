@@ -293,6 +293,7 @@ export class ManageTests implements OnInit {
     }
 
     redirectToRoute(route: string): boolean {
+        this.checkInstitutions();
             if (this.institutionRN > 0 && this.institutionPN > 0) {
                 this.router.parent.navigateByUrl(`/choose-institution/Test/${route}/${this.institutionRN}/${this.institutionPN}`);
             }
@@ -308,11 +309,13 @@ export class ManageTests implements OnInit {
                        let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
                        let subjectsPromise = this.testService.getSubjects(subjectsURL);
                        subjectsPromise.then((response) => {
-                           return response.json();
+                           if (response.status !== 400) {
+                               return response.json();
+                           }
+                           return [];
                        })
                            .then((json) => {
-
-                               if (json.length == 0) {
+                               if (json.length === 0) {
                                    window.open('/accounterror');
                                }
                                else {

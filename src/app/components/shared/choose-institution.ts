@@ -71,10 +71,13 @@ export class ChooseInstitution {
              let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
              let subjectsPromise = this.testService.getSubjects(subjectsURL);
              subjectsPromise.then((response) => {
-                 return response.json();
+                 if (response.status !== 400) {
+                     return response.json();
+                 }
+                 return [];
              })
                  .then((json) => {
-                     if (json.length == 0) {
+                     if (json.length === 0) {
                          window.open('/accounterror');
                      }
                      else {

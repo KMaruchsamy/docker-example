@@ -129,7 +129,7 @@ export class Home implements OnInit {
         this.hdpage = null;
         this.testTypeId = 1;
         this.institutionID = 0;
-    }
+          }
 
     redirectToLogin(event): void {
         event.preventDefault();
@@ -137,6 +137,7 @@ export class Home implements OnInit {
     }
 
     redirectToRoute(route: string): boolean {
+        this.checkInstitutions();
         if (this.institutionRN > 0 && this.institutionPN > 0) {
             this.router.parent.navigateByUrl(`/choose-institution/Home/${route}/${this.institutionRN}/${this.institutionPN}`);
         }
@@ -152,10 +153,13 @@ export class Home implements OnInit {
                 let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
                 let subjectsPromise = this.testService.getSubjects(subjectsURL);
                 subjectsPromise.then((response) => {
-                    return response.json();
+                    if (response.status !== 400) {
+                        return response.json();
+                    }
+                    return [];
                 })
                     .then((json) => {
-                        if (json.length == 0) {
+                        if (json.length === 0) {
                             window.open('/accounterror');
                         }
                         else {
