@@ -16,7 +16,8 @@ export class Auth {
     institutions:any;
     securitylevel:number;
     username:string;
-    common:Common;
+    common: Common;
+    isSelectedInstitutionIsPay: boolean = false;
   constructor() {
     this.common = new Common();
     this.sStorage = this.common.getStorage();
@@ -31,7 +32,8 @@ export class Auth {
     this.title = this.sStorage.getItem('title');
     this.institutions = this.sStorage.getItem('institutions');
     this.securitylevel = this.sStorage.getItem('securitylevel');
-    this.username=this.sStorage.getItem('username');
+    this.username = this.sStorage.getItem('username');
+    this.isSelectedInstitutionIsPay = (this.sStorage.getItem('payLinkEnabled') === "true" ? true : false);
   }
 
 
@@ -47,7 +49,8 @@ export class Auth {
     this.title = this.sStorage.getItem('title');
     this.institutions = this.sStorage.getItem('institutions');
     this.securitylevel = this.sStorage.getItem('securitylevel');
-    this.username=this.sStorage.getItem('username');
+    this.username = this.sStorage.getItem('username');
+    this.isSelectedInstitutionIsPay = (this.sStorage.getItem('payLinkEnabled') === "true" ? true:false);
   }
 
 
@@ -57,6 +60,15 @@ export class Auth {
 
   getUser() {
     return this.user;
+  }
+
+  isPayInstitutionEnabled(id: number): void {
+      let _institutions = JSON.parse(this.institutions);
+      if (_institutions.length > 0) {
+          let isEnabled = _.pluck(_.filter(_institutions, { 'InstitutionId': id }), 'StudentPayEnabled');
+          this.sStorage.setItem('payLinkEnabled', isEnabled[0]);          
+      } else
+          this.sStorage.setItem('payLinkEnabled', "false");
   }
 
   login(url, useremail, password, usertype) {
@@ -87,7 +99,8 @@ export class Auth {
     this.title = null;
     this.institutions = null;
     this.securitylevel = null;
-    this.username=null;
+    this.username = null;
+    this.isSelectedInstitutionIsPay = false;
   }
   settemporarypassword(url, useremail, password) {
     return fetch(url, {

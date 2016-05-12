@@ -64,6 +64,7 @@ export class ChooseInstitution {
 
     redirectToRoute(program: string): boolean {
         let institutionId = (program === 'RN' ? this.institutionRN : this.institutionPN);
+        this.auth.isPayInstitutionEnabled(parseInt(institutionId));
         this.institutionID = institutionId;
            let ProgramId = (program === 'RN' ? this.programRN : this.programPN);
          if (ProgramId > 0) {
