@@ -8,14 +8,14 @@ import {Auth} from '../../services/auth';
 @Component({
     selector: 'logout',
     providers: [ Auth],   
-    template: '<h1>Logging out ..</h1>',
+    template: 'logging out ...',
     directives: [LoginHeader, LoginContent, LoginFooter]
 })
 export class Logout implements OnInit{
     constructor(public auth: Auth, public router: Router) { }
-    
-    ngOnInit(): void{
-         this.auth.logout();
+
+    ngOnInit(): void {
+        this.auth.logout();
         this.router.navigate(['/Login']);
     }
     

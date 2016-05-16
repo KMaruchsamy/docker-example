@@ -24,6 +24,8 @@ import '../../plugins/bootstrap-select.min.js';
 import '../../plugins/jquery.dataTables.min.js';
 import '../../plugins/dataTables.responsive.js';
 import '../../lib/modal.js';
+import '../../lib/tooltip.js';
+import '../../lib/popover.js';
 //import '../../plugins/dataTables.bootstrap.min.js';
 
 @Component({
@@ -119,6 +121,20 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         let __this = this;
         $('#chooseCohortContainer').on('click', '#cohortStudentList .clear-input-values', function () {
             __this.clearTableSearch();
+        });
+        
+        $('body').on('hidden.bs.popover', function (e) {
+            $(e.target).data("bs.popover").inState.click = false;
+        });
+
+        $('body').on('click', function (e) {
+            $('[data-toggle="popover"]').each(function () {
+                //the 'is' for buttons that trigger popups
+                //the 'has' for icons within a button that triggers a popup
+                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
         });
     }
 
@@ -295,6 +311,27 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     resolveCohortStudentsURL(url: string): string {
         return url.replace('§cohortid', this.lastSelectedCohortID.toString()).replace('§testid', this.testScheduleModel.testId.toString());
     }
+    
+    markDuplicate(objArray: Object[]): Object[] {
+
+        if (!objArray)
+            return [];
+
+        if (objArray.length === 1)
+            return objArray;
+
+        let duplicate = false;
+        _.forEach(objArray, (obj, key) => {
+
+            let duplicateArray = _.filter(objArray, function (o) { return o.StudentId !== obj.StudentId && obj.FirstName === o.FirstName && obj.LastName === o.LastName });
+            if (duplicateArray.length > 0)
+                obj.duplicate = true;
+            else
+                obj.duplicate = false;
+        });
+
+        return objArray;
+    }
 
     loadStudentsByCohort(btnAddAllStudent, tblCohortStudentList, selectedcohort: any, event): void {
         event.preventDefault();
@@ -315,7 +352,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     $('#' + btnAddAllStudent.id).removeClass('hidden');
                     $('#' + tblCohortStudentList.id).removeClass('hidden');
                     if (typeof (json.msg) === "undefined")
-                        this.cohortStudentlist = json;
+                        this.cohortStudentlist = this.markDuplicate(json);
                     else
                         this.cohortStudentlist = [];
 
@@ -351,6 +388,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                             $('#cohortStudentList .add-students-table-search').addClass('invisible');
                         }
                         this.CheckForAllStudentSelected();
+                        $('.has-popover').popover();
+                      
                     });
                 })
                 .catch((error) => {

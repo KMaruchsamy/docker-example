@@ -58,7 +58,9 @@ module.exports = function() {
                 'src/app/plugins/mode-cfb-min.js',
                 'src/app/plugins/pad-ansix923-min.js',
                 'src/app/plugins/core-min.js',
-                'node_modules/crypto-js/crypto-js.js'
+                'node_modules/crypto-js/crypto-js.js',
+                'node_modules/bootstrap/js/tooltip.js',
+                'node_modules/bootstrap/js/popover.js'
                 // 'src/app/plugins/bootstrap-datepicker.min.js',
                 // 'src/app/plugins/jquery.timepicker.js',
                 // 'src/app/plugins/date.js'
