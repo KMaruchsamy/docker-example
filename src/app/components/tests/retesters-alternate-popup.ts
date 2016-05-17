@@ -4,12 +4,15 @@ import {RouterLink, OnDeactivate} from 'angular2/router';
 import {Common} from '../../services/common';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
+import * as _ from '../../lib/index';
+import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({
     selector: 'retesters-alternate',
     templateUrl: '../../templates/tests/retesters-alternate-popup.html',
     providers: [Common],
-    directives: [RouterLink, NgIf, NgFor]
+    directives: [RouterLink, NgIf, NgFor],
+    pipes:[SortPipe]
 })
 
 export class RetesterAlternatePopup implements OnDeactivate {

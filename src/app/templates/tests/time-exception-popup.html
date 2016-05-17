@@ -18,7 +18,7 @@
                     <span class="text-larger"> Please go back and modify your selections.</span>
                 </div>
                 <div class="thin-section border-top-bottom">
-                    <ul class="list-extra-spacing js-repeaters-list" *ngFor="#student of studentWindowException">
+                    <ul class="list-extra-spacing js-repeaters-list" *ngFor="#student of studentWindowException | sort:'asc':'StudentLastName'">
                         <li class="text-larger-purple"><b>{{student.StudentLastName}}, {{student.StudentFirstName}}</b></li>
                     </ul>
                 </div>

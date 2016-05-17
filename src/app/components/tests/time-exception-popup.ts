@@ -2,6 +2,8 @@
 import {RouterLink, OnDeactivate} from 'angular2/router';
 import {Common} from '../../services/common';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
+import * as _ from '../../lib/index';
+import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({
     selector: 'time-exception',
@@ -9,7 +11,7 @@ import {ParseDatePipe} from '../../pipes/parsedate.pipe';
     directives: [RouterLink],
     providers: [Common],
     inputs: ['studentWindowException','canRemoveStudents'],
-    pipes: [ParseDatePipe]
+    pipes: [ParseDatePipe,SortPipe]
 })
 
 export class TimeExceptionPopup implements OnInit, OnDeactivate {
@@ -21,7 +23,7 @@ export class TimeExceptionPopup implements OnInit, OnDeactivate {
     startDate: Date;
     endTestDate: Date;
     constructor(public common: Common) {
-        this.initialize();
+        
     }
     routerOnDeactivate(): void {
         this.studentWindowException = null;
@@ -37,7 +39,7 @@ export class TimeExceptionPopup implements OnInit, OnDeactivate {
     }
 
     ngOnInit(): void {
-        // console.log(this.studentRepeaters);
+        this.initialize();
     }
 
     removeStudents(): void {
@@ -46,7 +48,6 @@ export class TimeExceptionPopup implements OnInit, OnDeactivate {
             let savedSchedule = JSON.parse(this.sStorage.getItem('testschedule'));
             if (savedSchedule) {
                 var removedStudents = _.remove(savedSchedule.selectedStudents, function(student) {
-                    console.log(self.studentWindowException);
                     return _.some(self.studentWindowException, { 'StudentId': student.StudentId })
                 });
             }
