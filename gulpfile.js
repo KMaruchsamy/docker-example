@@ -50,7 +50,7 @@ gulp.task('js', function () {
         .src([config.app.src.js])
         .pipe(typescript(tscConfig.compilerOptions));
     return tsResult.js
-        //.pipe(uglify({mangle:false}))
+        .pipe(uglify({mangle:false}))
         .pipe(gulp.dest(config.app.src.build));
 });
 
@@ -87,7 +87,7 @@ gulp.task('libs', function () {
     var size = require('gulp-size');
     return gulp.src(config.app.lib)
         .pipe(size({ showFiles: true, gzip: true }))
-        //.pipe(uglify({mangle:false}))
+        .pipe(uglify({mangle:false}))
         .pipe(gulp.dest('build/app/lib'));
 });
 

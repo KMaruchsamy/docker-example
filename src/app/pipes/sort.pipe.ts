@@ -7,9 +7,6 @@ import * as _ from '../lib/index';
 export class SortPipe implements PipeTransform {
     transform(array: any[], args: any[]): any[] {
         
-        console.log(array);
-        console.log(args);
-        
         if (!array)
             return [];
 
