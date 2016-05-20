@@ -83,17 +83,10 @@ import {Angulartics2GoogleAnalytics} from './lib/angulartics2-google-analytics';
 ])
 export class App {
     constructor(public router: Router, angulartics2: Angulartics2, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {
-        // $(window).bind("popstate", function(event) {
-        //     // console.log(event);
-        //     // alert('sss');
-        //     // window.history.forward();
-        // });
     }
-
 }
 
-
-//enableProdMode();
+enableProdMode();
 
 bootstrap(App, [
     ROUTER_PROVIDERS,

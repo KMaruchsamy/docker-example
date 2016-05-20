@@ -305,6 +305,7 @@ export class ManageTests implements OnInit {
                     else {
                         this.institutionID = this.institutionRN;
                     }
+                    this.auth.isPayInstitutionEnabled(this.institutionID);
                        this.apiServer = this.common.getApiServer();
                        let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
                        let subjectsPromise = this.testService.getSubjects(subjectsURL);

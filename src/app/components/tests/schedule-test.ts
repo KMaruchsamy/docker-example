@@ -734,7 +734,6 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
 
     validateDates(): boolean {
-        debugger;
         if (this.testScheduleModel) {
 
             console.log(new Date().toTimeString());
