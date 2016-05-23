@@ -28,8 +28,11 @@
                             </div>
                         </form>
                     </div>
-
+                    <div id="errorText" class="hidden">
+                        <p class="text-larger section-medium-thin container-narrow ">We're sorry, there are no test names that match your search. Please try again.</p>
+                    </div>
                 </div><!--closes tab pane-->
+              
                 <div [class.hidden]="tests?.length===0" class="margin-2em-top available-tests hidden clearfix" id="availableTests">
 
                     <p class="text-larger-teal">Available Tests (choose one)</p>
@@ -69,6 +72,7 @@
                     </button>
                     <!--</form>-->
                 </div>
+               
                 <!--closes <div class="section available-tests">-->
                 <!--</section>-->
                 <div class="delete-draft section-medium-thin invisible clearfix">
@@ -78,6 +82,7 @@
                 </div>
 
             </div><!--closes  tab content -->
+           
         </div><!--closes container-medium-width-->
     </div><!--closes div section-->
 </main>

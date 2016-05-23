@@ -45,8 +45,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     searchString: string = '';
     typeaheadResults: Object[] = [];
     searchResult: Object[] = [];
-    testsBySearch: Object[] = [];
-    constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
+         constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public aLocation: Location) {
     }
 
@@ -65,9 +64,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                 $('title').html('Choose Test &ndash; Kaplan Nursing');
             }
         }
-
-
-
     }
 
     onCancelChanges(): void {
@@ -109,6 +105,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     initialize(): void {
         let self = this;
         this.testsTable = null;
+        $('#errorText').addClass('hidden');
         this.testTypeId = 1;
         this.institutionID = parseInt(this.routeParams.get('institutionId'));
         this.apiServer = this.common.getApiServer();
@@ -185,9 +182,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                 this.tests = json;
                 if (this.testsTable)
                     this.testsTable.destroy();
-                if (json.length == 0) {
-                    this.checkTestForSubjects();
-                }
                 setTimeout(json => {
                     this.testsTable = $('#chooseTestTable').DataTable({
                         "paging": false,
@@ -196,23 +190,15 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                         "info": false,
                         "ordering": false
                     });
-
-
                     $('#chooseTestTable').on('responsive-display.dt', function () {
                         $(this).find('.child .dtr-title br').remove();
                     });
-                    $('#availableTests').removeClass('hidden');
                 });
                  $('#availableTests').removeClass('hidden');
             })
             .catch((error) => {
                 console.log(error);
             });
-    }
-
-    checkTestForSubjects(): boolean {
-        window.open('/#/accounterror');
-        return false;
     }
 
     saveChooseTest(e): void {
@@ -366,9 +352,10 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#chooseBySubject').removeClass('active');
         $('.typeahead').typeahead('destroy');
         $('#findTestByName').val('');
+        $('.checkbox-image').attr('checked', false);
         $('#availableTests').addClass('hidden');
+        $('#errorText').addClass('hidden');
         this.subjectId = 0;
-        $(".checkbox-image").prop("checked", false);
     }
 
     chooseBySubject(element: string, event): void {
@@ -377,8 +364,9 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#findByName').removeClass('active');
         $('#chooseBySubject').addClass('active');
         $('#availableTests').addClass('hidden');
-        $(".checkbox-image").prop("checked", false);
         $('.selectpicker').selectpicker('refresh');
+        $('#errorText').addClass('hidden');
+        $('.checkbox-image').attr('checked', false);
         this.testsTable.clear().draw();
     }
 
@@ -390,12 +378,16 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}`);
         let testsP = this.testService.getTests(testsURL);
         testsP.then((response) => {
-            return response.json();
+            if (response.status !== 400) {
+                return response.json();
+            }
+            return [];
         })
             .then((json) => {
-               
                 this.searchResult = json;
-          
+                if (json.length === 0) {
+                    $('#errorText').removeClass('hidden');
+                }
                 var typeaheadTestName = '';
                 typeaheadTestName = _.pluck(this.searchResult, 'TestName');
 
@@ -404,8 +396,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                     queryTokenizer: Bloodhound.tokenizers.whitespace,
                     local: typeaheadTestName
                 });
-                
-
                 $('#bloodhound .typeahead').typeahead({
                     hint: false,
                     highlight: true,
@@ -418,8 +408,8 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                     });
                     $('#findTestByName').focus();
                     $('#findTestByName').typeahead('open');
-                });
-    }
+            });
+     }
 
     bindTestSearchResults(setValue: boolean): void {
         if (setValue) {
@@ -452,13 +442,24 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#availableTests').removeClass('hidden');
     }
 
-    bindTypeaheadFocus(searchString : string , e): void {
+    bindTypeaheadFocus(searchString: string, e): void {
+        var keycode = e.keyCode ? e.keyCode : e.which;
+        if (keycode == 8) { // backspace
+            $('#errorText').addClass('hidden');
+        }
         let self = this;
         this.searchString = searchString.value;
-        if (self.searchString.length == 2)
-            self.loadTestsBySearch();
+        if (/^[a-zA-Z\s]*$/.test(self.searchString)) {
+            if (self.searchString.length == 2 && self.searchString != "  ") {
+                self.loadTestsBySearch();
+            }
+        }
+        else {
+            $('#findTestByName').val('');
+        }
         if (self.searchString.length < 2)
             $('#findTestByName').typeahead('destroy');
+        $('#findTestByName').focus();
     }
 
     bindTypeaheadSearchButton(e): void {
