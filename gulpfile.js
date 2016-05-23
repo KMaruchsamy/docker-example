@@ -1,3 +1,4 @@
+﻿
 var gulp = require('gulp');
 var del = require('del');
 var plumber = require('gulp-plumber');
@@ -50,7 +51,7 @@ gulp.task('js', function () {
         .src([config.app.src.js])
         .pipe(typescript(tscConfig.compilerOptions));
     return tsResult.js
-        //.pipe(uglify({mangle:false}))
+        .pipe(uglify({mangle:false}))
         .pipe(gulp.dest(config.app.src.build));
 });
 
@@ -87,7 +88,7 @@ gulp.task('libs', function () {
     var size = require('gulp-size');
     return gulp.src(config.app.lib)
         .pipe(size({ showFiles: true, gzip: true }))
-        //.pipe(uglify({mangle:false}))
+        .pipe(uglify({mangle:false}))
         .pipe(gulp.dest('build/app/lib'));
 });
 
@@ -152,10 +153,27 @@ gulp.task('play', ['build'], function () {
 
     // app.use(serveStatic(__dirname + '/build/app'));  // serve everything that is static
 
-    http.createServer(app).listen(port, function () {
-        console.log('\n', 'Server listening on port', port, '\n')
+    // http.createServer(app).listen(port, function () {
+    //     console.log('\n', 'Server listening on port', port, '\n')
+    //     open('http://localhost:' + port);
+    // });
+
+
+  var liveServer = require("live-server");
+
+    var params = {
+        port: 3000, // Set the server port. Defaults to 8080. 
+        host: "0.0.0.0", // Set the address to bind to. Defaults to 0.0.0.0. 
+        root: __dirname + "/build/app", // Set root directory that's being server. Defaults to cwd. 
+        open: false, // When false, it won't load your browser by default. 
+        ignore: 'scss', // comma-separated string for paths to ignore 
+        file: "index.html", // When set, serve this file for every 404 (useful for single-page applications),
+        wait: 0,
+        logLevel:0
+    };
+    liveServer.start(params);
     open('http://localhost:' + port);
-    });
+
 });
 
 
