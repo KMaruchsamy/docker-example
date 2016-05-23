@@ -148,9 +148,9 @@ gulp.task('play', ['build'], function () {
     gulp.watch(config.app.src.json, ['json']);
     gulp.watch(config.app.src.css, ['css']);
 
-    app = connect();
+    // app = connect();
 
-    app.use(serveStatic(__dirname + '/build/app'));  // serve everything that is static
+    // app.use(serveStatic(__dirname + '/build/app'));  // serve everything that is static
 
     http.createServer(app).listen(port, function () {
         console.log('\n', 'Server listening on port', port, '\n')
