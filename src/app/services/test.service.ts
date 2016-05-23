@@ -391,7 +391,6 @@ export class TestService {
 
 
     validateDates(testScheduleModel: TestScheduleModel, institutionID: number, modify: boolean): boolean {
-        debugger;
         if (testScheduleModel) {
 
             if (testScheduleModel.scheduleStartTime && testScheduleModel.scheduleEndTime) {

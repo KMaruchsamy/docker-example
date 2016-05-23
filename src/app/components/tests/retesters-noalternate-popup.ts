@@ -3,6 +3,8 @@ import {RouterLink} from 'angular2/router';
 import {Common} from '../../services/common';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
+import * as _ from '../../lib/index';
+import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({
     selector: 'retesters-noalternate',
@@ -10,7 +12,7 @@ import {SelectedStudentModel} from '../../models/selectedStudent-model';
     directives: [RouterLink],
     providers: [Common],
     inputs: ['studentRepeaters'],
-    
+    pipes:[SortPipe]    
 })
 
 export class RetesterNoAlternatePopup implements OnInit {

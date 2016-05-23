@@ -16,7 +16,7 @@ import {AlertPopup} from '../shared/alert.popup';
 import {RetesterAlternatePopup} from './retesters-alternate-popup';
 import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
-//import {SelfPayStudentPopup} from './self-pay-student-popup';
+import {SelfPayStudentPopup} from './self-pay-student-popup';
 
 import * as _ from '../../lib/index';
 import '../../plugins/dropdown.js';
@@ -24,13 +24,15 @@ import '../../plugins/bootstrap-select.min.js';
 import '../../plugins/jquery.dataTables.min.js';
 import '../../plugins/dataTables.responsive.js';
 import '../../lib/modal.js';
+import '../../lib/tooltip.js';
+import '../../lib/popover.js';
 //import '../../plugins/dataTables.bootstrap.min.js';
 
 @Component({
     selector: 'add-students',
     templateUrl: '../../templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
-    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup],
+    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup,SelfPayStudentPopup],
     directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, RouterLink, AlertPopup],
     pipes: [RemoveWhitespacePipe]
 })
@@ -58,6 +60,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     hasADA: boolean = false;
     noCohort: boolean = false;
     noStudentInCohort: string = "No matching students in this cohort";
+    _selfPayStudent: Object[] = [];
+
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
         public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location) {
 
@@ -117,6 +121,20 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         let __this = this;
         $('#chooseCohortContainer').on('click', '#cohortStudentList .clear-input-values', function () {
             __this.clearTableSearch();
+        });
+        
+        $('body').on('hidden.bs.popover', function (e) {
+            $(e.target).data("bs.popover").inState.click = false;
+        });
+
+        $('body').on('click', function (e) {
+            $('[data-toggle="popover"]').each(function () {
+                //the 'is' for buttons that trigger popups
+                //the 'has' for icons within a button that triggers a popup
+                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
         });
     }
 
@@ -293,6 +311,27 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     resolveCohortStudentsURL(url: string): string {
         return url.replace('§cohortid', this.lastSelectedCohortID.toString()).replace('§testid', this.testScheduleModel.testId.toString());
     }
+    
+    markDuplicate(objArray: Object[]): Object[] {
+
+        if (!objArray)
+            return [];
+
+        if (objArray.length === 1)
+            return objArray;
+
+        let duplicate = false;
+        _.forEach(objArray, (obj, key) => {
+
+            let duplicateArray = _.filter(objArray, function (o) { return o.StudentId !== obj.StudentId && obj.FirstName === o.FirstName && obj.LastName === o.LastName });
+            if (duplicateArray.length > 0)
+                obj.duplicate = true;
+            else
+                obj.duplicate = false;
+        });
+
+        return objArray;
+    }
 
     loadStudentsByCohort(btnAddAllStudent, tblCohortStudentList, selectedcohort: any, event): void {
         event.preventDefault();
@@ -313,7 +352,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     $('#' + btnAddAllStudent.id).removeClass('hidden');
                     $('#' + tblCohortStudentList.id).removeClass('hidden');
                     if (typeof (json.msg) === "undefined")
-                        this.cohortStudentlist = json;
+                        this.cohortStudentlist = this.markDuplicate(json);
                     else
                         this.cohortStudentlist = [];
 
@@ -349,6 +388,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                             $('#cohortStudentList .add-students-table-search').addClass('invisible');
                         }
                         this.CheckForAllStudentSelected();
+                        $('.has-popover').popover();
+                      
                     });
                 })
                 .catch((error) => {
@@ -845,12 +886,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 }
                 else {
                     this.sStorage.removeItem('retesters');
-                    if (this.modify)
-                        this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
-                    else
-                        this.router.navigate(['ReviewTest']);
+                    this.HasStudentPayException();
                 }
-                // this.router.navigateByUrl('/tests/review');
             })
             .catch((error) => {
                 console.log(error);
@@ -858,7 +895,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
     WindowException(): void {
         let __this = this;
-        let windowExceptionURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.windowexception}`;
+        let windowExceptionURL = `${this.auth.common.apiServer}${links.api.v2baseurl}${links.api.admin.test.windowexception}`;
         let input = {
             "SessionTestId": this.testScheduleModel.testId,
             "StudentIds": __this.GetStudentIDList(),
@@ -870,8 +907,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             return response.json();
         })
             .then((json) => {
-               // __this.SeperateOutSelfPayStudents(json);
-                __this.HasWindowException(json);
+                 __this.SeperateOutSelfPayStudents(json);
+
             })
             .catch((error) => {
                 console.log(error);
@@ -895,46 +932,63 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 });
         }
         else {
+            this.GetRepeaterException(); // Repeater Exception will call only when having no timing window exception
+        }
+    }
+
+
+    HasStudentPayException(): void {
+        if (this._selfPayStudent.length > 0) {
+            if (this.loader)
+                this.loader.dispose();
+            this.dynamicComponentLoader.loadNextToLocation(SelfPayStudentPopup, this.elementRef)
+                .then(retester=> {
+                    this.loader = retester;
+                    $('#selfPayStudentModal').modal('show');
+                    retester.instance.selfPayStudentException = this._selfPayStudent;
+                    retester.instance.testSchedule = this.testScheduleModel;
+                    //retester.instance.canRemoveStudents = false;
+                    retester.instance.selfPayStudentExceptionPopupClose.subscribe((e) => {
+                        $('#selfPayStudentModal').modal('hide');
+                        if (this.modify)
+                            this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
+                        else
+                            this.router.navigate(['ReviewTest']);
+                    });
+
+                });
+        }
+        else {            
+            if (this.modify)
+                this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
+            else
+                this.router.navigate(['ReviewTest']);
+        }
+    }
+
+    SeperateOutSelfPayStudents(_studentWindowException: any): void {
+        let _timingWindowStudents: Object[] = [];
+        let __this = this;
+        if (_studentWindowException.length > 0) {
+            __this._selfPayStudent = [];
+            $.each(_studentWindowException, function () {
+                if (this.IgnoreExceptionIfStudentPay && __this.auth.isSelectedInstitutionIsPay)
+                    __this._selfPayStudent.push(this);
+                else
+                    _timingWindowStudents.push(this);
+            });
+            if (_timingWindowStudents.length > 0) {
+                this.HasWindowException(_timingWindowStudents);
+            }
+            else {
+                this.GetRepeaterException();
+            }
+        }
+        else {
             this.GetRepeaterException();
         }
     }
 
-    //SeperateOutSelfPayStudents(_studentWindowException: any): void {
-    //    let _timingWindowStudents: Object[] = [];
-    //    if (_studentWindowException.length > 0) {
-    //        let _selfPayStudent: Object[] = [];
-            
-    //        $.each(_studentWindowException, function () {
-    //            if (this.IgnoreExceptionIfStudentPay)
-    //                _selfPayStudent.push(this);
-    //            else
-    //                _timingWindowStudents.push(this);
-    //        });
-    //        if (_selfPayStudent.length > 0) {
-    //            if (this.loader)
-    //                this.loader.dispose();
-    //            this.dynamicComponentLoader.loadNextToLocation(SelfPayStudentPopup, this.elementRef)
-    //                .then(retester=> {
-    //                    this.loader = retester;
-    //                    $('#selfPayStudentModal').modal('show');
-    //                    retester.instance.selfPayStudentException = _selfPayStudent;
-    //                    retester.instance.testSchedule = this.testScheduleModel;
-    //                    retester.instance.selfPayStudentExceptionPopupClose.subscribe((e) => {
-    //                        $('#selfPayStudentModal').modal('hide');
-    //                        this.HasWindowException(_timingWindowStudents);
-    //                    });
-
-    //                });
-    //        }   
-    //        else {
-    //            this.HasWindowException(_timingWindowStudents);
-    //        }        
-    //    }
-    //    else {
-    //        this.GetRepeaterException();
-    //    }
-
-    //}
 
     removeMarked(_students: SelectedStudentModel[]): SelectedStudentModel[] {
         let resolvedStudents: SelectedStudentModel[] = _.remove(_students, function (_student: SelectedStudentModel) {
@@ -1063,10 +1117,11 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         this.testScheduleModel = testSchedule;
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
                         if (this.studentCountInSession()) {
-                            if (this.modify)
-                                this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
-                            else
-                                this.router.navigate(['ReviewTest']);
+                            //if (this.modify)
+                            //    this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
+                            //else
+                                //this.router.navigate(['ReviewTest']);
+                                this.HasStudentPayException();
                             // this.router.navigateByUrl('/tests/review');
                         }
                         else {
@@ -1108,10 +1163,11 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
                         if (this.studentCountInSession()) {
-                            if (this.modify)
-                                this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
-                            else
-                                this.router.navigate(['ReviewTest']);
+                            //if (this.modify)
+                            //    this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
+                            //else
+                                //   this.router.navigate(['ReviewTest']);
+                                this.HasStudentPayException();
                             // this.router.navigateByUrl('/tests/review');
                         }
                         else {

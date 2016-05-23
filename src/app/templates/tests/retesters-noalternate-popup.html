@@ -13,7 +13,7 @@
        </div>
        <div class="thin-section border-top">
          <ul class="list-extra-spacing js-repeaters-list">
-           <li class="text-larger-purple" *ngFor="#repeater of studentRepeaters"><b>{{repeater.LastName}}, {{repeater.FirstName}}</b></li>        
+           <li class="text-larger-purple" *ngFor="#repeater of studentRepeaters | sort:'asc':'LastName'"><b>{{repeater.LastName}}, {{repeater.FirstName}}</b></li>        
          </ul>
        </div>
        <div class="padding-1em-top margin-1em-bottom border-top">

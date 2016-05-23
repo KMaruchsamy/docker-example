@@ -154,7 +154,7 @@ gulp.task('play', ['build'], function () {
 
     http.createServer(app).listen(port, function () {
         console.log('\n', 'Server listening on port', port, '\n')
-        open('http://localhost:' + port);
+    open('http://localhost:' + port);
     });
 });
 
