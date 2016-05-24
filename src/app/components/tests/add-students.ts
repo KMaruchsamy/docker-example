@@ -985,6 +985,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             }
         }
         else {
+            __this._selfPayStudent = [];
             this.GetRepeaterException();
         }
     }
