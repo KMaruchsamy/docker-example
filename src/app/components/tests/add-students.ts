@@ -17,6 +17,7 @@ import {RetesterAlternatePopup} from './retesters-alternate-popup';
 import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
 import {SelfPayStudentPopup} from './self-pay-student-popup';
+import {SortPipe} from '../../pipes/sort.pipe';
 
 import * as _ from '../../lib/index';
 import '../../plugins/dropdown.js';
@@ -34,7 +35,7 @@ import '../../lib/popover.js';
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
     providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup,SelfPayStudentPopup],
     directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, RouterLink, AlertPopup],
-    pipes: [RemoveWhitespacePipe]
+    pipes: [RemoveWhitespacePipe, SortPipe]
 })
 
 export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
@@ -323,7 +324,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         let duplicate = false;
         _.forEach(objArray, (obj, key) => {
 
-            let duplicateArray = _.filter(objArray, function (o) { return o.StudentId !== obj.StudentId && obj.FirstName === o.FirstName && obj.LastName === o.LastName });
+            let duplicateArray = _.filter(objArray, function (o) { return o.StudentId !== obj.StudentId && obj.FirstName.toLowerCase() === o.FirstName.toLowerCase() && obj.LastName.toLowerCase() === o.LastName.toLowerCase() });
             if (duplicateArray.length > 0)
                 obj.duplicate = true;
             else
@@ -388,7 +389,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                             $('#cohortStudentList .add-students-table-search').addClass('invisible');
                         }
                         this.CheckForAllStudentSelected();
-                        $('.has-popover').popover();
+                        this.initPopOver();
                       
                     });
                 })
@@ -396,6 +397,17 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     throw (error);
                 });
         }
+    }
+    
+    initPopOver(): void {
+        $('.has-popover').popover();
+        $('#cohortStudents .has-popover').on('show.bs.popover', function () {
+            var firstRow = $('#cohortStudents tbody tr:visible:first').find($(this)).length;
+            if (firstRow > 0 ) {
+              $('.dataTables_scrollBody').css('padding-top', 35)
+              .find('table').addClass('border-top')
+            }
+        });
     }
 
     SearchFilterOptions(__this: any): void {
