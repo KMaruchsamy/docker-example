@@ -15,7 +15,7 @@ export const links = {
         prod: {
             server: "https://nursing.kaplan.com/"
         },
-        baseurl: "api/v1/",
+        baseurl: "api/v1/", 
         v2baseurl:"api/v2/",
         admin: {
             authenticationapi: "admin/login",
@@ -164,3 +164,4 @@ export let Timezones = {
     GMTplus13: 'Pacific/Apia',
     GMTplus14: 'Pacific/Kiritimati'
 }
+
