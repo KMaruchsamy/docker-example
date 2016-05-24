@@ -44,16 +44,17 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="#student of cohortStudentlist;#j=index;">
-                                                <td title="{{student.Email}}">{{student.LastName}} 
+                                            <tr *ngFor="#student of cohortStudentlist | sort:'asc':'LastName'">
+                                                <td title="{{student.Email}}">
+                                                    <span class="left">{{student.LastName}}</span>
                                                     <a *ngIf="student.duplicate"
                                                     tabindex="0"
                                                     role="button"                                                    
                                                      data-toggle="popover" 
-                                                     [attr.data-placement]="(j===0) ? 'bottom' : 'top'" 
+                                                     data-placement="top" 
                                                      data-trigger="click focus"
                                                      [attr.data-content]="student.Email" 
-                                                     class="unstyled-button right has-popover">
+                                                     class="unstyled-button right has-popover small-popover">
                                                         <img src="images/identity-icon.png" 
                                                         alt="duplicate student name icon" 
                                                         width="24" height="24"/>

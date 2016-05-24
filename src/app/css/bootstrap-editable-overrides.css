@@ -216,6 +216,12 @@ button.js-rename-session {
 
 }
 
+/* Small popover */
+.small-popover + .popover .popover-content {
+  font-size: 14px;
+  padding: .5em .75em;
+}
+
 /* Datepicker overrides */
 .datepicker table tr td, .datepicker table tr th {
     width: 30px;
