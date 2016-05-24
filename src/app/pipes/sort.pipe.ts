@@ -6,13 +6,21 @@ import * as _ from '../lib/index';
 })
 export class SortPipe implements PipeTransform {
     transform(array: any[], args: any[]): any[] {
-        
+
+        let order = args[0];
+        let strProperty = args[1];
         if (!array)
             return [];
 
         if (array.length === 1)
             return array;
 
-        return _.sortByOrder(array, args[1], args[0]);
+        return array.sort(
+            function (a, b) {
+                if (a[strProperty].toLowerCase() < b[strProperty].toLowerCase()) return (order === 'asc' ? -1 : 1);
+                if (a[strProperty].toLowerCase() > b[strProperty].toLowerCase()) return (order === 'asc' ? 1 : -1);
+                return 0;
+            }
+        );
     }
 }
