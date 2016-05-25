@@ -1,13 +1,15 @@
 ﻿import {Component, Input, OnInit, Output, EventEmitter} from 'angular2/core';
 import {RouterLink, OnDeactivate} from 'angular2/router';
 import {Common} from '../../services/common';
+import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({
     selector: 'self-pay-student-popup',
     templateUrl: '../../templates/tests/self-pay-student-popup.html',
     directives: [RouterLink],
     providers: [Common],
-    inputs: ['studentWindowException']
+    inputs: ['studentWindowException'],
+    pipes:[SortPipe]
 })
 
 export class SelfPayStudentPopup implements OnInit, OnDeactivate {
