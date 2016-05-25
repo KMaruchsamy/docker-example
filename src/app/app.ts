@@ -47,6 +47,7 @@ import {Angulartics2GoogleAnalytics} from './lib/angulartics2-google-analytics';
 
 @RouteConfig([
     { path: '/', component: Login, name: 'Login' },
+    { path: '/faculty', component: Login, name: 'Faculty' },
     { path: '/logout', component: Logout, name: 'Logout' },
     { path: '/home', component: Home, name: 'Home' },
     { path: '/reset-password/:id/:expirytime', component: ResetPassword, name: 'ResetPassword' },
