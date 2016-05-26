@@ -45,8 +45,7 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="#student of cohortStudentlist | sort:'asc':'LastName'">
-                                                <td title="{{student.Email}}">
-                                                    <span class="left">{{student.LastName}}</span>
+                                                <td title="{{student.Email}}"><span class="left">{{student.LastName}}</span>
                                                     <a *ngIf="student.duplicate"
                                                     tabindex="0"
                                                     role="button"                                                    

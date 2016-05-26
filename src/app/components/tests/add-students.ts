@@ -324,7 +324,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         let duplicate = false;
         _.forEach(objArray, (obj, key) => {
 
-            let duplicateArray = _.filter(objArray, function (o) { return o.StudentId !== obj.StudentId && obj.FirstName.toLowerCase() === o.FirstName.toLowerCase() && obj.LastName.toLowerCase() === o.LastName.toLowerCase() });
+            let duplicateArray = _.filter(objArray, function (o) { return o.StudentId !== obj.StudentId && obj.FirstName.toUpperCase() === o.FirstName.toUpperCase() && obj.LastName.toUpperCase() === o.LastName.toUpperCase() });
             if (duplicateArray.length > 0)
                 obj.duplicate = true;
             else
@@ -692,7 +692,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         let __this = this;
         $('#cohortStudentList .dataTables_filter :input').on('keyup click', function () {
            $('#noMatchingStudents').removeClass('hidden');
-
             let that = this;
             let _count = 0;
             let _lname = "";
