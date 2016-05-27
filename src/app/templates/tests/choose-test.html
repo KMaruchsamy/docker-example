@@ -3,88 +3,62 @@
     <test-header (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Choose a test' [testSchedule]="testScheduleModel"></test-header>
     <div class="thin-section">
         <div class="container-medium-width">
-            <ul class="nav nav-tabs minimal-nav-tabs">
-                <li id="subject" class="active"><a href="javascript:void(0)" (click)="chooseBySubject('#chooseBySubject',$event)" data-toggle="tab">Choose by subject</a></li>
-                <li id="test"><a href="javascript:void(0)" (click)="findByName('#findByName',$event)" data-toggle="tab">Find by name</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="chooseBySubject">
-                    <select #subjectDropDown id="testSubjectOptions" (change)="loadTests(subjectDropDown.value)" class="selectpicker" data-width="400"
-                            data-size="6" title='Choose a test by subject'>
-                        <option *ngFor="#subject of subjects; #i = index" [selected]="subject.SubjectId==subjectId" [value]='subject.SubjectId'>{{subject.SubjectName}}</option>
-                    </select>
+            <p class="text-link-color margin-1em-top"><b><h4 class="margin-1em-top h6">Choose by subject</h4>  </b></p>
+            <select #subjectDropDown id="testSubjectOptions" (change)="loadTests(subjectDropDown.value)" class="selectpicker" data-width="400"
+                    data-size="6" title='Choose a test by subject'>
+                <option *ngFor="#subject of subjects; #i = index" [selected]="subject.SubjectId==subjectId" [value]='subject.SubjectId'>{{subject.SubjectName}}</option>
+            </select>
+            <div [class.hidden]="tests?.length===0" class="margin-2em-top available-tests hidden clearfix" id="availableTests">
 
-                </div><!--closes tab pane-->
+                <p class="text-larger-teal">Available Tests (choose one)</p>
+                <table id="chooseTestTable" class="table-with-cell-padding table-striped last-row-no-border first-col-wrap">
+                    <thead>
+                        <tr>
+                            <th class="all" scope="col">Test Name</th>
+                            <th scope="col">Length</th>
+                            <th scope="col" class="center">No. of <br>Questions</th>
+                            <th scope="col">Norming Status</th>
+                            <th scope="col" class="center">Test Blueprint <br>(Faculty Use Only)</th>
+                            <th scope="col" class="all center">Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="#test of tests; #x = index">
+                            <td>{{test.TestName}}</td>
+                            <td>{{(test.NumberOfQuestionsInTest * test.SecondsPerQuestion)/60|round }} {{test.SecondsPerQuestion === 0 ? '': 'mins'}} </td>
+                            <td class="center">{{test.NumberOfQuestionsInTest}}</td>
+                            <td>{{test.NormingStatusName}}</td>
+                            <td class="center">
+                                <a [attr.href]='test.TopicalBlueprintLink' target="_blank"><img src="images/pdf-green-icon_2x.png" width="20" height="24" alt="open {{test.TestName}} Blueprint PDF"></a>
+                            </td>
+                            <td class="center">
+                                <input type="radio" [attr.testid]="test.TestId" [attr.testname]="test.TestName" [checked]="test.TestId === testScheduleModel.testId"
+                                       (change)="selectTest(test.TestId,test.TestName, subjectDropDown.value,test.NormingStatusName);" class="checkbox-image"
+                                       [attr.id]="'rdb' + test.TestName|removewhitespace" [attr.aria-label]="'Choose ' + test.TestName">
+                                <label [attr.for]="'rdb' + test.TestName|removewhitespace"></label>
+                            </td>
+                        </tr>
 
-                <div class="tab-pane" id="findByName">
-                    <div id="findByNameContainer">
-                        <form class="search-bar" role="form">
-                            <label class="screen-reader-only" for="findTestByName">Find by Name</label>
-                            <div class="search-input" id="bloodhound">
-                                <input #findTestByName class="typeahead" autocomplete="off" (keyup)="bindTypeaheadFocus(findTestByName,$event)" type="text" role="search" id="findTestByName">
-                                <button class="button" id="btnTypeahead" type="submit" (click)="bindTypeaheadSearchButton($event)">
-                                    <img src="images/search-icon_2x.png" alt="Search Icon">
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <div id="errorText" class="hidden">
-                        <p class="text-larger section-medium-thin container-narrow ">We're sorry, there are no test names that match your search. Please try again.</p>
-                    </div>
-                </div><!--closes tab pane-->
-              
-                <div [class.hidden]="tests?.length===0" class="margin-2em-top available-tests hidden clearfix" id="availableTests">
-
-                    <p class="text-larger-teal">Available Tests (choose one)</p>
-                    <table id="chooseTestTable" class="table-with-cell-padding table-striped last-row-no-border first-col-wrap">
-                        <thead>
-                            <tr>
-                                <th class="all" scope="col">Test Name</th>
-                                <th scope="col">Length</th>
-                                <th scope="col" class="center">No. of <br>Questions</th>
-                                <th scope="col">Norming Status</th>
-                                <th scope="col" class="center">Test Blueprint <br>(Faculty Use Only)</th>
-                                <th scope="col" class="all center">Select</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="#test of tests; #x = index">
-                                <td>{{test.TestName}}</td>
-                                <td>{{(test.NumberOfQuestionsInTest * test.SecondsPerQuestion)/60|round }} {{test.SecondsPerQuestion === 0 ? '': 'mins'}} </td>
-                                <td class="center">{{test.NumberOfQuestionsInTest}}</td>
-                                <td>{{test.NormingStatusName}}</td>
-                                <td class="center">
-                                    <a [attr.href]='test.TopicalBlueprintLink' target="_blank"><img src="images/pdf-green-icon_2x.png" width="20" height="24" alt="open {{test.TestName}} Blueprint PDF"></a>
-                                </td>
-                                <td class="center">
-                                    <input type="radio" [attr.testid]="test.TestId" [attr.testname]="test.TestName" [checked]="test.TestId === testScheduleModel.testId"
-                                           (change)="selectTest(test.TestId,test.TestName, subjectDropDown.value,test.NormingStatusName);" class="checkbox-image"
-                                           [attr.id]="'rdb' + test.TestName|removewhitespace" [attr.aria-label]="'Choose ' + test.TestName">
-                                    <label [attr.for]="'rdb' + test.TestName|removewhitespace"></label>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p [class.hidden]="tests?.length===0" class="icon info-icon-yellow section-medium-thin"><strong>Please note:</strong> Test blueprints are for faculty use only and should not be shared with students.</p>
-                    <button type="submit" (click)="saveChooseTest($event)" id="chooseDate" class="button right button-mobile-block"
-                            [disabled]=!testScheduleModel.testId>
-                        Next step: Choose date and time
-                    </button>
-                    <!--</form>-->
-                </div>
-               
-                <!--closes <div class="section available-tests">-->
-                <!--</section>-->
-                <div class="delete-draft section-medium-thin invisible clearfix">
-                    <hr>
-                    <button class="anchor-button smaller">Delete this draft</button>
-                    <p class="saved-draft-info smaller teal">Saving draft…</p>
-                </div>
-
-            </div><!--closes  tab content -->
-           
-        </div><!--closes container-medium-width-->
-    </div><!--closes div section-->
+                    </tbody>
+                </table>
+                <p [class.hidden]="tests?.length===0" class="icon info-icon-yellow section-medium-thin"><strong>Please note:</strong> Test blueprints are for faculty use only and should not be shared with students.</p>
+                <button type="submit" (click)="saveChooseTest($event)" id="chooseDate" class="button right button-mobile-block"
+                        [disabled]=!testScheduleModel.testId>
+                    Next step: Choose date and time
+                </button>
+                <!--</form>-->
+            </div>
+            <!--closes <div class="section available-tests">-->
+            <!--</section>-->
+            <div class="delete-draft section-medium-thin invisible clearfix">
+                <hr>
+                <button class="anchor-button smaller">Delete this draft</button>
+                <p class="saved-draft-info smaller teal">Saving draft…</p>
+            </div>
+        </div>
+        <!--closes container-medium-width-->
+    </div>
+    <!--closes div section-->
 </main>
 
 <page-footer></page-footer>
