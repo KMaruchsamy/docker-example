@@ -948,7 +948,21 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
 
+    markSelfPayStudents() {
+        if (this._selfPayStudent && this._selfPayStudent.length > 0) {
+            if (this.testScheduleModel && this.testScheduleModel.selectedStudents && this.testScheduleModel.selectedStudents.length > 0) {
+                _.forEach(this._selfPayStudent, (student, key) => {
+                    let selectedStudent: SelectedStudentModel = _.find(this.testScheduleModel.selectedStudents, { 'StudentId': student.StudentId });
+                    if (selectedStudent)
+                        selectedStudent.StudentPay = true;
+                });
+                this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
+            }
+        }
+    }
+
     HasStudentPayException(): void {
+        this.markSelfPayStudents();
         if (this._selfPayStudent.length > 0) {
             if (this.loader)
                 this.loader.dispose();
@@ -956,6 +970,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 .then(retester=> {
                     this.loader = retester;
                     $('#selfPayStudentModal').modal('show');
+                    this.markSelfPayStudents();
                     retester.instance.selfPayStudentException = this._selfPayStudent;
                     retester.instance.testSchedule = this.testScheduleModel;
                     //retester.instance.canRemoveStudents = false;
