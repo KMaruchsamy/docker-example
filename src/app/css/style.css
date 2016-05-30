@@ -2565,7 +2565,7 @@ form.search-bar {
     position: absolute;
     top: 0em;
     right: 0em;
-    bottom: 13px;
+    bottom: 0em;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
     padding: 5px 10px; }
