@@ -45,7 +45,7 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="#student of cohortStudentlist | sort:'asc':'LastName'">
-                                                <td title="{{student.Email}}"><span class="left">{{student.LastName}}</span>
+                                                <td title="{{student.Email}}" [class.duplicate-student]="student.duplicate">{{student.LastName}}
                                                     <a *ngIf="student.duplicate"
                                                     tabindex="0"
                                                     role="button"                                                    
@@ -53,7 +53,7 @@
                                                      data-placement="top" 
                                                      data-trigger="click focus"
                                                      [attr.data-content]="student.Email" 
-                                                     class="unstyled-button right has-popover small-popover">
+                                                     class="duplicate-student-table-icon has-popover small-popover">
                                                         <img src="images/identity-icon.png" 
                                                         alt="duplicate student name icon" 
                                                         width="24" height="24"/>
@@ -107,23 +107,17 @@
             </div><!-- closes testing-add-students-container-->
         </div><!--closes container small with no padding-->
 
-        <div class="container add-students-outer-container">
+        <div class="container add-students-outer-container section section-top-thin">
             <div class="info-icon-yellow-container-flush-text">
-                <p class="icon info-icon-yellow margin-1em-top" *ngIf="!hasADA && selectedStudents.length > 0">Please contact your Account Manager if there are students in your testing session who need testing accommodations. 
+                <p class="icon info-icon-yellow" *ngIf="!hasADA && selectedStudents.length > 0">Please contact your Account Manager if there are students in your testing session who need testing accommodations. 
                     Students with testing accommodations receive untimed versions of their tests.</p>
-                <p class="icon info-icon-yellow margin-1em-top" *ngIf="hasADA && selectedStudents.length > 0">One or more of the students you have added have testing accommodations. Their test will be untimed. 
+                <p class="icon info-icon-yellow" *ngIf="hasADA && selectedStudents.length > 0">One or more of the students you have added have testing accommodations. Their test will be untimed. 
                     For more information or to designate additional students who need testing accommodations, please contact your Account Manager.</p>
                 <p class="icon info-icon-yellow margin-1em-top" *ngIf="selectedStudents.length > 0">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
                 <!--  <div class="right margin-2em-top-bottom">-->
-                <button type="button" class="button button-mobile-block right margin-2em-top" id="reviewDetails" disabled (click)="DetailReviewTestClick($event)"><span class="hidden-extra-small-down">Next step: </span>Add details and review</button>
+                <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" disabled (click)="DetailReviewTestClick($event)"><span class="hidden-extra-small-down">Next step: </span>Add details and review</button>
                 <!--</div>-->
             </div>
-        </div>
-
-        <div class="container add-students-outer-container delete-draft section-medium-thin invisible">
-            <hr>
-            <button class="anchor-button smaller">Delete this draft</button>
-            <p class="saved-draft-info smaller teal">Draft saved Friday, October 23, 2015 at 2:31pm</p>
         </div>
     </div>
     <!--closes div section-->

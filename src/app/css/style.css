@@ -1398,6 +1398,18 @@ td .self-pay-alert-table-icon {
           transform: translateY(-50%);
   width: 18px; }
 
+td.duplicate-student {
+  padding-right: 32px !important;
+  position: relative; }
+
+td .duplicate-student-table-icon {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
+  right: .5em; }
+
 .email-icon {
   height: 17px;
   width: 21px;
@@ -4190,8 +4202,7 @@ input.page-lg-heading {
     .testing-add-students-container .right-grid .added-student-list {
       background-color: #e1e2f0;
       color: #5A5EA9;
-      font-weight: 600;
-      margin-bottom: 49px; }
+      font-weight: 600; }
       .testing-add-students-container .right-grid .added-student-list ul li {
         padding: .5em;
         padding-left: 1em; }
