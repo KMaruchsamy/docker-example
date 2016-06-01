@@ -186,6 +186,16 @@ export class TestService {
         });
     }
 
+    getSearchStudent(url: string): any {
+        let self = this;
+        return fetch(url, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': self.auth.authheader
+            }
+        });
+    }
 
     mapTestScheduleObjects(objTestScheduleModel): TestScheduleModel {
         let _testScheduleModel = new TestScheduleModel();
