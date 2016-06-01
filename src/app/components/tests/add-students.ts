@@ -171,8 +171,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         this.loadActiveCohorts();
         let self = this;
         $('.typeahead').bind('typeahead:select', function () {
-            alert('select = '+this.value);
-            self.FilterStudentfromResult(this);
+           // alert('select = '+this.value);
+            self.FilterStudentfromResult(this.value);
         });
             //this.FilterStudentfromResult();
     }
@@ -1380,7 +1380,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             if (this.AddByNameStudentlist.length > 0) {
                 $('#cohortStudentList').removeClass('hidden');
                 $('#cohortStudentList .add-students-table-search').addClass('invisible');
-                this.FilterStudentfromResult(searctText.toUpperCase());
+                this.FilterStudentfromResult(searctText);
             }
             else {
                 if (searctText.length > 1)
@@ -1454,6 +1454,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         $.each(this.AddByNameStudentlist, function (index, el) {
             let firstName = el.FirstName.toUpperCase();
             let lastName = el.LastName.toUpperCase();
+            searchString = searchString.toUpperCase();
             if (_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)) {
                 _searchStudents.push(el);
             }
