@@ -377,7 +377,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#findByName').removeClass('active');
         $('#subject').addClass('active');
         $('#chooseBySubject').addClass('active');
-        $('.selectpicker').selectpicker('refresh');
         $('#errorText').addClass('hidden');
         if (this.testScheduleModel.subjectId == 0 && this.testScheduleModel.testId == 0) {
             $('.selectpicker').val('').selectpicker('refresh');
