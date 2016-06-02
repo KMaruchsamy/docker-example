@@ -192,7 +192,9 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     
     anyStudentPayStudents(): void {
         if (this.testScheduleModel && this.testScheduleModel.selectedStudents && this.testScheduleModel.selectedStudents.length > 0)
-            this.hasStudentPay = _.some(this.testScheduleModel.selectedStudents, { 'StudentPay':true});    
+            this.hasStudentPay = _.some(this.testScheduleModel.selectedStudents, function (student) { 
+                return ((!student.hasOwnProperty('MarkedToRemove') || student.hasOwnProperty('MarkedToRemove') && !student.MarkedToRemove) && student.hasOwnProperty('StudentPay') && student.StudentPay);                   
+            });    
     }
 
     resolveMarked(_student): boolean {
