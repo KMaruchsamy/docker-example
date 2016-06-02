@@ -32,6 +32,8 @@ export class ViewTest implements OnInit, OnDeactivate {
     nextDay: boolean = false;
     modify: boolean = false;
     hasADA: boolean = false;
+    testStatus: number;
+    anyStudentPayStudents: boolean = false;
     constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams) {
 
     }
@@ -79,6 +81,8 @@ export class ViewTest implements OnInit, OnDeactivate {
             }
             this.schedule = _schedule;
             this.hasADA = _.some(this.schedule.selectedStudents, { 'Ada': true });
+            this.testStatus = this.testService.getTestStatusFromTimezone(_schedule.institutionId, _schedule.scheduleStartTime, _schedule.scheduleEndTime);
+            this.anyStudentPayStudents = this.testService.anyStudentPayStudents(_schedule);
             console.log('>>>>>>>>>>>>>>>>>>');
             console.log(JSON.stringify(this.schedule));
 

@@ -231,6 +231,7 @@ export class TestService {
                     _student.CohortId = student.CohortId;
                     _student.CohortName = student.CohortName;
                     _student.NormingStatus = student.StudentNormingStatusName;
+                    _student.StudentPay = student.IsStudentPayDeactivated;
                     _testScheduleModel.selectedStudents.push(_student);
 
                 });
@@ -489,5 +490,41 @@ export class TestService {
         return true;
     }
 
+    getTestStatusFromTimezone(institutionId: number, startTime: any, endTime: any): number {
+        let institutionTimezone: string = this.common.getTimezone(institutionId);
+        let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
+
+        let tStartTime = moment(new Date(
+            moment(startTime).year(),
+            moment(startTime).month(),
+            moment(startTime).date(),
+            moment(startTime).hour(),
+            moment(startTime).minute(),
+            moment(startTime).second()
+        )).format('YYYY-MM-DD HH:mm:ss');
+
+        let tEndTime = moment(new Date(
+            moment(endTime).year(),
+            moment(endTime).month(),
+            moment(endTime).date(),
+            moment(endTime).hour(),
+            moment(endTime).minute(),
+            moment(endTime).second()
+        )).format('YYYY-MM-DD HH:mm:ss');
+
+
+        if (moment(startTime).isAfter(institutionCurrentTime))
+            return 1;
+        else if (moment(startTime).isBefore(institutionCurrentTime) && moment(endTime).isAfter(institutionCurrentTime))
+            return 0;
+        else if (moment(startTime).isBefore(institutionCurrentTime) && moment(endTime).isBefore(institutionCurrentTime))
+            return -1;
+    }
+
+
+    anyStudentPayStudents(testScheduleModel: TestScheduleModel): boolean {
+        if (testScheduleModel && testScheduleModel.selectedStudents && testScheduleModel.selectedStudents.length > 0)
+            return _.some(testScheduleModel.selectedStudents, { 'StudentPay': true });
+    }
 
 }
