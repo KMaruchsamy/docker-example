@@ -7,9 +7,9 @@
             <!--Tabs will not be shown for MVP. Only option will be to select by cohort-->
             <!-- Nav tabs -->
             <ul class="nav nav-tabs minimal-nav-tabs margin-left-1em">
-                <li class="active"><a href="javascript:void(0);" data-toggle="tab">Add by Cohort</a></li>
-                <!--<li><a href="#addByGroup" data-toggle="tab">Add by Group</a></li>
-                <li><a href="#addByName" data-toggle="tab">Add by Name</a></li>-->
+                <li class="active" id="ByCohort"><a href="javascript:void(0);" (click)="AddByCohort($event);" data-toggle="tab">Add by Cohort</a></li>
+                <!--<li><a href="#addByGroup" data-toggle="tab">Add by Group</a></li>-->
+                <!--<li id="ByName"><a href="javascript:void(0);" (click)="AddByName($event);" data-toggle="tab">Add by Name</a></li>-->
             </ul>
 
             <!-- Tab panes -->
@@ -29,55 +29,76 @@
                                 <div *ngIf="noCohort">
                                     <p class="text-larger section-medium-thin container-narrow ">We're sorry, there are no active cohorts in your institution. Please contact your Account Manager for further assistance. You can find your Account Manager's contact info on the <a [routerLink]="['/Home']">Home page</a>.</p>
                                 </div>
-
-
-                                <div class="hidden" id="cohortStudentList" #cohortstudentlist>
-                                    <!--contains table and sets a max height so that it scrolls-->
-                                    <table id="cohortStudents" style="width:100%" class="tablesorter table-with-small-button-row order-column stripe table-with-cell-padding table-striped last-row-no-border">
-                                        <thead>
-                                            <tr>
-                                                <th class="select-filter" scope="col">Last Name</th>
-                                                <th class="select-filter" scope="col">First Name</th>
-                                                <th scope="col">Cohort</th>
-                                                <th scope="col">Retesting</th>
-                                                <th class="all" scope="col"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="#student of cohortStudentlist | sort:'asc':'LastName'">
-                                                <td title="{{student.Email}}"><span class="left">{{student.LastName}}</span>
-                                                    <a *ngIf="student.duplicate"
-                                                    tabindex="0"
-                                                    role="button"                                                    
-                                                     data-toggle="popover" 
-                                                     data-placement="top" 
-                                                     data-trigger="click focus"
-                                                     [attr.data-content]="student.Email" 
-                                                     class="unstyled-button right has-popover small-popover">
-                                                        <img src="images/identity-icon.png" 
-                                                        alt="duplicate student name icon" 
-                                                        width="24" height="24"/>
-                                                    </a>
-                                                </td>
-                                                <td>{{student.FirstName}}</td>
-                                                <td>{{lastSelectedCohortName}}</td>
-                                                <td [class]="getClassName(student.Retester)">{{student.Retester?"Yes":"No"}}</td>
-                                                <td>
-                                                    <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" [attr.ada]="student.Ada" [attr.email]="student.Email" (click)="AddStudent(student,$event)">Add</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                                <!--closes hidden-->
                             </div>
                             <!-- closes cohort container-->
                         </div><!--closes tab pane-->
-                    </div>
+
+                        <div class="tab-pane" id="addByName">
+                            <!-- Opening of Add By Name-->
+
+                            <div id="chooseStudentContainer">
+                                <div class="top-section">
+                                    <div id="chooseStudent">
+                                        <form class="search-bar" role="form">
+                                            <label for="findStudentToAdd">Find student by first or last name</label>
+                                            <div class="search-input">
+                                                <input class="typeahead" type="search" autocomplete="off" (keyup)="searchKeyPress(findstudenttoadd,$event);" role="search" #findstudenttoadd id="findStudentToAdd">
+                                                <button class="button" id="btnTypeahead" type="submit">
+                                                    <img src="images/search-icon_2x.png" alt="Search Icon">
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div *ngIf="noSearchStudent">
+                                    <p class="text-larger section-medium-thin container-narrow ">We’re sorry, there are no students that match your search. Please try again.</p>
+                                </div>
+                            </div>
+                        </div> <!-- Closing Add By Name-->
+
+                        <div class="hidden" id="cohortStudentList" #cohortstudentlist>
+                            <!--contains table and sets a max height so that it scrolls-->
+                            <table id="cohortStudents" style="width:100%" class="tablesorter table-with-small-button-row order-column stripe table-with-cell-padding table-striped last-row-no-border">
+                                <thead>
+                                    <tr>
+                                        <th class="select-filter" scope="col">Last Name</th>
+                                        <th class="select-filter" scope="col">First Name</th>
+                                        <th scope="col">Cohort</th>
+                                        <th scope="col">Retesting</th>
+                                        <th class="all" scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="#student of cohortStudentlist | sort:'asc':'LastName'">
+                                        <td title="{{student.Email}}" [class.duplicate-student]="student.duplicate">
+                                            {{student.LastName}}
+                                            <a *ngIf="student.duplicate"
+                                               tabindex="0"
+                                               role="button"
+                                               data-toggle="popover"
+                                               data-placement="top"
+                                               data-trigger="click focus"
+                                               [attr.data-content]="student.Email"
+                                               class="duplicate-student-table-icon has-popover small-popover">
+                                                <img src="images/identity-icon.png"
+                                                     alt="duplicate student name icon"
+                                                     width="24" height="24" />
+                                            </a>
+                                        </td>
+                                        <td>{{student.FirstName}}</td>
+                                        <td>{{lastSelectedCohortName}}</td>
+                                        <td [class]="getClassName(student.Retester)">{{student.Retester?"Yes":"No"}}</td>
+                                        <td>
+                                            <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" [attr.ada]="student.Ada" [attr.email]="student.Email" (click)="AddStudent(student,$event)">Add</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div> <!--closes hidden-->                        
+                    </div><!--closes tab pane-->
                 </div>
                 <!--end left-grid-->
-
                 <div class="grid right-grid">
                     <div class="top-section">
                         <h4 class="white-text h6 no-margin-bottom" id="studentAddedToTestingSession">Students in Testing Session ({{selectedStudentCount}})</h4>
@@ -107,23 +128,21 @@
             </div><!-- closes testing-add-students-container-->
         </div><!--closes container small with no padding-->
 
-        <div class="container add-students-outer-container">
+        <div class="container add-students-outer-container section section-top-thin">
             <div class="info-icon-yellow-container-flush-text">
-                <p class="icon info-icon-yellow margin-1em-top" *ngIf="!hasADA && selectedStudents.length > 0">Please contact your Account Manager if there are students in your testing session who need testing accommodations. 
-                    Students with testing accommodations receive untimed versions of their tests.</p>
-                <p class="icon info-icon-yellow margin-1em-top" *ngIf="hasADA && selectedStudents.length > 0">One or more of the students you have added have testing accommodations. Their test will be untimed. 
-                    For more information or to designate additional students who need testing accommodations, please contact your Account Manager.</p>
+                <p class="icon info-icon-yellow" *ngIf="!hasADA && selectedStudents.length > 0">
+                    Please contact your Account Manager if there are students in your testing session who need testing accommodations.
+                    Students with testing accommodations receive untimed versions of their tests.
+                </p>
+                <p class="icon info-icon-yellow" *ngIf="hasADA && selectedStudents.length > 0">
+                    One or more of the students you have added have testing accommodations. Their test will be untimed.
+                    For more information or to designate additional students who need testing accommodations, please contact your Account Manager.
+                </p>
                 <p class="icon info-icon-yellow margin-1em-top" *ngIf="selectedStudents.length > 0">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
                 <!--  <div class="right margin-2em-top-bottom">-->
-                <button type="button" class="button button-mobile-block right margin-2em-top" id="reviewDetails" disabled (click)="DetailReviewTestClick($event)"><span class="hidden-extra-small-down">Next step: </span>Add details and review</button>
+                <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" disabled (click)="DetailReviewTestClick($event)"><span class="hidden-extra-small-down">Next step: </span>Add details and review</button>
                 <!--</div>-->
             </div>
-        </div>
-
-        <div class="container add-students-outer-container delete-draft section-medium-thin invisible">
-            <hr>
-            <button class="anchor-button smaller">Delete this draft</button>
-            <p class="saved-draft-info smaller teal">Draft saved Friday, October 23, 2015 at 2:31pm</p>
         </div>
     </div>
     <!--closes div section-->
