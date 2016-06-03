@@ -45,6 +45,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     searchString: string = null;
     typeaheadResults: Object[] = [];
     searchResult: Object[];
+    previouSearch: string = null;
     constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public aLocation: Location) {
     }
@@ -366,9 +367,10 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#findTestByName').val('');
         $('#errorText').addClass('hidden');
         this.searchResult = [];
+        this.previouSearch = null;
         if (this.testScheduleModel.subjectId == 0 && this.testScheduleModel.testId == 0)
             this.tests = [];
-        else 
+        else
             $('#availableTests').addClass('hidden');
     }
 
@@ -383,7 +385,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             this.tests = [];
         }
         else {
-            $('.selectpicker').selectpicker('refresh');
+            $('.selectpicker').val('').selectpicker('refresh');
             $('#availableTests').addClass('hidden');
         }
     }
@@ -412,27 +414,35 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                 if (self.testScheduleModel.testId != 0 && self.testScheduleModel.subjectId == 0) {
                     this.displayTest(this.testScheduleModel.testId);
                 }
-                let typeaheadTestName = '';
-                typeaheadTestName = _.pluck(self.searchResult, 'TestName');
-
-                self.typeaheadResults = new Bloodhound({
-                    datumTokenizer: Bloodhound.tokenizers.whitespace,
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    local: typeaheadTestName
-                });
-                $('#bloodhound .typeahead').typeahead({
-                    hint: false,
-                    highlight: true,
-                    minLength: 1
-                },
-                    {
-                        name: 'testNames',
-                        limit: 20,
-                        source: self.typeaheadResults
-                    });
+                self.showTypeahead();
                 $('#findTestByName').focus();
-                $('#availableTests').addClass('hidden');
                 $('#findTestByName').typeahead('open');
+            });
+    }
+
+    showTypeahead(): void {
+        let self = this;
+        let testNamesList = _.pluck(self.searchResult, 'TestName');
+
+        $('#bloodhound .typeahead').typeahead({
+            hint: false,
+            highlight: true,
+            minLength: 1
+        },
+            {
+                name: 'testNames',
+                limit: 20,
+                source: function (query, process) {
+                    var states = [];
+                    var data = testNamesList
+                    var strRegex = new RegExp(query, 'i');
+                    $.each(data, function (i, state) {
+                        if (strRegex.test(state)) {
+                            states.push(state);
+                        }
+                    });
+                    process(states);
+                }
             });
     }
 
@@ -462,7 +472,8 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             else {
                 if (this.searchResult.length != 0)
                     self.tests = this.searchResult;
-                 else
+                else
+                    $('#errorText').removeClass('hidden');
                     $('#availableTests').addClass('hidden');
             }
         }
@@ -470,43 +481,52 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             $('#errorText').addClass('hidden');
             $('#availableTests').removeClass('hidden');
         }
-        else {
-            $('#errorText').removeClass('hidden');
-        }
     }
+
 
     bindTypeaheadFocus(e): void {
         e.preventDefault();
         let self = this;
         let searchText = $('#findTestByName').val();
-        if (/^[a-zA-Z]/.test(searchText)) {
-            if (searchText == "") {
-                $('#errorText').addClass('hidden');
-            }
-            if (searchText.length <= 1) {
-                $('#findTestByName').typeahead('destroy');
-                $('#errorText').addClass('hidden');
-            }
-            if (searchText.length == 2 && searchText != "  ") {
+        if (searchText == "") {
+            this.searchResult = [];
+            this.previouSearch = null;
+            $('.typeahead').typeahead('destroy');
+            $('#errorText').addClass('hidden');
+            $('#findTestByName').focus();
+        }
+        if (searchText.length <= 1) {
+            $('#errorText').addClass('hidden');
+            $('#findTestByName').focus();
+        }
+        if (searchText.length == 2 && searchText != "  ") {
+            if (this.previouSearch != searchText) {
                 self.loadTestsBySearch(searchText);
+                this.previouSearch = searchText;
+                $('#findTestByName').focus();
+            }
+            else {
+                self.showTypeahead();
+                $('#findTestByName').typeahead('open');
+                $('#findTestByName').focus();
             }
         }
-        else {
-            searchText = "";
-            $('#findTestByName').val('');
-        }
-        $('#findTestByName').focus();
+     
     }
 
     bindTypeaheadSearchButton(e): void {
         e.preventDefault();
         this.tests = [];
+        $('#findTestByName').focus();
+        $('#findTestByName').typeahead('close');
         this.bindTestSearchResults(false);
     }
 
     bindTypeahead(): void {
         let searchText = $('#findTestByName').typeahead('val');
         $('#errorText').addClass('hidden');
+        $('#findTestByName').focus();
+        $('#findTestByName').typeahead('close');
         this.tests = [];
         this.bindTestSearchResults(true);
     }
