@@ -438,6 +438,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                     var strRegex = new RegExp(query, 'i');
                     $.each(data, function (i, state) {
                         if (strRegex.test(state)) {
+                            $('#errorText').addClass('hidden');
                             states.push(state);
                         }
                     });
@@ -474,12 +475,15 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                     self.tests = this.searchResult;
                 else
                     $('#errorText').removeClass('hidden');
-                    $('#availableTests').addClass('hidden');
+                $('#availableTests').addClass('hidden');
             }
         }
         if (self.tests.length != 0) {
             $('#errorText').addClass('hidden');
             $('#availableTests').removeClass('hidden');
+        }
+        else {
+            $('#errorText').removeClass('hidden');
         }
     }
 
@@ -487,7 +491,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     bindTypeaheadFocus(e): void {
         e.preventDefault();
         let self = this;
-        let searchText = $('#findTestByName').val();
+        let searchText = $('#findTestByName').val().toLowerCase();
         if (searchText == "") {
             this.searchResult = [];
             this.previouSearch = null;
@@ -505,13 +509,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                 this.previouSearch = searchText;
                 $('#findTestByName').focus();
             }
-            else {
-                self.showTypeahead();
-                $('#findTestByName').typeahead('open');
-                $('#findTestByName').focus();
-            }
         }
-     
     }
 
     bindTypeaheadSearchButton(e): void {
