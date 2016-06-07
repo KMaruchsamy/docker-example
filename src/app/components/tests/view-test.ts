@@ -34,6 +34,7 @@ export class ViewTest implements OnInit, OnDeactivate {
     hasADA: boolean = false;
     testStatus: number;
     anyStudentPayStudents: boolean = false;
+    testScheduleId: number;
     constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams) {
 
     }
@@ -46,6 +47,7 @@ export class ViewTest implements OnInit, OnDeactivate {
             let action = this.routeParams.get('action');
             if (action != undefined && action.trim() !== '')
                 this.modify = true;
+            this.testScheduleId = parseInt(this.routeParams.get('id'));
             this.loadTestSchedule();
 
         }
@@ -63,65 +65,79 @@ export class ViewTest implements OnInit, OnDeactivate {
     }
 
 
+
+
     loadTestSchedule(): void {
         let __this = this;
-        let _schedule: TestScheduleModel = this.testService.getTestSchedule();
-        if (_schedule) {
-            if (_schedule.selectedStudents && _schedule.selectedStudents.length > 0) {
-                let __selectedStudents: SelectedStudentModel[] = _schedule.selectedStudents.sort(function(a, b) {
-                    var nameA = a.LastName.toLowerCase(), nameB = b.LastName.toLowerCase()
-                    if (nameA < nameB) //sort string ascending
-                        return -1
-                    if (nameA > nameB)
-                        return 1
-                    return 0 //default return value (no sorting)
-                });
-                _schedule.selectedStudents = __selectedStudents;
+        let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`);
+        let schedulePromise = this.testService.getScheduleById(scheduleURL);
+        schedulePromise.then((response) => {
+            return response.json();
+        })
+            .then((json) => {
+                if (json) {
+                    let _schedule: TestScheduleModel = __this.testService.mapTestScheduleObjects(json);
+                    if (_schedule) {
+                        __this.sStorage.setItem('testschedule', JSON.stringify(_schedule));
+                        if (_schedule.selectedStudents && _schedule.selectedStudents.length > 0) {
+                            let __selectedStudents: SelectedStudentModel[] = _schedule.selectedStudents.sort(function (a, b) {
+                                var nameA = a.LastName.toLowerCase(), nameB = b.LastName.toLowerCase()
+                                if (nameA < nameB) //sort string ascending
+                                    return -1
+                                if (nameA > nameB)
+                                    return 1
+                                return 0 //default return value (no sorting)
+                            });
+                            _schedule.selectedStudents = __selectedStudents;
 
-            }
-            this.schedule = _schedule;
-            this.hasADA = _.some(this.schedule.selectedStudents, { 'Ada': true });
-            this.testStatus = this.testService.getTestStatusFromTimezone(_schedule.institutionId, _schedule.scheduleStartTime, _schedule.scheduleEndTime);
-            this.anyStudentPayStudents = this.testService.anyStudentPayStudents(_schedule);
-            console.log('>>>>>>>>>>>>>>>>>>');
-            console.log(JSON.stringify(this.schedule));
-
-        }
-        else
-            this.router.navigate(['/LastTestingSession']);
-
-
-
-
-
-        if (this.schedule) {
-            let startTime = this.schedule.scheduleStartTime;
-            let endTime = this.schedule.scheduleEndTime;
-            if (moment(endTime).isAfter(startTime, 'day'))
-                this.nextDay = true;
-        }
-        if (this.schedule) {
-            setTimeout(() => {
-                this.studentsTable = $('#studentsInTestingSessionTable').DataTable({
-                    "paging": false,
-                    "searching": false,
-                    "responsive": true,
-                    "info": false,
-                    "ordering": false
-                });
+                        }
+                        __this.schedule = _schedule;
+                        __this.hasADA = _.some(__this.schedule.selectedStudents, { 'Ada': true });
+                        __this.testStatus = __this.testService.getTestStatusFromTimezone(_schedule.institutionId, _schedule.scheduleStartTime, _schedule.scheduleEndTime);
+                        __this.anyStudentPayStudents = __this.testService.anyStudentPayStudents(_schedule);
+                        console.log('>>>>>>>>>>>>>>>>>>');
+                        console.log(JSON.stringify(this.schedule));
+                    }
+                    else
+                        __this.router.navigate(['/LastTestingSession']);
+                    
+                    if (__this.schedule) {
+                        let startTime = __this.schedule.scheduleStartTime;
+                        let endTime = __this.schedule.scheduleEndTime;
+                        if (moment(endTime).isAfter(startTime, 'day'))
+                            __this.nextDay = true;
+                    }
+                    if (__this.schedule) {
+                        setTimeout(() => {
+                            __this.studentsTable = $('#studentsInTestingSessionTable').DataTable({
+                                "paging": false,
+                                "searching": false,
+                                "responsive": true,
+                                "info": false,
+                                "ordering": false
+                            });
 
 
-                $('#studentsInTestingSessionTable').on('responsive-display.dt', function() {
-                    $(this).find('.child .dtr-title br').remove();
-                });
+                            $('#studentsInTestingSessionTable').on('responsive-display.dt', function () {
+                                $(this).find('.child .dtr-title br').remove();
+                            });
 
+                        });
+                    }
+
+                }
+
+            })
+            .catch((error) => {
+                console.log(error);
             });
-        }
+
+       
     }
 
 
     resolveScheduleURL(url: string): string {
-        return url.replace('§scheduleId', this.schedule.scheduleId.toString());
+        return url.replace('§scheduleId', this.testScheduleId.toString());
     }
 
     print(e): void {
