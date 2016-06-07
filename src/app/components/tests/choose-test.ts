@@ -442,6 +442,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                         }
                     });
                     process(states);
+                    setTimeout(function () { $('#findTestByName').focus(); }, 1);
                 }
             });
     }
