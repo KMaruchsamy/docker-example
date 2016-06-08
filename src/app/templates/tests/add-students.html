@@ -9,7 +9,7 @@
             <ul class="nav nav-tabs minimal-nav-tabs margin-left-1em">
                 <li class="active" id="ByCohort"><a href="javascript:void(0);" (click)="AddByCohort($event);" data-toggle="tab">Add by Cohort</a></li>
                 <!--<li><a href="#addByGroup" data-toggle="tab">Add by Group</a></li>-->
-                <!--<li id="ByName"><a href="javascript:void(0);" (click)="AddByName($event);" data-toggle="tab">Add by Name</a></li>-->
+                <li id="ByName"><a href="javascript:void(0);" (click)="AddByName($event);" data-toggle="tab">Add by Name</a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -39,11 +39,11 @@
                             <div id="chooseStudentContainer">
                                 <div class="top-section">
                                     <div id="chooseStudent">
-                                        <form class="search-bar" role="form">
+                                        <form class="search-bar" role="form" >
                                             <label for="findStudentToAdd">Find student by first or last name</label>
                                             <div class="search-input">
-                                                <input class="typeahead" type="search" autocomplete="off" (keyup)="searchKeyPress(findstudenttoadd,$event);" role="search" #findstudenttoadd id="findStudentToAdd">
-                                                <button class="button" id="btnTypeahead" type="submit">
+                                                <input class="typeahead" type="search" autocomplete="off" role="search" #findstudenttoadd id="findStudentToAdd">
+                                                <button class="button" id="btnTypeahead" type="submit" (click)="searchStudent(findstudenttoadd,$event);">
                                                     <img src="images/search-icon_2x.png" alt="Search Icon">
                                                 </button>
                                             </div>
@@ -69,7 +69,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="#student of cohortStudentlist | sort:'asc':'LastName'">
+                                    <tr *ngFor="#student of cohortStudentlist | sort:'asc':'LastName'" >
                                         <td title="{{student.Email}}" [class.duplicate-student]="student.duplicate">
                                             {{student.LastName}}
                                             <a *ngIf="student.duplicate"
@@ -86,7 +86,7 @@
                                             </a>
                                         </td>
                                         <td>{{student.FirstName}}</td>
-                                        <td>{{lastSelectedCohortName}}</td>
+                                        <td>{{isAddByName?student.CohortName:lastSelectedCohortName}}</td>
                                         <td [class]="getClassName(student.Retester)">{{student.Retester?"Yes":"No"}}</td>
                                         <td>
                                             <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" [attr.ada]="student.Ada" [attr.email]="student.Email" (click)="AddStudent(student,$event)">Add</button>
