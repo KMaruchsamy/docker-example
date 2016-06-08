@@ -406,7 +406,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                 self.searchResult = json;
                 if (json.length === 0) {
                     $('#availableTests').addClass('hidden');
-                    $('#findTestByName').focus(); 
+                    $('#findTestByName').focus();
                     $('#errorText').removeClass('hidden');
                 } else {
                     $('#errorText').addClass('hidden');
@@ -451,7 +451,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         let self = this;
         this.testsTable = null;
         let search = $('#findTestByName').val();
-                if (setValue) {
+        if (setValue) {
             self.tests = _.where(self.searchResult, { TestName: search });
         }
         else {
@@ -473,9 +473,10 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             else {
                 if (this.searchResult.length != 0)
                     self.tests = this.searchResult;
-                else
+                else {
                     $('#errorText').removeClass('hidden');
-                $('#availableTests').addClass('hidden');
+                    $('#availableTests').addClass('hidden');
+                }
             }
         }
         if (self.tests.length != 0) {
@@ -490,9 +491,12 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
 
     bindTypeaheadFocus(e): void {
         e.preventDefault();
-         let self = this;
+        let self = this;
         let searchText = $('#findTestByName').val().toLowerCase();
         searchText = searchText.substring(0, 2);
+        if (e.keyCode == 13) {
+            self.bindTypeaheadSearchButton(e);
+        }
         if (searchText == "") {
             this.searchResult = [];
             this.previouSearch = null;
@@ -516,7 +520,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     bindTypeaheadSearchButton(e): void {
         e.preventDefault();
         this.tests = [];
-        setTimeout(function () { $('#findTestByName').focus(); }, 1);
+        $('#findTestByName').focus();
         $('#findTestByName').typeahead('close');
         this.bindTestSearchResults(false);
     }
@@ -524,7 +528,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     bindTypeahead(): void {
         let searchText = $('#findTestByName').typeahead('val');
         $('#errorText').addClass('hidden');
-        $('#findTestByName').focus(); 
+        $('#findTestByName').focus();
         $('#findTestByName').typeahead('close');
         this.tests = [];
         this.bindTestSearchResults(true);
