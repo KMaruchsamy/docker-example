@@ -1470,9 +1470,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     FilterStudentfromResult(searchString: string): void {
         let _self = this;
         if (this.AddByNameStudentlist.length > 0) {
-            this.cohortStudentlist = [];
-            if (this.testsTable)
-                this.testsTable.destroy();
+            //this.cohortStudentlist = [];
+            //if (this.testsTable)
+            //    this.testsTable.destroy();
             let _searchStudents: Object[] = [];
             $.each(this.AddByNameStudentlist, function (index, el) {
                 let firstName = el.FirstName.toUpperCase();
@@ -1519,6 +1519,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 }
             });
             if (_searchStudents.length > 0) {
+                this.cohortStudentlist = [];
+                if (this.testsTable)
+                    this.testsTable.destroy();
                 this.cohortStudentlist = this.markDuplicate(_searchStudents);
                 setTimeout(() => {
                     _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig());
