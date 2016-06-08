@@ -520,8 +520,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     bindTypeaheadSearchButton(e): void {
         e.preventDefault();
         this.tests = [];
-        $('#findTestByName').focus();
-        $('#findTestByName').typeahead('close');
         this.bindTestSearchResults(false);
     }
 
