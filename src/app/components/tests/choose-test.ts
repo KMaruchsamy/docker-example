@@ -406,16 +406,17 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                 self.searchResult = json;
                 if (json.length === 0) {
                     $('#availableTests').addClass('hidden');
+                    $('#findTestByName').focus(); 
                     $('#errorText').removeClass('hidden');
                 } else {
                     $('#errorText').addClass('hidden');
+                    self.showTypeahead();
+                    setTimeout(function () { $('#findTestByName').focus(); }, 1);
+                    $('#findTestByName').typeahead('open');
                 }
                 if (self.testScheduleModel.testId != 0 && self.testScheduleModel.subjectId == 0) {
                     this.displayTest(this.testScheduleModel.testId);
                 }
-                self.showTypeahead();
-                setTimeout(function () { $('#findTestByName').focus(); }, 1);
-                $('#findTestByName').typeahead('open');
             });
     }
 
@@ -442,7 +443,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                         }
                     });
                     process(states);
-                    setTimeout(function () { $('#findTestByName').focus(); }, 1);
                 }
             });
     }
@@ -498,17 +498,19 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             this.previouSearch = null;
             $('.typeahead').typeahead('destroy');
             $('#errorText').addClass('hidden');
+            setTimeout(function () { $('#findTestByName').focus(); }, 1);
         }
         if (searchText.length <= 1) {
             $('#errorText').addClass('hidden');
+            setTimeout(function () { $('#findTestByName').focus(); }, 1);
         }
         if (searchText.length == 2 && searchText != "  ") {
             if (this.previouSearch != searchText) {
                 self.loadTestsBySearch(searchText);
                 this.previouSearch = searchText;
+                setTimeout(function () { $('#findTestByName').focus(); }, 1);
             }
         }
-        setTimeout(function () { $('#findTestByName').focus(); }, 1);
     }
 
     bindTypeaheadSearchButton(e): void {
@@ -522,7 +524,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     bindTypeahead(): void {
         let searchText = $('#findTestByName').typeahead('val');
         $('#errorText').addClass('hidden');
-        setTimeout(function () { $('#findTestByName').focus(); }, 1);
+        $('#findTestByName').focus(); 
         $('#findTestByName').typeahead('close');
         this.tests = [];
         this.bindTestSearchResults(true);
