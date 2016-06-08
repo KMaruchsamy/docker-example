@@ -68,6 +68,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     AddByNameStudentlist: Object[] = []; // To Check AddByName got students or not...
     AddByCohortStudentlist: Object[] = []; // To preserve previous selected cohort
     isAddByName: boolean = false;
+    
 
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
         public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location) {
@@ -75,7 +76,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        debugger;
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
@@ -97,7 +97,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        debugger;
         if (this.testsTable)
             this.testsTable.destroy();
         $('.selectpicker').val('').selectpicker('refresh');
@@ -109,7 +108,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     ngOnInit() {
-        debugger;
         $(document).scrollTop(0);
         this.prevStudentList = [];
         let action = this.routeParams.get('action');
@@ -180,11 +178,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         });
         $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
             ev.preventDefault();
-           // alert('select = ' + suggetion);
             self.FilterStudentfromResult(suggetion);
-            //$('#findStudentToAdd').focus();
             $('.typeahead').typeahead('close');
-            
+
         });
     }
     InitializePage(): void {
@@ -369,8 +365,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             testsPromise.then((response) => {
                 return response.json();
             })
-                .then((json) => {
-                    debugger;
+                .then((json) => {                    
                     if (_self.testsTable)
                         _self.testsTable.destroy();
 
@@ -382,25 +377,27 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         this.cohortStudentlist = [];
 
                     setTimeout(json=> {
-                        _self.testsTable = $('#cohortStudents').DataTable({                            
-                            "paging": false,
-                            "responsive": true,
-                            "info": false,
-                            "scrollY": 551,
-                            "dom": 't<"add-students-table-search"f>',
-                            "language": {
-                                search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
-                                searchPlaceholder: "Find student in cohort",
-                                "zeroRecords": this.noStudentInCohort,
-                                "emptyTable": "We’re sorry, there are no students in this cohort.",
-                            },
-                            columnDefs: [{
-                                targets: [2, 4],
-                                orderable: false,
-                                searchable: false
-                            }]
+                        _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig());
+                            //{
+                            //"paging": false,
+                            //"responsive": true,
+                            //"info": false,
+                            //"scrollY": 551,
+                            //"dom": 't<"add-students-table-search"f>',
+                            //"language": {
+                            //    search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
+                            //    searchPlaceholder: "Find student in cohort",
+                            //    "zeroRecords": this.noStudentInCohort,
+                            //    "emptyTable": "We’re sorry, there are no students in this cohort.",
+                            //},
+                            //columnDefs: [{
+                            //    targets: [2, 4],
+                            //    orderable: false,
+                            //    searchable: false
+                            //}]
 
-                        });
+                            //}   );
+                     
                         this.RefreshAllSelectionOnCohortChange();
                     });
                 })
@@ -943,7 +940,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             return response.json();
         })
             .then((json) => {
-                debugger;
                 __this.SeperateOutSelfPayStudents(json);
 
             })
@@ -1331,8 +1327,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     AddByCohort(): void {
-        //e.preventDefault();
-        debugger;
         $('#ByCohort').addClass('active');
         $('#ByName').removeClass('active');
         $('#addByCohort').addClass('active');
@@ -1344,22 +1338,22 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         this.prevSearchText = "";
         let _self = this;
         if (this.AddByCohortStudentlist.length > 0) {
-
-           // this.cohortStudentlist = [];
+            this.cohortStudentlist = [];
+            if (this.testsTable)
+                this.testsTable.destroy();
+            
             this.cohortStudentlist = this.AddByCohortStudentlist;
-            setTimeout(function () {
-                if (_self.testsTable) {
-                    //  $('#cohortStudents').DataTable().clear();
-                    _self.testsTable.destroy();
-                }
+            setTimeout(() => {
                 _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig());
-                $('#cohortStudentList').removeClass('hidden');
-                _self.noSearchStudent = false;
-                _self.RefreshAllSelectionOnCohortChange();
+                setTimeout(() => {
+                    $('#cohortStudentList').removeClass('hidden');
+                    _self.noSearchStudent = false;
+                    _self.RefreshAllSelectionOnCohortChange();
+                });
             });
         }
         else {
-            //this.cohortStudentlist = [];
+            this.cohortStudentlist = [];
             $('#cohortStudentList').addClass('hidden');
         }
     }
@@ -1372,10 +1366,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         $('#addByName').addClass('active');
         this.isAddByName = true;
         $('#findStudentToAdd').focus();
+        let _self = this;
         if (this.cohortStudentlist.length > 0) {
             this.AddByCohortStudentlist = this.cohortStudentlist;
-            //this.cohortStudentlist = null;
-           
             $('#cohortStudentList').addClass('hidden');
         }
 
@@ -1383,7 +1376,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     searchKeyPress(e): void {
         let searchText = $('#findStudentToAdd').val();
-        //alert('searchtext=' + searchText);
+        $('.typeahead').typeahead('open');
         if (e.keyCode === 13) {
             this.FilterStudentfromResult(searchText);
             console.log('AddByCohort=' + this.AddByCohortStudentlist.length);
@@ -1396,7 +1389,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     BindSearch(searchText: string): void {
-        debugger;
         if (!searchText.startsWith(' ')) {
             if (searchText.length === 2 && this.prevSearchText != searchText) {
                 //call the api
@@ -1416,12 +1408,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             $('#findStudentToAdd').focus();
             $('.typeahead').typeahead('close');
         }
-        //$('#findStudentToAdd').focus();
     }
 
     loadSearchStudent(searctText: string): void {
         let cohortURL = this.resolveSearchStudentURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.searchStudents}`, searctText);
-        debugger;
         let searchStudentPromise = this.testService.getSearchStudent(cohortURL);
         let __this = this;
         searchStudentPromise.then((response) => {
@@ -1465,7 +1455,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     $('.typeahead').typeahead('close');
                     $('#cohortStudentList').addClass('hidden');
                 }
-               // $('#findStudentToAdd').focus();
+                // $('#findStudentToAdd').focus();
             })
             .catch((error) => {
                 console.log(error);
@@ -1478,10 +1468,11 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     FilterStudentfromResult(searchString: string): void {
-        debugger;
         let _self = this;
         if (this.AddByNameStudentlist.length > 0) {
-            this.cohortStudentlist = null;
+            this.cohortStudentlist = [];
+            if (this.testsTable)
+                this.testsTable.destroy();
             let _searchStudents: Object[] = [];
             $.each(this.AddByNameStudentlist, function (index, el) {
                 let firstName = el.FirstName.toUpperCase();
@@ -1493,7 +1484,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     isValidToSplitCheck = false;
                 }
                 else if (isValidToSplitCheck) {
-                    debugger;
                     let _fname = firstName.split(' ');
                     let _lname = lastName.split(' ');
                     if (_fname.length > 1 || _lname.length > 1) {
@@ -1515,7 +1505,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         }
                     }
                     else {
-                        debugger;
                         let studentName = firstName + " " + lastName;
                         if (_.startsWith(studentName, searchString)) {
                             _searchStudents.push(el);
@@ -1523,7 +1512,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     }
                 }
                 else {
-                    debugger;
                     let studentName = firstName + " " + lastName;
                     if (_.startsWith(studentName, searchString)) {
                         _searchStudents.push(el);
@@ -1531,25 +1519,16 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 }
             });
             if (_searchStudents.length > 0) {
-                //this.AddByCohortStudentlist = [];
-               // this.cohortStudentlist = null;
-                
-                debugger;
-               // $('#cohortStudents').DataTable().clear();
                 this.cohortStudentlist = this.markDuplicate(_searchStudents);
-                
-               // this.testsTable = $('#cohortStudents').DataTable(this.GetConfig());
-                setTimeout(function () {
-                    if (_self.testsTable)
-                        _self.testsTable.destroy();
-
+                setTimeout(() => {
                     _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig());
-                    $('#cohortStudentList').removeClass('hidden');
-                    _self.noSearchStudent = false;
-                    _self.RefreshAllSelectionOnCohortChange();
-                    $('#cohortStudents_filter').addClass('invisible');
-                    $('.typeahead').typeahead('close');
-                    //$('#findStudentToAdd').focus();
+                    setTimeout(() => {
+                        $('#cohortStudentList').removeClass('hidden');
+                        _self.noSearchStudent = false;
+                        _self.RefreshAllSelectionOnCohortChange();
+                        $('#cohortStudents_filter').addClass('invisible');
+                        $('.typeahead').typeahead('close');
+                    });
                 });
             }
             else {
@@ -1563,6 +1542,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         }
     }
 
+
+
     GetConfig(): any {
         let _config = {
             "paging": false,
@@ -1573,8 +1554,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             "language": {
                 search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
                 searchPlaceholder: "Find student in cohort",
-                "zeroRecords": "We’re sorry, there are no students that match your search. Please try again.",
-                //  "emptyTable": "We’re sorry, there are no students in this cohort.",
+                "zeroRecords": this.noStudentInCohort,
+                "emptyTable": "We’re sorry, there are no students in this cohort.",
             },
             columnDefs: [{
                 targets: [2, 4],
@@ -1587,12 +1568,11 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     searchStudent(findstudenttoadd: any, e): void {
         e.preventDefault();
-        debugger;
         let searchText: string = findstudenttoadd.value;
         this.FilterStudentfromResult(searchText);
-        //$('.typeahead').typeahead('close');
-        //$('#findStudentToAdd').focus();
     }
+
+
     // validateDates(): boolean {
     //     if (this.testScheduleModel) {
 
