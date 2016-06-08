@@ -151,7 +151,6 @@ export class Home implements OnInit {
                     this.institutionID = this.institutionRN;
                 }
                 
-                this.auth.isPayInstitutionEnabled(this.institutionID);
                 let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
                 let subjectsPromise = this.testService.getSubjects(subjectsURL);
                 subjectsPromise.then((response) => {

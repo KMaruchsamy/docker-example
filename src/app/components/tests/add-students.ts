@@ -916,7 +916,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             return response.json();
         })
             .then((json) => {
-
                 if (json != null) {
                     __this.resolveExceptions(json, __this);
                 }
@@ -943,6 +942,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             return response.json();
         })
             .then((json) => {
+                debugger;
                 __this.SeperateOutSelfPayStudents(json);
 
             })
@@ -955,7 +955,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             if (this.loader)
                 this.loader.dispose();
             this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopup, this.elementRef)
-                .then(retester=> {
+                .then(retester => {
                     this.loader = retester;
                     $('#modalTimingException').modal('show');
                     retester.instance.studentWindowException = _studentWindowException;
@@ -992,7 +992,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             if (this.loader)
                 this.loader.dispose();
             this.dynamicComponentLoader.loadNextToLocation(SelfPayStudentPopup, this.elementRef)
-                .then(retester=> {
+                .then(retester => {
                     this.loader = retester;
                     $('#selfPayStudentModal').modal('show');
                     this.markSelfPayStudents();
@@ -1023,7 +1023,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         if (_studentWindowException.length > 0) {
             __this._selfPayStudent = [];
             $.each(_studentWindowException, function () {
-                if (this.IgnoreExceptionIfStudentPay && __this.auth.isSelectedInstitutionIsPay)
+                if (this.IgnoreExceptionIfStudentPay && __this.auth.isStudentPayEnabledInstitution(__this.testScheduleModel.institutionId))
                     __this._selfPayStudent.push(this);
                 else
                     _timingWindowStudents.push(this);
