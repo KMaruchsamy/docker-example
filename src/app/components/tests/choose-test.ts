@@ -495,6 +495,8 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         let searchText = $('#findTestByName').val().toLowerCase();
         searchText = searchText.substring(0, 2);
         if (e.keyCode == 13) {
+            $('#findTestByName').focus();
+            $('#findTestByName').typeahead('close');
             self.bindTypeaheadSearchButton(e);
         }
         if (searchText == "") {
