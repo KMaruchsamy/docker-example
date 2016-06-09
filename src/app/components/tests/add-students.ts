@@ -177,13 +177,13 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             e.preventDefault();
             self.searchKeyPress(e);
         });
-        $('.typeahead').on('mouseleave', function (e) {
-            e.preventDefault();
-            self.searchKeyPress(e);
-        });
+        //$('.typeahead').on('mouseleave', function (e) {
+        //    e.preventDefault();
+        //    self.searchKeyPress(e); return true;
+        //});
         $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
             ev.preventDefault();
-            self.FilterStudentfromResult(suggetion);
+            self.FilterStudentfromResult(suggetion.toLowerCase());
             $('.typeahead').typeahead('close');
 
         });
@@ -1388,21 +1388,21 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     BindSearch(searchText: string): void {
         if (!searchText.startsWith(' ')) {
-            if (searchText.length === 2 && this.prevSearchText.toLowerCase() != searchText.toLowerCase()) {
+            if (searchText.length === 2 && this.prevSearchText.toUpperCase() != searchText.toUpperCase()) {
                 //call the api
-                $('.typeahead').typeahead('destroy');
-                this.loadSearchStudent(searchText.trimLeft().toLowerCase());
-                this.prevSearchText = searchText.trimLeft().toLowerCase();
+               $('.typeahead').typeahead('destroy');
+                this.loadSearchStudent(searchText.trimLeft().toUpperCase());
+                this.prevSearchText = searchText.trimLeft().toUpperCase();
             }                     
-            else if (searchText.length > 2) {        // On paste the searchString....  
-                let _searchStringToBindApi: string = "";
-                _searchStringToBindApi = searchText.trimLeft().substr(0, 2).toLowerCase();
-                if (this.prevSearchText !== _searchStringToBindApi ){// this.AddByNameStudentlist.length == 0) {
-                    $('.typeahead').typeahead('destroy');
-                    this.loadSearchStudent(_searchStringToBindApi);
-                    this.prevSearchText = _searchStringToBindApi;
-                }
-            }   // End of paste the searchString....        
+            //else if (searchText.length > 2) {        // On paste the searchString....  
+            //    let _searchStringToBindApi: string = "";
+            //    _searchStringToBindApi = searchText.trimLeft().substr(0, 2).toUpperCase();
+            //    if (this.prevSearchText !== _searchStringToBindApi ){
+            //       // $('.typeahead').typeahead('destroy');
+            //        this.loadSearchStudent(_searchStringToBindApi);
+            //        this.prevSearchText = _searchStringToBindApi;
+            //    }
+            //}   // End of paste the searchString....        
             else {
                 if (searchText.length < 2) {
                     $('.typeahead').typeahead('close');
