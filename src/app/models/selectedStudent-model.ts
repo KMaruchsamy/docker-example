@@ -15,6 +15,7 @@ export class SelectedStudentModel {
     NormingId: number;
     NormingStatus: string;
     MarkedToRemove: boolean = false;
+    StudentPay :boolean =false;
     constructor() {
     }
     resetData(): void {
@@ -31,5 +32,6 @@ export class SelectedStudentModel {
         this.NormingId = 0;
         this.NormingStatus = "";
         this.MarkedToRemove = false;
+        this.StudentPay = false;
     }
 }

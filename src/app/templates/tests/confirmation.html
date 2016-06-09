@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="margin-2em-top">
-            <a [routerLink]="['/ModifyViewTest',{action:'modify'}]">View/print this testing session</a>
+            <a [routerLink]="['/ModifyViewTest',{action:'modify', id: testScheduleModel.scheduleId}]">View/print this testing session</a>
         </div>
         <p class="margin-2em-top-bottom">Need to make changes? <a [routerLink]="['/ModifyChooseTest',{action:'modify',institutionId:testScheduleModel.institutionId}]">Modify this testing session</a></p>
         <a [routerLink]="['/ManageTests']">Go to Manage Tests main page</a>

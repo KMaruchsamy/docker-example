@@ -32,7 +32,7 @@ import '../../lib/modal.js';
 export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     institutionID: number;
     apiServer: string;
-    subjectId: number = 0;
+    subjectId: number;
     testTypeId: number;
     subjects: Object[] = [];
     tests: Object[] = [];
@@ -44,8 +44,9 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     saveTriggered: boolean = false;
     searchString: string = null;
     typeaheadResults: Object[] = [];
-    searchResult: Object[] = [];
-           constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
+    searchResult: Object[];
+    previouSearch: string = null;
+    constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public aLocation: Location) {
     }
 
@@ -90,11 +91,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         }
         // }
         if (outOfTestScheduling)
-        this.testService.clearTestScheduleObjects();
-        $('#subject').addClass('active');
-        $('#findByName').removeClass('active');
-        $('#test').removeClass('active');
-        $('#chooseBySubject').addClass('active');
+            this.testService.clearTestScheduleObjects();
         this.overrideRouteCheck = false;
         return true;
     }
@@ -102,6 +99,9 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         if (this.testsTable)
             this.testsTable.destroy();
+        this.tests = [];
+        $('#findTestByName').val('');
+        $('.typeahead').typeahead('destroy');
         $('.selectpicker').val('').selectpicker('refresh');
     }
 
@@ -113,12 +113,24 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         this.institutionID = parseInt(this.routeParams.get('institutionId'));
         this.apiServer = this.common.getApiServer();
         $('.typeahead').typeahead('destroy');
+        $('#test').removeClass('active');
+        $('#subject').addClass('active');
+        $('#findByName').removeClass('active');
+        $('#chooseBySubject').addClass('active');
+        $('#availableTests').removeClass('hidden');
         this.loadSubjects();
         $('.typeahead').bind('typeahead:select', function () {
-        self.bindTypeahead();
+            self.bindTypeahead();
+        });
+        $('.typeahead').on('keyup click ', function (e) {
+            e.preventDefault();
+            self.bindTypeaheadFocus(e);
+        });
+        $('.typeahead').on('mouseleave', function (e) {
+            e.preventDefault();
+            self.bindTypeaheadFocus(e);
         });
         $('#findTestByName').val('');
-
     }
 
     loadSchedule(): void {
@@ -127,7 +139,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             this.testScheduleModel = savedSchedule;
             this.subjectId = this.testScheduleModel.subjectId;
             if (this.subjectId == 0) {
-                this.loadTestsBySearch();
+                this.loadTestsBySearch(this.testScheduleModel.testName);
             } else {
                 this.loadTests(this.subjectId);
             }
@@ -186,21 +198,23 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         })
             .then((json) => {
                 self.tests = json;
-                if (self.testsTable)
+
+                if (self.testsTable) {
                     self.testsTable.destroy();
-                setTimeout(json => {
-                    self.testsTable = $('#chooseTestTable').DataTable({
-                        "paging": false,
-                        "searching": false,
-                        "responsive": true,
-                        "info": false,
-                        "ordering": false
+                    setTimeout(json => {
+                        self.testsTable = $('#chooseTestTable').DataTable({
+                            "paging": false,
+                            "searching": false,
+                            "responsive": true,
+                            "info": false,
+                            "ordering": false
+                        });
+                        $('#chooseTestTable').on('responsive-display.dt', function () {
+                            $(this).find('.child .dtr-title br').remove();
+                        });
                     });
-                    $('#chooseTestTable').on('responsive-display.dt', function () {
-                        $(this).find('.child .dtr-title br').remove();
-                    });
-                });
-                 $('#availableTests').removeClass('hidden');
+                }
+                $('#availableTests').removeClass('hidden');
             })
             .catch((error) => {
                 console.log(error);
@@ -352,147 +366,184 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     }
 
     findByName(element: string, event): void {
-        $('#test').addClass('active');
-        $('#findByName').addClass('active');
         $('#subject').removeClass('active');
         $('#chooseBySubject').removeClass('active');
+        $('#test').addClass('active');
+        $('#findByName').addClass('active');
         $('.typeahead').typeahead('destroy');
         $('#findTestByName').val('');
         $('#errorText').addClass('hidden');
-        if (this.testScheduleModel.subjectId == 0 && this.testScheduleModel.testId == 0) {
+        this.searchResult = [];
+        this.previouSearch = null;
+        if (this.testScheduleModel.subjectId == 0 && this.testScheduleModel.testId == 0)
             this.tests = [];
-        }
-        else {
+        else
             $('#availableTests').addClass('hidden');
-        }
     }
 
     chooseBySubject(element: string, event): void {
         $('#test').removeClass('active');
-        $('#subject').addClass('active');
         $('#findByName').removeClass('active');
+        $('#subject').addClass('active');
         $('#chooseBySubject').addClass('active');
-        $('.selectpicker').selectpicker('refresh');
         $('#errorText').addClass('hidden');
         if (this.testScheduleModel.subjectId == 0 && this.testScheduleModel.testId == 0) {
             $('.selectpicker').val('').selectpicker('refresh');
             this.tests = [];
         }
         else {
-            $('.selectpicker').selectpicker('refresh');
+            $('.selectpicker').val('').selectpicker('refresh');
             $('#availableTests').addClass('hidden');
         }
-       
     }
 
-    loadTestsBySearch(): void {
+    loadTestsBySearch(testName: string): void {
         $('.typeahead').typeahead('destroy');
         this.subjectId = 0;
-        this.searchString = $('#findTestByName').val();
+        this.searchString = testName;
         let self = this;
-            let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}`);
-            let testsPromise = this.testService.getTests(testsURL);
-            testsPromise.then((response) => {
-                if (response.status !== 400) {
-                    return response.json();
-                }
-                return [];
-            })
-                .then((json) => {
-                    self.searchResult = json;
-                    if (json.length === 0) {
-                        $('#availableTests').addClass('hidden');
-                        $('#errorText').removeClass('hidden');
-                    } else {
-                        $('#errorText').addClass('hidden');
-                    }
-                    let typeaheadTestName = '';
-                    typeaheadTestName = _.pluck(self.searchResult, 'TestName');
-
-                    self.typeaheadResults = new Bloodhound({
-                        datumTokenizer: Bloodhound.tokenizers.whitespace,
-                        queryTokenizer: Bloodhound.tokenizers.whitespace,
-                        local: typeaheadTestName
-                    });
-                    $('#bloodhound .typeahead').typeahead({
-                        hint: false,
-                        highlight: true,
-                        minLength: 1
-                    },
-                        {
-                            name: 'testNames',
-                            limit: 20,
-                            source: self.typeaheadResults
-                        });
-                    $('#findTestByName').focus();
-                    $('#findTestByName').typeahead('open');
-                });
+        let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}`);
+        let testsPromise = this.testService.getTests(testsURL);
+        testsPromise.then((response) => {
+            if (response.status !== 400) {
+                return response.json();
             }
+            return [];
+        })
+            .then((json) => {
+                self.searchResult = json;
+                if (json.length === 0) {
+                    $('#availableTests').addClass('hidden');
+                    $('#findTestByName').focus();
+                    $('#errorText').removeClass('hidden');
+                } else {
+                    $('#errorText').addClass('hidden');
+                    self.showTypeahead();
+                    setTimeout(function () { $('#findTestByName').focus(); }, 1);
+                    $('#findTestByName').typeahead('open');
+                }
+                if (self.testScheduleModel.testId != 0 && self.testScheduleModel.subjectId == 0) {
+                    this.displayTest(this.testScheduleModel.testId);
+                }
+            });
+    }
+
+    showTypeahead(): void {
+        let self = this;
+        let testNamesList = _.pluck(self.searchResult, 'TestName');
+
+        $('#bloodhound .typeahead').typeahead({
+            hint: false,
+            highlight: true,
+            minLength: 1
+        },
+            {
+                name: 'testNames',
+                limit: 20,
+                source: function (query, process) {
+                    var states = [];
+                    var data = testNamesList
+                    var strRegex = new RegExp(query, 'i');
+                    $.each(data, function (i, state) {
+                        if (strRegex.test(state)) {
+                            $('#errorText').addClass('hidden');
+                            states.push(state);
+                        }
+                    });
+                    process(states);
+                }
+            });
+    }
 
     bindTestSearchResults(setValue: boolean): void {
-        this.tests = [];
         let self = this;
+        this.testsTable = null;
         let search = $('#findTestByName').val();
         if (setValue) {
-            this.tests = _.where(self.searchResult, { TestName: search });
+            self.tests = _.where(self.searchResult, { TestName: search });
         }
         else {
             if (search.length != 0) {
                 let _testDetails = [];
                 let _listOfTests = [];
-                let testNameList = _.pluck(this.searchResult, 'TestName');
+                let testNameList = _.pluck(self.searchResult, 'TestName');
                 for (let i = 0; i < testNameList.length; i++) {
                     let testName = testNameList[i];
-                    if (_.startsWith(testName, search)) {
-                         _listOfTests = _.where(this.searchResult, { TestName: testName });
-                        for (var j = 0; j < _listOfTests.length; j++) {
+                    if (_.startsWith(testName.toLowerCase(), search.toLowerCase())) {
+                        _listOfTests = _.where(self.searchResult, { TestName: testName });
+                        for (let j = 0; j < _listOfTests.length; j++) {
                             _testDetails.push(_listOfTests[j]);
                         }
                     }
                 }
-                this.tests = _testDetails;
+                self.tests = _testDetails;
             }
             else {
-                this.tests = this.searchResult;
+                if (this.searchResult.length != 0)
+                    self.tests = this.searchResult;
+                else {
+                    $('#errorText').removeClass('hidden');
+                    $('#availableTests').addClass('hidden');
+                }
             }
         }
-        if (this.tests.length == 0) {
-                $('#availableTests').addclass('hidden');
+        if (self.tests.length != 0) {
+            $('#errorText').addClass('hidden');
+            $('#availableTests').removeClass('hidden');
         }
-        $('#errorText').addClass('hidden');
-        $('#availableTests').removeClass('hidden');
+        else {
+            $('#errorText').removeClass('hidden');
+        }
     }
+
 
     bindTypeaheadFocus(e): void {
         e.preventDefault();
         let self = this;
-        let searchText = $('#findTestByName').val();
-      if (/^[a-zA-Z][a-zA-Z0-9\b\s]*$/.test(searchText)) {
-          if (searchText.length == 2 && searchText != "  ") {
-                self.loadTestsBySearch();
-          }
-          $('#errorText').removeClass('hidden');
+        let searchText = $('#findTestByName').val().toLowerCase();
+        searchText = searchText.substring(0, 2);
+        if (e.keyCode == 13) {
+            $('#findTestByName').focus();
+            $('#findTestByName').typeahead('close');
+            self.bindTypeaheadSearchButton(e);
         }
-      else {
-          searchText = "";
-          $('#findTestByName').val('');
-                  }
-      if (searchText.length < 2)
-          $('#findTestByName').typeahead('destroy');
-      $('#errorText').addClass('hidden');
-      $('#findTestByName').focus();
-
-      if (searchText == "") {
-          $('#errorText').addClass('hidden');
-      }
+        if (searchText == "") {
+            this.searchResult = [];
+            this.previouSearch = null;
+            $('.typeahead').typeahead('destroy');
+            $('#errorText').addClass('hidden');
+            setTimeout(function () { $('#findTestByName').focus(); }, 1);
+        }
+        if (searchText.length <= 1) {
+            $('#errorText').addClass('hidden');
+            setTimeout(function () { $('#findTestByName').focus(); }, 1);
+        }
+        if (searchText.length == 2 && searchText != "  ") {
+            if (this.previouSearch != searchText) {
+                self.loadTestsBySearch(searchText);
+                this.previouSearch = searchText;
+                setTimeout(function () { $('#findTestByName').focus(); }, 1);
+            }
+        }
     }
 
     bindTypeaheadSearchButton(e): void {
+        e.preventDefault();
+        this.tests = [];
         this.bindTestSearchResults(false);
     }
 
     bindTypeahead(): void {
-       let searchText = $('#findTestByName').typeahead('val');
+        let searchText = $('#findTestByName').typeahead('val');
+        $('#errorText').addClass('hidden');
+        $('#findTestByName').focus();
+        $('#findTestByName').typeahead('close');
+        this.tests = [];
         this.bindTestSearchResults(true);
+    }
+
+    displayTest(testId: number): void {
+        let self = this;
+        self.tests = _.where(self.searchResult, { TestId: testId });
     }
 }

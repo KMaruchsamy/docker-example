@@ -57,6 +57,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     hasADA: boolean = false;
     retesterExceptionsModify: Object[] = [];
     facultyAssignable: boolean = true;
+    hasStudentPay: boolean = false;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public common: Common,
         public router: Router, public dynamicComponentLoader: DynamicComponentLoader,
@@ -151,7 +152,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
             }
             this.resolveADA();
-
+            this.anyStudentPayStudents();
             if (this.studentsTable)
                 this.studentsTable.destroy();
             setTimeout(() => {
@@ -187,6 +188,13 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
             this.testScheduleModel.facultyFirstName = this.auth.firstname;
             this.testScheduleModel.facultyLastName = this.auth.lastname;
         }
+    }
+    
+    anyStudentPayStudents(): void {
+        if (this.testScheduleModel && this.testScheduleModel.selectedStudents && this.testScheduleModel.selectedStudents.length > 0)
+            this.hasStudentPay = _.some(this.testScheduleModel.selectedStudents, function (student) { 
+                return ((!student.hasOwnProperty('MarkedToRemove') || student.hasOwnProperty('MarkedToRemove') && !student.MarkedToRemove) && student.hasOwnProperty('StudentPay') && student.StudentPay);                   
+            });    
     }
 
     resolveMarked(_student): boolean {
@@ -535,6 +543,8 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     rebindTable(): void {
+        this.anyStudentPayStudents();
+
         if (this.studentsTable)
             this.studentsTable.destroy();
 

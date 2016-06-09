@@ -124,33 +124,12 @@ export class ManageTests implements OnInit {
             });
     }
 
-    view(scheduleId: number, e, modify: boolean): void {
+     view(scheduleId: number, e, modify: boolean): void {
         e.preventDefault();
-        let __this = this;
-        let scheduleURL = this.resolveScheduleURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`, scheduleId);
-        let schedulePromise = this.testService.getScheduleById(scheduleURL);
-        schedulePromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
-                if (json) {
-                    let savedSchedule: TestScheduleModel = __this.testService.mapTestScheduleObjects(json);
-                    if (savedSchedule) {
-                        __this.sStorage.setItem('testschedule', JSON.stringify(savedSchedule));
-                        if (modify)
-                            __this.router.navigate(['/ModifyViewTest', { action: 'modify' }]);
-                        else
-                            __this.router.navigate(['/ViewTest']);
-                    }
-
-
-                }
-
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
+        if (modify)
+            this.router.navigate(['/ModifyViewTest', { action: 'modify', id: scheduleId }]);
+        else
+            this.router.navigate(['/ViewTest', { id: scheduleId }]);
     }
 
     configureEditor(__this: any) {
@@ -305,7 +284,6 @@ export class ManageTests implements OnInit {
                     else {
                         this.institutionID = this.institutionRN;
                     }
-                    this.auth.isPayInstitutionEnabled(this.institutionID);
                        this.apiServer = this.common.getApiServer();
                        let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
                        let subjectsPromise = this.testService.getSubjects(subjectsURL);

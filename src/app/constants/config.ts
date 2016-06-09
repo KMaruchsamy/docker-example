@@ -42,7 +42,8 @@ export const links = {
                 scheduletests: "scheduling/testingSessions",
                 modifyscheduletest: "scheduling/testingSessions/§scheduleId",
                 renamesession: "scheduling/testingSessions/§scheduleId/renameSession",
-                refreshTestingStatus: "scheduling/refreshRetestingStatus"
+                refreshTestingStatus: "scheduling/refreshRetestingStatus",
+                searchStudents:"scheduling/institutions/§institutionid/students?searchString=§searchstring&testId=§testid&windowStart=§windowstart&windowEnd=§windowend"
             },
             logging: {
                 error: 'error/Log'
