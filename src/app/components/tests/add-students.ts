@@ -69,7 +69,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     AddByNameStudentlist: Object[] = []; // To Check AddByName got students or not...
     AddByCohortStudentlist: Object[] = []; // To preserve previous selected cohort
     isAddByName: boolean = false;
-    
+
 
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
         public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location) {
@@ -110,7 +110,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     ngOnInit() {
         $(document).scrollTop(0);
-        this.prevStudentList = [];
+        this.prevStudentList = [];        
         let action = this.routeParams.get('action');
         if (action != undefined && action.trim() === 'modify') {
             this.modify = true;
@@ -173,17 +173,28 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         }
         this.loadActiveCohorts();
         let self = this;
-        $('.typeahead').on('keyup click', function (e) {
-            e.preventDefault();
-            self.searchKeyPress(e);
+
+        $('.typeahead').on('click', function (e) {
+            $('.typeahead').typeahead('open');
         });
-        //$('.typeahead').on('mouseleave', function (e) {
-        //    e.preventDefault();
-        //    self.searchKeyPress(e); return true;
-        //});
+        $('.typeahead').on('keyup', function (e) {
+            let searchText = $('#findStudentToAdd').val();
+            if (e.keyCode === 13) {               
+                self.FilterStudentfromResult(searchText);
+                $('.typeahead').typeahead('close');
+            }
+            if (e.keyCode !== 38 && e.keyCode !== 40)
+                self.BindSearch(searchText);
+        });
+        $('.typeahead').on('change', function (e) {
+            e.preventDefault();
+            let searchText = $('#findStudentToAdd').val();
+                self.BindSearch(searchText);
+        });
+
         $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
             ev.preventDefault();
-            self.FilterStudentfromResult(suggetion.toLowerCase());
+            self.FilterStudentfromResult(suggetion);
             $('.typeahead').typeahead('close');
 
         });
@@ -371,7 +382,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             testsPromise.then((response) => {
                 return response.json();
             })
-                .then((json) => {                    
+                .then((json) => {
                     if (_self.testsTable)
                         _self.testsTable.destroy();
 
@@ -610,9 +621,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     AddStudent(student: Object, event): void {
-        event.preventDefault(); ;
+        event.preventDefault();
         $('#cohort-' + student.StudentId.toString()).attr('disabled', 'disabled');
-        student.CohortId =( this.isAddByName ? student.CohortId : this.lastSelectedCohortID);
+        student.CohortId = (this.isAddByName ? student.CohortId : this.lastSelectedCohortID);
         student.CohortName = this.FindCohortName(student.CohortId);
         student.StudentTestId = this.testScheduleModel.testId;
         student.StudentTestName = this.testScheduleModel.testName;
@@ -814,11 +825,11 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         this.noSearchStudent = false;
         $('.typeahead').typeahead('destroy');
         this.prevSearchText = "";
-        
+
     }
     DetailReviewTestClick(event): void {
         event.preventDefault();
-        this.SetPageToAddByName();
+
         if (!this.validateDates())
             return;
         let studentId = [];
@@ -834,9 +845,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         console.log('TestScheduleModel with Selected student' + this.testScheduleModel);
         this.WindowException();
+        this.SetPageToAddByName();
     }
     CheckForPreviousAlternateSelection(selectedStudentModelList: any[]): void {
-        // let prevStudentList = this.testScheduleModel.selectedStudents;
         let _studentList: SelectedStudentModel[] = [];
         for (let i = 0; i < selectedStudentModelList.length; i++) {
             let _retester = selectedStudentModelList[i];
@@ -1166,10 +1177,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         this.testScheduleModel = testSchedule;
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
                         if (this.studentCountInSession()) {
-                            //if (this.modify)
-                            //    this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
-                            //else
-                            //this.router.navigate(['ReviewTest']);
+
                             this.HasStudentPayException();
                             // this.router.navigateByUrl('/tests/review');
                         }
@@ -1327,22 +1335,14 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     AddByCohort(): void {
-        //$('#ByCohort').addClass('active');
-        //$('#ByName').removeClass('active');
-        //$('#addByCohort').addClass('active');
-        //$('#addByName').removeClass('active');
-        //$('#findStudentToAdd').val("");
-        //this.isAddByName = false;
-        //this.noSearchStudent = false;
-        //$('.typeahead').typeahead('destroy');
-        //this.prevSearchText = "";
+
         this.SetPageToAddByName();
         let _self = this;
         if (this.AddByCohortStudentlist.length > 0) {
             this.cohortStudentlist = [];
             if (this.testsTable)
                 this.testsTable.destroy();
-            
+
             this.cohortStudentlist = this.AddByCohortStudentlist;
             setTimeout(() => {
                 _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig());
@@ -1375,34 +1375,19 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     }
 
-    searchKeyPress(e): void {
-        let searchText = $('#findStudentToAdd').val();
-        $('.typeahead').typeahead('open');
-        if (e.keyCode === 13) {
-            this.FilterStudentfromResult(searchText);
-        }
-        else {
-            this.BindSearch(searchText);
-        }
-    }
-
     BindSearch(searchText: string): void {
         if (!searchText.startsWith(' ')) {
-            if (searchText.length === 2 && this.prevSearchText.toUpperCase() != searchText.toUpperCase()) {
+            if (searchText.length > 2) {        // On paste the searchString....  
+                searchText = searchText.trim().substr(0, 2).toUpperCase();
+            }  // End of paste the searchString....  
+
+            if (searchText.length === 2 && this.prevSearchText != searchText.trim().toUpperCase()) {
                 //call the api
-               $('.typeahead').typeahead('destroy');
-                this.loadSearchStudent(searchText.trimLeft().toUpperCase());
-                this.prevSearchText = searchText.trimLeft().toUpperCase();
-            }                     
-            //else if (searchText.length > 2) {        // On paste the searchString....  
-            //    let _searchStringToBindApi: string = "";
-            //    _searchStringToBindApi = searchText.trimLeft().substr(0, 2).toUpperCase();
-            //    if (this.prevSearchText !== _searchStringToBindApi ){
-            //       // $('.typeahead').typeahead('destroy');
-            //        this.loadSearchStudent(_searchStringToBindApi);
-            //        this.prevSearchText = _searchStringToBindApi;
-            //    }
-            //}   // End of paste the searchString....        
+                $('.typeahead').typeahead('destroy');
+                this.loadSearchStudent(searchText);
+                this.prevSearchText = searchText.trim().toUpperCase();
+            }
+
             else {
                 if (searchText.length < 2) {
                     $('.typeahead').typeahead('close');
@@ -1475,36 +1460,47 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     FilterStudentfromResult(searchString: string): void {
         let _self = this;
-        if (this.AddByNameStudentlist.length > 0) {
-            let _searchStudents: Object[] = [];
-            $.each(this.AddByNameStudentlist, function (index, el) {
-                let firstName = el.FirstName.toUpperCase();
-                let lastName = el.LastName.toUpperCase();
-                let isValidToSplitCheck: boolean = true;
-                searchString = searchString.toUpperCase();
-                if (_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)) {
-                    _searchStudents.push(el);
-                    isValidToSplitCheck = false;
-                }
-                else if (isValidToSplitCheck) {
-                    let _fname = firstName.split(' ');
-                    let _lname = lastName.split(' ');
-                    if (_fname.length > 1 || _lname.length > 1) {
-                        let isValidToCheckLName = true;
-                        $.each(_fname, function (i, e) {
-                            if (_.startsWith(e, searchString)) {
-                                _searchStudents.push(el);
-                                isValidToCheckLName = false;
-                                return false;
-                            }
-                        });
-                        if (isValidToCheckLName) {
-                            $.each(_lname, function (i, e) {
+        if (searchString.length > 1) {
+            if (this.AddByNameStudentlist.length > 0) {
+                let _searchStudents: Object[] = [];
+                $.each(this.AddByNameStudentlist, function (index, el) {
+                    let firstName = el.FirstName.toUpperCase();
+                    let lastName = el.LastName.toUpperCase();
+                    let isValidToSplitCheck: boolean = true;
+                    let isValidToCheckFullName: boolean = true;
+                    searchString = searchString.trim().toUpperCase();
+                    if (_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)) {
+                        _searchStudents.push(el);
+                        isValidToSplitCheck = false;
+                    }
+                    else if (isValidToSplitCheck) {
+                        let _fname = firstName.split(' ');
+                        let _lname = lastName.split(' ');
+                        if (_fname.length > 1 || _lname.length > 1) {
+                            let isValidToCheckLName = true;
+                            $.each(_fname, function (i, e) {
                                 if (_.startsWith(e, searchString)) {
                                     _searchStudents.push(el);
+                                    isValidToCheckLName = false;
+                                    isValidToCheckFullName = false;
                                     return false;
                                 }
                             });
+                            if (isValidToCheckLName) {
+                                $.each(_lname, function (i, e) {
+                                    if (_.startsWith(e, searchString)) {
+                                        _searchStudents.push(el);
+                                        isValidToCheckFullName = false;
+                                        return false;
+                                    }
+                                });
+                            }
+                        }
+                        if (isValidToCheckFullName) {
+                            let studentName = firstName + " " + lastName;
+                            if (_.startsWith(studentName, searchString)) {
+                                _searchStudents.push(el);
+                            }
                         }
                     }
                     else {
@@ -1513,38 +1509,32 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                             _searchStudents.push(el);
                         }
                     }
+                });
+                if (_searchStudents.length > 0) {
+                    this.cohortStudentlist = [];
+                    if (this.testsTable)
+                        this.testsTable.destroy();
+                    this.cohortStudentlist = this.markDuplicate(_searchStudents);
+                    setTimeout(() => {
+                        _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig());
+                        setTimeout(() => {
+                            $('#cohortStudentList').removeClass('hidden');
+                            _self.noSearchStudent = false;
+                            _self.RefreshAllSelectionOnCohortChange();
+                            $('#cohortStudents_filter').addClass('invisible');
+                            $('.typeahead').typeahead('close');
+                        });
+                    });
                 }
                 else {
-                    let studentName = firstName + " " + lastName;
-                    if (_.startsWith(studentName, searchString)) {
-                        _searchStudents.push(el);
-                    }
+                    this.noSearchStudent = true;
+                    $('#cohortStudentList').addClass('hidden');
                 }
-            });
-            if (_searchStudents.length > 0) {
-                this.cohortStudentlist = [];
-                if (this.testsTable)
-                    this.testsTable.destroy();
-                this.cohortStudentlist = this.markDuplicate(_searchStudents);
-                setTimeout(() => {
-                    _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig());
-                    setTimeout(() => {
-                        $('#cohortStudentList').removeClass('hidden');
-                        _self.noSearchStudent = false;
-                        _self.RefreshAllSelectionOnCohortChange();
-                        $('#cohortStudents_filter').addClass('invisible');
-                        $('.typeahead').typeahead('close');
-                    });
-                });
             }
             else {
                 this.noSearchStudent = true;
                 $('#cohortStudentList').addClass('hidden');
             }
-        }
-        else {
-            this.noSearchStudent = true;
-            $('#cohortStudentList').addClass('hidden');
         }
     }
 
@@ -1578,8 +1568,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         this.FilterStudentfromResult(searchText);
     }
 
-
-    // validateDates(): boolean {
+   // validateDates(): boolean {
     //     if (this.testScheduleModel) {
 
     //         if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
