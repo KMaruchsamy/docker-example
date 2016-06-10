@@ -122,11 +122,8 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('.typeahead').bind('typeahead:select', function () {
             self.bindTypeahead();
         });
-        $('.typeahead').on('keyup click ', function (e) {
-            e.preventDefault();
-            self.bindTypeaheadFocus(e);
-        });
-        $('.typeahead').on('mouseleave', function (e) {
+
+        $('.typeahead').on('input', function (e) {
             e.preventDefault();
             self.bindTypeaheadFocus(e);
         });
