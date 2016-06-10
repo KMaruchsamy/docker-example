@@ -101,7 +101,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             this.testsTable.destroy();
         this.tests = [];
         $('#findTestByName').val('');
-        $('.typeahead').typeahead('destroy');
+        $('#findTestByName').typeahead('destroy');
         $('.selectpicker').val('').selectpicker('refresh');
     }
 
@@ -112,20 +112,16 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         this.testTypeId = 1;
         this.institutionID = parseInt(this.routeParams.get('institutionId'));
         this.apiServer = this.common.getApiServer();
-        $('.typeahead').typeahead('destroy');
+        $('#findTestByName').typeahead('destroy');
         $('#test').removeClass('active');
         $('#subject').addClass('active');
         $('#findByName').removeClass('active');
         $('#chooseBySubject').addClass('active');
         $('#availableTests').removeClass('hidden');
         this.loadSubjects();
-        $('.typeahead').bind('typeahead:select', function () {
-            self.bindTypeahead();
-        });
-
-        $('.typeahead').on('input', function (e) {
+        $('#findTestByName').on('typeahead:select', function (e, suggetion) {
             e.preventDefault();
-            self.bindTypeaheadFocus(e);
+            self.bindTypeahead(suggetion);
         });
         $('#findTestByName').val('');
     }
@@ -367,15 +363,19 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#chooseBySubject').removeClass('active');
         $('#test').addClass('active');
         $('#findByName').addClass('active');
-        $('.typeahead').typeahead('destroy');
+        $('#findTestByName').typeahead('destroy');
         $('#findTestByName').val('');
         $('#errorText').addClass('hidden');
         this.searchResult = [];
         this.previouSearch = null;
-        if (this.testScheduleModel.subjectId == 0 && this.testScheduleModel.testId == 0)
+        if (this.testScheduleModel.testId != 0) {
             this.tests = [];
-        else
+            this.loadTestsBySearch(this.testScheduleModel.testName);
+        }
+        else {
+            $('.selectpicker').val('').selectpicker('refresh');
             $('#availableTests').addClass('hidden');
+        }
     }
 
     chooseBySubject(element: string, event): void {
@@ -384,9 +384,10 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#subject').addClass('active');
         $('#chooseBySubject').addClass('active');
         $('#errorText').addClass('hidden');
-        if (this.testScheduleModel.subjectId == 0 && this.testScheduleModel.testId == 0) {
+        if (this.testScheduleModel.testId != 0) {
             $('.selectpicker').val('').selectpicker('refresh');
             this.tests = [];
+            this.loadTestsBySearch(this.testScheduleModel.testName);
         }
         else {
             $('.selectpicker').val('').selectpicker('refresh');
@@ -395,7 +396,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     }
 
     loadTestsBySearch(testName: string): void {
-        $('.typeahead').typeahead('destroy');
+        $('#findTestByName').typeahead('destroy');
         this.subjectId = 0;
         this.searchString = testName;
         let self = this;
@@ -419,7 +420,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                     setTimeout(function () { $('#findTestByName').focus(); }, 1);
                     $('#findTestByName').typeahead('open');
                 }
-                if (self.testScheduleModel.testId != 0 && self.testScheduleModel.subjectId == 0) {
+                if (self.testScheduleModel.testId != 0) {
                     this.displayTest(this.testScheduleModel.testId);
                 }
             });
@@ -495,7 +496,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
 
 
     bindTypeaheadFocus(e): void {
-        e.preventDefault();
         let self = this;
         let searchText = $('#findTestByName').val().toLowerCase();
         searchText = searchText.substring(0, 2);
@@ -507,12 +507,13 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         if (searchText == "") {
             this.searchResult = [];
             this.previouSearch = null;
-            $('.typeahead').typeahead('destroy');
+            $('#findTestByName').typeahead('destroy');
             $('#errorText').addClass('hidden');
             setTimeout(function () { $('#findTestByName').focus(); }, 1);
         }
-        if (searchText.length <= 1) {
+        if (searchText.length == 1) {
             $('#errorText').addClass('hidden');
+            $('#findTestByName').typeahead('destroy');
             setTimeout(function () { $('#findTestByName').focus(); }, 1);
         }
         if (searchText.length == 2 && searchText != "  ") {
@@ -530,7 +531,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         this.bindTestSearchResults(false);
     }
 
-    bindTypeahead(): void {
+    bindTypeahead(searchValue : string): void {
         let searchText = $('#findTestByName').typeahead('val');
         $('#errorText').addClass('hidden');
         $('#findTestByName').focus();
