@@ -9,7 +9,7 @@ import {PageFooter} from '../shared/page-footer';
 @Component({
     selector: 'groups',
     providers: [Auth],
-    templateUrl: '../../templates/groups/groups.html',
+    templateUrl: 'templates/groups/groups.html',
     directives: [RouterLink, PageHeader, PageFooter]
 })
 

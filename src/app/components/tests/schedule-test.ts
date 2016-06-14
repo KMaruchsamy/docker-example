@@ -18,7 +18,7 @@ import '../../lib/modal.js';
 
 @Component({
     selector: 'schedule-test',
-    templateUrl: '../../templates/tests/schedule-test.html',
+    templateUrl: 'templates/tests/schedule-test.html',
     styleUrls: ['../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css', '../../css/jquery.timepicker.css', '../../css/schedule.css'],
     encapsulation: ViewEncapsulation.None,
     providers: [TestService, Auth, TestScheduleModel, Common],

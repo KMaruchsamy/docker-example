@@ -12,7 +12,7 @@ import '../../lib/modal.js';
 
 @Component({
     selector: 'confirmation',
-    templateUrl: '../../templates/tests/confirmation.html',
+    templateUrl: 'templates/tests/confirmation.html',
     providers: [Common, TestService, TestScheduleModel, Auth],
     directives: [RouterLink, PageHeader, PageFooter, TestHeader]
 })

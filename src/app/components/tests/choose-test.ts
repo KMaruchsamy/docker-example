@@ -23,7 +23,7 @@ import '../../lib/modal.js';
 
 @Component({
     selector: 'choose-test',
-    templateUrl: '../../templates/tests/choose-test.html',
+    templateUrl: 'templates/tests/choose-test.html',
     providers: [TestService, Auth, TestScheduleModel, Utility, Common],
     directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup, AlertPopup],
     pipes: [RemoveWhitespacePipe, RoundPipe]

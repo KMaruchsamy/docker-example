@@ -11,7 +11,7 @@ import {links} from '../../constants/config';
 @Component({
     selector: 'reports',
     providers: [Auth, Common],
-    templateUrl: '../../templates/reports/reports.html',
+    templateUrl: 'templates/reports/reports.html',
     directives: [RouterLink, PageHeader, PageFooter]
 })
 

@@ -11,7 +11,7 @@ import {ProfileModel} from '../../models/profile-model';
 @Component({
     selector: 'profile-description',
     providers: [HomeService, Common],
-    templateUrl: '../../templates/home/profile-description.html',
+    templateUrl: 'templates/home/profile-description.html',
     directives: [RouterLink, PageHeader, PageFooter, NgFor, NgIf]
 })
 export class ProfileDescription {

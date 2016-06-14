@@ -321,3 +321,24 @@ function log(message){
     else
         util.log(util.colors.green(message));
 }
+
+
+
+
+
+// End to end testing 
+
+var gulpProtractor = require('gulp-protractor');
+gulp.task('e2e', ['e2e-test']);
+gulp.task('driver-update', gulpProtractor['webdriver_update']);
+gulp.task('e2e-test', ['driver-update'], function () {
+    gulp.src('./src/test/e2e/**/*.spec.js')
+    .pipe(gulpProtractor.protractor({
+        configFile: 'protractor.conf.js',
+        args: ['--baseUrl', 'http://localhost:3000']
+    }))
+    .on('error', function(e) {
+        console.log('Error running E2E testing');
+        process.exit(1);
+    });
+});

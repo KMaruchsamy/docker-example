@@ -10,7 +10,7 @@ import {general, forgot_password} from '../../constants/error-messages';
 @Component({
     selector: 'forgot-password',
     providers: [Common,Validations,Logger],
-    templateUrl: '../../templates/password/forgot-password.html',
+    templateUrl: 'templates/password/forgot-password.html',
     directives: [PasswordHeader]
 })
 

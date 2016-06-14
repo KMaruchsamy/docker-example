@@ -9,7 +9,7 @@ import {TestService} from '../../services/test.service';
 
 @Component({
     selector: 'last-testing-session',
-    templateUrl: '../../templates/tests/last-testing-session.html',
+    templateUrl: 'templates/tests/last-testing-session.html',
     directives: [RouterLink, PageHeader, PageFooter]
 })
 export class LastTestingSession{

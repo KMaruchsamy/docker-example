@@ -4,7 +4,7 @@ import {PasswordHeader} from '../password/password-header';
 
 @Component({
     selector: 'forgot-password-confirmation',
-    templateUrl: '../../templates/password/forgot-password-confirmation.html',
+    templateUrl: 'templates/password/forgot-password-confirmation.html',
     directives: [PasswordHeader]
 })
 
