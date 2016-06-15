@@ -7,7 +7,7 @@ import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({
     selector: 'time-exception',
-    templateUrl: '../../templates/tests/time-exception-popup.html',
+    templateUrl: 'templates/tests/time-exception-popup.html',
     directives: [RouterLink],
     providers: [Common],
     inputs: ['studentWindowException','canRemoveStudents'],

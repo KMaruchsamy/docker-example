@@ -13,7 +13,7 @@ import {TestScheduleModel} from '../../models/testSchedule.model';
 @Component({
     selector: 'choose-institution',
     providers: [Common, Auth, TestService, TestScheduleModel],
-    templateUrl: '../../templates/shared/choose-institution.html',
+    templateUrl: 'templates/shared/choose-institution.html',
     directives: [PageHeader, RouterLink, NgIf]
 })
 

@@ -6,7 +6,7 @@ import '../../lib/modal.js';
 @Component({
     selector: 'loader',
     providers:[Auth],
-    templateUrl: '../../templates/shared/loader.html',
+    templateUrl: 'templates/shared/loader.html',
     directives: [RouterLink],
     inputs:['loaderMessage','greetingMessage']
 })

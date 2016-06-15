@@ -5,7 +5,7 @@ import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({
     selector: 'self-pay-student-popup',
-    templateUrl: '../../templates/tests/self-pay-student-popup.html',
+    templateUrl: 'templates/tests/self-pay-student-popup.html',
     directives: [RouterLink],
     providers: [Common],
     inputs: ['studentWindowException'],

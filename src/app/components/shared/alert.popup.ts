@@ -5,7 +5,7 @@ import {Common} from '../../services/common';
 @Component({
     selector: 'alert-popup',
     providers: [Common],
-    templateUrl: '../../templates/shared/alert.popup.html',
+    templateUrl: 'templates/shared/alert.popup.html',
     directives: [RouterLink]
 })
 

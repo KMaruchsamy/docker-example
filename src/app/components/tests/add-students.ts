@@ -32,7 +32,7 @@ import '../../plugins/typeahead.bundle.js';
 
 @Component({
     selector: 'add-students',
-    templateUrl: '../../templates/tests/add-students.html',
+    templateUrl: 'templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
     providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup],
     directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, RouterLink, AlertPopup],

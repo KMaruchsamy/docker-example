@@ -7,7 +7,7 @@ import {ProfileModel} from '../../models/profile-model';
 @Component({
 	selector: 'profile',
     inputs: ['profile'],
-	templateUrl: '../../templates/home/profile.html',
+	templateUrl: 'templates/home/profile.html',
 	directives:[RouterLink,NgFor]
 })
 export class Profile {

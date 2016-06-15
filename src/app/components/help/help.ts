@@ -5,7 +5,7 @@ import {CanActivate} from 'angular2/router';
 
 @Component({
     selector:'help',
-    templateUrl:'../../templates/help/help.html',
+    templateUrl:'templates/help/help.html',
     directives:[HelpHeader, HelpContent]
 })
 @CanActivate(()=>{return true;})

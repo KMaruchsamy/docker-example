@@ -28,7 +28,7 @@ import '../../lib/tablesaw.js';
 
 @Component({
     selector: 'manage-tests',
-    templateUrl: '../../templates/tests/manage-tests.html',
+    templateUrl: 'templates/tests/manage-tests.html',
     providers: [TestService, Auth, TestScheduleModel, Utility, Common],
     host: {
         '(window:resize)': 'resize($event)'

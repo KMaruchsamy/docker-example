@@ -10,7 +10,7 @@ import {temp_password,general} from '../../constants/error-messages';
 @Component({
     selector: 'set-password-first-time',
     providers: [Auth, Common, Validations],
-    templateUrl: '../../templates/password/set-password-first-time.html',
+    templateUrl: 'templates/password/set-password-first-time.html',
     directives: [PasswordHeader, RouterLink]
 })
 

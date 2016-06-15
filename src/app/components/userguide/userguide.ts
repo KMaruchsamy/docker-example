@@ -11,7 +11,7 @@ import {Angulartics2On} from '../../lib/ng-ga';
 
 @Component({
     selector: 'userguide',
-    templateUrl: '../../templates/userguide/userguide.html',
+    templateUrl: 'templates/userguide/userguide.html',
     host: {
         '(window:scroll)': 'onScroll($event)'
     },

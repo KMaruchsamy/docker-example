@@ -12,7 +12,7 @@ import {Auth} from '../../services/auth';
     host: {
         '(window:resize)': 'resize($event)'
     },
-    templateUrl: '../../templates/login/login.html',
+    templateUrl: 'templates/login/login.html',
     directives: [LoginHeader, LoginContent, LoginFooter]
 })
 export class Login {

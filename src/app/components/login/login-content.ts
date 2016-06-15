@@ -10,7 +10,7 @@ import {general, login} from '../../constants/error-messages';
 @Component({
     selector: 'login-content',
     providers: [Auth, Common],
-    templateUrl: '../../templates/login/login-content.html',
+    templateUrl: 'templates/login/login-content.html',
     directives: [RouterLink]
 })
 
