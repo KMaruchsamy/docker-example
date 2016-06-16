@@ -23,7 +23,7 @@ import '../../lib/modal.js';
 
 @Component({
     selector: 'choose-test',
-    templateUrl: '../../templates/tests/choose-test.html',
+    templateUrl: 'templates/tests/choose-test.html',
     providers: [TestService, Auth, TestScheduleModel, Utility, Common],
     directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup, AlertPopup],
     pipes: [RemoveWhitespacePipe, RoundPipe]
@@ -119,6 +119,15 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#chooseBySubject').addClass('active');
         $('#availableTests').removeClass('hidden');
         this.loadSubjects();
+       
+        $('.typeahead').off('click keyup input');
+        $('.typeahead').unbind('typeahead:select');
+       $(document).off('input change', '#findTestByName');
+
+        $('.typeahead').on('click', function (e) {
+            $('.typeahead').typeahead('open');
+            console.log('click');
+        });
         $('.typeahead').on('keyup', function (e) {
             let searchText = $('#findTestByName').val();
             if (e.keyCode === 13) {
@@ -131,12 +140,10 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
 
         $(document).on('input change', '#findTestByName', function (e) {
             e.preventDefault();
-            setTimeout(() => {
-                let searchText = $('#findTestByName').val();
+                            let searchText = $('#findTestByName').val();
                 self.bindTypeaheadFocus(searchText);
                 $('#findTestByName').focus();
-            });
-        });
+                  });
 
         $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
             ev.preventDefault();
@@ -416,6 +423,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     }
 
     loadTestsBySearch(testName: string): void {
+        $('.typeahead').typeahead('destroy');
         this.subjectId = 0;
         this.searchString = testName;
         let self = this;
