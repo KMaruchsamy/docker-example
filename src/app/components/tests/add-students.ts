@@ -149,6 +149,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             });
         });
 
+        $('.typeahead').off('click keyup input');
+        $('.typeahead').unbind('typeahead:select');
+        $(document).off('input change', '#findStudentToAdd');
        
         $('.typeahead').on('click', function (e) {
             e.preventDefault();
@@ -159,6 +162,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             let searchText = $('#findStudentToAdd').val();
             if (e.keyCode === 13) {
                 self.FilterStudentfromResult(searchText);
+                $('.typeahead').typeahead('close');
             }
             else if (e.keyCode !== 38 && e.keyCode !== 40)
                 self.BindSearch(searchText);
@@ -167,8 +171,11 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
         $(document).on('input change', '#findStudentToAdd', function (e) {
             e.preventDefault();
+            setTimeout(() => {
                 let searchText = $('#findStudentToAdd').val();
                 self.BindSearch(searchText);
+                $('#findStudentToAdd').focus();
+            });
         });
 
         $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
@@ -1407,7 +1414,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         }
         else {
             $('#findStudentToAdd').val("");
-            $('#findStudentToAdd').focus();
+            setTimeout(() => { $('#findStudentToAdd').focus(); });
             $('.typeahead').typeahead('close');
         }
     }
@@ -1462,9 +1469,13 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     }, 
                     limit: 200
                 });
-
             $('.typeahead').typeahead('open');
-            $('#findStudentToAdd').focus();
+            setTimeout(() => {
+                $('#findStudentToAdd').focus();
+               
+            },1);
+           // $('.typeahead').typeahead('open');
+            
         });
     }
 
@@ -1550,13 +1561,13 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 }
                 else {
                     this.noSearchStudent = true;
-                    $('#findStudentToAdd').focus();
+                   // setTimeout(() => { $('#findStudentToAdd').focus(); });
                     $('#cohortStudentList').addClass('hidden');
                 }
             }
             else {
                 this.noSearchStudent = true;
-                $('#findStudentToAdd').focus();
+              //  setTimeout(() => { $('#findStudentToAdd').focus(); });
                 $('#cohortStudentList').addClass('hidden');
             }
         }
@@ -1564,7 +1575,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     GetConfig(): any {
         let _config = {
-            //"jQueryUI": true,
             "destroy": true,
             "retrive": true,
             "paging": false,
