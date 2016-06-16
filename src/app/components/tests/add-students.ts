@@ -99,7 +99,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         if (this.testsTable)
             this.testsTable.destroy();
-        this.cohortStudentlist = [];
         $('.selectpicker').val('').selectpicker('refresh');
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         if (outOfTestScheduling) {
@@ -109,6 +108,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     ngOnInit() {
+        let self = this;
         this.testsTable = null;
        
         this.SetPageToAddByName();
@@ -149,8 +149,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             });
         });
 
-        let self = this;
+       
         $('.typeahead').on('click', function (e) {
+            e.preventDefault();
             $('.typeahead').typeahead('open');
         });
         $('.typeahead').on('keyup', function (e) {
@@ -166,10 +167,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
         $(document).on('input change', '#findStudentToAdd', function (e) {
             e.preventDefault();
-            setTimeout(() => {
                 let searchText = $('#findStudentToAdd').val();
                 self.BindSearch(searchText);
-            });
         });
 
         $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
@@ -1376,7 +1375,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         $('#addByCohort').removeClass('active');
         $('#addByName').addClass('active');
         this.isAddByName = true;
-       // this.testsTable = null;
         $('#findStudentToAdd').focus();
         if (this.cohortStudentlist.length > 0) {
             this.AddByCohortStudentlist = this.cohortStudentlist;
@@ -1398,7 +1396,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 this.prevSearchText = searchText.trim().toUpperCase();
             }
             else if (searchText.length === 2 && mainSearchText.length > 2 && this.prevSearchText === searchText.trim().toUpperCase()) {
-                $('.typeahead').typeahead('close');
                 this.BindTypeAhead(mainSearchText);
             }
             else {
@@ -1435,12 +1432,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         __this.students.push(_student);
                     });
                     __this.BindTypeAhead(searctText);
-                }
-                else {
-                    __this.noSearchStudent = true;
-                    $('.typeahead').typeahead('close');
-                    $('#cohortStudentList').addClass('hidden');
-                }
+                }                
             })
             .catch((error) => {
                 console.log(error);
@@ -1534,7 +1526,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     }
                 });
                 if (_searchStudents.length > 0) {
-
                     let _promise = new Promise(function (resolve, reject) {
                         resolve(_searchStudents);
                     });
@@ -1548,7 +1539,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                             $('#cohortStudentList').removeClass('hidden');
                             _self.noSearchStudent = false;
                             $('#cohortStudents_filter').addClass('invisible');
-                            $('.typeahead').typeahead('close');
+                            $('#findStudentToAdd').focus();
+                            $('.typeahead').typeahead('close');                            
                             _self.RefreshAllSelectionOnCohortChange();
                         });
                     })
@@ -1558,11 +1550,13 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 }
                 else {
                     this.noSearchStudent = true;
+                    $('#findStudentToAdd').focus();
                     $('#cohortStudentList').addClass('hidden');
                 }
             }
             else {
                 this.noSearchStudent = true;
+                $('#findStudentToAdd').focus();
                 $('#cohortStudentList').addClass('hidden');
             }
         }
@@ -1571,7 +1565,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     GetConfig(): any {
         let _config = {
             //"jQueryUI": true,
-            //"destroy": true,
+            "destroy": true,
             "retrive": true,
             "paging": false,
             "responsive": true,
@@ -1596,7 +1590,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     searchStudent(findstudenttoadd: any, e): void {
         e.preventDefault();
         let searchText: string = findstudenttoadd.value;
-        $('#findStudentToAdd').focus();
         this.FilterStudentfromResult(searchText);
     }
 

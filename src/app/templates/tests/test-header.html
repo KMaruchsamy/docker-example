@@ -11,7 +11,7 @@
 [class.test-summary-heading-modify]="modify">
     <div class="container-medium-width" [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
         <div *ngIf="testSchedule.currentStep>1 " class="test-summary-heading-details"><span>Test: <b>{{testSchedule.testName}}</b></span>
-            <a href="#" [routerLink]="modify ? ['/ModifyChooseTest' , {action:'modify',institutionId : testSchedule.institutionId}] :  ['/ChooseTest' , {institutionId : testSchedule.institutionId}]" class="link-darker">Change test</a></div>
+            <a href="#" target="_self" [routerLink]="modify ? ['/ModifyChooseTest' , {action:'modify',institutionId : testSchedule.institutionId}] :  ['/ChooseTest' , {institutionId : testSchedule.institutionId}]" class="link-darker">Change test</a></div>
         <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>            
             <template [ngIf]="!nextDay">
                 {{testSchedule?.scheduleStartTime|parseDate:'ddd'}} {{testSchedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule?.scheduleStartTime|parseDate:'h:mma'}}
