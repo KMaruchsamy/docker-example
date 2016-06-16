@@ -110,7 +110,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     ngOnInit() {
         let self = this;
         this.testsTable = null;
-       
+
         this.SetPageToAddByName();
         $(document).scrollTop(0);
         this.prevStudentList = [];
@@ -152,7 +152,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         $('.typeahead').off('click keyup input');
         $('.typeahead').unbind('typeahead:select');
         $(document).off('input change', '#findStudentToAdd');
-       
+
         $('.typeahead').on('click', function (e) {
             e.preventDefault();
             $('.typeahead').typeahead('open');
@@ -831,7 +831,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         $('#addByCohort').addClass('active');
         $('#addByName').removeClass('active');
         $('#findStudentToAdd').val("");
-       // $('#addAllStudents').addClass('hidden');
+        $('#btnTypeahead').attr('disabled', 'disabled');
         this.isAddByName = false;
         this.noSearchStudent = false;
         $('.typeahead').typeahead('destroy');
@@ -1381,7 +1381,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         $('#ByName').addClass('active');
         $('#addByCohort').removeClass('active');
         $('#addByName').addClass('active');
-        this.isAddByName = true;
+        this.isAddByName = true;      
         $('#findStudentToAdd').focus();
         if (this.cohortStudentlist.length > 0) {
             this.AddByCohortStudentlist = this.cohortStudentlist;
@@ -1393,28 +1393,36 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     BindSearch(searchText: string): void {
         let mainSearchText: string = searchText;
         if (!searchText.startsWith(' ')) {
-            if (searchText.length > 2) {        // On paste the searchString....  
-                searchText = searchText.trim().substr(0, 2).toUpperCase();
-            }  // End of paste the searchString....  
+            if (searchText.length > 1) {
+                $('#btnTypeahead').removeAttr('disabled', 'disabled');
+                if (searchText.length > 2) {        // On paste the searchString....  
+                    searchText = searchText.trim().substr(0, 2).toUpperCase();
+                }  // End of paste the searchString....  
 
-            if (searchText.length === 2 && this.prevSearchText != searchText.trim().toUpperCase()) {
-                //call the api
-                this.loadSearchStudent(searchText);
-                this.prevSearchText = searchText.trim().toUpperCase();
-            }
-            else if (searchText.length === 2 && mainSearchText.length > 2 && this.prevSearchText === searchText.trim().toUpperCase()) {
-                this.BindTypeAhead(mainSearchText);
+                if (searchText.length === 2 && this.prevSearchText != searchText.trim().toUpperCase()) {
+                    //call the api
+                    this.loadSearchStudent(searchText);
+                    this.prevSearchText = searchText.trim().toUpperCase();
+                }
+                else if (searchText.length === 2 && mainSearchText.length > 2 && this.prevSearchText === searchText.trim().toUpperCase()) {
+                    this.BindTypeAhead(mainSearchText);
+                    $('#findStudentToAdd').focus();
+                    $('.typeahead').typeahead('open');
+                }
+                else {
+                    if (searchText.length < 2) {
+                        $('.typeahead').typeahead('close');
+                        this.noSearchStudent = false;
+                    }
+                }
             }
             else {
-                if (searchText.length < 2) {
-                    $('.typeahead').typeahead('close');
-                    this.noSearchStudent = false;
-                }
+                $('#btnTypeahead').attr('disabled', 'disabled');
             }
         }
         else {
             $('#findStudentToAdd').val("");
-            setTimeout(() => { $('#findStudentToAdd').focus(); });
+            $('#findStudentToAdd').focus();
             $('.typeahead').typeahead('close');
         }
     }
@@ -1437,9 +1445,11 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     $.each(__this.AddByNameStudentlist, function (index, el) {
                         let _student = el.FirstName + " " + el.LastName;
                         __this.students.push(_student);
-                    });
+                    });                    
                     __this.BindTypeAhead(searctText);
-                }                
+                    $('.typeahead').typeahead('open');
+                    $('#findStudentToAdd').focus();
+                }
             })
             .catch((error) => {
                 console.log(error);
@@ -1448,157 +1458,154 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     BindTypeAhead(_searchText: string): void {
         $('.typeahead').typeahead('destroy');
-
         let __this = this;
-            $('#chooseStudent .typeahead').typeahead({
-                hint: false,
-                highlight: true,
-                minLength: 1,
-            },
-                {
-                    name: 'students',
-                    source: function (query, process) {
-                        let data: string = [];
-                        $.each(__this.students, function (i, el) {
-                            if (_.startsWith(el.trim().toUpperCase(), _searchText.trim().toUpperCase())) {
-                                if ($.inArray(el, data) === -1)
-                                     data.push(el);
+        
+        $('#chooseStudent .typeahead').typeahead({
+            hint: false,
+            highlight: true,
+            minLength: 1,
+        },
+            {
+                name: 'students',
+                source: function (query, process) {  
+                    let data: string = [];        
+                    $.each(__this.students, function (i, el) {
+                        if (_.startsWith(el.trim().toUpperCase(), _searchText.trim().toUpperCase())) {
+                            if ($.inArray(el, data) === -1)
+                                data.push(el);
+                        }
+                    });                    
+                    process(data);
+                    
+                },
+                limit: 200
+            });
+    
+}
+
+
+resolveSearchStudentURL(url: string, searctText: string): string {
+    return url.replace('§institutionid', this.testScheduleModel.institutionId.toString()).replace('§searchstring', searctText).replace('§testid', this.testScheduleModel.testId.toString()).replace('§windowstart', this.windowStart.toString()).replace('§windowend', this.windowEnd.toString());
+}
+
+FilterStudentfromResult(searchString: string): void {
+    let _self = this;
+    if (searchString.length > 1) {
+        if (this.AddByNameStudentlist.length > 0) {
+            let _searchStudents: Object[] = [];
+            $.each(this.AddByNameStudentlist, function (index, el) {
+                let firstName = el.FirstName.toUpperCase();
+                let lastName = el.LastName.toUpperCase();
+                let isValidToSplitCheck: boolean = true;
+                let isValidToCheckFullName: boolean = true;
+                searchString = searchString.trim().toUpperCase();
+                if (_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)) {
+                    _searchStudents.push(el);
+                    isValidToSplitCheck = false;
+                }
+                else if (isValidToSplitCheck) {
+                    let _fname = firstName.split(' ');
+                    let _lname = lastName.split(' ');
+                    if (_fname.length > 1 || _lname.length > 1) {
+                        let isValidToCheckLName = true;
+                        $.each(_fname, function (i, e) {
+                            if (_.startsWith(e, searchString)) {
+                                _searchStudents.push(el);
+                                isValidToCheckLName = false;
+                                isValidToCheckFullName = false;
+                                return false;
                             }
                         });
-                        process(data);
-                    }, 
-                    limit: 200
-                });
-            $('.typeahead').typeahead('open');
-            setTimeout(() => {
-                $('#findStudentToAdd').focus();
-               
-            },1);            
-    }
-
-
-    resolveSearchStudentURL(url: string, searctText: string): string {
-        return url.replace('§institutionid', this.testScheduleModel.institutionId.toString()).replace('§searchstring', searctText).replace('§testid', this.testScheduleModel.testId.toString()).replace('§windowstart', this.windowStart.toString()).replace('§windowend', this.windowEnd.toString());
-    }
-
-    FilterStudentfromResult(searchString: string): void {
-        let _self = this;
-        if (searchString.length > 1) {
-            if (this.AddByNameStudentlist.length > 0) {
-                let _searchStudents: Object[] = [];
-                $.each(this.AddByNameStudentlist, function (index, el) {
-                    let firstName = el.FirstName.toUpperCase();
-                    let lastName = el.LastName.toUpperCase();
-                    let isValidToSplitCheck: boolean = true;
-                    let isValidToCheckFullName: boolean = true;
-                    searchString = searchString.trim().toUpperCase();
-                    if (_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)) {
-                        _searchStudents.push(el);
-                        isValidToSplitCheck = false;
-                    }
-                    else if (isValidToSplitCheck) {
-                        let _fname = firstName.split(' ');
-                        let _lname = lastName.split(' ');
-                        if (_fname.length > 1 || _lname.length > 1) {
-                            let isValidToCheckLName = true;
-                            $.each(_fname, function (i, e) {
+                        if (isValidToCheckLName) {
+                            $.each(_lname, function (i, e) {
                                 if (_.startsWith(e, searchString)) {
                                     _searchStudents.push(el);
-                                    isValidToCheckLName = false;
                                     isValidToCheckFullName = false;
                                     return false;
                                 }
                             });
-                            if (isValidToCheckLName) {
-                                $.each(_lname, function (i, e) {
-                                    if (_.startsWith(e, searchString)) {
-                                        _searchStudents.push(el);
-                                        isValidToCheckFullName = false;
-                                        return false;
-                                    }
-                                });
-                            }
-                        }
-                        if (isValidToCheckFullName) {
-                            let studentName = firstName + " " + lastName;
-                            if (_.startsWith(studentName, searchString)) {
-                                _searchStudents.push(el);
-                            }
                         }
                     }
-                    else {
+                    if (isValidToCheckFullName) {
                         let studentName = firstName + " " + lastName;
                         if (_.startsWith(studentName, searchString)) {
                             _searchStudents.push(el);
                         }
                     }
-                });
-                if (_searchStudents.length > 0) {
-                    let _promise = new Promise(function (resolve, reject) {
-                        resolve(_searchStudents);
-                    });
-
-                    _promise.then((data) => {
-                        if (_self.testsTable)
-                            _self.testsTable.destroy();
-                        _self.cohortStudentlist = _self.markDuplicate(data);
-                        setTimeout(data => {
-                            _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig());
-                            $('#cohortStudentList').removeClass('hidden');
-                            _self.noSearchStudent = false;
-                            $('#cohortStudents_filter').addClass('invisible');
-                            $('#findStudentToAdd').focus();
-                            $('.typeahead').typeahead('close');                            
-                            _self.RefreshAllSelectionOnCohortChange();
-                        });
-                    })
-                        .catch((error) => {
-                            throw (error);
-                        });
                 }
                 else {
-                    this.noSearchStudent = true;
-                   // setTimeout(() => { $('#findStudentToAdd').focus(); });
-                    $('#cohortStudentList').addClass('hidden');
+                    let studentName = firstName + " " + lastName;
+                    if (_.startsWith(studentName, searchString)) {
+                        _searchStudents.push(el);
+                    }
                 }
+            });
+            if (_searchStudents.length > 0) {
+                let _promise = new Promise(function (resolve, reject) {
+                    resolve(_searchStudents);
+                });
+
+                _promise.then((data) => {
+                    if (_self.testsTable)
+                        _self.testsTable.destroy();
+                    _self.cohortStudentlist = _self.markDuplicate(data);
+                    setTimeout(data => {
+                        _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig());
+                        $('#cohortStudentList').removeClass('hidden');
+                        _self.noSearchStudent = false;
+                        $('#cohortStudents_filter').addClass('invisible');
+                        $('#findStudentToAdd').focus();
+                        $('.typeahead').typeahead('close');
+                        _self.RefreshAllSelectionOnCohortChange();
+                    });
+                })
+                    .catch((error) => {
+                        throw (error);
+                    });
             }
             else {
                 this.noSearchStudent = true;
-              //  setTimeout(() => { $('#findStudentToAdd').focus(); });
+                $('.typeahead').typeahead('close');
                 $('#cohortStudentList').addClass('hidden');
             }
         }
+        else {
+            this.noSearchStudent = true;
+            $('.typeahead').typeahead('close');
+            $('#cohortStudentList').addClass('hidden');
+        }
     }
+}
 
-    GetConfig(): any {
-        let _config = {
-            "destroy": true,
-            "retrive": true,
-            "paging": false,
-            "responsive": true,
-            "info": false,
-            "scrollY": 551,
-            "dom": 't<"add-students-table-search"f>',
-            "language": {
-                search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
-                searchPlaceholder: "Find student in cohort",
-                "zeroRecords": this.isAddByName ? this.noStudentInFindByName : this.noStudentInCohort,
-                "emptyTable": "We’re sorry, there are no students in this cohort.",
-            },
-            columnDefs: [{
-                targets: [2, 4],
-                orderable: false,
-                searchable: false
-            }]
-        };
-        return _config;
-    }
+GetConfig(): any {
+    let _config = {
+        "destroy": true,
+        "retrive": true,
+        "paging": false,
+        "responsive": true,
+        "info": false,
+        "scrollY": 551,
+        "dom": 't<"add-students-table-search"f>',
+        "language": {
+            search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
+            searchPlaceholder: "Find student in cohort",
+            "zeroRecords": this.isAddByName ? this.noStudentInFindByName : this.noStudentInCohort,
+            "emptyTable": "We’re sorry, there are no students in this cohort.",
+        },
+        columnDefs: [{
+            targets: [2, 4],
+            orderable: false,
+            searchable: false
+        }]
+    };
+    return _config;
+}
 
-    searchStudent(findstudenttoadd: any, e): void {
-        e.preventDefault();
-        let searchText: string = findstudenttoadd.value;
-        this.FilterStudentfromResult(searchText);
-    }
+searchStudent(findstudenttoadd: any, e): void {
+    e.preventDefault();
+    let searchText: string = findstudenttoadd.value;
+    this.FilterStudentfromResult(searchText);
+}
 
     // validateDates(): boolean {
     //     if (this.testScheduleModel) {
