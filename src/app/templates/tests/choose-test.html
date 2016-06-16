@@ -21,7 +21,7 @@
                         <form class="search-bar" role="form">
                             <label class="screen-reader-only" for="findTestByName">Find by Name</label>
                             <div class="search-input" id="bloodhound">
-                                <input #findTestByName class="typeahead" autocomplete="off"  (keyup)="bindTypeaheadFocus($event)" type="search" role="search" id="findTestByName">
+                                <input #findTestByName class="typeahead" autocomplete="off"   type="search" role="search" id="findTestByName">
                                 <button class="button" id="btnTypeahead" type="submit" (click)="bindTypeaheadSearchButton($event)">
                                     <img src="images/search-icon_2x.png" alt="Search Icon" >
                                 </button>

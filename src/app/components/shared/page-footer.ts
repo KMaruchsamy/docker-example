@@ -4,7 +4,7 @@ import {Auth} from '../../services/auth';
 @Component({
     selector: 'page-footer',
     providers:[Auth],
-    templateUrl: '../../templates/shared/page-footer.html',
+    templateUrl: 'templates/shared/page-footer.html',
     directives: [RouterLink]
 })
 

@@ -5,7 +5,7 @@ import {RouterLink} from 'angular2/router';
 
 @Component({
     selector: 'reset-password-expired',
-    templateUrl: '../../templates/password/reset-password-expired.html',
+    templateUrl: 'templates/password/reset-password-expired.html',
     directives: [PasswordHeader, RouterLink]
 })
 

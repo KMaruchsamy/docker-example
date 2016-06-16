@@ -9,7 +9,7 @@ import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({
     selector: 'retesters-alternate',
-    templateUrl: '../../templates/tests/retesters-alternate-popup.html',
+    templateUrl: 'templates/tests/retesters-alternate-popup.html',
     providers: [Common],
     directives: [RouterLink, NgIf, NgFor],
     pipes:[SortPipe]

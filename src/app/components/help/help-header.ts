@@ -3,7 +3,7 @@ import {RouterLink} from 'angular2/router';
 
 @Component({
     selector:'help-header',
-    templateUrl:'../../templates/help/help-header.html',
+    templateUrl:'templates/help/help-header.html',
     directives:[RouterLink]
 })
 export class HelpHeader{

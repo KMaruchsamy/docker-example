@@ -21,7 +21,7 @@ import '../../lib/modal.js';
 
 @Component({
     selector: "view-test",
-    templateUrl: "../../templates/tests/view-test.html",
+    templateUrl: "templates/tests/view-test.html",
     providers: [TestService, Auth, TestScheduleModel, Common],
     directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, RouterLink, ConfirmationPopup],
     pipes: [ParseDatePipe]

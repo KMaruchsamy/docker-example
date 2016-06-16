@@ -9,7 +9,7 @@ import {DropdownMenu} from '../controls/dropdown-menu';
 	selector:'page-header',
     providers:[Auth],
     inputs:['showCover','ariaDisabled', 'hideDropdown'],
-    templateUrl:'../../templates/shared/page-header.html',
+    templateUrl:'templates/shared/page-header.html',
     directives: [RouterLink,DropdownMenu,NgClass]
 })
 

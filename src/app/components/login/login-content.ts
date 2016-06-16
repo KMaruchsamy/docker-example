@@ -5,13 +5,13 @@ import {Common} from '../../services/common';
 import * as _ from '../../lib/index';
 import {links} from '../../constants/config';
 import {general, login} from '../../constants/error-messages';
-
+import {Angulartics2On} from '../../lib/ng-ga';
 
 @Component({
     selector: 'login-content',
     providers: [Auth, Common],
-    templateUrl: '../../templates/login/login-content.html',
-    directives: [RouterLink]
+    templateUrl: 'templates/login/login-content.html',
+    directives: [RouterLink, Angulartics2On]
 })
 
 export class LoginContent {

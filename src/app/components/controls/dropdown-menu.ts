@@ -6,7 +6,7 @@ import '../../plugins/dropdown.js';
 @Component({
     selector: 'dropdown-menu',
     inputs: ['ariaDisabled'],
-    templateUrl: '../../templates/controls/dropdown-menu.html',
+    templateUrl: 'templates/controls/dropdown-menu.html',
     providers:[Auth],
     directives: [RouterLink]
 })

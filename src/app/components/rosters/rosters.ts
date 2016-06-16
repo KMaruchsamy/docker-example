@@ -9,7 +9,7 @@ import {PageFooter} from '../shared/page-footer';
 @Component({
     selector: 'rosters',
     providers: [Auth],
-    templateUrl: '../../templates/rosters/rosters.html',
+    templateUrl: 'templates/rosters/rosters.html',
     directives: [RouterLink, PageHeader, PageFooter]
 })
 
