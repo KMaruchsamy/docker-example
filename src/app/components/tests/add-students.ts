@@ -1450,7 +1450,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         $('.typeahead').typeahead('destroy');
 
         let __this = this;
-        setTimeout(() => {
             $('#chooseStudent .typeahead').typeahead({
                 hint: false,
                 highlight: true,
@@ -1462,7 +1461,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         let data: string = [];
                         $.each(__this.students, function (i, el) {
                             if (_.startsWith(el.trim().toUpperCase(), _searchText.trim().toUpperCase())) {
-                                data.push(el);
+                                if ($.inArray(el, data) === -1)
+                                     data.push(el);
                             }
                         });
                         process(data);
@@ -1473,10 +1473,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             setTimeout(() => {
                 $('#findStudentToAdd').focus();
                
-            },1);
-           // $('.typeahead').typeahead('open');
-            
-        });
+            },1);            
     }
 
 
