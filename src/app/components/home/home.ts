@@ -22,7 +22,7 @@ import {TestScheduleModel} from '../../models/testSchedule.model';
 @Component({
     selector: 'home',
     providers: [Auth, Common, HomeService, TestService, TestScheduleModel],
-    templateUrl: '../../templates/home/home.html',
+    templateUrl: 'templates/home/home.html',
     directives: [PageHeader, PageFooter, NgIf, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile, RouterLink, Angulartics2On]
 })
 @CanActivate((next, prev) => {

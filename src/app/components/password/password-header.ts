@@ -3,7 +3,7 @@ import {RouterLink} from 'angular2/router';
 
 @Component({
     selector:'password-header',
-    templateUrl:'../../templates/password/password-header.html',
+    templateUrl:'templates/password/password-header.html',
     directives:[RouterLink]
 })
 

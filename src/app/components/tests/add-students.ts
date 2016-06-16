@@ -32,7 +32,7 @@ import '../../plugins/typeahead.bundle.js';
 
 @Component({
     selector: 'add-students',
-    templateUrl: '../../templates/tests/add-students.html',
+    templateUrl: 'templates/tests/add-students.html',
     // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
     providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup],
     directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, RouterLink, AlertPopup],
@@ -108,7 +108,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         $('.typeahead').typeahead('destroy');
     }
 
-    ngOnInit() {
+    ngOnInit() {      
         $(document).scrollTop(0);
         this.prevStudentList = [];        
         let action = this.routeParams.get('action');
@@ -186,10 +186,13 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             if (e.keyCode !== 38 && e.keyCode !== 40)
                 self.BindSearch(searchText);
         });
-        $('.typeahead').on('change', function (e) {
+
+        $(document).on('input change', '#findStudentToAdd', function (e) {
             e.preventDefault();
-            let searchText = $('#findStudentToAdd').val();
+            setTimeout(()=>{
+                let searchText = $('#findStudentToAdd').val();
                 self.BindSearch(searchText);
+            });
         });
 
         $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
@@ -1522,7 +1525,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                             _self.noSearchStudent = false;
                             _self.RefreshAllSelectionOnCohortChange();
                             $('#cohortStudents_filter').addClass('invisible');
-                            $('.typeahead').typeahead('close');
+                          //  $('.typeahead').typeahead('close');
                         });
                     });
                 }

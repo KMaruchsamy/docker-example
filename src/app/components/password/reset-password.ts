@@ -10,7 +10,7 @@ import {general,reset_password,temp_password,login} from '../../constants/error-
 @Component({
     selector: 'reset-password',
     providers: [Auth, Common, Validations],
-    templateUrl: '../../templates/password/reset-password.html',
+    templateUrl: 'templates/password/reset-password.html',
     directives: [PasswordHeader, RouterLink]
 })
 

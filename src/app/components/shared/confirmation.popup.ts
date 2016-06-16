@@ -5,7 +5,7 @@ import {Common} from '../../services/common';
 @Component({
     selector: 'confirmation-popup',
     providers: [Common],
-    templateUrl: '../../templates/shared/confirmation.popup.html',
+    templateUrl: 'templates/shared/confirmation.popup.html',
     directives: [RouterLink],
     inputs: ['cancelButtonText', 'okButtonText', 'message']
 })

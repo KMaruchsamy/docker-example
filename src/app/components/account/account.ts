@@ -12,7 +12,7 @@ import {manage_account, general, reset_password_after_login, reset_student_passw
 @Component({
     selector: 'account',
     providers: [Auth, Common, Validations],
-    templateUrl: '../../templates/account/account.html',
+    templateUrl: 'templates/account/account.html',
     directives: [PageHeader, PageFooter]
 })
 

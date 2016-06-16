@@ -8,7 +8,7 @@ import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({
     selector: 'retesters-noalternate',
-    templateUrl: '../../templates/tests/retesters-noalternate-popup.html',
+    templateUrl: 'templates/tests/retesters-noalternate-popup.html',
     directives: [RouterLink],
     providers: [Common],
     inputs: ['studentRepeaters'],

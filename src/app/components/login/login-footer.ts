@@ -5,7 +5,7 @@ import {Utility} from '../../scripts/utility';
 @Component({
     selector:'login-footer',
     providers:[Utility],
-    templateUrl:'../../templates/login/login-footer.html',
+    templateUrl:'templates/login/login-footer.html',
     directives:[RouterLink]
 })
 export class LoginFooter{

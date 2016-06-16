@@ -26,7 +26,7 @@ import '../../lib/modal.js';
 
 @Component({
     selector: "review-test",
-    templateUrl: "../../templates/tests/review-test.html",
+    templateUrl: "templates/tests/review-test.html",
     providers: [TestService, Auth, TestScheduleModel, Common],
     directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, RouterLink, RetesterAlternatePopup, RetesterNoAlternatePopup, ConfirmationPopup, TimeExceptionPopup, Loader, AlertPopup],
     pipes: [ParseDatePipe]

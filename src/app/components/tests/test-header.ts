@@ -7,7 +7,7 @@ import {Common} from '../../services/common';
 
 @Component({
     selector: 'test-header',
-    templateUrl: '../../templates/tests/test-header.html',
+    templateUrl: 'templates/tests/test-header.html',
     inputs: ['testSchedule', 'scheduleStep','hideCancelButton'],
     directives: [RouterLink, NgIf, ConfirmationPopup],
     pipes: [ParseDatePipe]
