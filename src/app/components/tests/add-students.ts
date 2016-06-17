@@ -405,7 +405,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         this.cohortStudentlist = [];
 
                     setTimeout(json => {
-                        _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig());
+                        _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig(551));
                         this.RefreshAllSelectionOnCohortChange();
                     });
                 })
@@ -1359,10 +1359,12 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
                 setTimeout(() => {
                     _self.AddByCohortStudentlist = [];
-                    _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig());
+                    _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig(551));
                     $('#cohortStudentList').removeClass('hidden');
                     _self.noSearchStudent = false;
                     _self.RefreshAllSelectionOnCohortChange();
+                    _self.RedrawColumns(); 
+
                 });
             })
                 .catch((error) => {
@@ -1373,6 +1375,11 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             this.cohortStudentlist = [];
             $('#cohortStudentList').addClass('hidden');
         }
+    }
+
+   //Fix table headers collapsing in width as tab views are switched
+    RedrawColumns(): void {
+        this.testsTable.responsive.recalc().columns.adjust();
     }
 
     AddByName(e): void {
@@ -1598,13 +1605,14 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                             _self.testsTable.destroy();
                         _self.cohortStudentlist = _self.markDuplicate(data);
                         setTimeout(data => {
-                            _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig());
+                            _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig(493));
                             $('#cohortStudentList').removeClass('hidden');
                             _self.noSearchStudent = false;
                             $('#cohortStudents_filter').addClass('invisible');
                             $('#findStudentToAdd').focus();
                             $('.typeahead').typeahead('close');
                             _self.RefreshAllSelectionOnCohortChange();
+                            _self.RedrawColumns();
                         });
                     })
                         .catch((error) => {
@@ -1625,14 +1633,14 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         }
     }
 
-    GetConfig(): any {
+    GetConfig(scrollHeight): any {
         let _config = {
             "destroy": true,
             "retrive": true,
             "paging": false,
             "responsive": true,
             "info": false,
-            "scrollY": 551,
+            "scrollY": scrollHeight,
             "dom": 't<"add-students-table-search"f>',
             "language": {
                 search: "_INPUT_", //gets rid of label.  Seems to leave placeholder accessible to to screenreaders; see http://www.html5accessibility.com/tests/placeholder-labelling.html
