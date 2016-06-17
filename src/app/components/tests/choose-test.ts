@@ -126,7 +126,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
 
         $('.typeahead').on('click', function (e) {
             $('.typeahead').typeahead('open');
-            console.log('click');
         });
         $('.typeahead').on('keyup', function (e) {
             let searchText = $('#findTestByName').val();
@@ -395,6 +394,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#findTestByName').typeahead('destroy');
         $('#findTestByName').val('');
         $('#errorText').addClass('hidden');
+        $('#btnTypeahead').attr('disabled', 'disabled');
         this.searchResult = [];
         this.previouSearch = null;
         if (this.testScheduleModel.testId != 0) {
@@ -437,11 +437,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         })
             .then((json) => {
                 self.searchResult = json;
-                if (json.length === 0) {
-                    $('#availableTests').addClass('hidden');
-                    $('#findTestByName').focus();
-                    $('#errorText').removeClass('hidden');
-                } else {
+                if (json.length > 0) {
                     $('#errorText').addClass('hidden');
                     self.showTypeahead();
                     $('#findTestByName').typeahead('open');
@@ -457,7 +453,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         let self = this;
         let testNamesList = _.pluck(self.searchResult, 'TestName');
 
-        $('#bloodhound .typeahead').typeahead({
+        $('#findByNameContainer .typeahead').typeahead({
             hint: false,
             highlight: true,
             minLength: 1
@@ -468,15 +464,17 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                 source: function (search, process) {
                     var states = [];
                     var data = testNamesList
-                    $.each(data, function (i, state) {
-                        if (_.startsWith(state.toLowerCase(), search.toLowerCase())) {
-                            $('#errorText').addClass('hidden');
-                            states.push(state);
-                        }
-                    });
-                    process(states);
+                    if (search.length >= 2) {
+                        $.each(data, function (i, state) {
+                            if (_.startsWith(state.toLowerCase(), search.toLowerCase())) {
+                                $('#errorText').addClass('hidden');
+                                states.push(state);
+                            }
+                        });
+                        process(states);
+                    }
                 }
-            });
+                });
     }
 
     bindTestSearchResults(search: string, setValue: boolean): void {
@@ -521,21 +519,26 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
 
     bindTypeaheadFocus(searchText: string): void {
         if (!searchText.startsWith(' ')) {
-            if (searchText.length > 2) {
-                searchText = searchText.trim().substr(0, 2).toUpperCase();
-            }
-
-            if (searchText.length === 2 && this.previouSearch != searchText.trim().toUpperCase()) {
-                $('.typeahead').typeahead('destroy');
-                this.loadTestsBySearch(searchText);
-                this.previouSearch = searchText.trim().toUpperCase();
-                $('#findTestByName').focus();
-            }
-
-            else {
-                if (searchText.length < 2) {
-                    $('.typeahead').typeahead('close');
+            if (searchText.length > 1) {
+                $('#btnTypeahead').removeAttr('disabled', 'disabled');
+                if (searchText.length > 2) {
+                    searchText = searchText.trim().substr(0, 2).toUpperCase();
                 }
+                if (searchText.length === 2 && this.previouSearch != searchText.trim().toUpperCase() && searchText != "  ") {
+                    $('.typeahead').typeahead('destroy');
+                    this.loadTestsBySearch(searchText);
+                    this.previouSearch = searchText.trim().toUpperCase();
+                    $('#findTestByName').focus();
+                }
+                else {
+                    if (searchText.length < 2) {
+                        $('.typeahead').typeahead('close');
+                    }
+                }
+            }
+            else {
+                $('.typeahead').typeahead('close');
+                $('#btnTypeahead').attr('disabled', 'disabled');
             }
         }
         else {
@@ -548,7 +551,11 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     bindTypeaheadSearchButton(e): void {
         e.preventDefault();
         let search = $('#findTestByName').val();
-        this.bindTestSearchResults(search, false);
+        if (search.length >= 2) {
+            this.bindTestSearchResults(search, false);
+        } else {
+            $('.typeahead').typeahead('close');
+        }
     }
 
     displayTest(testId: number): void {
