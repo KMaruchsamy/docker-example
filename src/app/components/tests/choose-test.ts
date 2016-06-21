@@ -124,9 +124,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('.typeahead').unbind('typeahead:select');
        $(document).off('input change', '#findTestByName');
 
-        $('.typeahead').on('click', function (e) {
-            $('.typeahead').typeahead('open');
-        });
         $('.typeahead').on('keyup', function (e) {
             let searchText = $('#findTestByName').val();
             if (e.keyCode === 13) {
@@ -141,7 +138,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             e.preventDefault();
                             let searchText = $('#findTestByName').val();
                 self.bindTypeaheadFocus(searchText);
-                $('#findTestByName').focus();
+                setTimeout(function () { $('#findTestByName').focus(); }, 1)
                   });
 
         $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
@@ -401,6 +398,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             this.loadTestsBySearch(this.testScheduleModel.testName);
         }
         else {
+            $('#findTestByName').focus();
             $('.selectpicker').val('').selectpicker('refresh');
             $('#availableTests').addClass('hidden');
         }
@@ -423,7 +421,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     }
 
     loadTestsBySearch(testName: string): void {
-        $('.typeahead').typeahead('destroy');
         this.subjectId = 0;
         this.searchString = testName;
         let self = this;
@@ -438,7 +435,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             .then((json) => {
                 self.searchResult = json;
                 if (json.length > 0) {
-                    $('#errorText').addClass('hidden');
                     self.showTypeahead();
                     $('#findTestByName').typeahead('open');
                     setTimeout(function () { $('#findTestByName').focus(); }, 1)
@@ -450,6 +446,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     }
 
     showTypeahead(): void {
+        $('.typeahead').typeahead('destroy');
         let self = this;
         let testNamesList = _.pluck(self.searchResult, 'TestName');
 
@@ -467,7 +464,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                     if (search.length >= 2) {
                         $.each(data, function (i, state) {
                             if (_.startsWith(state.toLowerCase(), search.toLowerCase())) {
-                                $('#errorText').addClass('hidden');
                                 states.push(state);
                             }
                         });
@@ -504,7 +500,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                     self.tests = this.searchResult;
                 else {
                     $('#errorText').removeClass('hidden');
-                    $('#availableTests').addClass('hidden');
+                   $('#availableTests').addClass('hidden');
                 }
             }
         }
