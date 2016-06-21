@@ -502,8 +502,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 if ($(el).attr('class').search('hidden') < 0) {
                     let buttonId = $(el).find('td:eq(4) button').attr('id');
                     if (!$('#' + buttonId).prop('disabled')) {
-                        student.LastName = $(el).find('td:eq(0)').text();
-                        student.FirstName = $(el).find('td:eq(1)').text();
+                        student.LastName = $(el).find('td:eq(0)')..attr('lastname');
+                        student.FirstName = $(el).find('td:eq(1)')..attr('firstname');
                         student.Retester = $(el).find('td:eq(3)').text() === "Yes" ? true : false;
                         student.StudentId = parseInt(buttonId.split('-')[1]);
                         student.Email = $(el).find('td:eq(4) button').attr('email');

@@ -44,7 +44,7 @@
                                             <p class="smaller text-smaller-margin">Enter a minimum of 2 characters to start searching.</p>
                                             <div class="search-input">
                                                 <input class="typeahead" type="search" autocomplete="off" role="search" #findstudenttoadd id="findStudentToAdd">
-                                                <button class="button" disabled="disabled" id="btnTypeahead" type="submit" (click)="searchStudent(findstudenttoadd,$event);">
+                                                <button class="button" disabled id="btnTypeahead" type="submit" (click)="searchStudent(findstudenttoadd,$event);">
                                                     <img src="images/search-icon_2x.png" alt="Search Icon">
                                                 </button>
                                             </div>
@@ -71,7 +71,7 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="#student of cohortStudentlist | sort:'asc':'LastName'" >
-                                        <td title="{{student.Email}}" [class.duplicate-student]="student.duplicate">
+                                        <td title="{{student.Email}}" [class.duplicate-student]="student.duplicate" [attr.lastname]="student.LastName">
                                             {{student.LastName}}
                                             <a *ngIf="student.duplicate"
                                                tabindex="0"
@@ -86,7 +86,7 @@
                                                      width="24" height="24" />
                                             </a>
                                         </td>
-                                        <td>{{student.FirstName}}</td>
+                                        <td [attr.firstname]="student.FirstName">{{student.FirstName}}</td>
                                         <td>{{isAddByName?student.CohortName:lastSelectedCohortName}}</td>
                                         <td [class]="getClassName(student.Retester)">{{student.Retester?"Yes":"No"}}</td>
                                         <td>
