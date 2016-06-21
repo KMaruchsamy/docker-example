@@ -149,40 +149,23 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             });
         });
 
-        $('.typeahead').off('click keyup input');
-        $('.typeahead').unbind('typeahead:select');
-        $(document).off('input change', '#findStudentToAdd');
-
-        $('.typeahead').on('click', function (e) {
-            e.preventDefault();
-            $('.typeahead').typeahead('open');
-        });
-        $('.typeahead').on('keyup', function (e) {
-            e.preventDefault();
-            let searchText = $('#findStudentToAdd').val();
-            if (e.keyCode === 13) {
-                self.FilterStudentfromResult(searchText);
-                $('.typeahead').typeahead('close');
-            }
-            else if (e.keyCode !== 38 && e.keyCode !== 40)
-                self.BindSearch(searchText);
-
-        });
-
-        $(document).on('input change', '#findStudentToAdd', function (e) {
-            e.preventDefault();
-            setTimeout(() => {
-                let searchText = $('#findStudentToAdd').val();
-                self.BindSearch(searchText);
-                $('#findStudentToAdd').focus();
-            });
-        });
 
         $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
             ev.preventDefault();
             self.FilterStudentfromResult(suggetion);
             $('.typeahead').typeahead('close');
 
+        });
+    }
+
+    CallonSearchClick(e): void {
+        e.preventDefault();
+        $('.typeahead').typeahead('open');
+    }
+    CallOnSearchInput(searchText: string): void {
+        setTimeout(() => {
+            $('#findStudentToAdd').focus();
+            this.BindSearch(searchText);
         });
     }
 
@@ -1070,8 +1053,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     resolveExceptions(objException: any, __this: any): boolean {
         let repeaterExceptions: any;
-        //if (objException.repeaterExceptions)
-        repeaterExceptions = objException;//.repeaterExceptions;
+        repeaterExceptions = objException;
         if (objException) {
 
             let studentRepeaterExceptions: Object[] = [];
@@ -1334,8 +1316,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
 
-
-
     resolveScheduleURL(url: string, scheduleId: number): string {
         return url.replace('§scheduleId', scheduleId.toString());
     }
@@ -1363,7 +1343,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     $('#cohortStudentList').removeClass('hidden');
                     _self.noSearchStudent = false;
                     _self.RefreshAllSelectionOnCohortChange();
-                    _self.RedrawColumns(); 
+                    _self.RedrawColumns();
 
                 });
             })
@@ -1377,7 +1357,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         }
     }
 
-   //Fix table headers collapsing in width as tab views are switched
+    //Fix table headers collapsing in width as tab views are switched
     RedrawColumns(): void {
         this.testsTable.responsive.recalc().columns.adjust();
     }
@@ -1413,8 +1393,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 }
                 else if (searchText.length === 2 && mainSearchText.length > 2 && this.prevSearchText === searchText.trim().toUpperCase()) {
                     this.BindTypeAhead(mainSearchText);
-                    $('#findStudentToAdd').focus();
-                    $('.typeahead').typeahead('open');
                 }
                 else {
                     if (searchText.length < 2) {
@@ -1450,8 +1428,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
                 if (__this.AddByNameStudentlist.length > 0) {
                     __this.BindTypeAhead(searctText);
-                    $('.typeahead').typeahead('open');
-                    $('#findStudentToAdd').focus();
                 }
             })
             .catch((error) => {
@@ -1460,59 +1436,68 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     BindTypeAhead(_searchText: string): void {
-        $('.typeahead').typeahead('destroy');
-        let __this = this;
-        $('#chooseStudent .typeahead').typeahead({
-            hint: false,
-            highlight: true,
-            minLength: 1,
-        },
-            {
-                name: 'students',
-                source: function (query, process) {
-                    let data: string = [];
+            $('.typeahead').typeahead('destroy');
+            let __this = this;
+            $('#chooseStudent .typeahead').typeahead({
+                hint: false,
+                highlight: true,
+                minLength: 2,
+            },
+                {
+                    name: 'students',
+                    source: function (query, process) {
+                        let data: string = [];
 
-                    $.each(__this.AddByNameStudentlist, function (index, el) {
-                        let firstName = el.FirstName.toUpperCase();
-                        let lastName = el.LastName.toUpperCase();
-                        let isValidToSplitCheck: boolean = true;
-                        let isValidToCheckFullName: boolean = true;
-                        let _student = "";
-                        _searchText = _searchText.trim().toUpperCase();
-                        if (_.startsWith(firstName, _searchText) || _.startsWith(lastName, _searchText)) {
-                            _student = el.FirstName + " " + el.LastName;
-                            if ($.inArray(_student, data) === -1)
-                                data.push(_student);
-                            isValidToSplitCheck = false;
-                        }
-                        else if (isValidToSplitCheck) {
-                            let _fname = firstName.split(' ');
-                            let _lname = lastName.split(' ');
-                            if (_fname.length > 1 || _lname.length > 1) {
-                                let isValidToCheckLName = true;
-                                $.each(_fname, function (i, e) {
-                                    if (_.startsWith(e, _searchText)) {
-                                        _student = el.FirstName + " " + el.LastName;
-                                        if ($.inArray(_student, data) === -1)
-                                            data.push(_student);
-                                        isValidToCheckLName = false;
-                                        isValidToCheckFullName = false;
-                                        return false;
-                                    }
-                                });
-                                if (isValidToCheckLName) {
-                                    $.each(_lname, function (i, e) {
+                        $.each(__this.AddByNameStudentlist, function (index, el) {
+                            let firstName = el.FirstName.toUpperCase();
+                            let lastName = el.LastName.toUpperCase();
+                            let isValidToSplitCheck: boolean = true;
+                            let isValidToCheckFullName: boolean = true;
+                            let _student = "";
+                            _searchText = _searchText.trim().toUpperCase();
+                            if (_.startsWith(firstName, _searchText) || _.startsWith(lastName, _searchText)) {
+                                _student = el.FirstName + " " + el.LastName;
+                                if ($.inArray(_student, data) === -1)
+                                    data.push(_student);
+                                isValidToSplitCheck = false;
+                            }
+                            else if (isValidToSplitCheck) {
+                                let _fname = firstName.split(' ');
+                                let _lname = lastName.split(' ');
+                                if (_fname.length > 1 || _lname.length > 1) {
+                                    let isValidToCheckLName = true;
+                                    $.each(_fname, function (i, e) {
                                         if (_.startsWith(e, _searchText)) {
                                             _student = el.FirstName + " " + el.LastName;
                                             if ($.inArray(_student, data) === -1)
                                                 data.push(_student);
+                                            isValidToCheckLName = false;
                                             isValidToCheckFullName = false;
                                             return false;
                                         }
                                     });
+                                    if (isValidToCheckLName) {
+                                        $.each(_lname, function (i, e) {
+                                            if (_.startsWith(e, _searchText)) {
+                                                _student = el.FirstName + " " + el.LastName;
+                                                if ($.inArray(_student, data) === -1)
+                                                    data.push(_student);
+                                                isValidToCheckFullName = false;
+                                                return false;
+                                            }
+                                        });
+                                    }
+                                }
+                                if (isValidToCheckFullName) {
+                                    let studentName = firstName + " " + lastName;
+                                    if (_.startsWith(studentName, _searchText)) {
+                                        _student = el.FirstName + " " + el.LastName;
+                                        if ($.inArray(_student, data) === -1)
+                                            data.push(_student);
+                                    }
                                 }
                             }
-                            if (isValidToCheckFullName) {
+                            else {
                                 let studentName = firstName + " " + lastName;
                                 if (_.startsWith(studentName, _searchText)) {
                                     _student = el.FirstName + " " + el.LastName;
@@ -1520,24 +1505,29 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                                         data.push(_student);
                                 }
                             }
-                        }
-                        else {
-                            let studentName = firstName + " " + lastName;
-                            if (_.startsWith(studentName, _searchText)) {
-                                _student = el.FirstName + " " + el.LastName;
-                                if ($.inArray(_student, data) === -1)
-                                    data.push(_student);
-                            }
-                        }
-                    });
-                    process(data);
+                        });
+                        process(data);
 
-                },
-                limit: 200
-            });
+                    },
+                    limit: 200
+                });
+
+            $('.typeahead').typeahead('open');
+            setTimeout(() => { $('#findStudentToAdd').focus(); });
 
     }
-
+    FillGridWithSearch(searchText: string, e): void {
+        e.preventDefault();
+        if (searchText.length > 1) {
+            if (e.keyCode === 13) {
+                this.FilterStudentfromResult(searchText);
+                $('.typeahead').typeahead('close');
+            }
+            else {
+                $('.typeahead').typeahead('open');
+            }
+        }
+    }
 
     resolveSearchStudentURL(url: string, searctText: string): string {
         return url.replace('§institutionid', this.testScheduleModel.institutionId.toString()).replace('§searchstring', searctText).replace('§testid', this.testScheduleModel.testId.toString()).replace('§windowstart', this.windowStart.toString()).replace('§windowend', this.windowEnd.toString());
@@ -1657,9 +1647,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         return _config;
     }
 
-    searchStudent(findstudenttoadd: any, e): void {
+    searchStudent(searchText: string, e): void {
         e.preventDefault();
-        let searchText: string = findstudenttoadd.value;
         this.FilterStudentfromResult(searchText);
     }
 
