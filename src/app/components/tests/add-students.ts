@@ -1,4 +1,4 @@
-﻿import {Component, OnInit, AfterViewInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
+﻿import {Component, OnInit, AfterViewInit, DynamicComponentLoader, ElementRef, ViewEncapsulation} from 'angular2/core';
 import {Router, RouterLink, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, Location } from 'angular2/router';
 import {NgFor} from 'angular2/common';
 import {TestService} from '../../services/test.service';
@@ -33,7 +33,10 @@ import '../../plugins/typeahead.bundle.js';
 @Component({
     selector: 'add-students',
     templateUrl: 'templates/tests/add-students.html',
-    // styleUrls:['../../css/responsive.dataTablesCustom.css','../../css/jquery.dataTables.min.css'],
+    encapsulation: ViewEncapsulation.None,
+    styles: [`#addByName + #cohortStudentList .add-students-table-search {display: table; width: 100%;}
+    #addByName + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
+    #addByName + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
     providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup],
     directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, RouterLink, AlertPopup],
     pipes: [RemoveWhitespacePipe, SortPipe]
@@ -98,7 +101,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        $('#cohortStudentList').remove();
+        if (this.testsTable)
+        this.testsTable.destroy();
+        $('#cohortStudentList').addClass('hidden');
         // this.studentTable = false;  //remove any initialized tables from DOM
         $('.selectpicker').val('').selectpicker('refresh');
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
@@ -111,7 +116,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     ngOnInit() {
         let self = this;
         this.testsTable = null;
-
         this.SetPageToAddByCohort();
         $(document).scrollTop(0);
         this.prevStudentList = [];
@@ -1611,7 +1615,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                             $('#cohortStudentList').removeClass('hidden');
                             // this.studentTable = true;
                             _self.noSearchStudent = false;
-                            $('#cohortStudents_filter').addClass('invisible');
+                            $('#cohortStudents_filter').addClass('hidden');
                             $('.typeahead').typeahead('close');
                             _self.RefreshAllSelectionOnCohortChange();
                             _self.RedrawColumns();
