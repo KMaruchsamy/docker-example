@@ -71,8 +71,8 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="#student of cohortStudentlist | sort:'asc':'LastName'" >
-                                        <td title="{{student.Email}}" [class.duplicate-student]="student.duplicate" [attr.lastname]="student.LastName">
-                                            {{student.LastName}}
+                                        <td title="{{student.Email}}" [class.duplicate-student]="student.duplicate" [attr.lastname]="student.LastName">{{student.LastName}}
+                                            <!--Last name must be on same line as opening tag or last name starts with new line and search filter fails to match-->
                                             <a *ngIf="student.duplicate"
                                                tabindex="0"
                                                role="button"
