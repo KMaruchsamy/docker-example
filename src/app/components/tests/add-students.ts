@@ -34,9 +34,9 @@ import '../../plugins/typeahead.bundle.js';
     selector: 'add-students',
     templateUrl: 'templates/tests/add-students.html',
     encapsulation: ViewEncapsulation.None,
-    styles: [`#addByName + #cohortStudentList .add-students-table-search {display: table; width: 100%;}
-    #addByName + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
-    #addByName + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
+    styles: [`#addByName.active + #cohortStudentList .add-students-table-search {display: table; width: 100%;}
+    #addByName.active + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
+    #addByName.active + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
     providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup],
     directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, RouterLink, AlertPopup],
     pipes: [RemoveWhitespacePipe, SortPipe]
