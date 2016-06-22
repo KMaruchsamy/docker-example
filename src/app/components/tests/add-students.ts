@@ -1424,6 +1424,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 __this.AddByNameStudentlist = json;
 
                 if (__this.AddByNameStudentlist.length > 0) {
+                    $('.typeahead').focus();
                     __this.BindTypeAhead(searctText);
                 }
                 else {
