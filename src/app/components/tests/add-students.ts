@@ -69,6 +69,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     AddByNameStudentlist: Object[] = []; // To Check AddByName got students or not...
     AddByCohortStudentlist: Object[] = []; // To preserve previous selected cohort
     isAddByName: boolean = false;
+    // studentTable: boolean = false;
 
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
         public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location) {
@@ -97,8 +98,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        if (this.testsTable)
-            this.testsTable.destroy();
+        $('#cohortStudentList').remove();
+        // this.studentTable = false;  //remove any initialized tables from DOM
         $('.selectpicker').val('').selectpicker('refresh');
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
         if (outOfTestScheduling) {
@@ -111,7 +112,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         let self = this;
         this.testsTable = null;
 
-        this.SetPageToAddByName();
+        this.SetPageToAddByCohort();
         $(document).scrollTop(0);
         this.prevStudentList = [];
         let action = this.routeParams.get('action');
@@ -134,6 +135,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         $('#chooseCohortContainer').on('click', '#cohortStudentList .clear-input-values', function () {
             __this.clearTableSearch();
         });
+        // $('.tab-content').on('click', '#cohortStudentList .clear-input-values', function () {
+        //     __this.clearTableSearch();
+        // });
 
         $('body').on('hidden.bs.popover', function (e) {
             $(e.target).data("bs.popover").inState.click = false;
@@ -381,6 +385,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
                     $('#' + btnAddAllStudent.id).removeClass('hidden');
                     $('#' + tblCohortStudentList.id).removeClass('hidden');
+                    // this.studentTable = true;
                     if (typeof (json.msg) === "undefined")
                         this.cohortStudentlist = this.markDuplicate(json);
                     else
@@ -807,7 +812,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         $.each(listitems, function (idx, itm) { mylist.append(itm); });
     }
 
-    SetPageToAddByName(): void {
+    SetPageToAddByCohort(): void {
         $('#ByCohort').addClass('active');
         $('#ByName').removeClass('active');
         $('#addByCohort').addClass('active');
@@ -1325,7 +1330,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     AddByCohort(): void {
 
-        this.SetPageToAddByName();
+        this.SetPageToAddByCohort();
         let _self = this;
         if (this.AddByCohortStudentlist.length > 0) {
             let _promise = new Promise(function (resolve, reject) {
@@ -1340,6 +1345,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     _self.AddByCohortStudentlist = [];
                     _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig(551));
                     $('#cohortStudentList').removeClass('hidden');
+                    // this.studentTable = true;
                     _self.noSearchStudent = false;
                     _self.RefreshAllSelectionOnCohortChange();
                     _self.RedrawColumns();
@@ -1353,6 +1359,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         else {
             this.cohortStudentlist = [];
             $('#cohortStudentList').addClass('hidden');
+            // this.studentTable = false;
         }
     }
 
@@ -1372,6 +1379,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         if (this.cohortStudentlist.length > 0) {
             this.AddByCohortStudentlist = this.cohortStudentlist;
             $('#cohortStudentList').addClass('hidden');
+            // this.studentTable = false;
         }
 
     }
@@ -1601,6 +1609,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         setTimeout(data => {
                             _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig(493));
                             $('#cohortStudentList').removeClass('hidden');
+                            // this.studentTable = true;
                             _self.noSearchStudent = false;
                             $('#cohortStudents_filter').addClass('invisible');
                             $('.typeahead').typeahead('close');
@@ -1616,12 +1625,14 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     this.noSearchStudent = true;
                     $('.typeahead').typeahead('close');
                     $('#cohortStudentList').addClass('hidden');
+                    // this.studentTable = false;
                 }
             }
             else {
                 this.noSearchStudent = true;
                 $('.typeahead').typeahead('close');
                 $('#cohortStudentList').addClass('hidden');
+                // this.studentTable = false;
             }
         }
     }
