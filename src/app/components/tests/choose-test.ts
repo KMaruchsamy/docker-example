@@ -394,8 +394,9 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#btnTypeahead').attr('disabled', 'disabled');
         this.searchResult = [];
         this.previouSearch = null;
-        if (this.testScheduleModel.testId != 0) {
+        if (this.testScheduleModel.testId != 0 && this.testScheduleModel.subjectId == 0) {
             this.loadTestsBySearch(this.testScheduleModel.testName);
+            $('#availableTests').removeClass('hidden');
         }
         else {
             $('#findTestByName').focus();
@@ -410,9 +411,9 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#subject').addClass('active');
         $('#chooseBySubject').addClass('active');
         $('#errorText').addClass('hidden');
-        if (this.testScheduleModel.testId != 0) {
+        if (this.testScheduleModel.testId != 0 && this.testScheduleModel.subjectId != 0 ) {
             $('.selectpicker').val('').selectpicker('refresh');
-            this.loadTestsBySearch(this.testScheduleModel.testName);
+            this.loadTests(this.testScheduleModel.subjectId);
         }
         else {
             $('.selectpicker').val('').selectpicker('refresh');
