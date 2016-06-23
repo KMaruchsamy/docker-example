@@ -136,12 +136,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
         this.addClearIcon();
         let __this = this;
-        $('#chooseCohortContainer').on('click', '#cohortStudentList .clear-input-values', function () {
+
+        $('.tab-content').on('click', '#cohortStudentList .clear-input-values', function () {
             __this.clearTableSearch();
         });
-        // $('.tab-content').on('click', '#cohortStudentList .clear-input-values', function () {
-        //     __this.clearTableSearch();
-        // });
 
         $('body').on('hidden.bs.popover', function (e) {
             $(e.target).data("bs.popover").inState.click = false;
@@ -773,7 +771,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     clearTableSearch(): void {
         let __this = this;
-        var $that = $('.tab-pane.active :input');
+        var $that = $('.add-students-table-search .small-search-box');
         $that.val('');
         $that.next('span').removeClass('clear-input-values');
 
@@ -788,8 +786,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         //When only only letter has been entered table rows are simply hidden
         $that.on('click', function () {
 
-            var $table = $('.tab-pane.active table');
-            var table = $('.tab-pane.active table').DataTable();
+            var $table = $('table');
+            var table = $('table').DataTable();
             table.search(this.value).draw();
             $table.find('tr').each(function () {
                 $(this).removeClass('hidden');
