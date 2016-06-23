@@ -103,7 +103,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
         if (this.testsTable)
         this.testsTable.destroy();
-        $('#cohortStudentList').addClass('hidden');
+        $('#cohortStudentList, #addAllStudents').addClass('hidden');
         // this.studentTable = false;  //remove any initialized tables from DOM
         $('.selectpicker').val('').selectpicker('refresh');
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
