@@ -177,27 +177,30 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     initialize(): void {
         this.ResetData();
         let savedSchedule = this.testService.getTestSchedule();
+        if (savedSchedule) {
         this.testScheduleModel = savedSchedule;
-        this.testScheduleModel.currentStep = 3;
-        this.testScheduleModel.activeStep = 3;
-        this.windowStart = moment(this.testScheduleModel.scheduleStartTime).format("MM.DD.YY"); //'01.01.14'
-        this.windowEnd = moment(this.testScheduleModel.scheduleEndTime).format("MM.DD.YY"); //'12.12.16';
-        this.apiServer = this.auth.common.getApiServer();
+        
+            this.testScheduleModel.currentStep = 3;
+            this.testScheduleModel.activeStep = 3;
+            this.windowStart = moment(this.testScheduleModel.scheduleStartTime).format("MM.DD.YY"); //'01.01.14'
+            this.windowEnd = moment(this.testScheduleModel.scheduleEndTime).format("MM.DD.YY"); //'12.12.16';
+            this.apiServer = this.auth.common.getApiServer();
 
-        if (this.testScheduleModel.selectedStudents.length > 0) {
-            let previousTestId: number = parseInt(this.sStorage.getItem('previousTest'));
-            if (!(Number.isNaN(previousTestId)) && previousTestId !== 0) {
-                if (previousTestId !== this.testScheduleModel.testId) {
-                    this.RefreshSelectedSudent();
+            if (this.testScheduleModel.selectedStudents.length > 0) {
+                let previousTestId: number = parseInt(this.sStorage.getItem('previousTest'));
+                if (!(Number.isNaN(previousTestId)) && previousTestId !== 0) {
+                    if (previousTestId !== this.testScheduleModel.testId) {
+                        this.RefreshSelectedSudent();
+                    }
+                    else
+                        this.InitializePage();
                 }
-                else
+                else {
                     this.InitializePage();
+                }
             }
-            else {
-                this.InitializePage();
-            }
+            this.loadActiveCohorts();
         }
-        this.loadActiveCohorts();
     }
     InitializePage(): void {
         if (!this.modify)
