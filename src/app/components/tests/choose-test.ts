@@ -138,7 +138,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             e.preventDefault();
                             let searchText = $('#findTestByName').val();
                 self.bindTypeaheadFocus(searchText);
-                setTimeout(function () { $('#findTestByName').focus(); }, 1)
+               $('#findTestByName').focus();
                   });
 
         $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
@@ -394,8 +394,9 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#btnTypeahead').attr('disabled', 'disabled');
         this.searchResult = [];
         this.previouSearch = null;
-        if (this.testScheduleModel.testId != 0) {
+        if (this.testScheduleModel.testId != 0 && this.testScheduleModel.subjectId == 0) {
             this.loadTestsBySearch(this.testScheduleModel.testName);
+            $('#availableTests').removeClass('hidden');
         }
         else {
             $('#findTestByName').focus();
@@ -410,9 +411,9 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#subject').addClass('active');
         $('#chooseBySubject').addClass('active');
         $('#errorText').addClass('hidden');
-        if (this.testScheduleModel.testId != 0) {
-            $('.selectpicker').val('').selectpicker('refresh');
-            this.loadTestsBySearch(this.testScheduleModel.testName);
+        if (this.testScheduleModel.testId != 0 && this.testScheduleModel.subjectId != 0) {
+            $('.selectpicker').val(this.testScheduleModel.subjectId).selectpicker('refresh');
+            this.loadTests(this.testScheduleModel.subjectId);
         }
         else {
             $('.selectpicker').val('').selectpicker('refresh');
@@ -434,13 +435,13 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         })
             .then((json) => {
                 self.searchResult = json;
-                if (json.length > 0) {
+                if (self.testScheduleModel.testId != 0 && self.testScheduleModel.subjectId == 0) {
+                    this.displayTest(this.testScheduleModel.testId);
+                }
+                 if (json.length > 0) {
                     self.showTypeahead();
                     $('#findTestByName').typeahead('open');
                     setTimeout(function () { $('#findTestByName').focus(); }, 1)
-                }
-                if (self.testScheduleModel.testId != 0) {
-                    this.displayTest(this.testScheduleModel.testId);
                 }
             });
     }
