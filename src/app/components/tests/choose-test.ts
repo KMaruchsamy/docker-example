@@ -438,10 +438,11 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                 if (self.testScheduleModel.testId != 0 && self.testScheduleModel.subjectId == 0) {
                     this.displayTest(this.testScheduleModel.testId);
                 }
-                 if (json.length > 0) {
+                if (json.length > 0) {
+                    setTimeout(() => { $('.typeahead').focus(); });
                     self.showTypeahead();
                     $('#findTestByName').typeahead('open');
-                    setTimeout(function () { $('#findTestByName').focus(); }, 1)
+                    setTimeout(() => { $('#findTestByName').focus(); });
                 }
             });
     }
