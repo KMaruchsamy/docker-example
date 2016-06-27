@@ -441,7 +441,10 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                 if (json.length > 0) {
                     setTimeout(() => { $('.typeahead').focus(); });
                     self.showTypeahead();
+                    setTimeout(() => { $('#findTestByName').focus(); });
                     $('#findTestByName').typeahead('open');
+                }
+                else {
                     setTimeout(() => { $('#findTestByName').focus(); });
                 }
             });
