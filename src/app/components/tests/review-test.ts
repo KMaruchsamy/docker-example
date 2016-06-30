@@ -9,7 +9,7 @@ import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
 import * as _ from 'lodash';
-import {ParseDatePipe} from '../../pipes/parseDate.pipe';
+import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {RetesterAlternatePopup} from './retesters-alternate-popup';
