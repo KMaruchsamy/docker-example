@@ -4,7 +4,7 @@ var del = require('del');
 var print = require('gulp-print');
 
 /* Run all clean tasks */
-gulp.task('clean', ['clean.build', 'clean.report', 'clean.ts', 'clean.sass']);
+gulp.task('clean', ['clean.build', 'clean.report', 'clean.ts']);
 
 /* Clean build folder */
 gulp.task('clean.build', function () {
@@ -17,9 +17,9 @@ gulp.task('clean.report', function () {
 });
 
 /* Clean sass compile */
-gulp.task('clean.sass', function () {
-    return del([config.assetsPath.styles + '**/*.css']);
-});
+// gulp.task('clean.sass', function () {
+//     return del([config.assetsPath.styles + '**/*.css']);
+// });
 
 /* Clean js and map */
 gulp.task('clean.ts', function () {
