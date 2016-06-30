@@ -1,5 +1,5 @@
-import {Component, Input, Output, EventEmitter, OnInit} from 'angular2/core';
-import {Router, RouterLink} from 'angular2/router';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {Router, RouterLink} from '@angular/router-deprecated';
 import {Common} from '../../services/common';
 
 @Component({

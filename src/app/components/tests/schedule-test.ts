@@ -1,6 +1,6 @@
-import {Component, OnInit, AfterViewInit, ViewEncapsulation} from 'angular2/core';
-import {Router, CanDeactivate, OnDeactivate, ComponentInstruction, RouteParams, Location} from 'angular2/router';
-import {NgIf} from 'angular2/common';
+import {Component, OnInit, AfterViewInit, ViewEncapsulation} from '@angular/core';
+import {Router, CanDeactivate, OnDeactivate, ComponentInstruction, RouteParams} from '@angular/router-deprecated';
+import {NgIf,Location} from '@angular/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -8,13 +8,13 @@ import {links} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
-import * as _ from '../../lib/index';
+import * as _ from 'lodash';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {AlertPopup} from '../shared/alert.popup';
-import '../../plugins/bootstrap-datepicker-1.5.min.js';
-import '../../plugins/jquery.timepicker.js';
-import '../../lib/modal.js';
+// import '../../plugins/bootstrap-datepicker-1.5.min.js';
+// import '../../plugins/jquery.timepicker.js';
+// import '../../lib/modal.js';
 
 @Component({
     selector: 'schedule-test',
@@ -572,7 +572,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             return response.json();
         })
             .then((json) => {
-                __this.ignore8HourRule = _.contains(json, __this.testScheduleModel.testId);
+                __this.ignore8HourRule = _.includes(json, __this.testScheduleModel.testId);
                 __this.validate(__this);
             })
             .catch((error) => {

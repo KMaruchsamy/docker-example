@@ -1,5 +1,6 @@
-﻿import {Component} from 'angular2/core';
-import {Router, Location, RouterLink} from 'angular2/router';
+﻿import {Component} from '@angular/core';
+import {Router, RouterLink} from '@angular/router-deprecated';
+import {Location} from '@angular/common';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';

@@ -1,5 +1,5 @@
-import {Component, Input, Output, EventEmitter, OnInit} from 'angular2/core';
-import {RouterLink, OnDeactivate,ComponentInstruction, RouteParams, Router} from 'angular2/router';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {RouterLink, OnDeactivate,ComponentInstruction, RouteParams, Router} from '@angular/router-deprecated';
 import {Common} from '../../services/common';
 import {Auth} from '../../services/auth';
 import {TestScheduleModel} from '../../models/testSchedule.model';
@@ -7,7 +7,7 @@ import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
 import {TestService} from '../../services/test.service';
-import '../../lib/modal.js';
+// import '../../lib/modal.js';
 
 
 @Component({

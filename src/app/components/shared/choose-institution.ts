@@ -1,10 +1,10 @@
-import {Component} from 'angular2/core';
-import {Router, RouterLink, RouteParams, Location} from 'angular2/router';
-import {NgIf} from 'angular2/common';
+import {Component} from '@angular/core';
+import {Router, RouterLink, RouteParams} from '@angular/router-deprecated';
+import {NgIf, Location} from '@angular/common';
 import {PageHeader} from './page-header';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
-import * as _ from '../../lib/index';
+import * as _ from 'lodash';
 import {links} from '../../constants/config';
 import {TestService} from '../../services/test.service';
 import {TestScheduleModel} from '../../models/testSchedule.model';
@@ -96,12 +96,12 @@ export class ChooseInstitution {
     }
 
     checkInstitutions(): void {
-        let institutions = _.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
-        if (institutions != null && institutions != 'undefined') {
-            let institutionsRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
-            let institutionsPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
-            let programIdRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'ProgramId');
-            let programIdPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'ProgramId');
+        let institutions = _.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
+        if (institutions != null && institutions != undefined) {
+            let institutionsRN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
+            let institutionsPN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
+            let programIdRN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'ProgramId');
+            let programIdPN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'ProgramId');
             if (programIdRN.length > 0)
                 this.programRN = programIdRN[0];
             if (programIdPN.length > 0)

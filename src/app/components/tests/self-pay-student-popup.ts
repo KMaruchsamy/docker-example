@@ -1,5 +1,5 @@
-﻿import {Component, Input, OnInit, Output, EventEmitter} from 'angular2/core';
-import {RouterLink, OnDeactivate} from 'angular2/router';
+﻿import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {RouterLink, OnDeactivate} from '@angular/router-deprecated';
 import {Common} from '../../services/common';
 import {SortPipe} from '../../pipes/sort.pipe';
 

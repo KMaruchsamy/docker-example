@@ -1,6 +1,6 @@
-import {Component} from 'angular2/core';
-import {NgFor, NgIf} from 'angular2/common';
-import {RouteParams, RouterLink} from 'angular2/router';
+import {Component} from '@angular/core';
+import {NgFor, NgIf} from '@angular/common';
+import {RouteParams, RouterLink} from '@angular/router-deprecated';
 import {HomeService} from '../../services/home-service';
 import {Common} from '../../services/common';
 import {links} from '../../constants/config';

@@ -1,12 +1,12 @@
-﻿import {Pipe, PipeTransform} from 'angular2/core';
+﻿import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
     name: "parseDate"
 })
 export class ParseDatePipe implements PipeTransform {
-    transform(value: any, args: string[]): string {
+   transform(value: any, dateFormat: string): string {
         if (!value)
             return null;
-        return moment(value).format(args[0]);
+        return moment(value).format(dateFormat);
     }
 }

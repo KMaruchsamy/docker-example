@@ -21,7 +21,7 @@
 
                                 <div class="top-section " *ngIf="!noCohort">
                                     <select id="chooseCohort" #selectcohort class="selectpicker" title="Choose a Cohort" data-width="65%" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,selectcohort,$event);">
-                                        <option *ngFor="#cohort of cohorts;#i=index;" [selected]="cohort.CohortId==lastSelectedCohortID" [value]="cohort.CohortId">{{cohort.CohortName}}</option>
+                                        <option *ngFor="let cohort of cohorts; let i=index;" [selected]="cohort.CohortId==lastSelectedCohortID" [value]="cohort.CohortId">{{cohort.CohortName}}</option>
                                     </select>
                                     <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort($event)">Add all students</button>
                                 </div>
@@ -70,7 +70,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="#student of cohortStudentlist | sort:'asc':'LastName'" >
+                                    <tr *ngFor="let student of cohortStudentlist | sort:'asc':'LastName'" >
                                         <td title="{{student.Email}}" [class.duplicate-student]="student.duplicate" [attr.lastname]="student.LastName">{{student.LastName}}
                                             <!--Last name must be on same line as opening tag or last name starts with new line and search filter fails to match-->
                                             <a *ngIf="student.duplicate"

@@ -1,4 +1,4 @@
-module.exports = function() {
+module.exports = function () {
     var config = {
         app: {
             src: {
@@ -60,10 +60,25 @@ module.exports = function() {
                 'src/app/plugins/core-min.js',
                 'node_modules/crypto-js/crypto-js.js',
                 'node_modules/bootstrap/js/tooltip.js',
-                'node_modules/bootstrap/js/popover.js'
+                'node_modules/bootstrap/js/popover.js',
                 // 'src/app/plugins/bootstrap-datepicker.min.js',
                 // 'src/app/plugins/jquery.timepicker.js',
                 // 'src/app/plugins/date.js'
+                'node_modules/systemjs/dist/system.js',
+                'node_modules/systemjs/dist/system-polyfills.js',
+                'node_modules/core-js/client/shim.min.js',
+
+                'node_modules/zone.js/dist/zone.js',
+                'node_modules/reflect-metadata/Reflect.js',
+
+                'node_modules/rxjs/bundles/Rx.umd.js',
+                'node_modules/@angular/core/core.umd.js',
+                'node_modules/@angular/common/common.umd.js',
+                'node_modules/@angular/compiler/compiler.umd.js',
+                'node_modules/@angular/platform-browser/platform-browser.umd.js',
+                'node_modules/@angular/platform-browser-dynamic/platform-browser-dynamic.umd.js',
+                'node_modules/@angular/http/http.umd.js',
+                'node_modules/@angular/router-deprecated/router-deprecated.umd.js',
             ],
             jsreview: [
                 './src/app/app/*.js',

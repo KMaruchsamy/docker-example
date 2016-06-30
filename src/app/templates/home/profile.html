@@ -10,7 +10,7 @@
   <div [class.invisible]="!profile.kaplanAdminId" class="section-medium-thin for-help-list">
     <p class="bullet-heading">For help with:</p>
     <ul class="bullet bullet-indented">
-      <li *ngFor="#bullet of profile.bulletsForFrontEnd">{{bullet}}</li>
+      <li *ngFor="let bullet of profile.bulletsForFrontEnd">{{bullet}}</li>
     </ul>
   </div>
 </div>

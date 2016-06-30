@@ -17,7 +17,7 @@
                     <span class="text-larger"> Students should be encouraged to pay their past due balance as soon as possible.</span>
                 </div>
                 <div class="thin-section border-top-bottom">
-                    <ul class="list-extra-spacing js-repeaters-list" *ngFor="#student of selfPayStudentException | sort:'asc':'StudentLastName'">
+                    <ul class="list-extra-spacing js-repeaters-list" *ngFor="let student of selfPayStudentException | sort:'asc':'StudentLastName'">
                         <li class="text-larger-purple"><b>{{student.StudentLastName}}, {{student.StudentFirstName}}</b></li>
                     </ul>
                 </div>

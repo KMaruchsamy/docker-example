@@ -1,6 +1,6 @@
-﻿import {Component, OnInit, AfterViewInit, DynamicComponentLoader, ElementRef, ViewEncapsulation} from 'angular2/core';
-import {Router, RouterLink, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, Location } from 'angular2/router';
-import {NgFor} from 'angular2/common';
+import {Component, OnInit, AfterViewInit, DynamicComponentLoader, ElementRef,ViewEncapsulation, ViewContainerRef} from '@angular/core';
+import {Router, RouterLink, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction } from '@angular/router-deprecated';
+import {NgFor,Location} from '@angular/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {links} from '../../constants/config';
@@ -19,15 +19,15 @@ import {TimeExceptionPopup} from './time-exception-popup';
 import {SelfPayStudentPopup} from './self-pay-student-popup';
 import {SortPipe} from '../../pipes/sort.pipe';
 
-import * as _ from '../../lib/index';
-import '../../plugins/dropdown.js';
-import '../../plugins/bootstrap-select.min.js';
-import '../../plugins/jquery.dataTables.min.js';
-import '../../plugins/dataTables.responsive.js';
-import '../../lib/modal.js';
-import '../../lib/tooltip.js';
-import '../../lib/popover.js';
-import '../../plugins/typeahead.bundle.js';
+import * as _ from 'lodash';
+// import '../../plugins/dropdown.js';
+// import '../../plugins/bootstrap-select.min.js';
+// import '../../plugins/jquery.dataTables.min.js';
+// import '../../plugins/dataTables.responsive.js';
+// import '../../lib/modal.js';
+// import '../../lib/tooltip.js';
+// import '../../lib/popover.js';
+// import '../../plugins/typeahead.bundle.js';
 //import '../../plugins/dataTables.bootstrap.min.js';
 
 @Component({
@@ -49,7 +49,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     lastSelectedCohortName: string;
     cohorts: Object[] = [];
     cohortStudentlist: Object[] = [];
-    selectedStudents: selectedStudentModel[] = [];
+    selectedStudents: SelectedStudentModel[] = [];
     prevStudentList: SelectedStudentModel[] = [];
     testsTable: any;
     sStorage: any;
@@ -75,7 +75,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     // studentTable: boolean = false;
 
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
-        public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location) {
+        public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location, public viewContainerRef :ViewContainerRef) {
 
     }
 
@@ -963,8 +963,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     HasWindowException(_studentWindowException: any): void {
         if (_studentWindowException.length != 0) {
             if (this.loader)
-                this.loader.dispose();
-            this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopup, this.elementRef)
+                this.loader.destroy();
+            this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopup, this.viewContainerRef)
                 .then(retester => {
                     this.loader = retester;
                     $('#modalTimingException').modal('show');
@@ -1000,8 +1000,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         this.markSelfPayStudents();
         if (this._selfPayStudent.length > 0) {
             if (this.loader)
-                this.loader.dispose();
-            this.dynamicComponentLoader.loadNextToLocation(SelfPayStudentPopup, this.elementRef)
+                this.loader.destroy();
+            this.dynamicComponentLoader.loadNextToLocation(SelfPayStudentPopup, this.viewContainerRef)
                 .then(retester => {
                     this.loader = retester;
                     $('#selfPayStudentModal').modal('show');
@@ -1164,9 +1164,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     loadRetesterNoAlternatePopup(_studentRepeaterExceptions: any): void {
         if (this.loader)
-            this.loader.dispose();
-        this.dynamicComponentLoader.loadNextToLocation(RetesterNoAlternatePopup, this.elementRef)
-            .then(retester => {
+            this.loader.destroy();
+        this.dynamicComponentLoader.loadNextToLocation(RetesterNoAlternatePopup, this.viewContainerRef)
+            .then(retester=> {
                 this.loader = retester;
                 $('#modalNoAlternateTest').modal('show');
                 retester.instance.studentRepeaters = _studentRepeaterExceptions;
@@ -1202,10 +1202,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         let testTakenStudents: Object[] = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 1 });
 
         if (this.loader)
-            this.loader.dispose();
+            this.loader.destroy();
 
-        this.dynamicComponentLoader.loadNextToLocation(RetesterAlternatePopup, this.elementRef)
-            .then(retester => {
+        this.dynamicComponentLoader.loadNextToLocation(RetesterAlternatePopup, this.viewContainerRef)
+            .then(retester=> {
                 this.loader = retester;
                 $('#modalAlternateTest').modal('show');
                 retester.instance.retesterExceptions = _studentRepeaterExceptions;

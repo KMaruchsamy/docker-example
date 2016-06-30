@@ -1,10 +1,10 @@
-﻿import {Component, Input, Output, EventEmitter} from 'angular2/core';
-import {NgIf, NgFor} from 'angular2/common';
-import {RouterLink, OnDeactivate} from 'angular2/router';
+﻿import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {NgIf, NgFor} from '@angular/common';
+import {RouterLink, OnDeactivate} from '@angular/router-deprecated';
 import {Common} from '../../services/common';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
-import * as _ from '../../lib/index';
+import * as _ from 'lodash';
 import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({

@@ -1,5 +1,5 @@
-import {Component, OnInit} from 'angular2/core';
-import {Router, RouterLink, CanActivate} from 'angular2/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, RouterLink, CanActivate} from '@angular/router-deprecated';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {links, constants} from '../../constants/config';
@@ -7,7 +7,7 @@ import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {Utility} from '../../scripts/utility';
-import {Angulartics2On} from '../../lib/ng-ga';
+import {Angulartics2On} from 'angulartics2';
 
 @Component({
     selector: 'userguide',
