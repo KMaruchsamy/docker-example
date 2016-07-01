@@ -99,9 +99,6 @@ module.exports = function () {
         }
     };
 
-    var ebsSource = './ebs/',
-        ebExtensions = './.ebextensions/'
-
     var config = {
         root: root,
         src: src,
@@ -126,9 +123,7 @@ module.exports = function () {
         systemJs: systemJs,
         images: images,
         css: css,
-        favicons: favicons,
-        ebsSource: ebsSource,
-        ebextensions: ebExtensions
+        favicons: favicons
     };
 
     if (environment === 'dev') {

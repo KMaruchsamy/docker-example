@@ -14,7 +14,7 @@ gulp.task('prepare_config', function () {
             basename: 'resources',
             extname: '.config'
         }))
-        .pipe(gulp.dest(config.ebExtensions));
+        .pipe(gulp.dest('.ebextensions'));
 
     gulp.src('ebs/Dockerrun_' + env + '.aws.json')
         .pipe(plugins.rename({
@@ -28,7 +28,7 @@ gulp.task('prepare_config', function () {
 // To run: app_version=qa_v4 gulp create_zip
 gulp.task('create_zip', function(){
     gulp.src(['./Dockerrun.aws.json',
-            config.ebExtensions + 'resources.config'], { base: "." })
+            '.ebextensions/resources.config'], { base: "." })
         .pipe(plugins.zip('nursing-adminapp-' + app_version + '.zip'))
         .pipe(gulp.dest('dist'));
 });
