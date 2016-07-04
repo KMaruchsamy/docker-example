@@ -1,6 +1,6 @@
-import {Component, OnInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
-import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams, Location} from 'angular2/router';
-import {NgIf, NgFor} from 'angular2/common';
+import {Component, OnInit, DynamicComponentLoader, ElementRef, ViewContainerRef} from '@angular/core';
+import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams} from '@angular/router-deprecated';
+import {NgIf, NgFor, Location} from '@angular/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -8,8 +8,8 @@ import {links} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
-import * as _ from '../../lib/index';
-import {ParseDatePipe} from '../../pipes/parseDate.pipe';
+import * as _ from 'lodash';
+import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {RetesterAlternatePopup} from './retesters-alternate-popup';
@@ -18,11 +18,11 @@ import {TimeExceptionPopup} from './time-exception-popup';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {AlertPopup} from '../shared/alert.popup';
 import {Loader} from '../shared/loader';
-import '../../plugins/dropdown.js';
-import '../../plugins/bootstrap-select.min.js';
-import '../../plugins/jquery.dataTables.min.js';
-import '../../plugins/dataTables.responsive.js';
-import '../../lib/modal.js';
+// import '../../plugins/dropdown.js';
+// import '../../plugins/bootstrap-select.min.js';
+// import '../../plugins/jquery.dataTables.min.js';
+// import '../../plugins/dataTables.responsive.js';
+// import '../../lib/modal.js';
 
 @Component({
     selector: "review-test",
@@ -61,7 +61,8 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public common: Common,
         public router: Router, public dynamicComponentLoader: DynamicComponentLoader,
-        public elementRef: ElementRef, public routeParams: RouteParams, public aLocation: Location) {
+        public elementRef: ElementRef, public routeParams: RouteParams, public aLocation: Location,
+    public viewContainerRef:ViewContainerRef) {
 
     }
 
@@ -435,7 +436,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                     this.retesterExceptions = studentRepeaterExceptions;
 
                 if (!__this.hasAlternateTests) {
-                    // this.loaderPromise = this.dynamicComponentLoader.loadIntoLocation(RetesterNoAlternatePopup, this.elementRef, 'retestermodal')
+                    // this.loaderPromise = this.dynamicComponentLoader.loadIntoLocation(RetesterNoAlternatePopup, this.viewContainerRef, 'retestermodal')
                     this.loadRetesterNoAlternatePopup(studentRepeaterExceptions);
                 }
                 else {
@@ -471,7 +472,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     loadRetesterNoAlternatePopup(_studentRepeaterExceptions: any): void {
-        this.dynamicComponentLoader.loadNextToLocation(RetesterNoAlternatePopup, this.elementRef)
+        this.dynamicComponentLoader.loadNextToLocation(RetesterNoAlternatePopup, this.viewContainerRef)
             .then(retester => {
                 $('#modalNoAlternateTest').modal('show');
                 retester.instance.studentRepeaters = _studentRepeaterExceptions;
@@ -503,7 +504,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     loadWindowExceptions(_windowExceptions: any): void {
-        this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopup, this.elementRef)
+        this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopup, this.viewContainerRef)
             .then(window => {
                 $('#modalTimingException').modal('show');
                 window.instance.studentWindowException = _windowExceptions;
@@ -577,9 +578,9 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         let testTakenStudents: Object[] = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 1 });
 
         if (this.loader)
-            this.loader.dispose();
+            this.loader.destroy();
 
-        this.dynamicComponentLoader.loadNextToLocation(RetesterAlternatePopup, this.elementRef)
+        this.dynamicComponentLoader.loadNextToLocation(RetesterAlternatePopup, this.viewContainerRef)
             .then(retester => {
                 this.loader = retester;
                 $('#modalAlternateTest').modal('show');

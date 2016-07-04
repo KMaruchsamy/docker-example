@@ -1,7 +1,7 @@
-import {Component, OnInit, Input} from 'angular2/core';
-import {Router, RouterLink} from 'angular2/router';
+import {Component, OnInit, Input} from '@angular/core';
+import {Router, RouterLink} from '@angular/router-deprecated';
 import {Auth} from '../../services/auth';
-import '../../plugins/dropdown.js';
+// import '../../plugins/dropdown.js';
 
 @Component({
     selector: 'dropdown-menu',

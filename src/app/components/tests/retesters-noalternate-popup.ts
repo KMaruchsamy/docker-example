@@ -1,9 +1,9 @@
-import {Component, Input, OnInit, Output, EventEmitter} from 'angular2/core';
-import {RouterLink} from 'angular2/router';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {RouterLink} from '@angular/router-deprecated';
 import {Common} from '../../services/common';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
-import * as _ from '../../lib/index';
+import * as _ from 'lodash';
 import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({

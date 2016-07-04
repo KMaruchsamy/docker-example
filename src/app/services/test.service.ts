@@ -1,8 +1,8 @@
-import {Injectable, Inject} from 'angular2/core';
-import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "angular2/http";
+import {Injectable, Inject} from '@angular/core';
+import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
 import {Observable} from 'rxjs/Rx';
 import {Auth} from './auth';
-import * as _ from '../lib/index';
+import * as _ from 'lodash';
 import {TestScheduleModel} from '../models/testSchedule.model';
 import {SelectedStudentModel} from '../models/selectedStudent-model';
 import {TestShedulingPages} from '../constants/config';

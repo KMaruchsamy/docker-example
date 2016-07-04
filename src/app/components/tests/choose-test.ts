@@ -1,5 +1,6 @@
-import {Component, OnInit, OnChanges, AfterViewChecked, ElementRef} from 'angular2/core';
-import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, Location} from 'angular2/router';
+import {Component, OnInit, OnChanges, AfterViewChecked, ElementRef} from '@angular/core';
+import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction} from '@angular/router-deprecated';
+import {Location} from '@angular/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -13,13 +14,13 @@ import {AlertPopup} from '../shared/alert.popup';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';
 import {Utility} from '../../scripts/utility';
-import * as _ from '../../lib/index';
-import '../../plugins/dropdown.js';
-import '../../plugins/bootstrap-select.min.js';
-import '../../plugins/jquery.dataTables.min.js';
-import '../../plugins/dataTables.responsive.js';
-import '../../plugins/typeahead.bundle.js';
-import '../../lib/modal.js';
+import * as _ from 'lodash';
+// import '../../plugins/dropdown.js';
+// import '../../plugins/bootstrap-select.min.js';
+// import '../../plugins/jquery.dataTables.min.js';
+// import '../../plugins/dataTables.responsive.js';
+// import '../../plugins/typeahead.bundle.js';
+// import '../../lib/modal.js';
 
 @Component({
     selector: 'choose-test',
@@ -453,7 +454,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     showTypeahead(): void {
         $('.typeahead').typeahead('destroy');
         let self = this;
-        let testNamesList = _.pluck(self.searchResult, 'TestName');
+        let testNamesList = _.map(self.searchResult, 'TestName');
 
         $('#findByNameContainer .typeahead').typeahead({
             hint: false,
@@ -482,17 +483,17 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         let self = this;
         this.testsTable = null;
         if (setValue) {
-            self.tests = _.where(self.searchResult, { TestName: search });
+            self.tests = _.filter(self.searchResult, { TestName: search });
         }
         else {
             if (search.length != 0) {
                 let _testDetails = [];
                 let _listOfTests = [];
-                let testNameList = _.pluck(self.searchResult, 'TestName');
+                let testNameList = _.map(self.searchResult, 'TestName');
                 for (let i = 0; i < testNameList.length; i++) {
                     let testName = testNameList[i];
                     if (_.startsWith(testName.toLowerCase(), search.toLowerCase())) {
-                        _listOfTests = _.where(self.searchResult, { TestName: testName });
+                        _listOfTests = _.filter(self.searchResult, { TestName: testName });
                         for (let j = 0; j < _listOfTests.length; j++) {
                             _testDetails.push(_listOfTests[j]);
                         }
@@ -561,6 +562,6 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
 
     displayTest(testId: number): void {
         let self = this;
-        self.tests = _.where(self.searchResult, { TestId: testId });
+        self.tests = _.filter(self.searchResult, { TestId: testId });
     }
 }

@@ -1,6 +1,6 @@
-import {Component,Input, OnInit} from 'angular2/core';
-import {NgClass} from 'angular2/common';
-import {Router, RouterLink} from 'angular2/router';
+import {Component,Input, OnInit} from '@angular/core';
+import {NgClass} from '@angular/common';
+import {Router, RouterLink} from '@angular/router-deprecated';
 import {Auth} from '../../services/auth';
 import {DropdownMenu} from '../controls/dropdown-menu';
 

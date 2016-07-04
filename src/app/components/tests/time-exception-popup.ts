@@ -1,8 +1,8 @@
-﻿import {Component, Input, OnInit, Output, EventEmitter} from 'angular2/core';
-import {RouterLink, OnDeactivate} from 'angular2/router';
+﻿import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {RouterLink, OnDeactivate} from '@angular/router-deprecated';
 import {Common} from '../../services/common';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
-import * as _ from '../../lib/index';
+import * as _ from 'lodash';
 import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({

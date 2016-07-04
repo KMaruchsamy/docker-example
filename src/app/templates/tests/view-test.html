@@ -65,7 +65,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="#student of schedule?.selectedStudents">
+                    <tr *ngFor="let student of schedule?.selectedStudents">
                         <td [class.name-with-pay-alert]="student.StudentPay && testStatus > -1">{{student.LastName}}<img *ngIf="student.StudentPay && testStatus > -1" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon" alt="payment alert icon"/></td>
                         <td>{{student.FirstName}}</td>
                         <td>{{student.CohortName}}</td>

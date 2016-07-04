@@ -1,5 +1,6 @@
 import {Common} from './common';
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
+import * as _ from 'lodash';
 
 @Injectable()
 export class Auth {
@@ -71,7 +72,7 @@ export class Auth {
   isPayInstitutionEnabled(id: number): void {
       let _institutions = JSON.parse(this.institutions);
       if (_institutions.length > 0) {
-          let isEnabled = _.pluck(_.filter(_institutions, { 'InstitutionId': id }), 'StudentPayEnabled');
+          let isEnabled = _.map(_.filter(_institutions, { 'InstitutionId': id }), 'StudentPayEnabled');
           this.sStorage.setItem('payLinkEnabled', isEnabled[0]);          
       } else
           this.sStorage.setItem('payLinkEnabled', "false");

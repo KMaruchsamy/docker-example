@@ -1,4 +1,4 @@
-﻿
+﻿/*
 var gulp = require('gulp');
 var del = require('del');
 var plumber = require('gulp-plumber');
@@ -31,9 +31,9 @@ var csso = require('gulp-csso');
 var uglify = require('gulp-uglify');
 var minifyHTML = require('gulp-htmlmin');
 
-gulp.task('clean', function (done) {
-    del([config.app.src.build], done);
-});
+// // gulp.task('clean', function (done) {
+// //     del([config.app.src.build], done);
+// // });
 
 gulp.task('ts', function () {
     var tsResult = gulp
@@ -55,21 +55,21 @@ gulp.task('js', function () {
         .pipe(gulp.dest(config.app.src.build));
 });
 
-gulp.task('images', function () {
-    return gulp.src(config.app.src.images)
-     .pipe(gulp.dest(config.app.src.build + '/images'));
-});
+// // gulp.task('images', function () {
+// //     return gulp.src(config.app.src.images)
+// //      .pipe(gulp.dest(config.app.src.build + '/images'));
+// // });
 
-gulp.task('favicons', function () {
-    return gulp.src(config.app.src.favicons)
-     .pipe(gulp.dest(config.app.src.build));
-});
+// // gulp.task('favicons', function () {
+// //     return gulp.src(config.app.src.favicons)
+// //      .pipe(gulp.dest(config.app.src.build));
+// // });
 
-gulp.task('html', function () {
-    return gulp.src(config.app.src.html)
-    //   .pipe(minifyHTML({collapseWhitespace: true}))
-      .pipe(gulp.dest(config.app.src.build));
-});
+// // gulp.task('html', function () {
+// //     return gulp.src(config.app.src.html)
+// //     //   .pipe(minifyHTML({collapseWhitespace: true}))
+// //       .pipe(gulp.dest(config.app.src.build));
+// // });
 
 gulp.task('json', function () {
     return gulp.src(config.app.src.json)
@@ -77,11 +77,11 @@ gulp.task('json', function () {
 });
 
 
-gulp.task('css', function () {
-    return gulp.src(config.app.src.css)
-    .pipe(csso())
-    .pipe(gulp.dest(config.app.src.build));
-});
+// // gulp.task('css', function () {
+// //     return gulp.src(config.app.src.css)
+// //     .pipe(csso())
+// //     .pipe(gulp.dest(config.app.src.build));
+// // });
 
 gulp.task('libs', function () {
     console.log('Branch : ' + args.branch );
@@ -106,6 +106,7 @@ gulp.task('build', function (done) {
         done
         );
 });
+
 
 // To run: NODE_ENV=staging gulp prepare_config
 gulp.task('prepare_config', function () {
@@ -326,19 +327,12 @@ function log(message){
 
 
 
-// End to end testing 
 
-var gulpProtractor = require('gulp-protractor');
-gulp.task('e2e', ['e2e-test']);
-gulp.task('driver-update', gulpProtractor['webdriver_update']);
-gulp.task('e2e-test', ['driver-update'], function () {
-    gulp.src('./src/test/e2e/**/*.spec.js')
-    .pipe(gulpProtractor.protractor({
-        configFile: 'protractor.conf.js',
-        args: ['--baseUrl', 'http://localhost:3000']
-    }))
-    .on('error', function(e) {
-        console.log('Error running E2E testing');
-        process.exit(1);
-    });
-});
+
+
+*/ // Old code commented out ...
+
+
+
+var requireDir = require('require-dir');
+ var tasks = requireDir('./tasks');

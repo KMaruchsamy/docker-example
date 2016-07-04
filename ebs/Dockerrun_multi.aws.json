@@ -28,6 +28,18 @@
           "containerPort": 80
         }
       ]
+    },
+    {
+      "name": "nit-api",
+      "image": "kaptest/nursing:api",
+      "essential": true,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 3000,
+          "containerPort": 80
+        }
+      ]
     }
   ]
 }

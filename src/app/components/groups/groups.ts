@@ -1,8 +1,8 @@
-import {Component, OnInit} from 'angular2/core';
-import {Router, RouterLink} from 'angular2/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, RouterLink} from '@angular/router-deprecated';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
-import * as _ from '../../lib/index';
+import * as _ from 'lodash';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 
@@ -30,7 +30,7 @@ export class Groups implements OnInit {
 
     getLatestInstitution(): string {
         if (this.auth.institutions != null && this.auth.institutions != 'undefined') {
-            let latestInstitution = _.first(_.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
+            let latestInstitution = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
             if (latestInstitution)
                 return latestInstitution.InstitutionName;
         }

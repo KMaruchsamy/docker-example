@@ -1,7 +1,6 @@
-﻿import {Component} from 'angular2/core';
-import {Router} from 'angular2/router';
+﻿import {Component} from '@angular/core';
+import {Router,RouterLink} from '@angular/router-deprecated';
 import {PasswordHeader} from '../password/password-header';
-import {RouterLink} from 'angular2/router';
 
 @Component({
     selector: 'reset-password-expired',

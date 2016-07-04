@@ -1,6 +1,6 @@
-import {Component, Input} from 'angular2/core';
-import {NgFor} from 'angular2/common';
-import {Router, RouterLink} from 'angular2/router';
+import {Component, Input} from '@angular/core';
+import {NgFor} from '@angular/common';
+import {Router, RouterLink} from '@angular/router-deprecated';
 import {ProfileModel} from '../../models/profile-model';
 
 

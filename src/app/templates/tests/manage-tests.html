@@ -40,7 +40,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="tablesaw-stacked-hidden-border" *ngFor="#inProgressTest of inProgressTests">
+                            <tr class="tablesaw-stacked-hidden-border" *ngFor="let inProgressTest of inProgressTests">
                                 <td>
                                     <template [ngIf]="!inProgressTest?.nextDay">
                                         {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} 
@@ -107,7 +107,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="tablesaw-stacked-hidden-border" *ngFor="#scheduleTest of scheduleTests">
+                        <tr class="tablesaw-stacked-hidden-border" *ngFor="let scheduleTest of scheduleTests">
                             <td [attr.starttime]="scheduleTest?.TestingWindowStart" class="column-striped">
                                 <template [ngIf]="!scheduleTest?.nextDay">
                                     {{scheduleTest?.TestingWindowStart|parseDate:'ddd'}} {{scheduleTest?.TestingWindowStart|parseDate:'MM/DD/YY'}}
@@ -176,7 +176,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="tablesaw-stacked-hidden-border" *ngFor="#completedTest of completedTests">
+                        <tr class="tablesaw-stacked-hidden-border" *ngFor="let completedTest of completedTests">
                             <td [attr.starttime]="completedTest?.TestingWindowStart" class="column-striped">
                                 <template [ngIf]="!completedTest?.nextDay">
                                     {{completedTest?.TestingWindowStart|parseDate:'ddd'}} {{completedTest?.TestingWindowStart|parseDate:'MM/DD/YY'}}
