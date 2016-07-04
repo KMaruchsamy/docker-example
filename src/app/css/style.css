@@ -4090,20 +4090,6 @@ input.page-lg-heading {
       display: inline-block;
       margin-right: 15px; } }
 
-@media (max-width: 34.375em) {
-  .delete-draft {
-    text-align: center; }
-    .delete-draft button {
-      font-size: inherit;
-      margin-bottom: 1em; } }
-
-@media (min-width: 34.4375em) {
-  .delete-draft .saved-draft-info {
-    display: inline-block;
-    float: right; }
-  .delete-draft button {
-    float: left; } }
-
 @media (max-width: 25.875em) {
   .modal-wide-table {
     font-size: .9em; }
@@ -4529,7 +4515,7 @@ table.dataTable tbody td {
 
 @media (max-width: 47.9375em) {
   .hidden-small-down {
-    display: none !important; } }
+    display: none; } }
 
 @media (max-width: 61.9375em) {
   .hidden-medium-down {
