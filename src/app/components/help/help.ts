@@ -10,7 +10,7 @@ import {CanActivate} from '@angular/router-deprecated';
     directives:[HelpHeader, HelpContent]
 })
 @CanActivate(()=>{return true;})
-export class Help{
+export class Help implements OnInit {
     constructor(public titleService: Title){
     }
 

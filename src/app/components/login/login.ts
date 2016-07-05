@@ -17,7 +17,7 @@ import {Auth} from '../../services/auth';
     templateUrl: 'templates/login/login.html',
     directives: [LoginHeader, LoginContent, LoginFooter]
 })
-export class Login {
+export class Login implements OnInit {
     constructor(public logger: Logger, public auth: Auth, public router: Router, public titleService: Title) {
         if (auth.isAuth())
             this.router.navigateByUrl('/home');

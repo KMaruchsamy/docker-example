@@ -11,13 +11,13 @@ import {PasswordHeader} from '../password/password-header';
 
 
 
-export class ForgotPasswordConfirmation {
+export class ForgotPasswordConfirmation implements OnInit {
     constructor(public router: Router, public titleService: Title) {
         this.initialize();
     }
 
     ngOnInit(): void {
-        this.titleService.setTitle('Kaplan Nursing – Forgot Password Confirmation'));
+        this.titleService.setTitle('Kaplan Nursing – Forgot Password Confirmation');
     }
 
     initialize() {

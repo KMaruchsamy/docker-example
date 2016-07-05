@@ -16,7 +16,7 @@ import {links} from '../../constants/config';
     directives: [RouterLink, PageHeader, PageFooter]
 })
 
-export class Reports {
+export class Reports implements OnInit {
     institutionRN: number;
     institutionPN: number;
     page: string;

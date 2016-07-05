@@ -1,4 +1,4 @@
-﻿import {Component, View, OnInit} from '@angular/core';
+﻿import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router-deprecated';
 import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
@@ -15,7 +15,7 @@ import {temp_password,general} from '../../constants/error-messages';
     directives: [PasswordHeader, RouterLink]
 })
 
-export class SetPasswordFirstTime {
+export class SetPasswordFirstTime implements OnInit {
     apiServer:string;
     sStorage:any;
     constructor(public router: Router,public auth: Auth,public common: Common,public validations: Validations, public titleService: Title) {

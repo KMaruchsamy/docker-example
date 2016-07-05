@@ -15,7 +15,7 @@ import {general, forgot_password} from '../../constants/error-messages';
     directives: [PasswordHeader]
 })
 
-export class ForgotPassword {
+export class ForgotPassword implements OnInit {
     // errorMessages:any;
     // successMessage:string;
     // config:any;

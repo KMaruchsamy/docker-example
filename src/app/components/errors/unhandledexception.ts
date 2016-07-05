@@ -23,7 +23,7 @@ import {PageHeader} from '../shared/page-header';
     </div>
     </main>`
 })
-export class UnhandledException {
+export class UnhandledException implements OnInit {
     constructor(public titleService: Title){
     }
 

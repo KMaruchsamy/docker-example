@@ -9,7 +9,7 @@ import {PasswordHeader} from '../password/password-header';
     directives: [PasswordHeader, RouterLink]
 })
 
-export class ResetPasswordExpired {
+export class ResetPasswordExpired implements OnInit {
     constructor(public router: Router, public titleService: Title) {
     }
 

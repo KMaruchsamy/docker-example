@@ -16,7 +16,7 @@ import {general,reset_password,temp_password,login} from '../../constants/error-
     directives: [PasswordHeader, RouterLink]
 })
 
-export class ResetPassword {
+export class ResetPassword implements OnInit {
     // errorMessages: any;
     // successMessage: string;
     // config: any;

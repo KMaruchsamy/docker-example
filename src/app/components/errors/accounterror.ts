@@ -34,7 +34,7 @@ import {PageHeader} from '../shared/page-header';
       </div>
     </main>`
 })
-export class AccountError {
+export class AccountError implements OnInit{
       constructor(public titleService: Title){
     }
     

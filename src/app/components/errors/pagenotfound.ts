@@ -21,7 +21,7 @@ import {PageHeader} from '../shared/page-header';
                     </div>
                 </main>`
 })
-export class PageNotFound {
+export class PageNotFound implements OnInit {
     constructor(public titleService: Title){
     }
 

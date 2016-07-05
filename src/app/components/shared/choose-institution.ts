@@ -18,7 +18,7 @@ import {TestScheduleModel} from '../../models/testSchedule.model';
     directives: [PageHeader, RouterLink, NgIf]
 })
 
-export class ChooseInstitution {
+export class ChooseInstitution implements OnInit {
     fromPage: string;
     page: string;
     apiServer: string;
