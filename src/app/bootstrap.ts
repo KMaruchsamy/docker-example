@@ -1,5 +1,6 @@
 import {Component, provide, enableProdMode, ComponentRef} from '@angular/core';
 import {bootstrap} from '@angular/platform-browser-dynamic';
+import {Title} from '@angular/platform-browser';
 import {ROUTER_PROVIDERS} from '@angular/router-deprecated';
 import {HTTP_PROVIDERS} from '@angular/http';
 import {ExceptionHandler} from '@angular/core';
@@ -13,5 +14,6 @@ bootstrap(App, [
     ROUTER_PROVIDERS,
     HTTP_PROVIDERS,
     provide(ExceptionHandler, { useClass: MyExceptionHandler }),
-    Angulartics2
+    Angulartics2,
+    Title
 ])

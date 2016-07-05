@@ -1,5 +1,6 @@
-﻿import {Component} from '@angular/core';
+﻿import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {Location} from '@angular/common';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -21,15 +22,18 @@ export class ResetPassword {
     // config: any;
     apiServer: string;
     sStorage: any;
-    constructor(public router: Router, public auth: Auth, public common: Common, public location: Location, public validations: Validations) {
+    constructor(public router: Router, public auth: Auth, public common: Common, public location: Location, public validations: Validations, public titleService: Title) {
         this.apiServer = this.common.getApiServer();
         this.initialize();
         this.sStorage = this.common.getStorage();
     }
 
+    ngOnInit(): void {
+        this.titleService.setTitle('Reset Password – Kaplan Nursing');
+    }
+
     initialize() {
         $(document).scrollTop(0);
-        $('title').html('Reset Password &ndash; Kaplan Nursing');
     }
     
     onResetPassword(txtnPassword, txtcPassword, btnResetPassword, lnkhomeredirect, errorContainer, successcontainer, event) {

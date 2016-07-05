@@ -1,5 +1,6 @@
-﻿import {Component} from '@angular/core';
+﻿import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';
 import {Validations} from '../../services/validations';
@@ -19,7 +20,7 @@ export class ForgotPassword {
     // successMessage:string;
     // config:any;
     apiServer:string;
-    constructor(public router: Router,public common: Common,public validations:Validations,public logger:Logger) {
+    constructor(public router: Router,public common: Common,public validations:Validations,public logger:Logger, public titleService: Title) {
         this.validations=validations;
         this.apiServer = this.common.getApiServer();
         this.initialize();
@@ -27,9 +28,12 @@ export class ForgotPassword {
         this.logger = logger;
     }
 
+    ngOnInit(): void {
+        this.titleService.setTitle('Forgot Password – Kaplan Nursing');
+    }
+
     initialize():void {
         $(document).scrollTop(0);
-        $('title').html('Forgot Password &ndash; Kaplan Nursing');
         let self = this;
         $('#forgotPassword').bind('input', function() {
            self.checkpasswordlength();

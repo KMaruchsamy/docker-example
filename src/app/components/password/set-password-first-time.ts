@@ -1,5 +1,6 @@
-﻿import {Component, View} from '@angular/core';
+﻿import {Component, View, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';
@@ -17,15 +18,14 @@ import {temp_password,general} from '../../constants/error-messages';
 export class SetPasswordFirstTime {
     apiServer:string;
     sStorage:any;
-    constructor(public router: Router,public auth: Auth,public common: Common,public validations: Validations) {
+    constructor(public router: Router,public auth: Auth,public common: Common,public validations: Validations, public titleService: Title) {
         this.apiServer = this.common.getApiServer();
         this.reset();
-        this.initialize();
         this.sStorage = this.common.getStorage();
     }
 
-    initialize() {
-        $('title').html('Change Password &ndash; Kaplan Nursing');
+    ngOnInit(): void {
+        this.titleService.setTitle('Change Password – Kaplan Nursing');
     }
 
     reset() {

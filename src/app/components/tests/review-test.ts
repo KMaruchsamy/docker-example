@@ -1,6 +1,7 @@
 import {Component, OnInit, DynamicComponentLoader, ElementRef, ViewContainerRef} from '@angular/core';
 import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams} from '@angular/router-deprecated';
 import {NgIf, NgFor, Location} from '@angular/common';
+import {Title} from '@angular/platform-browser';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -62,7 +63,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         public testService: TestService, public auth: Auth, public common: Common,
         public router: Router, public dynamicComponentLoader: DynamicComponentLoader,
         public elementRef: ElementRef, public routeParams: RouteParams, public aLocation: Location,
-    public viewContainerRef:ViewContainerRef) {
+    public viewContainerRef:ViewContainerRef, public titleService: Title) {
 
     }
 
@@ -113,9 +114,9 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         let action = this.routeParams.get('action');
         if (action != undefined && action.trim() === 'modify') {
             this.modify = true;
-            $('title').html('Modify: Review Testing Session &ndash; Kaplan Nursing');
+            this.titleService.setTitle('Modify: Review Testing Session – Kaplan Nursing');
         } else {
-            $('title').html('Review Testing Session &ndash; Kaplan Nursing');
+            this.titleService.setTitle('Review Testing Session – Kaplan Nursing');
         }
 
         this.valid = false;

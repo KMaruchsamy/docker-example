@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import * as _ from 'lodash';
@@ -15,8 +16,7 @@ import {PageFooter} from '../shared/page-footer';
 
 export class Rosters implements OnInit {
     institutionName: string;
-    constructor(public auth: Auth, public router: Router) {
-
+    constructor(public auth: Auth, public router: Router, public titleService: Title) {
     }
 
     ngOnInit(): void {
@@ -25,7 +25,7 @@ export class Rosters implements OnInit {
         else
             this.institutionName = this.getLatestInstitution();
         $(document).scrollTop(0);
-        $('title').html('View Rosters &ndash; Kaplan Nursing');
+        this.titleService.setTitle('View Rosters – Kaplan Nursing');
     }
 
     getLatestInstitution(): string {

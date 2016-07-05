@@ -1,5 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import * as _ from 'lodash';
@@ -28,7 +29,7 @@ export class Reports {
     apiServer: string;
     nursingITServer: string;
     institutionName: string;
-    constructor(public auth: Auth, public router: Router, public common: Common) {
+    constructor(public auth: Auth, public router: Router, public common: Common, public titleService: Title) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
     }
@@ -39,7 +40,7 @@ export class Reports {
         else
             this.institutionName = this.getLatestInstitution();
         $(document).scrollTop(0);
-        $('title').html('View Reports &ndash; Kaplan Nursing');
+        this.titleService.setTitle('View Reports – Kaplan Nursing');
     }
 
     getLatestInstitution(): string {

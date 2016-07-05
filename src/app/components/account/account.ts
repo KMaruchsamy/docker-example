@@ -1,5 +1,6 @@
 ﻿import {Component, OnInit} from '@angular/core';
 import {Router, RouteParams} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {Auth} from '../../services/auth';
@@ -19,10 +20,11 @@ import {manage_account, general, reset_password_after_login, reset_student_passw
 export class Account implements OnInit{
     apiServer: string;
     sStorage: any;
-    constructor(public router: Router, public auth: Auth, public common: Common, public validations: Validations, public routeParams: RouteParams) {        
+    constructor(public router: Router, public auth: Auth, public common: Common, public validations: Validations, public routeParams: RouteParams, public titleService: Title) {        
     }
 
     ngOnInit(): void{
+        this.titleService.setTitle('Manage Account – Kaplan Nursing');
         this.sStorage = this.common.getStorage();
         this.apiServer = this.common.getApiServer();
         this.initialize();
@@ -38,7 +40,6 @@ export class Account implements OnInit{
     getInitialize() {
         // this.sStorage = this.common.sStorage;
         if (this.auth.isAuth()) {
-            $('title').html('Manage Account &ndash; Kaplan Nursing');
             $('#firstName').val(this.sStorage.getItem('firstname'));
             $('#lastName').val(this.sStorage.getItem('lastname'));
             $('#facultyTitle').val(this.sStorage.getItem('title'));

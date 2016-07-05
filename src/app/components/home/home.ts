@@ -1,6 +1,7 @@
 import {Component, Injector, Inject, OnInit} from '@angular/core';
 import {NgIf, Location} from '@angular/common';
 import {Router, RouterLink, CanActivate} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {DashboardHeader} from './dashboard-header';
@@ -50,10 +51,9 @@ export class Home implements OnInit {
     nurseConsultantProfile: ProfileModel;
     testTypeId: number;
     institutionID: number;
-    constructor(public router: Router, public auth: Auth, public location: Location, public common: Common, public homeService: HomeService, public testService: TestService, public testScheduleModel:TestScheduleModel) {
+    constructor(public router: Router, public auth: Auth, public location: Location, public common: Common, public homeService: HomeService, public testService: TestService, public testScheduleModel:TestScheduleModel, public titleService: Title) {
        
     }
-
 
     ngOnInit(): void {
         this.apiServer = this.common.getApiServer();
@@ -67,6 +67,7 @@ export class Home implements OnInit {
         this.loadProfiles(self);
         this.checkInstitutions();
         $(document).scrollTop(0);
+        this.titleService.setTitle('Faculty Home – Kaplan Nursing');
     }
 
     loadProfiles(self): void {
@@ -119,7 +120,6 @@ export class Home implements OnInit {
     }
 
     initialize(): void {
-        $('title').html('Faculty Home &ndash; Kaplan Nursing');
         this.programId = 0;
         this.institutionRN = 0;
         this.institutionPN = 0;

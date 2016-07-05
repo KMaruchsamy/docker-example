@@ -1,6 +1,7 @@
 import {Component, OnInit, DynamicComponentLoader, ElementRef} from '@angular/core';
 import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams} from '@angular/router-deprecated';
 import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
+import {Title} from '@angular/platform-browser';
 import {Observable} from 'rxjs/Rx';
 import {NgIf, NgFor} from '@angular/common';
 import {TestService} from '../../services/test.service';
@@ -35,7 +36,7 @@ export class ViewTest implements OnInit, OnDeactivate {
     testStatus: number;
     anyStudentPayStudents: boolean = false;
     testScheduleId: number;
-    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams) {
+    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams, public titleService: Title) {
 
     }
 
@@ -52,7 +53,7 @@ export class ViewTest implements OnInit, OnDeactivate {
 
         }
         $(document).scrollTop(0);
-        $('title').html('View Testing Session &ndash; Kaplan Nursing');
+        this.titleService.setTitle('View Testing Session – Kaplan Nursing');
     }
 
 

@@ -1,5 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RouterLink} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {PageHeader} from '../shared/page-header';
 @Component({
     selector: 'unhandled-exception',
@@ -23,6 +24,10 @@ import {PageHeader} from '../shared/page-header';
     </main>`
 })
 export class UnhandledException {
-    constructor() {
+    constructor(public titleService: Title){
     }
+
+    ngOnInit(): void {
+        this.titleService.setTitle('Error – Kaplan Nursing');
+    } 
 }
