@@ -25,6 +25,14 @@ export class RetesterAlternatePopup implements OnDeactivate {
     changes: Object[] = [];
     valid: boolean = false;
     sStorage: any;
+    testTakenStudentsChanges: Object[] = [];
+    testScheduledStudentsChanges: Object[] = [];
+    TestScheduled: boolean = true;
+    TestTaken: boolean = true;
+    chkTestTaken: boolean = false;
+    chkTestSchedule: boolean = false;
+    chkRdbTestTaken: boolean = true;
+    chkRdbTestSchedule: boolean = true;
     constructor(public common: Common) {
 
     }
@@ -49,7 +57,48 @@ export class RetesterAlternatePopup implements OnDeactivate {
                 }
             });
         }
-
+        if (this.testTakenStudents) {
+            _.forEach(self.testTakenStudents, function (student: any, key) {
+                if (!student.Enabled) {
+                    self.testTakenStudentsChanges.push({
+                        studentId: student.StudentId,
+                        mark: true,
+                        testId: 0,
+                        testName: ''
+                    });
+                }
+            });
+            let enabled = this.testTakenStudentsChanges.length;
+            let count = this.testTakenStudents.length;
+            if (count === enabled && count >= 5) {
+                this.chkTestTaken = true;
+                this.TestTaken = false;
+            }
+            else {
+                this.chkTestTaken = false;
+            }
+        }
+        if (this.testScheduledSudents) {
+            _.forEach(self.testScheduledSudents, function (student: any, key) {
+                if (!student.Enabled) {
+                    self.testScheduledStudentsChanges.push({
+                        studentId: student.StudentId,
+                        mark: true,
+                        testId: 0,
+                        testName: ''
+                    });
+                }
+            });
+            let enabled = this.testScheduledStudentsChanges.length;
+            let count = this.testScheduledSudents.length;
+            if (count === enabled && count >= 5) {
+                this.chkTestSchedule = true;
+                this.TestScheduled = true;
+            }
+            else {
+                this.chkTestSchedule = false;
+            }
+        }
         this.validate();
     }
 
@@ -71,16 +120,23 @@ export class RetesterAlternatePopup implements OnDeactivate {
         this.retesterAlternatePopupCancel.emit(e);
     }
 
-    onChangeTestTaken(studentId: number, mark: boolean, testId: number, testName: string, e): void {
+    onChangeTestTaken(studentId: number, mark: boolean, testId: number, testName: string, type: string, e): void {
         let student: any = _.find(this.testTakenStudents, { 'StudentId': studentId });
         if (student)
             student.Checked = true;
-
-        this.addChanges(studentId, mark, testId, testName);
+        this.addChanges(studentId, mark, testId, testName, type);
         this.validate();
+        let selected = _.filter(this.changes, { 'mark': true, 'type': 'testTaken' });
+        let count = this.testTakenStudents.length;
+        if (count === selected.length && count >= 5) {
+            this.chkTestTaken = true;
+        } else {
+            this.chkTestTaken = false;
+        }
     }
 
-    addChanges(studentId: number, mark: boolean, testId: number, testName: string): void {
+
+    addChanges(studentId: number, mark: boolean, testId: number, testName: string, type: string): void {
         let change: any = _.find(this.changes, { 'studentId': studentId });
         if (change) {
             change.testId = testId;
@@ -91,18 +147,26 @@ export class RetesterAlternatePopup implements OnDeactivate {
                 studentId: studentId,
                 mark: mark,
                 testId: testId,
-                testName: testName
+                testName: testName,
+                type: type
             });
         }
     }
 
-    onChangeTestScheduled(studentId: number, mark: boolean, testId: number, testName: string, e): void {
+    onChangeTestScheduled(studentId: number, mark: boolean, testId: number, testName: string, type: string, e): void {
         let student: any = _.find(this.testScheduledSudents, { 'StudentId': studentId });
         if (student)
             student.Checked = true;
-        this.addChanges(studentId, mark, testId, testName);
-
+        this.addChanges(studentId, mark, testId, testName, type);
         this.validate();
+        let selected = _.filter(this.changes, { 'mark': true, 'type': 'testScheduled' });
+        let count = this.testScheduledSudents.length;
+        if (count === selected.length && count >= 5) {
+            this.chkTestSchedule = true;
+        }
+        else {
+            this.chkTestSchedule = false;
+        }
     }
 
     markForRemoval(_studentId: number, mark: boolean, testId: number, testName: string) {
@@ -144,7 +208,61 @@ export class RetesterAlternatePopup implements OnDeactivate {
         return true;
     }
 
+    selectAll(check: boolean, e): void {
+        let self = this;
+        if (check === true) {
+            this.chkTestSchedule = false;
+            if (this.testScheduledSudents) {
+                _.forEach(self.testScheduledSudents, function (student: any, key) {
+                    let enabled = _.find(self.testScheduledStudentsChanges, { 'studentId': student.StudentId });
+                    if (enabled) {
+                        self.addChanges(student.StudentId, true, student.TestId, student.TestName, 'testScheduled');
+                        $('#rdbTestScheduledRemove' + student.StudentId).prop('checked', true);
+                    }
+                    else {
+                        self.addChanges(student.StudentId, false, student.TestId, student.TestName, 'testScheduled');
+                        $('#rdbTestScheduledRemove' + student.StudentId).prop('checked', false);
+                    }
+                });
+            }
+        }
+        else {
+            this.chkTestSchedule = true;
+            if (this.testScheduledSudents) {
+                _.forEach(self.testScheduledSudents, function (student: any, key) {
+                    self.addChanges(student.StudentId, true, student.TestId, student.TestName, 'testScheduled');
+                    $('#rdbTestScheduledRemove' + student.StudentId).prop('checked', true);
+                });
+            }
+        }
+    }
 
-
-
+    selectAllTestTaken(check: boolean, e): void {
+        let self = this;
+        if (check === true) {
+            this.chkTestTaken = false;
+            if (this.testTakenStudents) {
+                _.forEach(self.testTakenStudents, function (student: any, key) {
+                    let enabled = _.find(self.testTakenStudentsChanges, { 'studentId': student.StudentId });
+                    if (enabled) {
+                        self.addChanges(student.StudentId, true, student.TestId, student.TestName, 'testTaken');
+                        $('#rdbTestTakenRemove' + student.StudentId).prop('checked', true);
+                    }
+                    else {
+                        self.addChanges(student.StudentId, false, student.TestId, student.TestName, 'testTaken');
+                        $('#rdbTestTakenRemove' + student.StudentId).prop('checked', false);
+                    }
+                });
+            }
+        }
+        else {
+            this.chkTestTaken = true;
+            if (this.testTakenStudents) {
+                _.forEach(self.testTakenStudents, function (student: any, key) {
+                    self.addChanges(student.StudentId, true, student.TestId, student.TestName, 'testTaken');
+                    $('#rdbTestTakenRemove' + student.StudentId).prop('checked', true);
+                });
+            }
+        }
+    }
 }
