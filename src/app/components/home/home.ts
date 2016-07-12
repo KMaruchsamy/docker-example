@@ -1,6 +1,7 @@
-import {Component, Injector, Inject, OnInit} from 'angular2/core';
-import {NgIf} from 'angular2/common';
-import {Router, RouterLink, Location, CanActivate} from 'angular2/router';
+import {Component, Injector, Inject, OnInit} from '@angular/core';
+import {NgIf, Location} from '@angular/common';
+import {Router, RouterLink, CanActivate} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {DashboardHeader} from './dashboard-header';
@@ -10,12 +11,12 @@ import {DashboardPod3} from './dashboard-pod3';
 import {DashboardPod4} from './dashboard-pod4';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
-import * as _ from '../../lib/index';
+import * as _ from 'lodash';    
 import {ProfileModel} from '../../models/profile-model';
 import {Profile} from './profile';
 import {HomeService} from '../../services/home-service';
 import {links} from '../../constants/config';
-import {Angulartics2On} from '../../lib/ng-ga';
+import {Angulartics2On} from 'angulartics2';
 import {TestService} from '../../services/test.service';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 
@@ -29,6 +30,7 @@ import {TestScheduleModel} from '../../models/testSchedule.model';
     // let authInjector = Injector.resolveAndCreate([Auth]);
     // let auth = authInjector.get(Auth);
     // return auth.isAuth();
+    
     return true;
 })
 export class Home implements OnInit {
@@ -49,7 +51,11 @@ export class Home implements OnInit {
     nurseConsultantProfile: ProfileModel;
     testTypeId: number;
     institutionID: number;
-    constructor(public router: Router, public auth: Auth, public location: Location, public common: Common, public homeService: HomeService, public testService: TestService, public testScheduleModel:TestScheduleModel) {
+    constructor(public router: Router, public auth: Auth, public location: Location, public common: Common, public homeService: HomeService, public testService: TestService, public testScheduleModel:TestScheduleModel, public titleService: Title) {
+       
+    }
+
+    ngOnInit(): void {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
         this.redirectToPage();
@@ -60,11 +66,8 @@ export class Home implements OnInit {
         this.nurseConsultantProfile = {};
         this.loadProfiles(self);
         this.checkInstitutions();
-    }
-
-
-    ngOnInit(): void {
         $(document).scrollTop(0);
+        this.titleService.setTitle('Faculty Home – Kaplan Nursing');
     }
 
     loadProfiles(self): void {
@@ -117,7 +120,6 @@ export class Home implements OnInit {
     }
 
     initialize(): void {
-        $('title').html('Faculty Home &ndash; Kaplan Nursing');
         this.programId = 0;
         this.institutionRN = 0;
         this.institutionPN = 0;
@@ -219,7 +221,7 @@ export class Home implements OnInit {
 
     getLatestInstitution(): number {
         if (this.auth.institutions != null && this.auth.institutions != 'undefined') {
-            let latestInstitution = _.first(_.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
+            let latestInstitution = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
             if (latestInstitution)
                 return latestInstitution.InstitutionId;
         }
@@ -227,11 +229,11 @@ export class Home implements OnInit {
     }
 
     checkInstitutions(): void {
-        let institutions = _.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
-        if (institutions != null && institutions != 'undefined') {
-            let institutionsRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
-            let institutionsPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
-            let programId = _.pluck(institutions, 'ProgramId');
+        let institutions = _.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
+        if (institutions != null && institutions != undefined) {
+            let institutionsRN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
+            let institutionsPN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
+            let programId = _.map(institutions, 'ProgramId');
             if (programId.length > 0)
                 this.programId = programId[0];
             if (institutionsRN.length > 0)

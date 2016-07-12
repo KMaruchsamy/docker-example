@@ -1,4 +1,4 @@
-﻿import {Injectable, Inject} from 'angular2/core';
+﻿import {Injectable, Inject} from '@angular/core';
 
 @Injectable()
 export class SelectedStudentModel {

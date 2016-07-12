@@ -1,6 +1,7 @@
-import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef, ViewEncapsulation} from 'angular2/core';
-import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, RouterLink} from 'angular2/router';
-import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "angular2/http";
+import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef, ViewEncapsulation} from '@angular/core';
+import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, RouterLink} from '@angular/router-deprecated';
+import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
+import {Title} from '@angular/platform-browser';
 import {Observable} from 'rxjs/Rx';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -15,16 +16,16 @@ import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {Utility} from '../../scripts/utility';
-import * as _ from '../../lib/index';
-import '../../plugins/dropdown.js';
-import '../../plugins/bootstrap-select.min.js';
-// import '../../plugins/jquery.dataTables.min.js';
-// import '../../plugins/dataTables.responsive.js';
-import '../../lib/modal.js';
-import '../../lib/tooltip.js';
-import '../../lib/popover.js';
-import '../../lib/bootstrap-editable.min.js';
-import '../../lib/tablesaw.js';
+import * as _ from 'lodash';
+// import '../../plugins/dropdown.js';
+// import '../../plugins/bootstrap-select.min.js';
+// // import '../../plugins/jquery.dataTables.min.js';
+// // import '../../plugins/dataTables.responsive.js';
+// import '../../lib/modal.js';
+// import '../../lib/tooltip.js';
+// import '../../lib/popover.js';
+// import '../../lib/bootstrap-editable.min.js';
+// import '../../lib/tablesaw.js';
 
 @Component({
     selector: 'manage-tests',
@@ -55,7 +56,7 @@ export class ManageTests implements OnInit {
     sStorage: any;
     testTypeId: number = 1;
     institutionID: number = 0;
-    constructor(public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public routeParams: RouteParams) { }
+    constructor(public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public routeParams: RouteParams, public titleService: Title) { }
 
     ngOnInit(): void {
         this.sStorage = this.common.getStorage();
@@ -66,7 +67,7 @@ export class ManageTests implements OnInit {
         this.checkInstitutions();
         this.setLatestInstitution();
         this.bindTests();
-        $('title').html('Manage Tests &ndash; Kaplan Nursing');
+        this.titleService.setTitle('Manage Tests – Kaplan Nursing');
         $(document).scrollTop(0);
     }
 
@@ -246,7 +247,7 @@ export class ManageTests implements OnInit {
 
     setLatestInstitution(): number {
         if (this.auth.institutions != null && this.auth.institutions != 'undefined') {
-            let latestInstitution = _.first(_.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
+            let latestInstitution = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
             if (latestInstitution) {
                 this.institutionId = latestInstitution.InstitutionId;
                 this.institutionName = latestInstitution.InstitutionName;
@@ -257,11 +258,11 @@ export class ManageTests implements OnInit {
 
 
     checkInstitutions(): void {
-        let institutions = _.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
-        if (institutions != null && institutions != 'undefined') {
-            let institutionsRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
-            let institutionsPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
-            let programId = _.pluck(institutions, 'ProgramId');
+        let institutions = _.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
+        if (institutions != null && institutions != undefined) {
+            let institutionsRN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
+            let institutionsPN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
+            let programId = _.map(institutions, 'ProgramId');
             if (programId.length > 0)
                 this.programId = programId[0];
             if (institutionsRN.length > 0)

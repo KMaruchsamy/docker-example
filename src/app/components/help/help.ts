@@ -1,7 +1,8 @@
-﻿import {Component} from 'angular2/core';
+﻿import {Component, OnInit} from '@angular/core';
+import {Title} from '@angular/platform-browser';
 import {HelpHeader} from './help-header';
 import {HelpContent} from './help-content';
-import {CanActivate} from 'angular2/router';
+import {CanActivate} from '@angular/router-deprecated';
 
 @Component({
     selector:'help',
@@ -9,14 +10,11 @@ import {CanActivate} from 'angular2/router';
     directives:[HelpHeader, HelpContent]
 })
 @CanActivate(()=>{return true;})
-export class Help{
-    constructor(){
-        this.initialize();
+export class Help implements OnInit {
+    constructor(public titleService: Title){
     }
-    
-    initialize(){
-        $('title').html('Help &ndash; Kaplan Nursing');
-    }
-    
 
+    ngOnInit(): void {
+        this.titleService.setTitle('Help – Kaplan Nursing');
+    }    
 }

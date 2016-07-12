@@ -1,6 +1,6 @@
-import {Component, Input, OnInit, Output, EventEmitter} from 'angular2/core';
-import {NgIf} from 'angular2/common';
-import {Router, RouterLink, RouteParams} from 'angular2/router';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {NgIf} from '@angular/common';
+import {Router, RouterLink, RouteParams} from '@angular/router-deprecated';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {Common} from '../../services/common';

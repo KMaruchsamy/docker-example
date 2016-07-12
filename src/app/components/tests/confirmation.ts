@@ -1,5 +1,6 @@
-import {Component, Input, Output, EventEmitter, OnInit} from 'angular2/core';
-import {RouterLink, OnDeactivate,ComponentInstruction, RouteParams, Router} from 'angular2/router';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {RouterLink, OnDeactivate,ComponentInstruction, RouteParams, Router} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {Common} from '../../services/common';
 import {Auth} from '../../services/auth';
 import {TestScheduleModel} from '../../models/testSchedule.model';
@@ -7,7 +8,7 @@ import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
 import {TestService} from '../../services/test.service';
-import '../../lib/modal.js';
+// import '../../lib/modal.js';
 
 
 @Component({
@@ -19,7 +20,7 @@ import '../../lib/modal.js';
 export class Confirmation implements OnInit, OnDeactivate {
     sStorage: any;
     modify: boolean = false;
-    constructor(public testScheduleModel: TestScheduleModel, public common: Common, public testService: TestService, public routeParams:RouteParams, public router:Router, public auth:Auth) { }
+    constructor(public testScheduleModel: TestScheduleModel, public common: Common, public testService: TestService, public routeParams:RouteParams, public router:Router, public auth:Auth, public titleService: Title) { }
     
     ngOnInit(): void {
         $(document).scrollTop(0);
@@ -30,9 +31,9 @@ export class Confirmation implements OnInit, OnDeactivate {
             let action = this.routeParams.get('action');
             if (action != undefined && action.trim() !== '') {
                 this.modify = true;
-                $('title').html('Modify: Confirmation &ndash; Kaplan Nursing');
+                this.titleService.setTitle('Modify: Confirmation – Kaplan Nursing');
             } else {
-               $('title').html('Confirmation &ndash; Kaplan Nursing');
+               this.titleService.setTitle('Confirmation – Kaplan Nursing');
             }
             let savedSchedule: TestScheduleModel = this.testService.getTestSchedule();
             if (savedSchedule)

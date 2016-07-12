@@ -1,6 +1,6 @@
-﻿import * as _ from '../../lib/index';
+﻿import * as _ from 'lodash';
 import {links,Timezones} from '../constants/config';
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class Common {

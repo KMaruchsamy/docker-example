@@ -1,8 +1,9 @@
-import {Component} from 'angular2/core';
-import {Router, RouterLink} from 'angular2/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, RouterLink} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
-import * as _ from '../../lib/index';
+import * as _ from 'lodash';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {HomeService} from '../../services/home-service';
@@ -15,7 +16,7 @@ import {links} from '../../constants/config';
     directives: [RouterLink, PageHeader, PageFooter]
 })
 
-export class Reports {
+export class Reports implements OnInit {
     institutionRN: number;
     institutionPN: number;
     page: string;
@@ -28,7 +29,7 @@ export class Reports {
     apiServer: string;
     nursingITServer: string;
     institutionName: string;
-    constructor(public auth: Auth, public router: Router, public common: Common) {
+    constructor(public auth: Auth, public router: Router, public common: Common, public titleService: Title) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
     }
@@ -39,12 +40,12 @@ export class Reports {
         else
             this.institutionName = this.getLatestInstitution();
         $(document).scrollTop(0);
-        $('title').html('View Reports &ndash; Kaplan Nursing');
+        this.titleService.setTitle('View Reports – Kaplan Nursing');
     }
 
     getLatestInstitution(): string {
         if (this.auth.institutions != null && this.auth.institutions != 'undefined') {
-            let latestInstitution = _.first(_.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
+            let latestInstitution = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
             if (latestInstitution)
                 return latestInstitution.InstitutionName;
         }

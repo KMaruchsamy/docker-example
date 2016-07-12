@@ -1,5 +1,5 @@
-import {Pipe, PipeTransform} from 'angular2/core';
-import * as _ from '../lib/index';
+import {Pipe, PipeTransform} from '@angular/core';
+import * as _ from 'lodash';
 
 @Pipe({
     name: "round"

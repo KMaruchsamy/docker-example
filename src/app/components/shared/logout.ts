@@ -1,5 +1,5 @@
-import {Component, OnInit} from 'angular2/core';
-import {Router} from 'angular2/router';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router-deprecated';
 import {LoginHeader} from '../login/login-header';
 import {LoginContent} from '../login/login-content';
 import {LoginFooter} from '../login/login-footer';

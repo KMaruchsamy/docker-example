@@ -1,5 +1,6 @@
-import {Component} from 'angular2/core';
-import {Router, RouterLink} from 'angular2/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, RouterLink} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {PageHeader} from '../shared/page-header';
 @Component({
     selector: 'notfound',
@@ -20,6 +21,11 @@ import {PageHeader} from '../shared/page-header';
                     </div>
                 </main>`
 })
-export class PageNotFound {
+export class PageNotFound implements OnInit {
+    constructor(public titleService: Title){
+    }
 
+    ngOnInit(): void {
+        this.titleService.setTitle('Page Not Found – Kaplan Nursing');
+    }   
 }

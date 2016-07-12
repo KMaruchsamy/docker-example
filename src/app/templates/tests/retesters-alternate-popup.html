@@ -15,17 +15,21 @@
                             <span class="text-larger-teal"><b>The following students have already taken {{testSchedule.testName}}.</b></span>
                             <span class="text-larger"> Please assign another version of this test to these students or remove them from this testing session.</span>
                         </div>
-                        <div class="test-exeptions-student thin-section border-top" *ngFor="#student of testTakenStudents | sort:'asc':'LastName'">
+                        <div class="thin-section" *ngIf="testTakenStudents?.length >= 5">
+                            <input type="checkbox" [checked]="chkTestTaken" [disabled]="!TestTaken" class="checkbox-image" name="radio2" id="removeAllTestTakenStudents" (change)="selectAllTestTaken(chkTestTaken,$event);">
+                            <label for="removeAllTestTakenStudents" class="text-purple"><b>Remove all students</b></label>
+                        </div>
+                        <div class="test-exeptions-student thin-section border-top" *ngFor="let student of testTakenStudents | sort:'asc':'LastName'">
                             <p class="text-larger-purple"><b>{{student.LastName}}, {{student.FirstName}}</b></p>
 
-                            <div *ngFor="#test of student.AlternateTests; #i = index">
-                                <input type="radio" class="checkbox-image" (change)="onChangeTestTaken(student.StudentId,false,test.TestId,test.TestName, $event);"
+                            <div *ngFor="let test of student.AlternateTests; let i = index">
+                                <input type="radio" class="checkbox-image" (change)="onChangeTestTaken(student.StudentId,false,test.TestId,test.TestName,'testTaken',$event);"
                                 [attr.name]="'testTaken' + student.StudentId" [attr.id]="'rdbTestTaken' + student.StudentId + '_' + i"
                                 [checked]="test.Checked" [disabled]="test.ErrorCode>0">
                                 <label [attr.for]="'rdbTestTaken' + student.StudentId + '_' + i"><span class="text-purple">{{test.TestName}}{{test.Recommended ? '*' : ''}}</span> ({{test.NormingStatus}})</label>
                             </div>
-                            <input type="radio" class="checkbox-image" [attr.name]="'testTaken' + student.StudentId" [attr.id]="'rdbTestTakenRemove' + student.StudentId"
-                            [checked]="!student.Enabled" (change)="onChangeTestTaken(student.StudentId,true,0,'', $event);">
+                            <input type="radio" class="checkbox-image" [attr.name]="'testTaken' + student.StudentId" [attr.id]="'rdbTestTakenRemove' + student.StudentId" id="'rdbTestTakenRemove' + student.StudentId"
+                            [checked]="!student.Enabled" (change)="onChangeTestTaken(student.StudentId,true,0,'','testTaken', $event);">
                             <label [attr.for]="'rdbTestTakenRemove' + student.StudentId"><span class="text-purple">Remove from testing session</span></label>
                         </div>
                         <span class="text-purple">*recommended</span>
@@ -36,15 +40,19 @@
                             <span class="text-larger-teal"><b>The following students have been scheduled to take {{testSchedule.testName}} in another testing session.</b></span>
                             <span>Please assign another version of this test to these students or remove them from this testing session.</span>
                         </div>
-                        <div class="test-exeptions-student thin-section border-top" *ngFor="#student of testScheduledSudents | sort:'asc':'LastName'">
+                        <div class="thin-section" *ngIf="testScheduledSudents?.length >= 5">
+                            <input type="checkbox" [checked]="chkTestSchedule" [disabled]="!TestScheduled" class="checkbox-image" name="radio2" id="removeAllTestScheduledSudents" (change)="selectAll(chkTestSchedule,$event);">
+                            <label for="removeAllTestScheduledSudents" class="text-purple"><b>Remove all students</b></label>
+                        </div>
+                        <div class="test-exeptions-student thin-section border-top" *ngFor="let student of testScheduledSudents | sort:'asc':'LastName'">
                             <p class="text-larger-purple"><b>{{student.LastName}}, {{student.FirstName}}</b></p>
-                            <div *ngFor="#test of student.AlternateTests; #i = index">
+                            <div *ngFor="let test of student.AlternateTests; let i = index">
                                 <input type="radio" class="checkbox-image" [attr.name]="'testScheduled' + student.StudentId" [attr.id]="'rdbTestScheduled' + student.StudentId + '_' + i"
-                                [disabled]="test.ErrorCode>0" [checked]="test.Checked" (change)="onChangeTestScheduled(student.StudentId,false,test.TestId,test.TestName,$event);">
+                                [disabled]="test.ErrorCode>0" [checked]="test.Checked" (change)="onChangeTestScheduled(student.StudentId,false,test.TestId,test.TestName,'testScheduled',$event);">
                                 <label [attr.for]="'rdbTestScheduled' + student.StudentId + '_' + i"><span class="text-purple">{{test.TestName}}{{test.Recommended ? '*' : ''}}</span> ({{test.NormingStatus}})</label>
                             </div>
-                            <input type="radio" class="checkbox-image" [attr.name]="'testScheduled' + student.StudentId" [attr.id]="'rdbTestScheduledRemove' + student.StudentId"
-                            (change)="onChangeTestScheduled(student.StudentId,true,0,'',$event);" [checked]="!student.Enabled">
+                            <input type="radio" class="checkbox-image" [attr.name]="'testScheduled' + student.StudentId" [attr.id]="'rdbTestScheduledRemove' + student.StudentId" id="'rdbTestScheduledRemove' + student.StudentId"
+                            (change)="onChangeTestScheduled(student.StudentId,true,0,'','testScheduled',$event);" [checked]="!student.Enabled">
                             <label [attr.for]="'rdbTestScheduledRemove' + student.StudentId"><span class="text-purple">Remove from testing session</span></label>
                         </div>
                         <span class="text-purple">*recommended</span>

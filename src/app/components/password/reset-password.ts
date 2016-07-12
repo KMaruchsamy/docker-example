@@ -1,5 +1,7 @@
-﻿import {Component} from 'angular2/core';
-import {Router, Location, RouterLink} from 'angular2/router';
+﻿import {Component, OnInit} from '@angular/core';
+import {Router, RouterLink} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
+import {Location} from '@angular/common';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';
@@ -14,21 +16,24 @@ import {general,reset_password,temp_password,login} from '../../constants/error-
     directives: [PasswordHeader, RouterLink]
 })
 
-export class ResetPassword {
+export class ResetPassword implements OnInit {
     // errorMessages: any;
     // successMessage: string;
     // config: any;
     apiServer: string;
     sStorage: any;
-    constructor(public router: Router, public auth: Auth, public common: Common, public location: Location, public validations: Validations) {
+    constructor(public router: Router, public auth: Auth, public common: Common, public location: Location, public validations: Validations, public titleService: Title) {
         this.apiServer = this.common.getApiServer();
         this.initialize();
         this.sStorage = this.common.getStorage();
     }
 
+    ngOnInit(): void {
+        this.titleService.setTitle('Reset Password – Kaplan Nursing');
+    }
+
     initialize() {
         $(document).scrollTop(0);
-        $('title').html('Reset Password &ndash; Kaplan Nursing');
     }
     
     onResetPassword(txtnPassword, txtcPassword, btnResetPassword, lnkhomeredirect, errorContainer, successcontainer, event) {

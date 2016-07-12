@@ -1,11 +1,12 @@
-﻿import {Component} from 'angular2/core';
-import {Router, RouteParams} from 'angular2/router';
+﻿import {Component, OnInit} from '@angular/core';
+import {Router, RouteParams} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {Validations} from '../../services/validations';
-import * as _ from '../../lib/index';
+import * as _ from 'lodash';
 import {links, errorcodes} from '../../constants/config';
 import {manage_account, general, reset_password_after_login, reset_student_password} from '../../constants/error-messages';
 
@@ -16,17 +17,16 @@ import {manage_account, general, reset_password_after_login, reset_student_passw
     directives: [PageHeader, PageFooter]
 })
 
-export class Account {
+export class Account implements OnInit{
     apiServer: string;
     sStorage: any;
-    constructor(public router: Router, public auth: Auth, public common: Common, public validations: Validations, public routeParams: RouteParams) {
+    constructor(public router: Router, public auth: Auth, public common: Common, public validations: Validations, public routeParams: RouteParams, public titleService: Title) {        
+    }
+
+    ngOnInit(): void{
+        this.titleService.setTitle('Manage Account – Kaplan Nursing');
         this.sStorage = this.common.getStorage();
-        // this.errorMessages = "";
-        // this.successMessage = "";
-        // this.getErrorMessages();
-        // this.config = "";
         this.apiServer = this.common.getApiServer();
-        // this.getConfig();
         this.initialize();
         let scroll = this.routeParams.get('scroll');
         if (scroll) {
@@ -40,7 +40,6 @@ export class Account {
     getInitialize() {
         // this.sStorage = this.common.sStorage;
         if (this.auth.isAuth()) {
-            $('title').html('Manage Account &ndash; Kaplan Nursing');
             $('#firstName').val(this.sStorage.getItem('firstname'));
             $('#lastName').val(this.sStorage.getItem('lastname'));
             $('#facultyTitle').val(this.sStorage.getItem('title'));
@@ -71,7 +70,7 @@ export class Account {
 
     setInstitutionNames(institutions) {
         if (institutions !== null || institutions !== 'undefined')
-            $('#schoolName').html(_.pluck(institutions, 'InstitutionNameWithProgOfStudy').join('<br />'));
+            $('#schoolName').html(_.map(institutions, 'InstitutionNameWithProgOfStudy').join('<br />'));
     }
 
     initialize() {

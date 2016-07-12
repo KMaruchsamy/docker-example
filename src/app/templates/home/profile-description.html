@@ -25,13 +25,13 @@
           <div class="section container-narrow">
             <p class="bullet-heading">Contact {{profile.firstName}} for:</p>
             <ul class="bullet two-columns">
-              <li *ngFor="#bullet of profile.bulletsForFrontEnd">{{bullet}}</li>
+              <li *ngFor="let bullet of profile.bulletsForFrontEnd">{{bullet}}</li>
             </ul>
             <p class="js-bolded section-medium-thin" [innerHTML]='profile.bio'>
             </p>
               <p *ngIf="profile.kaplanAdminTypeName === 'AccountManager'">Use these external forms to submit requests directly to {{profile.firstName}}:</p>
               <ul class="action-links">
-                <li *ngFor="#link of profile.linksForFrontEnd"><a [href]='link.LinkUrl' target="_blank" class="icon action-color-link-icon">{{link.LinkTextToDisplay}}</a></li>  
+                <li *ngFor="let link of profile.linksForFrontEnd"><a [href]='link.LinkUrl' target="_blank" class="icon action-color-link-icon">{{link.LinkTextToDisplay}}</a></li>  
               </ul>
           </div>
         </div>

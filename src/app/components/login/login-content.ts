@@ -1,11 +1,11 @@
-import {Component} from 'angular2/core';
-import {Router, RouterLink} from 'angular2/router';
+import {Component} from '@angular/core';
+import {Router, RouterLink} from '@angular/router-deprecated';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
-import * as _ from '../../lib/index';
+import * as _ from 'lodash';
 import {links} from '../../constants/config';
 import {general, login} from '../../constants/error-messages';
-import {Angulartics2On} from '../../lib/ng-ga';
+import {Angulartics2On} from 'angulartics2';
 
 @Component({
     selector: 'login-content',
@@ -131,10 +131,10 @@ export class LoginContent {
     }
 
     checkInstitutions() {
-        let institutions = _.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
-        if (institutions != null && institutions != 'undefined') {
-            let institutionsRN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
-            let institutionsPN = _.pluck(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
+        let institutions = _.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
+        if (institutions != null && institutions != undefined) {
+            let institutionsRN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
+            let institutionsPN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
             if (institutionsRN.length > 0)
                 this.institutionRN = institutionsRN[0];
             if (institutionsPN.length > 0)

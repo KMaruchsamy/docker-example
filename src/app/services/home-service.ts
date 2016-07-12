@@ -1,8 +1,8 @@
-import {Injectable, Inject} from 'angular2/core';
-import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "angular2/http";
+import {Injectable, Inject} from '@angular/core';
+import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
 import {Auth} from './auth';
 import {ProfileModel} from '../models/profile-model';
-import * as _ from '../lib/index';
+import * as _ from 'lodash';
 
 @Injectable()
 export class HomeService {

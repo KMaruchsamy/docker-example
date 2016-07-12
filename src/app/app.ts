@@ -1,7 +1,9 @@
-import {Component, provide, enableProdMode, ComponentRef} from 'angular2/core';
-import {bootstrap} from 'angular2/platform/browser';
-import {Router, RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy, APP_BASE_HREF, ROUTER_PRIMARY_COMPONENT} from 'angular2/router';
-import {HTTP_PROVIDERS, Http} from 'angular2/http';
+import {Component, provide, enableProdMode, ComponentRef} from '@angular/core';
+import {bootstrap} from '@angular/platform-browser-dynamic';
+import {Title} from '@angular/platform-browser';
+import {Router, RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, 
+    ROUTER_PROVIDERS} from '@angular/router-deprecated';
+import {HTTP_PROVIDERS, Http} from '@angular/http';
 import {Home} from './components/home/home';
 import {Login} from './components/login/login';
 import {Auth} from './services/auth';
@@ -17,7 +19,7 @@ import {Page} from './scripts/page';
 import {Logger} from './scripts/logger';
 import {ChooseInstitution} from './components/shared/choose-institution';
 import {ProfileDescription} from './components/home/profile-description';
-import {ExceptionHandler} from 'angular2/core';
+import {ExceptionHandler} from '@angular/core';
 import {MyExceptionHandler} from './scripts/myexception-handler';
 import {ChooseTest} from './components/tests/choose-test';
 import {ScheduleTest} from './components/tests/schedule-test';
@@ -35,8 +37,8 @@ import {Logout} from './components/shared/logout';
 import {AccountError} from './components/errors/accounterror';
 import {LastTestingSession} from './components/tests/last-testing-session';
 import {Log} from './services/log';
-import {Angulartics2, Angulartics2On} from './lib/ng-ga';
-import {Angulartics2GoogleAnalytics} from './lib/angulartics2-google-analytics';
+import {Angulartics2} from 'angulartics2';
+import {Angulartics2GoogleAnalytics} from 'angulartics2/src/providers/angulartics2-google-analytics';
 
 @Component({
     selector: 'app',
@@ -83,16 +85,14 @@ import {Angulartics2GoogleAnalytics} from './lib/angulartics2-google-analytics';
     { path: '/testing-session-expired', component: LastTestingSession, name: 'LastTestingSession' }
 ])
 export class App {
-    constructor(public router: Router, angulartics2: Angulartics2, angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {
+    constructor(public router: Router, public angulartics2: Angulartics2,public angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics, public titleService: Title) {
+    }
+    public setTitle( newTitle: string) {
+        this.titleService.setTitle(newTitle);
+    }
+    
+    ngOnInit(): void {
+        this.setTitle('Kaplan Nursing');
     }
 }
 
-enableProdMode();
-
-bootstrap(App, [
-    ROUTER_PROVIDERS,
-    HTTP_PROVIDERS,
-    provide(ExceptionHandler, { useClass: MyExceptionHandler }),
-    provide(ROUTER_PRIMARY_COMPONENT, { useValue: App }),
-    Angulartics2
-]);

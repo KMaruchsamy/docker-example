@@ -1,5 +1,6 @@
-import {Component, OnInit} from 'angular2/core';
-import {Router, RouterLink, CanActivate} from 'angular2/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, RouterLink, CanActivate} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {links, constants} from '../../constants/config';
@@ -7,7 +8,7 @@ import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {Utility} from '../../scripts/utility';
-import {Angulartics2On} from '../../lib/ng-ga';
+import {Angulartics2On} from 'angulartics2';
 
 @Component({
     selector: 'userguide',
@@ -23,12 +24,12 @@ import {Angulartics2On} from '../../lib/ng-ga';
 export class UserGuide implements OnInit {
     modifiedDate: Date;
     activeId: string;
-    constructor(public router: Router, public auth: Auth, public common: Common) {
+    constructor(public router: Router, public auth: Auth, public common: Common, public titleService: Title) {
     }
 
     ngOnInit(): void {
         if (this.auth.isAuth()) {
-        $('title').html('Faculty User Guide &ndash; Kaplan Nursing');
+        this.titleService.setTitle('Faculty User Guide – Kaplan Nursing');
         this.modifiedDate = new Date(constants.USERGUIDEMODIFICATIONDATE);
         $(document).scrollTop(0);
         this.activeId = '#whatsNew';

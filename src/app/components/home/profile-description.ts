@@ -1,6 +1,7 @@
-import {Component} from 'angular2/core';
-import {NgFor, NgIf} from 'angular2/common';
-import {RouteParams, RouterLink} from 'angular2/router';
+import {Component} from '@angular/core';
+import {NgFor, NgIf} from '@angular/common';
+import {RouteParams, RouterLink} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {HomeService} from '../../services/home-service';
 import {Common} from '../../services/common';
 import {links} from '../../constants/config';
@@ -18,7 +19,7 @@ export class ProfileDescription {
     kaplanAdminId: number;
     profile: ProfileModel;
     apiServer: string;
-    constructor(public routeParams: RouteParams, public homeService: HomeService, public common: Common) {
+    constructor(public routeParams: RouteParams, public homeService: HomeService, public common: Common, public titleService: Title) {
         this.apiServer = this.common.getApiServer();
         this.kaplanAdminId = parseInt(this.routeParams.get('id'));
         this.profile = {}
@@ -37,9 +38,9 @@ export class ProfileDescription {
                     self.profile = self.homeService.bindToModel(json);
                     if (self.profile) {
                         if (self.profile.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER')
-                            $('title').html('Your Account Manager &ndash; Kaplan Nursing');
+                            this.titleService.setTitle('Your Account Manager – Kaplan Nursing');
                         else
-                            $('title').html('Your Nurse Consultant &ndash; Kaplan Nursing');
+                            this.titleService.setTitle('Your Nurse Consultant – Kaplan Nursing');
                     }
                 })
                 .catch((error) => {

@@ -1,0 +1,35 @@
+{
+  "name": "nursing-ux",
+  "description": "Nursing Faculty Site",
+  "main": "src/tmp/app/bootstrap.js",
+  "authors": [
+    "kaptest"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "angular2",
+    "starter",
+    "seed",
+    "gulp",
+    "webpack",
+    "extensible",
+    "systemjs",
+    "systemjs",
+    "builder",
+    "travis",
+    "karma",
+    "jasmine",
+    "istanbul"
+  ],
+  "homepage": "https://github.com/KaplanTestPrep/NursingIT.Frontend",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "x-editable": "1.5.1"
+  }
+}

@@ -1,6 +1,6 @@
-import {ExceptionHandler, Injectable, Injector} from 'angular2/core';
-import {Http} from 'angular2/http';
-import {Router} from 'angular2/router';
+import {ExceptionHandler, Injectable, Injector} from '@angular/core';
+import {Http} from '@angular/http';
+import {Router} from '@angular/router-deprecated';
 import {Log} from '../services/log';
 import {Auth} from '../services/auth';
 import {Common} from '../services/common';

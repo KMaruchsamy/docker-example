@@ -1,7 +1,7 @@
-﻿import {Component} from 'angular2/core';
-import {Router,RouterLink} from 'angular2/router';
+﻿import {Component} from '@angular/core';
+import {Router,RouterLink} from '@angular/router-deprecated';
 import {Utility} from '../../scripts/utility';
-import {Angulartics2On} from '../../lib/ng-ga';
+import {Angulartics2On} from 'angulartics2';
 
 @Component({
     selector:'login-footer',

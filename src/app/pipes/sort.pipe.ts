@@ -1,14 +1,12 @@
-import {Pipe, PipeTransform} from 'angular2/core';
-import * as _ from '../lib/index';
+import {Pipe, PipeTransform} from '@angular/core';
+import * as _ from 'lodash';
 
 @Pipe({
     name: "sort"
 })
 export class SortPipe implements PipeTransform {
-    transform(array: any[], args: any[]): any[] {
+    transform(array: any[], order:string, strProperty:string): any[] {
 
-        let order = args[0];
-        let strProperty = args[1];
         if (!array)
             return [];
 

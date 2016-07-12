@@ -17,7 +17,7 @@
                 <div class="one-half-grid">
                     <label class="label-bold label-larger" for="ddlFaculty">Assign faculty member</label>
                     <select id="ddlFaculty" #ddlfaculty class="selectpicker" (change)="facultyChange(ddlfaculty.value,$event);" data-size="6" [disabled]="!facultyAssignable">
-                        <option *ngFor="#admin of faculty" [value]="admin.AdminId" [selected]="admin.AdminId == testScheduleModel.facultyMemberId">{{admin.LastName}}, {{admin.FirstName}}</option>
+                        <option *ngFor="let admin of faculty" [value]="admin.AdminId" [selected]="admin.AdminId == testScheduleModel.facultyMemberId">{{admin.LastName}}, {{admin.FirstName}}</option>
                     </select>
 
                 </div>
@@ -89,7 +89,7 @@
                     <tr *ngIf="resolveMarked(student)">
                         <tr>
                 </template>-->
-                <tr *ngFor="#student of testScheduleModel.selectedStudents;  #_student=student" [hidden]="resolveMarked(student)">
+                <tr *ngFor="let student of testScheduleModel.selectedStudents;  let _student=student" [hidden]="resolveMarked(student)">
                     <td [class.name-with-pay-alert]="student.StudentPay">{{student.LastName}} 
                         <img *ngIf="student.StudentPay" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon" alt="payment alert icon"/>
                     </td>

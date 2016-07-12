@@ -1,8 +1,9 @@
-import {Component, OnInit, DynamicComponentLoader, ElementRef} from 'angular2/core';
-import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams} from 'angular2/router';
-import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "angular2/http";
+import {Component, OnInit, DynamicComponentLoader, ElementRef} from '@angular/core';
+import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams} from '@angular/router-deprecated';
+import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
+import {Title} from '@angular/platform-browser';
 import {Observable} from 'rxjs/Rx';
-import {NgIf, NgFor} from 'angular2/common';
+import {NgIf, NgFor} from '@angular/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -10,14 +11,14 @@ import {links} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {TestHeader} from './test-header';
-import * as _ from '../../lib/index';
+import * as _ from 'lodash';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
-import '../../plugins/jquery.dataTables.min.js';
-import '../../plugins/dataTables.responsive.js';
-import '../../lib/modal.js';
+// import '../../plugins/jquery.dataTables.min.js';
+// import '../../plugins/dataTables.responsive.js';
+// import '../../lib/modal.js';
 
 @Component({
     selector: "view-test",
@@ -35,7 +36,7 @@ export class ViewTest implements OnInit, OnDeactivate {
     testStatus: number;
     anyStudentPayStudents: boolean = false;
     testScheduleId: number;
-    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams) {
+    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams, public titleService: Title) {
 
     }
 
@@ -52,7 +53,7 @@ export class ViewTest implements OnInit, OnDeactivate {
 
         }
         $(document).scrollTop(0);
-        $('title').html('View Testing Session &ndash; Kaplan Nursing');
+        this.titleService.setTitle('View Testing Session – Kaplan Nursing');
     }
 
 

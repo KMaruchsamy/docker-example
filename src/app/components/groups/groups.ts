@@ -1,8 +1,9 @@
-import {Component, OnInit} from 'angular2/core';
-import {Router, RouterLink} from 'angular2/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, RouterLink} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
-import * as _ from '../../lib/index';
+import * as _ from 'lodash';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 
@@ -15,8 +16,7 @@ import {PageFooter} from '../shared/page-footer';
 
 export class Groups implements OnInit {
     institutionName: string;
-    constructor(public auth: Auth, public router: Router) {
-
+    constructor(public auth: Auth, public router: Router, public titleService: Title) {
     }
 
     ngOnInit(): void {
@@ -25,12 +25,12 @@ export class Groups implements OnInit {
         else
             this.institutionName = this.getLatestInstitution();
         $(document).scrollTop(0);
-        $('title').html('Manage Groups &ndash; Kaplan Nursing');
+        this.titleService.setTitle('Manage Groups – Kaplan Nursing');
     }
 
     getLatestInstitution(): string {
         if (this.auth.institutions != null && this.auth.institutions != 'undefined') {
-            let latestInstitution = _.first(_.sortByOrder(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
+            let latestInstitution = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
             if (latestInstitution)
                 return latestInstitution.InstitutionName;
         }
