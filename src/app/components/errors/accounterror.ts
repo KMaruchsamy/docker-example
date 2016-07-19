@@ -1,5 +1,6 @@
-﻿import {Component} from '@angular/core';
+﻿import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router-deprecated';
+import {Title} from '@angular/platform-browser';
 import {PageHeader} from '../shared/page-header';
 @Component({
     selector: 'accounterror',
@@ -23,7 +24,7 @@ import {PageHeader} from '../shared/page-header';
       <div class="section">
         <div class="container-narrow center">
           <i class="icon account-alert-icon"></i>
-          <h2 class="margin-1em-top">We’re sorry!<br> There is a problem with your account information.</h2>
+          <h2 class="margin-1em-top">We’re sorry!<br>There is a problem with your account information.</h2>
           <p class="text-larger">Please call our customer support hotline at <a href="tel:+1-877-572-8457" class="link-base-color">1-866-920-6311</a> (+1-213-452-5783 outside the U.S. and Canada) and
             we’ll get it resolved for you right away.
           </p>
@@ -33,6 +34,11 @@ import {PageHeader} from '../shared/page-header';
       </div>
     </main>`
 })
-export class AccountError {
-
+export class AccountError implements OnInit{
+      constructor(public titleService: Title){
+    }
+    
+    ngOnInit(): void {
+        this.titleService.setTitle('Account Error – Kaplan Nursing');
+    }
 }

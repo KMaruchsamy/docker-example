@@ -1,11 +1,10 @@
-<div class="modal fade" id="confirmationPopup" [attr.id]="popupId" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
-aria-labelledby="confirmationPopup">
+<div class="modal fade" [attr.id]="popupId" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" [attr.aria-labelledby]="popupId+'Heading'">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button [class.hidden]="hideClose" type="button" class="close close-medium-icon-grey" aria-label="Close" (click)="onCancel($event);"></button>
                 <p class="icon red-triangle-alert-large center"></p>
-                <h5 class="attention center" id="loseWorkWarningLabel">
+                <h5 class="attention center" [attr.id]="popupId+'Heading'">
              <span [innerHTML]="message"></span>
            </h5>
             </div>

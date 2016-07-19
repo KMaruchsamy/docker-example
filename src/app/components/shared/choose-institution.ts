@@ -1,6 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink, RouteParams} from '@angular/router-deprecated';
 import {NgIf, Location} from '@angular/common';
+import {Title} from '@angular/platform-browser';
 import {PageHeader} from './page-header';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -17,7 +18,7 @@ import {TestScheduleModel} from '../../models/testSchedule.model';
     directives: [PageHeader, RouterLink, NgIf]
 })
 
-export class ChooseInstitution {
+export class ChooseInstitution implements OnInit {
     fromPage: string;
     page: string;
     apiServer: string;
@@ -30,7 +31,7 @@ export class ChooseInstitution {
     backMessage: string;
     nursingITServer: string;
     isTest: boolean = false;
-    constructor(public router: Router, public routeParams: RouteParams, public common: Common, public auth: Auth, public aLocation: Location, public testService: TestService, public testScheduleModel: TestScheduleModel) {
+    constructor(public router: Router, public routeParams: RouteParams, public common: Common, public auth: Auth, public aLocation: Location, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
         this.nursingITServer = this.common.getNursingITServer();
         this.fromPage = this.routeParams.get('frompage');
         this.page = this.routeParams.get('redirectpage');
@@ -41,7 +42,7 @@ export class ChooseInstitution {
         this.setBackMessage();
     }
     ngOnInit(): void {
-        $('title').html('Choose a Program &ndash; Kaplan Nursing');
+        this.titleService.setTitle('Choose a Program – Kaplan Nursing');
         this.checkInstitutions();
     }
 

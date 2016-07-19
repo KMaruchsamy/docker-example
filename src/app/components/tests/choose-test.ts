@@ -1,6 +1,7 @@
 import {Component, OnInit, OnChanges, AfterViewChecked, ElementRef} from '@angular/core';
 import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction} from '@angular/router-deprecated';
 import {Location} from '@angular/common';
+import {Title} from '@angular/platform-browser';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -48,7 +49,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     searchResult: Object[];
     previouSearch: string = null;
     constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
-        public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public aLocation: Location) {
+        public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public aLocation: Location, public titleService: Title) {
     }
 
     ngOnInit(): void {
@@ -61,9 +62,9 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             let action = this.routeParams.get('action');
             if (action != undefined && action.trim() === 'modify') {
                 this.modify = true;
-                $('title').html('Modify: Choose Test &ndash; Kaplan Nursing');
+                this.titleService.setTitle('Modify: Choose Test – Kaplan Nursing');
             } else {
-                $('title').html('Choose Test &ndash; Kaplan Nursing');
+                this.titleService.setTitle('Choose Test – Kaplan Nursing');
             }
         }
     }

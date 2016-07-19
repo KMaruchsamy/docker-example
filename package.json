@@ -92,7 +92,8 @@
     "yargs": "^4.7.1",
     "gulp-inject": "4.1.0",
     "colors"  : "1.1.2",
-    "jasmine2-reporter": "0.2.0"
+    "jasmine2-reporter": "0.2.0",
+    "systemjs-builder": "0.15.23"
   },
   "dependencies": {
     "@angular/common": "2.0.0-rc.1",

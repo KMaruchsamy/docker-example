@@ -1,5 +1,6 @@
 import {Component, provide, enableProdMode, ComponentRef} from '@angular/core';
 import {bootstrap} from '@angular/platform-browser-dynamic';
+import {Title} from '@angular/platform-browser';
 import {Router, RouterOutlet, RouteConfig, RouterLink, ROUTER_DIRECTIVES, 
     ROUTER_PROVIDERS} from '@angular/router-deprecated';
 import {HTTP_PROVIDERS, Http} from '@angular/http';
@@ -88,7 +89,14 @@ import {ConfirmationModifyInProgress} from './components/tests/confirmation-modi
     { path: '/tests/confirmation-modify-in-progress', component: ConfirmationModifyInProgress, name: 'ConfirmationModifyInProgress' }
 ])
 export class App {
-    constructor(public router: Router, public angulartics2: Angulartics2,public angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {
+    constructor(public router: Router, public angulartics2: Angulartics2,public angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics, public titleService: Title) {
+    }
+    public setTitle( newTitle: string) {
+        this.titleService.setTitle(newTitle);
+    }
+    
+    ngOnInit(): void {
+        this.setTitle('Kaplan Nursing');
     }
 }
 

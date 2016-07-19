@@ -1,6 +1,7 @@
 import {Component, OnInit, DynamicComponentLoader, ElementRef} from '@angular/core';
 import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams} from '@angular/router-deprecated';
 import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
+import {Title} from '@angular/platform-browser';
 import {Observable} from 'rxjs/Rx';
 import {NgIf, NgFor} from '@angular/common';
 import {TestService} from '../../services/test.service';
@@ -35,8 +36,7 @@ export class ViewTest implements OnInit, OnDeactivate {
     testStatus: number;
     anyStudentPayStudents: boolean = false;
     testScheduleId: number;
-    modifyInProgress: boolean = false;
-    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams) {
+    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams, public titleService: Title) {
 
     }
 
@@ -46,16 +46,14 @@ export class ViewTest implements OnInit, OnDeactivate {
             this.router.navigateByUrl('/');
         else {
             let action = this.routeParams.get('action');
-            if (action != undefined && action.trim() !== '' && action.trim() === 'modifyinprogress')
-                this.modifyInProgress = true;
-            else
+            if (action != undefined && action.trim() !== '')
                 this.modify = true;
             this.testScheduleId = parseInt(this.routeParams.get('id'));
             this.loadTestSchedule();
 
         }
         $(document).scrollTop(0);
-        $('title').html('View Testing Session &ndash; Kaplan Nursing');
+        this.titleService.setTitle('View Testing Session – Kaplan Nursing');
     }
 
 
@@ -78,7 +76,6 @@ export class ViewTest implements OnInit, OnDeactivate {
             return response.json();
         })
             .then((json) => {
-                debugger;
                 if (json) {
                     let _schedule: TestScheduleModel = __this.testService.mapTestScheduleObjects(json);
                     if (_schedule) {

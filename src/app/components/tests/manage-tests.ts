@@ -1,6 +1,7 @@
 import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef, ViewEncapsulation} from '@angular/core';
 import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, RouterLink} from '@angular/router-deprecated';
 import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
+import {Title} from '@angular/platform-browser';
 import {Observable} from 'rxjs/Rx';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -55,7 +56,7 @@ export class ManageTests implements OnInit {
     sStorage: any;
     testTypeId: number = 1;
     institutionID: number = 0;
-    constructor(public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public routeParams: RouteParams) { }
+    constructor(public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public routeParams: RouteParams, public titleService: Title) { }
 
     ngOnInit(): void {
         this.sStorage = this.common.getStorage();
@@ -66,7 +67,7 @@ export class ManageTests implements OnInit {
         this.checkInstitutions();
         this.setLatestInstitution();
         this.bindTests();
-        $('title').html('Manage Tests &ndash; Kaplan Nursing');
+        this.titleService.setTitle('Manage Tests – Kaplan Nursing');
         $(document).scrollTop(0);
     }
 

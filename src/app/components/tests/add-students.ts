@@ -1,6 +1,7 @@
 import {Component, OnInit, AfterViewInit, DynamicComponentLoader, ElementRef,ViewEncapsulation, ViewContainerRef} from '@angular/core';
 import {Router, RouterLink, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction } from '@angular/router-deprecated';
 import {NgFor,Location} from '@angular/common';
+import {Title} from '@angular/platform-browser';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {links} from '../../constants/config';
@@ -75,7 +76,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     // studentTable: boolean = false;
 
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
-        public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location, public viewContainerRef :ViewContainerRef) {
+        public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location, public viewContainerRef :ViewContainerRef, public titleService: Title) {
 
     }
 
@@ -122,9 +123,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         let action = this.routeParams.get('action');
         if (action != undefined && action.trim() === 'modify') {
             this.modify = true;
-            $('title').html('Modify: Add Students &ndash; Kaplan Nursing');
+            this.titleService.setTitle('Modify: Add Students – Kaplan Nursing');
         } else {
-            $('title').html('Add Students &ndash; Kaplan Nursing');
+            this.titleService.setTitle('Add Students – Kaplan Nursing');
         }
         this.CheckForAdaStatus();
 

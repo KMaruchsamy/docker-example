@@ -1,6 +1,7 @@
 import {Component, OnInit, AfterViewInit, ViewEncapsulation} from '@angular/core';
 import {Router, CanDeactivate, OnDeactivate, ComponentInstruction, RouteParams} from '@angular/router-deprecated';
 import {NgIf,Location} from '@angular/common';
+import {Title} from '@angular/platform-browser';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -42,7 +43,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     overrideRouteCheck: boolean = false;
     modify: boolean = false;
     constructor(public testScheduleModel: TestScheduleModel,
-        public testService: TestService, public auth: Auth, public router: Router, public common: Common, public routeParams: RouteParams, public aLocation: Location) {
+        public testService: TestService, public auth: Auth, public router: Router, public common: Common, public routeParams: RouteParams, public aLocation: Location, public titleService: Title) {
     }
 
     onCancelChanges(): void {
@@ -91,9 +92,9 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             let action = this.routeParams.get('action');
             if (action != undefined && action.trim() === 'modify') {
                 this.modify = true;
-                $('title').html('Modify: Schedule Test &ndash; Kaplan Nursing');
+                this.titleService.setTitle('Modify: Schedule Test – Kaplan Nursing');
             } else {
-                $('title').html('Schedule Test &ndash; Kaplan Nursing');
+                this.titleService.setTitle('Schedule Test – Kaplan Nursing');
             }
         }
 
