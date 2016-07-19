@@ -1,4 +1,5 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {NgIf, NgFor} from '@angular/common';
 import {RouterLink} from '@angular/router-deprecated';
 import {Common} from '../../services/common';
 import {TestScheduleModel} from '../../models/testSchedule.model';
@@ -9,7 +10,7 @@ import {SortPipe} from '../../pipes/sort.pipe';
 @Component({
     selector: 'retesters-noalternate',
     templateUrl: 'templates/tests/retesters-noalternate-popup.html',
-    directives: [RouterLink],
+    directives: [RouterLink, NgIf, NgFor],
     providers: [Common],
     inputs: ['studentRepeaters'],
     pipes:[SortPipe]    
