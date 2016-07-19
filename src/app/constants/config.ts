@@ -43,7 +43,10 @@ export const links = {
                 modifyscheduletest: "scheduling/testingSessions/§scheduleId",
                 renamesession: "scheduling/testingSessions/§scheduleId/renameSession",
                 refreshTestingStatus: "scheduling/refreshRetestingStatus",
-                searchStudents:"scheduling/institutions/§institutionid/students?searchString=§searchstring&testId=§testid&windowStart=§windowstart&windowEnd=§windowend"
+                searchStudents: "scheduling/institutions/§institutionid/students?searchString=§searchstring&testId=§testid&windowStart=§windowstart&windowEnd=§windowend",
+                modifyInProgressCohortStudent:"scheduling/modifyInProgress/cohorts/§cohortId/students?testingSessionId=§testingSessionId",
+                refreshStudentsWhoStarted: "scheduling/testingSessions/§testingSessionId/students?filter=§filter",
+                updateModifyInProgressStudents: "scheduling/modifyInProgress/testingSessions/§testSessionId"
             },
             logging: {
                 error: 'error/Log'
@@ -52,7 +55,7 @@ export const links = {
     },
     nursingit: {
         local: {
-            server: "http://localhost/"
+            server: "http://localhost:55611/"
         },
         dev: {
             server: "https://dev01-nursing.kaptest.com/"

@@ -3,7 +3,7 @@
     <div class="section section-light-pink section-bottom-thin">
         <div class="container">
             <h2 class="error h5">Add/Remove Students</h2>
-            <h3 class="modify-testing-session-left page-lg-heading">Test In Progress: Gerontology A</h3>
+            <h3 class="modify-testing-session-left page-lg-heading">Test In Progress: {{testName}}</h3>
             <div class="modify-testing-session-right text-larger">
                 <button class="anchor-button" (click)="confirmCancelChanges($event)">Cancel changes</button>
             </div>
@@ -29,7 +29,7 @@
 
                                 <div class="top-section " *ngIf="!noCohort">
                                     <select id="chooseCohort" #selectcohort class="selectpicker" title="Choose a Cohort" data-width="65%" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,selectcohort,$event);">
-                                        <option *ngFor="#cohort of cohorts;#i=index;" [selected]="cohort.CohortId==lastSelectedCohortID" [value]="cohort.CohortId">{{cohort.CohortName}}</option>
+                                        <option *ngFor="let cohort of cohorts; let i=index;" [selected]="cohort.CohortId==lastSelectedCohortID" [value]="cohort.CohortId">{{cohort.CohortName}}</option>
                                     </select>
                                     <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort($event)">Add all students</button>
                                 </div>
@@ -54,7 +54,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="#student of cohortStudentlist | sort:'asc':'LastName'">
+                                    <tr *ngFor="let student of cohortStudentlist | sort:'asc':'LastName'">
                                         <td title="{{student.Email}}" [class.duplicate-student]="student.duplicate" [attr.lastname]="student.LastName">
                                             {{student.LastName}}
                                             <!--Last name must be on same line as opening tag or last name starts with new line and search filter fails to match-->
@@ -73,7 +73,7 @@
                                         </td>
                                         <td [attr.firstname]="student.FirstName">{{student.FirstName}}</td>
                                         <td>{{lastSelectedCohortName}}</td>
-                                        <td [class]="getClassName(student.Retester)">{{student.Retester?"Yes":"No"}}</td>
+                                        <td [class]="getClassName(getRetester(student))">{{getRetester(student)?"Yes":"No"}}</td>
                                         <td>
                                             <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" [attr.ada]="student.Ada" [attr.email]="student.Email" (click)="AddStudent(student,$event)">Add</button>
                                         </td>
@@ -127,10 +127,8 @@
                 </p>
                 <p class="icon info-icon-yellow margin-1em-top" *ngIf="selectedStudents.length > 0">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
                 <div>
-                    <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" disabled (click)="DetailReviewTestClick($event)">Verify changes and save</button>
-                    <!--<button class="anchor-button right clear" data-toggle="modal" data-target="#cancelChangesModal">
-                        Cancel changes
-                    </button>-->
+                    <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="verifySaveModifyInProgress" [disabled]="EnableDisableDetailReviewButton()" (click)="Verify_SaveTestClick($event)">Verify changes and save</button>
+                   
                     <button class="anchor-button right clear" (click)="confirmCancelChanges($event)">Cancel changes</button>
                 </div>
             </div>
@@ -140,5 +138,13 @@
 <page-footer></page-footer>
 <confirmation-popup [popupId]="'cancelChangesPopup'" [message]="'Cancel changes to testing session and return to Manage Tests main page?'"
                     [okButtonText]="'Yes'" [cancelButtonText]="'No, continue making changes'" (onOK)="cancelChanges()" (onCancel)="continueMakingChanges()"
+                    [hideClose]="true">
+</confirmation-popup>
+<confirmation-popup [popupId]="'confirmationPopup'"
+                    [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
+                    [okButtonText]="'Yes, leave this page'"
+                    [cancelButtonText]="'No, stay on this page'"
+                    (onOK)="onOKConfirmation()"
+                    (onCancel)="onCancelConfirmation()"
                     [hideClose]="true">
 </confirmation-popup>

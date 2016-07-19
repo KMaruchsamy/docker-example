@@ -1,6 +1,6 @@
-﻿import {Component, OnInit, AfterViewInit, DynamicComponentLoader, ElementRef, ViewEncapsulation} from 'angular2/core';
-import {Router, RouterLink, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, Location } from 'angular2/router';
-import {NgFor} from 'angular2/common';
+﻿import {Component, OnInit, Output, AfterViewInit, DynamicComponentLoader, ElementRef, EventEmitter, ViewContainerRef, Renderer} from '@angular/core';
+import {Router, RouterLink, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction} from '@angular/router-deprecated';
+import {NgFor, Location} from '@angular/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {links} from '../../constants/config';
@@ -13,30 +13,20 @@ import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {SortPipe} from '../../pipes/sort.pipe';
 
-import * as _ from '../../lib/index';
-import '../../plugins/dropdown.js';
-import '../../plugins/bootstrap-select.min.js';
-import '../../plugins/jquery.dataTables.min.js';
-import '../../plugins/dataTables.responsive.js';
-import '../../lib/modal.js';
-import '../../lib/tooltip.js';
-import '../../lib/popover.js';
-import '../../plugins/typeahead.bundle.js';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'add-students-modify-progress',
     templateUrl: 'templates/tests/add-students-modify-progress.html',
-    // encapsulation: ViewEncapsulation.None,
-    //styles: [`#addByName.active + #cohortStudentList .add-students-table-search {display: table; width: 100%;}
-    //#addByName.active + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
-    //#addByName.active + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
+    //encapsulation: ViewEncapsulation.None,
     providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common],
     directives: [PageHeader, PageFooter, NgFor, ConfirmationPopup, RouterLink],
     pipes: [RemoveWhitespacePipe, SortPipe]
 })
 
-export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDeactivate  {
-    //  institutionID: number;
+export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDeactivate {
+    // _nativeElement: any;
+    //_renderer: any;
     apiServer: string;
     lastSelectedCohortID: number;
     lastSelectedCohortName: string;
@@ -52,26 +42,20 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
     selectedStudentCount: number = 0;
     attemptedRoute: string;
     overrideRouteCheck: boolean = false;
-    //valid: boolean = false;
-    //loader: any;
-    //retesterExceptions: any;
-    //modify: boolean = false;
     hasADA: boolean = false;
     noCohort: boolean = false;
     noStudentInCohort: string = "No matching students in this cohort";
-    //noStudentInFindByName: string = "We’re sorry, there are no students that match your search. Please try again.";
-    //_selfPayStudent: Object[] = [];
-    //prevSearchText: string = "";
-    //noSearchStudent: boolean = false;
-    //AddByNameStudentlist: Object[] = []; // To Check AddByName got students or not...
-    //AddByCohortStudentlist: Object[] = []; // To preserve previous selected cohort
-    //isAddByName: boolean = false;
-    // studentTable: boolean = false;
-    @Output('cancelChanges') cancelChangesEvent = new EventEmitter();
-    @Output('continueMakingChanges') continueMakingChangesEvent = new EventEmitter();
+    refreshStudentsWhoStarted: number[];
+    filterStatus: string = "assignedTestStarted";
+
+    //@Output('cancelChanges') cancelChangesEvent = new EventEmitter();
+    //@Output('continueMakingChanges') continueMakingChangesEvent = new EventEmitter();
 
     constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
-        public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location) {
+        public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location, public viewContainerRef: ViewContainerRef, public renderer: Renderer) {
+        debugger;
+        //this._nativeElement = this.elementRef.nativeElement;
+        //this._renderer = this.renderer;
 
     }
 
@@ -86,11 +70,9 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
                 }
             }
         }
-        //if (outOfTestScheduling) {
-        //    this.sStorage.removeItem('testschedule');
-        //    this.sStorage.removeItem('retesters');
-        //    this.sStorage.removeItem('previousTest');
-        //}
+        if (outOfTestScheduling) {
+            this.sStorage.removeItem('testschedule');
+        }
         this.overrideRouteCheck = false;
         return true;
     }
@@ -111,14 +93,7 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
         let self = this;
         this.testsTable = null;
         $(document).scrollTop(0);
-        //this.prevStudentList = [];
-        //let action = this.routeParams.get('action');
-        //if (action != undefined && action.trim() === 'modify') {
-        //    this.modify = true;
-        //    $('title').html('Modify: Add Students &ndash; Kaplan Nursing');
-        //} else {
-        //    $('title').html('Add Students &ndash; Kaplan Nursing');
-        //}
+
         $('title').html('Modify In Progress: Add Students &ndash; Kaplan Nursing');
         this.CheckForAdaStatus();
 
@@ -130,11 +105,15 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
 
         this.addClearIcon();
         let __this = this;
-
+        //this._renderer.listen($('.tab-content'), 'click', (event) => {
+        //    __this.clearTableSearch();
+        //});
         $('.tab-content').on('click', '#cohortStudentList .clear-input-values', function () {
             __this.clearTableSearch();
         });
-
+        //this._renderer.listenGlobal('body', 'click', (e) => {
+        //    this._renderer.listenGlobal(e.target).data("bs.popover").inState.click = false;
+        //});
         $('body').on('hidden.bs.popover', function (e) {
             $(e.target).data("bs.popover").inState.click = false;
         });
@@ -157,30 +136,18 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
         let savedSchedule = this.testService.getTestSchedule();
         if (savedSchedule) {
             this.testScheduleModel = savedSchedule;
-
-            //this.testScheduleModel.currentStep = 3;
-            //this.testScheduleModel.activeStep = 3;
+            this.testName = this.testScheduleModel.testName;
             this.windowStart = moment(this.testScheduleModel.scheduleStartTime).format("MM.DD.YY"); //'01.01.14'
             this.windowEnd = moment(this.testScheduleModel.scheduleEndTime).format("MM.DD.YY"); //'12.12.16';
             this.apiServer = this.auth.common.getApiServer();
 
             if (this.testScheduleModel.selectedStudents.length > 0) {
-                //let previousTestId: number = parseInt(this.sStorage.getItem('previousTest'));
-                //if (!(Number.isNaN(previousTestId)) && previousTestId !== 0) {
-                //    if (previousTestId !== this.testScheduleModel.testId) {
-                //        this.RefreshSelectedSudent();
-                //    }
-                //    else
-                //        this.InitializePage();
-                //}
-                //else {
-                    this.InitializePage();
-               // }
+                this.InitializePage();
             }
             this.loadActiveCohorts();
         }
     }
-    InitializePage(): void {      
+    InitializePage(): void {
         this.ReloadData();
         this.RefreshSelectedStudentCount();
     }
@@ -196,17 +163,28 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
                 if (student.Retester) {
                     retesting = "RETESTING";
                 }
-                studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light testing-remove-students-button" data-id="' + student.StudentId + '">Remove</button></li>';
+                studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="' + this.setClasses(student.AssignedTestStarted) + '" data-id="' + student.StudentId + '">Remove</button><button class="' + this.setClasses(!student.AssignedTestStarted) + '" disabled>Started test</button></li>';
             }
         }
         $('#testSchedulingSelectedStudentsList').append(studentlist);
         this.ShowHideSelectedStudentContainer();
         this.displaySelectedStudentFilter();
-        this.EnableDisableButtonForDetailReview();
+        // this.EnableDisableButtonForDetailReview();
+        if (this.selectedStudentCount > 0) {
+            this.CheckForAdaStatus();
+        }
         this.sortAlpha();
         this.RemoveSelectedStudents();
     }
 
+    setClasses(AssigendTestStarted: boolean): string {
+        if (AssigendTestStarted) {
+            return 'button button-small button-light testing-remove-students-button hidden';
+        }
+        else {
+            return 'button button-small button-light testing-remove-students-button';
+        }
+    }
 
     RefreshSelectedStudentCount(): void {
         this.selectedStudentCount = this.selectedStudents.length;
@@ -233,9 +211,9 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
     }
     clearTableSearch(): void {
         let __this = this;
-        var $that = $('.add-students-table-search .small-search-box');
-        $that.val('');
-        $that.next('span').removeClass('clear-input-values');
+        var __that = $('.add-students-table-search .small-search-box');
+        __that.val('');
+        __that.next('span').removeClass('clear-input-values');
 
         this.filterTableSearch()
 
@@ -246,12 +224,12 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
 
         //Right now necessary because table is empty of rows except for no matching student row after more than one letter entered
         //When only only letter has been entered table rows are simply hidden
-        $that.on('click', function () {
+        __that.on('click', function () {
 
-            var $table = $('table');
+            var _table = $('table');
             var table = $('table').DataTable();
             table.search(this.value).draw();
-            $table.find('tr').each(function () {
+            _table.find('tr').each(function () {
                 $(this).removeClass('hidden');
             });
             __this.CheckForAllStudentSelected();
@@ -285,7 +263,7 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
             else {
                 if (_lname !== __this.noStudentInCohort.toUpperCase()) {
                     $('#cohortStudents tbody').append('<tr class="odd" id="noMatchingStudents"><td class="not-collapsed" style="text-align:center" colspan="5" >' + __this.noStudentInCohort + '</td></tr>');
-                    var $table = $('#cohortStudents tbody').parent('table')
+                    var __table = $('#cohortStudents tbody').parent('table')
                 }
                 $('#addAllStudents').attr('disabled', 'disabled');
             }
@@ -293,6 +271,7 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
     }
 
     CheckForAllStudentSelected(): void {
+
         let rows = $("#cohortStudents tbody tr button");
         if (rows.length > 0) {
             $('#cohortStudents tbody tr button').each(function (index, el) {
@@ -309,15 +288,26 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
             $('#addAllStudents').attr('disabled', 'disabled');
     }
 
-    EnableDisableButtonForDetailReview(): void {
+    EnableDisableDetailReviewButton(): boolean {
         if (this.selectedStudentCount > 0) {
-            this.CheckForAdaStatus();
-            $('#reviewDetails').removeAttr('disabled', 'disabled');
+            let _selectedStudent = this.testScheduleModel.selectedStudents;
+            let studentDifferece = _.xor(_selectedStudent, this.selectedStudents);
+            if (studentDifferece.length > 0) {
+                return false;
+            }
+            return true;
         }
-        else {
-            $('#reviewDetails').attr('disabled', 'true');
-        }
+        return true;
     }
+    //EnableDisableButtonForDetailReview(): void {
+    //    if (this.selectedStudentCount > 0) {
+    //        this.CheckForAdaStatus();
+    //        $('#reviewDetails').removeAttr('disabled', 'disabled');
+    //    }
+    //    else {
+    //        $('#reviewDetails').attr('disabled', 'true');
+    //    }
+    //}
 
     ResetData(): void {
         $('#testSchedulingSelectedStudentsList').empty();
@@ -326,8 +316,11 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
         });
         this.selectedStudents = [];
         this.ShowHideSelectedStudentContainer();
-        this.EnableDisableButtonForDetailReview();
-    }   
+        // this.EnableDisableButtonForDetailReview();
+        if (this.selectedStudentCount > 0) {
+            this.CheckForAdaStatus();
+        }
+    }
 
     loadActiveCohorts(): void {
         this.loadCohorts();
@@ -367,7 +360,7 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
     }
 
     resolveCohortStudentsURL(url: string): string {
-        return url.replace('§cohortid', this.lastSelectedCohortID.toString()).replace('§testid', this.testScheduleModel.testId.toString());
+        return url.replace('§cohortId', this.lastSelectedCohortID.toString()).replace('§testingSessionId', this.testScheduleModel.scheduleId.toString());
     }
 
     markDuplicate(objArray: Object[]): Object[] {
@@ -398,7 +391,7 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
         this.lastSelectedCohortName = this.cohorts[selectedcohort.selectedIndex - 1].CohortName.toString();
         if (cohortId > 0) {
             this.lastSelectedCohortID = cohortId;
-            let CohortStudentsURL = this.resolveCohortStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.cohortstudents}`);
+            let CohortStudentsURL = this.resolveCohortStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.modifyInProgressCohortStudent}`);
             let testsPromise = this.testService.getTests(CohortStudentsURL);
             let _self = this;
             testsPromise.then((response) => {
@@ -410,7 +403,6 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
 
                     $('#' + btnAddAllStudent.id).removeClass('hidden');
                     $('#' + tblCohortStudentList.id).removeClass('hidden');
-                    // this.studentTable = true;
                     if (typeof (json.msg) === "undefined")
                         this.cohortStudentlist = this.markDuplicate(json);
                     else
@@ -460,7 +452,7 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
     }
 
     SearchFilterOptions(__this: any): void {
-          $('#cohortStudentList .dataTables_filter :input').addClass('small-search-box').after('<span class="icon"></span>');
+        $('#cohortStudentList .dataTables_filter :input').addClass('small-search-box').after('<span class="icon"></span>');
         __this.filterTableSearch();
         let checkboxfilters = '<div class="form-group hidden-small-down"><input type="checkbox" class="small-checkbox-image" id="cohortRepeatersOnly" name="filterADA" value="repeatersOnly">' +
             '<label class="smaller" for="cohortRepeatersOnly">Retesting only</label>' +
@@ -469,10 +461,10 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
 
         $('#cohortStudentList .add-students-table-search').append(checkboxfilters);
         $('#cohortRepeatersOnly').on('click', function () {
-            let $excludeRepeaters = $('#cohortExcludeRepeaters');
+            let _excludeRepeaters = $('#cohortExcludeRepeaters');
 
             if ($(this).is(':checked')) {
-                $excludeRepeaters.prop('checked', false);
+                _excludeRepeaters.prop('checked', false);
                 $('#cohortStudents').DataTable().column(3)
                     .search('Yes')
                     .draw();
@@ -484,10 +476,10 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
             __this.IncludeExcludeRetesterFromList();
         });
         $('#cohortExcludeRepeaters').on('click', function () {
-            let $Repeaters = $('#cohortRepeatersOnly');
+            let _Repeaters = $('#cohortRepeatersOnly');
 
             if ($(this).is(':checked')) {
-                $Repeaters.prop('checked', false);
+                _Repeaters.prop('checked', false);
                 $('#cohortStudents').DataTable().column(3)
                     .search('No')
                     .draw();
@@ -545,6 +537,13 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
             return "";
     }
 
+    getRetester(student: Object): boolean {
+        if (student.AlternateTestAssignedInTestingSession || (!student.InTestingSession && student.StartedTestingSessionTest)) {
+            return true;
+        }
+        return false;
+    }
+
     AddStudent(student: Object, event): void {
         event.preventDefault();
         $('#cohort-' + student.StudentId.toString()).attr('disabled', 'disabled');
@@ -554,6 +553,7 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
         student.StudentTestName = this.testScheduleModel.testName;
         student.NormingId = 0;
         student.NormingStatus = "";
+        student.Retester = this.getRetester(student);
         this.selectedStudents.push(student);
         let retesting = "";
         if (student.Retester) {
@@ -571,7 +571,10 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
         }
         this.ShowHideSelectedStudentContainer();
         this.displaySelectedStudentFilter();
-        this.EnableDisableButtonForDetailReview();
+        // this.EnableDisableButtonForDetailReview();
+        if (this.selectedStudentCount > 0) {
+            this.CheckForAdaStatus();
+        }
         this.sortAlpha();
         this.RemoveSelectedStudents();
     }
@@ -582,7 +585,10 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
         $('#addAllStudents').attr('disabled', 'true');
         this.ShowHideSelectedStudentContainer();
         this.displaySelectedStudentFilter();
-        this.EnableDisableButtonForDetailReview();
+        // this.EnableDisableButtonForDetailReview();
+        if (this.selectedStudentCount > 0) {
+            this.CheckForAdaStatus();
+        }
         this.sortAlpha();
         this.RemoveSelectedStudents();
     }
@@ -632,12 +638,49 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
 
     RemoveAllSelectedStudents(event): void {
         event.preventDefault();
-        this.selectedStudents = [];
-        this.ResetAddButton();
-        this.CheckForAllStudentSelected();
-        this.ShowHideSelectedStudentContainer();
-        this.displaySelectedStudentFilter();
-        this.EnableDisableButtonForDetailReview();
+        debugger;
+        this.RefreshStudentsWhoHaveStarted();
+
+    }
+
+    RefreshStudentsWhoHaveStarted(): void {
+        let refreshStudentsURL = this.resolveRefreshStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.refreshStudentsWhoStarted}`);
+        let refreshStudentsPromise = this.testService.getActiveCohorts(refreshStudentsURL);
+        let _this = this;
+        refreshStudentsPromise.then((response) => {
+            if (response.status !== 400) {
+                return response.json();
+            }
+            return [];
+        })
+            .then((json) => {
+                _this.refreshStudentsWhoStarted = json;
+                if (_this.refreshStudentsWhoStarted.length > 0) {
+                    _.each(_this.refreshStudentsWhoStarted, function (studentid) {
+                        // let rowId = $(this).attr('data-id');
+                        // $(this).parent().remove();
+                        _this.RemoveStudentFromList(studentid);
+                    });
+
+                }
+                else {
+                    _this.selectedStudents = [];
+                    _this.ResetAddButton();
+                    _this.CheckForAllStudentSelected();
+                    _this.ShowHideSelectedStudentContainer();
+                    _this.displaySelectedStudentFilter();
+                    //this.EnableDisableButtonForDetailReview();
+                        _this.CheckForAdaStatus();
+
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    resolveRefreshStudentsURL(url: string): string {
+        return url.replace('§testingSessionId', this.testScheduleModel.scheduleId.toString()).replace('§filter', this.filterStatus);
     }
 
     ShowHideSelectedStudentContainer(): void {
@@ -695,7 +738,10 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
             this.CheckForAllStudentSelected();
             if (this.selectedStudentCount < 1) {
                 this.ShowHideSelectedStudentContainer();
-                this.EnableDisableButtonForDetailReview();
+                //this.EnableDisableButtonForDetailReview();
+                if (this.selectedStudentCount > 0) {
+                    this.CheckForAdaStatus();
+                }
             }
         }
     }
@@ -714,9 +760,9 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
         $('#filterSelectedStudents').on('keyup', function () {
             let that = this;
             $('#testSchedulingSelectedStudents li').each(function () {
-                let $span = $(this).find('span.js-selected-student');
-                let firstName = $span.text().split(',')[0].toUpperCase();
-                let lastName = $span.text().split(',')[1].replace(' ', '').toUpperCase();
+                let _span = $(this).find('span.js-selected-student');
+                let firstName = _span.text().split(',')[0].toUpperCase();
+                let lastName = _span.text().split(',')[1].replace(' ', '').toUpperCase();
                 let searchString = $(that).val().toUpperCase();
                 if (!(_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)))
                     $(this).addClass('hidden');
@@ -727,8 +773,8 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
         });
     }
     invokeFilterSelectedStudents(): void {
-        var $that = $('#filterSelectedStudents');
-        $that.val('').next().removeClass('clear-input-values');
+        var __that = $('#filterSelectedStudents');
+        __that.val('').next().removeClass('clear-input-values');
 
         $('#testSchedulingSelectedStudents li').each(function () {
             $(this).removeClass('hidden');
@@ -763,19 +809,101 @@ export class AddStudentsModifyInProgress implements OnInit, OnDeactivate, CanDea
             $('#addAllStudents').removeAttr('disabled', 'disabled');
     }
 
-    cancelChanges(): boolean {
-        $('#cancelChangesPopup').modal('hide');
-        this.cancelChangesEvent.emit('');
-        return false;
+    Verify_SaveTestClick(event): void {
+        debugger;
+        event.preventDefault();
+
+        //let studentId = [];
+        this.sStorage = this.auth.common.getStorage();
+        this.sStorage.setItem('prevtestschedule', JSON.stringify(this.testScheduleModel));
+        console.log('TestScheduleModel with previous Selected student' + this.testScheduleModel);
+
+        let selectedStudentModelList = this.selectedStudents;
+        //if (this.prevStudentList.length === 0)
+        //    this.prevStudentList = this.testScheduleModel.selectedStudents;
+        //this.testScheduleModel.selectedStudents = selectedStudentModelList;       
+
+        this.updateModifyInProgress(selectedStudentModelList);
+        
+        
     }
 
-    continueMakingChanges(): boolean {
+    updateModifyInProgress(_selectedStudents: SelectedStudentModel[]): void {
+        debugger;
+        this.testScheduleModel.selectedStudents = _selectedStudents;
+        let input = {
+            TestingSessionId: (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0),
+            SessionName: this.testScheduleModel.scheduleName,
+            AdminId: (this.testScheduleModel.adminId ? this.testScheduleModel.adminId : this.auth.userid),
+            InstitutionId: this.testScheduleModel.institutionId,
+            SessionTestId: this.testScheduleModel.testId,
+            SessionTestName: this.testScheduleModel.testName,
+            TestingWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
+            TestingWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format(),
+            FacultyMemberId: this.testScheduleModel.facultyMemberId,
+            Students: this.testScheduleModel.selectedStudents,
+            LastCohortSelectedId: this.testScheduleModel.lastselectedcohortId,
+            LastSubjectSelectedId: this.testScheduleModel.subjectId,
+            PageSavedOn: ''//TODO need to add the logic for this one ..
+        };
+        let __this = this;
+        let updateModifyInProgressTestURL = this.resolveUpdateModifyInProgressTestURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateModifyInProgressStudents}`);
+        let updateModifyInProgressTestPromise = this.testService.modifyScheduleTests(updateModifyInProgressTestURL, JSON.stringify(input));
+        updateModifyInProgressTestPromise.then((response) => {
+            return response.json();
+        })
+            .then((json) => {
+               // if (json.Errorcode === 0 && json.TestingSessionId > 0)  {
+                    __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
+                    __this.router.navigate(['ConfirmationModifyInProgress']);
+                //}
+                //else if (__this.checkForModifyInProgressException(json)) {
+                //    __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
+                //    __this.router.navigate(['ConfirmationModifyInProgress']);
+                //}
+
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    resolveUpdateModifyInProgressTestURL(url: string): string {
+        return url.replace('§testSessionId', this.testScheduleModel.scheduleId.toString());
+    }
+
+    checkForModifyInProgressException(_json: any): boolean {
+        if (_json.windowExceptions.length)
+        { return false;}
+
+        if (_json.repeaterExceptions) {
+            if (_json.repeaterExceptions.AlternateTestInfo.length) { return false;}
+            if (_json.repeaterExceptions.StudentRepeaterExceptions.length) { return false;}
+            if (_json.repeaterExceptions.StudentAlternateTestInfo.length) { return false; }
+        }
+
+        if (_json.alreadyStartedExceptions.length) { return false; }
+        return true;
+    }
+    cancelChanges(e: any): boolean {
         $('#cancelChangesPopup').modal('hide');
-        this.continueMakingChangesEvent.emit('');
-        return false;
+        this.router.navigate(['ManageTests']);
+    }
+
+    continueMakingChanges(e: any): boolean {
+        $('#cancelChangesPopup').modal('hide');
     }
     confirmCancelChanges(e): void {
         $('#cancelChangesPopup').modal('show');
         e.preventDefault();
+    }
+
+    onCancelConfirmation(e: any): void {
+        $('#confirmationPopup').modal('hide');
+        this.attemptedRoute = '';
+    }
+    onOKConfirmation(e: any): void {
+        $('#confirmationPopup').modal('hide');
+        this.overrideRouteCheck = true;
+        this.router.navigateByUrl(this.attemptedRoute);
     }
 }

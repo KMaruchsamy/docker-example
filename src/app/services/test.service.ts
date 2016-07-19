@@ -232,6 +232,7 @@ export class TestService {
                     _student.CohortName = student.CohortName;
                     _student.NormingStatus = student.StudentNormingStatusName;
                     _student.StudentPay = student.IsStudentPayDeactivated;
+                    _student.AssignedTestStarted = student.AssignedTestStarted;
                     _testScheduleModel.selectedStudents.push(_student);
 
                 });
@@ -299,6 +300,7 @@ export class TestService {
         this.sStorage.removeItem('testschedule');
         this.sStorage.removeItem('retesters');
         this.sStorage.removeItem('previousTest');
+        this.sStorage.removeItem('prevtestschedule');
     }
 
     getAlternateExceptionsModify(): any {

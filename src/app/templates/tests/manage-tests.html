@@ -63,7 +63,11 @@
                                 <td class="tablesaw-stacked-hidden">{{inProgressTest?.FacultyFirstName}} {{inProgressTest?.FacultyLastName}}</td>
                                 <td class="tablesaw-stacked-hidden">{{inProgressTest?.AdminFirstName}} {{inProgressTest?.AdminLastName}}
                                 </td>
-                                <td class="tablesaw-stacked-hidden"><a href="javascript:void(0)" (click)="view(inProgressTest?.TestingSessionId, $event)" class="smaller">View</a></td>
+                                <td class="tablesaw-stacked-hidden">
+                                <a href="javascript:void(0)" (click)="view(inProgressTest?.TestingSessionId, $event,true,'modifyinprogress')" class="smaller">View</a>
+                                    <a *ngIf="adminId==inProgressTest?.AdminId && adminId==inProgressTest?.FacultyMemberId" href="javascript:void(0)" (click)="view(inProgressTest?.TestingSessionId, $event,true,'modifyinprogress')"
+                                       class="smaller">Add/Remove Students</a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -130,7 +134,7 @@
                             <td class="tablesaw-stacked-hidden">
                                 <a *ngIf="adminId!=scheduleTest?.AdminId && adminId!=scheduleTest?.FacultyMemberId" href="javascript:void(0)" (click)="view(scheduleTest?.TestingSessionId, $event,false)"
                                 class="smaller">View</a>
-                                <a *ngIf="adminId==scheduleTest?.AdminId || adminId==scheduleTest?.FacultyMemberId" href="javascript:void(0)" (click)="view(scheduleTest?.TestingSessionId, $event,true)"
+                                <a *ngIf="adminId==scheduleTest?.AdminId || adminId==scheduleTest?.FacultyMemberId" href="javascript:void(0)" (click)="view(scheduleTest?.TestingSessionId, $event,true,'modify')"
                                 class="smaller">View/Modify</a>
                                 <button *ngIf="adminId==scheduleTest?.AdminId || adminId==scheduleTest?.FacultyMemberId" class="anchor-button smaller" (click)="showConfirmation(scheduleTest?.TestingSessionId)">Delete</button>
                             </td>

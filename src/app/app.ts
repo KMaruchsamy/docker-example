@@ -39,6 +39,7 @@ import {LastTestingSession} from './components/tests/last-testing-session';
 import {Log} from './services/log';
 import {Angulartics2} from 'angulartics2';
 import {Angulartics2GoogleAnalytics} from 'angulartics2/src/providers/angulartics2-google-analytics';
+import {ConfirmationModifyInProgress} from './components/tests/confirmation-modify-in-progress';
 
 @Component({
     selector: 'app',
@@ -83,7 +84,8 @@ import {Angulartics2GoogleAnalytics} from 'angulartics2/src/providers/angulartic
     { path: '/*wildcard', component: PageNotFound, name: 'PageNotFound' },
     { path: '/accounterror', component: AccountError, name: 'AccountError' },
     { path: '/testing-session-expired', component: LastTestingSession, name: 'LastTestingSession' },
-    { path: '/tests/add-students-modify-progress', component: AddStudentsModifyInProgress, name: 'AddStudentsModifyInProgress' }
+    { path: '/tests/add-students-modify-progress', component: AddStudentsModifyInProgress, name: 'AddStudentsModifyInProgress' },
+    { path: '/tests/confirmation-modify-in-progress', component: ConfirmationModifyInProgress, name: 'ConfirmationModifyInProgress' }
 ])
 export class App {
     constructor(public router: Router, public angulartics2: Angulartics2,public angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics) {

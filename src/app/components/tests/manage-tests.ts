@@ -124,10 +124,10 @@ export class ManageTests implements OnInit {
             });
     }
 
-     view(scheduleId: number, e, modify: boolean): void {
-        e.preventDefault();
+    view(scheduleId: number, e, modify: boolean, status: string): void {
+        e.preventDefault(); debugger;
         if (modify)
-            this.router.navigate(['/ModifyViewTest', { action: 'modify', id: scheduleId }]);
+            this.router.navigate(['/ModifyViewTest', { action: status, id: scheduleId }]);
         else
             this.router.navigate(['/ViewTest', { id: scheduleId }]);
     }

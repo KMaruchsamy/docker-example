@@ -35,6 +35,7 @@ export class ViewTest implements OnInit, OnDeactivate {
     testStatus: number;
     anyStudentPayStudents: boolean = false;
     testScheduleId: number;
+    modifyInProgress: boolean = false;
     constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams) {
 
     }
@@ -45,7 +46,9 @@ export class ViewTest implements OnInit, OnDeactivate {
             this.router.navigateByUrl('/');
         else {
             let action = this.routeParams.get('action');
-            if (action != undefined && action.trim() !== '')
+            if (action != undefined && action.trim() !== '' && action.trim() === 'modifyinprogress')
+                this.modifyInProgress = true;
+            else
                 this.modify = true;
             this.testScheduleId = parseInt(this.routeParams.get('id'));
             this.loadTestSchedule();
@@ -75,6 +78,7 @@ export class ViewTest implements OnInit, OnDeactivate {
             return response.json();
         })
             .then((json) => {
+                debugger;
                 if (json) {
                     let _schedule: TestScheduleModel = __this.testService.mapTestScheduleObjects(json);
                     if (_schedule) {
