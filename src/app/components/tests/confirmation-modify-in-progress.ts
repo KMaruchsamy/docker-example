@@ -1,9 +1,10 @@
 ﻿import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink, OnDeactivate, ComponentInstruction} from '@angular/router-deprecated';
-import {NgFor} from '@angular/common';
+import {NgFor, NgIf} from '@angular/common';
 import {Common} from '../../services/common';
 import {Auth} from '../../services/auth';
 import {PageHeader} from '../shared/page-header';
+import {TestScheduleModel} from '../../models/testSchedule.model';
 import {TestService} from '../../services/test.service';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import * as _ from 'lodash';
@@ -13,7 +14,7 @@ import {SortPipe} from '../../pipes/sort.pipe';
     selector: 'confirmation-modify-in-progress',
     templateUrl: 'templates/tests/confirmation-modify-in-progress.html',
     directives: [RouterLink, PageHeader, NgFor],
-    providers: [Auth, Common, TestService,Router,SelectedStudentModel],
+    providers: [Auth, Common, TestService, Router,TestScheduleModel,SelectedStudentModel],
     pipes: [SortPipe]
 })
 export class ConfirmationModifyInProgress implements OnInit, OnDeactivate {
@@ -21,7 +22,7 @@ export class ConfirmationModifyInProgress implements OnInit, OnDeactivate {
     removedStudents: SelectedStudentModel[]=[];
     studentsAdded: SelectedStudentModel[]=[];
 
-    constructor(public auth: Auth, public common: Common, public testService: TestService, public router: Router) {
+    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router) {
 
     }
 
