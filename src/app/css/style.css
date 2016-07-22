@@ -4515,7 +4515,7 @@ table.dataTable tbody td {
 
 @media (max-width: 47.9375em) {
   .hidden-small-down {
-    display: none !important; } }
+    display: none; } }
 
 @media (max-width: 61.9375em) {
   .hidden-medium-down {

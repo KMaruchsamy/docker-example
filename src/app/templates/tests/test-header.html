@@ -1,13 +1,20 @@
-<div class="section section-bottom-thin">
-    <div [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
+<div class="section section-bottom-thin" [class.section-light-pink]="modifyInProgress">
+    <div *ngIf="!modifyInProgress" [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
         <h2 class="page-sm-heading-teal">Manage Tests</h2>
         <h3 class="page-lg-heading" [class.modify-testing-session-left]="modify">{{ modify ? 'Modify a Testing Session' : 'Schedule a Test' }}</h3>
         <div *ngIf="modify && !hideCancelButton" class="modify-testing-session-right text-larger">
             <button class="anchor-button" (click)="confirmCancelChanges($event)">Cancel changes</button>
         </div>
     </div>
+    <div class="container" *ngIf="modifyInProgress">
+        <h2 class="error h5">Add/Remove Students</h2>
+        <h3 class="modify-testing-session-left page-lg-heading">Test In Progress: {{TestName}}</h3>
+        <div class="modify-testing-session-right text-larger">
+            <button class="anchor-button" (click)="confirmCancelChanges($event)">Cancel changes</button>
+        </div>
+    </div>
 </div>
-<div *ngIf="testSchedule.currentStep>1 && testSchedule.activeStep!==1 && testSchedule.activeStep!==5" class="thin-section test-summary-heading"
+<div *ngIf="!modifyInProgress && testSchedule.currentStep>1 && testSchedule.activeStep!==1 && testSchedule.activeStep!==5" class="thin-section test-summary-heading"
 [class.test-summary-heading-modify]="modify">
     <div class="container-medium-width" [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
         <div *ngIf="testSchedule.currentStep>1 " class="test-summary-heading-details"><span>Test: <b>{{testSchedule.testName}}</b></span>
@@ -27,7 +34,7 @@
         </div>
     </div>
 </div>
-<div class="thin-section" [class.section-gray]="!modify" [class.section-blue]="modify">
+<div *ngIf="!modifyInProgress" class="thin-section" [class.section-gray]="!modify" [class.section-blue]="modify">
     <div [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)" class="manage-test-breadcrumb">
         <div class="grid">
             <div [class.completed-step]="( testSchedule.activeStep > 1)" [class.success-icon]="(testSchedule.activeStep > 1)"

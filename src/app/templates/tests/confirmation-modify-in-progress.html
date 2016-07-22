@@ -1,0 +1,40 @@
+﻿<page-header [ariaDisabled]="true" [hideDropdown]="true"></page-header>
+<main role="main" class="app-main">
+    <div class="section">
+        <div class="container-medium-width center">
+            <i class="icon checkmark-green-circle-icon"></i>
+            <h2 class="margin-1em-top-bottom center">Your changes to the test in progress have been made.</h2>
+        </div>
+        <div class="container-narrow">
+            <p class="text-larger-teal"><b>Test In Progress: {{testName}}</b></p>
+            <div class="thin-section" *ngIf="studentsAdded.length > 0">
+                <p>
+                    The following students have been added:
+                </p>
+                <table class="table-fixed">
+                    <tbody class="text-larger-purple border-top">
+                        <tr *ngFor="let student of studentsAdded | sort:'asc':'LastName'">
+                            <td><b>{{student.LastName}}, {{student.FirstName}}</b></td>
+                            <td>{{student.StudentTestName}}</td>
+                        </tr>                        
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="thin-section" *ngIf="removedStudents.length > 0">
+                <p>
+                    The following students have been removed:
+                </p>
+                <table class="table-fixed">
+                    <tbody class="text-larger-purple border-top">
+                        <tr *ngFor="let student of removedStudents | sort:'asc':'LastName'">
+                            <td><b>{{student.LastName}}, {{student.FirstName}}</b></td>
+                            <td>{{student.StudentTestName}}</td>                       
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <a [routerLink]="['/ManageTests']" class="button right margin-1em-top">Go to Manage Tests Main page</a>
+        </div>
+    </div>
+</main>

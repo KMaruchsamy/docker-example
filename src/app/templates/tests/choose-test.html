@@ -4,11 +4,11 @@
     <div class="thin-section">
         <div class="container-medium-width">
             <ul class="nav nav-tabs minimal-nav-tabs">
-                <li id="subject" class="active"><a href="javascript:void(0)" (click)="chooseBySubject('#chooseBySubject',$event)" data-toggle="tab">Choose by subject</a></li>
-                <li id="test"><a href="javascript:void(0)" (click)="findByName('#findByName',$event)" data-toggle="tab">Find by name</a></li>
+                <li id="subject" [class.active]="activeSubject"><a href="javascript:void(0)" (click)="chooseBySubject('#chooseBySubject',$event)" data-toggle="tab">Choose by subject</a></li>
+                <li id="test" [class.active]="activeTest"><a href="javascript:void(0)" (click)="findByName(findtestbyname,$event)" data-toggle="tab">Find by name</a></li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane active" id="chooseBySubject">
+                <div class="tab-pane" id="chooseBySubject" [class.active]="activeChooseBySubject">
                     <select #subjectDropDown id="testSubjectOptions" (change)="loadTests(subjectDropDown.value)" class="selectpicker" data-width="400"
                             data-size="6" title='Choose a test by subject'>
                         <option *ngFor="let subject of subjects; let i = index" [selected]="subject.SubjectId==subjectId" [value]='subject.SubjectId'>{{subject.SubjectName}}</option>
@@ -16,25 +16,29 @@
 
                 </div><!--closes tab pane-->
 
-                <div class="tab-pane" id="findByName">
+                <div class="tab-pane" id="findByName" [class.active]="activeFindByName">
                     <div id="findByNameContainer">
                         <form class="search-bar" role="form">
                             <label class="screen-reader-only" for="findTestByName">Find by Name</label>
                             <p class="smaller text-smaller-margin">Enter a minimum of 2 characters to start searching.</p>
                             <div class="search-input">
-                                <input #findTestByName class="typeahead" autocomplete="off" type="search" role="search" id="findTestByName">
-                                <button class="button" disabled="disabled"  #btnTypeahead id="btnTypeahead" type="submit" (click)="bindTypeaheadSearchButton($event)">
+                                <input class="typeahead" type="search" autofocus autocomplete="off" role="search" #findtestbyname id="findTestByName" (input)="CallOnSearchInput(findtestbyname);" (keyup)="bindTypeaheadFocus(findtestbyname,findtestbyname.value);">
+                                <button class="button" [disabled]="!disabled" #btnTypeahead id="btnTypeahead" type="submit" (click)="bindTypeaheadSearchButton(findtestbyname.value,$event)">
                                     <img src="images/search-icon_2x.png" alt="Search Icon">
                                 </button>
                             </div>
                         </form>
                     </div>
-                    <div id="errorText" class="hidden">
+                    <!--<div id="errorText" class="hidden">
                         <p class="text-larger section-medium-thin  ">We're sorry, there are no test names that match your search. Please try again.</p>
+                    </div>-->
+                    <div *ngIf="noSearch">
+                        <p class="text-larger section-medium-thin">We're sorry, there are no test names that match your search. Please try again.</p>
                     </div>
+
                 </div><!--closes tab pane-->
 
-                <div [class.hidden]="tests?.length===0" class="margin-2em-top available-tests hidden clearfix" id="availableTests">
+                <div [class.hidden]="tests?.length===0" [hidden]="!noTest" class="margin-2em-top available-tests hidden clearfix" id="availableTests">
 
                     <p class="text-larger-teal">Available Tests (choose one)</p>
                     <table id="chooseTestTable" class="table-with-cell-padding table-striped last-row-no-border first-col-wrap">
