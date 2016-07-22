@@ -36,18 +36,25 @@ export class ViewTest implements OnInit, OnDeactivate {
     testStatus: number;
     anyStudentPayStudents: boolean = false;
     testScheduleId: number;
+    modifyInProgress: boolean = false;
+    adminId: number = 0;
     constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams, public titleService: Title) {
 
     }
 
     ngOnInit(): void {
         this.sStorage = this.common.getStorage();
+        this.adminId = this.auth.userid;
         if (!this.auth.isAuth())
             this.router.navigateByUrl('/');
         else {
             let action = this.routeParams.get('action');
-            if (action != undefined && action.trim() !== '')
-                this.modify = true;
+            if (action != undefined && action.trim() !== '') {
+                if (action.trim() === 'modifyinprogress')
+                    this.modifyInProgress = true;
+                else
+                    this.modify = true;
+            }
             this.testScheduleId = parseInt(this.routeParams.get('id'));
             this.loadTestSchedule();
 
@@ -59,7 +66,7 @@ export class ViewTest implements OnInit, OnDeactivate {
 
     routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction): void {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
-        if (outOfTestScheduling)
+        if (outOfTestScheduling && !this.modifyInProgress)
             this.testService.clearTestScheduleObjects();
         if (this.studentsTable)
             this.studentsTable.destroy();
@@ -101,7 +108,7 @@ export class ViewTest implements OnInit, OnDeactivate {
                     }
                     else
                         __this.router.navigate(['/LastTestingSession']);
-                    
+
                     if (__this.schedule) {
                         let startTime = __this.schedule.scheduleStartTime;
                         let endTime = __this.schedule.scheduleEndTime;
@@ -133,7 +140,7 @@ export class ViewTest implements OnInit, OnDeactivate {
                 console.log(error);
             });
 
-       
+
     }
 
 
@@ -172,4 +179,13 @@ export class ViewTest implements OnInit, OnDeactivate {
             __this.router.navigate(['/ManageTests']);
         });
     }
+
+    addRemoveStudent(e, modify: boolean, status: string): void {
+        e.preventDefault(); debugger;
+        if (modify)
+            this.router.navigate(['/ModifyAddStudents', { action: status }]);
+        else
+            this.router.navigate(['/AddStudents']);
+    }
+    
 }

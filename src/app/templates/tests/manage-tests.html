@@ -65,7 +65,7 @@
                                 </td>
                                 <td class="tablesaw-stacked-hidden">
                                 <a href="javascript:void(0)" (click)="view(inProgressTest?.TestingSessionId, $event,true,'modifyinprogress')" class="smaller">View</a>
-                                    <a *ngIf="adminId==inProgressTest?.AdminId && adminId==inProgressTest?.FacultyMemberId" href="javascript:void(0)" (click)="view(inProgressTest?.TestingSessionId, $event,true,'modifyinprogress')"
+                                    <a *ngIf="adminId==inProgressTest?.AdminId && adminId==inProgressTest?.FacultyMemberId" href="javascript:void(0)" (click)="goToAddRemoveStudentPage(inProgressTest?.TestingSessionId, $event)"
                                        class="smaller">Add/Remove Students</a>
                                 </td>
                             </tr>

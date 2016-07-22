@@ -1,10 +1,11 @@
 ﻿import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink, OnDeactivate, ComponentInstruction} from '@angular/router-deprecated';
-import {NgFor} from '@angular/common';
+import {NgFor, NgIf} from '@angular/common';
 import {Common} from '../../services/common';
 import {Auth} from '../../services/auth';
 import {PageHeader} from '../shared/page-header';
 import {TestService} from '../../services/test.service';
+import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import * as _ from 'lodash';
 import {SortPipe} from '../../pipes/sort.pipe';
@@ -12,16 +13,16 @@ import {SortPipe} from '../../pipes/sort.pipe';
 @Component({
     selector: 'confirmation-modify-in-progress',
     templateUrl: 'templates/tests/confirmation-modify-in-progress.html',
-    directives: [RouterLink, PageHeader, NgFor],
-    providers: [Auth, Common, TestService,Router,SelectedStudentModel],
+    providers: [Auth, Common, TestService, TestScheduleModel, SelectedStudentModel],
+    directives: [RouterLink, PageHeader, NgFor, NgIf],
     pipes: [SortPipe]
 })
 export class ConfirmationModifyInProgress implements OnInit, OnDeactivate {
     sStorage: any;
     removedStudents: SelectedStudentModel[]=[];
-    studentsAdded: SelectedStudentModel[]=[];
-
-    constructor(public auth: Auth, public common: Common, public testService: TestService, public router: Router) {
+    studentsAdded: SelectedStudentModel[] = [];
+    testName: string = "";
+    constructor(public auth: Auth, public common: Common, public testService: TestService, public router: Router, public testScheduleModel: TestScheduleModel) {
 
     }
 
@@ -39,9 +40,12 @@ export class ConfirmationModifyInProgress implements OnInit, OnDeactivate {
             this.testService.clearTestScheduleObjects();      
     }
     initialization(): void {
-        let _prevStudentList: SelectedStudentModel[] = this.sStorage.getItem('prevtestschedule').selectedStudents;
-        let _newStudentList: SelectedStudentModel[] = this.sStorage.getItem('testschedule').selectedStudents;
-        this.removedStudents = _.difference(_prevStudentList, _newStudentList);
-        this.studentsAdded = _.difference(_newStudentList, _prevStudentList);
+        let _testScheduleModal = JSON.parse(this.sStorage.getItem('testschedule'));
+        this.testName = _testScheduleModal.testName;
+        let _prevStudentList: SelectedStudentModel[] = JSON.parse(this.sStorage.getItem('prevtestschedule')).selectedStudents;
+        let _newStudentList: SelectedStudentModel[] = _testScheduleModal.selectedStudents;
+        this.removedStudents = _.differenceWith(_prevStudentList, _newStudentList, _.isEqual);
+        this.studentsAdded = _.differenceWith(_newStudentList, _prevStudentList, _.isEqual);
     }
+   
 }

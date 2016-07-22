@@ -1,4 +1,4 @@
-﻿<page-header></page-header>
+﻿<page-header [ariaDisabled]="true" [hideDropdown]="true"></page-header>
 <main role="main" class="app-main">
     <div class="section">
         <div class="container-medium-width center">
@@ -6,8 +6,8 @@
             <h2 class="margin-1em-top-bottom center">Your changes to the test in progress have been made.</h2>
         </div>
         <div class="container-narrow">
-            <p class="text-larger-teal"><b>Test In Progress: Gerontology A</b></p>
-            <div class="thin-section" [ngIf]="studentsAdded.length > 0">
+            <p class="text-larger-teal"><b>Test In Progress: {{testName}}</b></p>
+            <div class="thin-section" *ngIf="studentsAdded.length > 0">
                 <p>
                     The following students have been added:
                 </p>
@@ -21,7 +21,7 @@
                 </table>
             </div>
 
-            <div class="thin-section" [ngIf]="removedStudents.length > 0">
+            <div class="thin-section" *ngIf="removedStudents.length > 0">
                 <p>
                     The following students have been removed:
                 </p>

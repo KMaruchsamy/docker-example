@@ -44,9 +44,10 @@ export const links = {
                 renamesession: "scheduling/testingSessions/§scheduleId/renameSession",
                 refreshTestingStatus: "scheduling/refreshRetestingStatus",
                 searchStudents: "scheduling/institutions/§institutionid/students?searchString=§searchstring&testId=§testid&windowStart=§windowstart&windowEnd=§windowend",
+                modifyInProgressSearchStudents: "scheduling/modifyInProgress/studentsInInstitution?searchString=§searchString&testingSessionId=§testingSessionId",
                 modifyInProgressCohortStudent:"scheduling/modifyInProgress/cohorts/§cohortId/students?testingSessionId=§testingSessionId",
                 refreshStudentsWhoStarted: "scheduling/testingSessions/§testingSessionId/students?filter=§filter",
-                updateModifyInProgressStudents: "scheduling/modifyInProgress/testingSessions/§testSessionId"
+                updateModifyInProgressStudents: "scheduling/modifyInProgress/testingSessions/§testSessionId"                
             },
             logging: {
                 error: 'error/Log'
