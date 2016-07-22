@@ -20,24 +20,17 @@ export class TestHeader implements OnInit {
     @Output('cancelChanges') cancelChangesEvent = new EventEmitter();
     @Output('continueMakingChanges') continueMakingChangesEvent = new EventEmitter();
     modify: boolean = false;
-    modifyInProgress: boolean = false;
     sStorage: any;
-    TestName: string = "";
     constructor(public routeParams: RouteParams, public router: Router, public common: Common) { }
 
     ngOnInit(): void {
         this.sStorage = this.common.getStorage();
         let action = this.routeParams.get('action');
-        if (action != undefined && action.trim() !== '') {
-            if (action.trim() === 'modifyinprogress')
-                this.modifyInProgress = true;
-            else
-                this.modify = true;
-        }
+        if (action != undefined && action.trim() === 'modify')
+            this.modify = true;
         if (this.testSchedule) {
             let startTime = this.testSchedule.scheduleStartTime;
             let endTime = this.testSchedule.scheduleEndTime;
-            this.TestName = this.testSchedule.testName;
             if (moment(endTime).isAfter(startTime, 'day'))
                 this.nextDay = true;
         }

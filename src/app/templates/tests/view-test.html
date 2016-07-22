@@ -1,31 +1,21 @@
 <page-header></page-header>
 <main role="main" class="app-main">
-    <div *ngIf="modifyInProgress">
-        <div class="section section-bottom-thin section-light-pink" >
-            <div class="container-medium-width">
-                <h2 class="page-sm-heading-teal">Manage Tests</h2>
-                <h3 class="page-lg-heading">View Testing Session - In Progress</h3>
-                <a *ngIf="adminId==schedule?.adminId && adminId==schedule?.facultyMemberId" href="javascript:void()" (click)="addRemoveStudent($event,true,'modifyinprogress')" class="right view-testing-session-link button-mobile-block">Add/Remove Students</a>
-            </div>
-        </div>
-    </div>
-    <div class="section" >
-            <div class="container-medium-width">
-                <div class="clearfix" *ngIf="!modifyInProgress" >
-                    <div class="modify-testing-session-left">
-                        <h2 class="page-sm-heading-teal">Manage Tests</h2>
-                        <h3 *ngIf="!modifyInProgress" class="page-lg-heading">View Testing Session</h3>
-                        <a *ngIf="!modifyInProgress" [routerLink]="['/ManageTests']" class="block margin-1em-top-bottom">Go to Manage Tests main page</a>
-                    </div>
-                    <div class="modify-testing-session-right" *ngIf="modify">
-                        <a [routerLink]="['/ModifyChooseTest',{action:'modify',institutionId:schedule.institutionId}]" class="button button-mobile-block">Modify this testing session</a>
-                        <button class="anchor-button margin-1em-top" (click)="showConfirmation($event);">Delete this testing session</button>
-                    </div>
+    <div class="section">
+        <div class="container-medium-width">
+            <div class="clearfix">
+                <div class="modify-testing-session-left">
+                    <h2 class="page-sm-heading-teal">Manage Tests</h2>
+                    <h3 class="page-lg-heading">View Testing Session</h3>
+                    <a [routerLink]="['/ManageTests']" class="block margin-1em-top-bottom">Go to Manage Tests main page</a>
                 </div>
-            <a *ngIf="modifyInProgress" [routerLink]="['/ManageTests']" class="block margin-1em-top-bottom">Go to Manage Tests main page</a>
+                <div class="modify-testing-session-right" *ngIf="modify">
+                    <a [routerLink]="['/ModifyChooseTest',{action:'modify',institutionId:schedule.institutionId}]" class="button button-mobile-block">Modify this testing session</a>
+                    <button class="anchor-button margin-1em-top" (click)="showConfirmation($event);">Delete this testing session</button>
+                </div>
+            </div>
             <button id="printButton" (click)="print($event);" class="anchor-button icon print-icon margin-1em-top">Print this page</button>
 
-            <div class="section-medium-thin" >
+            <div class="section-medium-thin">
                 <table class="review-details-table table-with-cell-padding justified-ends">
                     <tr>
                         <th scope="row">Testing Session</th>

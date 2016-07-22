@@ -34,6 +34,7 @@ import {Reports} from './components/reports/reports';
 import {Rosters} from './components/rosters/rosters';
 import {Groups} from './components/groups/groups';
 import {Logout} from './components/shared/logout';
+import {AddStudentsModifyInProgress} from './components/tests/add-students-modify-progress';
 import {AccountError} from './components/errors/accounterror';
 import {LastTestingSession} from './components/tests/last-testing-session';
 import {Log} from './services/log';
@@ -84,6 +85,7 @@ import {ConfirmationModifyInProgress} from './components/tests/confirmation-modi
     { path: '/*wildcard', component: PageNotFound, name: 'PageNotFound' },
     { path: '/accounterror', component: AccountError, name: 'AccountError' },
     { path: '/testing-session-expired', component: LastTestingSession, name: 'LastTestingSession' },
+    { path: '/tests/add-students-modify-progress', component: AddStudentsModifyInProgress, name: 'AddStudentsModifyInProgress' },
     { path: '/tests/confirmation-modify-in-progress', component: ConfirmationModifyInProgress, name: 'ConfirmationModifyInProgress' }
 ])
 export class App {
