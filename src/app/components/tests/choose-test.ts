@@ -16,12 +16,6 @@ import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';
 import {Utility} from '../../scripts/utility';
 import * as _ from 'lodash';
-// import '../../plugins/dropdown.js';
-// import '../../plugins/bootstrap-select.min.js';
-// import '../../plugins/jquery.dataTables.min.js';
-// import '../../plugins/dataTables.responsive.js';
-// import '../../plugins/typeahead.bundle.js';
-// import '../../lib/modal.js';
 
 @Component({
     selector: 'choose-test',
@@ -48,6 +42,14 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     typeaheadResults: Object[] = [];
     searchResult: Object[];
     previouSearch: string = null;
+    noSearch: boolean = false;
+    noTest: boolean = false;
+    disabled: boolean = false;
+    activeSubject: boolean = true;
+    activeTest: boolean = false;
+    activeChooseBySubject: boolean = true;
+    activeFindByName: boolean = false;
+    setFocus: boolean = true;
     constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public aLocation: Location, public titleService: Title) {
     }
@@ -107,50 +109,33 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('.selectpicker').val('').selectpicker('refresh');
     }
 
+    CallOnSearchInput(searchElement: any): void {
+        setTimeout(() => {
+            let searchText = searchElement.value;
+            this.bindTypeaheadFocus(searchElement,searchText);
+        });
+    }
+
     initialize(): void {
         let self = this;
         this.testsTable = null;
-        $('#errorText').addClass('hidden');
+        this.noSearch = false;
         this.testTypeId = 1;
         this.institutionID = parseInt(this.routeParams.get('institutionId'));
         this.apiServer = this.common.getApiServer();
         $('#findTestByName').typeahead('destroy');
-        $('#test').removeClass('active');
-        $('#subject').addClass('active');
-        $('#findByName').removeClass('active');
-        $('#chooseBySubject').addClass('active');
-        $('#availableTests').removeClass('hidden');
+        this.activeTest = false;
+        this.activeSubject = true;
+        this.activeChooseBySubject = true;
+        this.activeFindByName = false;
+        this.noTest = true;
         this.loadSubjects();
-       
-        $('.typeahead').off('click keyup input');
-        $('.typeahead').unbind('typeahead:select');
-       $(document).off('input change', '#findTestByName');
-
-        $('.typeahead').on('keyup', function (e) {
-            let searchText = $('#findTestByName').val();
-            if (e.keyCode === 13) {
-                self.bindTypeaheadSearchButton(e);
-                $('.typeahead').typeahead('close');
-            }
-            if (e.keyCode !== 38 && e.keyCode !== 40)
-                self.bindTypeaheadFocus(searchText);
-        });
-
-        $(document).on('input change', '#findTestByName', function (e) {
-            e.preventDefault();
-                            let searchText = $('#findTestByName').val();
-                self.bindTypeaheadFocus(searchText);
-               $('#findTestByName').focus();
-                  });
-
         $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
             ev.preventDefault();
             self.bindTestSearchResults(suggetion, true);
             $('.typeahead').typeahead('close');
 
         });
-
-        $('#findTestByName').val('');
     }
 
     loadSchedule(): void {
@@ -234,7 +219,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                         });
                     });
                 }
-                $('#availableTests').removeClass('hidden');
+                this.noTest = true;
             })
             .catch((error) => {
                 console.log(error);
@@ -285,76 +270,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         return this.testService.validateDates(this.testScheduleModel, this.institutionID, this.modify);
     }
 
-    //validateDates(): boolean{
-    // if (this.testScheduleModel) {
 
-    //     if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
-
-    //         let institutionTimezone: string = this.common.getTimezone(this.institutionID);
-    //         let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
-
-    //         let scheduleEndTime = moment(new Date(
-    //             moment(this.testScheduleModel.scheduleEndTime).year(),
-    //             moment(this.testScheduleModel.scheduleEndTime).month(),
-    //             moment(this.testScheduleModel.scheduleEndTime).date(),
-    //             moment(this.testScheduleModel.scheduleEndTime).hour(),
-    //             moment(this.testScheduleModel.scheduleEndTime).minute(),
-    //             moment(this.testScheduleModel.scheduleEndTime).second()
-    //         )).format('YYYY-MM-DD HH:mm:ss');
-    
-
-    //         if (this.modify) {
-    //             if (this.testScheduleModel.savedStartTime) {
-    //                 let savedStartTime = moment(new Date(
-    //                     moment(this.testScheduleModel.savedStartTime).year(),
-    //                     moment(this.testScheduleModel.savedStartTime).month(),
-    //                     moment(this.testScheduleModel.savedStartTime).date(),
-    //                     moment(this.testScheduleModel.savedStartTime).hour(),
-    //                     moment(this.testScheduleModel.savedStartTime).minute(),
-    //                     moment(this.testScheduleModel.savedStartTime).second()
-    //                 )).format('YYYY-MM-DD HH:mm:ss');
-
-    //                 let savedEndTime = moment(new Date(
-    //                     moment(this.testScheduleModel.savedEndTime).year(),
-    //                     moment(this.testScheduleModel.savedEndTime).month(),
-    //                     moment(this.testScheduleModel.savedEndTime).date(),
-    //                     moment(this.testScheduleModel.savedEndTime).hour(),
-    //                     moment(this.testScheduleModel.savedEndTime).minute(),
-    //                     moment(this.testScheduleModel.savedEndTime).second()
-    //                 )).format('YYYY-MM-DD HH:mm:ss');
-
-    //                 if (moment(savedEndTime).isBefore(institutionCurrentTime)) {
-    //                     $('#alertPopup').modal('show');
-    //                     return false;
-    //                 }
-
-    //                 if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
-    //                     if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
-    //                         $('#alertPopup').modal('show');
-    //                         return false;
-    //                     }
-    //                 }
-
-    //             }
-    //             else {
-    //                 if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
-    //                     $('#alertPopup').modal('show');
-    //                     return false;
-    //                 }
-    //             }
-
-    //         }
-    //         else {
-    //             if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
-    //                 $('#alertPopup').modal('show');
-    //                 return false;
-    //             }
-    //         }
-    //     }
-    // }
-
-    // return true;
-    //}    
 
     selectTest(testId: number, testName: string, subjectId: number, normingStatusName): void {
         this.sStorage.setItem('previousTest', this.testScheduleModel.testId);
@@ -385,41 +301,60 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             this.router.navigate(['ScheduleTest']);
     }
 
-    findByName(element: string, event): void {
-        $('#subject').removeClass('active');
-        $('#chooseBySubject').removeClass('active');
-        $('#test').addClass('active');
-        $('#findByName').addClass('active');
+    findByName(element: any, event): void {
+            var ms_ie = false;
+            var ua = window.navigator.userAgent;
+            var old_ie = ua.indexOf('MSIE ');
+            var new_ie = ua.indexOf('Trident/');
+
+            if ((old_ie > -1) || (new_ie > -1)) {
+                ms_ie = true;
+            }
+            if (ms_ie && this.testScheduleModel.testId != 0 ) {
+                    element.focus();
+                    element.value = '';
+            }
+            else {
+                setTimeout(() => {
+                    element.focus();
+                    element.value = '';
+                });
+            }
+        this.activeSubject = false;
+        this.activeChooseBySubject = false;
+        this.activeFindByName = true;
+        this.activeTest = true;
         $('#findTestByName').typeahead('destroy');
-        $('#findTestByName').val('');
-        $('#errorText').addClass('hidden');
-        $('#btnTypeahead').attr('disabled', 'disabled');
+        this.noSearch = false;
+        this.disabled = false;
         this.searchResult = [];
         this.previouSearch = null;
         if (this.testScheduleModel.testId != 0 && this.testScheduleModel.subjectId == 0) {
             this.loadTestsBySearch(this.testScheduleModel.testName);
-            $('#availableTests').removeClass('hidden');
+            this.noTest = true;
         }
         else {
-            $('#findTestByName').focus();
             $('.selectpicker').val('').selectpicker('refresh');
-            $('#availableTests').addClass('hidden');
+            this.noTest = false;
         }
+      
     }
 
-    chooseBySubject(element: string, event): void {
-        $('#test').removeClass('active');
-        $('#findByName').removeClass('active');
-        $('#subject').addClass('active');
-        $('#chooseBySubject').addClass('active');
-        $('#errorText').addClass('hidden');
+    
+
+    chooseBySubject(element: any, event): void {
+        this.activeTest = false;
+        this.activeSubject = true;
+        this.noSearch = false;
+        this.activeChooseBySubject = true;
+        this.activeFindByName = false;
         if (this.testScheduleModel.testId != 0 && this.testScheduleModel.subjectId != 0) {
             $('.selectpicker').val(this.testScheduleModel.subjectId).selectpicker('refresh');
             this.loadTests(this.testScheduleModel.subjectId);
         }
         else {
             $('.selectpicker').val('').selectpicker('refresh');
-            $('#availableTests').addClass('hidden');
+            this.noTest = false;
         }
     }
 
@@ -441,13 +376,12 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                     this.displayTest(this.testScheduleModel.testId);
                 }
                 if (json.length > 0) {
-                    setTimeout(() => { $('.typeahead').focus(); });
                     self.showTypeahead();
-                    setTimeout(() => { $('#findTestByName').focus(); });
+                        setTimeout(() => { $('#findTestByName').focus(); });
                     $('#findTestByName').typeahead('open');
                 }
                 else {
-                    setTimeout(() => { $('#findTestByName').focus(); });
+                        $('#findTestByName').focus();
                 }
             });
     }
@@ -469,15 +403,16 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                     var states = [];
                     var data = testNamesList
                     if (search.length >= 2) {
-                        $.each(data, function (i, state) {
-                            if (_.startsWith(state.toLowerCase(), search.toLowerCase())) {
+                        _.forEach(data, function (state, i) {
+                            let name: any = state;
+                            if (_.startsWith(name.toLowerCase(), search.toLowerCase())) {
                                 states.push(state);
                             }
                         });
                         process(states);
                     }
                 }
-                });
+            });
     }
 
     bindTestSearchResults(search: string, setValue: boolean): void {
@@ -492,7 +427,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                 let _listOfTests = [];
                 let testNameList = _.map(self.searchResult, 'TestName');
                 for (let i = 0; i < testNameList.length; i++) {
-                    let testName = testNameList[i];
+                    let testName: any = testNameList[i];
                     if (_.startsWith(testName.toLowerCase(), search.toLowerCase())) {
                         _listOfTests = _.filter(self.searchResult, { TestName: testName });
                         for (let j = 0; j < _listOfTests.length; j++) {
@@ -506,24 +441,24 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                 if (this.searchResult.length != 0)
                     self.tests = this.searchResult;
                 else {
-                    $('#errorText').removeClass('hidden');
-                   $('#availableTests').addClass('hidden');
+                    this.noSearch = true;
+                    this.noTest = false;
                 }
             }
         }
         if (self.tests.length != 0) {
-            $('#errorText').addClass('hidden');
-            $('#availableTests').removeClass('hidden');
+            this.noSearch = false;
+            this.noTest = true;
         }
         else {
-            $('#errorText').removeClass('hidden');
+            this.noSearch = true;
         }
     }
 
-    bindTypeaheadFocus(searchText: string): void {
-        if (!searchText.startsWith(' ')) {
+    bindTypeaheadFocus(element: any, searchText: string ): void {
+        if (!_.startsWith(searchText, '  ')) {
             if (searchText.length > 1) {
-                $('#btnTypeahead').removeAttr('disabled', 'disabled');
+                this.disabled = true;
                 if (searchText.length > 2) {
                     searchText = searchText.trim().substr(0, 2).toUpperCase();
                 }
@@ -531,7 +466,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                     $('.typeahead').typeahead('destroy');
                     this.loadTestsBySearch(searchText);
                     this.previouSearch = searchText.trim().toUpperCase();
-                    $('#findTestByName').focus();
+                    element.focus();
                 }
                 else {
                     if (searchText.length < 2) {
@@ -541,21 +476,21 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             }
             else {
                 $('.typeahead').typeahead('close');
-                $('#btnTypeahead').attr('disabled', 'disabled');
+                this.disabled = false;
             }
         }
         else {
-            $('#findTestByName').val("");
-            $('#findTestByName').focus();
+            element.value = '';
+            element.focus();
             $('.typeahead').typeahead('close');
         }
     }
 
-    bindTypeaheadSearchButton(e): void {
+    bindTypeaheadSearchButton(search:string,e): void {
         e.preventDefault();
-        let search = $('#findTestByName').val();
         if (search.length >= 2) {
             this.bindTestSearchResults(search, false);
+            $('.typeahead').typeahead('close');
         } else {
             $('.typeahead').typeahead('close');
         }
