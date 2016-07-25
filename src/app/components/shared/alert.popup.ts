@@ -1,12 +1,12 @@
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {Common} from '../../services/common';
 
 @Component({
     selector: 'alert-popup',
     providers: [Common],
     templateUrl: 'templates/shared/alert.popup.html',
-    directives: [RouterLink]
+    directives: [ROUTER_DIRECTIVES]
 })
 
 export class AlertPopup implements OnInit {

@@ -15,11 +15,11 @@
                     <b>Information on tests scheduled through our 
             old process will not appear here.</b>
                 </p>
-                <p>You can view upcoming tests that have been scheduled through our old process by accessing the ​<b>Tests Scheduled by Date</b>                    report from the <a [routerLink]="['/Reports']">View Reports</a> page.
+                <p>You can view upcoming tests that have been scheduled through our old process by accessing the ​<b>Tests Scheduled by Date</b>                    report from the <a [routerLink]="['/reports']">View Reports</a> page.
                 </p>
                 <p class="no-margin-bottom">
                     If you have any questions, please contact your Account Manager. You can find your Account Manager’s contact details on the
-                    <a [routerLink]="['/Home']">Home page</a>.
+                    <a [routerLink]="['/home']">Home page</a>.
                 </p>
             </div>
         </div>
@@ -29,7 +29,7 @@
                 <div class="container-medium-width">
                     <h4 class="section-heading-purple normal">Tests In Progress</h4>
                     <table *ngIf="!inProgressTests?.length==0" class="table-fixed tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none"
-                    data-tablesaw-mode="stack">
+                        data-tablesaw-mode="stack">
                         <thead class="smaller">
                             <tr>
                                 <th class="date-time-col" scope="col">Date and Time</th>
@@ -43,20 +43,18 @@
                             <tr class="tablesaw-stacked-hidden-border" *ngFor="let inProgressTest of inProgressTests">
                                 <td>
                                     <template [ngIf]="!inProgressTest?.nextDay">
-                                        {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} 
-                                         <br>{{inProgressTest?.TestingWindowStart|parseDate:'h:mma'}}
-                                        &ndash; {{inProgressTest?.TestingWindowEnd|parseDate:'h:mma'}}
+                                        {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}}
+                                        <br>{{inProgressTest?.TestingWindowStart|parseDate:'h:mma'}} &ndash; {{inProgressTest?.TestingWindowEnd|parseDate:'h:mma'}}
                                     </template>
                                     <template [ngIf]="inProgressTest?.nextDay">
-                                        {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}} 
-                                         <br>{{inProgressTest?.TestingWindowStart|parseDate:'h:mma'}}
-                                        &ndash; {{inProgressTest?.TestingWindowEnd|parseDate:'h:mma'}} {{inProgressTest?.TestingWindowEnd|parseDate:'ddd'}}
-                                        {{inProgressTest?.TestingWindowEnd|parseDate:'MM/DD/YY'}}
+                                        {{inProgressTest?.TestingWindowStart|parseDate:'ddd'}} {{inProgressTest?.TestingWindowStart|parseDate:'MM/DD/YY'}}
+                                        <br>{{inProgressTest?.TestingWindowStart|parseDate:'h:mma'}} &ndash; {{inProgressTest?.TestingWindowEnd|parseDate:'h:mma'}}
+                                        {{inProgressTest?.TestingWindowEnd|parseDate:'ddd'}} {{inProgressTest?.TestingWindowEnd|parseDate:'MM/DD/YY'}}
                                     </template>
                                 </td>
                                 <td class="tablesaw-stacked-hidden">
                                     <button [attr.type]="'inprogress'" [attr.sessionId]="inProgressTest?.TestingSessionId" [disabled]="adminId!=inProgressTest?.AdminId && adminId!=inProgressTest?.FacultyMemberId"
-                                    class="js-rename-session unstyled-button">{{inProgressTest?.SessionName}}<img *ngIf="adminId==inProgressTest?.AdminId || adminId==inProgressTest?.FacultyMemberId"
+                                        class="js-rename-session unstyled-button">{{inProgressTest?.SessionName}}<img *ngIf="adminId==inProgressTest?.AdminId || adminId==inProgressTest?.FacultyMemberId"
                                         src="/images/edit-pencil-icon_2x.png" alt="edit">
                                     </button>
                                 </td>
@@ -64,7 +62,11 @@
                                 <td class="tablesaw-stacked-hidden">{{inProgressTest?.AdminFirstName}} {{inProgressTest?.AdminLastName}}
                                 </td>
                                 <td class="tablesaw-stacked-hidden">
-                                <a href="javascript:void(0)" (click)="view(inProgressTest?.TestingSessionId, $event,true)" class="smaller">View</a>
+                                    <a href="javascript:void(0)" (click)="view(inProgressTest?.TestingSessionId, $event)" class="smaller block text-extra-mobile-spacing">View</a>
+                                    <a href="javascript:void(0)" *ngIf="adminId==inProgressTest?.AdminId || adminId==inProgressTest?.FacultyMemberId" (click)="redirectModifyInProgress('ModifyAddStudents',inProgressTest?.TestingSessionId,$event)"
+                                        class="smaller block text-extra-mobile-spacing">Add/Remove Students</a>
+                                    <a href="javascript:void(0)" *ngIf="adminId==inProgressTest?.AdminId || adminId==inProgressTest?.FacultyMemberId" (click)="redirectModifyInProgress('ModifyScheduleTest',inProgressTest?.TestingSessionId,$event)"
+                                        class="smaller block text-extra-mobile-spacing">Change Testing Window</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -78,29 +80,29 @@
             <div class="container-medium-width">
                 <h4 class="section-heading-teal normal">Scheduled Tests</h4>
                 <table *ngIf="!scheduleTests?.length==0" class="table-fixed tablesaw tablesaw-stack tablesaw-sortable" data-tablesaw-mode="stack"
-                id="tblScheduledTests">
+                    id="tblScheduledTests">
                     <thead class="smaller">
                         <tr>
                             <th (click)="sort('#tblScheduledTests','#schDateTH')" order="1" id="schDateTH" class="date-time-col tablesaw-sortable-head tablesaw-sortable-ascending"
-                            scope="col">
+                                scope="col">
                                 <button class="tablesaw-sortable-btn">
                                     Date and Time
                                 </button>
                             </th>
                             <th (click)="sort('#tblScheduledTests','#schSessionTH')" order="1" id="schSessionTH" class="testing-session-col tablesaw-sortable-head tablesaw-sortable-ascending"
-                            scope="col">
+                                scope="col">
                                 <button class="tablesaw-sortable-btn">
                                     Testing Session
                                 </button>
                             </th>
                             <th (click)="sort('#tblScheduledTests','#schFacultyTH')" class="tablesaw-sortable-head tablesaw-sortable-ascending" order="1"
-                            id="schFacultyTH" scope="col">
+                                id="schFacultyTH" scope="col">
                                 <button class="tablesaw-sortable-btn">
                                     Faculty Name
                                 </button>
                             </th>
                             <th (click)="sort('#tblScheduledTests','#schAdminTH')" class="tablesaw-sortable-head tablesaw-sortable-ascending" order="1"
-                            id="schAdminTH" scope="col">
+                                id="schAdminTH" scope="col">
                                 <button class="tablesaw-sortable-btn">
                                     Scheduled by
                                 </button>
@@ -123,7 +125,7 @@
                             </td>
                             <td class="tablesaw-stacked-hidden">
                                 <button [attr.type]="'scheduled'" [attr.sessionId]="scheduleTest?.TestingSessionId" [disabled]="adminId!=scheduleTest?.AdminId && adminId!=scheduleTest?.FacultyMemberId"
-                                class="js-rename-session unstyled-button">{{scheduleTest.SessionName}}<img *ngIf="adminId==scheduleTest?.AdminId || adminId==scheduleTest?.FacultyMemberId"
+                                    class="js-rename-session unstyled-button">{{scheduleTest.SessionName}}<img *ngIf="adminId==scheduleTest?.AdminId || adminId==scheduleTest?.FacultyMemberId"
                                     src="/images/edit-pencil-icon_2x.png" alt="edit">
                                 </button>
                             </td>
@@ -131,9 +133,9 @@
                             <td class="tablesaw-stacked-hidden">{{scheduleTest.AdminFirstName}} {{scheduleTest.AdminLastName}}</td>
                             <td class="tablesaw-stacked-hidden">
                                 <a *ngIf="adminId!=scheduleTest?.AdminId && adminId!=scheduleTest?.FacultyMemberId" href="javascript:void(0)" (click)="view(scheduleTest?.TestingSessionId, $event,false)"
-                                class="smaller">View</a>
-                                <a *ngIf="adminId==scheduleTest?.AdminId || adminId==scheduleTest?.FacultyMemberId" href="javascript:void(0)" (click)="view(scheduleTest?.TestingSessionId, $event,true,'modify')"
-                                class="smaller">View/Modify</a>
+                                    class="smaller">View</a>
+                                <a *ngIf="adminId==scheduleTest?.AdminId || adminId==scheduleTest?.FacultyMemberId" href="javascript:void(0)" (click)="view(scheduleTest?.TestingSessionId, $event,true)"
+                                    class="smaller">View/Modify</a>
                                 <button *ngIf="adminId==scheduleTest?.AdminId || adminId==scheduleTest?.FacultyMemberId" class="anchor-button smaller" (click)="showConfirmation(scheduleTest?.TestingSessionId)">Delete</button>
                             </td>
                         </tr>
@@ -148,17 +150,17 @@
             <div class="container-medium-width">
                 <h4 class="section-heading-teal normal">Completed Tests</h4>
                 <table *ngIf="!completedTests?.length==0" class="table-fixed tablesaw tablesaw-stack tablesaw-sortable" data-tablesaw-mode="stack"
-                id="tblCompletedTests">
+                    id="tblCompletedTests">
                     <thead class="smaller">
                         <tr>
                             <th (click)="sort('#tblCompletedTests','#cmpDateTH')" order="1" id="cmpDateTH" class="date-time-col tablesaw-sortable-head tablesaw-sortable-ascending"
-                            scope="col">
+                                scope="col">
                                 <button class="tablesaw-sortable-btn">
                                     Date and Time
                                 </button>
                             </th>
                             <th (click)="sort('#tblCompletedTests','#cmpSessionTH')" order="1" id="cmpSessionTH" class="testing-session-col tablesaw-sortable-head tablesaw-sortable-ascending"
-                            scope="col">
+                                scope="col">
                                 <button class="tablesaw-sortable-btn">
                                     Testing Session
                                 </button>
@@ -207,6 +209,6 @@
 <page-footer></page-footer>
 
 <confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to delete this testing session? This cannot be undone.'"
-[okButtonText]="'Yes, delete'" [cancelButtonText]="'Cancel'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation()"
-[hideClose]="false">
+    [okButtonText]="'Yes, delete'" [cancelButtonText]="'Cancel'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation()"
+    [hideClose]="false">
 </confirmation-popup>

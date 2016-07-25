@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {RouterLink} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {PageHeader} from '../shared/page-header';
 @Component({
     selector: 'unhandled-exception',
-    directives: [RouterLink, PageHeader],
+    directives: [ROUTER_DIRECTIVES, PageHeader],
     template: `<page-header [hideDropdown]=true></page-header>
     <main role="main" class="app-main">
       <div class="section">
@@ -17,8 +17,8 @@ import {PageHeader} from '../shared/page-header';
           </p>
           <h2 class="margin-2em-top">What can you do?</h2>
           <p class="text-larger">Try reloading the page in a few minutes.</p>
-          <p class="text-larger">Already signed in? Go to the <a [routerLink]="['/Home']">home page</a>.</p>
-          <p class="text-larger">Need to sign in? Go to the <a [routerLink]="['/Login']">sign in page</a>.</p>
+          <p class="text-larger">Already signed in? Go to the <a [routerLink]="['/home']">home page</a>.</p>
+          <p class="text-larger">Need to sign in? Go to the <a [routerLink]="['/']">sign in page</a>.</p>
        </div>
     </div>
     </main>`

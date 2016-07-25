@@ -147,7 +147,7 @@ export class Common {
         let sStorage = this.getStorage();
         let institutions = sStorage.getItem('institutions');
         if (institutions) {
-            let selectedInstitution = _.find(JSON.parse(institutions), { 'InstitutionId': institutionId });
+            let selectedInstitution = _.find(JSON.parse(institutions), { 'InstitutionId': +institutionId });
             if (selectedInstitution) {
                 return selectedInstitution.TimeZoneName;
             }

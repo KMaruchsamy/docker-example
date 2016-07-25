@@ -1,17 +1,18 @@
-import {Component, Injector, Inject, OnInit} from '@angular/core';
+import {Component, Injector, Inject, OnInit, OnDestroy} from '@angular/core';
 import {NgIf, Location} from '@angular/common';
-import {Router, RouterLink, CanActivate} from '@angular/router-deprecated';
+import {Router, RouterLink, ROUTER_DIRECTIVES, RouterLinkActive} from '@angular/router';
+import {Response} from '@angular/http';
 import {Title} from '@angular/platform-browser';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
-import {DashboardHeader} from './dashboard-header';
-import {DashboardPod1} from './dashboard-pod1';
-import {DashboardPod2} from './dashboard-pod2';
-import {DashboardPod3} from './dashboard-pod3';
-import {DashboardPod4} from './dashboard-pod4';
+// import {DashboardHeader} from './dashboard-header';
+// import {DashboardPod1} from './dashboard-pod1';
+// import {DashboardPod2} from './dashboard-pod2';
+// import {DashboardPod3} from './dashboard-pod3';
+// import {DashboardPod4} from './dashboard-pod4';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
-import * as _ from 'lodash';    
+import * as _ from 'lodash';
 import {ProfileModel} from '../../models/profile-model';
 import {Profile} from './profile';
 import {HomeService} from '../../services/home-service';
@@ -19,21 +20,15 @@ import {links} from '../../constants/config';
 import {Angulartics2On} from 'angulartics2';
 import {TestService} from '../../services/test.service';
 import {TestScheduleModel} from '../../models/testSchedule.model';
+import {Observable, Subscription} from 'rxjs/Rx';
 
 @Component({
     selector: 'home',
     providers: [Auth, Common, HomeService, TestService, TestScheduleModel],
     templateUrl: 'templates/home/home.html',
-    directives: [PageHeader, PageFooter, NgIf, DashboardHeader, DashboardPod1, DashboardPod2, DashboardPod3, DashboardPod4, Profile, RouterLink, Angulartics2On]
+    directives: [PageHeader, PageFooter, NgIf, Profile, ROUTER_DIRECTIVES, Angulartics2On, RouterLinkActive]
 })
-@CanActivate((next, prev) => {
-    // let authInjector = Injector.resolveAndCreate([Auth]);
-    // let auth = authInjector.get(Auth);
-    // return auth.isAuth();
-    
-    return true;
-})
-export class Home implements OnInit {
+export class Home implements OnInit, OnDestroy {
     // profiles: Array<ProfileModel>;
     programId: number;
     institutionRN: number;
@@ -51,8 +46,17 @@ export class Home implements OnInit {
     nurseConsultantProfile: ProfileModel;
     testTypeId: number;
     institutionID: number;
-    constructor(public router: Router, public auth: Auth, public location: Location, public common: Common, public homeService: HomeService, public testService: TestService, public testScheduleModel:TestScheduleModel, public titleService: Title) {
-       
+    profilesSubscription: Subscription;
+    subjectsSubscription: Subscription;
+    constructor(public router: Router, public auth: Auth, public location: Location, public common: Common, public homeService: HomeService, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
+
+    }
+
+    ngOnDestroy() {
+        if (this.profilesSubscription)
+            this.profilesSubscription.unsubscribe();
+        if (this.subjectsSubscription)
+            this.subjectsSubscription.unsubscribe();
     }
 
     ngOnInit(): void {
@@ -62,8 +66,8 @@ export class Home implements OnInit {
         this.initialize();
         // this.profiles = [];
         let self = this;
-        this.accountManagerProfile = {};
-        this.nurseConsultantProfile = {};
+        this.accountManagerProfile = new ProfileModel(null, null, 'ACCOUNTMANAGER', null, null, null, null, null, null, null, null, null, null, null);
+        this.nurseConsultantProfile = new ProfileModel(null, null, 'NURSECONSULTANT', null, null, null, null, null, null, null, null, null, null, null);
         this.loadProfiles(self);
         this.checkInstitutions();
         $(document).scrollTop(0);
@@ -74,16 +78,27 @@ export class Home implements OnInit {
         let institutionID = this.getLatestInstitution();
         if (institutionID > 0) {
             let url = this.apiServer + links.api.baseurl + links.api.admin.profilesapi + '?institutionId=' + institutionID;
-            let profilePromise = this.homeService.getProfiles(url);
-            profilePromise.then((response) => {
-                return response.json();
-            })
-                .then((json) => {
+            let profilesObservable: Observable<Response> = this.homeService.getProfiles(url);
+            this.profilesSubscription = profilesObservable
+                .map(response => response.json())
+                .subscribe(json => {
+                    console.log(json);
                     self.bindToModel(self, json);
-                })
-                .catch((error) => {
-                    alert(error);
-                });
+                },
+                error => console.log(error.message),
+                () => console.log('complete')
+                );
+
+            // let profilePromise = this.homeService.getProfiles(url);
+            // profilePromise.then((response) => {
+            //     return response.json();
+            // })
+            //     .then((json) => {
+            //         self.bindToModel(self, json);
+            //     })
+            //     .catch((error) => {
+            //         alert(error);
+            //     });
         }
         else {
             this.accountManagerProfile = new ProfileModel(null, null, 'ACCOUNTMANAGER', null, null, null, null, null, null, null, null, null, null, null);
@@ -93,7 +108,7 @@ export class Home implements OnInit {
 
     bindToModel(self, json): void {
         if (json) {
-            _.forEach(json, function(profile, key) {
+            _.forEach(json, function (profile, key) {
                 if (profile && profile.KaplanAdminTypeName !== undefined) {
                     if (profile.KaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER') {
                         self.accountManagerProfile = self.homeService.bindToModel(profile);
@@ -113,10 +128,10 @@ export class Home implements OnInit {
     redirectToPage(): void {
         if (this.location.path().search("first") > 0) {
             if (this.auth.istemppassword && this.auth.isAuth())
-                this.router.parent.navigateByUrl('/');
+                this.router.navigate(['/']);
         }
         else if (!this.auth.isAuth())
-            this.router.parent.navigateByUrl('/');
+            this.router.navigate(['/']);
     }
 
     initialize(): void {
@@ -131,17 +146,17 @@ export class Home implements OnInit {
         this.hdpage = null;
         this.testTypeId = 1;
         this.institutionID = 0;
-          }
+    }
 
     redirectToLogin(event): void {
         event.preventDefault();
-        this.router.parent.navigateByUrl('/');
+        this.router.navigate(['/']);
     }
 
     redirectToRoute(route: string): boolean {
         this.checkInstitutions();
         if (this.institutionRN > 0 && this.institutionPN > 0) {
-            this.router.parent.navigateByUrl(`/choose-institution/Home/${route}/${this.institutionRN}/${this.institutionPN}`);
+            this.router.navigateByUrl(`/choose-institution/home/${route}/${this.institutionRN}/${this.institutionPN}`);
         }
         else {
             if (this.programId > 0) {
@@ -152,21 +167,24 @@ export class Home implements OnInit {
                 else {
                     this.institutionID = this.institutionRN;
                 }
-                
+
                 let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
-                let subjectsPromise = this.testService.getSubjects(subjectsURL);
-                subjectsPromise.then((response) => {
-                    if (response.status !== 400) {
-                        return response.json();
-                    }
-                    return [];
-                })
-                    .then((json) => {
+
+
+                let subjectsObservable: Observable<Response> = this.testService.getSubjects(subjectsURL);
+                this.subjectsSubscription = subjectsObservable
+                    .map(response => {
+                        if (response.status !== 400) {
+                            return response.json();
+                        }
+                        return [];
+                    })
+                    .subscribe(json => {
                         if (json.length === 0) {
                             window.open('/accounterror');
                         }
                         else {
-                            this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
+                            this.router.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
                         }
                     });
             }
@@ -174,7 +192,7 @@ export class Home implements OnInit {
                 window.open('/accounterror');
             }
         }
-       return false;
+        return false;
     }
 
     resolveSubjectsURL(url: string): string {
@@ -192,11 +210,11 @@ export class Home implements OnInit {
 
         if (this.institutionRN > 0 && this.institutionPN > 0) {
             // open the interstitial page here ...
-            // this.router.parent.navigate(['/ChooseInstitution', { page: this.page, idRN: this.institutionRN, idPN: this.institutionPN }]);
+            // this.router.navigate(['/ChooseInstitution', { page: this.page, idRN: this.institutionRN, idPN: this.institutionPN }]);
             if (this.page.toUpperCase() === 'CASESTUDIES')
                 this.redirectToStudentSite();
             else
-                this.router.parent.navigateByUrl(`/choose-institution/Home/${this.page}/${this.institutionRN}/${this.institutionPN}`);
+                this.router.navigateByUrl(`/choose-institution/home/${this.page}/${this.institutionRN}/${this.institutionPN}`);
         }
         else {
             this.redirectToStudentSite();
@@ -204,7 +222,7 @@ export class Home implements OnInit {
         return false
     }
 
-    resolveExceptionPage(url): string { 
+    resolveExceptionPage(url): string {
         let resolvedURL = url.replace('§environment', this.common.getOrigin());
         return resolvedURL;
     }
@@ -252,7 +270,7 @@ export class Home implements OnInit {
         this.redirectToReports();
         return false;
     }
-    
+
 
     redirectToReports(): void {
         var serverURL = this.nursingITServer + links.nursingit.ReportingLandingPage;

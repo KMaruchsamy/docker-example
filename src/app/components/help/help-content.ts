@@ -1,12 +1,12 @@
 ﻿import {Component} from '@angular/core';
-import {Router,RouterLink} from '@angular/router-deprecated';
+import {Router,ROUTER_DIRECTIVES} from '@angular/router';
 import {Utility} from '../../scripts/utility';
 
 @Component({
     selector:'help-content',
     providers:[Utility],
     templateUrl:'templates/help/help-content.html',
-    directives:[RouterLink]
+    directives:[ROUTER_DIRECTIVES]
 })
 export class HelpContent{
 }

@@ -1,6 +1,6 @@
 ﻿<page-header></page-header>
 <main role="main" class="app-main">
-    <test-header (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Add students' [testSchedule]="testScheduleModel"></test-header>
+    <test-header [modify]="modify" (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Add students' [testSchedule]="testScheduleModel"></test-header>
     <div class="thin-section">
         <div class="container add-students-outer-container section-small-screen-no-padding">
 
@@ -27,7 +27,7 @@
                                 </div>
 
                                 <div *ngIf="noCohort">
-                                    <p class="text-larger section-medium-thin container-narrow ">We're sorry, there are no active cohorts in your institution. Please contact your Account Manager for further assistance. You can find your Account Manager's contact info on the <a [routerLink]="['/Home']">Home page</a>.</p>
+                                    <p class="text-larger section-medium-thin container-narrow ">We're sorry, there are no active cohorts in your institution. Please contact your Account Manager for further assistance. You can find your Account Manager's contact info on the <a [routerLink]="['/home']">Home page</a>.</p>
                                 </div>
                             </div>
                             <!-- closes cohort container-->

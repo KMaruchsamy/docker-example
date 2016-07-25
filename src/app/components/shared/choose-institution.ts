@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {Router, RouterLink, RouteParams} from '@angular/router-deprecated';
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Router, ROUTER_DIRECTIVES, ActivatedRoute} from '@angular/router';
 import {NgIf, Location} from '@angular/common';
 import {Title} from '@angular/platform-browser';
 import {PageHeader} from './page-header';
@@ -9,21 +9,22 @@ import * as _ from 'lodash';
 import {links} from '../../constants/config';
 import {TestService} from '../../services/test.service';
 import {TestScheduleModel} from '../../models/testSchedule.model';
-
+import {Subscription, Observable} from 'rxjs/Rx';
+import {Response} from '@angular/http';
 
 @Component({
     selector: 'choose-institution',
     providers: [Common, Auth, TestService, TestScheduleModel],
     templateUrl: 'templates/shared/choose-institution.html',
-    directives: [PageHeader, RouterLink, NgIf]
+    directives: [PageHeader, ROUTER_DIRECTIVES, NgIf]
 })
 
-export class ChooseInstitution implements OnInit {
+export class ChooseInstitution implements OnInit, OnDestroy {
     fromPage: string;
     page: string;
     apiServer: string;
     testTypeId: number = 1;
-    institutionID : string = null;
+    institutionID: string = null;
     institutionRN: string;
     institutionPN: string;
     programRN: number = 0;
@@ -31,19 +32,33 @@ export class ChooseInstitution implements OnInit {
     backMessage: string;
     nursingITServer: string;
     isTest: boolean = false;
-    constructor(public router: Router, public routeParams: RouteParams, public common: Common, public auth: Auth, public aLocation: Location, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
-        this.nursingITServer = this.common.getNursingITServer();
-        this.fromPage = this.routeParams.get('frompage');
-        this.page = this.routeParams.get('redirectpage');
-        if (this.page === 'choose-test')
-            this.isTest = true;
-        this.institutionRN = this.routeParams.get('idRN');
-        this.institutionPN = this.routeParams.get('idPN');
-        this.setBackMessage();
+    routeParamsSubscription: Subscription;
+    subjectsSubscription: Subscription;
+    constructor(public router: Router, private activatedRoute: ActivatedRoute, public common: Common, public auth: Auth, public aLocation: Location, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
+
     }
+
+
+    ngOnDestroy(): void {
+        if (this.routeParamsSubscription)
+            this.routeParamsSubscription.unsubscribe();
+        if (this.subjectsSubscription)
+            this.subjectsSubscription.unsubscribe();
+    }
+
     ngOnInit(): void {
-        this.titleService.setTitle('Choose a Program – Kaplan Nursing');
-        this.checkInstitutions();
+        this.nursingITServer = this.common.getNursingITServer();
+        this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+            this.fromPage = params['frompage'];
+            this.page = params['redirectpage'];
+            if (this.page === 'choose-test')
+                this.isTest = true;
+            this.institutionRN = params['idRN'];
+            this.institutionPN = params['idPN'];
+            this.setBackMessage();
+            this.titleService.setTitle('Choose a Program – Kaplan Nursing');
+            this.checkInstitutions();
+        });
     }
 
     setBackMessage() {
@@ -66,29 +81,31 @@ export class ChooseInstitution implements OnInit {
     redirectToRoute(program: string): boolean {
         let institutionId = (program === 'RN' ? this.institutionRN : this.institutionPN);
         this.institutionID = institutionId;
-           let ProgramId = (program === 'RN' ? this.programRN : this.programPN);
-         if (ProgramId > 0) {
-             this.apiServer = this.common.getApiServer();
-             let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
-             let subjectsPromise = this.testService.getSubjects(subjectsURL);
-             subjectsPromise.then((response) => {
-                 if (response.status !== 400) {
-                     return response.json();
-                 }
-                 return [];
-             })
-                 .then((json) => {
-                     if (json.length === 0) {
-                         window.open('/accounterror');
-                     }
-                     else {
-                         this.router.parent.navigateByUrl(`/tests/${this.page}/${institutionId}`);
-                     }
-                 });
-         }
+        let ProgramId = (program === 'RN' ? this.programRN : this.programPN);
+        if (ProgramId > 0) {
+            this.apiServer = this.common.getApiServer();
+            let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
+            let subjectsObservable: Observable<Response> = this.testService.getSubjects(subjectsURL);
+            this.subjectsSubscription = subjectsObservable
+                .map(response => {
+                    if (response.status !== 400) {
+                        return response.json();
+                    }
+                    return [];
+                })
+                .subscribe(json => {
+                    if (json.length === 0) {
+                        window.open('/accounterror');
+                    }
+                    else {
+                        this.router.navigateByUrl(`/tests/${this.page}/${institutionId}`);
+                    }
+                })
+
+        }
         else {
-             window.open('/accounterror');
-         }
+            window.open('/accounterror');
+        }
         return false;
     }
 
@@ -114,7 +131,7 @@ export class ChooseInstitution implements OnInit {
         }
     }
 
-    triggerRedirect(programType, myform, hdInstitution, hdToken, hdPage, hdExceptionURL,event) {
+    triggerRedirect(programType, myform, hdInstitution, hdToken, hdPage, hdExceptionURL, event) {
         var serverURL = this.nursingITServer + links.nursingit.landingpage;
         hdInstitution.value = programType === 'RN' ? this.institutionRN : this.institutionPN
         hdToken.value = this.auth.token
@@ -133,16 +150,16 @@ export class ChooseInstitution implements OnInit {
         switch (this.fromPage.toUpperCase()) {
             case "LOGIN":
                 this.auth.logout();
-                this.router.parent.navigateByUrl('/');
+                this.router.navigate(['/'])
                 break;
             case "HOME":
-                this.router.parent.navigateByUrl('/home');
+                this.router.navigate(['/home']);
                 break;
             case "TEST":
-                this.router.parent.navigateByUrl('/tests');
+                this.router.navigate(['/tests']);
                 break;
             default:
-                this.router.parent.navigateByUrl('/home');
+                this.router.navigate(['/home']);
                 break;
         }
     }

@@ -1,6 +1,6 @@
 <page-header></page-header>
 <main role="main" class="app-main">
-    <test-header (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Choose a test' [testSchedule]="testScheduleModel"></test-header>
+    <test-header [modify]="modify" (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Choose a test' [testSchedule]="testScheduleModel"></test-header>
     <div class="thin-section">
         <div class="container-medium-width">
             <ul class="nav nav-tabs minimal-nav-tabs">
@@ -59,7 +59,7 @@
                                 <td class="center">{{test.NumberOfQuestionsInTest}}</td>
                                 <td>{{test.NormingStatusName}}</td>
                                 <td class="center">
-                                    <a [attr.href]='test.TopicalBlueprintLink' target="_blank"><img src="images/pdf-green-icon_2x.png" width="20" height="24" alt="open {{test.TestName}} Blueprint PDF"></a>
+                                    <a [attr.href]="sanitizeURL(test.TopicalBlueprintLink)" target="_blank"><img src="images/pdf-green-icon_2x.png" width="20" height="24" alt="open {{test.TestName}} Blueprint PDF"></a>
                                 </td>
                                 <td class="center">
                                     <input type="radio" [attr.testid]="test.TestId" [attr.testname]="test.TestName" [checked]="test.TestId === testScheduleModel.testId"

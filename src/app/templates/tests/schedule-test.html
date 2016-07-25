@@ -1,7 +1,7 @@
 <page-header></page-header>
 <main role="main" class="app-main">
 
-    <test-header (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Choose date and time' [testSchedule]="testScheduleModel"></test-header>
+    <test-header  [modify]="modify" [modifyInProgress]="modifyInProgress" (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Choose date and time' [testSchedule]="testScheduleModel"></test-header>
 
     <div class="thin-section container-medium-width">
         <form class="margin-2em-top clearfix" id="scheduleTest">

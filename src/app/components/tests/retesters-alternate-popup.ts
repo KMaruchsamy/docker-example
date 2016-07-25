@@ -1,6 +1,6 @@
-﻿import {Component, Input, Output, EventEmitter} from '@angular/core';
+﻿import {Component, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {NgIf, NgFor} from '@angular/common';
-import {RouterLink, OnDeactivate} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 import {Common} from '../../services/common';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
@@ -11,11 +11,11 @@ import {SortPipe} from '../../pipes/sort.pipe';
     selector: 'retesters-alternate',
     templateUrl: 'templates/tests/retesters-alternate-popup.html',
     providers: [Common],
-    directives: [RouterLink, NgIf, NgFor],
+    directives: [ROUTER_DIRECTIVES, NgIf, NgFor],
     pipes: [SortPipe]
 })
 
-export class RetesterAlternatePopup implements OnDeactivate {
+export class RetesterAlternatePopup implements OnDestroy {
     @Input() retesterExceptions: Object[];
     @Input() testScheduledSudents: Object[];
     @Input() testTakenStudents: Object[];
@@ -37,7 +37,7 @@ export class RetesterAlternatePopup implements OnDeactivate {
 
     }
 
-    routerOnDeactivate(): void {
+    ngOnDestroy(): void {
         this.testScheduledSudents = null;
         this.testTakenStudents = null;
     }

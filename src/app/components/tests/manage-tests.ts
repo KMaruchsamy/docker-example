@@ -1,5 +1,6 @@
-import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef, ViewEncapsulation} from '@angular/core';
-import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction, RouterLink} from '@angular/router-deprecated';
+import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef, ViewEncapsulation, OnDestroy} from '@angular/core';
+import {Router, ActivatedRoute, CanDeactivate, ROUTER_DIRECTIVES} from '@angular/router';
+import {Subscription} from 'rxjs/Rx';
 import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
 import {Title} from '@angular/platform-browser';
 import {Observable} from 'rxjs/Rx';
@@ -34,12 +35,12 @@ import * as _ from 'lodash';
     host: {
         '(window:resize)': 'resize($event)'
     },
-    styleUrls: ['../../css/tablesaw.bare.css','../../css/tablesaw.overrides.css',' ../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css'],
+    styleUrls: ['../../css/tablesaw.bare.css', '../../css/tablesaw.overrides.css', ' ../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css'],
     encapsulation: ViewEncapsulation.None,
-    directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup, RouterLink],
+    directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup, ROUTER_DIRECTIVES],
     pipes: [RemoveWhitespacePipe, RoundPipe, ParseDatePipe]
 })
-export class ManageTests implements OnInit {
+export class ManageTests implements OnInit, OnDestroy {
     testDate: string;
     apiServer: string;
     tests: Object[] = [];
@@ -56,7 +57,23 @@ export class ManageTests implements OnInit {
     sStorage: any;
     testTypeId: number = 1;
     institutionID: number = 0;
-    constructor(public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public routeParams: RouteParams, public titleService: Title) { }
+    actionSubscription: Subscription;
+    subjectsSubscription: Subscription;
+    scheduleTestsSubscription: Subscription;
+    renameSessionSuscription: Subscription;
+    constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public titleService: Title) { }
+
+    ngOnDestroy(): void {
+        if (this.actionSubscription)
+            this.actionSubscription.unsubscribe();
+        if (this.subjectsSubscription)
+            this.subjectsSubscription.unsubscribe();
+        if (this.scheduleTestsSubscription)
+            this.scheduleTestsSubscription.unsubscribe();
+        if (this.renameSessionSuscription)
+            this.renameSessionSuscription.unsubscribe();    
+    }
+
 
     ngOnInit(): void {
         this.sStorage = this.common.getStorage();
@@ -78,35 +95,34 @@ export class ManageTests implements OnInit {
     bindTests(): void {
         let __this = this;
         let scheduleTestsURL = `${this.apiServer}${links.api.baseurl}${links.api.admin.test.scheduletests}?adminId=${this.auth.userid}&after=${this.testDate}`;
-        let scheduleTestsPromise = this.testService.getAllScheduleTests(scheduleTestsURL);
-        scheduleTestsPromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
+        let scheduleTestsObservable: Observable<Response> = this.testService.getAllScheduleTests(scheduleTestsURL);
+        this.scheduleTestsSubscription = scheduleTestsObservable
+            .map(response => response.json())
+            .subscribe(json => {
                 __this.tests = json;
                 if (__this.tests && __this.tests.length > 0) {
 
-                    let unsortedCompletedTests = _.filter(__this.tests, function(test) {
+                    let unsortedCompletedTests = _.filter(__this.tests, function (test) {
                         return (test.Status == teststatus.Completed);
                     });
-                    __this.completedTests = _.sortBy(unsortedCompletedTests, function(_test) {
+                    __this.completedTests = _.sortBy(unsortedCompletedTests, function (_test) {
                         _test.nextDay = moment(_test.TestingWindowStart).isBefore(_test.TestingWindowEnd, 'day');
                         return moment(_test.TestingWindowStart).toDate()
                     });
 
-                    let unsortedScheduledTests = _.filter(__this.tests, function(test) {
+                    let unsortedScheduledTests = _.filter(__this.tests, function (test) {
                         test.nextDay = moment(test.TestingWindowStart).isBefore(test.TestingWindowEnd, 'day');
                         return (test.Status == teststatus.Scheduled);
                     });
-                    __this.scheduleTests = _.sortBy(unsortedScheduledTests, function(_test) {
+                    __this.scheduleTests = _.sortBy(unsortedScheduledTests, function (_test) {
                         return moment(_test.TestingWindowStart).toDate()
                     });
 
-                    let unsortedInProgressTests = _.filter(__this.tests, function(test) {
+                    let unsortedInProgressTests = _.filter(__this.tests, function (test) {
                         return (test.Status == teststatus.InProgress);
                     });
 
-                    __this.inProgressTests = _.sortBy(unsortedInProgressTests, function(_test) {
+                    __this.inProgressTests = _.sortBy(unsortedInProgressTests, function (_test) {
                         _test.nextDay = moment(_test.TestingWindowStart).isBefore(_test.TestingWindowEnd, 'day');
                         return moment(_test.TestingWindowStart).toDate()
                     });
@@ -119,18 +135,56 @@ export class ManageTests implements OnInit {
                     })
 
                 }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            },
+            error => console.log(error));
+
     }
 
-    view(scheduleId: number, e, modify: boolean, status: string): void {
-        e.preventDefault(); debugger;
+
+    view(scheduleId: number, e, modify: boolean): void {
+        e.preventDefault();
         if (modify)
-            this.router.navigate(['/ModifyViewTest', { action: status, id: scheduleId }]);
+            this.router.navigate(['/tests', 'modify', 'view', scheduleId]);
         else
-            this.router.navigate(['/ViewTest', { id: scheduleId }]);
+            this.router.navigate(['/tests/view', scheduleId]);
+    }
+
+    getTestSchedule(testScheduleId: number): Observable<Response> {
+        let __this = this;
+        let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`, testScheduleId);
+        let scheduleObservable: Observable<Response> = this.testService.getScheduleById(scheduleURL);
+        return scheduleObservable;
+    }
+
+    redirectModifyInProgress(route: string, testScheduleId: number, e: any): void {
+        e.preventDefault();
+        let testScheduleObservable: Observable<Response> = this.getTestSchedule(testScheduleId);
+        let __this = this;
+        testScheduleObservable
+            .map(response => response.json())
+            .subscribe(json => {
+                if (json) {
+                    let testSchedule: TestScheduleModel = __this.testService.mapTestScheduleObjects(json);
+                    if (testSchedule) {
+                        __this.sStorage.setItem('testschedule', JSON.stringify(testSchedule));
+                        console.log(testSchedule);
+                        switch (route) {
+                            case 'ModifyScheduleTest':
+                                this.router.navigate(['/tests','modify','schedule-test']);
+                                break;
+
+                            case 'ModifyAddStudents':
+                                this.router.navigate(['/tests', 'modify','add-students']);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+            },
+            error => console.log(error));
     }
 
     configureEditor(__this: any) {
@@ -142,11 +196,11 @@ export class ManageTests implements OnInit {
             title: 'Rename this testing session',
             highlight: 'transparent',
             tpl: '<input type="text" aria-label="Rename this testing session">',
-            display: function(value) {
+            display: function (value) {
                 // $(this).html(value).append('<img src="images/edit-pencil-icon_2x.png" alt="edit">');
             },
             savenochange: false,
-            validate: function(value) {
+            validate: function (value) {
                 if (value.trim() == '') {
                     return 'This field is required';
                 }
@@ -158,16 +212,15 @@ export class ManageTests implements OnInit {
             '<button type="button" class="unstyled-button editable-cancel" aria-label="cancel"><img src="images/button-close-icon.png" alt="x icon"></button>';
 
 
-        $('.js-rename-session').on('save', function(e, params) {
+        $('.js-rename-session').on('save', function (e, params) {
             let _sessionId = e.currentTarget.attributes['sessionId'].textContent;
             let type = e.currentTarget.attributes['type'].textContent;
             let _newName = params.newValue;
-            let renameSessionPromise = __this.renameSession(_sessionId, _newName);
+            let renameSessionObservable = __this.renameSession(_sessionId, _newName);
 
-            renameSessionPromise.then((response) => {
-                return response.status;
-            })
-                .then((status) => {
+            this.renameSessionSubscription = renameSessionObservable
+                .map(response => response.status)
+                .subscribe(status => {
                     if (status.toString() === errorcodes.SUCCESS) {
                         // e.currentTarget.textContent = _newName;
                         let renamedTest: any;
@@ -183,17 +236,10 @@ export class ManageTests implements OnInit {
                                 renamedTest.SessionName = _newName;
                             }
                         }
-
-                        // $(e.currentTarget).html(_newName).append('<img src="images/edit-pencil-icon_2x.png" alt="edit">');
-
-                        //__this.bindTests();
-
                     }
 
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+                }, error => console.log(error));
+              
         });
     }
 
@@ -206,9 +252,9 @@ export class ManageTests implements OnInit {
         let __this = this;
         let renameSessionURL = __this.resolveScheduleURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.renamesession}`, sessionId);
 
-        let renameSessionPromise = this.testService.renameSession(renameSessionURL, JSON.stringify(newName));
+        let renameSessionObservable:Observable<Response> = this.testService.renameSession(renameSessionURL, JSON.stringify(newName));
 
-        return renameSessionPromise;
+        return renameSessionObservable;
 
     }
 
@@ -226,7 +272,6 @@ export class ManageTests implements OnInit {
     showConfirmation(scheduleId: number): void {
         this.scheduleIdToDelete = scheduleId;
         $('#confirmationPopup').modal('show');
-        // return false;
     }
 
     resolveScheduleURL(url: string, scheduleId: number): string {
@@ -274,40 +319,42 @@ export class ManageTests implements OnInit {
 
     redirectToRoute(route: string): boolean {
         this.checkInstitutions();
-            if (this.institutionRN > 0 && this.institutionPN > 0) {
-                this.router.parent.navigateByUrl(`/choose-institution/Test/${route}/${this.institutionRN}/${this.institutionPN}`);
+        if (this.institutionRN > 0 && this.institutionPN > 0) {
+            this.router.navigateByUrl(`/choose-institution/Test/${route}/${this.institutionRN}/${this.institutionPN}`);
+        }
+        else {
+            if (this.programId > 0) {
+                if (this.institutionRN == 0) {
+                    this.institutionID = this.institutionPN;
+                }
+                else {
+                    this.institutionID = this.institutionRN;
+                }
+                this.apiServer = this.common.getApiServer();
+                let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
+                let subjectsObservable: Observable<Response> = this.testService.getSubjects(subjectsURL);
+
+                this.subjectsSubscription = subjectsObservable
+                    .map(response => {
+                        if (response.status !== 400) {
+                            return response.json();
+                        }
+                        return [];
+                    })
+                    .subscribe(json => {
+                        if (json.length === 0) {
+                            window.open('/accounterror');
+                        }
+                        else {
+                            this.router.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
+                        }
+                    });
             }
             else {
-                if (this.programId > 0) {
-                    if (this.institutionRN == 0) {
-                        this.institutionID = this.institutionPN;
-                    }
-                    else {
-                        this.institutionID = this.institutionRN;
-                    }
-                       this.apiServer = this.common.getApiServer();
-                       let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
-                       let subjectsPromise = this.testService.getSubjects(subjectsURL);
-                       subjectsPromise.then((response) => {
-                           if (response.status !== 400) {
-                               return response.json();
-                           }
-                           return [];
-                       })
-                           .then((json) => {
-                               if (json.length === 0) {
-                                   window.open('/accounterror');
-                               }
-                               else {
-                                   this.router.parent.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
-                               }
-                           });
-                   }
-                   else {
-                       window.open('/accounterror');
-                   }
-                                }
-            return false;
+                window.open('/accounterror');
+            }
+        }
+        return false;
     }
     resolveSubjectsURL(url: string): string {
         return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeId.toString());
@@ -315,7 +362,7 @@ export class ManageTests implements OnInit {
 
     addColumnStyle($table) {
         $table.find('tbody td:nth-child(1)').addClass('column-striped');
-        $table.find('thead th').click(function() {
+        $table.find('thead th').click(function () {
             // $table.find('thead th button').removeClass('sorted');
             //$(this).focus().addClass('sorted');
 
@@ -328,7 +375,7 @@ export class ManageTests implements OnInit {
 
     toggleTd() {
         $('tr td:first-child').unbind('click');
-        $('tr td:first-child').on('click', function() {
+        $('tr td:first-child').on('click', function () {
             var $firstTd = $(this);
             var $tr = $(this).parent('tr');
             var $hiddenTd = $tr.find('td').not($(this));
@@ -341,7 +388,7 @@ export class ManageTests implements OnInit {
     bindSort(tblTest: string): void {
         let __this = this;
         $(tblTest).find('th').off('click');
-        $(tblTest).find('th').on('click', function(e) {
+        $(tblTest).find('th').on('click', function (e) {
             e.preventDefault();
             let columnId = $(this).attr('id');
             let ascending: boolean = false;
@@ -359,28 +406,28 @@ export class ManageTests implements OnInit {
                 if (__this.scheduleTests) {
                     switch (columnId) {
                         case 'dateTH':
-                            tempTests = _.sortBy(__this.scheduleTests, function(_test) {
+                            tempTests = _.sortBy(__this.scheduleTests, function (_test) {
                                 return moment(_test.TestingWindowStart).toDate();
                             });
                             break;
                         case 'sessionTH':
-                            tempTests = _.sortBy(__this.scheduleTests, function(test) {
+                            tempTests = _.sortBy(__this.scheduleTests, function (test) {
                                 return test.SessionName;
                             });
                             break;
                         case 'facultyTH':
-                            tempTests = _.sortBy(__this.scheduleTests, function(_test) {
+                            tempTests = _.sortBy(__this.scheduleTests, function (_test) {
                                 return _test.FacultyFirstName + ' ' + _test.FacultyLastName;
                             });
                             break;
                         case 'adminTH':
-                            tempTests = _.sortBy(__this.scheduleTests, function(_test) {
+                            tempTests = _.sortBy(__this.scheduleTests, function (_test) {
                                 return _test.AdminFirstName + ' ' + _test.AdminLastName;
                             });
                             break;
 
                         default:
-                            tempTests = _.sortBy(__this.scheduleTests, function(_test) {
+                            tempTests = _.sortBy(__this.scheduleTests, function (_test) {
                                 return moment(_test.TestingWindowStart).toDate();
                             });
                             break;
@@ -396,28 +443,28 @@ export class ManageTests implements OnInit {
                 if (__this.completedTests) {
                     switch (columnId) {
                         case 'dateTH':
-                            tempTests = _.sortBy(__this.completedTests, function(_test) {
+                            tempTests = _.sortBy(__this.completedTests, function (_test) {
                                 return moment(_test.TestingWindowStart).toDate();
                             });
                             break;
                         case 'sessionTH':
-                            tempTests = _.sortBy(__this.completedTests, function(_test) {
+                            tempTests = _.sortBy(__this.completedTests, function (_test) {
                                 return _test.SessionName;
                             });
                             break;
                         case 'facultyTH':
-                            tempTests = _.sortBy(__this.completedTests, function(_test) {
+                            tempTests = _.sortBy(__this.completedTests, function (_test) {
                                 return _test.FacultyFirstName + ' ' + _test.FacultyLastName;
                             });
                             break;
                         case 'adminTH':
-                            tempTests = _.sortBy(__this.completedTests, function(_test) {
+                            tempTests = _.sortBy(__this.completedTests, function (_test) {
                                 return _test.AdminFirstName + ' ' + _test.AdminLastName;
                             });
                             break;
 
                         default:
-                            tempTests = _.sortBy(__this.completedTests, function(_test) {
+                            tempTests = _.sortBy(__this.completedTests, function (_test) {
                                 return moment(_test.TestingWindowStart).toDate();
                             });
                             break;
@@ -440,47 +487,6 @@ export class ManageTests implements OnInit {
             });
 
         });
-
-
-        //         $("#tblScheduledTests th#customSort").data("tablesaw-sort", function(ascending) {
-        //             alert(ascending);
-        //             // return a function
-        //             return function(a, b) {
-        // 
-        //                 let startTimeA = a.element.attributes['starttime'].textContent;
-        // 
-        //                 let startTimeB = b.element.attributes['starttime'].textContent;
-        //                 
-        // 
-        //                 if (ascending) {
-        //                     return moment(startTimeA).isAfter(startTimeB)
-        //                 } else { // descending
-        //                     return moment(startTimeA).isBefore(startTimeB);
-        //                 }
-        //             };
-        //         });
-        // 
-        // 
-        // 
-        // 
-        //         $("#tblCompletedTests th#completedCustomTests").data("tablesaw-sort", function(ascending) {
-        //             // return a function
-        //             return function(a, b) {
-        //                 let startTimeA = a.element.attributes['starttime'].textContent; 
-        //                 let startTimeB = b.element.attributes['starttime'].textContent; 
-        //                 if (ascending) {
-        //                     return moment(startTimeA).isAfter(startTimeB);
-        //                 } else { // descending
-        //                     return moment(startTimeA).isBefore(startTimeB);
-        //                 }
-        //             };
-        //         });
-
-
-
-
-
-
     }
 
     sort(tablename: string, columnname: string): void {
@@ -490,16 +496,5 @@ export class ManageTests implements OnInit {
             this.completedTests = this.testService.sortTests(this.completedTests, tablename, columnname);
 
         let __this = this;
-        // setTimeout((json) => {
-        //     $(document).trigger("enhance.tablesaw");
-        //     // $('#tblScheduledTests').table().data("table").refresh();
-        //     //$('#tblScheduledTests').table().data("table").init()
-        //     $('.js-rename-session').editable("destroy");
-        //     __this.configureEditor(__this);
-        //     // __this.bindSort('#tblScheduledTests');
-        //     // __this.bindSort('#tblCompletedTests'); 
-        //     // __this.addColumnStyle($('table#tblCompletedTests'));
-        //     // __this.addColumnStyle($('table#tblScheduledTests'));
-        // })
     }
 }

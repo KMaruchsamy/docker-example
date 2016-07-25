@@ -1,5 +1,5 @@
 ﻿import {Component} from '@angular/core';
-import {Router,RouterLink} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 import {Utility} from '../../scripts/utility';
 import {Angulartics2On} from 'angulartics2';
 
@@ -7,7 +7,7 @@ import {Angulartics2On} from 'angulartics2';
     selector:'login-footer',
     providers:[Utility],
     templateUrl:'templates/login/login-footer.html',
-    directives:[RouterLink, Angulartics2On]
+    directives:[ROUTER_DIRECTIVES, Angulartics2On]
 })
 export class LoginFooter{
 }

@@ -1,106 +1,123 @@
 <page-header></page-header>
 <main role="main" class="app-main">
-    <div class="section">
-        <div class="container-medium-width">
-            <div class="clearfix">
+
+    <section>
+        <div class="section section-bottom-thin" [class.section-light-pink]="modifyInProgress">
+            <div class="container-medium-width">
                 <div class="modify-testing-session-left">
                     <h2 class="page-sm-heading-teal">Manage Tests</h2>
-                    <h3 class="page-lg-heading">View Testing Session</h3>
-                    <a [routerLink]="['/ManageTests']" class="block margin-1em-top-bottom">Go to Manage Tests main page</a>
+                    <h3 class="page-lg-heading">View Testing Session {{modifyInProgress ? '— In Progress' : ''}}</h3>
                 </div>
+
+              <a *ngIf="modifyInProgress && (adminId==schedule?.adminId || adminId==schedule?.facultyMemberId)" [routerLink]="['ModifyAddStudents',{action:'modify'}]" class="right view-testing-session-link button-mobile-block">Add/Remove Students</a><br>
+              <a *ngIf="modifyInProgress && (adminId==schedule?.adminId || adminId==schedule?.facultyMemberId)" [routerLink]="['ModifyScheduleTest',{action:'modify'}]" class="right view-testing-session-link button-mobile-block">Change Testing Window</a>
                 <div class="modify-testing-session-right" *ngIf="modify">
-                    <a [routerLink]="['/ModifyChooseTest',{action:'modify',institutionId:schedule.institutionId}]" class="button button-mobile-block">Modify this testing session</a>
+                    <a [routerLink]="['/tests','modify','choose-test',schedule.institutionId]" class="button button-mobile-block">Modify this testing session</a>
                     <button class="anchor-button margin-1em-top" (click)="showConfirmation($event);">Delete this testing session</button>
                 </div>
             </div>
-            <button id="printButton" (click)="print($event);" class="anchor-button icon print-icon margin-1em-top">Print this page</button>
+        </div>
+    </section>
 
-            <div class="section-medium-thin">
-                <table class="review-details-table table-with-cell-padding justified-ends">
-                    <tr>
-                        <th scope="row">Testing Session</th>
-                        <td>{{schedule?.scheduleName}}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Test</th>
-                        <td>{{schedule?.testName}}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Faculty</th>
-                        <td>{{schedule?.facultyFirstName}} {{schedule?.facultyLastName}}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Scheduled by</th>
-                        <td>{{schedule?.adminFirstName}} {{schedule?.adminLastName}}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Date and Time</th>
-                        <td>
-                            <template [ngIf]="!nextDay">
-                                {{schedule?.scheduleStartTime|parseDate:'ddd'}} {{schedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{schedule?.scheduleStartTime|parseDate:'h:mma'}}
-                                &ndash; {{schedule?.scheduleEndTime|parseDate:'h:mma'}}
-                            </template>
-                            <template [ngIf]="nextDay">
-                                {{schedule?.scheduleStartTime|parseDate:'ddd'}} {{schedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{schedule?.scheduleStartTime|parseDate:'h:mma'}}
-                                &ndash; {{schedule?.scheduleEndTime|parseDate:'h:mma'}} {{schedule?.scheduleEndTime|parseDate:'ddd'}}
-                                {{schedule?.scheduleEndTime|parseDate:'MM/DD/YY'}}
-                            </template>
-                        </td>
-                    </tr>
+    <section>
+        <div class="section section-top-medium-thin ">
+            <div class="container-medium-width">
+                <a [routerLink]="['/tests']" class="block">Go to Manage Tests main page</a>
+                <button id="printButton" (click)="print($event);" class="anchor-button icon print-icon margin-1em-top">Print this page</button>
+
+                <div class="section-medium-thin">
+                    <table class="review-details-table table-with-cell-padding justified-ends">
+                        <tr>
+                            <th scope="row">Testing Session</th>
+                            <td>{{schedule?.scheduleName}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Test</th>
+                            <td>{{schedule?.testName}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Faculty</th>
+                            <td>{{schedule?.facultyFirstName}} {{schedule?.facultyLastName}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Scheduled by</th>
+                            <td>{{schedule?.adminFirstName}} {{schedule?.adminLastName}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Date and Time</th>
+                            <td>
+                                <template [ngIf]="!nextDay">
+                                    {{schedule?.scheduleStartTime|parseDate:'ddd'}} {{schedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{schedule?.scheduleStartTime|parseDate:'h:mma'}}
+                                    &ndash; {{schedule?.scheduleEndTime|parseDate:'h:mma'}}
+                                </template>
+                                <template [ngIf]="nextDay">
+                                    {{schedule?.scheduleStartTime|parseDate:'ddd'}} {{schedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{schedule?.scheduleStartTime|parseDate:'h:mma'}}
+                                    &ndash; {{schedule?.scheduleEndTime|parseDate:'h:mma'}} {{schedule?.scheduleEndTime|parseDate:'ddd'}}
+                                    {{schedule?.scheduleEndTime|parseDate:'MM/DD/YY'}}
+                                </template>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+                <h4 class="teal inline">Students in Testing Session ({{schedule?.selectedStudents?.length}})</h4>
+                <table id="studentsInTestingSessionTable" class="table-with-cell-padding table-striped last-row-no-border">
+                    <thead>
+                        <tr>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Cohort</th>
+                            <th scope="col">Test</th>
+                            <th scope="col">Norming Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let student of schedule?.selectedStudents">
+                            <td [class.name-with-pay-alert]="student.StudentPay && testStatus > -1">{{student.LastName}}<img *ngIf="student.StudentPay && testStatus > -1" src="images/self-pay-alert-icon.svg"
+                                    class="self-pay-alert-table-icon" alt="payment alert icon" /></td>
+                            <td>{{student.FirstName}}</td>
+                            <td>{{student.CohortName}}</td>
+                            <td>{{student.StudentTestName}}</td>
+                            <td>{{student.NormingStatus ? student.NormingStatus : schedule.testNormingStatus}}</td>
+                        </tr>
+
                     </tbody>
                 </table>
-            </div>
 
+                <div class="icon-container-flush-text">
+                    <p class="icon info-icon-yellow margin-1em-top" *ngIf="hasADA">One or more of the students you have added have testing accommodations. Their test will be untimed. For
+                        more information or to designate additional students who need testing accommodations, please contact
+                        your Account Manager.</p>
+                    <p class="icon info-icon-yellow margin-1em-top" *ngIf="!hasADA">Please contact your Account Manager if there are students in your testing session who need testing accommodations.
+                        Students with testing accommodations receive untimed versions of their tests.</p>
+                    <img *ngIf="anyStudentPayStudents && testStatus > -1" src="images/self-pay-alert-icon.svg" class="self-pay-alert-icon" alt="payment alert icon"
+                        height="22" width="22" />
+                    <p *ngIf="anyStudentPayStudents && testStatus > -1">
+                        These students have been deactivated due to non-payment. They will not be able to access their test during the specified
+                        testing window unless their balance is paid in full at least two business days prior to test day.
+                    </p>
 
-
-            <h4 class="teal inline">Students in Testing Session ({{schedule?.selectedStudents?.length}})</h4>
-            <table id="studentsInTestingSessionTable" class="table-with-cell-padding table-striped last-row-no-border">
-                <thead>
-                    <tr>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Cohort</th>
-                        <th scope="col">Test</th>
-                        <th scope="col">Norming Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let student of schedule?.selectedStudents">
-                        <td [class.name-with-pay-alert]="student.StudentPay && testStatus > -1">{{student.LastName}}<img *ngIf="student.StudentPay && testStatus > -1" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon" alt="payment alert icon"/></td>
-                        <td>{{student.FirstName}}</td>
-                        <td>{{student.CohortName}}</td>
-                        <td>{{student.StudentTestName}}</td>
-                        <td>{{student.NormingStatus ? student.NormingStatus : schedule.testNormingStatus}}</td>
-                    </tr>
-
-                </tbody>
-            </table>
-
-            <div class="icon-container-flush-text">
-                <p class="icon info-icon-yellow margin-1em-top" *ngIf="hasADA">One or more of the students you have added have testing accommodations. Their test will be untimed. 
-                    For more information or to designate additional students who need testing accommodations, please contact your Account Manager.</p>
-                <p class="icon info-icon-yellow margin-1em-top" *ngIf="!hasADA">Please contact your Account Manager if there are students in your testing session who need testing accommodations. Students with testing accommodations receive untimed versions of their tests.</p>
-                 <img *ngIf="anyStudentPayStudents && testStatus > -1" src="images/self-pay-alert-icon.svg" class="self-pay-alert-icon" alt="payment alert icon" height="22" width="22"/>
-                 <p *ngIf="anyStudentPayStudents && testStatus > -1">
-                 These students have been deactivated due to non-payment. They will not be able to access their test during the specified testing window unless their balance is paid in full at least two business days prior to test day.
-                </p>
-
-            </div>
-
-            <div class="margin-2em-top">
-                <div class="modify-testing-session-left margin-2em-bottom">
-                    <a [routerLink]="['/ManageTests']" class="block">Go to Manage Tests main page</a>
                 </div>
-                <div class="modify-testing-session-right" *ngIf="modify">
-                    <a [routerLink]="['/ModifyChooseTest',{action:'modify',institutionId:schedule.institutionId}]" class="button button-mobile-block">Modify this testing session</a>
-                    <button class="anchor-button margin-1em-top" (click)="showConfirmation($event);">Delete this testing session</button>
-                </div>
-            </div>
 
+                <div class="margin-2em-top">
+                    <div class="modify-testing-session-left margin-2em-bottom">
+                        <a [routerLink]="['/tests']" class="block">Go to Manage Tests main page</a>
+                    </div>
+                    <div class="modify-testing-session-right" *ngIf="modify">
+                        <a [routerLink]="['/tests','modify','choose-test',institutionId:schedule.institutionId]" class="button button-mobile-block">Modify this testing session</a>
+                        <button class="anchor-button margin-1em-top" (click)="showConfirmation($event);">Delete this testing session</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
+    </section>
 </main>
 <page-footer></page-footer>
-<confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to delete this testing session? This cannot be undone.'" [okButtonText]="'Yes, delete'"
-[cancelButtonText]="'Cancel'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation()" [hideClose]="true">
+<confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to delete this testing session? This cannot be undone.'"
+    [okButtonText]="'Yes, delete'" [cancelButtonText]="'Cancel'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation()"
+    [hideClose]="true">
 </confirmation-popup>
