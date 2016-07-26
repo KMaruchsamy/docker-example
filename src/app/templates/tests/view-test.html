@@ -11,7 +11,7 @@
 
               <a *ngIf="modifyInProgress && (adminId==schedule?.adminId || adminId==schedule?.facultyMemberId)" [routerLink]="['/tests','modify','add-students']" class="right view-testing-session-link button-mobile-block">Add/Remove Students</a><br>
               <a *ngIf="modifyInProgress && (adminId==schedule?.adminId || adminId==schedule?.facultyMemberId)" [routerLink]="['/tests','modify','schedule-test']" class="right view-testing-session-link button-mobile-block">Change Testing Window</a>
-                <div class="modify-testing-session-right" *ngIf="modify">
+                <div class="modify-testing-session-right" *ngIf="modify && !modifyInProgress">
                     <a [routerLink]="['/tests','modify','choose-test',schedule.institutionId]" class="button button-mobile-block">Modify this testing session</a>
                     <button class="anchor-button margin-1em-top" (click)="showConfirmation($event);">Delete this testing session</button>
                 </div>
@@ -106,7 +106,7 @@
                     <div class="modify-testing-session-left margin-2em-bottom">
                         <a [routerLink]="['/tests']" class="block">Go to Manage Tests main page</a>
                     </div>
-                    <div class="modify-testing-session-right" *ngIf="modify">
+                    <div class="modify-testing-session-right" *ngIf="modify && !modifyInProgress">
                         <a [routerLink]="['/tests','modify','choose-test',schedule.institutionId]" class="button button-mobile-block">Modify this testing session</a>
                         <button class="anchor-button margin-1em-top" (click)="showConfirmation($event);">Delete this testing session</button>
                     </div>

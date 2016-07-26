@@ -780,6 +780,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
 
 
     saveDateTime(): boolean {
+        
         if (!this.validateDates())
             return;
 
@@ -808,75 +809,55 @@ export class ScheduleTest implements OnInit, OnDestroy {
 
     saveModifyInProgress() {
         let input = {
-            TestingSessionId: (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0),
-            SessionName: this.testScheduleModel.scheduleName,
-            AdminId: (this.testScheduleModel.adminId ? this.testScheduleModel.adminId : this.auth.userid),
-            InstitutionId: this.testScheduleModel.institutionId,
-            SessionTestId: this.testScheduleModel.testId,
-            SessionTestName: this.testScheduleModel.testName,
-            TestingWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
-            TestingWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format(),
-            FacultyMemberId: this.testScheduleModel.facultyMemberId,
-            Students: this.testScheduleModel.selectedStudents,
-            LastCohortSelectedId: this.testScheduleModel.lastselectedcohortId,
-            LastSubjectSelectedId: this.testScheduleModel.subjectId,
-            PageSavedOn: ''//TODO need to add the logic for this one ..
+            TestingSessionWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
+            TestingSessionWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format()           
         };
 
         let myNewStartDateTime2 = moment(new Date(
-            moment(input.TestingWindowStart).year(),
-            moment(input.TestingWindowStart).month(),
-            moment(input.TestingWindowStart).date(),
-            moment(input.TestingWindowStart).hour(),
-            moment(input.TestingWindowStart).minute(),
-            moment(input.TestingWindowStart).second()
+            moment(input.TestingSessionWindowStart).year(),
+            moment(input.TestingSessionWindowStart).month(),
+            moment(input.TestingSessionWindowStart).date(),
+            moment(input.TestingSessionWindowStart).hour(),
+            moment(input.TestingSessionWindowStart).minute(),
+            moment(input.TestingSessionWindowStart).second()
         )).format('YYYY/MM/DD HH:mm:ss');
 
         let myNewEndDateTime2 = moment(new Date(
-            moment(input.TestingWindowEnd).year(),
-            moment(input.TestingWindowEnd).month(),
-            moment(input.TestingWindowEnd).date(),
-            moment(input.TestingWindowEnd).hour(),
-            moment(input.TestingWindowEnd).minute(),
-            moment(input.TestingWindowEnd).second()
+            moment(input.TestingSessionWindowEnd).year(),
+            moment(input.TestingSessionWindowEnd).month(),
+            moment(input.TestingSessionWindowEnd).date(),
+            moment(input.TestingSessionWindowEnd).hour(),
+            moment(input.TestingSessionWindowEnd).minute(),
+            moment(input.TestingSessionWindowEnd).second()
         )).format('YYYY/MM/DD HH:mm:ss');
 
-        input.TestingWindowStart = myNewStartDateTime2;
-        input.TestingWindowEnd = myNewEndDateTime2;
+        input.TestingSessionWindowStart = myNewStartDateTime2;
+        input.TestingSessionWindowEnd = myNewEndDateTime2;
 
 
 
-        let scheduleTestPromise: any;
+        let scheduleTestObservable: Observable<Response>;
         let scheduleTestURL = '';
-        scheduleTestURL = this.resolveModifyTestingSessionURL(`${this.auth.common.apiServer}${links.api.v2baseurl}${links.api.admin.test.modifyscheduletest}`);
-        scheduleTestPromise = this.testService.modifyScheduleTests(scheduleTestURL, JSON.stringify(input));
+        scheduleTestURL = this.resolveModifyTestingSessionURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateScheduleDatesModifyInProgress}`);
+        scheduleTestObservable = this.testService.updateScheduleDates(scheduleTestURL, JSON.stringify(input));
 
         let __this = this;
-        scheduleTestPromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
+        scheduleTestObservable
+            .map(response => response.json())
+            .subscribe(json => {
                 __this.valid = true;
                 // clearTimeout(loaderTimer);
                 // $('#loader').modal('hide');
                 let result = json;
                 console.log(json);
-                if (result.TestingSessionId && result.TestingSessionId > 0) {
+                if (result.TestingSessionId && result.TestingSessionId > 0 && result.ErrorCode ===0 && !result.TimingExceptions) {
                     // __this.testScheduleModel.scheduleId = result.TestingSessionId;
                     // __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
+                    __this.overrideRouteCheck = true;
                     __this.router.navigate(['/tests']);
                 }
-                else {
-                    // __this.resolveExceptions(json, __this);
-                }
 
-            })
-            .catch((error) => {
-                // __this.valid = true;
-                // $('#loader').modal('hide');
-                console.log(error);
-            });
-
+            }, error => console.log(error));
     }
 
 
@@ -1010,14 +991,14 @@ export class ScheduleTest implements OnInit, OnDestroy {
                                 return false;
                             }
                         }
-                        else {
+                        else if(!this.modifyInProgress){
                             $('#alertPopup').modal('show');
                             return false;
                         }
 
                     }
                     else {
-                        if (moment(scheduleStartTime).isBefore(institutionCurrentTime)) {
+                        if (moment(scheduleStartTime).isBefore(institutionCurrentTime) && !this.modifyInProgress) {
                             $('#alertPopup').modal('show');
                             return false;
                         }

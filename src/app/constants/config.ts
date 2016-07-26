@@ -46,7 +46,8 @@ export const links = {
                 searchStudents: "scheduling/institutions/§institutionid/students?searchString=§searchstring&testId=§testid&windowStart=§windowstart&windowEnd=§windowend",
                 modifyInProgressCohortStudent:"scheduling/modifyInProgress/cohorts/§cohortId/students?testingSessionId=§testingSessionId",
                 refreshStudentsWhoStarted: "scheduling/testingSessions/§testingSessionId/students?filter=§filter",
-                updateModifyInProgressStudents: "scheduling/modifyInProgress/testingSessions/§testSessionId"
+                updateModifyInProgressStudents: "scheduling/modifyInProgress/testingSessions/§testSessionId",
+                updateScheduleDatesModifyInProgress:"scheduling/modifyInProgress/testingSessions/§scheduleId/windowDates"
             },
             logging: {
                 error: 'error/Log'

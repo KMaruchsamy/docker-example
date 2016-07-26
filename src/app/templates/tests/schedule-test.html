@@ -34,7 +34,7 @@
                 </p>
                 <p>Choosing shorter testing windows will help maintain better security.</p>
             </div>
-            <button type="button" class="button margin-2em-top button-mobile-block right" (click)="saveDateTime($event);" [disabled]="!valid">Next step: Add students</button>
+            <button type="button" class="button margin-2em-top button-mobile-block right" (click)="saveDateTime($event);" [disabled]="!valid">{{modifyInProgress ? 'Verify changes and save' : 'Next step: Add students'}}</button>
         </form>
         <div class="delete-draft section-medium-thin clearfix invisible">
             <hr>

@@ -145,7 +145,7 @@ export class TestService {
     }
 
     modifyScheduleTests(url: string, input: string): Observable<Response> {
-        return this.http.post(url,input, this.getRequestOptions())
+        return this.http.put(url,input, this.getRequestOptions())
     }
 
 
@@ -472,6 +472,10 @@ export class TestService {
     anyStudentPayStudents(testScheduleModel: TestScheduleModel): boolean {
         if (testScheduleModel && testScheduleModel.selectedStudents && testScheduleModel.selectedStudents.length > 0)
             return _.some(testScheduleModel.selectedStudents, { 'StudentPay': true });
+    }
+
+    updateScheduleDates(url:string, input :string): Observable<Response>{
+        return this.http.put(url, input, this.getRequestOptions());
     }
 
 }
