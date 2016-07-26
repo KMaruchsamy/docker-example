@@ -3,36 +3,39 @@ import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/
 import {Auth} from './auth';
 import {ProfileModel} from '../models/profile-model';
 import * as _ from 'lodash';
+import {Observable} from 'rxjs/Rx';
 
 @Injectable()
 export class HomeService {
 	auth: Auth;
 	constructor(public http: Http) {	
 		this.http = http;
-		this.auth = new Auth();
+		this.auth = new Auth(http);
 		this.auth.refresh();
 	}
 
-	getProfiles(url) {
+	getProfiles(url):Observable<Response> {
 		let self = this;
-		return fetch(url, {
-			method: 'get',
-			headers: {
-				'Accept': 'application/json',
-				'Authorization': self.auth.authheader
-			}
+		let headers: Headers = new Headers({
+			'Accept': 'application/json',
+			'Authorization': self.auth.authheader
 		});
+		let requestOptions: RequestOptions = new RequestOptions({
+			headers: headers
+		});
+		return this.http.get(url, requestOptions);
 	}
 
-	getProfile(url) {
+	getProfile(url):Observable<Response> {
 		let self = this;
-		return fetch(url, {
-			method: 'get',
-			headers: {
-				'Accept': 'application/json',
-				'Authorization': self.auth.authheader
-			}
+		let headers: Headers = new Headers({
+			'Accept': 'application/json',
+			'Authorization': self.auth.authheader
 		});
+		let requestOptions: RequestOptions = new RequestOptions({
+			headers: headers
+		});
+		return this.http.get(url, requestOptions);
 	}
 
 

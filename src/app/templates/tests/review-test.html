@@ -1,6 +1,6 @@
 <page-header></page-header>
 <main role="main" class="app-main">
-    <test-header (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Add details and review' [testSchedule]="testScheduleModel"></test-header>
+    <test-header [modify]="modify" (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Add details and review' [testSchedule]="testScheduleModel"></test-header>
 
     <div class="section">
         <div class="container-medium-width">
@@ -40,14 +40,11 @@
                 <tr>
                     <th scope="row">Test</th>
                     <td>{{testScheduleModel.testName}}</td>
-                    <td><a [routerLink]="modify ? ['/ModifyChooseTest' , {action:'modify',institutionId : testScheduleModel.institutionId}] : ['/ChooseTest' , {institutionId : testScheduleModel.institutionId}]">Change</a></td>
+                    <td><a [routerLink]="modify ? ['/tests' , 'modify','choose-test',testScheduleModel.institutionId] : ['/tests/choose-test' , testScheduleModel.institutionId]">Change</a></td>
                 </tr>
                 <tr>
                     <th scope="row">Date and Time</th>
                     <td>
-                        <!--{{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from
-                        {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}}
-                        {{testScheduleModel?.scheduleEndTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleEndTime|parseDate:'MM/DD/YY'}}-->
                         <template [ngIf]="!nextDay">
                             {{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from
                             {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}}
@@ -59,19 +56,15 @@
                         </template>
 
                     </td>
-                    <td><a href="#" target="_self" [routerLink]="modify ? ['/ModifyScheduleTest',{action:'modify'}] : ['/ScheduleTest']">Change</a>
+                    <td><a href="#" target="_self" [routerLink]="modify ? ['/tests','modify','schedule-test'] : ['/tests/schedule-test']">Change</a>
                     </td>
                 </tr>
-                <!--<tr>
-                    <th scope="row">Time</th>
-                    <td>{{testScheduleTimes}} ({{testScheduleWindow}})</td>
-                    <td><a [routerLink]="['/ScheduleTest']">Change</a></td>
-                </tr>-->
+                
                 </tbody>
             </table>
         </div>
         <h4 class="teal" id="studentsInTestingSessionConfirmation">Students in Testing Session ({{unmarkedStudentsCount()}})</h4>
-        <a [routerLink]="modify ? ['/ModifyAddStudents',{action:'modify'}] : ['/AddStudents']">Change</a>
+        <a [routerLink]="modify ? ['/tests','modify','add-students'] : ['/tests','add-students']">Change</a>
         <button class="right anchor-button" *ngIf="(retesterExceptions?.length>0 && hasAlternateTests) || (retesterExceptions?.length>0 && hasSavedRetesterExceptions) || (modify && retesterExceptionsModify?.length>0)" (click)="changeAlternateAssignments($event)">Change alternate test assignments</button>
 
         <table id="studentsInTestingSessionTable" class="dataTable-bordered table-with-cell-padding table-striped last-row-no-border">

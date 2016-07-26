@@ -1,12 +1,12 @@
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {Common} from '../../services/common';
 
 @Component({
     selector: 'confirmation-popup',
     providers: [Common],
     templateUrl: 'templates/shared/confirmation.popup.html',
-    directives: [RouterLink],
+    directives: [ROUTER_DIRECTIVES],
     inputs: ['cancelButtonText', 'okButtonText', 'message']
 })
 

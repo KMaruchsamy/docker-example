@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -13,7 +13,7 @@ import {links} from '../../constants/config';
     selector: 'reports',
     providers: [Auth, Common],
     templateUrl: 'templates/reports/reports.html',
-    directives: [RouterLink, PageHeader, PageFooter]
+    directives: [ROUTER_DIRECTIVES, PageHeader, PageFooter]
 })
 
 export class Reports implements OnInit {
@@ -36,7 +36,7 @@ export class Reports implements OnInit {
 
     ngOnInit(): void {
         if (!this.auth.isAuth())
-            this.router.navigateByUrl('/');
+            this.router.navigate(['/']);
         else
             this.institutionName = this.getLatestInstitution();
         $(document).scrollTop(0);

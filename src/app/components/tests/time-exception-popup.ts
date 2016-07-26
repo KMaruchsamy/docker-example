@@ -1,5 +1,5 @@
-﻿import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {RouterLink, OnDeactivate} from '@angular/router-deprecated';
+﻿import {Component, Input, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 import {Common} from '../../services/common';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import * as _ from 'lodash';
@@ -8,13 +8,13 @@ import {SortPipe} from '../../pipes/sort.pipe';
 @Component({
     selector: 'time-exception',
     templateUrl: 'templates/tests/time-exception-popup.html',
-    directives: [RouterLink],
+    directives: [ROUTER_DIRECTIVES],
     providers: [Common],
     inputs: ['studentWindowException','canRemoveStudents'],
     pipes: [ParseDatePipe,SortPipe]
 })
 
-export class TimeExceptionPopup implements OnInit, OnDeactivate {
+export class TimeExceptionPopup implements OnInit, OnDestroy {
     @Input() studentWindowException: any;
     @Input() canRemoveStudents: boolean;
     @Output() windowExceptionPopupClose = new EventEmitter();
@@ -25,7 +25,8 @@ export class TimeExceptionPopup implements OnInit, OnDeactivate {
     constructor(public common: Common) {
         
     }
-    routerOnDeactivate(): void {
+
+    ngOnDestroy(): void {
         this.studentWindowException = null;
     }
     initialize(): void {

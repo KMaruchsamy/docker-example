@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -11,7 +11,7 @@ import {PageFooter} from '../shared/page-footer';
     selector: 'rosters',
     providers: [Auth],
     templateUrl: 'templates/rosters/rosters.html',
-    directives: [RouterLink, PageHeader, PageFooter]
+    directives: [ROUTER_DIRECTIVES, PageHeader, PageFooter]
 })
 
 export class Rosters implements OnInit {
@@ -21,7 +21,7 @@ export class Rosters implements OnInit {
 
     ngOnInit(): void {
         if (!this.auth.isAuth())
-            this.router.navigateByUrl('/');
+            this.router.navigate(['/']);
         else
             this.institutionName = this.getLatestInstitution();
         $(document).scrollTop(0);

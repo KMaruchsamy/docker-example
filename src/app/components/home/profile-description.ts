@@ -1,6 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {NgFor, NgIf} from '@angular/common';
-import {RouteParams, RouterLink} from '@angular/router-deprecated';
+import {ActivatedRoute, ROUTER_DIRECTIVES} from '@angular/router';
+import {Response} from '@angular/http';
+import {Observable, Subscription} from 'rxjs/Rx';
 import {Title} from '@angular/platform-browser';
 import {HomeService} from '../../services/home-service';
 import {Common} from '../../services/common';
@@ -13,28 +15,40 @@ import {ProfileModel} from '../../models/profile-model';
     selector: 'profile-description',
     providers: [HomeService, Common],
     templateUrl: 'templates/home/profile-description.html',
-    directives: [RouterLink, PageHeader, PageFooter, NgFor, NgIf]
+    directives: [ROUTER_DIRECTIVES, PageHeader, PageFooter, NgFor, NgIf]
 })
-export class ProfileDescription {
+export class ProfileDescription implements OnDestroy {
     kaplanAdminId: number;
     profile: ProfileModel;
     apiServer: string;
-    constructor(public routeParams: RouteParams, public homeService: HomeService, public common: Common, public titleService: Title) {
+    routeParametersSubscription: Subscription;
+    getProfileSubscription: Subscription;
+    constructor(public activatedRoute: ActivatedRoute, public homeService: HomeService, public common: Common, public titleService: Title) {
         this.apiServer = this.common.getApiServer();
-        this.kaplanAdminId = parseInt(this.routeParams.get('id'));
-        this.profile = {}
-        this.loadProfileDescription();
+        this.routeParametersSubscription = this.activatedRoute.params.subscribe(params => {
+            this.kaplanAdminId = +params['id'];
+            this.profile = {}
+            this.loadProfileDescription();
+        });
+
+    }
+
+    ngOnDestroy(): void {
+        if(this.routeParametersSubscription)
+            this.routeParametersSubscription.unsubscribe();
+        if(this.getProfileSubscription)
+        this.getProfileSubscription.unsubscribe();
     }
 
     loadProfileDescription(): void {
         if (this.kaplanAdminId != null && this.kaplanAdminId > 0) {
             let url = this.apiServer + links.api.baseurl + links.api.admin.profilesapi + '/' + this.kaplanAdminId;
-            let profilePromise = this.homeService.getProfile(url);
+            let profileObservable: Observable<Response> = this.homeService.getProfile(url);
             let self: ProfileDescription = this;
-            profilePromise.then((response) => {
-                return response.json();
-            })
-                .then((json) => {
+            this.getProfileSubscription = profileObservable
+                .map(response => response.json())
+                .subscribe(
+                json => {
                     self.profile = self.homeService.bindToModel(json);
                     if (self.profile) {
                         if (self.profile.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER')
@@ -42,10 +56,10 @@ export class ProfileDescription {
                         else
                             this.titleService.setTitle('Your Nurse Consultant – Kaplan Nursing');
                     }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+                },
+                error => console.log(error.message),
+                () => console.log('complete !'));
+           
         }
     }
 

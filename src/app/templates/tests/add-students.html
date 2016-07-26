@@ -1,6 +1,6 @@
 ﻿<page-header></page-header>
 <main role="main" class="app-main">
-    <test-header (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Add students' [testSchedule]="testScheduleModel"></test-header>
+    <test-header [modify]="modify" [modifyInProgress]="modifyInProgress" (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Add students' [testSchedule]="testScheduleModel"></test-header>
     <div class="thin-section">
         <div class="container add-students-outer-container section-small-screen-no-padding">
 
@@ -27,7 +27,7 @@
                                 </div>
 
                                 <div *ngIf="noCohort">
-                                    <p class="text-larger section-medium-thin container-narrow ">We're sorry, there are no active cohorts in your institution. Please contact your Account Manager for further assistance. You can find your Account Manager's contact info on the <a [routerLink]="['/Home']">Home page</a>.</p>
+                                    <p class="text-larger section-medium-thin container-narrow ">We're sorry, there are no active cohorts in your institution. Please contact your Account Manager for further assistance. You can find your Account Manager's contact info on the <a [routerLink]="['/home']">Home page</a>.</p>
                                 </div>
                             </div>
                             <!-- closes cohort container-->
@@ -101,7 +101,7 @@
                 </div>
                 <!--end left-grid-->
                 <div class="grid right-grid">
-                    <div class="top-section" [class.modify]="modifyInProgress" [class.active]="modifyInProgress">
+                    <div class="top-section"  [class.modify]="modifyInProgress" [class.active]="modifyInProgress">
                         <h4 class="white-text h6 no-margin-bottom" id="studentAddedToTestingSession">Students in Testing Session ({{selectedStudentCount}})</h4>
                     </div>
                     <div class="section-medium-thin container-narrow lightbulb-icon-container-flush-text" *ngIf="selectedStudentCount === 0" id="selectedStudentsContainer">
@@ -133,20 +133,19 @@
         </div><!--closes container small with no padding-->
 
         <div class="container add-students-outer-container section section-top-thin">
-            <div class="info-icon-yellow-container-flush-text">
+            <div class="icon-container-flush-text">
                 <p *ngIf="modifyInProgress" class="icon red-triangle-alert-small small-triangle-alert-icon margin-1em-top" id="alreadyStartedNote"><strong>Please note:</strong> Students who have already started their test can no longer be removed from the testing session.</p>
                 <p class="icon info-icon-yellow" *ngIf="!hasADA && selectedStudents.length > 0">
                     Please contact your Account Manager if there are students in your testing session who need testing accommodations.
                     Students with testing accommodations receive untimed versions of their tests.
                 </p>
                 <p class="icon info-icon-yellow" *ngIf="hasADA && selectedStudents.length > 0">
-                    One or more of the students you have added have testing accommodations. Their test will be untimed.For more information or to designate additional students who need testing accommodations, please contact your Account Manager.
+                    One or more of the students you have added have testing accommodations. Their test will be untimed.
+                    For more information or to designate additional students who need testing accommodations, please contact your Account Manager.
                 </p>
                 <p class="icon info-icon-yellow margin-1em-top" *ngIf="!modifyInProgress && selectedStudents.length > 0">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
-                <button *ngIf="!modifyInProgress" type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" [disabled]="EnableDisableButtonForDetailReview()" (click)="DetailReviewTestClick($event)"><span class="hidden-extra-small-down">Next step: </span>Add details and review</button>
+                <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" [disabled]="makeSave_ContinueButtonEnableDisable()" (click)="save_ContinueButtonClick($event)"> <span *ngIf="!modifyInProgress" class="hidden-extra-small-down">Next step: </span>{{ modifyInProgress ? 'Verify changes and save' : 'Add details and review'}}</button>
                 <div *ngIf="modifyInProgress">
-                    <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="verifySaveModifyInProgress" [disabled]="EnableDisableVerify_SaveButton()" (click)="Verify_SaveTestClick($event)">Verify changes and save</button>
-
                     <button class="anchor-button right clear" (click)="confirmCancelChanges($event)">Cancel changes</button>
                 </div>
             </div>

@@ -1,6 +1,6 @@
-import {Component, OnInit, AfterViewInit, ViewEncapsulation} from '@angular/core';
-import {Router, CanDeactivate, OnDeactivate, ComponentInstruction, RouteParams} from '@angular/router-deprecated';
-import {NgIf,Location} from '@angular/common';
+import {Component, OnInit, AfterViewInit, ViewEncapsulation, OnDestroy} from '@angular/core';
+import {Router, ActivatedRoute, CanDeactivate, RoutesRecognized} from '@angular/router';
+import {NgIf, Location} from '@angular/common';
 import {Title} from '@angular/platform-browser';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -13,6 +13,9 @@ import * as _ from 'lodash';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {AlertPopup} from '../shared/alert.popup';
+import {Observable, Subscription} from 'rxjs/Rx';
+import {Response} from '@angular/http';
+import {Utility} from '../../scripts/utility';
 // import '../../plugins/bootstrap-datepicker-1.5.min.js';
 // import '../../plugins/jquery.timepicker.js';
 // import '../../lib/modal.js';
@@ -22,10 +25,10 @@ import {AlertPopup} from '../shared/alert.popup';
     templateUrl: 'templates/tests/schedule-test.html',
     styleUrls: ['../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css', '../../css/jquery.timepicker.css', '../../css/schedule.css'],
     encapsulation: ViewEncapsulation.None,
-    providers: [TestService, Auth, TestScheduleModel, Common],
+    providers: [TestService, Auth, TestScheduleModel, Common, Utility],
     directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup, AlertPopup]
 })
-export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
+export class ScheduleTest implements OnInit, OnDestroy {
     valid: boolean = false;
     invalid8hours: boolean = false;
     ignore8HourRule: boolean = false;
@@ -42,25 +45,70 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     attemptedRoute: string;
     overrideRouteCheck: boolean = false;
     modify: boolean = false;
-    constructor(public testScheduleModel: TestScheduleModel,
-        public testService: TestService, public auth: Auth, public router: Router, public common: Common, public routeParams: RouteParams, public aLocation: Location, public titleService: Title) {
+    modifyInProgress: boolean = false;
+    paramsSubscription: Subscription;
+    destinationRoute: string;
+    deactivateSubscription: Subscription;
+    eightHourSubscription: Subscription;
+    constructor(private activatedRoute: ActivatedRoute, public testScheduleModel: TestScheduleModel,
+        public testService: TestService, public auth: Auth, public router: Router, public common: Common, public aLocation: Location, public titleService: Title, private utility: Utility) {
     }
+
+
+
+    ngOnInit(): void {
+
+        this.deactivateSubscription = this.router
+            .events
+            .filter(event => event instanceof RoutesRecognized)
+            .subscribe(event => {
+                console.log('Event - ' + event);
+                this.destinationRoute = event.urlAfterRedirects;
+            });
+
+        this.sStorage = this.common.getStorage();
+        if (!this.auth.isAuth())
+            this.router.navigate(['/']);
+        else {
+            this.$startDate = $('#startDate');
+            this.$endDate = $('#endDate');
+            this.$startTime = $('#startTime');
+            this.$endTime = $('#endTime');
+
+            this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
+                let action = params['action'];
+                if (action != undefined && action.trim() === 'modify') {
+                    this.modify = true;
+                    this.titleService.setTitle('Modify: Schedule Test – Kaplan Nursing');
+                } else {
+                    this.titleService.setTitle('Schedule Test – Kaplan Nursing');
+                }
+
+                this.bindEvents();
+                this.initialize();
+                this.initializeControls();
+                this.set8HourRule();
+                $(document).scrollTop(0);
+            });
+        }
+    }
+
 
     onCancelChanges(): void {
         this.overrideRouteCheck = true;
         this.testService.clearTestScheduleObjects();
-        this.router.parent.navigate(['/ManageTests']);
+        this.router.navigate(['/tests']);
     }
 
     onContinueMakingChanges(): void {
         // continue making changes after confirmation popup..
     }
 
-    routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+    canDeactivate(): Observable<boolean> | boolean {
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
-                this.attemptedRoute = next.urlPath;
+                this.attemptedRoute = this.destinationRoute;
                 $('#confirmationPopup').modal('show');
                 return false;
             }
@@ -77,35 +125,37 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         return true;
     }
 
-    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-    }
+    // routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+    //     let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+    //     if (!this.overrideRouteCheck) {
+    //         if (outOfTestScheduling) {
+    //             this.attemptedRoute = next.urlPath;
+    //             $('#confirmationPopup').modal('show');
+    //             return false;
+    //         }
+    //     }
+    //     if (outOfTestScheduling) {
+    //         this.startDate = null;
+    //         this.endDate = null;
+    //         this.sStorage.removeItem('testschedule');
+    //         this.$startDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
+    //         this.$endDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
+    //     }
 
-    ngOnInit(): void {
-        this.sStorage = this.common.getStorage();
-        if (!this.auth.isAuth())
-            this.router.navigateByUrl('/');
-        else {
-            this.$startDate = $('#startDate');
-            this.$endDate = $('#endDate');
-            this.$startTime = $('#startTime');
-            this.$endTime = $('#endTime');
-            let action = this.routeParams.get('action');
-            if (action != undefined && action.trim() === 'modify') {
-                this.modify = true;
-                this.titleService.setTitle('Modify: Schedule Test – Kaplan Nursing');
-            } else {
-                this.titleService.setTitle('Schedule Test – Kaplan Nursing');
-            }
-        }
+    //     this.overrideRouteCheck = false;
+    //     return true;
+    // }
 
+    // routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+    // }
 
-        this.bindEvents();
-        this.initialize();
-        this.initializeControls();
-        this.set8HourRule();
-        $(document).scrollTop(0);
-
-
+    ngOnDestroy(): void {
+        if (this.paramsSubscription)
+            this.paramsSubscription.unsubscribe();
+        if (this.deactivateSubscription)
+            this.deactivateSubscription.unsubscribe();
+        if (this.eightHourSubscription)
+            this.eightHourSubscription.unsubscribe();
     }
 
     initialize() {
@@ -130,6 +180,12 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
             }
         }
 
+        if (this.modify) {
+            let testStatus: number = this.testService.getTestStatusFromTimezone(this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
+            if (testStatus === 0)
+                this.modifyInProgress = true;
+        }
+
         if (this.testScheduleModel.currentStep < 2)
             this.testScheduleModel.currentStep = 2;
         this.testScheduleModel.activeStep = 2;
@@ -137,8 +193,17 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     }
 
     initializeControls() {
-        if (this.startDate)
+        if (this.startDate) {
+            if (this.modifyInProgress) {
+                if (moment(this.testScheduleModel.savedStartTime).isBefore(moment(new Date()))) {
+                    this.$startDate.datepicker('setStartDate', moment(this.testScheduleModel.savedStartTime).format('L'));
+                    let disabledDateArray = this.utility.getDateRangeArray(moment(this.testScheduleModel.savedStartTime).add(1, 'day'), new Date());
+                    console.log(disabledDateArray);
+                    this.$startDate.datepicker('setDatesDisabled', disabledDateArray);
+                }
+            }
             this.$startDate.datepicker('update', this.startDate);
+        }
         else {
             this.$startDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
             this.$startDate.datepicker('update', '');
@@ -146,20 +211,23 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
         }
 
 
-        if (this.endDate)
+        if (this.endDate) {
             this.$endDate.datepicker('update', this.endDate);
+            if (this.modifyInProgress)
+                this.$endDate.datepicker('setStartDate', moment(this.testScheduleModel.savedStartTime).toDate());
+        }
         else {
             this.$endDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
             this.$endDate.datepicker('update', '');
         }
 
         if (this.startTime)
-            this.$startTime.timepicker('setTime', new Date(this.startTime));
+            this.$startTime.timepicker('setTime', moment(this.startTime).toDate());
         else
             this.$startTime.timepicker('setTime', '');
 
         if (this.endTime)
-            this.$endTime.timepicker('setTime', new Date(this.endTime));
+            this.$endTime.timepicker('setTime', moment(this.endTime).toDate());
         else
             this.$endTime.timepicker('setTime', '');
     }
@@ -195,6 +263,14 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                 let startTime;
                 if (__this.startDate) {
                     startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
+
+                    if (__this.modifyInProgress) {
+                        if (moment(__this.testScheduleModel.savedStartTime).isAfter(startTime)) {
+                            __this.$startTime.timepicker('setTime', moment(__this.testScheduleModel.savedStartTime).toDate());
+                            return;
+                        }
+                    }
+
                     if (startTime && moment(startTime).isValid()) {
                         __this.startTime = startTime;
 
@@ -258,7 +334,11 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
             }
             else {
-                __this.startTime = '';
+                if (__this.modifyInProgress) {
+                    __this.$startTime.timepicker('setTime', moment(__this.startTime).toDate());
+                }
+                else
+                    __this.startTime = '';
             }
             __this.$endTime.timepicker('option', 'durationTime', moment(__this.startTime).toDate());
             __this.validate(__this);
@@ -294,28 +374,42 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                         }
                         else {
                             if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
-                                if (moment(__this.endTime).isBefore(minEndTime)) {
-                                    __this.endTime = minEndTime;
-                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                if (__this.modifyInProgress) {
+                                    __this.endTime = __this.startTime;
+                                    __this.$endTime.timepicker('setTime', moment(__this.endTime).toDate());
                                 }
                                 else {
-                                    __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
-                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                    if (moment(__this.endTime).isBefore(minEndTime)) {
+                                        __this.endTime = minEndTime;
+                                        __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                    }
+                                    else {
+                                        __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
+                                        __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                    }
                                 }
-
                             }
                             else {
-                                if (moment(__this.endTime).isBefore(minEndTime)) {
-                                    __this.endTime = minEndTime;
-                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                if (!__this.modifyInProgress) {
+                                    if (moment(__this.endTime).isBefore(minEndTime)) {
+                                        __this.endTime = minEndTime;
+                                        __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                    }
                                 }
                             }
                         }
                     } else {
-                        if (!__this.endTime)
-                            __this.$endTime.timepicker('setTime', '');
-                        else
-                            __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+
+                        if (__this.modifyInProgress) {
+                            __this.$endTime.timepicker('setTime', moment(__this.testScheduleModel.savedEndTime).toDate());
+                        }
+                        else {
+                            if (!__this.endTime)
+                                __this.$endTime.timepicker('setTime', '');
+                            else
+                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                        }
+
                     }
 
                 } else {
@@ -361,7 +455,10 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                 }
             }
             else {
-                __this.endTime = '';
+                if (__this.modifyInProgress)
+                    __this.$endTime.timepicker('setTime', moment(__this.testScheduleModel.savedEndTime).toDate());
+                else
+                    __this.endTime = '';
             }
 
             if (__this.startTime)
@@ -386,15 +483,20 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
                 if (outputString !== '' && moment(outputString).isValid()) {
 
+
                     if (moment(outputString).isBefore(new Date(), 'day')) {
-                        if (!__this.startDate)
+                        if (__this.modifyInProgress) {
+                            if (moment(outputString).isSame(__this.testScheduleModel.savedStartTime, 'day'))
+                                __this.startDate = __this.testScheduleModel.savedStartTime;
+                        } else if (!__this.startDate)
                             __this.startDate = moment(new Date()).format('L');
                     }
                     else
                         __this.startDate = outputString;
 
-                    __this.$startDate.datepicker('update', __this.startDate);
-
+                    __this.$startDate.datepicker('update', moment(__this.startDate).toDate());
+                    console.log(moment(__this.startDate).toDate());
+                    console.log(moment(__this.startDate).format('LTS'));
 
                     // have to change the date part of the time because the date is changed ..
                     __this.startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
@@ -419,15 +521,22 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                     __this.$endDate.datepicker('setStartDate', __this.startDate);
                 }
                 else {
-                    if (__this.startDate)
-                        __this.$startDate.datepicker('update', new Date(__this.startDate));
+                    if (__this.modifyInProgress) {
+                        __this.$startDate.datepicker('update', moment(__this.startDate).toDate());
+                    } else if (__this.startDate)
+                        __this.$startDate.datepicker('update', moment(__this.startDate).toDate());
                     else
                         __this.$startDate.datepicker('update', '');
                 }
             }
             else {
-                __this.startDate = '';
-                __this.startTime = __this.$startTime.timepicker('getTime', new Date());
+                if (__this.modifyInProgress) {
+                    __this.$startDate.datepicker('update', __this.startDate);
+                }
+                else {
+                    __this.startDate = '';
+                    __this.startTime = __this.$startTime.timepicker('getTime', new Date());
+                }
             }
 
             if (moment(__this.startDate).isAfter(new Date())) {
@@ -469,8 +578,11 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                         if (__this.startTime) {
                             let outputTimeString = __this.$endTime.timepicker('getTime', new Date(outputString));
                             if (moment(outputTimeString).isBefore(__this.startTime)) {
-                                __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
-                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                if (__this.modifyInProgress)
+                                    __this.endTime = __this.startTime;
+                                else
+                                    __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                                __this.$endTime.timepicker('setTime', moment(__this.endTime).toDate());
                                 __this.endDate = moment(__this.startTime).format('L');
                             }
                             else {
@@ -511,24 +623,41 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                     __this.$endDate.datepicker('update', __this.endDate);
                     // have to change the date part of the time because the date is changed ..
                     __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
-                    let minEndTime = moment(new Date()).add(30, 'minutes').format();
-                    if (moment(__this.endTime).isBefore(minEndTime)) {
-                        __this.endTime = minEndTime;
-                        __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+
+                    if (!__this.modifyInProgress) {
+                        let minEndTime = moment(new Date()).add(30, 'minutes').format();
+                        if (moment(__this.endTime).isBefore(minEndTime)) {
+                            __this.endTime = minEndTime;
+                            __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                        }
                     }
 
-
-
                 } else {
-                    if (__this.endDate)
-                        __this.$endDate.datepicker('update', new Date(__this.endDate));
-                    else
-                        __this.$endDate.datepicker('update', '');
+
+                    if (__this.modifyInProgress) {
+                        __this.endDate = __this.testScheduleModel.savedEndTime;
+                        __this.$endDate.datepicker('update', moment(__this.testScheduleModel.savedEndTime).toDate());
+                    }
+                    else {
+                        if (__this.endDate)
+                            __this.$endDate.datepicker('update', new Date(__this.endDate));
+                        else
+                            __this.$endDate.datepicker('update', '');
+                    }
+
                 }
             }
             else {
-                __this.endDate = '';
-                __this.endTime = __this.$endTime.timepicker('getTime', new Date());
+
+                if (__this.modifyInProgress) {
+                    __this.endDate = __this.testScheduleModel.savedEndTime;
+                    __this.$endDate.datepicker('update', moment(__this.testScheduleModel.savedEndTime).toDate());
+                }
+                else {
+                    __this.endDate = '';
+                    __this.endTime = __this.$endTime.timepicker('getTime', new Date());
+                }
+
             }
 
             if (moment(__this.endDate).isAfter(new Date())) {
@@ -555,6 +684,7 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
     }
 
 
+
     set8HourRule(): void {
         let institution = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': this.testScheduleModel.institutionId });
         if (institution)
@@ -568,15 +698,14 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
         let __this = this;
         let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
-        let openIntegratedTestsPromise = this.testService.getOpenIntegratedTests(url);
-        openIntegratedTestsPromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
+        let openIntegratedTestsObservable: Observable<Response> = this.testService.getOpenIntegratedTests(url);
+        this.eightHourSubscription = openIntegratedTestsObservable
+            .map(response => response.json())
+            .subscribe(json => {
                 __this.ignore8HourRule = _.includes(json, __this.testScheduleModel.testId);
                 __this.validate(__this);
-            })
-            .catch((error) => {
+            },
+            error => {
                 console.log(error);
                 __this.validate(__this);
             });
@@ -651,20 +780,87 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
 
 
     saveDateTime(): boolean {
+        
         if (!this.validateDates())
             return;
 
         if (this.startTime !== undefined && moment(this.startTime).isValid() && this.endTime != undefined && moment(this.endTime).isValid()) {
-            this.testScheduleModel.scheduleStartTime = new Date(this.startTime);
-            this.testScheduleModel.scheduleEndTime = new Date(this.endTime);
-            this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
-            if (this.modify)
-                this.router.navigate(['/ModifyAddStudents', { action: 'modify' }]);
-            else
-                this.router.navigate(['/AddStudents']);
-            return false;
+            this.testScheduleModel.scheduleStartTime = moment(this.startTime).toDate();
+            this.testScheduleModel.scheduleEndTime = moment(this.endTime).toDate();
+            if (this.modifyInProgress) {
+                this.saveModifyInProgress();
+            }
+            else {
+                this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
+                if (this.modify)
+                    this.router.navigate(['/tests', 'modify', 'add-students']);
+                else
+                    this.router.navigate(['/tests/add-students']);
+                return false;
+            }
         }
     }
+
+
+    
+    resolveModifyTestingSessionURL(url: string): string {
+        return url.replace('§scheduleId', (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0).toString());
+    }
+
+    saveModifyInProgress() {
+        let input = {
+            TestingSessionWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
+            TestingSessionWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format()           
+        };
+
+        let myNewStartDateTime2 = moment(new Date(
+            moment(input.TestingSessionWindowStart).year(),
+            moment(input.TestingSessionWindowStart).month(),
+            moment(input.TestingSessionWindowStart).date(),
+            moment(input.TestingSessionWindowStart).hour(),
+            moment(input.TestingSessionWindowStart).minute(),
+            moment(input.TestingSessionWindowStart).second()
+        )).format('YYYY/MM/DD HH:mm:ss');
+
+        let myNewEndDateTime2 = moment(new Date(
+            moment(input.TestingSessionWindowEnd).year(),
+            moment(input.TestingSessionWindowEnd).month(),
+            moment(input.TestingSessionWindowEnd).date(),
+            moment(input.TestingSessionWindowEnd).hour(),
+            moment(input.TestingSessionWindowEnd).minute(),
+            moment(input.TestingSessionWindowEnd).second()
+        )).format('YYYY/MM/DD HH:mm:ss');
+
+        input.TestingSessionWindowStart = myNewStartDateTime2;
+        input.TestingSessionWindowEnd = myNewEndDateTime2;
+
+
+
+        let scheduleTestObservable: Observable<Response>;
+        let scheduleTestURL = '';
+        scheduleTestURL = this.resolveModifyTestingSessionURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateScheduleDatesModifyInProgress}`);
+        scheduleTestObservable = this.testService.updateScheduleDates(scheduleTestURL, JSON.stringify(input));
+
+        let __this = this;
+        scheduleTestObservable
+            .map(response => response.json())
+            .subscribe(json => {
+                __this.valid = true;
+                // clearTimeout(loaderTimer);
+                // $('#loader').modal('hide');
+                let result = json;
+                console.log(json);
+                if (result.TestingSessionId && result.TestingSessionId > 0 && result.ErrorCode ===0 && !result.TimingExceptions) {
+                    // __this.testScheduleModel.scheduleId = result.TestingSessionId;
+                    // __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
+                    __this.overrideRouteCheck = true;
+                    __this.router.navigate(['/tests']);
+                }
+
+            }, error => console.log(error));
+    }
+
+
 
     parseDateString(inputDate: string): string {
         let inputArr: string[] = [];
@@ -795,14 +991,14 @@ export class ScheduleTest implements OnInit, CanDeactivate, OnDeactivate {
                                 return false;
                             }
                         }
-                        else {
+                        else if(!this.modifyInProgress){
                             $('#alertPopup').modal('show');
                             return false;
                         }
 
                     }
                     else {
-                        if (moment(scheduleStartTime).isBefore(institutionCurrentTime)) {
+                        if (moment(scheduleStartTime).isBefore(institutionCurrentTime) && !this.modifyInProgress) {
                             $('#alertPopup').modal('show');
                             return false;
                         }

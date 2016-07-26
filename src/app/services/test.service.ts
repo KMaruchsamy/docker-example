@@ -18,6 +18,18 @@ export class TestService {
         this.auth.refresh();
     }
 
+    private getRequestOptions(): RequestOptions {
+        let self = this;
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.auth.authheader
+        });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        return requestOptions;
+    }
 
     outOfTestScheduling(routeName: string): boolean {
         routeName = routeName.toUpperCase();
@@ -33,6 +45,7 @@ export class TestService {
             || routeName.indexOf(TestShedulingPages.MODIFYCONFIRMATION) > -1
             || routeName.indexOf(TestShedulingPages.VIEW) > -1
             || routeName.indexOf(TestShedulingPages.MODIFYVIEW) > -1
+            || routeName.indexOf(TestShedulingPages.CONFIRMATIONMODIFYINPROGRESS) > -1
             || routeName.indexOf('ERROR') > -1)
             return false;
         return true;
@@ -51,58 +64,48 @@ export class TestService {
         else null;
     }
 
-    getSubjects(url): any {
+    getSubjects(url): Observable<Response> {
         let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Authorization': self.auth.authheader
         });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        return this.http.get(url, requestOptions);
     }
 
 
-    getTests(url): any {
+    getTests(url): Observable<Response> {
         let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
+       	let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Authorization': self.auth.authheader
         });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        return this.http.get(url, requestOptions);
     }
 
-    getOpenIntegratedTests(url): any {
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json'
-            }
+    getOpenIntegratedTests(url): Observable<Response> {
+       let self = this;
+       	let headers: Headers = new Headers({
+            'Accept': 'application/json',
         });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        return this.http.get(url, requestOptions);
     }
 
-    getActiveCohorts(url): any {
-        let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
-        });
+    getActiveCohorts(url): Observable<Response> {
+        return this.http.get(url, this.getRequestOptions());
     }
 
     getFaculty(url: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
-        });
+       return this.http.get(url, this.getRequestOptions());
     }
 
     getFacultySync(url: string): any {
@@ -133,68 +136,27 @@ export class TestService {
 
 
 
-    getRetesters(url: string, input: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': self.auth.authheader
-            },
-            body: input
-        });
+    getRetesters(url: string, input: string): Observable<Response> {
+         return this.http.post(url,input, this.getRequestOptions())
     }
 
 
-    scheduleTests(url: string, input: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': self.auth.authheader
-            },
-            body: input
-        });
+    scheduleTests(url: string, input: string): Observable<Response> {
+        return this.http.post(url,input, this.getRequestOptions())
     }
 
-    modifyScheduleTests(url: string, input: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'put',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': self.auth.authheader
-            },
-            body: input
-        });
+    modifyScheduleTests(url: string, input: string): Observable<Response> {
+        return this.http.put(url,input, this.getRequestOptions())
     }
 
 
 
-    getScheduleById(url: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
-        });
+    getScheduleById(url: string): Observable<Response> {
+        return this.http.get(url, this.getRequestOptions());
     }
 
-    getSearchStudent(url: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
-        });
+    getSearchStudent(url: string): Observable<Response> {
+       return this.http.get(url, this.getRequestOptions());
     }
 
     mapTestScheduleObjects(objTestScheduleModel): TestScheduleModel {
@@ -255,29 +217,13 @@ export class TestService {
     }
 
 
-    getAllScheduleTests(url: string) {
-        let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
-        });
+    getAllScheduleTests(url: string) :Observable<Response>{
+        return this.http.get(url, this.getRequestOptions());
     }
 
 
-    renameSession(url: string, input: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'put',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': self.auth.authheader
-            },
-            body: input
-        });
+    renameSession(url: string, input: string): Observable<Response> {      
+        return this.http.put(url, input, this.getRequestOptions());
     }
 
     sortSchedule(schedule: TestScheduleModel): TestScheduleModel {
@@ -529,4 +475,12 @@ export class TestService {
             return _.some(testScheduleModel.selectedStudents, { 'StudentPay': true });
     }
 
+    updateScheduleDates(url:string, input :string): Observable<Response>{
+        return this.http.put(url, input, this.getRequestOptions());
+    }
+
+    modifyInProgressScheduleTests(url: string, input: string): Observable<Response> {
+        return this.http.put(url, input, this.getRequestOptions())
+    }
+    
 }
