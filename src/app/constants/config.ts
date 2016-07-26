@@ -44,6 +44,7 @@ export const links = {
                 renamesession: "scheduling/testingSessions/§scheduleId/renameSession",
                 refreshTestingStatus: "scheduling/refreshRetestingStatus",
                 searchStudents: "scheduling/institutions/§institutionid/students?searchString=§searchstring&testId=§testid&windowStart=§windowstart&windowEnd=§windowend",
+                modifyInProgressSearchStudents: "scheduling/modifyInProgress/studentsInInstitution?searchString=§searchString&testingSessionId=§testingSessionId",
                 modifyInProgressCohortStudent:"scheduling/modifyInProgress/cohorts/§cohortId/students?testingSessionId=§testingSessionId",
                 refreshStudentsWhoStarted: "scheduling/testingSessions/§testingSessionId/students?filter=§filter",
                 updateModifyInProgressStudents: "scheduling/modifyInProgress/testingSessions/§testSessionId"
@@ -126,7 +127,8 @@ export const TestShedulingPages = {
     MODIFYCONFIRMATION: 'TESTS/MODIFY/CONFIRMATION',
     CONFIRMATION: 'TESTS/CONFIRMATION',
     VIEW: 'TESTS/VIEW',
-    MODIFYVIEW: 'TESTS/MODIFY/VIEW'
+    MODIFYVIEW: 'TESTS/MODIFY/VIEW',
+    CONFIRMATIONMODIFYINPROGRESS:'TESTS/CONFIRMATIONMODIFYINPROGRESS'
 };
 
 export const constants = {

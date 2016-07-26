@@ -86,6 +86,13 @@ export class AddStudents implements OnInit, OnDestroy {
     exceptionSubscription: Subscription;
     exceptionSubscriptionOne: Subscription;
     searchStudentSubscription: Subscription;
+    updateModifyInProgressTestSubscription: Subscription;
+    refreshStudentsSubscription: Subscription;
+    scheduleSubscription: Subscription;
+    modifyInProgress: boolean = false;
+    refreshStudentsWhoStarted: number[];
+    filterStatus: string = "assignedTestStarted";  // constant to pass into endpoint as a parameter
+
     constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public selectedStudentModel: SelectedStudentModel, public common: Common,
         public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location, public viewContainerRef: ViewContainerRef, public titleService: Title) {
 
@@ -139,7 +146,13 @@ export class AddStudents implements OnInit, OnDestroy {
         if (this.exceptionSubscriptionOne)
             this.exceptionSubscriptionOne.unsubscribe();
         if (this.searchStudentSubscription)
-            this.searchStudentSubscription.unsubscribe();    
+            this.searchStudentSubscription.unsubscribe();
+        if (this.updateModifyInProgressTestSubscription)
+            this.updateModifyInProgressTestSubscription.unsubscribe();
+        if (this.refreshStudentsSubscription)
+            this.refreshStudentsSubscription.unsubscribe();
+        if (this.scheduleSubscription)
+            this.scheduleSubscription.unsubscribe();
     }
 
     /*    
@@ -260,6 +273,12 @@ export class AddStudents implements OnInit, OnDestroy {
         this.ResetData();
         let savedSchedule = this.testService.getTestSchedule();
         if (savedSchedule) {
+            if (this.modify) {
+                debugger;
+                let testStatus: number = this.testService.getTestStatusFromTimezone(savedSchedule.institutionId, savedSchedule.scheduleStartTime, savedSchedule.scheduleEndTime);
+                if (testStatus === 0)
+                    this.modifyInProgress = true;
+            }
             this.testScheduleModel = savedSchedule;
 
             this.testScheduleModel.currentStep = 3;
@@ -282,7 +301,9 @@ export class AddStudents implements OnInit, OnDestroy {
                 }
             }
             this.loadActiveCohorts();
+
         }
+
     }
     InitializePage(): void {
         if (!this.modify)
@@ -299,7 +320,7 @@ export class AddStudents implements OnInit, OnDestroy {
             "TestingSessionWindowStart": moment(this.testScheduleModel.scheduleStartTime).format(),
             "TestingSessionWindowEnd": moment(this.testScheduleModel.scheduleEndTime).format()
         }
-        let refreshTestingStatusObservable :Observable<Response> = this.testService.scheduleTests(refreshTestingStatusURL, JSON.stringify(input));
+        let refreshTestingStatusObservable: Observable<Response> = this.testService.scheduleTests(refreshTestingStatusURL, JSON.stringify(input));
         this.refreshingTestingStatusSubscription = refreshTestingStatusObservable
             .map(response => response.json())
             .subscribe(json => {
@@ -328,7 +349,7 @@ export class AddStudents implements OnInit, OnDestroy {
                 //else
                 //    this.router.navigateByUrl('/tests/review');
             }, error => console.log(error));
-            
+
     }
 
     ResetData(): void {
@@ -338,7 +359,8 @@ export class AddStudents implements OnInit, OnDestroy {
         });
         this.selectedStudents = [];
         this.ShowHideSelectedStudentContainer();
-        this.EnableDisableButtonForDetailReview();
+        //this.EnableDisableButtonForDetailReview();
+        this.CheckForAdaStatus();
     }
 
     UpdateTestName(): void {
@@ -377,13 +399,17 @@ export class AddStudents implements OnInit, OnDestroy {
                 if (student.Retester) {
                     retesting = "RETESTING";
                 }
-                studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="button button-small button-light testing-remove-students-button" data-id="' + student.StudentId + '">Remove</button></li>';
+                if (!this.modifyInProgress)
+                    studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="' + this.setClasses(false) + '" data-id="' + student.StudentId + '">Remove</button></li>';
+                else
+                    studentlist += '<li class="clearfix"><div class="students-in-testing-session-list-item"><span class="js-selected-student">' + student.LastName + ', ' + student.FirstName + '</span><span class="small-tag-text">' + ' ' + retesting + '</span></div><button class="' + this.setClasses(student.AssignedTestStarted) + '" data-id="' + student.StudentId + '">Remove</button><button class="' + this.setClasses(!student.AssignedTestStarted) + '" disabled>Started test</button></li>';
             }
         }
         $('#testSchedulingSelectedStudentsList').append(studentlist);
         this.ShowHideSelectedStudentContainer();
         this.displaySelectedStudentFilter();
-        this.EnableDisableButtonForDetailReview();
+        // this.EnableDisableButtonForDetailReview();
+        this.CheckForAdaStatus();
         this.sortAlpha();
         this.RemoveSelectedStudents();
     }
@@ -396,7 +422,7 @@ export class AddStudents implements OnInit, OnDestroy {
         let cohortURL = this.resolveCohortURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.cohorts}`);
         let subjectsObservable = this.testService.getActiveCohorts(cohortURL);
         let __this = this;
-       this.subjectsSubscription= subjectsObservable
+        this.subjectsSubscription = subjectsObservable
             .map(response => {
                 if (response.status !== 400) {
                     return response.json();
@@ -427,6 +453,10 @@ export class AddStudents implements OnInit, OnDestroy {
         return url.replace('§cohortid', this.lastSelectedCohortID.toString()).replace('§testid', this.testScheduleModel.testId.toString());
     }
 
+    resolveCohortStudentsInProgressURL(url: string): string {
+        return url.replace('§cohortId', this.lastSelectedCohortID.toString()).replace('§testingSessionId', this.testScheduleModel.scheduleId.toString());
+    }
+
     markDuplicate(objArray: Object[]): Object[] {
 
         if (!objArray)
@@ -455,7 +485,12 @@ export class AddStudents implements OnInit, OnDestroy {
         this.lastSelectedCohortName = this.cohorts[selectedcohort.selectedIndex - 1].CohortName.toString();
         if (cohortId > 0) {
             this.lastSelectedCohortID = cohortId;
-            let CohortStudentsURL = this.resolveCohortStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.cohortstudents}`);
+            //let CohortStudentsURL = this.resolveCohortStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.cohortstudents}`);
+            let CohortStudentsURL: any;
+            if (this.modifyInProgress)
+                CohortStudentsURL = this.resolveCohortStudentsInProgressURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.modifyInProgressCohortStudent}`);
+            else
+                CohortStudentsURL = this.resolveCohortStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.cohortstudents}`);
             let testsObservable: Observable<Response> = this.testService.getTests(CohortStudentsURL);
             let _self = this;
             this.testsSubscription = testsObservable
@@ -556,7 +591,7 @@ export class AddStudents implements OnInit, OnDestroy {
         $('#addAllStudents').attr('disabled', 'true');
         this.ShowHideSelectedStudentContainer();
         this.displaySelectedStudentFilter();
-        this.EnableDisableButtonForDetailReview();
+        this.CheckForAdaStatus();
         this.sortAlpha();
         this.RemoveSelectedStudents();
     }
@@ -680,14 +715,14 @@ export class AddStudents implements OnInit, OnDestroy {
             this.CheckForAllStudentSelected();
             if (this.selectedStudentCount < 1) {
                 this.ShowHideSelectedStudentContainer();
-                this.EnableDisableButtonForDetailReview();
+                this.CheckForAdaStatus();
             }
         }
     }
 
     UpdateSelectedStudentCount(studentid: number): void {
         for (let i = 0; i < this.selectedStudents.length; i++) {
-            if (this.selectedStudents[i].StudentId.toString() === studentid) {
+            if (this.selectedStudents[i].StudentId.toString() === studentid.toString()) {
                 this.selectedStudents.splice(i, 1);
                 this.selectedStudentCount = this.selectedStudentCount - 1;
                 break;
@@ -708,6 +743,8 @@ export class AddStudents implements OnInit, OnDestroy {
         student.StudentTestName = this.testScheduleModel.testName;
         student.NormingId = 0;
         student.NormingStatus = "";
+        if (this.modifyInProgress)
+            student.Retester = this.getRetester(student);
         this.selectedStudents.push(student);
         let retesting = "";
         if (student.Retester) {
@@ -725,19 +762,23 @@ export class AddStudents implements OnInit, OnDestroy {
         }
         this.ShowHideSelectedStudentContainer();
         this.displaySelectedStudentFilter();
-        this.EnableDisableButtonForDetailReview();
+        this.CheckForAdaStatus();
         this.sortAlpha();
         this.RemoveSelectedStudents();
     }
 
     RemoveAllSelectedStudents(event): void {
         event.preventDefault();
-        this.selectedStudents = [];
-        this.ResetAddButton();
-        this.CheckForAllStudentSelected();
-        this.ShowHideSelectedStudentContainer();
-        this.displaySelectedStudentFilter();
-        this.EnableDisableButtonForDetailReview();
+        if (!this.modifyInProgress) {
+            this.selectedStudents = [];
+            this.ResetAddButton();
+            this.CheckForAllStudentSelected();
+            this.ShowHideSelectedStudentContainer();
+            this.displaySelectedStudentFilter();
+            this.CheckForAdaStatus();
+        }
+        else
+            this.RefreshStudentsWhoHaveStarted();
     }
 
     ShowHideSelectedStudentContainer(): void {
@@ -777,14 +818,11 @@ export class AddStudents implements OnInit, OnDestroy {
         }
     }
 
-    EnableDisableButtonForDetailReview(): void {
-        if (this.selectedStudentCount > 0) {
-            this.CheckForAdaStatus();
-            $('#reviewDetails').removeAttr('disabled', 'disabled');
-        }
-        else {
-            $('#reviewDetails').attr('disabled', 'true');
-        }
+    EnableDisableButtonForDetailReview(): boolean {
+        if (this.selectedStudentCount > 0)
+            return false;
+        else
+            return true;
     }
 
     filterTableSearch(): void {
@@ -906,9 +944,7 @@ export class AddStudents implements OnInit, OnDestroy {
         this.prevSearchText = "";
 
     }
-    DetailReviewTestClick(event): void {
-        event.preventDefault();
-
+    DetailReviewTestClick(): void {
         if (!this.validateDates())
             return;
         let studentId = [];
@@ -998,8 +1034,8 @@ export class AddStudents implements OnInit, OnDestroy {
                 "TestingSessionWindowEnd": moment(this.testScheduleModel.scheduleEndTime).format()
             }
         }
-        let exceptionObservable:Observable<Response> = this.testService.scheduleTests(repeaterExceptionURL, JSON.stringify(input));
-       this.exceptionSubscription = exceptionObservable
+        let exceptionObservable: Observable<Response> = this.testService.scheduleTests(repeaterExceptionURL, JSON.stringify(input));
+        this.exceptionSubscription = exceptionObservable
             .map(response => response.json())
             .subscribe((json) => {
                 if (json != null) {
@@ -1010,7 +1046,7 @@ export class AddStudents implements OnInit, OnDestroy {
                     this.HasStudentPayException();
                 }
             }, error => console.log(error));
-            
+
     }
     WindowException(): void {
         let __this = this;
@@ -1028,7 +1064,7 @@ export class AddStudents implements OnInit, OnDestroy {
                 __this.SeperateOutSelfPayStudents(json);
 
             }, error => console.log(error));
-            
+
     }
     HasWindowException(_studentWindowException: any): void {
         if (_studentWindowException.length != 0) {
@@ -1395,9 +1431,9 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
 
-    resolveScheduleURL(url: string, scheduleId: number): string {
-        return url.replace('§scheduleId', scheduleId.toString());
-    }
+    //resolveScheduleURL(url: string, scheduleId: number): string {
+    //    return url.replace('§scheduleId', scheduleId.toString());
+    //}
 
     validateDates(): boolean {
         return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify);
@@ -1494,7 +1530,11 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     loadSearchStudent(searctText: string): void {
-        let cohortURL = this.resolveSearchStudentURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.searchStudents}`, searctText);
+        let cohortURL = "";
+        if (this.modifyInProgress)
+            cohortURL = this.resolveModifyInProgressSearchStudentURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.modifyInProgressSearchStudents}`, searctText);
+        else
+            cohortURL = this.resolveSearchStudentURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.searchStudents}`, searctText);
         let searchStudentObservable = this.testService.getSearchStudent(cohortURL);
         let __this = this;
         this.searchStudentSubscription = searchStudentObservable
@@ -1516,7 +1556,15 @@ export class AddStudents implements OnInit, OnDestroy {
                     $('.typeahead').typeahead('destroy');
                 }
             }, error => console.log(error));
-            
+
+    }
+
+    resolveSearchStudentURL(url: string, searctText: string): string {
+        return url.replace('§institutionid', this.testScheduleModel.institutionId.toString()).replace('§searchstring', searctText).replace('§testid', this.testScheduleModel.testId.toString()).replace('§windowstart', this.windowStart.toString()).replace('§windowend', this.windowEnd.toString());
+    }
+
+    resolveModifyInProgressSearchStudentURL(url: string, searctText: string): string {
+        return url.replace('§searchString', searctText).replace('§testingSessionId', this.testScheduleModel.scheduleId.toString());
     }
 
     BindTypeAhead(_searchText: string): void {
@@ -1613,10 +1661,6 @@ export class AddStudents implements OnInit, OnDestroy {
                 this.FilterStudentfromResult(searchText);
             }
         }
-    }
-
-    resolveSearchStudentURL(url: string, searctText: string): string {
-        return url.replace('§institutionid', this.testScheduleModel.institutionId.toString()).replace('§searchstring', searctText).replace('§testid', this.testScheduleModel.testId.toString()).replace('§windowstart', this.windowStart.toString()).replace('§windowend', this.windowEnd.toString());
     }
 
     FilterStudentfromResult(searchString: string): void {
@@ -1740,37 +1784,236 @@ export class AddStudents implements OnInit, OnDestroy {
         this.FilterStudentfromResult(searchText);
     }
 
-    // validateDates(): boolean {
-    //     if (this.testScheduleModel) {
 
-    //         if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
+    //........ Modify In Progress changes Start........
 
-    //             let scheduleEndTime = moment(new Date(
-    //                 moment(this.testScheduleModel.scheduleEndTime).year(),
-    //                 moment(this.testScheduleModel.scheduleEndTime).month(),
-    //                 moment(this.testScheduleModel.scheduleEndTime).date(),
-    //                 moment(this.testScheduleModel.scheduleEndTime).hour(),
-    //                 moment(this.testScheduleModel.scheduleEndTime).minute(),
-    //                 moment(this.testScheduleModel.scheduleEndTime).second()
-    //             )).format('YYYY-MM-DD HH:mm:ss');
+    getRetester(student: Object): boolean {
+        if (this.modifyInProgress) {
+            if (student.AlternateTestAssignedInTestingSession || (!student.InTestingSession && student.StartedTestingSessionTest)) {
+                return true;
+            }
+            return false;
+        }
+        else {
+            return student.Retester;
 
-    //             if (this.modify) {
-    //                 let scheduleURL = this.resolveScheduleURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`, this.testScheduleModel.scheduleId);
-    //                 let status = this.testService.getTestStatus(scheduleURL);
-    //                 if (status === 'completed' || status === 'inprogress') {
-    //                     $('#alertPopup').modal('show');
-    //                     return false;
-    //                 }
-    //             }
-    //             else {
-    //                 if (moment(scheduleEndTime).isBefore(new Date(), 'day')) {
-    //                     $('#alertPopup').modal('show');
-    //                     return false;
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return true;
-    // }
+        }
+    }
 
+    EnableDisableVerify_SaveButton(): boolean {
+        let __this = this;
+        let isDisabled: boolean = true;
+        let isRemoved: boolean = false;
+        let isAdded: boolean = false;
+        if (this.selectedStudentCount > 0) {
+            let _selectedStudent = this.testScheduleModel.selectedStudents;
+            let removedStudent = _.difference(_selectedStudent, this.selectedStudents);
+            let newlyAddedStudent = _.difference(this.selectedStudents, _selectedStudent);
+            if (removedStudent.length > 0) {
+                isRemoved = true;
+                isDisabled = !isRemoved;
+            }
+            if (newlyAddedStudent.length > 0) {
+                isAdded = true;
+                isDisabled = !isAdded;
+            }
+            if (isAdded) {
+                
+                let isStudentExist = false;
+                let studentExistInSession: SelectedStudentModel[] = [];
+                //_.forEach(newlyAddedStudent, function (obj) {
+                //    let _studentExist: SelectedStudentModel = _.filter(__this.testScheduleModel.selectedStudents, { 'StudentId': obj.StudentId });
+                //    let _index = _.findIndex(__this.selectedStudents, ['StudentId', obj.StudentId]);
+                //    if (_index > -1) {
+                //        __this.selectedStudents[_index] = _studentExist;
+                //    }
+                //    studentExistInSession.push(_studentExist);
+                //});
+                //if (newlyAddedStudent.length === studentExistInSession.length) {
+                //    isStudentExist = true;
+                //}
+                //if (isRemoved || !isStudentExist) {
+                //    isDisabled = false;
+                //}
+            }
+        }
+        return isDisabled;
+    }
+
+    Verify_SaveTestClick(): void {
+        this.sStorage = this.auth.common.getStorage();
+        this.sStorage.setItem('prevtestschedule', JSON.stringify(this.testScheduleModel));
+        console.log('TestScheduleModel with previous Selected student' + this.testScheduleModel);
+
+        let selectedStudentModelList = this.selectedStudents;
+        this.updateModifyInProgress(selectedStudentModelList);
+
+
+    }
+
+    updateModifyInProgress(_selectedStudents: SelectedStudentModel[]): void {
+        this.testScheduleModel.selectedStudents = _selectedStudents;
+        let input = {
+            TestingSessionId: (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0),
+            SessionName: this.testScheduleModel.scheduleName,
+            AdminId: (this.testScheduleModel.adminId ? this.testScheduleModel.adminId : this.auth.userid),
+            InstitutionId: this.testScheduleModel.institutionId,
+            SessionTestId: this.testScheduleModel.testId,
+            SessionTestName: this.testScheduleModel.testName,
+            TestingWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
+            TestingWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format(),
+            FacultyMemberId: this.testScheduleModel.facultyMemberId,
+            Students: this.testScheduleModel.selectedStudents,
+            LastCohortSelectedId: this.testScheduleModel.lastselectedcohortId,
+            LastSubjectSelectedId: this.testScheduleModel.subjectId,
+            PageSavedOn: ''//TODO need to add the logic for this one ..
+        };
+        let __this = this;
+        let updateModifyInProgressTestURL = this.resolveUpdateModifyInProgressTestURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateModifyInProgressStudents}`);
+        let updateModifyInProgressTestObservable: Observable<Response> = this.testService.modifyInProgressScheduleTests(updateModifyInProgressTestURL, JSON.stringify(input));
+        this.updateModifyInProgressTestSubscription = updateModifyInProgressTestObservable
+            .map(response => response.json())
+            .subscribe((json) => {
+                if (json.ErrorCode === undefined) {
+                    if (__this.checkForModifyInProgressException(json)) {
+                        alert('Unable to Save because of having some error/exception.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
+                        // __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
+                        //  __this.router.navigate(['ConfirmationModifyInProgress']);
+                    }
+                }
+                else {
+                    if (json.ErrorCode === 0 && json.TestingSessionId > 0) {
+                        //if (__this.checkForModifyInProgressException(json)) {
+                        //    alert('Unable to Save because some student already started the test.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
+
+                        //} else {
+                            __this.overrideRouteCheck = true;
+                            __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
+                            __this.router.navigate(['/tests/confirmation-modify-in-progress']);
+                      //  }
+                    }
+                }
+            },
+            error => console.log(error.message),
+            () => console.log('complete')
+            );
+    }
+    resolveUpdateModifyInProgressTestURL(url: string): string {
+        return url.replace('§testSessionId', this.testScheduleModel.scheduleId.toString());
+    }
+
+    checkForModifyInProgressException(_json: any): boolean {
+    //    if (_json.windowExceptions.length)
+    //    { return false; }
+
+    //    if (_json.repeaterExceptions) {
+    //        if (_json.repeaterExceptions.AlternateTestInfo.length) { return false; }
+    //        if (_json.repeaterExceptions.StudentRepeaterExceptions.length) { return false; }
+    //        if (_json.repeaterExceptions.StudentAlternateTestInfo.length) { return false; }
+    //    }
+
+    //    if (_json.alreadyStartedExceptions.length) { return false; }
+        return true;
+    }
+
+    setClasses(AssigendTestStarted: boolean): string {
+        if (AssigendTestStarted) {
+            return 'button button-small button-light testing-remove-students-button hidden';
+        }
+        else {
+            return 'button button-small button-light testing-remove-students-button';
+        }
+    }
+
+    RefreshStudentsWhoHaveStarted(): void {
+        let refreshStudentsURL = this.resolveRefreshStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.refreshStudentsWhoStarted}`);
+        let refreshStudentsObservable: Observable<Response> = this.testService.getActiveCohorts(refreshStudentsURL);
+        let _this = this;
+        this.refreshStudentsSubscription = refreshStudentsObservable
+            .map(response => response.json())
+            .subscribe((json) => {
+                _this.refreshStudentsWhoStarted = json;
+                if (_this.refreshStudentsWhoStarted.length > 0) {
+                    //   _this.RefreshTestScheduleModalInSession();
+                    debugger;
+                    let studentsInSession = _.map(_this.selectedStudents, 'StudentId');
+                    let studentToRemove = _.difference(studentsInSession, _this.refreshStudentsWhoStarted);
+                    _.each(studentToRemove, function (studentid) {
+                        $('#testSchedulingSelectedStudentsList button').filter("[data-id=" + studentid + "]").parent().remove();
+                        _this.RemoveStudentFromList(studentid);
+                    });
+
+                }
+                else {
+                    _this.selectedStudents = [];
+                    _this.ResetAddButton();
+                    _this.CheckForAllStudentSelected();
+                    _this.ShowHideSelectedStudentContainer();
+                    _this.displaySelectedStudentFilter();
+                    _this.CheckForAdaStatus();
+
+                }
+            },
+            error => console.log(error.message),
+            () => console.log('complete')
+            );
+    }
+
+    resolveRefreshStudentsURL(url: string): string {
+        return url.replace('§testingSessionId', this.testScheduleModel.scheduleId.toString()).replace('§filter', this.filterStatus);
+    }
+
+    RefreshTestScheduleModalInSession(): void {
+        let __this = this;
+        let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`);
+        let scheduleObservable: Observable<Response> = this.testService.getScheduleById(scheduleURL);
+        this.scheduleSubscription = scheduleObservable
+            .map(response => response.json())
+            .subscribe((json) => {
+                if (json) {
+                    let _schedule: TestScheduleModel = __this.testService.mapTestScheduleObjects(json);
+                    if (_schedule) {
+                        __this.sStorage.setItem('testschedule', JSON.stringify(_schedule));
+                    }
+                }
+            },
+            error => console.log(error.message),
+            () => console.log('complete')
+            );
+
+
+    }
+
+
+    resolveScheduleURL(url: string): string {
+        return url.replace('§scheduleId', this.testScheduleModel.scheduleId.toString());
+    }
+
+    getRetesterClass(student: SelectedStudentModel): string {
+        if (this.modifyInProgress) {
+            return this.getClassName(this.getRetester(student));
+        }
+        else
+            return this.getClassName(student.Retester);
+    }
+
+    makeSave_ContinueButtonEnableDisable(): boolean {
+        if (this.modifyInProgress)
+            return this.EnableDisableVerify_SaveButton();
+        else
+            return this.EnableDisableButtonForDetailReview();
+    }
+    save_ContinueButtonClick(e): void {
+        if (this.modifyInProgress)
+            this.Verify_SaveTestClick();
+        else
+            this.DetailReviewTestClick();
+    }
+
+    confirmCancelChanges(e): void {
+        $('#cancelChangesPopup').modal('show');
+        e.preventDefault();
+    }
+
+    //........ Modify In Progress changes End........
 }

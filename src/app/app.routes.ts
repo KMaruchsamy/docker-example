@@ -1,4 +1,4 @@
-import {provideRouter, RouterConfig, } from '@angular/router'
+import {provideRouter, RouterConfig } from '@angular/router';
 import {Home} from './components/home/home';
 import {Login} from './components/login/login';
 import {ResetPassword} from './components/password/reset-password';
@@ -28,6 +28,7 @@ import {Logout} from './components/shared/logout';
 import {AccountError} from './components/errors/accounterror';
 import {LastTestingSession} from './components/tests/last-testing-session';
 import {SharedDeactivateGuard} from './components/shared/shared.deactivate.guard';
+import {ConfirmationModifyInProgress} from './components/tests/confirmation-modify-in-progress';
 
 const APP_ROUTES: RouterConfig = [
     { path: '', component: Login },
@@ -64,7 +65,8 @@ const APP_ROUTES: RouterConfig = [
     { path: 'error', component: UnhandledException },
     { path: '**', component: PageNotFound },
     { path: 'accounterror', component: AccountError },
-    { path: 'testing-session-expired', component: LastTestingSession }
+    { path: 'testing-session-expired', component: LastTestingSession },
+    { path: 'tests/confirmation-modify-in-progress', component: ConfirmationModifyInProgress }
 ]
 
 

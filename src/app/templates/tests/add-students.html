@@ -1,6 +1,6 @@
 ﻿<page-header></page-header>
 <main role="main" class="app-main">
-    <test-header [modify]="modify" (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Add students' [testSchedule]="testScheduleModel"></test-header>
+    <test-header [modify]="modify" [modifyInProgress]="modifyInProgress" (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Add students' [testSchedule]="testScheduleModel"></test-header>
     <div class="thin-section">
         <div class="container add-students-outer-container section-small-screen-no-padding">
 
@@ -88,7 +88,7 @@
                                         </td>
                                         <td [attr.firstname]="student.FirstName">{{student.FirstName}}</td>
                                         <td>{{isAddByName?student.CohortName:lastSelectedCohortName}}</td>
-                                        <td [class]="getClassName(student.Retester)">{{student.Retester?"Yes":"No"}}</td>
+                                        <td [class]="getRetesterClass(student)">{{getRetester(student)?"Yes":"No"}}</td>
                                         <td>
                                             <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" [attr.ada]="student.Ada" [attr.email]="student.Email" (click)="AddStudent(student,$event)">Add</button>
                                         </td>
@@ -101,13 +101,16 @@
                 </div>
                 <!--end left-grid-->
                 <div class="grid right-grid">
-                    <div class="top-section">
+                    <div class="top-section"  [class.modify]="modifyInProgress" [class.active]="modifyInProgress">
                         <h4 class="white-text h6 no-margin-bottom" id="studentAddedToTestingSession">Students in Testing Session ({{selectedStudentCount}})</h4>
                     </div>
                     <div class="section-medium-thin container-narrow lightbulb-icon-container-flush-text" *ngIf="selectedStudentCount === 0" id="selectedStudentsContainer">
-                        <p class="icon lightbulb-icon">Students you add to your testing session by Cohort will appear here.</p>
-                        <p class="icon lightbulb-icon">You will be able to assign alternate test versions to retesting students before moving to Step 4.</p>
-                        <p class="icon lightbulb-icon">If a cohort you are expecting to see does not appear in the menu, please check your testing window in Step 2.</p>
+                        <p *ngIf="!modifyInProgress" class="icon lightbulb-icon">Students you add to your testing session by Cohort will appear here.</p>
+                        <p *ngIf="!modifyInProgress" class="icon lightbulb-icon">You will be able to assign alternate test versions to retesting students before moving to Step 4.</p>
+                        <p *ngIf="!modifyInProgress" class="icon lightbulb-icon">If a cohort you are expecting to see does not appear in the menu, please check your testing window in Step 2.</p>
+                        <p *ngIf="modifyInProgress" class="icon lightbulb-icon">Students you add to your testing session by Cohort will appear here. <strong>You must have at least one student in this testing session to continue.</strong></p>
+                        <p *ngIf="modifyInProgress" class="icon lightbulb-icon">You will be able to assign alternate test versions to retesting students before finalizing your changes.</p>
+                        <p *ngIf="modifyInProgress" class="icon lightbulb-icon">If a cohort you are expecting to see does not appear in the menu, please check your testing window.</p>
                     </div>
                     <div id="testSchedulingSelectedStudents" class="added-student-list" [hidden]="selectedStudentCount === 0">
                         <form class="test-scheduling-selected-students-container">
@@ -131,6 +134,7 @@
 
         <div class="container add-students-outer-container section section-top-thin">
             <div class="icon-container-flush-text">
+                <p *ngIf="modifyInProgress" class="icon red-triangle-alert-small small-triangle-alert-icon margin-1em-top" id="alreadyStartedNote"><strong>Please note:</strong> Students who have already started their test can no longer be removed from the testing session.</p>
                 <p class="icon info-icon-yellow" *ngIf="!hasADA && selectedStudents.length > 0">
                     Please contact your Account Manager if there are students in your testing session who need testing accommodations.
                     Students with testing accommodations receive untimed versions of their tests.
@@ -139,10 +143,11 @@
                     One or more of the students you have added have testing accommodations. Their test will be untimed.
                     For more information or to designate additional students who need testing accommodations, please contact your Account Manager.
                 </p>
-                <p class="icon info-icon-yellow margin-1em-top" *ngIf="selectedStudents.length > 0">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
-                <!--  <div class="right margin-2em-top-bottom">-->
-                <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" disabled (click)="DetailReviewTestClick($event)"><span class="hidden-extra-small-down">Next step: </span>Add details and review</button>
-                <!--</div>-->
+                <p class="icon info-icon-yellow margin-1em-top" *ngIf="!modifyInProgress && selectedStudents.length > 0">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
+                <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" [disabled]="makeSave_ContinueButtonEnableDisable()" (click)="save_ContinueButtonClick($event)"> <span *ngIf="!modifyInProgress" class="hidden-extra-small-down">Next step: </span>{{ modifyInProgress ? 'Verify changes and save' : 'Add details and review'}}</button>
+                <div *ngIf="modifyInProgress">
+                    <button class="anchor-button right clear" (click)="confirmCancelChanges($event)">Cancel changes</button>
+                </div>
             </div>
         </div>
     </div>

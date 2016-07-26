@@ -45,6 +45,7 @@ export class TestService {
             || routeName.indexOf(TestShedulingPages.MODIFYCONFIRMATION) > -1
             || routeName.indexOf(TestShedulingPages.VIEW) > -1
             || routeName.indexOf(TestShedulingPages.MODIFYVIEW) > -1
+            || routeName.indexOf(TestShedulingPages.CONFIRMATIONMODIFYINPROGRESS) > -1
             || routeName.indexOf('ERROR') > -1)
             return false;
         return true;
@@ -474,4 +475,8 @@ export class TestService {
             return _.some(testScheduleModel.selectedStudents, { 'StudentPay': true });
     }
 
+    modifyInProgressScheduleTests(url: string, input: string): Observable<Response> {
+        return this.http.put(url, input, this.getRequestOptions())
+    }
+    
 }
