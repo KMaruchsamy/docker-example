@@ -64,7 +64,7 @@
             </table>
         </div>
         <h4 class="teal" id="studentsInTestingSessionConfirmation">Students in Testing Session ({{unmarkedStudentsCount()}})</h4>
-        <a [routerLink]="modify ? ['/tests','modify','add-students'] : ['tests/add-students']">Change</a>
+        <a [routerLink]="modify ? ['/tests','modify','add-students'] : ['/tests','add-students']">Change</a>
         <button class="right anchor-button" *ngIf="(retesterExceptions?.length>0 && hasAlternateTests) || (retesterExceptions?.length>0 && hasSavedRetesterExceptions) || (modify && retesterExceptionsModify?.length>0)" (click)="changeAlternateAssignments($event)">Change alternate test assignments</button>
 
         <table id="studentsInTestingSessionTable" class="dataTable-bordered table-with-cell-padding table-striped last-row-no-border">
