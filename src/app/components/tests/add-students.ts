@@ -22,6 +22,7 @@ import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
 import {SelfPayStudentPopup} from './self-pay-student-popup';
 import {SortPipe} from '../../pipes/sort.pipe';
+import {Utility} from '../../scripts/utility';
 
 import * as _ from 'lodash';
 // import '../../plugins/dropdown.js';
@@ -41,7 +42,7 @@ import * as _ from 'lodash';
     styles: [`#addByName.active + #cohortStudentList .add-students-table-search {display: table; width: 100%;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
-    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup],
+    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup, Utility],
     directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, ROUTER_DIRECTIVES, AlertPopup],
     pipes: [RemoveWhitespacePipe, SortPipe]
 })
@@ -1807,36 +1808,43 @@ export class AddStudents implements OnInit, OnDestroy {
         let isAdded: boolean = false;
         if (this.selectedStudentCount > 0) {
             let _selectedStudent = this.testScheduleModel.selectedStudents;
-            let removedStudent = _.difference(_selectedStudent, this.selectedStudents);
+          
             let newlyAddedStudent = _.difference(this.selectedStudents, _selectedStudent);
-            if (removedStudent.length > 0) {
-                isRemoved = true;
-                isDisabled = !isRemoved;
-            }
+            
             if (newlyAddedStudent.length > 0) {
                 isAdded = true;
-                isDisabled = !isAdded;
             }
             if (isAdded) {
-                
                 let isStudentExist = false;
                 let studentExistInSession: SelectedStudentModel[] = [];
-                //_.forEach(newlyAddedStudent, function (obj) {
-                //    let _studentExist: SelectedStudentModel = _.filter(__this.testScheduleModel.selectedStudents, { 'StudentId': obj.StudentId });
-                //    let _index = _.findIndex(__this.selectedStudents, ['StudentId', obj.StudentId]);
-                //    if (_index > -1) {
-                //        __this.selectedStudents[_index] = _studentExist;
-                //    }
-                //    studentExistInSession.push(_studentExist);
-                //});
-                //if (newlyAddedStudent.length === studentExistInSession.length) {
-                //    isStudentExist = true;
-                //}
-                //if (isRemoved || !isStudentExist) {
-                //    isDisabled = false;
-                //}
+                _.forEach(newlyAddedStudent, function (obj) {                    
+                    _.forEach(__this.testScheduleModel.selectedStudents, function (o) {
+                        let _studentExist: SelectedStudentModel;
+                        if (o.StudentId === obj.StudentId) {
+                            _studentExist = o;
+                            let _index = _.findIndex(__this.selectedStudents, ['StudentId', obj.StudentId]);
+                            if (_index > -1) {
+                                __this.selectedStudents[_index] = _studentExist;
+                                studentExistInSession.push(_studentExist);
+                            }
+                        }
+                    });
+                });
+                if (newlyAddedStudent.length === studentExistInSession.length) {
+                    isStudentExist = true;
+                }
+                if (isStudentExist) {
+                    isAdded = false;
+                }
+            }
+
+            let removedStudent = _.difference(_selectedStudent, this.selectedStudents);
+            if (removedStudent.length > 0) {
+                isRemoved = true;
             }
         }
+        
+        if (isRemoved || isAdded) { isDisabled = false;}
         return isDisabled;
     }
 
@@ -1860,8 +1868,8 @@ export class AddStudents implements OnInit, OnDestroy {
             InstitutionId: this.testScheduleModel.institutionId,
             SessionTestId: this.testScheduleModel.testId,
             SessionTestName: this.testScheduleModel.testName,
-            TestingWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
-            TestingWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format(),
+            TestingWindowStart:this.testScheduleModel.scheduleStartTime,
+            TestingWindowEnd: this.testScheduleModel.scheduleEndTime,
             FacultyMemberId: this.testScheduleModel.facultyMemberId,
             Students: this.testScheduleModel.selectedStudents,
             LastCohortSelectedId: this.testScheduleModel.lastselectedcohortId,
@@ -2004,6 +2012,7 @@ export class AddStudents implements OnInit, OnDestroy {
             return this.EnableDisableButtonForDetailReview();
     }
     save_ContinueButtonClick(e): void {
+        e.preventDefault();
         if (this.modifyInProgress)
             this.Verify_SaveTestClick();
         else

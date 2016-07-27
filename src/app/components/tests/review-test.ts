@@ -66,6 +66,7 @@ export class ReviewTest implements OnInit, OnDestroy {
     destinationRoute: string;
     scheduleTestSubscription: Subscription;
     retesterExceptionsSubscripton: Subscription;
+    facultySubscription: Subscription;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public common: Common,
         public router: Router, public dynamicComponentLoader: DynamicComponentLoader,
@@ -86,7 +87,9 @@ export class ReviewTest implements OnInit, OnDestroy {
         if (this.scheduleTestSubscription)
             this.scheduleTestSubscription.unsubscribe();
         if (this.retesterExceptionsSubscripton)
-            this.retesterExceptionsSubscripton.unsubscribe();    
+            this.retesterExceptionsSubscripton.unsubscribe();
+        if (this.facultySubscription)
+            this.facultySubscription.unsubscribe();    
     }
 
     canDeactivate(): Observable<boolean> | boolean {
@@ -298,17 +301,29 @@ export class ReviewTest implements OnInit, OnDestroy {
 
     bindFaculty(): void {
         let facultyURL = this.resolveFacultyURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.faculty}`);
-        let facultyJSON = this.testService.getFacultySync(facultyURL);
-        if (facultyJSON) {
-            this.faculty = facultyJSON;
-            setTimeout(() => {
-                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
-                    $('#ddlFaculty').selectpicker('mobile');
-                else
-                    $('#ddlFaculty').selectpicker('refresh');
+        let facultyObservable: Observable<Response> = this.testService.getFaculty(facultyURL);
+        this.facultySubscription =facultyObservable
+            .map(response => response.json())
+            .subscribe(facultyJSON => {
+                this.faculty = facultyJSON;
+                setTimeout(() => {
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
+                        $('#ddlFaculty').selectpicker('mobile');
+                    else
+                        $('#ddlFaculty').selectpicker('refresh');
+                });
+                this.validate();
             });
-            this.validate();
-        }
+        // if (facultyJSON) {
+        //     this.faculty = facultyJSON;
+        //     setTimeout(() => {
+        //         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
+        //             $('#ddlFaculty').selectpicker('mobile');
+        //         else
+        //             $('#ddlFaculty').selectpicker('refresh');
+        //     });
+        //     this.validate();
+        // }
     }
 
     resolveFacultyURL(url: string): string {
