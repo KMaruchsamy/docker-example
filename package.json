@@ -132,6 +132,6 @@
     "whatwg-fetch": "0.7.0",
     "when": "3.7.3",
     "x-editable": "1.5.1",
-    "zone.js": "^0.6.12"
+    "zone.js": "0.6.12"
   }
 }
