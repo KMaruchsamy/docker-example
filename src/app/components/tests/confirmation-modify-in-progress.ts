@@ -1,5 +1,5 @@
 ﻿import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES, ActivatedRoute, CanDeactivate, RoutesRecognized } from '@angular/router';
+import {Router, ROUTER_DIRECTIVES, ActivatedRoute, RoutesRecognized } from '@angular/router';
 import {NgFor, NgIf} from '@angular/common';
 import {Title} from '@angular/platform-browser';
 import {Subscription} from 'rxjs/Rx';
@@ -16,7 +16,7 @@ import {SortPipe} from '../../pipes/sort.pipe';
     selector: 'confirmation-modify-in-progress',
     templateUrl: 'templates/tests/confirmation-modify-in-progress.html',
     providers: [Auth, Common, TestService, TestScheduleModel, SelectedStudentModel],
-    directives: [PageHeader, NgFor, NgIf],
+    directives: [ROUTER_DIRECTIVES,PageHeader, NgFor, NgIf],
     pipes: [SortPipe]
 })
 export class ConfirmationModifyInProgress implements OnInit, OnDestroy {
@@ -51,7 +51,7 @@ export class ConfirmationModifyInProgress implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (outOfTestScheduling)
             this.testService.clearTestScheduleObjects();  
 
