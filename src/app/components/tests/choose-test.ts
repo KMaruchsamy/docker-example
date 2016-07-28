@@ -4,6 +4,8 @@ import {Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterSta
 import {Subscription, Observable} from 'rxjs/Rx';
 import {Location} from '@angular/common';
 import {Title} from '@angular/platform-browser';
+import {NgIf, NgFor} from '@angular/common';
+import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -14,6 +16,7 @@ import {TestHeader} from './test-header';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {AlertPopup} from '../shared/alert.popup';
+import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';
 import {Utility} from '../../scripts/utility';
@@ -31,8 +34,8 @@ import {Response} from '@angular/http';
     selector: 'choose-test',
     templateUrl: 'templates/tests/choose-test.html',
     providers: [TestService, Auth, TestScheduleModel, Utility, Common],
-    directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup, AlertPopup],
-    pipes: [RemoveWhitespacePipe, RoundPipe]
+    directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup, AlertPopup, TestingSessionStartingPopup, NgIf, NgFor],
+    pipes: [RemoveWhitespacePipe, RoundPipe, ParseDatePipe]
 })
 
 export class ChooseTest implements OnInit, OnChanges, OnDestroy {
@@ -47,6 +50,7 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
     attemptedRoute: string;
     overrideRouteCheck: boolean = false;
     modify: boolean = false;
+    modifyInProgress: boolean;
     saveTriggered: boolean = false;
     searchString: string = null;
     typeaheadResults: Object[] = [];
@@ -128,6 +132,11 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
         this.overrideRouteCheck = true;
         this.testService.clearTestScheduleObjects();
         this.router.navigate(['/tests']);
+    }
+
+    cancelStartingTestChanges(popupId): void {
+        $('#'+ popupId).modal('hide');
+        this.onCancelChanges();
     }
 
     onContinueMakingChanges(): void {
@@ -221,13 +230,15 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
             .subscribe(json => {
                 this.subjects = json;
                 this.loadSchedule();
+                this.checkIfTestHasStarted();
+                this.testService.showTestStartingWarningModals(this.modify,this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
                 setTimeout(json => {
                     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
                         $('.selectpicker').selectpicker('mobile');
                     else
                         $('.selectpicker').selectpicker('refresh');
                 });
-
+                
             });
     }
 
@@ -272,7 +283,7 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
 
     }
 
-    saveChooseTest(e): void {
+    saveChooseTest(e): any {
         this.saveTriggered = true;
         e.preventDefault();
         if (!this.validateDates())
@@ -313,7 +324,11 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
     }
 
     validateDates(): boolean {
-        return this.testService.validateDates(this.testScheduleModel, this.institutionID, this.modify);
+        return this.testService.validateDates(this.testScheduleModel, this.institutionID, this.modify, this.modifyInProgress);
+    }
+
+    checkIfTestHasStarted():any {
+        return this.testService.checkIfTestHasStarted(this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modifyInProgress );
     }
 
     selectTest(testId: number, testName: string, subjectId: number, normingStatusName): void {
@@ -325,8 +340,8 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
         this.sStorage.removeItem('retesters');
     }
 
-    onCancelConfirmation(e: any): void {
-        $('#confirmationPopup').modal('hide');
+    onCancelConfirmation(popupId): void {
+        $('#' + popupId).modal('hide');
         this.attemptedRoute = '';
     }
 

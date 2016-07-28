@@ -19,6 +19,7 @@ import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {AlertPopup} from '../shared/alert.popup';
+import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
 import {Loader} from '../shared/loader';
 import {Subscription, Observable} from 'rxjs/Rx';
 // import '../../plugins/dropdown.js';
@@ -31,7 +32,7 @@ import {Subscription, Observable} from 'rxjs/Rx';
     selector: "review-test",
     templateUrl: "templates/tests/review-test.html",
     providers: [TestService, Auth, TestScheduleModel, Common],
-    directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, ROUTER_DIRECTIVES, RetesterAlternatePopup, RetesterNoAlternatePopup, ConfirmationPopup, TimeExceptionPopup, Loader, AlertPopup],
+    directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, ROUTER_DIRECTIVES, RetesterAlternatePopup, RetesterNoAlternatePopup, ConfirmationPopup, TimeExceptionPopup, Loader, AlertPopup, TestingSessionStartingPopup],
     pipes: [ParseDatePipe]
 })
 
@@ -56,6 +57,7 @@ export class ReviewTest implements OnInit, OnDestroy {
     windowExceptions: Object[];
     nextDay: boolean = false;
     modify: boolean = false;
+    modifyInProgress: boolean;
     hasSavedRetesterExceptions: boolean = false;
     hasADA: boolean = false;
     retesterExceptionsModify: Object[] = [];
@@ -118,6 +120,10 @@ export class ReviewTest implements OnInit, OnDestroy {
         // continue making changes after confirmation popup..
     }
 
+    cancelStartingTestChanges(popupId): void {
+        $('#'+ popupId).modal('hide');
+        this.onCancelChanges();
+    }
 
     // routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
     //     let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
@@ -227,9 +233,10 @@ export class ReviewTest implements OnInit, OnDestroy {
 
                 let startTime = this.testScheduleModel.scheduleStartTime;
                 let endTime = this.testScheduleModel.scheduleEndTime;
-                if (moment(endTime).isAfter(startTime, 'day'))
+                if (moment(endTime).isAfter(startTime, 'day')) {
                     this.nextDay = true;
-
+                }
+                this.testService.showTestStartingWarningModals(this.modify, this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
             }
 
             if (this.testScheduleModel.currentStep < 4)
@@ -408,6 +415,8 @@ export class ReviewTest implements OnInit, OnDestroy {
                 console.log(json);
                 if (result.TestingSessionId && result.TestingSessionId > 0) {
                     __this.testScheduleModel.scheduleId = result.TestingSessionId;
+                    __this.testScheduleModel.savedStartTime = __this.testScheduleModel.scheduleStartTime;
+                    __this.testScheduleModel.savedEndTime = __this.testScheduleModel.scheduleEndTime;
                     __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
                     if (__this.modify)
                         __this.router.navigate(['/tests', 'modify', 'confirmation']);
@@ -705,8 +714,8 @@ export class ReviewTest implements OnInit, OnDestroy {
     //     return _retesters;
     // }
 
-    onCancelConfirmation(e: any): void {
-        $('#confirmationPopup').modal('hide');
+    onCancelConfirmation(popupId): void {
+        $('#' + popupId).modal('hide');
         this.attemptedRoute = '';
     }
     onOKConfirmation(e: any): void {
@@ -958,7 +967,7 @@ export class ReviewTest implements OnInit, OnDestroy {
     }
 
     validateDates(): boolean {
-        return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify);
+        return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify, this.modifyInProgress);
     }
 
     // validateDates(): boolean {

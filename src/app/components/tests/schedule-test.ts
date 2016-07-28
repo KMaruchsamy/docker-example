@@ -1,6 +1,7 @@
 import {Component, OnInit, AfterViewInit, ViewEncapsulation, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute, CanDeactivate, RoutesRecognized} from '@angular/router';
 import {NgIf, Location} from '@angular/common';
+import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {Title} from '@angular/platform-browser';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -16,6 +17,7 @@ import {AlertPopup} from '../shared/alert.popup';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {Response} from '@angular/http';
 import {Utility} from '../../scripts/utility';
+import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
 // import '../../plugins/bootstrap-datepicker-1.5.min.js';
 // import '../../plugins/jquery.timepicker.js';
 // import '../../lib/modal.js';
@@ -26,9 +28,11 @@ import {Utility} from '../../scripts/utility';
     styleUrls: ['../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css', '../../css/jquery.timepicker.css', '../../css/schedule.css'],
     encapsulation: ViewEncapsulation.None,
     providers: [TestService, Auth, TestScheduleModel, Common, Utility],
-    directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup, AlertPopup]
+    directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup, AlertPopup, TestingSessionStartingPopup],
+    pipes: [ParseDatePipe]
 })
 export class ScheduleTest implements OnInit, OnDestroy {
+    institutionID: number;
     valid: boolean = false;
     invalid8hours: boolean = false;
     ignore8HourRule: boolean = false;
@@ -88,6 +92,8 @@ export class ScheduleTest implements OnInit, OnDestroy {
                 this.initialize();
                 this.initializeControls();
                 this.set8HourRule();
+                this.testService.showTestStartingWarningModals(this.modify, this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
+
                 $(document).scrollTop(0);
             });
         }
@@ -98,6 +104,11 @@ export class ScheduleTest implements OnInit, OnDestroy {
         this.overrideRouteCheck = true;
         this.testService.clearTestScheduleObjects();
         this.router.navigate(['/tests']);
+    }
+
+    cancelStartingTestChanges(popupId): void {
+        $('#'+ popupId).modal('hide');
+        this.onCancelChanges();
     }
 
     onContinueMakingChanges(): void {
@@ -778,8 +789,19 @@ export class ScheduleTest implements OnInit, OnDestroy {
         __this.valid = true;
     }
 
+     checkIfTestHasStarted(): number {
+        debugger;
+        return this.testService.checkIfTestHasStarted(this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modifyInProgress)
+    }
 
     saveDateTime(): boolean {
+        //if modify flow, check first if test has already started
+        if (this.modify) {
+            this.checkIfTestHasStarted();
+            if (!this.checkIfTestHasStarted()) {
+                return false;
+            }
+       }
         
         if (!this.validateDates())
             return;
@@ -985,32 +1007,33 @@ export class ScheduleTest implements OnInit, OnDestroy {
                         console.log('Saved Starttime : ' + savedStartTime);
                         console.log('Saved End time : ' + savedEndTime);
 
-                        if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
-                            if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
-                                $('#alertPopup').modal('show');
-                                return false;
-                            }
-                        }
-                        else if(!this.modifyInProgress){
-                            $('#alertPopup').modal('show');
-                            return false;
-                        }
+                //         if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
+                //             if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                //                 $('#alertPopup').modal('show');
+                //                 return false;
+                //             }
+                //         }
+                //         else if(!this.modifyInProgress){
+                //             $('#alertPopup').modal('show');
+                //             return false;
+                //         }
 
-                    }
-                    else {
-                        if (moment(scheduleStartTime).isBefore(institutionCurrentTime) && !this.modifyInProgress) {
-                            $('#alertPopup').modal('show');
-                            return false;
-                        }
-                    }
+                //     }
+                //     else {
+                //         if (moment(scheduleStartTime).isBefore(institutionCurrentTime) && !this.modifyInProgress) {
+                //             $('#alertPopup').modal('show');
+                //             return false;
+                //         }
+                //     }
 
-                }
-                else {
+                // }
+                // else {
                     if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
                         $('#alertPopup').modal('show');
                         return false;
                     }
                 }
+                } //closes if this.modify
             }
         }
         return true;
@@ -1023,8 +1046,8 @@ export class ScheduleTest implements OnInit, OnDestroy {
     }
 
 
-    onCancelConfirmation(e: any): void {
-        $('#confirmationPopup').modal('hide');
+    onCancelConfirmation(popupId): void {
+        $('#' + popupId).modal('hide');
         this.attemptedRoute = '';
     }
     onOKConfirmation(e: any): void {

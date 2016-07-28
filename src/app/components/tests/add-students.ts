@@ -15,8 +15,10 @@ import {TestHeader} from './test-header';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
+import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {AlertPopup} from '../shared/alert.popup';
+import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
 import {RetesterAlternatePopup} from './retesters-alternate-popup';
 import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
@@ -43,8 +45,8 @@ import * as _ from 'lodash';
     #addByName.active + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
     providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup, Utility],
-    directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, ROUTER_DIRECTIVES, AlertPopup],
-    pipes: [RemoveWhitespacePipe, SortPipe]
+    directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, ROUTER_DIRECTIVES, AlertPopup, TestingSessionStartingPopup],
+    pipes: [RemoveWhitespacePipe, SortPipe, ParseDatePipe]
 })
 
 export class AddStudents implements OnInit, OnDestroy {
@@ -275,7 +277,6 @@ export class AddStudents implements OnInit, OnDestroy {
         let savedSchedule = this.testService.getTestSchedule();
         if (savedSchedule) {
             if (this.modify) {
-                debugger;
                 let testStatus: number = this.testService.getTestStatusFromTimezone(savedSchedule.institutionId, savedSchedule.scheduleStartTime, savedSchedule.scheduleEndTime);
                 if (testStatus === 0)
                     this.modifyInProgress = true;
@@ -311,6 +312,8 @@ export class AddStudents implements OnInit, OnDestroy {
             this.UpdateTestName();
         this.ReloadData();
         this.RefreshSelectedStudentCount();
+        this.testService.showTestStartingWarningModals(this.modify, this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
+
     }
     RefreshSelectedSudent(): void {
         let refreshTestingStatusURL = this.resolveCohortURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.refreshTestingStatus}`);
@@ -945,7 +948,8 @@ export class AddStudents implements OnInit, OnDestroy {
         this.prevSearchText = "";
 
     }
-    DetailReviewTestClick(): void {
+
+    DetailReviewTestClick(event): void {
         if (!this.validateDates())
             return;
         let studentId = [];
@@ -1395,8 +1399,8 @@ export class AddStudents implements OnInit, OnDestroy {
             return _studentRepeaterExceptions;
     }
 
-    onCancelConfirmation(e: any): void {
-        $('#confirmationPopup').modal('hide');
+    onCancelConfirmation(popupId): void {
+        $('#' + popupId).modal('hide');
         this.attemptedRoute = '';
     }
     onOKConfirmation(e: any): void {
@@ -1427,6 +1431,11 @@ export class AddStudents implements OnInit, OnDestroy {
         this.router.navigate(['/tests']);
     }
 
+     cancelStartingTestChanges(popupId): void {
+        $('#'+ popupId).modal('hide');
+        this.onCancelChanges();
+    }
+
     onContinueMakingChanges(): void {
         // continue making changes after confirmation popup..
     }
@@ -1437,7 +1446,7 @@ export class AddStudents implements OnInit, OnDestroy {
     //}
 
     validateDates(): boolean {
-        return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify);
+        return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify, this.modifyInProgress);
     }
 
     AddByCohort(): void {

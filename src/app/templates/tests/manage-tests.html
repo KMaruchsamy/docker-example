@@ -209,6 +209,6 @@
 <page-footer></page-footer>
 
 <confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to delete this testing session? This cannot be undone.'"
-    [okButtonText]="'Yes, delete'" [cancelButtonText]="'Cancel'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation()"
-    [hideClose]="false">
+[okButtonText]="'Yes, delete'" [cancelButtonText]="'Cancel'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation($event)"
+[hideClose]="false">
 </confirmation-popup>
