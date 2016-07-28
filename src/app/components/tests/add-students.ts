@@ -1038,7 +1038,7 @@ export class AddStudents implements OnInit, OnDestroy {
         let exceptionObservable: Observable<Response> = this.testService.scheduleTests(repeaterExceptionURL, JSON.stringify(input));
         this.exceptionSubscription = exceptionObservable
             .map(response => response.json())
-            .subscribe((json) => {
+            .subscribe(json => {
                 if (json != null) {
                     __this.resolveExceptions(json, __this);
                 }
@@ -1061,7 +1061,7 @@ export class AddStudents implements OnInit, OnDestroy {
         let exceptionObservable = this.testService.scheduleTests(windowExceptionURL, JSON.stringify(input));
         this.exceptionSubscriptionOne = exceptionObservable
             .map(response => response.json())
-            .subscribe((json) => {
+            .subscribe(json => {
                 __this.SeperateOutSelfPayStudents(json);
 
             }, error => console.log(error));
@@ -1881,7 +1881,7 @@ export class AddStudents implements OnInit, OnDestroy {
         let updateModifyInProgressTestObservable: Observable<Response> = this.testService.modifyInProgressScheduleTests(updateModifyInProgressTestURL, JSON.stringify(input));
         this.updateModifyInProgressTestSubscription = updateModifyInProgressTestObservable
             .map(response => response.json())
-            .subscribe((json) => {
+            .subscribe(json => {
                 if (json.ErrorCode === undefined) {
                     if (__this.checkForModifyInProgressException(json)) {
                         alert('Unable to Save because of having some error/exception.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
@@ -1891,20 +1891,15 @@ export class AddStudents implements OnInit, OnDestroy {
                 }
                 else {
                     if (json.ErrorCode === 0 && json.TestingSessionId > 0) {
-                        //if (__this.checkForModifyInProgressException(json)) {
-                        //    alert('Unable to Save because some student already started the test.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
-
-                        //} else {
-                            __this.overrideRouteCheck = true;
-                            __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
-                            __this.router.navigate(['/tests/confirmation-modify-in-progress']);
-                      //  }
+                    
+                         //   __this.overrideRouteCheck = true;
+                        __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
+                        __this.router.navigate(['/tests/confirmation-modify-in-progress']);
                     }
-                }
+                } 
             },
-            error => console.log(error.message),
-            () => console.log('complete')
-            );
+            error => console.log(error)
+        );
     }
     resolveUpdateModifyInProgressTestURL(url: string): string {
         return url.replace('§testSessionId', this.testScheduleModel.scheduleId.toString());
@@ -1962,9 +1957,7 @@ export class AddStudents implements OnInit, OnDestroy {
 
                 }
             },
-            error => console.log(error.message),
-            () => console.log('complete')
-            );
+            error => console.log(error));
     }
 
     resolveRefreshStudentsURL(url: string): string {
@@ -1985,11 +1978,7 @@ export class AddStudents implements OnInit, OnDestroy {
                     }
                 }
             },
-            error => console.log(error.message),
-            () => console.log('complete')
-            );
-
-
+            error => console.log(error));
     }
 
 
