@@ -23,6 +23,7 @@ export class ForgotPassword implements OnInit, OnDestroy {
     // config:any;
     apiServer: string;
     forgotPasswordSubscription: Subscription;
+    errorCodes: any;
     constructor(private http: Http, public router: Router, public common: Common, public validations: Validations, public logger: Logger, public titleService: Title) {
 
     }
@@ -33,6 +34,7 @@ export class ForgotPassword implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.errorCodes = errorcodes;
         this.titleService.setTitle('Forgot Password – Kaplan Nursing');
         this.apiServer = this.common.getApiServer();
         this.initialize();
@@ -74,17 +76,26 @@ export class ForgotPassword implements OnInit, OnDestroy {
             this.forgotPasswordSubscription = forgotPasswordObservable
                 .map(response => response.status)
                 .subscribe(status => {
-                    if (status.toString() === errorcodes.SUCCESS) {
+                    if (status.toString() === self.errorCodes.SUCCESS) {
                         self.router.navigate(['/forgot-password-confirmation']);
                     }
-                    else if (status.toString() === errorcodes.SERVERERROR) {
+                    else if (status.toString() === self.errorCodes.SERVERERROR) {
                         self.showError(forgot_password.failed_sent_mail, errorContainer);
                     }
                     else {
                         self.showError(forgot_password.invalid_emailid, errorContainer);
                     }
                 }, error => {
-                    self.showError(general.exception, errorContainer);
+                    if (error.status.toString() === self.errorCodes.SERVERERROR) {
+                        self.showError(forgot_password.failed_sent_mail, errorContainer);
+                    }
+                    else if (error.json().Payload.length > 0) {
+                        if (error.json().Payload[0].Messages.length > 0) {
+                            self.showError(error.json().Payload[0].Messages[0].toString(),errorContainer);
+                        }
+                    }
+                    else
+                        self.showError(general.exception, errorContainer);
                 });
         }
     }

@@ -3,8 +3,8 @@
 
     <test-header  [modify]="modify" [modifyInProgress]="modifyInProgress" (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Choose date and time' [testSchedule]="testScheduleModel"></test-header>
 
-    <div class="thin-section container-medium-width">
-        <form class="margin-2em-top clearfix" id="scheduleTest">
+    <div class="section container-medium-width">
+        <form class="clearfix" id="scheduleTest">
             <div class="date-time-container clearfix">
                 <label class="label-inline screen-reader-only" for="startDate">Start Date (MM/DD/YYYY)</label>
                 <input #startdate type="text" autocomplete="off" class="date start required-entry" placeholder="Date" id="startDate" (keyup)="onKeyUpDate(startdate,$event);"
@@ -36,11 +36,6 @@
             </div>
             <button type="button" class="button margin-2em-top button-mobile-block right" (click)="saveDateTime($event);" [disabled]="!valid">{{modifyInProgress ? 'Verify changes and save' : 'Next step: Add students'}}</button>
         </form>
-        <div class="delete-draft section-medium-thin clearfix invisible">
-            <hr>
-            <button class="anchor-button smaller">Delete this draft</button>
-            <p class="saved-draft-info smaller teal">Saving draft…</p>
-        </div>
     </div>
     <!--closes div containing form-->
 </main>
@@ -51,7 +46,7 @@
     [okButtonText] = "'Yes, leave this page'" 
     [cancelButtonText] = "'No, stay on this page'" 
     (onOK)="onOKConfirmation()" 
-    (onCancel)="onCancelConfirmation()"
+    (onCancel)="onCancelConfirmation($event)"
     [hideClose]="true" >
 </confirmation-popup>
 
@@ -62,3 +57,37 @@
     (onOK)="onOKAlert()"    
     [hideClose]="false">
 </alert-popup>
+
+<test-starting-popup
+                    [popupId]="'testStarted'"
+                    [heading]="'Alert: Testing Session Has Already Started'"
+                    [leadParagraph]="'<b>We’re sorry, this testing session is now underway. You can no longer modify it from this location.</b>'"
+                    [paragraph]="'Please hit “OK” to go to the <b>Manage Tests</b> main page, where you will be able to make changes to this testing session'"
+                    [okButtonText]="'OK'"
+                    [cancelButtonText]="'Cancel'"
+                    (onOK)="cancelStartingTestChanges($event)"
+                    (onCancel)="onCancelConfirmation($event)"
+                    [isStarted] ="true">
+</test-starting-popup>
+
+<test-starting-popup [popupId]="'testStartingin5'"
+                    [heading]="'Alert: Testing Session Starting in 5 Minutes'"
+                    leadParagraph="This testing session is scheduled to start in <b>5 minutes ({{testScheduleModel.scheduleStartTime|parseDate:'h:mma'}})</b>."
+                    [paragraph]="'Once this testing session is in progress, you will no longer be able to modify it from this location.'"
+                    [okButtonText]="'Continue modifying this session'"
+                    [cancelButtonText]="'Cancel changes'"
+                    (onOK)="onCancelConfirmation($event)"
+                    (onCancel)="cancelStartingTestChanges($event)"
+                    [isStarted] ="false">
+</test-starting-popup>
+
+<test-starting-popup [popupId]="'testStartingin10'"
+                    [heading]="'Alert: Testing Session Starting in 10 Minutes'"
+                    leadParagraph="This testing session is scheduled to start in <b>10 minutes ({{testScheduleModel.scheduleStartTime|parseDate:'h:mma'}})</b>."
+                    [paragraph]="'Once this testing session is in progress, you will no longer be able to modify it from this location.'"
+                    [okButtonText]="'Continue modifying this session'"
+                    [cancelButtonText]="'Cancel changes'"
+                    (onOK)="onCancelConfirmation($event)"
+                    (onCancel)="cancelStartingTestChanges($event)"
+                    [isStarted] ="false">
+</test-starting-popup>

@@ -61,6 +61,8 @@ export class ManageTests implements OnInit, OnDestroy {
     subjectsSubscription: Subscription;
     scheduleTestsSubscription: Subscription;
     renameSessionSuscription: Subscription;
+    errorCodes: any;
+    testStatus: any;
     constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public titleService: Title) { }
 
     ngOnDestroy(): void {
@@ -76,6 +78,8 @@ export class ManageTests implements OnInit, OnDestroy {
 
 
     ngOnInit(): void {
+        this.errorCodes = errorcodes;
+        this.testStatus = teststatus;
         this.sStorage = this.common.getStorage();
         this.testService.clearTestScheduleObjects();
         this.apiServer = this.common.getApiServer();
@@ -103,7 +107,7 @@ export class ManageTests implements OnInit, OnDestroy {
                 if (__this.tests && __this.tests.length > 0) {
 
                     let unsortedCompletedTests = _.filter(__this.tests, function (test) {
-                        return (test.Status == teststatus.Completed);
+                        return (test.Status == __this.testStatus.Completed);
                     });
                     __this.completedTests = _.sortBy(unsortedCompletedTests, function (_test) {
                         _test.nextDay = moment(_test.TestingWindowStart).isBefore(_test.TestingWindowEnd, 'day');
@@ -112,14 +116,14 @@ export class ManageTests implements OnInit, OnDestroy {
 
                     let unsortedScheduledTests = _.filter(__this.tests, function (test) {
                         test.nextDay = moment(test.TestingWindowStart).isBefore(test.TestingWindowEnd, 'day');
-                        return (test.Status == teststatus.Scheduled);
+                        return (test.Status == __this.testStatus.Scheduled);
                     });
                     __this.scheduleTests = _.sortBy(unsortedScheduledTests, function (_test) {
                         return moment(_test.TestingWindowStart).toDate()
                     });
 
                     let unsortedInProgressTests = _.filter(__this.tests, function (test) {
-                        return (test.Status == teststatus.InProgress);
+                        return (test.Status == __this.testStatus.InProgress);
                     });
 
                     __this.inProgressTests = _.sortBy(unsortedInProgressTests, function (_test) {
@@ -220,8 +224,8 @@ export class ManageTests implements OnInit, OnDestroy {
 
             this.renameSessionSubscription = renameSessionObservable
                 .map(response => response.status)
-                .subscribe(status => {
-                    if (status.toString() === errorcodes.SUCCESS) {
+                .subscribe(status => {                   
+                    if (status.toString() === __this.errorCodes.SUCCESS) {
                         // e.currentTarget.textContent = _newName;
                         let renamedTest: any;
                         if (type === 'scheduled') {

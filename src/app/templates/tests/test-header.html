@@ -1,9 +1,9 @@
 <div class="section section-bottom-thin"  [class.section-light-pink]="modifyInProgress">
     <div [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
          <h2 [class.page-sm-heading-teal]="!modifyInProgress" [class.error]="modifyInProgress" [class.h5]="modifyInProgress">
-            {{modifyInProgress ?(testSchedule.activeStep ===3 ? 'Add/Remove Students' :'Change testing window' ): 'Manage Tests'}}
+            {{modifyInProgress ?(testSchedule.activeStep ===3 ? 'Add/Remove Students' :'Change Testing Window' ): 'Manage Tests'}}
             </h2>
-        <h3 class="page-lg-heading" [class.modify-testing-session-left]="modify">{{ modify ? (modifyInProgress ? 'Test in progress : ' + testSchedule.testName  : 'Modify a Testing Session') : 'Schedule a Test' }}</h3>
+        <h3 class="page-lg-heading" [class.modify-testing-session-left]="modify">{{ modify ? (modifyInProgress ? 'Test In Progress : ' + testSchedule.testName  : 'Modify a Testing Session') : 'Schedule a Test' }}</h3>
         <div *ngIf="modify && !hideCancelButton" class="modify-testing-session-right text-larger">
             <button class="anchor-button" (click)="confirmCancelChanges($event)">Cancel changes</button>
         </div>

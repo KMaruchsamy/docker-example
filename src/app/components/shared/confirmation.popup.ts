@@ -10,7 +10,7 @@ import {Common} from '../../services/common';
     inputs: ['cancelButtonText', 'okButtonText', 'message']
 })
 
-export class ConfirmationPopup implements OnInit {
+export class ConfirmationPopup {
     @Input() popupId: number;
     @Input() cancelButtonText:string;
     @Input() okButtonText:string;
@@ -21,16 +21,13 @@ export class ConfirmationPopup implements OnInit {
     constructor(public router: Router, public common: Common) {
 
     }
-    
-    ngOnInit(): void{
-    }
 
     onOK(e): void {
-        this.okEvent.emit(e);
+        this.okEvent.emit(this.popupId);
     }
     
     onCancel(e): void{
-        this.cancelEvent.emit(e);
+        this.cancelEvent.emit(this.popupId);
     }
     
 

@@ -27,6 +27,7 @@ export class Account implements OnInit, OnDestroy {
     resetPasswordSubscription: Subscription;
     resetStudentPasswordSubscription: Subscription;
     routeSubscription: Subscription;
+    errorCodes: any;
     constructor(private http: Http, public router: Router, private activatedRoute: ActivatedRoute, public auth: Auth, public common: Common, public validations: Validations, public titleService: Title) {
     }
 
@@ -44,6 +45,7 @@ export class Account implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.errorCodes = errorcodes;
         this.titleService.setTitle('Manage Account – Kaplan Nursing');
         this.sStorage = this.common.getStorage();
         this.apiServer = this.common.getApiServer();
@@ -185,14 +187,14 @@ export class Account implements OnInit, OnDestroy {
         this.saveProfileSubscription = saveProfileObservable
             .map(response => response.status)
             .subscribe(status => {
-                if (status.toString() === errorcodes.SUCCESS) {
+                if (status.toString() === this.errorCodes.SUCCESS) {
                     self.showSuccess(resetSaveProfile, successContainer, btnSaveProfile);
                     self.sStorage.setItem('firstname', fname);
                     self.sStorage.setItem('lastname', lname);
                     self.sStorage.setItem('title', title);
                     self.getInitialize();
                 }
-                else if (status.toString() === errorcodes.UNAUTHORIZED) {
+                else if (status.toString() === this.errorCodes.UNAUTHORIZED) {
                     self.redirectToLogin();
                 }
                 else {
@@ -234,7 +236,7 @@ export class Account implements OnInit, OnDestroy {
                     return response.json();
                 })
                 .subscribe(json => {
-                    if (status.toString() === errorcodes.SUCCESS) {
+                    if (status.toString() === this.errorCodes.SUCCESS) {
                         self.showSuccess(resetEmailSave, SuccessEmailContainer, btnChangeEmail);
                         self.sStorage.setItem('jwt', json.AccessToken);
                         self.sStorage.setItem('useremail', newemailid);
@@ -250,7 +252,7 @@ export class Account implements OnInit, OnDestroy {
                             });
                         }, 3000);
                     }
-                    else if (status.toString() === errorcodes.API) {
+                    else if (status.toString() === this.errorCodes.API) {
                         if (json.Payload.length > 0) {
                             if (json.Payload[0].Messages.length > 0) {
                                 self.showError(json.Payload[0].Messages[0].toString(), PasswordErrorContainer, 2);
@@ -264,7 +266,16 @@ export class Account implements OnInit, OnDestroy {
                     txtPassword.value = '';
                 },
                 error => {
-                    self.showError(general.exception, PasswordErrorContainer, 2);
+                    if (error.status.toString() === this.errorCodes.API) {
+                        if (error.json().Payload.length > 0) {
+                            if (error.json().Payload[0].Messages.length > 0) {
+                                self.showError(error.json().Payload[0].Messages[0].toString(), PasswordErrorContainer, 2);
+                            }
+                        }
+                    }
+                    else {
+                        self.showError(general.exception, PasswordErrorContainer, 2);
+                    }
                     txtPassword.value = '';
                 });
         }
@@ -333,7 +344,7 @@ export class Account implements OnInit, OnDestroy {
                     return response.json();
                 })
                 .subscribe(json => {
-                    if (status.toString() === errorcodes.SUCCESS) {
+                    if (status.toString() === this.errorCodes.SUCCESS) {
                         $('#divNewPasswordInfo').slideUp('fast', function () {
                             $(this).addClass('hidden');
                         });
@@ -341,7 +352,7 @@ export class Account implements OnInit, OnDestroy {
                         self.showSuccess(btnResetResetPassword, SuccessResetPasswordContainer, btnResetPassword);
                         self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
                     }
-                    else if (status.toString() === errorcodes.API) {
+                    else if (status.toString() === this.errorCodes.API) {
                         if (json.Payload.length > 0) {
                             if (json.Payload[0].Messages.length > 0) {
                                 self.showError(json.Payload[0].Messages[0].toString(), ResetPasswordErrorContainer, 4);
@@ -354,8 +365,19 @@ export class Account implements OnInit, OnDestroy {
                         self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
                     }
                 }, error => {
-                    self.showError(general.exception, ResetPasswordErrorContainer, 4);
-                    self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                    if (error.status.toString() === this.errorCodes.API) {
+                        if (error.json().Payload.length > 0) {
+                            if (error.json().Payload[0].Messages.length > 0) {
+                                self.showError(error.json().Payload[0].Messages[0].toString(), ResetPasswordErrorContainer, 4);
+                                self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                            }
+                        }
+                    }
+                    else {
+                        self.showError(general.exception, ResetPasswordErrorContainer, 4);
+                        self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                    }
+
                 });
         }
         else {
@@ -429,12 +451,12 @@ export class Account implements OnInit, OnDestroy {
                     return response.json();
                 })
                 .subscribe(json => {
-                    if (status.toString() === errorcodes.SUCCESS) {
+                    if (status.toString() === this.errorCodes.SUCCESS) {
                         successResetStudentPasswordContainer.innerHTML = reset_student_password.success_message;
                         self.showSuccess(btnClearResetStudentPassword, successResetStudentPasswordContainer, btnResetStudentPassword);
                         self.clearResetStudentPassword(txtResetStudentPassword, btnResetStudentPassword);
                     }
-                    else if (status.toString() === errorcodes.API) {
+                    else if (status.toString() === this.errorCodes.API) {
                         if (json.Payload.length > 0) {
                             if (json.Payload[0].Messages.length > 0) {
                                 self.showError(json.Payload[0].Messages[0].toString(), resetStudentPasswordErrorContainer, 5);
@@ -447,8 +469,19 @@ export class Account implements OnInit, OnDestroy {
                         self.clearResetStudentPassword(txtResetStudentPassword, null);
                     }
                 }, error => {
-                    self.showError(general.exception, resetStudentPasswordErrorContainer, 5);
-                    self.clearResetStudentPassword(txtResetStudentPassword, null);
+                    if (error.status.toString() === this.errorCodes.API) {
+                        if (error.json().Payload.length > 0) {
+                            if (error.json().Payload[0].Messages.length > 0) {
+                                self.showError(error.json().Payload[0].Messages[0].toString(), resetStudentPasswordErrorContainer, 5);
+                                self.clearResetStudentPassword(txtResetStudentPassword, null);
+                            }
+                        }
+                    }
+                    else {
+                        self.showError(general.exception, resetStudentPasswordErrorContainer, 5);
+                        self.clearResetStudentPassword(txtResetStudentPassword, null);
+                    }
+
                 });
         }
     }

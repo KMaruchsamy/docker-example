@@ -15,8 +15,10 @@ import {TestHeader} from './test-header';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
+import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {AlertPopup} from '../shared/alert.popup';
+import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
 import {RetesterAlternatePopup} from './retesters-alternate-popup';
 import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
@@ -43,8 +45,8 @@ import * as _ from 'lodash';
     #addByName.active + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
     providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup, Utility],
-    directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, ROUTER_DIRECTIVES, AlertPopup],
-    pipes: [RemoveWhitespacePipe, SortPipe]
+    directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, ROUTER_DIRECTIVES, AlertPopup, TestingSessionStartingPopup],
+    pipes: [RemoveWhitespacePipe, SortPipe, ParseDatePipe]
 })
 
 export class AddStudents implements OnInit, OnDestroy {
@@ -275,7 +277,6 @@ export class AddStudents implements OnInit, OnDestroy {
         let savedSchedule = this.testService.getTestSchedule();
         if (savedSchedule) {
             if (this.modify) {
-                debugger;
                 let testStatus: number = this.testService.getTestStatusFromTimezone(savedSchedule.institutionId, savedSchedule.scheduleStartTime, savedSchedule.scheduleEndTime);
                 if (testStatus === 0)
                     this.modifyInProgress = true;
@@ -311,6 +312,8 @@ export class AddStudents implements OnInit, OnDestroy {
             this.UpdateTestName();
         this.ReloadData();
         this.RefreshSelectedStudentCount();
+        this.testService.showTestStartingWarningModals(this.modify, this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
+
     }
     RefreshSelectedSudent(): void {
         let refreshTestingStatusURL = this.resolveCohortURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.refreshTestingStatus}`);
@@ -945,7 +948,8 @@ export class AddStudents implements OnInit, OnDestroy {
         this.prevSearchText = "";
 
     }
-    DetailReviewTestClick(): void {
+
+    DetailReviewTestClick(event): void {
         if (!this.validateDates())
             return;
         let studentId = [];
@@ -1038,7 +1042,7 @@ export class AddStudents implements OnInit, OnDestroy {
         let exceptionObservable: Observable<Response> = this.testService.scheduleTests(repeaterExceptionURL, JSON.stringify(input));
         this.exceptionSubscription = exceptionObservable
             .map(response => response.json())
-            .subscribe((json) => {
+            .subscribe(json => {
                 if (json != null) {
                     __this.resolveExceptions(json, __this);
                 }
@@ -1061,7 +1065,7 @@ export class AddStudents implements OnInit, OnDestroy {
         let exceptionObservable = this.testService.scheduleTests(windowExceptionURL, JSON.stringify(input));
         this.exceptionSubscriptionOne = exceptionObservable
             .map(response => response.json())
-            .subscribe((json) => {
+            .subscribe(json => {
                 __this.SeperateOutSelfPayStudents(json);
 
             }, error => console.log(error));
@@ -1395,8 +1399,8 @@ export class AddStudents implements OnInit, OnDestroy {
             return _studentRepeaterExceptions;
     }
 
-    onCancelConfirmation(e: any): void {
-        $('#confirmationPopup').modal('hide');
+    onCancelConfirmation(popupId): void {
+        $('#' + popupId).modal('hide');
         this.attemptedRoute = '';
     }
     onOKConfirmation(e: any): void {
@@ -1427,6 +1431,11 @@ export class AddStudents implements OnInit, OnDestroy {
         this.router.navigate(['/tests']);
     }
 
+     cancelStartingTestChanges(popupId): void {
+        $('#'+ popupId).modal('hide');
+        this.onCancelChanges();
+    }
+
     onContinueMakingChanges(): void {
         // continue making changes after confirmation popup..
     }
@@ -1437,7 +1446,7 @@ export class AddStudents implements OnInit, OnDestroy {
     //}
 
     validateDates(): boolean {
-        return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify);
+        return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify, this.modifyInProgress);
     }
 
     AddByCohort(): void {
@@ -1881,7 +1890,7 @@ export class AddStudents implements OnInit, OnDestroy {
         let updateModifyInProgressTestObservable: Observable<Response> = this.testService.modifyInProgressScheduleTests(updateModifyInProgressTestURL, JSON.stringify(input));
         this.updateModifyInProgressTestSubscription = updateModifyInProgressTestObservable
             .map(response => response.json())
-            .subscribe((json) => {
+            .subscribe(json => {
                 if (json.ErrorCode === undefined) {
                     if (__this.checkForModifyInProgressException(json)) {
                         alert('Unable to Save because of having some error/exception.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
@@ -1891,20 +1900,15 @@ export class AddStudents implements OnInit, OnDestroy {
                 }
                 else {
                     if (json.ErrorCode === 0 && json.TestingSessionId > 0) {
-                        //if (__this.checkForModifyInProgressException(json)) {
-                        //    alert('Unable to Save because some student already started the test.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
-
-                        //} else {
-                            __this.overrideRouteCheck = true;
-                            __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
-                            __this.router.navigate(['/tests/confirmation-modify-in-progress']);
-                      //  }
+                    
+                         //   __this.overrideRouteCheck = true;
+                        __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
+                        __this.router.navigate(['/tests/confirmation-modify-in-progress']);
                     }
-                }
+                } 
             },
-            error => console.log(error.message),
-            () => console.log('complete')
-            );
+            error => console.log(error)
+        );
     }
     resolveUpdateModifyInProgressTestURL(url: string): string {
         return url.replace('§testSessionId', this.testScheduleModel.scheduleId.toString());
@@ -1962,9 +1966,7 @@ export class AddStudents implements OnInit, OnDestroy {
 
                 }
             },
-            error => console.log(error.message),
-            () => console.log('complete')
-            );
+            error => console.log(error));
     }
 
     resolveRefreshStudentsURL(url: string): string {
@@ -1985,11 +1987,7 @@ export class AddStudents implements OnInit, OnDestroy {
                     }
                 }
             },
-            error => console.log(error.message),
-            () => console.log('complete')
-            );
-
-
+            error => console.log(error));
     }
 
 

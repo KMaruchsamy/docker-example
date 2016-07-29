@@ -66,7 +66,7 @@ export class Auth {
   isStudentPayEnabledInstitution(institutionId: number): boolean {
     let institutions = JSON.parse(this.institutions);
     if (institutions.length > 0) {
-      return _.some(institutions, { 'InstitutionId': institutionId, 'StudentPayEnabled': true });
+      return _.some(institutions, { 'InstitutionId': +institutionId, 'StudentPayEnabled': true });
     }
     return false;
   }

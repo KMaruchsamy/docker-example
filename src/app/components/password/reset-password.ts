@@ -26,18 +26,20 @@ export class ResetPassword implements OnInit, OnDestroy {
     sStorage: any;
     temporaryPasswordSubscription: Subscription;
     authenticateSubscription: Subscription;
+    errorCodes: any;
     constructor(public router: Router, public auth: Auth, public common: Common, public location: Location, public validations: Validations, public titleService: Title) {
 
     }
 
-    ngOnDestroy(): void{
+    ngOnDestroy(): void {
         if (this.temporaryPasswordSubscription)
             this.temporaryPasswordSubscription.unsubscribe();
         if (this.authenticateSubscription)
-            this.authenticateSubscription.unsubscribe();    
+            this.authenticateSubscription.unsubscribe();
     }
 
     ngOnInit(): void {
+        this.errorCodes = errorcodes;
         this.apiServer = this.common.getApiServer();
         this.initialize();
         this.sStorage = this.common.getStorage();
@@ -75,19 +77,19 @@ export class ResetPassword implements OnInit, OnDestroy {
 
                 let apiURL = this.apiServer + links.api.baseurl + links.api.admin.settemporarypasswordapi;
                 let temporaryPasswordObservable: Observable<Response> = this.auth.settemporarypassword(apiURL, decryptedId, newpassword);
-               this.temporaryPasswordSubscription = temporaryPasswordObservable
+                this.temporaryPasswordSubscription = temporaryPasswordObservable
                     .map(response => {
                         status = response.status;
                         return response.json();
                     })
                     .subscribe(json => {
-                        if (status.toString() === errorcodes.SUCCESS) {
+                        if (status.toString() === self.errorCodes.SUCCESS) {
                             txtnPassword.value = "";
                             txtcPassword.value = "";
                             self.AuthanticateUser(decryptedId, newpassword, 'admin', errorContainer);
                             self.showSuccess(successcontainer, lnkhomeredirect, btnResetPassword);
                         }
-                        else if (status.toString() === errorcodes.API) {
+                        else if (status.toString() === self.errorCodes.API) {
                             if (json.Payload.length > 0) {
                                 if (json.Payload[0].Messages.length > 0) {
                                     self.showError(json.Payload[0].Messages[0].toString(), errorContainer);
@@ -100,8 +102,18 @@ export class ResetPassword implements OnInit, OnDestroy {
                             self.clearPasswords(txtnPassword, txtcPassword);
                         }
                     }, error => {
-                        self.showError(general.exception, errorContainer);
-                        self.clearPasswords(txtnPassword, txtcPassword);
+                        if (error.status.toString() === this.errorCodes.API) {
+                            if (error.json().Payload.length > 0) {
+                                if (error.json().Payload[0].Messages.length > 0) {
+                                    self.showError(error.json().Payload[0].Messages[0].toString(), errorContainer);
+                                    self.clearPasswords(txtnPassword, txtcPassword);
+                                }
+                            }
+                        }
+                        else {
+                            self.showError(general.exception, errorContainer);
+                            self.clearPasswords(txtnPassword, txtcPassword);
+                        }
                     });
             }
         }
@@ -188,7 +200,7 @@ export class ResetPassword implements OnInit, OnDestroy {
     AuthanticateUser(useremail, password, userType, errorContainer) {
         let self = this;
         let apiURL = this.apiServer + links.api.baseurl + links.api.admin.authenticationapi;
-        let authenticateObservable:Observable<Response> = this.auth.login(apiURL, useremail, password, userType);
+        let authenticateObservable: Observable<Response> = this.auth.login(apiURL, useremail, password, userType);
         this.authenticateSubscription = authenticateObservable
             .map(response => response.json())
             .subscribe(function (json) {
