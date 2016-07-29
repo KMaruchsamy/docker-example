@@ -61,12 +61,12 @@ const APP_ROUTES: RouterConfig = [
     { path: 'tests/:action/add-students', component: AddStudents , canDeactivate:[SharedDeactivateGuard]},
     { path: 'tests/:action/review', component: ReviewTest, canDeactivate:[SharedDeactivateGuard]},
     { path: 'tests/:action/view/:id', component: ViewTest },
-    { path: 'tests/:action/confirmation', component: Confirmation },
+    { path: 'tests/:action/confirmation', component: Confirmation }, 
+    { path: 'testing-session-expired', component: LastTestingSession },
+    { path: 'tests/confirmation-modify-in-progress', component: ConfirmationModifyInProgress },
+    { path: 'accounterror', component: AccountError },
     { path: 'error', component: UnhandledException },
     { path: '**', component: PageNotFound },
-    { path: 'accounterror', component: AccountError },
-    { path: 'testing-session-expired', component: LastTestingSession },
-    { path: 'tests/confirmation-modify-in-progress', component: ConfirmationModifyInProgress }
 ]
 
 

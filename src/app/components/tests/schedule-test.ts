@@ -66,7 +66,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
             .events
             .filter(event => event instanceof RoutesRecognized)
             .subscribe(event => {
-                console.log('Event - ' + event);
                 this.destinationRoute = event.urlAfterRedirects;
             });
 
@@ -107,7 +106,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
     }
 
     cancelStartingTestChanges(popupId): void {
-        $('#'+ popupId).modal('hide');
+        $('#' + popupId).modal('hide');
         this.onCancelChanges();
     }
 
@@ -209,7 +208,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
                 if (moment(this.testScheduleModel.savedStartTime).isBefore(moment(new Date()))) {
                     this.$startDate.datepicker('setStartDate', moment(this.testScheduleModel.savedStartTime).format('L'));
                     let disabledDateArray = this.utility.getDateRangeArray(moment(this.testScheduleModel.savedStartTime).add(1, 'day'), new Date());
-                    console.log(disabledDateArray);
                     this.$startDate.datepicker('setDatesDisabled', disabledDateArray);
                 }
             }
@@ -506,8 +504,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
                         __this.startDate = outputString;
 
                     __this.$startDate.datepicker('update', moment(__this.startDate).toDate());
-                    console.log(moment(__this.startDate).toDate());
-                    console.log(moment(__this.startDate).format('LTS'));
 
                     // have to change the date part of the time because the date is changed ..
                     __this.startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
@@ -786,10 +782,17 @@ export class ScheduleTest implements OnInit, OnDestroy {
             return;
         }
 
+        if (this.modifyInProgress
+            && (moment(this.testScheduleModel.savedStartTime).isSame(this.startTime)
+                && moment(this.testScheduleModel.savedEndTime).isSame(this.endTime))) {
+            __this.valid = false;
+            return;
+        }
+
         __this.valid = true;
     }
 
-     checkIfTestHasStarted(): number {
+    checkIfTestHasStarted(): number {
         debugger;
         return this.testService.checkIfTestHasStarted(this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modifyInProgress)
     }
@@ -801,8 +804,8 @@ export class ScheduleTest implements OnInit, OnDestroy {
             if (!this.checkIfTestHasStarted()) {
                 return false;
             }
-       }
-        
+        }
+
         if (!this.validateDates())
             return;
 
@@ -824,7 +827,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
     }
 
 
-    
+
     resolveModifyTestingSessionURL(url: string): string {
         return url.replace('§scheduleId', (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0).toString());
     }
@@ -832,7 +835,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
     saveModifyInProgress() {
         let input = {
             TestingSessionWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
-            TestingSessionWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format()           
+            TestingSessionWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format()
         };
 
         let myNewStartDateTime2 = moment(new Date(
@@ -871,8 +874,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
                 // clearTimeout(loaderTimer);
                 // $('#loader').modal('hide');
                 let result = json;
-                console.log(json);
-                if (result.TestingSessionId && result.TestingSessionId > 0 && result.ErrorCode ===0 && !result.TimingExceptions) {
+                if (result.TestingSessionId && result.TestingSessionId > 0 && result.ErrorCode === 0 && !result.TimingExceptions) {
                     // __this.testScheduleModel.scheduleId = result.TestingSessionId;
                     // __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
                     __this.overrideRouteCheck = true;
@@ -955,9 +957,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
     validateDates(): boolean {
         if (this.testScheduleModel) {
 
-            console.log(new Date().toTimeString());
             let institutionTimezone: string = this.common.getTimezone(this.testScheduleModel.institutionId);
-            console.log('Timezone : ' + institutionTimezone);
             let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
 
             if (this.startTime && this.endTime) {
@@ -980,9 +980,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
                     moment(this.startTime).second()
                 )).format('YYYY-MM-DD HH:mm:ss');
 
-                console.log('Institution Current Time : ' + institutionCurrentTime);
-                console.log('Schedule endtime : ' + scheduleEndTime)
-
                 if (this.modify) {
                     if (this.testScheduleModel.savedStartTime) {
                         let savedStartTime = moment(new Date(
@@ -1004,35 +1001,34 @@ export class ScheduleTest implements OnInit, OnDestroy {
                         )).format('YYYY-MM-DD HH:mm:ss');
 
 
-                        console.log('Saved Starttime : ' + savedStartTime);
-                        console.log('Saved End time : ' + savedEndTime);
+                      
 
-                //         if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
-                //             if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
-                //                 $('#alertPopup').modal('show');
-                //                 return false;
-                //             }
-                //         }
-                //         else if(!this.modifyInProgress){
-                //             $('#alertPopup').modal('show');
-                //             return false;
-                //         }
+                        //         if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
+                        //             if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                        //                 $('#alertPopup').modal('show');
+                        //                 return false;
+                        //             }
+                        //         }
+                        //         else if(!this.modifyInProgress){
+                        //             $('#alertPopup').modal('show');
+                        //             return false;
+                        //         }
 
-                //     }
-                //     else {
-                //         if (moment(scheduleStartTime).isBefore(institutionCurrentTime) && !this.modifyInProgress) {
-                //             $('#alertPopup').modal('show');
-                //             return false;
-                //         }
-                //     }
+                        //     }
+                        //     else {
+                        //         if (moment(scheduleStartTime).isBefore(institutionCurrentTime) && !this.modifyInProgress) {
+                        //             $('#alertPopup').modal('show');
+                        //             return false;
+                        //         }
+                        //     }
 
-                // }
-                // else {
-                    if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
-                        $('#alertPopup').modal('show');
-                        return false;
+                        // }
+                        // else {
+                        if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                            $('#alertPopup').modal('show');
+                            return false;
+                        }
                     }
-                }
                 } //closes if this.modify
             }
         }
