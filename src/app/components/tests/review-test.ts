@@ -152,7 +152,6 @@ export class ReviewTest implements OnInit, OnDestroy {
             .events
             .filter(event => event instanceof RoutesRecognized)
             .subscribe(event => {
-                console.log('Event - ' + event);
                 this.destinationRoute = event.urlAfterRedirects;
             });
 
@@ -283,7 +282,6 @@ export class ReviewTest implements OnInit, OnDestroy {
 
     validate(): void {
         if (this.testScheduleModel.scheduleName !== '')
-            console.log(this.testScheduleModel.scheduleName);
 
         if (this.testScheduleModel) {
             if (this.testScheduleModel.scheduleName && this.testScheduleModel.scheduleName !== ''
@@ -412,7 +410,6 @@ export class ReviewTest implements OnInit, OnDestroy {
                 clearTimeout(loaderTimer);
                 $('#loader').modal('hide');
                 let result = json;
-                console.log(json);
                 if (result.TestingSessionId && result.TestingSessionId > 0) {
                     __this.testScheduleModel.scheduleId = result.TestingSessionId;
                     __this.testScheduleModel.savedStartTime = __this.testScheduleModel.scheduleStartTime;
@@ -588,9 +585,6 @@ export class ReviewTest implements OnInit, OnDestroy {
                         this.testScheduleModel = this.testService.sortSchedule(this.testService.getTestSchedule());
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
                         //this.removeWindowExceptionStudentsFromRetesters(_windowExceptions);
-                        console.log('WINDOW');
-                        console.log(JSON.stringify(this.testScheduleModel));
-                        console.log(JSON.stringify(this.retesterExceptions));
                         //this.rebindTable();
                         if (this.modify)
                             this.router.navigate(['/tests', 'modify', 'add-students']);
@@ -612,7 +606,6 @@ export class ReviewTest implements OnInit, OnDestroy {
                 });
             }
         }
-        console.log(this.retesterExceptions);
     }
 
     rebindTable(): void {
@@ -679,10 +672,6 @@ export class ReviewTest implements OnInit, OnDestroy {
 
                         this.validate();
                         //this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
-                        console.log('ALTERNATE');
-                        console.log(JSON.stringify(this.testScheduleModel));
-                        console.log(JSON.stringify(this.retesterExceptions));
-
                         // if (this.windowExceptions && this.windowExceptions.length > 0) {
                         //     this.loadWindowExceptions(this.windowExceptions);
                         // }
@@ -754,7 +743,6 @@ export class ReviewTest implements OnInit, OnDestroy {
         this.retesterExceptionsSubscripton = retesterExceptionsObservable
             .map(response => response.json())
             .subscribe((json) => {
-                console.log(JSON.stringify(json));
                 __this.resolveAlternateExceptionsForModify(json, __this);
                 __this.checkAndResolveNewExceptionsOnModify(__this);
             }, error => console.log(error));

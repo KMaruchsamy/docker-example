@@ -352,13 +352,7 @@ export class TestService {
         let institutionTimezone: string = this.common.getTimezone(institutionId);
         let institutionCurrentTime = moment.tz(new Date(), institutionTimezone);
         let mStartTime = moment(savedStartTime);
-
-         console.log('start time'+ mStartTime);
-         console.log('school time' + institutionCurrentTime);
-
         let timeDifference = (mStartTime.diff(institutionCurrentTime, 'seconds'));
-
-         console.log('diff' + timeDifference);
 
          return timeDifference;
     }
@@ -377,7 +371,6 @@ export class TestService {
 
             if (testScheduleModel.scheduleStartTime && testScheduleModel.scheduleEndTime) {
 
-                console.log(new Date().toDateString());
                 let institutionTimezone: string = this.common.getTimezone(institutionID);
                 let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
 
@@ -399,13 +392,8 @@ export class TestService {
                     moment(testScheduleModel.scheduleStartTime).second()
                 )).format('YYYY-MM-DD HH:mm:ss');
 
-
-                console.log('Institution Current Time : ' + institutionCurrentTime);
-                console.log('Schedule endtime : ' + scheduleEndTime)
-
                 if (modify) {
-                    ///change to saved times
-                    //first check if not in modidfy in progress flow if test has started 
+                    //first check if not in modify in progress flow if test has started 
                     this.checkIfTestHasStarted(institutionID, testScheduleModel.savedStartTime, testScheduleModel.savedEndTime, modifyInProgress);
                     if (!this.checkIfTestHasStarted(institutionID, testScheduleModel.savedStartTime, testScheduleModel.savedEndTime, modifyInProgress)) {
                         return false;
@@ -414,31 +402,7 @@ export class TestService {
                         $('#alertPopup').modal('show');
                         return false;
                     }
-                    // if (testScheduleModel.savedStartTime) {
-                        // let savedStartTime = moment(new Date(
-                        //     moment(testScheduleModel.savedStartTime).year(),
-                        //     moment(testScheduleModel.savedStartTime).month(),
-                        //     moment(testScheduleModel.savedStartTime).date(),
-                        //     moment(testScheduleModel.savedStartTime).hour(),
-                        //     moment(testScheduleModel.savedStartTime).minute(),
-                        //     moment(testScheduleModel.savedStartTime).second()
-                        // )).format('YYYY-MM-DD HH:mm:ss');
-
-                        // let savedEndTime = moment(new Date(
-                        //     moment(testScheduleModel.savedEndTime).year(),
-                        //     moment(testScheduleModel.savedEndTime).month(),
-                        //     moment(testScheduleModel.savedEndTime).date(),
-                        //     moment(testScheduleModel.savedEndTime).hour(),
-                        //     moment(testScheduleModel.savedEndTime).minute(),
-                        //     moment(testScheduleModel.savedEndTime).second()
-                        // )).format('YYYY-MM-DD HH:mm:ss');
-
-
-                        // console.log('Saved Starttime : ' + savedStartTime);
-                        // console.log('Saved End time : ' + savedEndTime);
-
-                }
-                      
+                }      
             }
         }
 
@@ -493,7 +457,6 @@ export class TestService {
     }
     
     checkIfTestHasStarted(institutionId: number, testStartTime: any, testEndTime: any, modifyInProgress: boolean=false): any {
-        debugger;
         if ((!modifyInProgress) && (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) < 1 )) {
             $('#testStarted').modal('show');
             return false; 
@@ -506,25 +469,20 @@ export class TestService {
             let timeDiff = this.checkIfTestStartingSoon(institutionID, savedStartTime);
             let convertToMinutes = 60;
             let waitTime = 0;
-            console.log(timeDiff/convertToMinutes);
             if (timeDiff >= 10 * convertToMinutes) {
                 waitTime = timeDiff - 10 * convertToMinutes;
                 let waitTimePlus5 = waitTime + 5 * convertToMinutes;
                 setTimeout(()=> {
-                    console.log(timeDiff/convertToMinutes);
                     $('#testStartingin10').modal('show');
                 }, waitTime * 1000)
                 setTimeout(()=> {
-                    console.log(timeDiff * convertToMinutes);
                     $('#testStartingin10').modal('hide');
                     $('#testStartingin5').modal('show');
                 }, waitTimePlus5 * 1000)
             }
             else if (timeDiff >= 5 * convertToMinutes) {
-                console.log('time diff is greater than 5');
                 waitTime = timeDiff - 5 * convertToMinutes;
                 setTimeout(()=> {
-                    console.log(timeDiff/convertToMinutes);
                     $('#testStartingin5').modal('show');
                 }, waitTime * 1000)
             }
