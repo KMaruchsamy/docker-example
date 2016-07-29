@@ -1,6 +1,7 @@
-import {Component, OnInit, DynamicComponentLoader, ElementRef, ViewContainerRef} from '@angular/core';
-import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams} from '@angular/router-deprecated';
+import {Component, OnInit, OnDestroy, DynamicComponentLoader, ElementRef, ViewContainerRef} from '@angular/core';
+import {Router, ROUTER_DIRECTIVES, ActivatedRoute, CanDeactivate, RoutesRecognized} from '@angular/router';
 import {NgIf, NgFor, Location} from '@angular/common';
+import {Response} from '@angular/http';
 import {Title} from '@angular/platform-browser';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -18,7 +19,9 @@ import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {AlertPopup} from '../shared/alert.popup';
+import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
 import {Loader} from '../shared/loader';
+import {Subscription, Observable} from 'rxjs/Rx';
 // import '../../plugins/dropdown.js';
 // import '../../plugins/bootstrap-select.min.js';
 // import '../../plugins/jquery.dataTables.min.js';
@@ -29,11 +32,11 @@ import {Loader} from '../shared/loader';
     selector: "review-test",
     templateUrl: "templates/tests/review-test.html",
     providers: [TestService, Auth, TestScheduleModel, Common],
-    directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, RouterLink, RetesterAlternatePopup, RetesterNoAlternatePopup, ConfirmationPopup, TimeExceptionPopup, Loader, AlertPopup],
+    directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, ROUTER_DIRECTIVES, RetesterAlternatePopup, RetesterNoAlternatePopup, ConfirmationPopup, TimeExceptionPopup, Loader, AlertPopup, TestingSessionStartingPopup],
     pipes: [ParseDatePipe]
 })
 
-export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
+export class ReviewTest implements OnInit, OnDestroy {
     testScheduleWindow: string = '';
     isScheduleDatesSame: boolean = true;
     testScheduleDates: string = '';
@@ -54,35 +57,48 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     windowExceptions: Object[];
     nextDay: boolean = false;
     modify: boolean = false;
+    modifyInProgress: boolean;
     hasSavedRetesterExceptions: boolean = false;
     hasADA: boolean = false;
     retesterExceptionsModify: Object[] = [];
     facultyAssignable: boolean = true;
     hasStudentPay: boolean = false;
+    paramsSubscription: Subscription;
+    deactivateSubscription: Subscription;
+    destinationRoute: string;
+    scheduleTestSubscription: Subscription;
+    retesterExceptionsSubscripton: Subscription;
+    facultySubscription: Subscription;
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public common: Common,
         public router: Router, public dynamicComponentLoader: DynamicComponentLoader,
-        public elementRef: ElementRef, public routeParams: RouteParams, public aLocation: Location,
-    public viewContainerRef:ViewContainerRef, public titleService: Title) {
+        public elementRef: ElementRef, public aLocation: Location,
+        public viewContainerRef: ViewContainerRef, public titleService: Title, private activatedRoute: ActivatedRoute) {
 
     }
 
-    onCancelChanges(): void {
-        this.overrideRouteCheck = true;
-        this.testService.clearTestScheduleObjects();
-        this.router.parent.navigate(['/ManageTests']);
+    ngOnDestroy(): void {
+        if (this.studentsTable)
+            this.studentsTable.destroy();
+        $('#ddlFaculty').val('').selectpicker('refresh');
+        this.testService.removeRestestersExceptionForModify();
+        if (this.paramsSubscription)
+            this.paramsSubscription.unsubscribe();
+        if (this.deactivateSubscription)
+            this.deactivateSubscription.unsubscribe();
+        if (this.scheduleTestSubscription)
+            this.scheduleTestSubscription.unsubscribe();
+        if (this.retesterExceptionsSubscripton)
+            this.retesterExceptionsSubscripton.unsubscribe();
+        if (this.facultySubscription)
+            this.facultySubscription.unsubscribe();    
     }
 
-    onContinueMakingChanges(): void {
-        // continue making changes after confirmation popup..
-    }
-
-
-    routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+    canDeactivate(): Observable<boolean> | boolean {
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
-                this.attemptedRoute = next.urlPath;
+                this.attemptedRoute = this.destinationRoute;
                 $('#confirmationPopup').modal('show');
                 return false;
             }
@@ -91,18 +107,57 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
             this.testService.clearTestScheduleObjects();
         this.overrideRouteCheck = false;
         return true;
+
     }
 
-    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        if (this.studentsTable)
-            this.studentsTable.destroy();
-        $('#ddlFaculty').val('').selectpicker('refresh');
-        this.testService.removeRestestersExceptionForModify();
+    onCancelChanges(): void {
+        this.overrideRouteCheck = true;
+        this.testService.clearTestScheduleObjects();
+        this.router.navigate(['/tests']);
     }
+
+    onContinueMakingChanges(): void {
+        // continue making changes after confirmation popup..
+    }
+
+    cancelStartingTestChanges(popupId): void {
+        $('#'+ popupId).modal('hide');
+        this.onCancelChanges();
+    }
+
+    // routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+    //     let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+    //     if (!this.overrideRouteCheck) {
+    //         if (outOfTestScheduling) {
+    //             this.attemptedRoute = next.urlPath;
+    //             $('#confirmationPopup').modal('show');
+    //             return false;
+    //         }
+    //     }
+    //     if (outOfTestScheduling)
+    //         this.testService.clearTestScheduleObjects();
+    //     this.overrideRouteCheck = false;
+    //     return true;
+    // }
+
+    // routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+    //     if (this.studentsTable)
+    //         this.studentsTable.destroy();
+    //     $('#ddlFaculty').val('').selectpicker('refresh');
+    //     this.testService.removeRestestersExceptionForModify();
+    // }
 
     ngOnInit() {
+        this.deactivateSubscription = this.router
+            .events
+            .filter(event => event instanceof RoutesRecognized)
+            .subscribe(event => {
+                console.log('Event - ' + event);
+                this.destinationRoute = event.urlAfterRedirects;
+            });
+
         if (!this.auth.isAuth())
-            this.router.navigateByUrl('/');
+            this.router.navigate(['/']);
         else {
             this.initialize();
         }
@@ -111,92 +166,96 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
 
     initialize() {
-        let action = this.routeParams.get('action');
-        if (action != undefined && action.trim() === 'modify') {
-            this.modify = true;
-            this.titleService.setTitle('Modify: Review Testing Session – Kaplan Nursing');
-        } else {
-            this.titleService.setTitle('Review Testing Session – Kaplan Nursing');
-        }
+        this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
 
-        this.valid = false;
-        this.sStorage = this.common.getStorage();
-        this.$ddlfacultyMember = $('#ddlFaculty');
-        this.$txtScheduleName = $('#txtSessionName');
-        this.$txtScheduleName.val('');
-        this.$divfacultyLightbulbContainer = $('#facultyLightbulbContainer');
-        let __this = this;
-        let savedSchedule = this.testService.getTestSchedule();
-        if (savedSchedule) {
-            let savedRetesterExceptions = this.testService.getSavedRetesterExceptions();
-            if (savedRetesterExceptions) {
-                this.retesterExceptions = savedRetesterExceptions;
-                this.hasSavedRetesterExceptions = true;
+            let action = params['action'];
+            if (action != undefined && action.trim() === 'modify') {
+                this.modify = true;
+                this.titleService.setTitle('Modify: Review Testing Session – Kaplan Nursing');
+            } else {
+                this.titleService.setTitle('Review Testing Session – Kaplan Nursing');
             }
 
-            this.testScheduleModel = this.testService.sortSchedule(savedSchedule);
-            this.bindFaculty();
-
-            if (this.testScheduleModel.scheduleName)
-                this.$txtScheduleName.val(this.testScheduleModel.scheduleName);
-            if (this.modify) {
-
-                if (this.testScheduleModel.facultyMemberId !== this.testScheduleModel.adminId && this.auth.userid !== this.testScheduleModel.adminId) {
-                    this.facultyAssignable = false;
+            this.valid = false;
+            this.sStorage = this.common.getStorage();
+            this.$ddlfacultyMember = $('#ddlFaculty');
+            this.$txtScheduleName = $('#txtSessionName');
+            this.$txtScheduleName.val('');
+            this.$divfacultyLightbulbContainer = $('#facultyLightbulbContainer');
+            let __this = this;
+            let savedSchedule = this.testService.getTestSchedule();
+            if (savedSchedule) {
+                let savedRetesterExceptions = this.testService.getSavedRetesterExceptions();
+                if (savedRetesterExceptions) {
+                    this.retesterExceptions = savedRetesterExceptions;
+                    this.hasSavedRetesterExceptions = true;
                 }
-                let retestersExceptionsModify = this.testService.getAlternateExceptionsModify();
-                if (retestersExceptionsModify != undefined && retestersExceptionsModify.length > 0) {
-                    this.retesterExceptionsModify = retestersExceptionsModify;
-                    this.checkAndResolveNewExceptionsOnModify(this);
-                }
-                else
-                    this.loadAlternateAssignmentsModify();
 
+                this.testScheduleModel = this.testService.sortSchedule(savedSchedule);
+                this.bindFaculty();
+
+                if (this.testScheduleModel.scheduleName)
+                    this.$txtScheduleName.val(this.testScheduleModel.scheduleName);
+                if (this.modify) {
+
+                    if (this.testScheduleModel.facultyMemberId !== this.testScheduleModel.adminId && this.auth.userid !== this.testScheduleModel.adminId) {
+                        this.facultyAssignable = false;
+                    }
+                    let retestersExceptionsModify = this.testService.getAlternateExceptionsModify();
+                    if (retestersExceptionsModify != undefined && retestersExceptionsModify.length > 0) {
+                        this.retesterExceptionsModify = retestersExceptionsModify;
+                        this.checkAndResolveNewExceptionsOnModify(this);
+                    }
+                    else
+                        this.loadAlternateAssignmentsModify();
+
+                }
+                this.resolveADA();
+                this.anyStudentPayStudents();
+                if (this.studentsTable)
+                    this.studentsTable.destroy();
+                setTimeout(() => {
+
+                    __this.studentsTable = $('#studentsInTestingSessionTable').DataTable({
+                        "paging": false,
+                        "searching": false,
+                        "responsive": true,
+                        "info": false,
+                        "ordering": false
+                    });
+
+
+                    $('#studentsInTestingSessionTable').on('responsive-display.dt', function () {
+                        $(this).find('.child .dtr-title br').remove();
+                    });
+                    __this.validate();
+                });
+
+                let startTime = this.testScheduleModel.scheduleStartTime;
+                let endTime = this.testScheduleModel.scheduleEndTime;
+                if (moment(endTime).isAfter(startTime, 'day')) {
+                    this.nextDay = true;
+                }
+                this.testService.showTestStartingWarningModals(this.modify, this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
             }
-            this.resolveADA();
-            this.anyStudentPayStudents();
-            if (this.studentsTable)
-                this.studentsTable.destroy();
-            setTimeout(() => {
 
-                __this.studentsTable = $('#studentsInTestingSessionTable').DataTable({
-                    "paging": false,
-                    "searching": false,
-                    "responsive": true,
-                    "info": false,
-                    "ordering": false
-                });
+            if (this.testScheduleModel.currentStep < 4)
+                this.testScheduleModel.currentStep = 4;
+            this.testScheduleModel.activeStep = 4;
 
-
-                $('#studentsInTestingSessionTable').on('responsive-display.dt', function () {
-                    $(this).find('.child .dtr-title br').remove();
-                });
-                __this.validate();
-            });
-
-            let startTime = this.testScheduleModel.scheduleStartTime;
-            let endTime = this.testScheduleModel.scheduleEndTime;
-            if (moment(endTime).isAfter(startTime, 'day'))
-                this.nextDay = true;
-
-        }
-
-        if (this.testScheduleModel.currentStep < 4)
-            this.testScheduleModel.currentStep = 4;
-        this.testScheduleModel.activeStep = 4;
-
-        if (!this.testScheduleModel.facultyMemberId) {
-            this.testScheduleModel.facultyMemberId = this.auth.userid;
-            this.testScheduleModel.facultyFirstName = this.auth.firstname;
-            this.testScheduleModel.facultyLastName = this.auth.lastname;
-        }
+            if (!this.testScheduleModel.facultyMemberId) {
+                this.testScheduleModel.facultyMemberId = this.auth.userid;
+                this.testScheduleModel.facultyFirstName = this.auth.firstname;
+                this.testScheduleModel.facultyLastName = this.auth.lastname;
+            }
+        });
     }
-    
+
     anyStudentPayStudents(): void {
         if (this.testScheduleModel && this.testScheduleModel.selectedStudents && this.testScheduleModel.selectedStudents.length > 0)
-            this.hasStudentPay = _.some(this.testScheduleModel.selectedStudents, function (student) { 
-                return ((!student.hasOwnProperty('MarkedToRemove') || student.hasOwnProperty('MarkedToRemove') && !student.MarkedToRemove) && student.hasOwnProperty('StudentPay') && student.StudentPay);                   
-            });    
+            this.hasStudentPay = _.some(this.testScheduleModel.selectedStudents, function (student) {
+                return ((!student.hasOwnProperty('MarkedToRemove') || student.hasOwnProperty('MarkedToRemove') && !student.MarkedToRemove) && student.hasOwnProperty('StudentPay') && student.StudentPay);
+            });
     }
 
     resolveMarked(_student): boolean {
@@ -249,17 +308,29 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
     bindFaculty(): void {
         let facultyURL = this.resolveFacultyURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.faculty}`);
-        let facultyJSON = this.testService.getFacultySync(facultyURL);
-        if (facultyJSON) {
-            this.faculty = facultyJSON;
-            setTimeout(() => {
-                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
-                    $('#ddlFaculty').selectpicker('mobile');
-                else
-                    $('#ddlFaculty').selectpicker('refresh');
+        let facultyObservable: Observable<Response> = this.testService.getFaculty(facultyURL);
+        this.facultySubscription =facultyObservable
+            .map(response => response.json())
+            .subscribe(facultyJSON => {
+                this.faculty = facultyJSON;
+                setTimeout(() => {
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
+                        $('#ddlFaculty').selectpicker('mobile');
+                    else
+                        $('#ddlFaculty').selectpicker('refresh');
+                });
+                this.validate();
             });
-            this.validate();
-        }
+        // if (facultyJSON) {
+        //     this.faculty = facultyJSON;
+        //     setTimeout(() => {
+        //         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
+        //             $('#ddlFaculty').selectpicker('mobile');
+        //         else
+        //             $('#ddlFaculty').selectpicker('refresh');
+        //     });
+        //     this.validate();
+        // }
     }
 
     resolveFacultyURL(url: string): string {
@@ -302,7 +373,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
 
-        let scheduleTestPromise: any;
+        let scheduleTestObservable: Observable<Response>;
         let scheduleTestURL = '';
         var myNewStartDateTime2 = moment(new Date(
             moment(input.TestingWindowStart).year(),
@@ -327,17 +398,16 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
 
         if (this.modify) {
             scheduleTestURL = this.resolveModifyTestingSessionURL(`${this.auth.common.apiServer}${links.api.v2baseurl}${links.api.admin.test.modifyscheduletest}`);
-            scheduleTestPromise = this.testService.modifyScheduleTests(scheduleTestURL, JSON.stringify(input));
+            scheduleTestObservable = this.testService.modifyScheduleTests(scheduleTestURL, JSON.stringify(input));
         }
         else {
             scheduleTestURL = `${this.auth.common.apiServer}${links.api.v2baseurl}${links.api.admin.test.scheduletest}`;
-            scheduleTestPromise = this.testService.scheduleTests(scheduleTestURL, JSON.stringify(input));
+            scheduleTestObservable = this.testService.scheduleTests(scheduleTestURL, JSON.stringify(input));
         }
 
-        scheduleTestPromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
+       this.scheduleTestSubscription = scheduleTestObservable
+            .map(response => response.json())
+            .subscribe(json => {
                 __this.valid = true;
                 clearTimeout(loaderTimer);
                 $('#loader').modal('hide');
@@ -345,18 +415,19 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                 console.log(json);
                 if (result.TestingSessionId && result.TestingSessionId > 0) {
                     __this.testScheduleModel.scheduleId = result.TestingSessionId;
+                    __this.testScheduleModel.savedStartTime = __this.testScheduleModel.scheduleStartTime;
+                    __this.testScheduleModel.savedEndTime = __this.testScheduleModel.scheduleEndTime;
                     __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
                     if (__this.modify)
-                        __this.router.navigate(['/ModifyConfirmation', { action: 'modify' }]);
+                        __this.router.navigate(['/tests', 'modify', 'confirmation']);
                     else
-                        __this.router.navigate(['/Confirmation']);
+                        __this.router.navigate(['/tests/confirmation']);
                 }
                 else {
                     __this.resolveExceptions(json, __this);
                 }
 
-            })
-            .catch((error) => {
+            }, error => {
                 __this.valid = true;
                 $('#loader').modal('hide');
                 console.log(error);
@@ -522,9 +593,9 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
                         console.log(JSON.stringify(this.retesterExceptions));
                         //this.rebindTable();
                         if (this.modify)
-                            this.router.navigate(['/AddStudents', { action: 'modify' }]);
+                            this.router.navigate(['/tests', 'modify', 'add-students']);
                         else
-                            this.router.navigate(['/AddStudents']);
+                            this.router.navigate(['/tests/add-students']);
 
                     }
                 });
@@ -643,8 +714,8 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     //     return _retesters;
     // }
 
-    onCancelConfirmation(e: any): void {
-        $('#confirmationPopup').modal('hide');
+    onCancelConfirmation(popupId): void {
+        $('#' + popupId).modal('hide');
         this.attemptedRoute = '';
     }
     onOKConfirmation(e: any): void {
@@ -678,20 +749,16 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
             TestingSessionWindowStart: __this.testScheduleModel.scheduleStartTime,
             TestingSessionWindowEnd: __this.testScheduleModel.scheduleEndTime
         };
-        let retesterExceptionsPromise: any = this.testService.getRetesters(retesterExceptionsURL, JSON.stringify(input));
+        let retesterExceptionsObservable: any = this.testService.getRetesters(retesterExceptionsURL, JSON.stringify(input));
 
-        retesterExceptionsPromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
+        this.retesterExceptionsSubscripton = retesterExceptionsObservable
+            .map(response => response.json())
+            .subscribe((json) => {
                 console.log(JSON.stringify(json));
                 __this.resolveAlternateExceptionsForModify(json, __this);
                 __this.checkAndResolveNewExceptionsOnModify(__this);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
+            }, error => console.log(error));
+          
     }
 
     resolveAlternateExceptionsForModify(objException: any, __this: any): any {
@@ -900,7 +967,7 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     validateDates(): boolean {
-        return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify);
+        return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify, this.modifyInProgress);
     }
 
     // validateDates(): boolean {
@@ -940,9 +1007,9 @@ export class ReviewTest implements OnInit, OnDeactivate, CanDeactivate {
         $('#alertPopup').modal('hide');
         this.overrideRouteCheck = true;
         if (this.modify)
-            this.router.navigate(['/ModifyScheduleTest', { action: 'modify' }]);
+            this.router.navigate(['/tests', 'modify', 'schedule-test']);
         else
-            this.router.navigate(['ScheduleTest']);
+            this.router.navigate(['/tests/schedule-test']);
     }
 
 }

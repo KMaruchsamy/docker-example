@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {Auth} from '../../services/auth';
 // import '../../plugins/dropdown.js';
 
@@ -8,7 +8,7 @@ import {Auth} from '../../services/auth';
     inputs: ['ariaDisabled'],
     templateUrl: 'templates/controls/dropdown-menu.html',
     providers:[Auth],
-    directives: [RouterLink]
+    directives: [ROUTER_DIRECTIVES]
 })
 export class DropdownMenu implements OnInit {
     @Input() ariaDisabled;
@@ -83,6 +83,6 @@ export class DropdownMenu implements OnInit {
     logout(e) {
         // this.auth.logout();
         e.preventDefault();
-        this.router.parent.navigateByUrl('/logout');
+        this.router.navigate(['/logout']);
     }
 }

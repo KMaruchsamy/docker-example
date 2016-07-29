@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {Auth} from '../../services/auth';
 // import '../../lib/modal.js';
 
@@ -7,7 +7,7 @@ import {Auth} from '../../services/auth';
     selector: 'loader',
     providers:[Auth],
     templateUrl: 'templates/shared/loader.html',
-    directives: [RouterLink],
+    directives: [ROUTER_DIRECTIVES],
     inputs:['loaderMessage','greetingMessage']
 })
 

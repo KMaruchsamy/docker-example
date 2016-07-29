@@ -1,41 +1,55 @@
-﻿import {Component, OnInit} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
+﻿import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {Response, RequestOptions} from '@angular/http';
+import {Observable, Subscription} from 'rxjs/Rx';
 import {Title} from '@angular/platform-browser';
 import {Location} from '@angular/common';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';
 import {Validations} from '../../services/validations';
-import {links,errorcodes} from '../../constants/config';
-import {general,reset_password,temp_password,login} from '../../constants/error-messages';
+import {links, errorcodes} from '../../constants/config';
+import {general, reset_password, temp_password, login} from '../../constants/error-messages';
 
 @Component({
     selector: 'reset-password',
     providers: [Auth, Common, Validations],
     templateUrl: 'templates/password/reset-password.html',
-    directives: [PasswordHeader, RouterLink]
+    directives: [PasswordHeader, ROUTER_DIRECTIVES]
 })
 
-export class ResetPassword implements OnInit {
+export class ResetPassword implements OnInit, OnDestroy {
     // errorMessages: any;
     // successMessage: string;
     // config: any;
     apiServer: string;
     sStorage: any;
+    temporaryPasswordSubscription: Subscription;
+    authenticateSubscription: Subscription;
+    errorCodes: any;
     constructor(public router: Router, public auth: Auth, public common: Common, public location: Location, public validations: Validations, public titleService: Title) {
-        this.apiServer = this.common.getApiServer();
-        this.initialize();
-        this.sStorage = this.common.getStorage();
+
+    }
+
+    ngOnDestroy(): void {
+        if (this.temporaryPasswordSubscription)
+            this.temporaryPasswordSubscription.unsubscribe();
+        if (this.authenticateSubscription)
+            this.authenticateSubscription.unsubscribe();
     }
 
     ngOnInit(): void {
+        this.errorCodes = errorcodes;
+        this.apiServer = this.common.getApiServer();
+        this.initialize();
+        this.sStorage = this.common.getStorage();
         this.titleService.setTitle('Reset Password – Kaplan Nursing');
     }
 
     initialize() {
         $(document).scrollTop(0);
     }
-    
+
     onResetPassword(txtnPassword, txtcPassword, btnResetPassword, lnkhomeredirect, errorContainer, successcontainer, event) {
         event.preventDefault();
         let self = this;
@@ -54,42 +68,53 @@ export class ResetPassword implements OnInit {
             let isExpire: any = new Date(decryptedTime) - currentTime;
             let status = '';
 
-            if (isExpire < 0)
-            {
-                this.router.parent.navigateByUrl('/reset-password-expired');
+            if (isExpire < 0) {
+                this.router.navigate(['/reset-password-expired']);
             }
             else if (isExpire.toString() === "NaN")
             { alert('Please refresh the page and try once again.'); }
             else {
 
                 let apiURL = this.apiServer + links.api.baseurl + links.api.admin.settemporarypasswordapi;
-                let promise = this.auth.settemporarypassword(apiURL, decryptedId, newpassword);
-                promise.then(function(response) {
-                    status = response.status;
-                    return response.json();
-                }).then(function(json) {
-                    if (status.toString() === errorcodes.SUCCESS) {
-                        txtnPassword.value = "";
-                        txtcPassword.value = "";
-                        self.AuthanticateUser(decryptedId, newpassword, 'admin', errorContainer);
-                        self.showSuccess(successcontainer, lnkhomeredirect, btnResetPassword);
-                    }
-                    else if (status.toString() === errorcodes.API) {
-                        if (json.Payload.length > 0) {
-                            if (json.Payload[0].Messages.length > 0) {
-                                self.showError(json.Payload[0].Messages[0].toString(), errorContainer);
-                                self.clearPasswords(txtnPassword, txtcPassword);
+                let temporaryPasswordObservable: Observable<Response> = this.auth.settemporarypassword(apiURL, decryptedId, newpassword);
+                this.temporaryPasswordSubscription = temporaryPasswordObservable
+                    .map(response => {
+                        status = response.status;
+                        return response.json();
+                    })
+                    .subscribe(json => {
+                        if (status.toString() === self.errorCodes.SUCCESS) {
+                            txtnPassword.value = "";
+                            txtcPassword.value = "";
+                            self.AuthanticateUser(decryptedId, newpassword, 'admin', errorContainer);
+                            self.showSuccess(successcontainer, lnkhomeredirect, btnResetPassword);
+                        }
+                        else if (status.toString() === self.errorCodes.API) {
+                            if (json.Payload.length > 0) {
+                                if (json.Payload[0].Messages.length > 0) {
+                                    self.showError(json.Payload[0].Messages[0].toString(), errorContainer);
+                                    self.clearPasswords(txtnPassword, txtcPassword);
+                                }
                             }
                         }
-                    }
-                    else {
-                        self.showError(general.exception, errorContainer);
-                        self.clearPasswords(txtnPassword, txtcPassword);
-                    }
-                }).catch(function(ex) {
-                    self.showError(general.exception, errorContainer);
-                    self.clearPasswords(txtnPassword, txtcPassword);
-                });
+                        else {
+                            self.showError(general.exception, errorContainer);
+                            self.clearPasswords(txtnPassword, txtcPassword);
+                        }
+                    }, error => {
+                        if (error.status.toString() === this.errorCodes.API) {
+                            if (error.json().Payload.length > 0) {
+                                if (error.json().Payload[0].Messages.length > 0) {
+                                    self.showError(error.json().Payload[0].Messages[0].toString(), errorContainer);
+                                    self.clearPasswords(txtnPassword, txtcPassword);
+                                }
+                            }
+                        }
+                        else {
+                            self.showError(general.exception, errorContainer);
+                            self.clearPasswords(txtnPassword, txtcPassword);
+                        }
+                    });
             }
         }
         else {
@@ -101,12 +126,12 @@ export class ResetPassword implements OnInit {
         txtnPassword.value = '';
         txtcPassword.value = '';
     }
-    
+
     RedirectToLogin(event) {
         event.preventDefault();
-        this.router.parent.navigateByUrl('/');
+        this.router.navigate(['/']);
     }
-    
+
     // route(path, e) {
     //     this.utility.route(path, this.router, e);
     // }
@@ -175,28 +200,28 @@ export class ResetPassword implements OnInit {
     AuthanticateUser(useremail, password, userType, errorContainer) {
         let self = this;
         let apiURL = this.apiServer + links.api.baseurl + links.api.admin.authenticationapi;
-        let promise = this.auth.login(apiURL, useremail, password, userType);
-        promise.then(function(response) {
-            return response.json();
-        }).then(function(json) {
-            if (json.AccessToken != null && json.AccessToken != '') {
-                self.sStorage.setItem('jwt', json.AccessToken);
-                self.sStorage.setItem('useremail', json.Email);
-                self.sStorage.setItem('istemppassword', json.TemporaryPassword);
-                self.sStorage.setItem('userid', json.UserId);
-                self.sStorage.setItem('firstname', json.FirstName);
-                self.sStorage.setItem('lastname', json.LastName);
-                self.sStorage.setItem('title', json.JobTitle);
-                // let name = self.getInstitutions(json.Institutions);
-                // self.sStorage.setItem('institutions', name);
-                self.sStorage.setItem('institutions', JSON.stringify(json.Institutions));
-                self.sStorage.setItem('securitylevel', json.SecurityLevel);
-            }
-            else {
-                self.showError(login.auth_failed, errorContainer);
-            }
-        }).catch(function(ex) {
-            self.showError(general.exception, errorContainer);
-        });
+        let authenticateObservable: Observable<Response> = this.auth.login(apiURL, useremail, password, userType);
+        this.authenticateSubscription = authenticateObservable
+            .map(response => response.json())
+            .subscribe(function (json) {
+                if (json.AccessToken != null && json.AccessToken != '') {
+                    self.sStorage.setItem('jwt', json.AccessToken);
+                    self.sStorage.setItem('useremail', json.Email);
+                    self.sStorage.setItem('istemppassword', json.TemporaryPassword);
+                    self.sStorage.setItem('userid', json.UserId);
+                    self.sStorage.setItem('firstname', json.FirstName);
+                    self.sStorage.setItem('lastname', json.LastName);
+                    self.sStorage.setItem('title', json.JobTitle);
+                    // let name = self.getInstitutions(json.Institutions);
+                    // self.sStorage.setItem('institutions', name);
+                    self.sStorage.setItem('institutions', JSON.stringify(json.Institutions));
+                    self.sStorage.setItem('securitylevel', json.SecurityLevel);
+                }
+                else {
+                    self.showError(login.auth_failed, errorContainer);
+                }
+            }, error => {
+                self.showError(general.exception, errorContainer);
+            });
     }
 }

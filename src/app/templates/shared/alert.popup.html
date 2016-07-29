@@ -1,10 +1,10 @@
-  <div class="modal fade" [attr.id]="popupId" tabindex="-1" role="dialog" [attr.aria-labelledby]="popupId">
+  <div class="modal fade" [attr.id]="popupId" tabindex="-1" role="dialog" [attr.aria-labelledby]="popupId+'Heading'">
    <div class="modal-dialog" role="document">
      <div class="modal-content ">
        <div class="modal-header">
          <button type="button" [class.hidden]="hideClose" class="close close-medium-icon-grey" aria-label="Close" data-dismiss="modal"></button>
          <p class="icon red-triangle-alert-large center"></p>
-         <h4 class="attention center" id="sessionAlreadyStarted" [innerHTML]="message">
+         <h4 class="attention center" id="popupId+'Heading'" [innerHTML]="message">
            <!--We’re sorry! You can no longer make changes to this testing session because it has already started or has passed.
            Click “OK” to go back to the Manage Tests main page.-->
          </h4>

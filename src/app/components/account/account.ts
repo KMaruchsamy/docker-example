@@ -1,5 +1,7 @@
-﻿import {Component, OnInit} from '@angular/core';
-import {Router, RouteParams} from '@angular/router-deprecated';
+﻿import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Subscription, Observable} from 'rxjs/Rx';
+import {Router, ActivatedRoute} from '@angular/router';
+import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Title} from '@angular/platform-browser';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
@@ -17,24 +19,50 @@ import {manage_account, general, reset_password_after_login, reset_student_passw
     directives: [PageHeader, PageFooter]
 })
 
-export class Account implements OnInit{
+export class Account implements OnInit, OnDestroy {
     apiServer: string;
     sStorage: any;
-    constructor(public router: Router, public auth: Auth, public common: Common, public validations: Validations, public routeParams: RouteParams, public titleService: Title) {        
+    saveProfileSubscription: Subscription;
+    resetEmailSubscription: Subscription;
+    resetPasswordSubscription: Subscription;
+    resetStudentPasswordSubscription: Subscription;
+    routeSubscription: Subscription;
+    errorCodes: any;
+    constructor(private http: Http, public router: Router, private activatedRoute: ActivatedRoute, public auth: Auth, public common: Common, public validations: Validations, public titleService: Title) {
     }
 
-    ngOnInit(): void{
+    ngOnDestroy(): void {
+        if (this.saveProfileSubscription)
+            this.saveProfileSubscription.unsubscribe();
+        if (this.resetEmailSubscription)
+            this.resetEmailSubscription.unsubscribe();
+        if (this.resetPasswordSubscription)
+            this.resetPasswordSubscription.unsubscribe();
+        if (this.resetStudentPasswordSubscription)
+            this.resetStudentPasswordSubscription.unsubscribe();
+        if (this.routeSubscription)
+            this.routeSubscription.unsubscribe();
+    }
+
+    ngOnInit(): void {
+        this.errorCodes = errorcodes;
         this.titleService.setTitle('Manage Account – Kaplan Nursing');
         this.sStorage = this.common.getStorage();
         this.apiServer = this.common.getApiServer();
         this.initialize();
-        let scroll = this.routeParams.get('scroll');
-        if (scroll) {
-            this.scroll(scroll);
-        }
-        else {
-            $(document).scrollTop(0);
-        }
+
+        this.routeSubscription = this.activatedRoute.params.subscribe(params => {
+            let scroll = params['scroll'];
+            if (scroll) {
+                this.scroll(scroll);
+            }
+            else {
+                $(document).scrollTop(0);
+            }
+        })
+
+        // let scroll = this.routeParams.get('scroll');
+
     }
 
     getInitialize() {
@@ -58,7 +86,7 @@ export class Account implements OnInit{
         switch (scroll) {
             case "send-student-info":
                 $('html, body').animate({
-                    scrollTop: $("#sendStudentInfo").offset().top-headerHeight
+                    scrollTop: $("#sendStudentInfo").offset().top - headerHeight
                 }, 750, 'swing');
                 break;
 
@@ -90,45 +118,45 @@ export class Account implements OnInit{
 
             $('#divNewPasswordInfo').addClass('hidden');
 
-            $('#firstName').bind('input', function() {
+            $('#firstName').bind('input', function () {
                 self.checkfirstnamelastname();
                 self.resetProfileFields();
             });
-            $('#lastName').bind('input', function() {
+            $('#lastName').bind('input', function () {
                 self.checkfirstnamelastname();
                 self.resetProfileFields();
             });
-            $('#facultyTitle').bind('input', function() {
+            $('#facultyTitle').bind('input', function () {
                 self.checkfirstnamelastname();
                 self.resetProfileFields();
             });
-            $('#emailAddress').bind('input', function() {
+            $('#emailAddress').bind('input', function () {
                 self.checkemailpassword();
             });
-            $('#txtPassword').bind('input', function() {
+            $('#txtPassword').bind('input', function () {
                 self.checkemailpassword();
             });
-            $('#currentPassword').bind('input', function() {
+            $('#currentPassword').bind('input', function () {
                 self.checkpasswordlength();
                 if ($btnResetResetPassword.hasClass('hidden'))
                     self.resetSuccess($btnResetResetPassword, $successResetPasswordContainer);
             });
-            $('#newPassword').focus(function() {
-                $('#divNewPasswordInfo').slideDown('fast', function() {
+            $('#newPassword').focus(function () {
+                $('#divNewPasswordInfo').slideDown('fast', function () {
                     $(this).removeClass('hidden');
                 });
             });
-            $('#newPassword').bind('input', function() {
+            $('#newPassword').bind('input', function () {
                 self.checkpasswordlength();
                 if ($btnResetResetPassword.hasClass('hidden'))
                     self.resetSuccess($btnResetResetPassword, $successResetPasswordContainer);
             });
-            $('#confirmNewPassword').bind('input', function() {
+            $('#confirmNewPassword').bind('input', function () {
                 self.checkpasswordlength();
                 if ($btnResetResetPassword.hasClass('hidden'))
                     self.resetSuccess($btnResetResetPassword, $successResetPasswordContainer);
             });
-            $('#resetStudentPassword').bind('input', function() {
+            $('#resetStudentPassword').bind('input', function () {
                 self.checkstudentemail();
                 if ($btnClearResetStudentPassword.hasClass('hidden'))
                     self.resetSuccess($btnClearResetStudentPassword, $successResetStudentPasswordContainer);
@@ -142,7 +170,7 @@ export class Account implements OnInit{
 
 
     redirectToLogin() {
-        this.router.parent.navigateByUrl('/');
+        this.router.navigateByUrl('/');
     }
 
     onSubmitSaveProfile(txtFirstname, txtLastname, txtTitle, btnSaveProfile, resetSaveProfile, successContainer, event) {
@@ -155,26 +183,24 @@ export class Account implements OnInit{
         let email = self.auth.useremail;
         let authheader = self.auth.authheader;
         let apiURL = this.apiServer + links.api.baseurl + links.api.admin.resetprofileapi;
-        let promise = self.saveProfile(apiURL, authheader, userid, fname, lname, title, email);
-        promise.then(function(response) {
-            return response.status;
-        }).then(function(status) {
-            if (status.toString() === errorcodes.SUCCESS) {
-                self.showSuccess(resetSaveProfile, successContainer, btnSaveProfile);
-                self.sStorage.setItem('firstname', fname);
-                self.sStorage.setItem('lastname', lname);
-                self.sStorage.setItem('title', title);
-                self.getInitialize();
-            }
-            else if (status.toString() === errorcodes.UNAUTHORIZED) {
-                self.redirectToLogin();
-            }
-            else {
-                console.log('failed because of ' + status + ' error.');
-            }
-        }).catch(function(ex) {
-            console.log('Exception');
-        });
+        let saveProfileObservable: Observable<Response> = self.saveProfile(apiURL, authheader, userid, fname, lname, title, email);
+        this.saveProfileSubscription = saveProfileObservable
+            .map(response => response.status)
+            .subscribe(status => {
+                if (status.toString() === this.errorCodes.SUCCESS) {
+                    self.showSuccess(resetSaveProfile, successContainer, btnSaveProfile);
+                    self.sStorage.setItem('firstname', fname);
+                    self.sStorage.setItem('lastname', lname);
+                    self.sStorage.setItem('title', title);
+                    self.getInitialize();
+                }
+                else if (status.toString() === this.errorCodes.UNAUTHORIZED) {
+                    self.redirectToLogin();
+                }
+                else {
+                    console.log('failed because of ' + status + ' error.');
+                }
+            }, error => console.log(error));
     }
 
     onCancelSaveProfile(btnSaveProfile, event) {
@@ -203,43 +229,55 @@ export class Account implements OnInit{
             let authheader = 'Bearer ' + this.sStorage.getItem('jwt');
             let security = this.auth.securitylevel;
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.resetemailapi;
-            let promise = this.resetEmail(apiURL, authheader, userid, newemailid, security, password);
-            promise.then(function(response) {
-                status = response.status;
-                return response.json();
-            }).then(function(json) {
-                if (status.toString() === errorcodes.SUCCESS) {
-                    self.showSuccess(resetEmailSave, SuccessEmailContainer, btnChangeEmail);
-                    self.sStorage.setItem('jwt', json.AccessToken);
-                    self.sStorage.setItem('useremail', newemailid);
-                    self.auth.authheader = 'Bearer ' + json.AccessToken;
-                    self.auth.useremail = newemailid
-                    $('#emailId').text(newemailid);
-                    txtNewEmailId.value = '';
-                    // self.getInitialize();
-                    setTimeout(function() {
-                        $("#changeEmailFormSubmittable").slideUp("slow", function() {
-                            $('#changeEmailFormSubmittable').addClass('hidden');
-                            $('#showChangeEmail').removeClass('hidden');
-                        });
-                    }, 3000);
-                }
-                else if (status.toString() === errorcodes.API) {
-                    if (json.Payload.length > 0) {
-                        if (json.Payload[0].Messages.length > 0) {
-                            self.showError(json.Payload[0].Messages[0].toString(), PasswordErrorContainer, 2);
+            let resetEmailObservable: Observable<Response> = this.resetEmail(apiURL, authheader, userid, newemailid, security, password);
+            this.resetEmailSubscription = resetEmailObservable
+                .map(response => {
+                    status = response.status;
+                    return response.json();
+                })
+                .subscribe(json => {
+                    if (status.toString() === this.errorCodes.SUCCESS) {
+                        self.showSuccess(resetEmailSave, SuccessEmailContainer, btnChangeEmail);
+                        self.sStorage.setItem('jwt', json.AccessToken);
+                        self.sStorage.setItem('useremail', newemailid);
+                        self.auth.authheader = 'Bearer ' + json.AccessToken;
+                        self.auth.useremail = newemailid
+                        $('#emailId').text(newemailid);
+                        txtNewEmailId.value = '';
+                        // self.getInitialize();
+                        setTimeout(function () {
+                            $("#changeEmailFormSubmittable").slideUp("slow", function () {
+                                $('#changeEmailFormSubmittable').addClass('hidden');
+                                $('#showChangeEmail').removeClass('hidden');
+                            });
+                        }, 3000);
+                    }
+                    else if (status.toString() === this.errorCodes.API) {
+                        if (json.Payload.length > 0) {
+                            if (json.Payload[0].Messages.length > 0) {
+                                self.showError(json.Payload[0].Messages[0].toString(), PasswordErrorContainer, 2);
+                            }
                         }
                     }
-                }
-                else {
-                    self.showError(general.exception, PasswordErrorContainer, 2);
-                }
+                    else {
+                        self.showError(general.exception, PasswordErrorContainer, 2);
+                    }
 
-                txtPassword.value = '';
-            }).catch(function(ex) {
-                self.showError(general.exception, PasswordErrorContainer, 2);
-                txtPassword.value = '';
-            });
+                    txtPassword.value = '';
+                },
+                error => {
+                    if (error.status.toString() === this.errorCodes.API) {
+                        if (error.json().Payload.length > 0) {
+                            if (error.json().Payload[0].Messages.length > 0) {
+                                self.showError(error.json().Payload[0].Messages[0].toString(), PasswordErrorContainer, 2);
+                            }
+                        }
+                    }
+                    else {
+                        self.showError(general.exception, PasswordErrorContainer, 2);
+                    }
+                    txtPassword.value = '';
+                });
         }
         else {
             txtPassword.value = '';
@@ -250,7 +288,7 @@ export class Account implements OnInit{
     showChangeEmail(btnShowChangeEmail, txtNewEmailId, txtPassword, btnChangeEmail, $event) {
         $('#successemailmsg').addClass('hidden');
         // $('#changeEmailFormSubmittable').show().removeClass('hidden');
-        $('#changeEmailFormSubmittable').slideDown('fast', function() {
+        $('#changeEmailFormSubmittable').slideDown('fast', function () {
             $(this).removeClass('hidden');
         });
         $(btnShowChangeEmail).addClass('hidden');
@@ -279,7 +317,7 @@ export class Account implements OnInit{
         $('#spnEmailErrorMessage').text('');
         $('#spnPasswordErrorMessage').text('');
         // $('#changeEmailFormSubmittable').hide().addClass('hidden');
-        $('#changeEmailFormSubmittable').slideUp('fast', function() {
+        $('#changeEmailFormSubmittable').slideUp('fast', function () {
             $(this).addClass('hidden');
         });
     }
@@ -299,35 +337,48 @@ export class Account implements OnInit{
             let userId = this.auth.userid;
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.resetfacultypasswordafterloginapi;
             let self = this;
-            let resetPasswordPromise = this.resetPassword(apiURL, authheader, userId, currentpassword, newpassword);
-            resetPasswordPromise.then(function(response) {
-                status = response.status;
-                return response.json();
-            }).then(function(json) {
-                if (status.toString() === errorcodes.SUCCESS) {
-                    $('#divNewPasswordInfo').slideUp('fast', function() {
-                        $(this).addClass('hidden');
-                    });
-                    SuccessResetPasswordContainer.innerHTML = reset_password_after_login.resetpass_success;
-                    self.showSuccess(btnResetResetPassword, SuccessResetPasswordContainer, btnResetPassword);
-                    self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
-                }
-                else if (status.toString() === errorcodes.API) {
-                    if (json.Payload.length > 0) {
-                        if (json.Payload[0].Messages.length > 0) {
-                            self.showError(json.Payload[0].Messages[0].toString(), ResetPasswordErrorContainer, 4);
-                            self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+            let resetPasswordObservable: Observable<Response> = this.resetPassword(apiURL, authheader, userId, currentpassword, newpassword);
+            this.resetPasswordSubscription = resetPasswordObservable
+                .map(response => {
+                    status = response.status;
+                    return response.json();
+                })
+                .subscribe(json => {
+                    if (status.toString() === this.errorCodes.SUCCESS) {
+                        $('#divNewPasswordInfo').slideUp('fast', function () {
+                            $(this).addClass('hidden');
+                        });
+                        SuccessResetPasswordContainer.innerHTML = reset_password_after_login.resetpass_success;
+                        self.showSuccess(btnResetResetPassword, SuccessResetPasswordContainer, btnResetPassword);
+                        self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                    }
+                    else if (status.toString() === this.errorCodes.API) {
+                        if (json.Payload.length > 0) {
+                            if (json.Payload[0].Messages.length > 0) {
+                                self.showError(json.Payload[0].Messages[0].toString(), ResetPasswordErrorContainer, 4);
+                                self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                            }
                         }
                     }
-                }
-                else {
-                    self.showError(general.exception, ResetPasswordErrorContainer, 4);
-                    self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
-                }
-            }).catch(function(ex) {
-                self.showError(general.exception, ResetPasswordErrorContainer, 4);
-                self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
-            });
+                    else {
+                        self.showError(general.exception, ResetPasswordErrorContainer, 4);
+                        self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                    }
+                }, error => {
+                    if (error.status.toString() === this.errorCodes.API) {
+                        if (error.json().Payload.length > 0) {
+                            if (error.json().Payload[0].Messages.length > 0) {
+                                self.showError(error.json().Payload[0].Messages[0].toString(), ResetPasswordErrorContainer, 4);
+                                self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                            }
+                        }
+                    }
+                    else {
+                        self.showError(general.exception, ResetPasswordErrorContainer, 4);
+                        self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                    }
+
+                });
         }
         else {
             this.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
@@ -362,7 +413,7 @@ export class Account implements OnInit{
         this.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
         $('#spnCurrentPasswordErrorMessage').text('');
         $('#spnResetPasswordErrorMessage').text('');
-        $('#divNewPasswordInfo').slideUp('fast', function() {
+        $('#divNewPasswordInfo').slideUp('fast', function () {
             $(this).addClass('hidden');
         });
     }
@@ -393,32 +444,45 @@ export class Account implements OnInit{
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.resetstudentpassword;
             let self = this;
             let status = 0;
-            let resetStudentPasswordPromise = this.resetStudentPassword(apiURL, authheader, userId, studentEmailID);
-            resetStudentPasswordPromise.then(function(response) {
-                status = response.status;
-                return response.json();
-            }).then(function(json) {
-                if (status.toString() === errorcodes.SUCCESS) {
-                    successResetStudentPasswordContainer.innerHTML = reset_student_password.success_message;
-                    self.showSuccess(btnClearResetStudentPassword, successResetStudentPasswordContainer, btnResetStudentPassword);
-                    self.clearResetStudentPassword(txtResetStudentPassword, btnResetStudentPassword);
-                }
-                else if (status.toString() === errorcodes.API) {
-                    if (json.Payload.length > 0) {
-                        if (json.Payload[0].Messages.length > 0) {
-                            self.showError(json.Payload[0].Messages[0].toString(), resetStudentPasswordErrorContainer, 5);
-                            self.clearResetStudentPassword(txtResetStudentPassword, null);
+            let resetStudentPasswordObservable: Observable<Response> = this.resetStudentPassword(apiURL, authheader, userId, studentEmailID);
+            this.resetStudentPasswordSubscription = resetStudentPasswordObservable
+                .map(response => {
+                    status = response.status;
+                    return response.json();
+                })
+                .subscribe(json => {
+                    if (status.toString() === this.errorCodes.SUCCESS) {
+                        successResetStudentPasswordContainer.innerHTML = reset_student_password.success_message;
+                        self.showSuccess(btnClearResetStudentPassword, successResetStudentPasswordContainer, btnResetStudentPassword);
+                        self.clearResetStudentPassword(txtResetStudentPassword, btnResetStudentPassword);
+                    }
+                    else if (status.toString() === this.errorCodes.API) {
+                        if (json.Payload.length > 0) {
+                            if (json.Payload[0].Messages.length > 0) {
+                                self.showError(json.Payload[0].Messages[0].toString(), resetStudentPasswordErrorContainer, 5);
+                                self.clearResetStudentPassword(txtResetStudentPassword, null);
+                            }
                         }
                     }
-                }
-                else {
-                    self.showError(general.exception, resetStudentPasswordErrorContainer, 5);
-                    self.clearResetStudentPassword(txtResetStudentPassword, null);
-                }
-            }).catch(function(ex) {
-                self.showError(general.exception, resetStudentPasswordErrorContainer, 5);
-                self.clearResetStudentPassword(txtResetStudentPassword, null);
-            });
+                    else {
+                        self.showError(general.exception, resetStudentPasswordErrorContainer, 5);
+                        self.clearResetStudentPassword(txtResetStudentPassword, null);
+                    }
+                }, error => {
+                    if (error.status.toString() === this.errorCodes.API) {
+                        if (error.json().Payload.length > 0) {
+                            if (error.json().Payload[0].Messages.length > 0) {
+                                self.showError(error.json().Payload[0].Messages[0].toString(), resetStudentPasswordErrorContainer, 5);
+                                self.clearResetStudentPassword(txtResetStudentPassword, null);
+                            }
+                        }
+                    }
+                    else {
+                        self.showError(general.exception, resetStudentPasswordErrorContainer, 5);
+                        self.clearResetStudentPassword(txtResetStudentPassword, null);
+                    }
+
+                });
         }
     }
 
@@ -598,71 +662,79 @@ export class Account implements OnInit{
         $(successContainer).removeClass('hidden');
     }
 
-    saveProfile(url, authheader, userid, fname, lname, title, email) {
-        return fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': authheader
-            },
-            body: JSON.stringify({
-                userid: userid,
-                Firstname: fname,
-                LastName: lname,
-                Jobtitle: title,
-                Email: email
-            })
+    saveProfile(url, authheader, userid, fname, lname, title, email): Observable<Response> {
+        let self = this;
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Authorization': authheader,
+            'Content-Type': 'application/json'
         });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        let body: any = JSON.stringify({
+            userid: userid,
+            Firstname: fname,
+            LastName: lname,
+            Jobtitle: title,
+            Email: email
+        });
+        return this.http.post(url, body, requestOptions);
     }
 
-    resetEmail(url, authheader, userid, email, security, password) {
-        return fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': authheader
-            },
-            body: JSON.stringify({
-                userid: userid,
-                Email: email,
-                SecurityLevel: security,
-                Password: password
-            })
+    resetEmail(url, authheader, userid, email, security, password): Observable<Response> {
+        let self = this;
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Authorization': authheader,
+            'Content-Type': 'application/json'
         });
-    }
-
-
-    resetPassword(url, authheader, userid, currentPassword, newPassword) {
-        return fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': authheader
-            },
-            body: JSON.stringify({
-                userid: userid,
-                Password: currentPassword,
-                NewPassword: newPassword
-            })
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
         });
+        let body: any = JSON.stringify({
+            userid: userid,
+            Email: email,
+            SecurityLevel: security,
+            Password: password
+        })
+        return this.http.post(url, body, requestOptions);
     }
 
 
-    resetStudentPassword(url, authheader, userid, studentEmail) {
-        return fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': authheader
-            },
-            body: JSON.stringify({
-                userid: userid,
-                StudentEmail: studentEmail
-            })
+    resetPassword(url, authheader, userid, currentPassword, newPassword): Observable<Response> {
+        let self = this;
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Authorization': authheader,
+            'Content-Type': 'application/json'
         });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        let body: any = JSON.stringify({
+            userid: userid,
+            Password: currentPassword,
+            NewPassword: newPassword
+        })
+        return this.http.post(url, body, requestOptions);
+    }
+
+
+    resetStudentPassword(url, authheader, userid, studentEmail): Observable<Response> {
+        let self = this;
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Authorization': authheader,
+            'Content-Type': 'application/json'
+        });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        let body: any = JSON.stringify({
+            userid: userid,
+            StudentEmail: studentEmail
+        })
+        return this.http.post(url, body, requestOptions);
     }
 }

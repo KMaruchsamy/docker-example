@@ -1,24 +1,18 @@
-<div class="section section-bottom-thin" [class.section-light-pink]="modifyInProgress">
-    <div *ngIf="!modifyInProgress" [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
-        <h2 class="page-sm-heading-teal">Manage Tests</h2>
-        <h3 class="page-lg-heading" [class.modify-testing-session-left]="modify">{{ modify ? 'Modify a Testing Session' : 'Schedule a Test' }}</h3>
+<div class="section section-bottom-thin"  [class.section-light-pink]="modifyInProgress">
+    <div [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
+         <h2 [class.page-sm-heading-teal]="!modifyInProgress" [class.error]="modifyInProgress" [class.h5]="modifyInProgress">
+            {{modifyInProgress ?(testSchedule.activeStep ===3 ? 'Add/Remove Students' :'Change Testing Window' ): 'Manage Tests'}}
+            </h2>
+        <h3 class="page-lg-heading" [class.modify-testing-session-left]="modify">{{ modify ? (modifyInProgress ? 'Test In Progress : ' + testSchedule.testName  : 'Modify a Testing Session') : 'Schedule a Test' }}</h3>
         <div *ngIf="modify && !hideCancelButton" class="modify-testing-session-right text-larger">
             <button class="anchor-button" (click)="confirmCancelChanges($event)">Cancel changes</button>
         </div>
     </div>
-    <div class="container" *ngIf="modifyInProgress">
-        <h2 class="error h5">Add/Remove Students</h2>
-        <h3 class="modify-testing-session-left page-lg-heading">Test In Progress: {{TestName}}</h3>
-        <div class="modify-testing-session-right text-larger">
-            <button class="anchor-button" (click)="confirmCancelChanges($event)">Cancel changes</button>
-        </div>
-    </div>
 </div>
-<div *ngIf="!modifyInProgress && testSchedule.currentStep>1 && testSchedule.activeStep!==1 && testSchedule.activeStep!==5" class="thin-section test-summary-heading"
-[class.test-summary-heading-modify]="modify">
+<div *ngIf="testSchedule.currentStep>1 && testSchedule.activeStep!==1 && testSchedule.activeStep!==5 && !modifyInProgress" class="thin-section test-summary-heading" [class.test-summary-heading-modify]="modify">
     <div class="container-medium-width" [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
         <div *ngIf="testSchedule.currentStep>1 " class="test-summary-heading-details"><span>Test: <b>{{testSchedule.testName}}</b></span>
-            <a href="#" target="_self" [routerLink]="modify ? ['/ModifyChooseTest' , {action:'modify',institutionId : testSchedule.institutionId}] :  ['/ChooseTest' , {institutionId : testSchedule.institutionId}]" class="link-darker">Change test</a></div>
+            <a href="#" target="_self" [routerLink]="modify ? ['/tests' , 'modify', 'choose-test',testSchedule.institutionId] :  ['/tests/choose-test' , testSchedule.institutionId]" class="link-darker">Change test</a></div>
         <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>            
             <template [ngIf]="!nextDay">
                 {{testSchedule?.scheduleStartTime|parseDate:'ddd'}} {{testSchedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule?.scheduleStartTime|parseDate:'h:mma'}}
@@ -30,7 +24,7 @@
                 {{testSchedule?.scheduleEndTime|parseDate:'MM/DD/YY'}}
             </template>
             </b></span>
-            <a [routerLink]="modify ? ['/ModifyScheduleTest',{action:'modify'}] : ['/ScheduleTest']" class="link-darker">Change date or time</a>
+            <a [routerLink]="modify ? ['/tests','modify','schedule-test'] : ['/tests/schedule-test']" class="link-darker">Change date or time</a>
         </div>
     </div>
 </div>

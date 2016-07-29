@@ -1,8 +1,8 @@
-import {Component, OnInit, DynamicComponentLoader, ElementRef} from '@angular/core';
-import {Router, RouterLink, OnDeactivate, CanDeactivate, ComponentInstruction, RouteParams} from '@angular/router-deprecated';
+import {Component, OnInit, DynamicComponentLoader, ElementRef, OnDestroy} from '@angular/core';
+import {Router, ROUTER_DIRECTIVES, RoutesRecognized, ActivatedRoute} from '@angular/router';
 import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
 import {Title} from '@angular/platform-browser';
-import {Observable} from 'rxjs/Rx';
+import {Observable, Subscription} from 'rxjs/Rx';
 import {NgIf, NgFor} from '@angular/common';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
@@ -24,10 +24,10 @@ import {ConfirmationPopup} from '../shared/confirmation.popup';
     selector: "view-test",
     templateUrl: "templates/tests/view-test.html",
     providers: [TestService, Auth, TestScheduleModel, Common],
-    directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, RouterLink, ConfirmationPopup],
+    directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, ROUTER_DIRECTIVES, ConfirmationPopup],
     pipes: [ParseDatePipe]
 })
-export class ViewTest implements OnInit, OnDeactivate {
+export class ViewTest implements OnInit, OnDestroy {
     studentsTable: any;
     sStorage: any;
     nextDay: boolean = false;
@@ -37,39 +37,58 @@ export class ViewTest implements OnInit, OnDeactivate {
     anyStudentPayStudents: boolean = false;
     testScheduleId: number;
     modifyInProgress: boolean = false;
-    adminId: number = 0;
-    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public routeParams: RouteParams, public titleService: Title) {
+    adminId: number;
+    deactivateSubscription: Subscription;
+    destinationRoute: string;
+    paramsSubscription: Subscription;
+    scheduleSubscription: Subscription;
+    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, private activatedRoute: ActivatedRoute, public titleService: Title) {
 
     }
 
     ngOnInit(): void {
-        this.sStorage = this.common.getStorage();
-        this.adminId = this.auth.userid;
-        if (!this.auth.isAuth())
-            this.router.navigateByUrl('/');
-        else {
-            let action = this.routeParams.get('action');
-            if (action != undefined && action.trim() !== '') {
-                if (action.trim() === 'modifyinprogress')
-                    this.modifyInProgress = true;
-                else
-                    this.modify = true;
-            }
-            this.testScheduleId = parseInt(this.routeParams.get('id'));
-            this.loadTestSchedule();
 
+        this.deactivateSubscription = this.router
+            .events
+            .filter(event => event instanceof RoutesRecognized)
+            .subscribe(event => {
+                console.log('Event - ' + event);
+                this.destinationRoute = event.urlAfterRedirects;
+            });
+
+        this.sStorage = this.common.getStorage();
+        if (!this.auth.isAuth())
+            this.router.navigate(['/']);
+        else {
+            this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
+                let action = params['action'];
+                if (action != undefined && action.trim() !== '')
+                    this.modify = true;
+                this.testScheduleId = parseInt(params['id']);
+                this.adminId = this.auth.userid;
+                this.loadTestSchedule();
+            });
         }
         $(document).scrollTop(0);
         this.titleService.setTitle('View Testing Session – Kaplan Nursing');
     }
 
 
-    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction): void {
-        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
-        if (outOfTestScheduling && !this.modifyInProgress)
+    ngOnDestroy(): void {
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
+        if (outOfTestScheduling)
             this.testService.clearTestScheduleObjects();
         if (this.studentsTable)
             this.studentsTable.destroy();
+
+        if (this.deactivateSubscription)
+            this.deactivateSubscription.unsubscribe();
+
+        if (this.paramsSubscription)
+            this.paramsSubscription.unsubscribe();
+
+        if (this.scheduleSubscription)
+            this.scheduleSubscription.unsubscribe();
     }
 
 
@@ -78,11 +97,10 @@ export class ViewTest implements OnInit, OnDeactivate {
     loadTestSchedule(): void {
         let __this = this;
         let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`);
-        let schedulePromise = this.testService.getScheduleById(scheduleURL);
-        schedulePromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
+        let scheduleObservable: Observable<Response> = this.testService.getScheduleById(scheduleURL);
+        this.scheduleSubscription = scheduleObservable
+            .map(response => response.json())
+            .subscribe(json => {
                 if (json) {
                     let _schedule: TestScheduleModel = __this.testService.mapTestScheduleObjects(json);
                     if (_schedule) {
@@ -105,9 +123,12 @@ export class ViewTest implements OnInit, OnDeactivate {
                         __this.anyStudentPayStudents = __this.testService.anyStudentPayStudents(_schedule);
                         console.log('>>>>>>>>>>>>>>>>>>');
                         console.log(JSON.stringify(this.schedule));
+                        let testStatus: number = __this.testService.getTestStatusFromTimezone(__this.schedule.institutionId, __this.schedule.scheduleStartTime, __this.schedule.scheduleEndTime);
+                        if (testStatus === 0)
+                            __this.modifyInProgress = true;
                     }
                     else
-                        __this.router.navigate(['/LastTestingSession']);
+                        __this.router.navigate(['/testing-session-expired']);
 
                     if (__this.schedule) {
                         let startTime = __this.schedule.scheduleStartTime;
@@ -135,12 +156,8 @@ export class ViewTest implements OnInit, OnDeactivate {
 
                 }
 
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
-
+            },
+            error => console.log(error));
     }
 
 
@@ -176,16 +193,7 @@ export class ViewTest implements OnInit, OnDeactivate {
         let deleteObdervable: Observable<Response> = this.testService.deleteSchedule(scheduleURL);
         deleteObdervable.subscribe((res: Response) => {
             __this.testService.clearTestScheduleObjects();
-            __this.router.navigate(['/ManageTests']);
+            __this.router.navigate(['/tests']);
         });
     }
-
-    addRemoveStudent(e, modify: boolean, status: string): void {
-        e.preventDefault(); debugger;
-        if (modify)
-            this.router.navigate(['/ModifyAddStudents', { action: status }]);
-        else
-            this.router.navigate(['/AddStudents']);
-    }
-    
 }

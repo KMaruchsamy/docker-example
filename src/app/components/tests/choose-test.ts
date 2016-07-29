@@ -1,7 +1,11 @@
-import {Component, OnInit, OnChanges, AfterViewChecked, ElementRef} from '@angular/core';
-import {Router, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction} from '@angular/router-deprecated';
+import {Component, OnInit, OnChanges, AfterViewChecked, ElementRef, OnDestroy} from '@angular/core';
+import {DomSanitizationService, SafeUrl} from '@angular/platform-browser';
+import {Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, RoutesRecognized, NavigationStart} from '@angular/router';
+import {Subscription, Observable} from 'rxjs/Rx';
 import {Location} from '@angular/common';
 import {Title} from '@angular/platform-browser';
+import {NgIf, NgFor} from '@angular/common';
+import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -12,20 +16,29 @@ import {TestHeader} from './test-header';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {AlertPopup} from '../shared/alert.popup';
+import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';
 import {Utility} from '../../scripts/utility';
 import * as _ from 'lodash';
+import {Response} from '@angular/http';
+// import {SharedDeactivateGuard} from '../shared/shared.deactivate.guard';
+// import '../../plugins/dropdown.js';
+// import '../../plugins/bootstrap-select.min.js';
+// import '../../plugins/jquery.dataTables.min.js';
+// import '../../plugins/dataTables.responsive.js';
+// import '../../plugins/typeahead.bundle.js';
+// import '../../lib/modal.js';
 
 @Component({
     selector: 'choose-test',
     templateUrl: 'templates/tests/choose-test.html',
     providers: [TestService, Auth, TestScheduleModel, Utility, Common],
-    directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup, AlertPopup],
-    pipes: [RemoveWhitespacePipe, RoundPipe]
+    directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup, AlertPopup, TestingSessionStartingPopup, NgIf, NgFor],
+    pipes: [RemoveWhitespacePipe, RoundPipe, ParseDatePipe]
 })
 
-export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
+export class ChooseTest implements OnInit, OnChanges, OnDestroy {
     institutionID: number;
     apiServer: string;
     subjectId: number;
@@ -37,6 +50,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     attemptedRoute: string;
     overrideRouteCheck: boolean = false;
     modify: boolean = false;
+    modifyInProgress: boolean;
     saveTriggered: boolean = false;
     searchString: string = null;
     typeaheadResults: Object[] = [];
@@ -50,44 +64,93 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     activeChooseBySubject: boolean = true;
     activeFindByName: boolean = false;
     setFocus: boolean = true;
-    constructor(public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
-        public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public aLocation: Location, public titleService: Title) {
+    actionSubscription: Subscription;
+    deactivateSubscription: Subscription;
+    destinationRoute: string;
+    subjectsSubscription: Subscription;
+    testsSubscription: Subscription;
+    typeaheadTestsSubscription: Subscription;
+    constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
+        public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public aLocation: Location,
+        public titleService: Title, private sanitizer:DomSanitizationService) {
+    }
+
+    ngOnChanges(): void {
+    }
+
+    ngOnDestroy(): void {
+        if (this.testsTable)
+            this.testsTable.destroy();
+        this.tests = [];
+        $('#findTestByName').val('');
+        $('#findTestByName').typeahead('destroy');
+        $('.selectpicker').val('').selectpicker('refresh');
+        if (this.actionSubscription)
+            this.actionSubscription.unsubscribe();
+        if (this.deactivateSubscription)
+            this.deactivateSubscription.unsubscribe();
+        if (this.subjectsSubscription)
+            this.subjectsSubscription.unsubscribe();
+        if (this.testsSubscription)
+            this.testsSubscription.unsubscribe();
+        if (this.typeaheadTestsSubscription)
+            this.typeaheadTestsSubscription.unsubscribe();
     }
 
     ngOnInit(): void {
+
+        this.deactivateSubscription = this.router
+            .events
+            .filter(event => event instanceof RoutesRecognized)
+            .subscribe(event => {
+                console.log('Event - ' + event);
+                this.destinationRoute = event.urlAfterRedirects;
+            });
+
+
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
-            this.router.navigateByUrl('/');
+            this.router.navigate(['/']);
         else {
-            this.initialize();
-            $(document).scrollTop(0);
-            let action = this.routeParams.get('action');
-            if (action != undefined && action.trim() === 'modify') {
-                this.modify = true;
-                this.titleService.setTitle('Modify: Choose Test – Kaplan Nursing');
-            } else {
-                this.titleService.setTitle('Choose Test – Kaplan Nursing');
-            }
+            this.actionSubscription = this.activatedRoute.params.subscribe(params => {
+                let action = params['action'];
+                this.institutionID = params['institutionId'];
+                if (action != undefined && action.trim() === 'modify') {
+                    this.modify = true;
+                    this.titleService.setTitle('Modify: Choose Test – Kaplan Nursing');
+                } else {
+                    this.titleService.setTitle('Choose Test – Kaplan Nursing');
+                }
+                this.initialize();
+                $(document).scrollTop(0);
+
+            });
         }
     }
 
     onCancelChanges(): void {
         this.overrideRouteCheck = true;
         this.testService.clearTestScheduleObjects();
-        this.router.parent.navigate(['/ManageTests']);
+        this.router.navigate(['/tests']);
+    }
+
+    cancelStartingTestChanges(popupId): void {
+        $('#'+ popupId).modal('hide');
+        this.onCancelChanges();
     }
 
     onContinueMakingChanges(): void {
         // continue making changes after confirmation popup..
     }
 
-    routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+
+    canDeactivate(next: string): Observable<boolean> | boolean {
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         // if (!this.modify) {
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
                 if (this.testScheduleModel.testId) {
-                    this.attemptedRoute = next.urlPath;
+                    this.attemptedRoute = this.destinationRoute;
                     $('#confirmationPopup').modal('show');
                     return false;
                 }
@@ -100,19 +163,10 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         return true;
     }
 
-    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        if (this.testsTable)
-            this.testsTable.destroy();
-        this.tests = [];
-        $('#findTestByName').val('');
-        $('#findTestByName').typeahead('destroy');
-        $('.selectpicker').val('').selectpicker('refresh');
-    }
-
     CallOnSearchInput(searchElement: any): void {
         setTimeout(() => {
             let searchText = searchElement.value;
-            this.bindTypeaheadFocus(searchElement,searchText);
+            this.bindTypeaheadFocus(searchElement, searchText);
         });
     }
 
@@ -121,7 +175,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         this.testsTable = null;
         this.noSearch = false;
         this.testTypeId = 1;
-        this.institutionID = parseInt(this.routeParams.get('institutionId'));
+        // this.institutionID = parseInt(this.routeParams.get('institutionId'));
         this.apiServer = this.common.getApiServer();
         $('#findTestByName').typeahead('destroy');
         this.activeTest = false;
@@ -130,7 +184,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         this.activeFindByName = false;
         this.noTest = true;
         this.loadSubjects();
-        $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
+        $('.typeahead').bind('typeahead:select', function(ev, suggetion) {
             ev.preventDefault();
             self.bindTestSearchResults(suggetion, true);
             $('.typeahead').typeahead('close');
@@ -163,24 +217,28 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
 
     }
 
+    sanitizeURL(url: string): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustUrl(url);
+    }
+
     loadSubjects(): void {
         let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
-        let subjectsPromise = this.testService.getSubjects(subjectsURL);
-        subjectsPromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
+        let subjectsObservable: Observable<Response> = this.testService.getSubjects(subjectsURL);;
+
+        this.subjectsSubscription = subjectsObservable
+            .map(response => response.json())
+            .subscribe(json => {
                 this.subjects = json;
                 this.loadSchedule();
+                this.checkIfTestHasStarted();
+                this.testService.showTestStartingWarningModals(this.modify,this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
                 setTimeout(json => {
                     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
                         $('.selectpicker').selectpicker('mobile');
                     else
                         $('.selectpicker').selectpicker('refresh');
                 });
-            })
-            .catch((error) => {
-                console.log(error);
+                
             });
     }
 
@@ -197,11 +255,11 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         this.subjectId = subjectID;
         this.searchString = '';
         let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}`);
-        let testsPromise = this.testService.getTests(testsURL);
-        testsPromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
+        let testsObservable: Observable<Response> = this.testService.getTests(testsURL);
+
+        this.testsSubscription = testsObservable
+            .map(response => response.json())
+            .subscribe(json => {
                 self.tests = json;
 
                 if (self.testsTable) {
@@ -214,19 +272,18 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
                             "info": false,
                             "ordering": false
                         });
-                        $('#chooseTestTable').on('responsive-display.dt', function () {
+                        $('#chooseTestTable').on('responsive-display.dt', function() {
                             $(this).find('.child .dtr-title br').remove();
                         });
                     });
                 }
                 this.noTest = true;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            },
+            error => console.log(error));
+
     }
 
-    saveChooseTest(e): void {
+    saveChooseTest(e): any {
         this.saveTriggered = true;
         e.preventDefault();
         if (!this.validateDates())
@@ -257,9 +314,9 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         }
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         if (this.modify)
-            this.router.navigate(['/ModifyScheduleTest', { action: 'modify' }]);
+            this.router.navigate(['/tests', 'modify', 'schedule-test']);
         else
-            this.router.navigate(['/ScheduleTest']);
+            this.router.navigate(['/tests/schedule-test']);
     }
 
     resolveScheduleURL(url: string, scheduleId: number): string {
@@ -267,10 +324,12 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
     }
 
     validateDates(): boolean {
-        return this.testService.validateDates(this.testScheduleModel, this.institutionID, this.modify);
+        return this.testService.validateDates(this.testScheduleModel, this.institutionID, this.modify, this.modifyInProgress);
     }
 
-
+    checkIfTestHasStarted():any {
+        return this.testService.checkIfTestHasStarted(this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modifyInProgress );
+    }
 
     selectTest(testId: number, testName: string, subjectId: number, normingStatusName): void {
         this.sStorage.setItem('previousTest', this.testScheduleModel.testId);
@@ -281,8 +340,8 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         this.sStorage.removeItem('retesters');
     }
 
-    onCancelConfirmation(e: any): void {
-        $('#confirmationPopup').modal('hide');
+    onCancelConfirmation(popupId): void {
+        $('#' + popupId).modal('hide');
         this.attemptedRoute = '';
     }
 
@@ -296,30 +355,30 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         $('#alertPopup').modal('hide');
         this.overrideRouteCheck = true;
         if (this.modify)
-            this.router.navigate(['/ModifyScheduleTest', { action: 'modify' }]);
+            this.router.navigate(['/tests', 'modify', 'schedule-test']);
         else
-            this.router.navigate(['ScheduleTest']);
+            this.router.navigate(['tests/schedule-test']);
     }
 
     findByName(element: any, event): void {
-            var ms_ie = false;
-            var ua = window.navigator.userAgent;
-            var old_ie = ua.indexOf('MSIE ');
-            var new_ie = ua.indexOf('Trident/');
+        var ms_ie = false;
+        var ua = window.navigator.userAgent;
+        var old_ie = ua.indexOf('MSIE ');
+        var new_ie = ua.indexOf('Trident/');
 
-            if ((old_ie > -1) || (new_ie > -1)) {
-                ms_ie = true;
-            }
-            if (ms_ie && this.testScheduleModel.testId != 0 ) {
-                    element.focus();
-                    element.value = '';
-            }
-            else {
-                setTimeout(() => {
-                    element.focus();
-                    element.value = '';
-                });
-            }
+        if ((old_ie > -1) || (new_ie > -1)) {
+            ms_ie = true;
+        }
+        if (ms_ie && this.testScheduleModel.testId != 0) {
+            element.focus();
+            element.value = '';
+        }
+        else {
+            setTimeout(() => {
+                element.focus();
+                element.value = '';
+            });
+        }
         this.activeSubject = false;
         this.activeChooseBySubject = false;
         this.activeFindByName = true;
@@ -337,10 +396,10 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             $('.selectpicker').val('').selectpicker('refresh');
             this.noTest = false;
         }
-      
+
     }
 
-    
+
 
     chooseBySubject(element: any, event): void {
         this.activeTest = false;
@@ -363,27 +422,30 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         this.searchString = testName;
         let self = this;
         let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}`);
-        let testsPromise = this.testService.getTests(testsURL);
-        testsPromise.then((response) => {
-            if (response.status !== 400) {
-                return response.json();
-            }
-            return [];
-        })
-            .then((json) => {
+        let testsObservable: Observable<Response> = this.testService.getTests(testsURL);
+        this.typeaheadTestsSubscription = testsObservable
+            .map(response => {
+                if (response.status !== 400) {
+                    return response.json();
+                }
+                return [];
+            })
+            .subscribe(json => {
                 self.searchResult = json;
                 if (self.testScheduleModel.testId != 0 && self.testScheduleModel.subjectId == 0) {
                     this.displayTest(this.testScheduleModel.testId);
                 }
                 if (json.length > 0) {
                     self.showTypeahead();
-                        setTimeout(() => { $('#findTestByName').focus(); });
+                    setTimeout(() => { $('#findTestByName').focus(); });
                     $('#findTestByName').typeahead('open');
                 }
                 else {
-                        $('#findTestByName').focus();
+                    $('#findTestByName').focus();
                 }
-            });
+            },
+            error => console.log(error)
+            );
     }
 
     showTypeahead(): void {
@@ -399,11 +461,11 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
             {
                 name: 'testNames',
                 limit: 20,
-                source: function (search, process) {
+                source: function(search, process) {
                     var states = [];
                     var data = testNamesList
                     if (search.length >= 2) {
-                        _.forEach(data, function (state, i) {
+                        _.forEach(data, function(state, i) {
                             let name: any = state;
                             if (_.startsWith(name.toLowerCase(), search.toLowerCase())) {
                                 states.push(state);
@@ -455,7 +517,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         }
     }
 
-    bindTypeaheadFocus(element: any, searchText: string ): void {
+    bindTypeaheadFocus(element: any, searchText: string): void {
         if (!_.startsWith(searchText, '  ')) {
             if (searchText.length > 1) {
                 this.disabled = true;
@@ -486,7 +548,7 @@ export class ChooseTest implements OnDeactivate, CanDeactivate, OnInit {
         }
     }
 
-    bindTypeaheadSearchButton(search:string,e): void {
+    bindTypeaheadSearchButton(search: string, e): void {
         e.preventDefault();
         if (search.length >= 2) {
             this.bindTestSearchResults(search, false);

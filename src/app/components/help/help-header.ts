@@ -1,10 +1,10 @@
 ﻿import {Component} from '@angular/core';
-import {RouterLink} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 
 @Component({
     selector:'help-header',
     templateUrl:'templates/help/help-header.html',
-    directives:[RouterLink]
+    directives:[ROUTER_DIRECTIVES]
 })
 export class HelpHeader{
 

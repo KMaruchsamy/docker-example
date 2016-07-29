@@ -1,6 +1,6 @@
 <page-header></page-header>
 <main role="main" class="app-main">
-    <test-header scheduleStep='Schedule a test' [testSchedule]="testScheduleModel" [hideCancelButton]=true></test-header>
+    <test-header [modify]="modify" scheduleStep='Schedule a test' [testSchedule]="testScheduleModel" [hideCancelButton]=true></test-header>
     <div class="section">
     <div class="container-medium-width">
         <h4>{{ modify ? 'Success! Your scheduled test has been modified.' : 'Success! Your test has been scheduled.' }}
@@ -14,10 +14,10 @@
             </div>
         </div>
         <div class="margin-2em-top">
-            <a [routerLink]="['/ModifyViewTest',{action:'modify', id: testScheduleModel.scheduleId}]">View/print this testing session</a>
+            <a [routerLink]="['/tests','modify','view',testScheduleModel.scheduleId]">View/print this testing session</a>
         </div>
-        <p class="margin-2em-top-bottom">Need to make changes? <a [routerLink]="['/ModifyChooseTest',{action:'modify',institutionId:testScheduleModel.institutionId}]">Modify this testing session</a></p>
-        <a [routerLink]="['/ManageTests']">Go to Manage Tests main page</a>
+        <p class="margin-2em-top-bottom">Need to make changes? <a [routerLink]="['/tests','modify','choose-test',testScheduleModel.institutionId]">Modify this testing session</a></p>
+        <a [routerLink]="['/tests']">Go to Manage Tests main page</a>
     </div>
 </div>
 </main>

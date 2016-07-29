@@ -52,7 +52,7 @@
         'http',
         'platform-browser',
         'platform-browser-dynamic',
-        'router-deprecated'
+        'router'
     ];
 
     npmPackages.forEach(function (pkgName) {
@@ -65,7 +65,7 @@
 
     ngPackageNames.forEach(function(pkgName) {
         var main = global.ENV === 'testing' ? 'index.js' :
-            pkgName + '.umd.js';
+            'bundles/' + pkgName + '.umd.js';
 
         packages['@angular/'+pkgName] = { main: main, defaultExtension: 'js' };
     });

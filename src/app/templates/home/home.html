@@ -25,8 +25,8 @@
         <nav class="navigation container" role="navigation" aria-label="secondary">
             <ul class="nav-items">
                 <li class="nav-icon schedule-icon"><a href="#" (click)="redirectToRoute('choose-test');">Schedule an Integrated Test</a></li>
-                <li class="nav-icon email-icon-outline"><a [routerLink]="['/AccountScroll',{scroll:'send-student-info'}]" angulartics2On="click" angularticsEvent="SigninInfoClick" angularticsCategory="LoginHelp">Send student sign in info</a></li>
-                <li class="nav-icon info-icon-white"><a [routerLink]="['/UserGuide']">View user guide</a></li>
+                <li class="nav-icon email-icon-outline"><a [routerLink]="['/account','send-student-info']" angulartics2On="click" angularticsEvent="SigninInfoClick" angularticsCategory="LoginHelp">Send student sign in info</a></li>
+                <li class="nav-icon info-icon-white"><a [routerLink]="['/userguide']">View user guide</a></li>
             </ul>
         </nav>
     </div>
@@ -96,8 +96,8 @@
         <div class="section-light-gray">
             <div class="bottom-grid">
                 <!--Account Manager and Nurse consultant profiles -->
-                <profile [profile]="accountManagerProfile"></profile>
-                <profile [profile]="nurseConsultantProfile"></profile>
+                <profile  [profile]="accountManagerProfile"></profile>
+                <profile  [profile]="nurseConsultantProfile"></profile>
                 <!--<profile *ng-for="#profile of profiles" [profile]="profile"></profile>-->
             </div>
             <!--closes-grid-->

@@ -1,6 +1,6 @@
 import {Component,Input, OnInit} from '@angular/core';
 import {NgClass} from '@angular/common';
-import {Router, RouterLink} from '@angular/router-deprecated';
+import {Router, RouterLink, ROUTER_DIRECTIVES,RouterLinkActive} from '@angular/router';
 import {Auth} from '../../services/auth';
 import {DropdownMenu} from '../controls/dropdown-menu';
 
@@ -10,7 +10,7 @@ import {DropdownMenu} from '../controls/dropdown-menu';
     providers:[Auth],
     inputs:['showCover','ariaDisabled', 'hideDropdown'],
     templateUrl:'templates/shared/page-header.html',
-    directives: [RouterLink,DropdownMenu,NgClass]
+    directives: [ROUTER_DIRECTIVES,DropdownMenu,NgClass,RouterLinkActive]
 })
 
 export class PageHeader implements OnInit{

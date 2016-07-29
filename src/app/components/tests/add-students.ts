@@ -1,5 +1,8 @@
-import {Component, OnInit, AfterViewInit, DynamicComponentLoader, ElementRef, ViewEncapsulation, ViewContainerRef} from '@angular/core';
-import {Router, RouterLink, RouteParams, OnDeactivate, CanDeactivate, ComponentInstruction } from '@angular/router-deprecated';
+import {Component, OnInit, OnDestroy, AfterViewInit, DynamicComponentLoader, ElementRef,
+    ViewEncapsulation, ViewContainerRef} from '@angular/core';
+import {Router, ROUTER_DIRECTIVES, ActivatedRoute, CanDeactivate, RoutesRecognized } from '@angular/router';
+import {Response} from '@angular/http';
+import {Subscription, Observable} from 'rxjs/Rx';
 import {NgFor, Location} from '@angular/common';
 import {Title} from '@angular/platform-browser';
 import {TestService} from '../../services/test.service';
@@ -12,24 +15,19 @@ import {TestHeader} from './test-header';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
+import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {AlertPopup} from '../shared/alert.popup';
+import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
 import {RetesterAlternatePopup} from './retesters-alternate-popup';
 import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
 import {SelfPayStudentPopup} from './self-pay-student-popup';
 import {SortPipe} from '../../pipes/sort.pipe';
+import {Utility} from '../../scripts/utility';
 
 import * as _ from 'lodash';
-// import '../../plugins/dropdown.js';
-// import '../../plugins/bootstrap-select.min.js';
-// import '../../plugins/jquery.dataTables.min.js';
-// import '../../plugins/dataTables.responsive.js';
-// import '../../lib/modal.js';
-// import '../../lib/tooltip.js';
-// import '../../lib/popover.js';
-// import '../../plugins/typeahead.bundle.js';
-//import '../../plugins/dataTables.bootstrap.min.js';
+
 
 @Component({
     selector: 'add-students',
@@ -38,13 +36,12 @@ import * as _ from 'lodash';
     styles: [`#addByName.active + #cohortStudentList .add-students-table-search {display: table; width: 100%;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
-    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup],
-    directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, RouterLink, AlertPopup],
-    pipes: [RemoveWhitespacePipe, SortPipe]
+    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup, Utility],
+    directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, ROUTER_DIRECTIVES, AlertPopup, TestingSessionStartingPopup],
+    pipes: [RemoveWhitespacePipe, SortPipe, ParseDatePipe]
 })
 
-export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
-    //  institutionID: number;
+export class AddStudents implements OnInit, OnDestroy {
     apiServer: string;
     lastSelectedCohortID: number;
     lastSelectedCohortName: string;
@@ -73,21 +70,34 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     AddByNameStudentlist: Object[] = []; // To Check AddByName got students or not...
     AddByCohortStudentlist: Object[] = []; // To preserve previous selected cohort
     isAddByName: boolean = false;
+    actionSubscription: Subscription;
+    deactivateSubscription: Subscription;
+    destinationRoute: string;
+    testsSubscription: Subscription;
+    refreshingTestingStatusSubscription: Subscription;
+    subjectsSubscription: Subscription;
+    exceptionSubscription: Subscription;
+    exceptionSubscriptionOne: Subscription;
+    searchStudentSubscription: Subscription;
+    updateModifyInProgressTestSubscription: Subscription;
+    refreshStudentsSubscription: Subscription;
+    scheduleSubscription: Subscription;
     modifyInProgress: boolean = false;
     refreshStudentsWhoStarted: number[];
-    filterStatus: string = "assignedTestStarted";
+    filterStatus: string = "assignedTestStarted";  // constant to pass into endpoint as a parameter
 
-    constructor(public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public routeParams: RouteParams, public selectedStudentModel: SelectedStudentModel, public common: Common,
+    constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public selectedStudentModel: SelectedStudentModel, public common: Common,
         public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location, public viewContainerRef: ViewContainerRef, public titleService: Title) {
 
     }
 
-    routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+
+    canDeactivate(): Observable<boolean> | boolean {
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
                 if (this.testScheduleModel.testId) {
-                    this.attemptedRoute = next.urlPath;
+                    this.attemptedRoute = this.destinationRoute;
                     $('#confirmationPopup').modal('show');
                     return false;
                 }
@@ -102,73 +112,142 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         return true;
     }
 
-
-    routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+    ngOnDestroy(): void {
         if (this.testsTable)
             this.testsTable.destroy();
         $('#cohortStudentList, #addAllStudents').addClass('hidden');
         // this.studentTable = false;  //remove any initialized tables from DOM
         $('.selectpicker').val('').selectpicker('refresh');
-        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+        let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (outOfTestScheduling) {
             this.ResetData();
         }
         $('.typeahead').typeahead('destroy');
+
+        if (this.deactivateSubscription)
+            this.deactivateSubscription.unsubscribe();
+        if (this.actionSubscription)
+            this.actionSubscription.unsubscribe();
+        if (this.testsSubscription)
+            this.testsSubscription.unsubscribe();
+        if (this.subjectsSubscription)
+            this.subjectsSubscription.unsubscribe();
+        if (this.refreshingTestingStatusSubscription)
+            this.refreshingTestingStatusSubscription.unsubscribe();
+        if (this.exceptionSubscription)
+            this.exceptionSubscription.unsubscribe();
+        if (this.exceptionSubscriptionOne)
+            this.exceptionSubscriptionOne.unsubscribe();
+        if (this.searchStudentSubscription)
+            this.searchStudentSubscription.unsubscribe();
+        if (this.updateModifyInProgressTestSubscription)
+            this.updateModifyInProgressTestSubscription.unsubscribe();
+        if (this.refreshStudentsSubscription)
+            this.refreshStudentsSubscription.unsubscribe();
+        if (this.scheduleSubscription)
+            this.scheduleSubscription.unsubscribe();
     }
 
+    /*    
+        routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+            let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+            if (!this.overrideRouteCheck) {
+                if (outOfTestScheduling) {
+                    if (this.testScheduleModel.testId) {
+                        this.attemptedRoute = next.urlPath;
+                        $('#confirmationPopup').modal('show');
+                        return false;
+                    }
+                }
+            }
+            if (outOfTestScheduling) {
+                this.sStorage.removeItem('testschedule');
+                this.sStorage.removeItem('retesters');
+                this.sStorage.removeItem('previousTest');
+            }
+            this.overrideRouteCheck = false;
+            return true;
+        }
+    
+    
+        routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+            if (this.testsTable)
+                this.testsTable.destroy();
+            $('#cohortStudentList, #addAllStudents').addClass('hidden');
+            // this.studentTable = false;  //remove any initialized tables from DOM
+            $('.selectpicker').val('').selectpicker('refresh');
+            let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
+            if (outOfTestScheduling) {
+                this.ResetData();
+            }
+            $('.typeahead').typeahead('destroy');
+        }
+    */
     ngOnInit() {
+
+        this.deactivateSubscription = this.router
+            .events
+            .filter(event => event instanceof RoutesRecognized)
+            .subscribe(event => {
+                console.log('Event - ' + event);
+                this.destinationRoute = event.urlAfterRedirects;
+            });
+
         let self = this;
         this.testsTable = null;
         this.SetPageToAddByCohort();
         $(document).scrollTop(0);
         this.prevStudentList = [];
-        let action = this.routeParams.get('action');
-        if (action != undefined && action.trim() !== '') {
-            if (action.trim() === 'modifyinprogress') {
-                this.modifyInProgress = true;
-                this.titleService.setTitle('Modify In Progress: Add/Remove Students – Kaplan Nursing');
-            }
-            else {
+
+
+
+
+        this.actionSubscription = this.activatedRoute.params.subscribe(params => {
+            let action = params['action'];
+
+            if (action != undefined && action.trim() === 'modify') {
                 this.modify = true;
                 this.titleService.setTitle('Modify: Add Students – Kaplan Nursing');
+            } else {
+                this.titleService.setTitle('Add Students – Kaplan Nursing');
             }
-        } else {
-            this.titleService.setTitle('Add Students – Kaplan Nursing');
-        }
-        this.CheckForAdaStatus();
+            this.CheckForAdaStatus();
 
-        this.sStorage = this.common.getStorage();
-        if (!this.auth.isAuth())
-            this.router.navigateByUrl('/');
-        else
-            this.initialize();
+            this.sStorage = this.common.getStorage();
+            if (!this.auth.isAuth())
+                this.router.navigate(['/']);
+            else
+                this.initialize();
 
-        this.addClearIcon();
-        let __this = this;
+            this.addClearIcon();
+            let __this = this;
 
-        $('.tab-content').on('click', '#cohortStudentList .clear-input-values', function () {
-            __this.clearTableSearch();
-        });
+            $('.tab-content').on('click', '#cohortStudentList .clear-input-values', function () {
+                __this.clearTableSearch();
+            });
 
-        $('body').on('hidden.bs.popover', function (e) {
-            $(e.target).data("bs.popover").inState.click = false;
-        });
+            $('body').on('hidden.bs.popover', function (e) {
+                $(e.target).data("bs.popover").inState.click = false;
+            });
 
-        $('body').on('click', function (e) {
-            $('[data-toggle="popover"]').each(function () {
-                //the 'is' for buttons that trigger popups
-                //the 'has' for icons within a button that triggers a popup
-                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-                    $(this).popover('hide');
-                }
+            $('body').on('click', function (e) {
+                $('[data-toggle="popover"]').each(function () {
+                    //the 'is' for buttons that trigger popups
+                    //the 'has' for icons within a button that triggers a popup
+                    if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                        $(this).popover('hide');
+                    }
+                });
+            });
+
+
+            $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
+                ev.preventDefault();
+                self.FilterStudentfromResult(suggetion);
             });
         });
 
 
-        $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
-            ev.preventDefault();
-            self.FilterStudentfromResult(suggetion);
-        });
     }
 
     CallonSearchClick(e): void {
@@ -187,6 +266,11 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         this.ResetData();
         let savedSchedule = this.testService.getTestSchedule();
         if (savedSchedule) {
+            if (this.modify) {
+                let testStatus: number = this.testService.getTestStatusFromTimezone(savedSchedule.institutionId, savedSchedule.savedStartTime, savedSchedule.savedEndTime);
+                if (testStatus === 0)
+                    this.modifyInProgress = true;
+            }
             this.testScheduleModel = savedSchedule;
 
             this.testScheduleModel.currentStep = 3;
@@ -209,13 +293,17 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 }
             }
             this.loadActiveCohorts();
+
         }
+
     }
     InitializePage(): void {
-        if (!this.modify && !this.modifyInProgress)
+        if (!this.modify)
             this.UpdateTestName();
         this.ReloadData();
         this.RefreshSelectedStudentCount();
+        this.testService.showTestStartingWarningModals(this.modify, this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
+
     }
     RefreshSelectedSudent(): void {
         let refreshTestingStatusURL = this.resolveCohortURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.refreshTestingStatus}`);
@@ -226,11 +314,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             "TestingSessionWindowStart": moment(this.testScheduleModel.scheduleStartTime).format(),
             "TestingSessionWindowEnd": moment(this.testScheduleModel.scheduleEndTime).format()
         }
-        let refreshTestingStatusPromise = this.testService.scheduleTests(refreshTestingStatusURL, JSON.stringify(input));
-        refreshTestingStatusPromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
+        let refreshTestingStatusObservable: Observable<Response> = this.testService.scheduleTests(refreshTestingStatusURL, JSON.stringify(input));
+        this.refreshingTestingStatusSubscription = refreshTestingStatusObservable
+            .map(response => response.json())
+            .subscribe(json => {
 
                 if (json != null) {
                     let prevSessionStudentList = __this.testScheduleModel.selectedStudents;
@@ -253,12 +340,9 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     __this.ReloadData();
                     __this.RefreshSelectedStudentCount();
                 }
-                //else
-                //    this.router.navigateByUrl('/tests/review');
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+             
+            }, error => console.log(error));
+
     }
 
     ResetData(): void {
@@ -327,16 +411,17 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     loadCohorts(): void {
         let cohortURL = this.resolveCohortURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.cohorts}`);
-        let subjectsPromise = this.testService.getActiveCohorts(cohortURL);
-        let _this = this;
-        subjectsPromise.then((response) => {
-            if (response.status !== 400) {
-                return response.json();
-            }
-            return [];
-        })
-            .then((json) => {
-                _this.cohorts = json;
+        let subjectsObservable = this.testService.getActiveCohorts(cohortURL);
+        let __this = this;
+        this.subjectsSubscription = subjectsObservable
+            .map(response => {
+                if (response.status !== 400) {
+                    return response.json();
+                }
+                return [];
+            })
+            .subscribe(json => {
+                __this.cohorts = json;
                 setTimeout(json => {
                     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
                         $('.selectpicker').selectpicker('mobile');
@@ -344,13 +429,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         $('.selectpicker').selectpicker('refresh');
                 });
 
-                if (_this.cohorts.length === 0) {
+                if (__this.cohorts.length === 0) {
                     this.noCohort = true;
                 }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            }, error => console.log(error));
     }
 
 
@@ -365,7 +447,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     resolveCohortStudentsInProgressURL(url: string): string {
         return url.replace('§cohortId', this.lastSelectedCohortID.toString()).replace('§testingSessionId', this.testScheduleModel.scheduleId.toString());
     }
-
 
     markDuplicate(objArray: Object[]): Object[] {
 
@@ -400,18 +481,16 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 CohortStudentsURL = this.resolveCohortStudentsInProgressURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.modifyInProgressCohortStudent}`);
             else
                 CohortStudentsURL = this.resolveCohortStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.cohortstudents}`);
-            let testsPromise = this.testService.getTests(CohortStudentsURL);
+            let testsObservable: Observable<Response> = this.testService.getTests(CohortStudentsURL);
             let _self = this;
-            testsPromise.then((response) => {
-                return response.json();
-            })
-                .then((json) => {
+            this.testsSubscription = testsObservable
+                .map(response => response.json())
+                .subscribe(json => {
                     if (_self.testsTable)
                         _self.testsTable.destroy();
 
                     $('#' + btnAddAllStudent.id).removeClass('hidden');
                     $('#' + tblCohortStudentList.id).removeClass('hidden');
-                    // this.studentTable = true;
                     if (typeof (json.msg) === "undefined")
                         this.cohortStudentlist = this.markDuplicate(json);
                     else
@@ -421,11 +500,11 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig(551));
                         this.RefreshAllSelectionOnCohortChange();
                     });
-                })
+                },
+                error => console.log(error)
+                );
 
-                .catch((error) => {
-                    throw (error);
-                });
+
         }
     }
 
@@ -854,9 +933,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         this.prevSearchText = "";
 
     }
-    DetailReviewTestClick(event): void {
-        event.preventDefault();
 
+    DetailReviewTestClick(): void {
         if (!this.validateDates())
             return;
         let studentId = [];
@@ -946,11 +1024,10 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 "TestingSessionWindowEnd": moment(this.testScheduleModel.scheduleEndTime).format()
             }
         }
-        let exceptionPromise = this.testService.scheduleTests(repeaterExceptionURL, JSON.stringify(input));
-        exceptionPromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
+        let exceptionObservable: Observable<Response> = this.testService.scheduleTests(repeaterExceptionURL, JSON.stringify(input));
+        this.exceptionSubscription = exceptionObservable
+            .map(response => response.json())
+            .subscribe(json => {
                 if (json != null) {
                     __this.resolveExceptions(json, __this);
                 }
@@ -958,10 +1035,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     this.sStorage.removeItem('retesters');
                     this.HasStudentPayException();
                 }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            }, error => console.log(error));
+
     }
     WindowException(): void {
         let __this = this;
@@ -972,17 +1047,14 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             "TestingSessionWindowStart": moment(this.testScheduleModel.scheduleStartTime).format(),
             "TestingSessionWindowEnd": moment(this.testScheduleModel.scheduleEndTime).format()
         }
-        let exceptionPromise = this.testService.scheduleTests(windowExceptionURL, JSON.stringify(input));
-        exceptionPromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
+        let exceptionObservable = this.testService.scheduleTests(windowExceptionURL, JSON.stringify(input));
+        this.exceptionSubscriptionOne = exceptionObservable
+            .map(response => response.json())
+            .subscribe(json => {
                 __this.SeperateOutSelfPayStudents(json);
 
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            }, error => console.log(error));
+
     }
     HasWindowException(_studentWindowException: any): void {
         if (_studentWindowException.length != 0) {
@@ -1036,18 +1108,18 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     retester.instance.selfPayStudentExceptionPopupClose.subscribe((e) => {
                         $('#selfPayStudentModal').modal('hide');
                         if (this.modify)
-                            this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
+                            this.router.navigate(['/tests', 'modify', 'review']);
                         else
-                            this.router.navigate(['ReviewTest']);
+                            this.router.navigate(['/tests/review']);
                     });
 
                 });
         }
         else {
             if (this.modify)
-                this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
+                this.router.navigate(['/tests', 'modify', 'review']);
             else
-                this.router.navigate(['ReviewTest']);
+                this.router.navigate(['/tests/review']);
         }
     }
 
@@ -1204,7 +1276,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                         if (this.studentCountInSession()) {
 
                             this.HasStudentPayException();
-                            // this.router.navigateByUrl('/tests/review');
                         }
                         else {
                             this.initialize();
@@ -1245,12 +1316,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
                         this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
                         if (this.studentCountInSession()) {
-                            //if (this.modify)
-                            //    this.router.navigate(['/ModifyReviewTest', { action: 'modify' }]);
-                            //else
-                            //   this.router.navigate(['ReviewTest']);
                             this.HasStudentPayException();
-                            // this.router.navigateByUrl('/tests/review');
                         }
                         else {
                             this.initialize();
@@ -1312,8 +1378,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             return _studentRepeaterExceptions;
     }
 
-    onCancelConfirmation(e: any): void {
-        $('#confirmationPopup').modal('hide');
+    onCancelConfirmation(popupId): void {
+        $('#' + popupId).modal('hide');
         this.attemptedRoute = '';
     }
     onOKConfirmation(e: any): void {
@@ -1333,15 +1399,20 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         $('#alertPopup').modal('hide');
         this.overrideRouteCheck = true;
         if (this.modify)
-            this.router.navigate(['/ModifyScheduleTest', { action: 'modify' }]);
+            this.router.navigate(['/tests', 'modify', 'review-test']);
         else
-            this.router.navigate(['ScheduleTest']);
+            this.router.navigate(['/tests/schedule-test']);
     }
 
     onCancelChanges(): void {
         this.overrideRouteCheck = true;
         this.testService.clearTestScheduleObjects();
-        this.router.parent.navigate(['/ManageTests']);
+        this.router.navigate(['/tests']);
+    }
+
+    cancelStartingTestChanges(popupId): void {
+        $('#' + popupId).modal('hide');
+        this.onCancelChanges();
     }
 
     onContinueMakingChanges(): void {
@@ -1349,12 +1420,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
 
-    //resolveScheduleURL(url: string, scheduleId: number): string {
-    //    return url.replace('§scheduleId', scheduleId.toString());
-    //}
-
     validateDates(): boolean {
-        return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify);
+        return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify, this.modifyInProgress);
     }
 
     AddByCohort(): void {
@@ -1453,16 +1520,16 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             cohortURL = this.resolveModifyInProgressSearchStudentURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.modifyInProgressSearchStudents}`, searctText);
         else
             cohortURL = this.resolveSearchStudentURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.searchStudents}`, searctText);
-
-        let searchStudentPromise = this.testService.getSearchStudent(cohortURL);
+        let searchStudentObservable = this.testService.getSearchStudent(cohortURL);
         let __this = this;
-        searchStudentPromise.then((response) => {
-            if (response.status !== 400) {
-                return response.json();
-            }
-            return [];
-        })
-            .then((json) => {
+        this.searchStudentSubscription = searchStudentObservable
+            .map(response => {
+                if (response.status !== 400) {
+                    return response.json();
+                }
+                return [];
+            })
+            .subscribe(json => {
                 __this.AddByNameStudentlist = json;
 
                 if (__this.AddByNameStudentlist.length > 0) {
@@ -1473,10 +1540,16 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     setTimeout(() => { $('.typeahead').focus(); });
                     $('.typeahead').typeahead('destroy');
                 }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            }, error => console.log(error));
+
+    }
+
+    resolveSearchStudentURL(url: string, searctText: string): string {
+        return url.replace('§institutionid', this.testScheduleModel.institutionId.toString()).replace('§searchstring', searctText).replace('§testid', this.testScheduleModel.testId.toString()).replace('§windowstart', this.windowStart.toString()).replace('§windowend', this.windowEnd.toString());
+    }
+
+    resolveModifyInProgressSearchStudentURL(url: string, searctText: string): string {
+        return url.replace('§searchString', searctText).replace('§testingSessionId', this.testScheduleModel.scheduleId.toString());
     }
 
     BindTypeAhead(_searchText: string): void {
@@ -1573,14 +1646,6 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                 this.FilterStudentfromResult(searchText);
             }
         }
-    }
-
-    resolveSearchStudentURL(url: string, searctText: string): string {
-        return url.replace('§institutionid', this.testScheduleModel.institutionId.toString()).replace('§searchstring', searctText).replace('§testid', this.testScheduleModel.testId.toString()).replace('§windowstart', this.windowStart.toString()).replace('§windowend', this.windowEnd.toString());
-    }
-
-    resolveModifyInProgressSearchStudentURL(url: string, searctText: string): string {
-        return url.replace('§searchString', searctText).replace('§testingSessionId', this.testScheduleModel.scheduleId.toString());
     }
 
     FilterStudentfromResult(searchString: string): void {
@@ -1721,36 +1786,53 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     }
 
     EnableDisableVerify_SaveButton(): boolean {
-        let isDisabled = true;
+        let __this = this;
+        let isDisabled: boolean = true;
+        let isRemoved: boolean = false;
+        let isAdded: boolean = false;
         if (this.selectedStudentCount > 0) {
             let _selectedStudent = this.testScheduleModel.selectedStudents;
-            let removedStudent = _.difference(_selectedStudent, this.selectedStudents);
+
             let newlyAddedStudent = _.difference(this.selectedStudents, _selectedStudent);
-            if (removedStudent.length > 0)
-                isDisabled = false;
-            if (newlyAddedStudent.length > 0)
-                isDisabled = false;
-            if (removedStudent.length > 0 && newlyAddedStudent.length > 0) {
-                let __this = this;
-                let isValid = false;
-                _.forEach(removedStudent, function (obj) {
-                    _.forEach(newlyAddedStudent, function (o) {
+
+            if (newlyAddedStudent.length > 0) {
+                isAdded = true;
+            }
+            if (isAdded) {
+                let isStudentExist = false;
+                let studentExistInSession: SelectedStudentModel[] = [];
+                _.forEach(newlyAddedStudent, function (obj) {
+                    _.forEach(__this.testScheduleModel.selectedStudents, function (o) {
+                        let _studentExist: SelectedStudentModel;
                         if (o.StudentId === obj.StudentId) {
+                            _studentExist = o;
                             let _index = _.findIndex(__this.selectedStudents, ['StudentId', obj.StudentId]);
-                            __this.selectedStudents[_index] = obj;
-                            isValid = true;
+                            if (_index > -1) {
+                                __this.selectedStudents[_index] = _studentExist;
+                                studentExistInSession.push(_studentExist);
+                            }
                         }
                     });
                 });
-                if (isValid)
-                    isDisabled = _.isEqual(_selectedStudent, this.selectedStudents);
+                if (newlyAddedStudent.length === studentExistInSession.length) {
+                    isStudentExist = true;
+                }
+                if (isStudentExist) {
+                    isAdded = false;
+                }
+            }
+
+            let removedStudent = _.difference(_selectedStudent, this.selectedStudents);
+            if (removedStudent.length > 0) {
+                isRemoved = true;
             }
         }
+
+        if (isRemoved || isAdded) { isDisabled = false; }
         return isDisabled;
     }
 
-    Verify_SaveTestClick(event): void {
-        event.preventDefault();
+    Verify_SaveTestClick(): void {
         this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('prevtestschedule', JSON.stringify(this.testScheduleModel));
         console.log('TestScheduleModel with previous Selected student' + this.testScheduleModel);
@@ -1770,8 +1852,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             InstitutionId: this.testScheduleModel.institutionId,
             SessionTestId: this.testScheduleModel.testId,
             SessionTestName: this.testScheduleModel.testName,
-            TestingWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
-            TestingWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format(),
+            TestingWindowStart: this.testScheduleModel.scheduleStartTime,
+            TestingWindowEnd: this.testScheduleModel.scheduleEndTime,
             FacultyMemberId: this.testScheduleModel.facultyMemberId,
             Students: this.testScheduleModel.selectedStudents,
             LastCohortSelectedId: this.testScheduleModel.lastselectedcohortId,
@@ -1780,12 +1862,16 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         };
         let __this = this;
         let updateModifyInProgressTestURL = this.resolveUpdateModifyInProgressTestURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateModifyInProgressStudents}`);
-        let updateModifyInProgressTestPromise = this.testService.modifyScheduleTests(updateModifyInProgressTestURL, JSON.stringify(input));
-        updateModifyInProgressTestPromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
-                if (json.ErrorCode === undefined) {
+        let updateModifyInProgressTestObservable: Observable<Response> = this.testService.modifyInProgressScheduleTests(updateModifyInProgressTestURL, JSON.stringify(input));
+        this.updateModifyInProgressTestSubscription = updateModifyInProgressTestObservable
+            .map(response => {
+                if (response.status !== 400) {
+                    return response.json();
+                }
+                return [];
+            })
+            .subscribe(json => {
+                if (json.ErrorCode === undefined ||json.length===0) {
                     if (__this.checkForModifyInProgressException(json)) {
                         alert('Unable to Save because of having some error/exception.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
                         // __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
@@ -1793,31 +1879,33 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     }
                 }
                 else {
-                    if (json.ErrorCode === 0 && json.TestingSessionId > 0) {
+                    if (json.ErrorCode === 0 && json.TestingSessionId > 0 && json.TimingExceptions === null && json.TestAlreadyStartedExceptions === null) {
+
                         __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
-                        __this.router.navigate(['/ConfirmationModifyInProgress']);
+                        __this.router.navigate(['/tests/confirmation-modify-in-progress']);
                     }
+                    else
+                        alert('Unable to Save because of having either Timing or StudentAlreadyStartedTest exception.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
                 }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            },
+            error => console.log(error)
+            );
     }
     resolveUpdateModifyInProgressTestURL(url: string): string {
         return url.replace('§testSessionId', this.testScheduleModel.scheduleId.toString());
     }
 
     checkForModifyInProgressException(_json: any): boolean {
-        if (_json.windowExceptions.length)
-        { return false; }
+        //    if (_json.windowExceptions.length)
+        //    { return false; }
 
-        if (_json.repeaterExceptions) {
-            if (_json.repeaterExceptions.AlternateTestInfo.length) { return false; }
-            if (_json.repeaterExceptions.StudentRepeaterExceptions.length) { return false; }
-            if (_json.repeaterExceptions.StudentAlternateTestInfo.length) { return false; }
-        }
+        //    if (_json.repeaterExceptions) {
+        //        if (_json.repeaterExceptions.AlternateTestInfo.length) { return false; }
+        //        if (_json.repeaterExceptions.StudentRepeaterExceptions.length) { return false; }
+        //        if (_json.repeaterExceptions.StudentAlternateTestInfo.length) { return false; }
+        //    }
 
-        if (_json.alreadyStartedExceptions.length) { return false; }
+        //    if (_json.alreadyStartedExceptions.length) { return false; }
         return true;
     }
 
@@ -1832,21 +1920,18 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
 
     RefreshStudentsWhoHaveStarted(): void {
         let refreshStudentsURL = this.resolveRefreshStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.refreshStudentsWhoStarted}`);
-        let refreshStudentsPromise = this.testService.getActiveCohorts(refreshStudentsURL);
+        let refreshStudentsObservable: Observable<Response> = this.testService.getActiveCohorts(refreshStudentsURL);
         let _this = this;
-        refreshStudentsPromise.then((response) => {
-            if (response.status !== 400) {
-                return response.json();
-            }
-            return [];
-        })
-            .then((json) => {
+        this.refreshStudentsSubscription = refreshStudentsObservable
+            .map(response => response.json())
+            .subscribe((json) => {
                 _this.refreshStudentsWhoStarted = json;
                 if (_this.refreshStudentsWhoStarted.length > 0) {
-                    _this.RefreshTestScheduleModalInSession();
-                    _.each(_this.refreshStudentsWhoStarted, function (studentid) {
-                        // let rowId = $(this).attr('data-id');
-                        // $(this).parent().remove();
+                    //   _this.RefreshTestScheduleModalInSession();
+                    let studentsInSession = _.map(_this.selectedStudents, 'StudentId');
+                    let studentToRemove = _.difference(studentsInSession, _this.refreshStudentsWhoStarted);
+                    _.each(studentToRemove, function (studentid) {
+                        $('#testSchedulingSelectedStudentsList button').filter("[data-id=" + studentid + "]").parent().remove();
                         _this.RemoveStudentFromList(studentid);
                     });
 
@@ -1860,10 +1945,8 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
                     _this.CheckForAdaStatus();
 
                 }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+            },
+            error => console.log(error));
     }
 
     resolveRefreshStudentsURL(url: string): string {
@@ -1873,24 +1956,18 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
     RefreshTestScheduleModalInSession(): void {
         let __this = this;
         let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`);
-        let schedulePromise = this.testService.getScheduleById(scheduleURL);
-        schedulePromise.then((response) => {
-            return response.json();
-        })
-            .then((json) => {
+        let scheduleObservable: Observable<Response> = this.testService.getScheduleById(scheduleURL);
+        this.scheduleSubscription = scheduleObservable
+            .map(response => response.json())
+            .subscribe((json) => {
                 if (json) {
                     let _schedule: TestScheduleModel = __this.testService.mapTestScheduleObjects(json);
                     if (_schedule) {
                         __this.sStorage.setItem('testschedule', JSON.stringify(_schedule));
                     }
                 }
-
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-
-
+            },
+            error => console.log(error));
     }
 
 
@@ -1898,7 +1975,7 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
         return url.replace('§scheduleId', this.testScheduleModel.scheduleId.toString());
     }
 
-    getRetesterClass(student: Object): string {
+    getRetesterClass(student: SelectedStudentModel): string {
         if (this.modifyInProgress) {
             return this.getClassName(this.getRetester(student));
         }
@@ -1906,6 +1983,19 @@ export class AddStudents implements OnInit, OnDeactivate, CanDeactivate {
             return this.getClassName(student.Retester);
     }
 
+    makeSave_ContinueButtonEnableDisable(): boolean {
+        if (this.modifyInProgress)
+            return this.EnableDisableVerify_SaveButton();
+        else
+            return this.EnableDisableButtonForDetailReview();
+    }
+    save_ContinueButtonClick(e): void {
+        e.preventDefault();
+        if (this.modifyInProgress)
+            this.Verify_SaveTestClick();
+        else
+            this.DetailReviewTestClick();
+    }
 
     confirmCancelChanges(e): void {
         $('#cancelChangesPopup').modal('show');

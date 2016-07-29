@@ -18,6 +18,18 @@ export class TestService {
         this.auth.refresh();
     }
 
+    private getRequestOptions(): RequestOptions {
+        let self = this;
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.auth.authheader
+        });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        return requestOptions;
+    }
 
     outOfTestScheduling(routeName: string): boolean {
         routeName = routeName.toUpperCase();
@@ -33,6 +45,7 @@ export class TestService {
             || routeName.indexOf(TestShedulingPages.MODIFYCONFIRMATION) > -1
             || routeName.indexOf(TestShedulingPages.VIEW) > -1
             || routeName.indexOf(TestShedulingPages.MODIFYVIEW) > -1
+            || routeName.indexOf(TestShedulingPages.CONFIRMATIONMODIFYINPROGRESS) > -1
             || routeName.indexOf('ERROR') > -1)
             return false;
         return true;
@@ -51,58 +64,48 @@ export class TestService {
         else null;
     }
 
-    getSubjects(url): any {
+    getSubjects(url): Observable<Response> {
         let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Authorization': self.auth.authheader
         });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        return this.http.get(url, requestOptions);
     }
 
 
-    getTests(url): any {
+    getTests(url): Observable<Response> {
         let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
+       	let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Authorization': self.auth.authheader
         });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        return this.http.get(url, requestOptions);
     }
 
-    getOpenIntegratedTests(url): any {
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json'
-            }
+    getOpenIntegratedTests(url): Observable<Response> {
+       let self = this;
+       	let headers: Headers = new Headers({
+            'Accept': 'application/json',
         });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        return this.http.get(url, requestOptions);
     }
 
-    getActiveCohorts(url): any {
-        let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
-        });
+    getActiveCohorts(url): Observable<Response> {
+        return this.http.get(url, this.getRequestOptions());
     }
 
     getFaculty(url: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
-        });
+       return this.http.get(url, this.getRequestOptions());
     }
 
     getFacultySync(url: string): any {
@@ -133,68 +136,27 @@ export class TestService {
 
 
 
-    getRetesters(url: string, input: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': self.auth.authheader
-            },
-            body: input
-        });
+    getRetesters(url: string, input: string): Observable<Response> {
+         return this.http.post(url,input, this.getRequestOptions())
     }
 
 
-    scheduleTests(url: string, input: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': self.auth.authheader
-            },
-            body: input
-        });
+    scheduleTests(url: string, input: string): Observable<Response> {
+        return this.http.post(url,input, this.getRequestOptions())
     }
 
-    modifyScheduleTests(url: string, input: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'put',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': self.auth.authheader
-            },
-            body: input
-        });
+    modifyScheduleTests(url: string, input: string): Observable<Response> {
+        return this.http.put(url,input, this.getRequestOptions())
     }
 
 
 
-    getScheduleById(url: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
-        });
+    getScheduleById(url: string): Observable<Response> {
+        return this.http.get(url, this.getRequestOptions());
     }
 
-    getSearchStudent(url: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
-        });
+    getSearchStudent(url: string): Observable<Response> {
+       return this.http.get(url, this.getRequestOptions());
     }
 
     mapTestScheduleObjects(objTestScheduleModel): TestScheduleModel {
@@ -208,6 +170,8 @@ export class TestService {
             _testScheduleModel.testNormingStatus = objTestScheduleModel.NormingStatusName;
             _testScheduleModel.scheduleStartTime = objTestScheduleModel.TestingWindowStart;
             _testScheduleModel.scheduleEndTime = objTestScheduleModel.TestingWindowEnd;
+            _testScheduleModel.savedStartTime = objTestScheduleModel.TestingWindowStart;
+            _testScheduleModel.savedEndTime = objTestScheduleModel.TestingWindowEnd;
             _testScheduleModel.institutionId = objTestScheduleModel.InstitutionId;
             _testScheduleModel.lastselectedcohortId = objTestScheduleModel.LastCohortSelectedId;
             _testScheduleModel.facultyMemberId = objTestScheduleModel.FacultyMemberId;
@@ -255,29 +219,13 @@ export class TestService {
     }
 
 
-    getAllScheduleTests(url: string) {
-        let self = this;
-        return fetch(url, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': self.auth.authheader
-            }
-        });
+    getAllScheduleTests(url: string) :Observable<Response>{
+        return this.http.get(url, this.getRequestOptions());
     }
 
 
-    renameSession(url: string, input: string): any {
-        let self = this;
-        return fetch(url, {
-            method: 'put',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': self.auth.authheader
-            },
-            body: input
-        });
+    renameSession(url: string, input: string): Observable<Response> {      
+        return this.http.put(url, input, this.getRequestOptions());
     }
 
     sortSchedule(schedule: TestScheduleModel): TestScheduleModel {
@@ -400,10 +348,31 @@ export class TestService {
         return status;
     }
 
+    checkIfTestStartingSoon(institutionId: number, savedStartTime: any): number {
+        let institutionTimezone: string = this.common.getTimezone(institutionId);
+        let institutionCurrentTime = moment.tz(new Date(), institutionTimezone);
+        let mStartTime = moment(savedStartTime);
+
+         console.log('start time'+ mStartTime);
+         console.log('school time' + institutionCurrentTime);
+
+        let timeDifference = (mStartTime.diff(institutionCurrentTime, 'seconds'));
+
+         console.log('diff' + timeDifference);
+
+         return timeDifference;
+    }
+
+    getTestStartTime(testScheduleModel: TestScheduleModel, institutionId: number): any{
+        let institutionTimezone: string = this.common.getTimezone(institutionId);
+        let institutionCurrentTime = moment.tz(new Date(), institutionTimezone);
+        let testStartTime = moment(testScheduleModel.scheduleStartTime);
+
+        return testStartTime;
+    }
 
 
-
-    validateDates(testScheduleModel: TestScheduleModel, institutionID: number, modify: boolean): boolean {
+    validateDates(testScheduleModel: TestScheduleModel, institutionID: number, modify: boolean, modifyInProgress: boolean): boolean {
         if (testScheduleModel) {
 
             if (testScheduleModel.scheduleStartTime && testScheduleModel.scheduleEndTime) {
@@ -435,57 +404,41 @@ export class TestService {
                 console.log('Schedule endtime : ' + scheduleEndTime)
 
                 if (modify) {
-                    if (testScheduleModel.savedStartTime) {
-                        let savedStartTime = moment(new Date(
-                            moment(testScheduleModel.savedStartTime).year(),
-                            moment(testScheduleModel.savedStartTime).month(),
-                            moment(testScheduleModel.savedStartTime).date(),
-                            moment(testScheduleModel.savedStartTime).hour(),
-                            moment(testScheduleModel.savedStartTime).minute(),
-                            moment(testScheduleModel.savedStartTime).second()
-                        )).format('YYYY-MM-DD HH:mm:ss');
-
-                        let savedEndTime = moment(new Date(
-                            moment(testScheduleModel.savedEndTime).year(),
-                            moment(testScheduleModel.savedEndTime).month(),
-                            moment(testScheduleModel.savedEndTime).date(),
-                            moment(testScheduleModel.savedEndTime).hour(),
-                            moment(testScheduleModel.savedEndTime).minute(),
-                            moment(testScheduleModel.savedEndTime).second()
-                        )).format('YYYY-MM-DD HH:mm:ss');
-
-
-                        console.log('Saved Starttime : ' + savedStartTime);
-                        console.log('Saved End time : ' + savedEndTime);
-
-
-
-                        if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
-                            if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
-                                $('#alertPopup').modal('show');
-                                return false;
-                            }
-                        }
-                        else {
-                            $('#alertPopup').modal('show');
-                            return false;
-                        }
-
+                    ///change to saved times
+                    //first check if not in modidfy in progress flow if test has started 
+                    this.checkIfTestHasStarted(institutionID, testScheduleModel.savedStartTime, testScheduleModel.savedEndTime, modifyInProgress);
+                    if (!this.checkIfTestHasStarted(institutionID, testScheduleModel.savedStartTime, testScheduleModel.savedEndTime, modifyInProgress)) {
+                        return false;
                     }
-                    else {
-                        if (moment(scheduleStartTime).isBefore(institutionCurrentTime)) {
-                            $('#alertPopup').modal('show');
-                            return false;
-                        }
-                    }
-
-                }
-                else {
                     if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
                         $('#alertPopup').modal('show');
                         return false;
                     }
+                    // if (testScheduleModel.savedStartTime) {
+                        // let savedStartTime = moment(new Date(
+                        //     moment(testScheduleModel.savedStartTime).year(),
+                        //     moment(testScheduleModel.savedStartTime).month(),
+                        //     moment(testScheduleModel.savedStartTime).date(),
+                        //     moment(testScheduleModel.savedStartTime).hour(),
+                        //     moment(testScheduleModel.savedStartTime).minute(),
+                        //     moment(testScheduleModel.savedStartTime).second()
+                        // )).format('YYYY-MM-DD HH:mm:ss');
+
+                        // let savedEndTime = moment(new Date(
+                        //     moment(testScheduleModel.savedEndTime).year(),
+                        //     moment(testScheduleModel.savedEndTime).month(),
+                        //     moment(testScheduleModel.savedEndTime).date(),
+                        //     moment(testScheduleModel.savedEndTime).hour(),
+                        //     moment(testScheduleModel.savedEndTime).minute(),
+                        //     moment(testScheduleModel.savedEndTime).second()
+                        // )).format('YYYY-MM-DD HH:mm:ss');
+
+
+                        // console.log('Saved Starttime : ' + savedStartTime);
+                        // console.log('Saved End time : ' + savedEndTime);
+
                 }
+                      
             }
         }
 
@@ -514,11 +467,13 @@ export class TestService {
             moment(endTime).second()
         )).format('YYYY-MM-DD HH:mm:ss');
 
-
+        //session has not started yet
         if (moment(startTime).isAfter(institutionCurrentTime))
             return 1;
+        //session started but not finished
         else if (moment(startTime).isBefore(institutionCurrentTime) && moment(endTime).isAfter(institutionCurrentTime))
             return 0;
+        //session started and finished
         else if (moment(startTime).isBefore(institutionCurrentTime) && moment(endTime).isBefore(institutionCurrentTime))
             return -1;
     }
@@ -527,6 +482,53 @@ export class TestService {
     anyStudentPayStudents(testScheduleModel: TestScheduleModel): boolean {
         if (testScheduleModel && testScheduleModel.selectedStudents && testScheduleModel.selectedStudents.length > 0)
             return _.some(testScheduleModel.selectedStudents, { 'StudentPay': true });
+    }
+
+    updateScheduleDates(url:string, input :string): Observable<Response>{
+        return this.http.put(url, input, this.getRequestOptions());
+    }
+
+    modifyInProgressScheduleTests(url: string, input: string): Observable<Response> {
+        return this.http.put(url, input, this.getRequestOptions())
+    }
+    
+    checkIfTestHasStarted(institutionId: number, testStartTime: any, testEndTime: any, modifyInProgress: boolean=false): any {
+        debugger;
+        if ((!modifyInProgress) && (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) < 1 )) {
+            $('#testStarted').modal('show');
+            return false; 
+        }
+        return true;
+    }te
+
+     showTestStartingWarningModals(modify: boolean, institutionID: number, savedStartTime: any, testEndTime: any): any {
+        if ((modify)&&(this.getTestStatusFromTimezone(institutionID, savedStartTime, testEndTime) === 1)) {
+            let timeDiff = this.checkIfTestStartingSoon(institutionID, savedStartTime);
+            let convertToMinutes = 60;
+            let waitTime = 0;
+            console.log(timeDiff/convertToMinutes);
+            if (timeDiff >= 10 * convertToMinutes) {
+                waitTime = timeDiff - 10 * convertToMinutes;
+                let waitTimePlus5 = waitTime + 5 * convertToMinutes;
+                setTimeout(()=> {
+                    console.log(timeDiff/convertToMinutes);
+                    $('#testStartingin10').modal('show');
+                }, waitTime * 1000)
+                setTimeout(()=> {
+                    console.log(timeDiff * convertToMinutes);
+                    $('#testStartingin10').modal('hide');
+                    $('#testStartingin5').modal('show');
+                }, waitTimePlus5 * 1000)
+            }
+            else if (timeDiff >= 5 * convertToMinutes) {
+                console.log('time diff is greater than 5');
+                waitTime = timeDiff - 5 * convertToMinutes;
+                setTimeout(()=> {
+                    console.log(timeDiff/convertToMinutes);
+                    $('#testStartingin5').modal('show');
+                }, waitTime * 1000)
+            }
+        }
     }
 
 }

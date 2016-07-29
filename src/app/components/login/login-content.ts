@@ -1,20 +1,22 @@
-import {Component} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
+import {Component, NgZone, OnDestroy} from '@angular/core';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import * as _ from 'lodash';
 import {links} from '../../constants/config';
 import {general, login} from '../../constants/error-messages';
 import {Angulartics2On} from 'angulartics2';
+import {Response} from '@angular/http';
+import {Observable, Subscription} from 'rxjs/Rx';
 
 @Component({
     selector: 'login-content',
     providers: [Auth, Common],
     templateUrl: 'templates/login/login-content.html',
-    directives: [RouterLink, Angulartics2On]
+    directives: [ROUTER_DIRECTIVES, Angulartics2On]
 })
 
-export class LoginContent {
+export class LoginContent implements OnDestroy {
     // errorMessages:any;
     // config:any;
     apiServer: string;
@@ -28,7 +30,8 @@ export class LoginContent {
     hdToken: any;
     hdURL: any;
     hdExceptionURL: any;
-    constructor(public router: Router, public auth: Auth, public common: Common) {
+    loginSubscription: Subscription;
+    constructor(private zone: NgZone, public router: Router, public auth: Auth, public common: Common) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
         this.sStorage = this.common.getStorage();
@@ -36,8 +39,14 @@ export class LoginContent {
         this.institutionPN = 0;
     }
 
+
+    ngOnDestroy(): void {
+        if (this.loginSubscription)
+            this.loginSubscription.unsubscribe();
+    }
+
     onSignIn(txtUserName, txtPassword, rdFaculty, rdStudent, errorContainer, btnSignIn, event) {
-        event.preventDefault();
+        // event.preventDefault();
         let self = this;
         let useremail = '';
         let password = '';
@@ -52,42 +61,52 @@ export class LoginContent {
                 userType = 'student';
 
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.authenticationapi;
-            let promise = this.auth.login(apiURL, useremail, password, userType);
-            promise.then(function (response) {
-                return response.json();
-            }).then(function (json) {
-                if (json.AccessToken != null && json.AccessToken != '') {
-                    self.sStorage.setItem('jwt', json.AccessToken);
-                    self.sStorage.setItem('useremail', json.Email);
-                    self.sStorage.setItem('istemppassword', json.TemporaryPassword);
-                    self.sStorage.setItem('userid', json.UserId);
-                    self.sStorage.setItem('firstname', json.FirstName);
-                    self.sStorage.setItem('lastname', json.LastName);
-                    self.sStorage.setItem('title', json.JobTitle);
-                    self.sStorage.setItem('institutions', JSON.stringify(json.Institutions));
-                    self.sStorage.setItem('securitylevel', json.SecurityLevel);
-                    self.sStorage.setItem('username', json.UserName);
-                    self.auth.refresh();
-                    if (userType === 'student') {
-                        self.prepareRedirectToStudentSite('Login');
-                    }
-                    else {
-                        if (json.TemporaryPassword) {
-                            self.router.parent.navigateByUrl('/set-password-first-time');
+            let loginObservable: Observable<Response> = this.auth.login(apiURL, useremail, password, userType);
+            this.loginSubscription = loginObservable.subscribe(
+                respose => {
+                    let json = respose.json();
+                    if (json.AccessToken != null && json.AccessToken != '') {
+                        self.sStorage.setItem('jwt', json.AccessToken);
+                        self.sStorage.setItem('useremail', json.Email);
+                        self.sStorage.setItem('istemppassword', json.TemporaryPassword);
+                        self.sStorage.setItem('userid', json.UserId);
+                        self.sStorage.setItem('firstname', json.FirstName);
+                        self.sStorage.setItem('lastname', json.LastName);
+                        self.sStorage.setItem('title', json.JobTitle);
+                        self.sStorage.setItem('institutions', JSON.stringify(json.Institutions));
+                        self.sStorage.setItem('securitylevel', json.SecurityLevel);
+                        self.sStorage.setItem('username', json.UserName);
+                        self.auth.refresh();
+                        if (userType === 'student') {
+                            self.prepareRedirectToStudentSite('Login');
                         }
                         else {
-                            self.router.parent.navigateByUrl('/home');
+                            if (json.TemporaryPassword) {
+                                self.router.navigate(['/set-password-first-time']);
+                            }
+                            else {
+                                // self.zone.run(() => {
+                                self.router.navigate(['/home']);
+                                // });
+                            }
                         }
                     }
+                    else {
+                        self.showError(login.auth_failed, errorContainer);
+                        txtPassword.value = '';
+                    }
+                },
+                error => {
+                    if ((error.json().AccessToken != undefined || error.json().AccessToken === '') && error.json().msg.toLowerCase()==='invalid user' ) {
+                        self.showError(login.auth_failed, errorContainer);
+                        txtPassword.value = '';
+                    }
+                    else {
+                        self.showError(general.exception, errorContainer);
+                        txtPassword.value = '';
+                    }
                 }
-                else {
-                    self.showError(login.auth_failed, errorContainer);
-                    txtPassword.value = '';
-                }
-            }).catch(function (ex) {
-                self.showError(general.exception, errorContainer);
-                txtPassword.value = '';
-            });
+            );
         }
         else {
             txtPassword.value = '';
@@ -106,8 +125,8 @@ export class LoginContent {
 
         if (this.institutionRN > 0 && this.institutionPN > 0) {
             // open the interstitial page here ...
-            // this.router.parent.navigate(['/ChooseInstitution', { page: this.page, idRN: this.institutionRN, idPN: this.institutionPN }]);
-            this.router.parent.navigateByUrl(`/choose-institution/${returnPage}/${this.page}/${this.institutionRN}/${this.institutionPN}`);
+            // this.router.navigate(['/ChooseInstitution', { page: this.page, idRN: this.institutionRN, idPN: this.institutionPN }]);
+            this.router.navigateByUrl(`/choose-institution/${returnPage}/${this.page}/${this.institutionRN}/${this.institutionPN}`);
         }
         else {
             this.redirectToStudentSite();
@@ -199,7 +218,7 @@ export class LoginContent {
     }
     RedirectToForgotpassword(event) {
         event.preventDefault();
-        this.router.parent.navigateByUrl('/forgot-password');
+        this.router.navigate(['/forgot-password']);
     }
 
     radioChanged(elem, otherElem) {

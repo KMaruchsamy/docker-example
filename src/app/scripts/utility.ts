@@ -4,7 +4,7 @@
 
     route(path, router, e) {
         e.preventDefault();
-        router.parent.navigateByUrl(path);
+        router.navigateByUrl(path);
     }
 
     boldText(strtext: string): string {
@@ -30,7 +30,7 @@
 
     generateUUID() {
         var d = new Date().getTime();
-        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = (d + Math.random() * 16) % 16 | 0;
             d = Math.floor(d / 16);
             return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
@@ -38,5 +38,13 @@
         return uuid;
     };
 
-
+    getDateRangeArray(startDate, endDate) {
+        var dateArray = [];
+        let currentDate = startDate;
+        while (moment(currentDate).isBefore(moment(endDate), 'days')) {
+            dateArray.push(moment(currentDate).format('MM-DD-YYYY'))
+            currentDate = moment(currentDate).add(1, 'days');
+        }
+        return dateArray;
+    }
 }

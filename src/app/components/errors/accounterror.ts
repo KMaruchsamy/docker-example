@@ -1,10 +1,10 @@
 ﻿import {Component, OnInit} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {PageHeader} from '../shared/page-header';
 @Component({
     selector: 'accounterror',
-    directives: [RouterLink, PageHeader],
+    directives: [ROUTER_DIRECTIVES, PageHeader],
     template: `<page-header [hideDropdown]=true></page-header>   
     <header class="inner-banner" role="banner">
       <div class="container">

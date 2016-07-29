@@ -1,5 +1,7 @@
-﻿import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router-deprecated';
+﻿import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Router} from '@angular/router';
+import {Http, Response, Headers, RequestOptions} from '@angular/http';
+import {Observable, Subscription} from 'rxjs/Rx'
 import {Title} from '@angular/platform-browser';
 import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';
@@ -10,33 +12,40 @@ import {general, forgot_password} from '../../constants/error-messages';
 
 @Component({
     selector: 'forgot-password',
-    providers: [Common,Validations,Logger],
+    providers: [Common, Validations, Logger],
     templateUrl: 'templates/password/forgot-password.html',
     directives: [PasswordHeader]
 })
 
-export class ForgotPassword implements OnInit {
+export class ForgotPassword implements OnInit, OnDestroy {
     // errorMessages:any;
     // successMessage:string;
     // config:any;
-    apiServer:string;
-    constructor(public router: Router,public common: Common,public validations:Validations,public logger:Logger, public titleService: Title) {
-        this.validations=validations;
-        this.apiServer = this.common.getApiServer();
-        this.initialize();
-        this.reset();
-        this.logger = logger;
+    apiServer: string;
+    forgotPasswordSubscription: Subscription;
+    errorCodes: any;
+    constructor(private http: Http, public router: Router, public common: Common, public validations: Validations, public logger: Logger, public titleService: Title) {
+
+    }
+
+    ngOnDestroy(): void {
+        if (this.forgotPasswordSubscription)
+            this.forgotPasswordSubscription.unsubscribe();
     }
 
     ngOnInit(): void {
+        this.errorCodes = errorcodes;
         this.titleService.setTitle('Forgot Password – Kaplan Nursing');
+        this.apiServer = this.common.getApiServer();
+        this.initialize();
+        this.reset();
     }
 
-    initialize():void {
+    initialize(): void {
         $(document).scrollTop(0);
         let self = this;
-        $('#forgotPassword').bind('input', function() {
-           self.checkpasswordlength();
+        $('#forgotPassword').bind('input', function () {
+            self.checkpasswordlength();
         });
     }
 
@@ -46,7 +55,7 @@ export class ForgotPassword implements OnInit {
         $('#btnSend').attr("disabled", "true");
         $('#btnSend').attr("aria-disabled", "true");
     }
-    
+
     onForgotPassword(txtEmailId, btnSend, errorContainer, event) {
         event.preventDefault();
         let self = this;
@@ -54,36 +63,45 @@ export class ForgotPassword implements OnInit {
 
         let encryptedId = this.getEncryption(emailid);
 
-        let expiryhour=parseInt(links.resetemailexpire.expirytime); // Default expiry hour is 2 hours. To change hours go to config.json & change expirytime...
+        let expiryhour = parseInt(links.resetemailexpire.expirytime); // Default expiry hour is 2 hours. To change hours go to config.json & change expirytime...
         let currentTime = new Date();
         let expiryTime = new Date(currentTime.getTime() + (expiryhour * 60 * 60 * 1000));     // converting hours to milliseconds and adding to Date
-                
+
         // Expiry Time Encryption
         let encryptedTime = this.getEncryption(expiryTime.toString());
-        
+
         if (this.validate(emailid, errorContainer)) {
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.forgotpasswordapi;
-            let promise = this.forgotpassword(apiURL, emailid, encryptedId, encryptedTime);
-            promise.then(function (response) {
-                return response.status;
-            }).then(function (status) {
-                if (status.toString()===errorcodes.SUCCESS) {
-                    self.router.parent.navigateByUrl('/forgot-password-confirmation');
-                }
-                else if (status.toString()===errorcodes.SERVERERROR) {
-                    self.showError(forgot_password.failed_sent_mail, errorContainer);
-                }
-                else {
-                    self.showError(forgot_password.invalid_emailid, errorContainer);
-                }
-            }).catch(function (ex) {
-                self.showError(general.exception, errorContainer);
-            });
+            let forgotPasswordObservable: Observable<Response> = this.forgotpassword(apiURL, emailid, encryptedId, encryptedTime);
+            this.forgotPasswordSubscription = forgotPasswordObservable
+                .map(response => response.status)
+                .subscribe(status => {
+                    if (status.toString() === self.errorCodes.SUCCESS) {
+                        self.router.navigate(['/forgot-password-confirmation']);
+                    }
+                    else if (status.toString() === self.errorCodes.SERVERERROR) {
+                        self.showError(forgot_password.failed_sent_mail, errorContainer);
+                    }
+                    else {
+                        self.showError(forgot_password.invalid_emailid, errorContainer);
+                    }
+                }, error => {
+                    if (error.status.toString() === self.errorCodes.SERVERERROR) {
+                        self.showError(forgot_password.failed_sent_mail, errorContainer);
+                    }
+                    else if (error.json().Payload.length > 0) {
+                        if (error.json().Payload[0].Messages.length > 0) {
+                            self.showError(error.json().Payload[0].Messages[0].toString(),errorContainer);
+                        }
+                    }
+                    else
+                        self.showError(general.exception, errorContainer);
+                });
         }
     }
     RedirectToLogin(event) {
         event.preventDefault();
-        this.router.parent.navigateByUrl('/');
+        this.router.navigate(['/']);
     }
 
     validate(emailId, errorContainer) {
@@ -109,7 +127,7 @@ export class ForgotPassword implements OnInit {
         $container.html(errorMessage);
         $outerContainer.show();
     }
-   
+
     checkpasswordlength() {
         let password = $('#forgotPassword').val();
         if (password.length > 0) {
@@ -128,19 +146,21 @@ export class ForgotPassword implements OnInit {
         // let replaceEscapeFromStr = encryptedStr.replace(/\//g, "#").replace(/=/g,"~");
         return encodeURIComponent(encryptedStr);
     }
-    
-    forgotpassword(url, useremail, encryptedUserEmail, expiryTime) {
-        return fetch(url, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                useremail: useremail,
-                encrypteduseremail: encryptedUserEmail,
-                expirytime: expiryTime
-            })
+
+    forgotpassword(url, useremail, encryptedUserEmail, expiryTime): Observable<Response> {
+        let self = this;
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        let body: any = JSON.stringify({
+            useremail: useremail,
+            encrypteduseremail: encryptedUserEmail,
+            expirytime: expiryTime
+        })
+        return this.http.post(url, body, requestOptions);
     }
 }

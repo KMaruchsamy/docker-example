@@ -1,30 +1,41 @@
-﻿import {Component, OnInit} from '@angular/core';
-import {Router, RouterLink} from '@angular/router-deprecated';
+﻿import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {Http, Response} from '@angular/http';
+import {Observable, Subscription} from 'rxjs/Rx';
 import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';
 import {Validations} from '../../services/validations';
-import {links,errorcodes} from '../../constants/config';
-import {temp_password,general} from '../../constants/error-messages';
+import {links, errorcodes} from '../../constants/config';
+import {temp_password, general} from '../../constants/error-messages';
 
 @Component({
     selector: 'set-password-first-time',
     providers: [Auth, Common, Validations],
     templateUrl: 'templates/password/set-password-first-time.html',
-    directives: [PasswordHeader, RouterLink]
+    directives: [PasswordHeader, ROUTER_DIRECTIVES]
 })
 
-export class SetPasswordFirstTime implements OnInit {
-    apiServer:string;
-    sStorage:any;
-    constructor(public router: Router,public auth: Auth,public common: Common,public validations: Validations, public titleService: Title) {
-        this.apiServer = this.common.getApiServer();
-        this.reset();
-        this.sStorage = this.common.getStorage();
+export class SetPasswordFirstTime implements OnInit, OnDestroy {
+    apiServer: string;
+    sStorage: any;
+    temproaryPasswordSubscription: Subscription;
+    errorCodes: any;
+    constructor(public router: Router, public auth: Auth, public common: Common, public validations: Validations, public titleService: Title) {
+
+    }
+
+    ngOnDestroy(): void {
+        if (this.temproaryPasswordSubscription)
+            this.temproaryPasswordSubscription.unsubscribe();
     }
 
     ngOnInit(): void {
+        this.errorCodes = errorcodes;
+        this.apiServer = this.common.getApiServer();
+        this.reset();
+        this.sStorage = this.common.getStorage();
         this.titleService.setTitle('Change Password – Kaplan Nursing');
     }
 
@@ -47,33 +58,46 @@ export class SetPasswordFirstTime implements OnInit {
         let status = '';
         if (this.validate(newpassword, confirmpassword, btnSetPassword, lnkhomeredirect, errorContainer, successcontainer)) {
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.settemporarypasswordapi;
-            let promise = this.auth.settemporarypassword(apiURL, emailid, newpassword);
-            promise.then(function (response) {
-                status = response.status;
-                return response.json();
-            }).then(function (json) {
-                if (status.toString() === errorcodes.SUCCESS) {
-                    txtnPassword.value = "";
-                    txtcPassword.value = "";
-                    self.sStorage.setItem('istemppassword', false);
-                    self.showSuccess(successcontainer, lnkhomeredirect, btnSetPassword);
-                }
-                else if (status.toString() === errorcodes.API) {
-                    if (json.Payload.length > 0) {
-                        if (json.Payload[0].Messages.length > 0) {
-                            self.showError(json.Payload[0].Messages[0].toString(), errorContainer);
-                            self.clearPasswords(txtnPassword, txtcPassword);
+            let temporaryPasswordObservable: Observable<Response> = this.auth.settemporarypassword(apiURL, emailid, newpassword);
+            temporaryPasswordObservable
+                .map(response => {
+                    status = response.status;
+                    return response.json();
+                })
+                .subscribe(function (json) {
+                    if (status.toString() === this.errorCodes.SUCCESS) {
+                        txtnPassword.value = "";
+                        txtcPassword.value = "";
+                        self.sStorage.setItem('istemppassword', false);
+                        self.showSuccess(successcontainer, lnkhomeredirect, btnSetPassword);
+                    }
+                    else if (status.toString() === this.errorCodes.API) {
+                        if (json.Payload.length > 0) {
+                            if (json.Payload[0].Messages.length > 0) {
+                                self.showError(json.Payload[0].Messages[0].toString(), errorContainer);
+                                self.clearPasswords(txtnPassword, txtcPassword);
+                            }
                         }
                     }
-                }
-                else {
-                    self.showError(general.exception, errorContainer);
-                    self.clearPasswords(txtnPassword, txtcPassword);
-                }
-            }).catch(function (ex) {
-                self.showError(general.exception, errorContainer);
-                self.clearPasswords(txtnPassword, txtcPassword);
-            });
+                    else {
+                        self.showError(general.exception, errorContainer);
+                        self.clearPasswords(txtnPassword, txtcPassword);
+                    }
+                }, error => {
+                    if (error.status.toString() === this.errorCodes.API) {
+                        if (error.json().Payload.length > 0) {
+                            if (error.json().Payload[0].Messages.length > 0) {
+                                self.showError(error.json().Payload[0].Messages[0].toString(), errorContainer);
+                                self.clearPasswords(txtnPassword, txtcPassword);
+                            }
+                        }
+                    }
+                    else {
+                        self.showError(general.exception, errorContainer);
+                        self.clearPasswords(txtnPassword, txtcPassword);
+                    }
+
+                });
         }
         else {
             self.clearPasswords(txtnPassword, txtcPassword);
@@ -87,11 +111,11 @@ export class SetPasswordFirstTime implements OnInit {
 
     RedirectToLogin(event) {
         event.preventDefault();
-        this.router.parent.navigateByUrl('/');
+        this.router.navigate(['/']);
     }
     RedirectToHome(event) {
         event.preventDefault();
-        this.router.parent.navigateByUrl('/home');
+        this.router.navigate(['/home']);
     }
 
     validate(newpassword, confirmpassword, btnSetPassword, lnkhomeredirect, errorContainer, successContainer) {

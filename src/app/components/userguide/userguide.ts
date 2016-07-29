@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, RouterLink, CanActivate} from '@angular/router-deprecated';
+import {Router, ROUTER_DIRECTIVES, CanActivate} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -18,7 +18,7 @@ import {Angulartics2On} from 'angulartics2';
     },
 
     providers: [Auth, Utility, Common],
-    directives: [PageHeader, PageFooter, RouterLink, Angulartics2On],
+    directives: [PageHeader, PageFooter, ROUTER_DIRECTIVES, Angulartics2On],
     pipes: [ParseDatePipe]
 })
 export class UserGuide implements OnInit {
@@ -40,7 +40,7 @@ export class UserGuide implements OnInit {
     }
     
      redirectToLogin() {
-        this.router.parent.navigateByUrl('/');
+        this.router.navigate(['/']);
     }
     
     //on click event added to elements in html template
