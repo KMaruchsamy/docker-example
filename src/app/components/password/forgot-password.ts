@@ -89,13 +89,8 @@ export class ForgotPassword implements OnInit, OnDestroy {
                     if (error.status.toString() === self.errorCodes.SERVERERROR) {
                         self.showError(forgot_password.failed_sent_mail, errorContainer);
                     }
-                    else if (error.json().Payload.length > 0) {
-                        if (error.json().Payload[0].Messages.length > 0) {
-                            self.showError(error.json().Payload[0].Messages[0].toString(),errorContainer);
-                        }
-                    }
                     else
-                        self.showError(general.exception, errorContainer);
+                        self.showError(forgot_password.invalid_emailid, errorContainer);
                 });
         }
     }

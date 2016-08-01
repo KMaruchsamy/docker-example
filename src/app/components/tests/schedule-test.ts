@@ -793,7 +793,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
     }
 
     checkIfTestHasStarted(): number {
-        debugger;
         return this.testService.checkIfTestHasStarted(this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modifyInProgress)
     }
 
@@ -948,12 +947,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
         return url.replace('§scheduleId', scheduleId.toString());
     }
 
-    // validateDates(): boolean {
-    //     return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify);       
-    // }
-
-
-
     validateDates(): boolean {
         if (this.testScheduleModel) {
 
@@ -1000,30 +993,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
                             moment(this.testScheduleModel.savedEndTime).second()
                         )).format('YYYY-MM-DD HH:mm:ss');
 
-
-                      
-
-                        //         if (moment(institutionCurrentTime).isBefore(savedStartTime)) {
-                        //             if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
-                        //                 $('#alertPopup').modal('show');
-                        //                 return false;
-                        //             }
-                        //         }
-                        //         else if(!this.modifyInProgress){
-                        //             $('#alertPopup').modal('show');
-                        //             return false;
-                        //         }
-
-                        //     }
-                        //     else {
-                        //         if (moment(scheduleStartTime).isBefore(institutionCurrentTime) && !this.modifyInProgress) {
-                        //             $('#alertPopup').modal('show');
-                        //             return false;
-                        //         }
-                        //     }
-
-                        // }
-                        // else {
                         if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
                             $('#alertPopup').modal('show');
                             return false;

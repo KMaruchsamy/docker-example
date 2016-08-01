@@ -103,7 +103,6 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
             .events
             .filter(event => event instanceof RoutesRecognized)
             .subscribe(event => {
-                console.log('Event - ' + event);
                 this.destinationRoute = event.urlAfterRedirects;
             });
 
