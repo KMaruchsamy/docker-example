@@ -97,14 +97,8 @@ export class LoginContent implements OnDestroy {
                     }
                 },
                 error => {
-                    if ((error.json().AccessToken != undefined || error.json().AccessToken === '') && error.json().msg.toLowerCase()==='invalid user' ) {
-                        self.showError(login.auth_failed, errorContainer);
-                        txtPassword.value = '';
-                    }
-                    else {
-                        self.showError(general.exception, errorContainer);
-                        txtPassword.value = '';
-                    }
+                    self.showError(login.auth_failed, errorContainer);
+                    txtPassword.value = '';
                 }
             );
         }

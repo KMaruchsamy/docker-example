@@ -10,7 +10,7 @@ import {App} from './app';
 import {APP_ROUTES_PROVIDER} from './app.routes';
 import {SharedDeactivateGuard} from './components/shared/shared.deactivate.guard';
 
-// enableProdMode();
+enableProdMode();
 
 
 bootstrap(App, [
