@@ -398,6 +398,7 @@ export class TestService {
                     if (!this.checkIfTestHasStarted(institutionID, testScheduleModel.savedStartTime, testScheduleModel.savedEndTime, modifyInProgress)) {
                         return false;
                     }
+                    // alert that The testing window you specified has expired and needs to be changed
                     if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
                         $('#alertPopup').modal('show');
                         return false;
@@ -457,12 +458,16 @@ export class TestService {
     }
     
     checkIfTestHasStarted(institutionId: number, testStartTime: any, testEndTime: any, modifyInProgress: boolean=false): any {
-        if ((!modifyInProgress) && (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) < 1 )) {
+        if ((!modifyInProgress) && (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) === 0 )) {
             $('#testStarted').modal('show');
             return false; 
-        }
+        //let user know test session has completely passed and they can no longer make changes (in Modify and Modify in Progress)
+        } else if (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) === -1 ) {
+            $('#testPassed').modal('show');
+            return false;
+        } else 
         return true;
-    }te
+    }
 
      showTestStartingWarningModals(modify: boolean, institutionID: number, savedStartTime: any, testEndTime: any): any {
         if ((modify)&&(this.getTestStatusFromTimezone(institutionID, savedStartTime, testEndTime) === 1)) {

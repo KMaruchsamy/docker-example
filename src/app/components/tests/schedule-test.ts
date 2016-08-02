@@ -992,8 +992,8 @@ export class ScheduleTest implements OnInit, OnDestroy {
                             moment(this.testScheduleModel.savedEndTime).minute(),
                             moment(this.testScheduleModel.savedEndTime).second()
                         )).format('YYYY-MM-DD HH:mm:ss');
-
-                        if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                        // show The testing window you specified has expired and needs to be changed modal if end time is at least a minute before current time only
+                        if (moment(scheduleEndTime).isBefore(institutionCurrentTime, 'minute')) {
                             $('#alertPopup').modal('show');
                             return false;
                         }

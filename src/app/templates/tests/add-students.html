@@ -170,17 +170,19 @@
              [hideClose]="false">
 </alert-popup>
 
-<test-starting-popup
-                    [popupId]="'testStarted'"
-                    [heading]="'Alert: Testing Session Has Already Started'"
-                    [leadParagraph]="'<b>We’re sorry, this testing session is now underway. You can no longer modify it from this location.</b>'"
-                    [paragraph]="'Please hit “OK” to go to the <b>Manage Tests</b> main page, where you will be able to make changes to this testing session'"
-                    [okButtonText]="'OK'"
-                    [cancelButtonText]="'Cancel'"
-                    (onOK)="cancelStartingTestChanges($event)"
-                    (onCancel)="onCancelConfirmation($event)"
-                    [isStarted] ="true">
-</test-starting-popup>
+<alert-popup [popupId]="'testPassed'"
+             [message]="'We’re sorry! You can no longer modify this testing session because it has already taken place. Click or tap “OK” to go back to the Manage Tests main page.'"
+             [okButtonText]="'OK'"
+             (onOK)="cancelStartingTestChanges($event)"
+             [hideClose]="false">
+</alert-popup>
+
+<alert-popup [popupId]="'testStarted'"
+             [message]="'We’re sorry! This testing session is now underway and you can no longer modify it from this location. Click or tap “OK” to go to the Manage Tests main page, where you will be able to make changes to this testing session.'"
+             [okButtonText]="'OK'"
+             (onOK)="cancelStartingTestChanges($event)"
+             [hideClose]="false">
+</alert-popup>
 
 <test-starting-popup [popupId]="'testStartingin5'"
                     [heading]="'Alert: Testing Session Starting in 5 Minutes'"
@@ -189,8 +191,7 @@
                     [okButtonText]="'Continue modifying this session'"
                     [cancelButtonText]="'Cancel changes'"
                     (onOK)="onCancelConfirmation($event)"
-                    (onCancel)="cancelStartingTestChanges($event)"
-                    [isStarted] ="false">
+                    (onCancel)="cancelStartingTestChanges($event)">
 </test-starting-popup>
 
 <test-starting-popup [popupId]="'testStartingin10'"
@@ -200,6 +201,5 @@
                     [okButtonText]="'Continue modifying this session'"
                     [cancelButtonText]="'Cancel changes'"
                     (onOK)="onCancelConfirmation($event)"
-                    (onCancel)="cancelStartingTestChanges($event)"
-                    [isStarted] ="false">
+                    (onCancel)="cancelStartingTestChanges($event)">
 </test-starting-popup>

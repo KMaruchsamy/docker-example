@@ -22,11 +22,9 @@ export class TestingSessionStartingPopup {
     @Input() leadParagraph: string;
     @Input() paragraph: string;
     @Input() hideClose: boolean;
-    @Input() isStarted: boolean;
     @Output('onCancel') cancelEvent = new EventEmitter();
     @Output('onOK') okEvent = new EventEmitter();
     constructor(public router: Router, public common: Common, public testService: TestService) {
-
     }
 
 
