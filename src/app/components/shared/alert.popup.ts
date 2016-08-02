@@ -25,7 +25,7 @@ export class AlertPopup implements OnInit {
     }
 
     onOK(e): void {
-        this.okEvent.emit(e);
+        this.okEvent.emit(this.popupId);
     }
     
     // onCancel(e): void{
