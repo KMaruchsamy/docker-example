@@ -135,30 +135,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
         return true;
     }
 
-    // routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-    //     let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(next.urlPath)));
-    //     if (!this.overrideRouteCheck) {
-    //         if (outOfTestScheduling) {
-    //             this.attemptedRoute = next.urlPath;
-    //             $('#confirmationPopup').modal('show');
-    //             return false;
-    //         }
-    //     }
-    //     if (outOfTestScheduling) {
-    //         this.startDate = null;
-    //         this.endDate = null;
-    //         this.sStorage.removeItem('testschedule');
-    //         this.$startDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
-    //         this.$endDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
-    //     }
-
-    //     this.overrideRouteCheck = false;
-    //     return true;
-    // }
-
-    // routerOnDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
-    // }
-
     ngOnDestroy(): void {
         if (this.paramsSubscription)
             this.paramsSubscription.unsubscribe();
@@ -222,8 +198,12 @@ export class ScheduleTest implements OnInit, OnDestroy {
 
         if (this.endDate) {
             this.$endDate.datepicker('update', this.endDate);
-            if (this.modifyInProgress)
-                this.$endDate.datepicker('setStartDate', moment(this.testScheduleModel.savedStartTime).toDate());
+            if (this.modifyInProgress) {
+                if (moment(this.testScheduleModel.savedStartTime).isAfter(new Date()))
+                    this.$endDate.datepicker('setStartDate', moment(this.testScheduleModel.savedStartTime).toDate());
+                else
+                    this.$endDate.datepicker('setStartDate', moment(new Date()).toDate());
+            }
         }
         else {
             this.$endDate.datepicker({ defaultViewDate: moment(new Date()).format('L') });
@@ -239,6 +219,9 @@ export class ScheduleTest implements OnInit, OnDestroy {
             this.$endTime.timepicker('setTime', moment(this.endTime).toDate());
         else
             this.$endTime.timepicker('setTime', '');
+
+        if (this.startTime)
+            this.$endTime.timepicker('option', 'durationTime', this.roundMinTime(moment(this.startTime).toDate()));
     }
 
 
@@ -268,23 +251,33 @@ export class ScheduleTest implements OnInit, OnDestroy {
             'selectOnBlur': false,
             'typeaheadHighlight': false
         }).on('change', function (e) {
+            debugger;
             if (e.currentTarget.value) {
                 let startTime;
                 if (__this.startDate) {
                     startTime = __this.$startTime.timepicker('getTime', new Date(__this.startDate));
 
-                    if (__this.modifyInProgress) {
-                        if (moment(__this.testScheduleModel.savedStartTime).isAfter(startTime)) {
-                            __this.$startTime.timepicker('setTime', moment(__this.testScheduleModel.savedStartTime).toDate());
-                            return;
-                        }
-                    }
+
 
                     if (startTime && moment(startTime).isValid()) {
                         __this.startTime = startTime;
 
-                        if (moment(__this.startTime).isAfter(new Date()))
-                            __this.$endTime.timepicker('option', 'minTime', new Date(moment(__this.startTime).add(30, 'minutes').format()));
+                        if (moment(__this.startTime).isAfter(new Date())) {
+                            if (__this.modifyInProgress)
+                                __this.$endTime.timepicker('option', 'minTime', __this.roundMinTime(moment(__this.startTime).toDate()));
+                            else
+                                __this.$endTime.timepicker('option', 'minTime', __this.roundMinTime(moment(__this.startTime).add(30, 'minutes').toDate()));
+                        }
+                        else {
+                            if (__this.modifyInProgress) {
+                                if (moment(startTime).isBefore(__this.testScheduleModel.savedStartTime)) {
+                                    __this.$startTime.timepicker('setTime', moment(__this.testScheduleModel.savedStartTime).toDate());
+                                }
+                                __this.$endTime.timepicker('option', 'minTime', __this.roundMinTime(moment(new Date()).toDate()));
+                            }
+                            else
+                                __this.$endTime.timepicker('option', 'minTime', __this.roundMinTime(moment(new Date()).add(30, 'minutes').toDate()));
+                        }
 
                         if (!__this.endTime) {
                             if (moment(__this.startTime).isAfter(new Date()))
@@ -297,8 +290,15 @@ export class ScheduleTest implements OnInit, OnDestroy {
                         }
                         else {
                             if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
-                                __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
-                                __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                if (__this.modifyInProgress) {
+                                    __this.endTime = moment(__this.startTime).format();
+                                    __this.$endTime.timepicker('setTime', moment(__this.endTime).toDate());
+                                }
+                                else {
+                                    __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
+                                    __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                }
+
                             }
                         }
                     } else {
@@ -362,9 +362,11 @@ export class ScheduleTest implements OnInit, OnDestroy {
             'selectOnBlur': false,
             'typeaheadHighlight': false
         }).on('change', function (e) {
+            debugger;
             if (e.currentTarget.value) {
                 let endTime;
                 let minEndTime = moment(new Date()).add(30, 'minutes').format();
+                let inProgressMinEndTime = moment(new Date()).format();
                 if (__this.endDate) {
                     endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
                     // if (moment(endTime).isBefore(minEndTime))
@@ -384,7 +386,10 @@ export class ScheduleTest implements OnInit, OnDestroy {
                         else {
                             if (moment(__this.startTime).isAfter(__this.endTime) || moment(__this.startTime).isSame(__this.endTime)) {
                                 if (__this.modifyInProgress) {
-                                    __this.endTime = __this.startTime;
+                                    if (moment(__this.endTime).isBefore(inProgressMinEndTime))
+                                        __this.endTime = moment(new Date()).format();
+                                    else
+                                        __this.endTime = __this.startTime;
                                     __this.$endTime.timepicker('setTime', moment(__this.endTime).toDate());
                                 }
                                 else {
@@ -399,7 +404,12 @@ export class ScheduleTest implements OnInit, OnDestroy {
                                 }
                             }
                             else {
-                                if (!__this.modifyInProgress) {
+                                if (__this.modifyInProgress) {
+                                    if (moment(__this.endTime).isBefore(moment(new Date()))) {
+                                        __this.endTime = moment(new Date()).format();
+                                        __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                                    }
+                                } else {
                                     if (moment(__this.endTime).isBefore(minEndTime)) {
                                         __this.endTime = minEndTime;
                                         __this.$endTime.timepicker('setTime', new Date(__this.endTime));
@@ -486,7 +496,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
             'disableTouchKeyboard': true
         }).on('hide', function (e) {
             let outputString = '';
-
+            debugger;
             if (e.currentTarget.value !== '') {
                 outputString = __this.parseDateString(e.currentTarget.value);
 
@@ -529,7 +539,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
                 }
                 else {
                     if (__this.modifyInProgress) {
-                        __this.$startDate.datepicker('update', moment(__this.startDate).toDate());
+                        __this.$startDate.datepicker('update', moment(__this.testScheduleModel.savedStartTime).toDate());
                     } else if (__this.startDate)
                         __this.$startDate.datepicker('update', moment(__this.startDate).toDate());
                     else
@@ -538,7 +548,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
             }
             else {
                 if (__this.modifyInProgress) {
-                    __this.$startDate.datepicker('update', __this.startDate);
+                    __this.$startDate.datepicker('update', __this.testScheduleModel.savedStartTime);
                 }
                 else {
                     __this.startDate = '';
@@ -574,6 +584,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
             orientation: 'bottom',
             'disableTouchKeyboard': true
         }).on('hide', function (e) {
+            debugger;
             let outputString = '';
             if (e.currentTarget.value !== '') {
                 outputString = __this.parseDateString(e.currentTarget.value);
@@ -585,12 +596,17 @@ export class ScheduleTest implements OnInit, OnDestroy {
                         if (__this.startTime) {
                             let outputTimeString = __this.$endTime.timepicker('getTime', new Date(outputString));
                             if (moment(outputTimeString).isBefore(__this.startTime)) {
-                                if (__this.modifyInProgress)
-                                    __this.endTime = __this.startTime;
-                                else
-                                    __this.endTime = moment(__this.startTime).add(15, 'minutes').format();
+                                if (__this.modifyInProgress) {
+                                    __this.endTime = moment(new Date()).format();
+                                }
+                                else {
+                                    __this.endTime = moment(__this.startTime).add(30, 'minutes').format();
+                                }
                                 __this.$endTime.timepicker('setTime', moment(__this.endTime).toDate());
-                                __this.endDate = moment(__this.startTime).format('L');
+                                if (__this.modifyInProgress)
+                                    __this.endDate = moment(new Date()).format('L');
+                                else
+                                    __this.endDate = moment(__this.startTime).format('L');
                             }
                             else {
                                 __this.endDate = moment(outputString).format('L');
@@ -631,7 +647,13 @@ export class ScheduleTest implements OnInit, OnDestroy {
                     // have to change the date part of the time because the date is changed ..
                     __this.endTime = __this.$endTime.timepicker('getTime', new Date(__this.endDate));
 
-                    if (!__this.modifyInProgress) {
+                    if (__this.modifyInProgress) {
+                        let minEndTime = moment(new Date()).format();
+                        if (moment(__this.endTime).isBefore(minEndTime)) {
+                            __this.endTime = minEndTime;
+                            __this.$endTime.timepicker('setTime', new Date(__this.endTime));
+                        }
+                    } else {
                         let minEndTime = moment(new Date()).add(30, 'minutes').format();
                         if (moment(__this.endTime).isBefore(minEndTime)) {
                             __this.endTime = minEndTime;
@@ -693,7 +715,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
 
 
     set8HourRule(): void {
-        let institution = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': this.testScheduleModel.institutionId });
+        let institution = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': +this.testScheduleModel.institutionId });
         if (institution)
             this.ignore8HourRule = !institution.IsIpBlank;
 
@@ -873,9 +895,17 @@ export class ScheduleTest implements OnInit, OnDestroy {
                 // clearTimeout(loaderTimer);
                 // $('#loader').modal('hide');
                 let result = json;
-                if (result.TestingSessionId && result.TestingSessionId > 0 && result.ErrorCode === 0 && !result.TimingExceptions) {
+                if (result.TestingSessionId && result.TestingSessionId > 0
+                    && result.ErrorCode === 0
+                    && !result.TimingExceptions
+                    && !result.TestAlreadyStartedExceptions) {
                     // __this.testScheduleModel.scheduleId = result.TestingSessionId;
                     // __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
+                    __this.overrideRouteCheck = true;
+                    __this.router.navigate(['/tests']);
+                }
+                else {
+                    alert('Exceptions !! Will be handled later..');
                     __this.overrideRouteCheck = true;
                     __this.router.navigate(['/tests']);
                 }
