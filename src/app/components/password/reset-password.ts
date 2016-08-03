@@ -103,7 +103,7 @@ export class ResetPassword implements OnInit, OnDestroy {
                         }
                     }, error => {
                         if (error.status.toString() === this.errorCodes.API) {
-                            if (error.json().Payload.length > 0) {
+                            if (error.json().Payload && error.json().Payload.length > 0) {
                                 if (error.json().Payload[0].Messages.length > 0) {
                                     self.showError(error.json().Payload[0].Messages[0].toString(), errorContainer);
                                     self.clearPasswords(txtnPassword, txtcPassword);

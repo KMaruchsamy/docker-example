@@ -97,8 +97,15 @@ export class LoginContent implements OnDestroy {
                     }
                 },
                 error => {
-                    self.showError(login.auth_failed, errorContainer);
-                    txtPassword.value = '';
+                    if (error.status > 0) {
+                        self.showError(login.auth_failed, errorContainer);
+                        txtPassword.value = '';
+                    }
+                    else {
+                        self.showError(general.exception, errorContainer);
+                        txtPassword.value = '';
+                    }
+
                 }
             );
         }
