@@ -2224,6 +2224,8 @@ input.checkbox-small-image:focus + label::before {
       width: 12px;
       -webkit-transform: rotate(0deg);
               transform: rotate(0deg); }
+    .expander-trigger-no-line {
+      border-bottom: 0; }
   .expander .expander-content p {
     color: #6c6c6c;
     line-height: 1.5; }
