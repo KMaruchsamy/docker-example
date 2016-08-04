@@ -1,0 +1,45 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "Authentication": {
+    "Bucket": "elasticbeanstalk-us-east-1-229683044909",
+    "Key": ".dockercfg"
+  },
+  "containerDefinitions": [
+    {
+      "name": "nit-ux-dev",
+      "image": "kaptest/nursing:dev",
+      "essential": true,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ]
+    },
+    {
+      "name": "nit-ux-styleguide",
+      "image": "kaptest/nursing:styleguide",
+      "essential": true,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 9000,
+          "containerPort": 80
+        }
+      ]
+    },
+    {
+      "name": "nit-api",
+      "image": "kaptest/nursing:api",
+      "essential": true,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 3000,
+          "containerPort": 3000
+        }
+      ]
+    }
+  ]
+}
