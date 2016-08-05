@@ -7,7 +7,7 @@
   "containerDefinitions": [
     {
       "name": "nit-ux-dev",
-      "image": "kaptest/nursing:dev",
+      "image": "kaptest/nursing-admin-ux:dev",
       "essential": true,
       "memory": 128,
       "portMappings": [
