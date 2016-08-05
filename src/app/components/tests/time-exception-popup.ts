@@ -4,6 +4,7 @@ import {Common} from '../../services/common';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import * as _ from 'lodash';
 import {SortPipe} from '../../pipes/sort.pipe';
+import {TestScheduleModel} from '../../models/testSchedule.model';
 
 @Component({
     selector: 'time-exception',
@@ -17,6 +18,7 @@ import {SortPipe} from '../../pipes/sort.pipe';
 export class TimeExceptionPopup implements OnInit, OnDestroy {
     @Input() studentWindowException: any;
     @Input() canRemoveStudents: boolean;
+    @Input() testSchedule: TestScheduleModel;
     @Output() windowExceptionPopupClose = new EventEmitter();
     sStorage: any;
     endDate: Date;
