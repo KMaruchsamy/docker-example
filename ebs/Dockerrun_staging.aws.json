@@ -5,7 +5,7 @@
     "Key": ".dockercfg"
   },
   "Image": {
-    "Name": "kaptest/nursing:latest",
+    "Name": "kaptest/nursing-admin-ux:latest",
     "Update": "true"
   },
   "Ports": [
