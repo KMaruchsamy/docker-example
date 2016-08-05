@@ -1082,7 +1082,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
     }
 
     studentsStartedTestPopupOK(e): void {
-        console.log(e);
         $('#studentsStartedTest').modal('hide');
         if (this.timingExceptions && this.timingExceptions.length > 0)
             $('#modalTimingException').modal('show');

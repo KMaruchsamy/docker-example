@@ -40,6 +40,7 @@
     <!--closes div containing form-->
 </main>
 <page-footer></page-footer>
+
 <confirmation-popup 
 [popupId]="'confirmationPopup'"
     [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'" 
@@ -95,7 +96,11 @@
 
 <students-started-test-popup 
 (onOK)="studentsStartedTestPopupOK(e);" 
-[students]="testStartedExceptions" >
+[students]="testStartedExceptions"
+pageName="scheduletest"
+mainHeader="Students Have Started Tests In This Testing Session"
+mainContent="The following students have already started tests in this testing session:"
+ >
 </students-started-test-popup>
 
 <time-exception 

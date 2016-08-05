@@ -20,7 +20,12 @@ import {TestScheduleModel} from '../../models/testSchedule.model';
 
 export class StudentsStartedTest implements OnInit {
     @Input() students;
+    @Input() mainHeader;
+    @Input() subContent;
+    @Input() mainContent;
+    @Input() pageName;
     @Output() onOK = new EventEmitter();
+    @Output() onBack = new EventEmitter();
     constructor() { }
 
 
@@ -30,6 +35,10 @@ export class StudentsStartedTest implements OnInit {
 
     OK(e:any): void{
         this.onOK.emit(e);
-   }
+    }
+
+    back(e: any): void{
+        this.onBack.emit(e);
+   } 
 
 }
