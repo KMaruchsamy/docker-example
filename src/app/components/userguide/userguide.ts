@@ -22,7 +22,6 @@ import {Angulartics2On} from 'angulartics2';
     pipes: [ParseDatePipe]
 })
 export class UserGuide implements OnInit {
-    modifiedDate: Date;
     activeId: string;
     constructor(public router: Router, public auth: Auth, public common: Common, public titleService: Title) {
     }
@@ -30,7 +29,6 @@ export class UserGuide implements OnInit {
     ngOnInit(): void {
         if (this.auth.isAuth()) {
         this.titleService.setTitle('Faculty User Guide – Kaplan Nursing');
-        this.modifiedDate = new Date(constants.USERGUIDEMODIFICATIONDATE);
         $(document).scrollTop(0);
         this.activeId = '#whatsNew';
         }
