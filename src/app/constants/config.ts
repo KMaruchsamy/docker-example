@@ -132,10 +132,6 @@ export const TestShedulingPages = {
     CONFIRMATIONMODIFYINPROGRESS:'TESTS/CONFIRMATIONMODIFYINPROGRESS'
 };
 
-export const constants = {
-    USERGUIDEMODIFICATIONDATE: '03/15/2016'
-}
-
 export const teststatus = {
     Completed: 'Completed',
     Scheduled: 'Scheduled',
