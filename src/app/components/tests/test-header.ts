@@ -25,7 +25,7 @@ export class TestHeader implements OnInit, OnDestroy {
     sStorage: any;
     constructor(public activatedRoute: ActivatedRoute, public router: Router, public common: Common) { }
 
-    ngOnDestroy(): void {      
+    ngOnDestroy(): void {
     }
 
     ngOnInit(): void {
@@ -39,18 +39,27 @@ export class TestHeader implements OnInit, OnDestroy {
     }
 
     confirmCancelChanges(e): void {
-        $('#cancelChangesPopup').modal('show');
+        if (this.modifyInProgress)
+            $('#cancelModifyInProgress').modal('show');
+        else
+            $('#cancelChangesPopup').modal('show');
         e.preventDefault();
     }
 
     cancelChanges(): boolean {
-        $('#cancelChangesPopup').modal('hide');
+        if (this.modifyInProgress)
+            $('#cancelModifyInProgress').modal('hide');
+        else
+            $('#cancelChangesPopup').modal('hide');
         this.cancelChangesEvent.emit('');
         return false;
     }
 
     continueMakingChanges(): boolean {
-        $('#cancelChangesPopup').modal('hide');
+        if (this.modifyInProgress)
+            $('#cancelModifyInProgress').modal('hide');
+        else
+            $('#cancelChangesPopup').modal('hide');
         this.continueMakingChangesEvent.emit('');
         return false;
     }

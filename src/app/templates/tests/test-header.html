@@ -62,3 +62,13 @@
 [okButtonText]="'Yes'" [cancelButtonText]="'No, continue making changes'" (onOK)="cancelChanges()" (onCancel)="continueMakingChanges()"
 [hideClose]="true">
 </confirmation-popup>
+
+<confirmation-popup 
+[popupId]="'cancelModifyInProgress'"
+    [message]="'Cancel changes to testing session in progress and return to Manage Tests main page?'" 
+    [okButtonText] = "'Yes, cancel changes'" 
+    [cancelButtonText] = "'No, continue making changes'" 
+    (onOK)="cancelChanges()" 
+    (onCancel)="continueMakingChanges()"
+    [hideClose]="true" >
+</confirmation-popup>

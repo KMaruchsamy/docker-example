@@ -18,6 +18,11 @@ import {Observable, Subscription} from 'rxjs/Rx';
 import {Response} from '@angular/http';
 import {Utility} from '../../scripts/utility';
 import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
+import {StudentsStartedTest} from './students-started-test.popup';
+import {TestStartedExceptionModal} from '../../models/test-started-exceptions.modal';
+import {TimingExceptionsModal} from '../../models/timing-exceptions.modal';
+import {TimeExceptionPopup} from './time-exception-popup';
+import {SelfPayStudentPopup} from './self-pay-student-popup';
 // import '../../plugins/bootstrap-datepicker-1.5.min.js';
 // import '../../plugins/jquery.timepicker.js';
 // import '../../lib/modal.js';
@@ -27,8 +32,8 @@ import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
     templateUrl: 'templates/tests/schedule-test.html',
     styleUrls: ['../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css', '../../css/jquery.timepicker.css', '../../css/schedule.css'],
     encapsulation: ViewEncapsulation.None,
-    providers: [TestService, Auth, TestScheduleModel, Common, Utility],
-    directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup, AlertPopup, TestingSessionStartingPopup],
+    providers: [TestService, Auth, TestScheduleModel, Common, Utility, TestStartedExceptionModal, TimingExceptionsModal],
+    directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup, AlertPopup, TestingSessionStartingPopup, StudentsStartedTest, TimeExceptionPopup, SelfPayStudentPopup],
     pipes: [ParseDatePipe]
 })
 export class ScheduleTest implements OnInit, OnDestroy {
@@ -54,6 +59,9 @@ export class ScheduleTest implements OnInit, OnDestroy {
     destinationRoute: string;
     deactivateSubscription: Subscription;
     eightHourSubscription: Subscription;
+    testStartedExceptions: Array<TestStartedExceptionModal>;
+    timingExceptions: Array<TimingExceptionsModal>;
+    studentPayExceptions: Array<TimingExceptionsModal>;
     constructor(private activatedRoute: ActivatedRoute, public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: Auth, public router: Router, public common: Common, public aLocation: Location, public titleService: Title, private utility: Utility) {
     }
@@ -891,6 +899,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
         scheduleTestObservable
             .map(response => response.json())
             .subscribe(json => {
+                debugger;
                 __this.valid = true;
                 // clearTimeout(loaderTimer);
                 // $('#loader').modal('hide');
@@ -905,13 +914,34 @@ export class ScheduleTest implements OnInit, OnDestroy {
                     __this.router.navigate(['/tests']);
                 }
                 else {
-                    alert('Exceptions !! Will be handled later..');
-                    __this.overrideRouteCheck = true;
-                    __this.router.navigate(['/tests']);
+                    __this.handleExceptions(result, __this);
                 }
-
             }, error => console.log(error));
     }
+
+    handleExceptions(result: any, __this: any) {
+        if (result.TimingExceptions && result.TimingExceptions.length > 0) {
+            let studentPayEnabledInstitution: boolean;
+            studentPayEnabledInstitution = __this.auth.isStudentPayEnabledInstitution(__this.testScheduleModel.institutionId);
+            if (studentPayEnabledInstitution) {
+                __this.studentPayExceptions = _.filter(result.TimingExceptions, { 'IgnoreExceptionIfStudentPay': true });
+                __this.timingExceptions = _.filter(result.TimingExceptions, { 'IgnoreExceptionIfStudentPay': false });
+            }
+            else
+                __this.timingExceptions = result.TimingExceptions
+        }
+        if (result.TestAlreadyStartedExceptions && result.TestAlreadyStartedExceptions.length > 0) {
+            __this.testStartedExceptions = result.TestAlreadyStartedExceptions;
+            $('#studentsStartedTest').modal('show');
+        }
+        else if (__this.timingExceptions && __this.timingExceptions.length > 0)
+            $('#modalTimingException').modal('show');
+        else if (__this.studentPayExceptions && __this.studentPayExceptions.length > 0)
+            $('#selfPayStudentModal').modal('show');
+    }
+
+
+
 
 
 
@@ -1049,6 +1079,35 @@ export class ScheduleTest implements OnInit, OnDestroy {
         $('#confirmationPopup').modal('hide');
         this.overrideRouteCheck = true;
         this.router.navigateByUrl(this.attemptedRoute);
+    }
+
+    studentsStartedTestPopupOK(e): void {
+        console.log(e);
+        $('#studentsStartedTest').modal('hide');
+        if (this.timingExceptions && this.timingExceptions.length > 0)
+            $('#modalTimingException').modal('show');
+        else if (this.studentPayExceptions && this.studentPayExceptions.length > 0)
+            $('#selfPayStudentModal').modal('show');
+        else {
+            this.overrideRouteCheck = true;
+            this.router.navigate(['/tests']);
+        }
+    }
+
+    onCloseTimingExceptionsPopup(e): void {
+        $('#modalTimingException').modal('hide');
+        // if (this.studentPayExceptions && this.studentPayExceptions.length > 0)
+        //     $('#selfPayStudentModal').modal('show');
+        // else {
+        //     this.overrideRouteCheck = true;
+        //     this.router.navigate(['/tests']);
+        // }
+    }
+
+    onCloseSelfPayExceptionsPopup(e): void {
+        $('#selfPayStudentModal').modal('hide');
+        this.overrideRouteCheck = true;
+        this.router.navigate(['/tests']);
     }
 
 }

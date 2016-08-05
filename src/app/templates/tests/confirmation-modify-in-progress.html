@@ -11,7 +11,7 @@
                 <p>
                     The following students have been added:
                 </p>
-                <table class="table-fixed">
+                <table class="table-no-row-borders">
                     <tbody class="text-larger-purple border-top">
                         <tr *ngFor="let student of studentsAdded | sort:'asc':'LastName'">
                             <td><b>{{student.LastName}}, {{student.FirstName}}</b></td>
@@ -25,7 +25,7 @@
                 <p>
                     The following students have been removed:
                 </p>
-                <table class="table-fixed">
+                <table class="table-no-row-borders">
                     <tbody class="text-larger-purple border-top">
                         <tr *ngFor="let student of removedStudents | sort:'asc':'LastName'">
                             <td><b>{{student.LastName}}, {{student.FirstName}}</b></td>

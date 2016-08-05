@@ -91,3 +91,22 @@
                     (onOK)="onCancelConfirmation($event)"
                     (onCancel)="cancelStartingTestChanges($event)">
 </test-starting-popup>
+
+
+<students-started-test-popup 
+(onOK)="studentsStartedTestPopupOK(e);" 
+[students]="testStartedExceptions" >
+</students-started-test-popup>
+
+<time-exception 
+[testSchedule]="testScheduleModel" 
+[studentWindowException]="timingExceptions" 
+canRemoveStudents=false
+(windowExceptionPopupClose)="onCloseTimingExceptionsPopup(e)">
+</time-exception>
+
+<self-pay-student-popup
+[selfPayStudentException]="studentPayExceptions"
+(selfPayStudentExceptionPopupClose)="onCloseSelfPayExceptionsPopup(e)">
+</self-pay-student-popup>
+
