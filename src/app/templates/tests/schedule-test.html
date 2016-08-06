@@ -95,23 +95,31 @@
 
 
 <students-started-test-popup 
-(onOK)="studentsStartedTestPopupOK(e);" 
-[students]="testStartedExceptions"
-pageName="scheduletest"
-mainHeader="Students Have Started Tests In This Testing Session"
-mainContent="The following students have already started tests in this testing session:"
- >
+        (onOK)="studentsStartedTestPopupOK(e);" 
+        [students]="testStartedExceptions"
+        pageName="scheduletest"
+        mainHeader="Students Have Started Tests In This Testing Session"
+        mainContent="The following students have already started tests in this testing session:">
 </students-started-test-popup>
 
 <time-exception 
-[testSchedule]="testScheduleModel" 
-[studentWindowException]="timingExceptions" 
-canRemoveStudents=false
-(windowExceptionPopupClose)="onCloseTimingExceptionsPopup(e)">
+        [testSchedule]="testScheduleModel" 
+        [studentWindowException]="timingExceptions" 
+        canRemoveStudents=false
+        (windowExceptionPopupClose)="onCloseTimingExceptionsPopup(e)">
 </time-exception>
 
 <self-pay-student-popup
-[selfPayStudentException]="studentPayExceptions"
-(selfPayStudentExceptionPopupClose)="onCloseSelfPayExceptionsPopup(e)">
+        [selfPayStudentException]="studentPayExceptions"
+        (selfPayStudentExceptionPopupClose)="onCloseSelfPayExceptionsPopup(e)">
 </self-pay-student-popup>
 
+<confirmation-popup 
+    popupId="endModifyInProgressSession"
+    message="You have specified a testing window that will immediately end this testing session. Students who have not started their tests will no longer be able to access them. Are you sure you want to do this? " 
+    okButtonText = "Yes, end session" 
+    cancelButtonText = "Cancel" 
+    (onOK)="endSession()" 
+    (onCancel)="cancelEndSession($event)"
+    hideClose="true" >
+</confirmation-popup>
