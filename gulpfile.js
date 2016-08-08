@@ -335,4 +335,4 @@ function log(message){
 
 
 var requireDir = require('require-dir');
- var tasks = requireDir('./tasks');
+var tasks = requireDir('./tasks');
