@@ -7,7 +7,7 @@ import {NgFor, Location} from '@angular/common';
 import {Title} from '@angular/platform-browser';
 import {TestService} from '../../services/test.service';
 import {Auth} from '../../services/auth';
-import {links} from '../../constants/config';
+import {links, errorcodes} from '../../constants/config';
 import {Common} from '../../services/common';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
@@ -23,6 +23,7 @@ import {RetesterAlternatePopup} from './retesters-alternate-popup';
 import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
 import {TimeExceptionPopup} from './time-exception-popup';
 import {SelfPayStudentPopup} from './self-pay-student-popup';
+import {StudentAlreadyStartedTestPopup} from './student-already-started-test';
 import {SortPipe} from '../../pipes/sort.pipe';
 import {Utility} from '../../scripts/utility';
 
@@ -36,7 +37,7 @@ import * as _ from 'lodash';
     styles: [`#addByName.active + #cohortStudentList .add-students-table-search {display: table; width: 100%;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
-    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup, Utility],
+    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup, Utility, StudentAlreadyStartedTestPopup],
     directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, ROUTER_DIRECTIVES, AlertPopup, TestingSessionStartingPopup],
     pipes: [RemoveWhitespacePipe, SortPipe, ParseDatePipe]
 })
@@ -340,7 +341,7 @@ export class AddStudents implements OnInit, OnDestroy {
                     __this.ReloadData();
                     __this.RefreshSelectedStudentCount();
                 }
-             
+
             }, error => console.log(error));
 
     }
@@ -946,7 +947,7 @@ export class AddStudents implements OnInit, OnDestroy {
         }
         else
             this.testScheduleModel.selectedStudents = selectedStudentModelList;
-        this.sStorage = this.auth.common.getStorage();
+        //   this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         console.log('TestScheduleModel with Selected student' + this.testScheduleModel);
         this.WindowException();
@@ -1057,6 +1058,7 @@ export class AddStudents implements OnInit, OnDestroy {
 
     }
     HasWindowException(_studentWindowException: any): void {
+        debugger;
         if (_studentWindowException.length != 0) {
             if (this.loader)
                 this.loader.destroy();
@@ -1074,7 +1076,8 @@ export class AddStudents implements OnInit, OnDestroy {
                 });
         }
         else {
-            this.GetRepeaterException(); // Repeater Exception will call only when having no timing window exception
+            if (!this.modifyInProgress)
+                this.GetRepeaterException(); // Repeater Exception will call only when having no timing window exception
         }
     }
 
@@ -1093,7 +1096,8 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     HasStudentPayException(): void {
-        this.markSelfPayStudents();
+        debugger;
+        if (!this.modifyInProgress) this.markSelfPayStudents();
         if (this._selfPayStudent.length > 0) {
             if (this.loader)
                 this.loader.destroy();
@@ -1101,25 +1105,35 @@ export class AddStudents implements OnInit, OnDestroy {
                 .then(retester => {
                     this.loader = retester;
                     $('#selfPayStudentModal').modal('show');
-                    this.markSelfPayStudents();
+                    if (!this.modifyInProgress) this.markSelfPayStudents();
                     retester.instance.selfPayStudentException = this._selfPayStudent;
                     retester.instance.testSchedule = this.testScheduleModel;
-                    //retester.instance.canRemoveStudents = false;
+                    retester.instance.isModifyInProgress = this.modifyInProgress ? true : false;
                     retester.instance.selfPayStudentExceptionPopupClose.subscribe((e) => {
                         $('#selfPayStudentModal').modal('hide');
-                        if (this.modify)
-                            this.router.navigate(['/tests', 'modify', 'review']);
-                        else
-                            this.router.navigate(['/tests/review']);
+                        if (this.modifyInProgress) {
+                            this.moveToConfirmationModifyInProgress();
+                        }
+                        else {
+                            if (this.modify)
+                                this.router.navigate(['/tests', 'modify', 'review']);
+                            else
+                                this.router.navigate(['/tests/review']);
+                        }
                     });
 
                 });
         }
         else {
-            if (this.modify)
-                this.router.navigate(['/tests', 'modify', 'review']);
-            else
-                this.router.navigate(['/tests/review']);
+            if (this.modifyInProgress) {
+                this.moveToConfirmationModifyInProgress();
+            }
+            else {
+                if (this.modify)
+                    this.router.navigate(['/tests', 'modify', 'review']);
+                else
+                    this.router.navigate(['/tests/review']);
+            }
         }
     }
 
@@ -1157,6 +1171,7 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     resolveExceptions(objException: any, __this: any): boolean {
+        debugger;
         let repeaterExceptions: any;
         repeaterExceptions = objException;
         if (objException) {
@@ -1833,18 +1848,18 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     Verify_SaveTestClick(): void {
-        this.sStorage = this.auth.common.getStorage();
-        this.sStorage.setItem('prevtestschedule', JSON.stringify(this.testScheduleModel));
+        // this.sStorage = this.auth.common.getStorage();
+        //this.sStorage.setItem('prevtestschedule', JSON.stringify(this.testScheduleModel));
         console.log('TestScheduleModel with previous Selected student' + this.testScheduleModel);
 
-        let selectedStudentModelList = this.selectedStudents;
-        this.updateModifyInProgress(selectedStudentModelList);
+        //  let selectedStudentModelList = this.selectedStudents;
+        this.updateModifyInProgress();
 
 
     }
 
-    updateModifyInProgress(_selectedStudents: SelectedStudentModel[]): void {
-        this.testScheduleModel.selectedStudents = _selectedStudents;
+    updateModifyInProgress(): void {
+
         let input = {
             TestingSessionId: (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0),
             SessionName: this.testScheduleModel.scheduleName,
@@ -1855,58 +1870,112 @@ export class AddStudents implements OnInit, OnDestroy {
             TestingWindowStart: this.testScheduleModel.scheduleStartTime,
             TestingWindowEnd: this.testScheduleModel.scheduleEndTime,
             FacultyMemberId: this.testScheduleModel.facultyMemberId,
-            Students: this.testScheduleModel.selectedStudents,
+            Students: this.selectedStudents,
             LastCohortSelectedId: this.testScheduleModel.lastselectedcohortId,
             LastSubjectSelectedId: this.testScheduleModel.subjectId,
             PageSavedOn: ''//TODO need to add the logic for this one ..
         };
+        this.sStorage.setItem('prevtestschedule', JSON.stringify(this.testScheduleModel));
         let __this = this;
         let updateModifyInProgressTestURL = this.resolveUpdateModifyInProgressTestURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateModifyInProgressStudents}`);
         let updateModifyInProgressTestObservable: Observable<Response> = this.testService.modifyInProgressScheduleTests(updateModifyInProgressTestURL, JSON.stringify(input));
         this.updateModifyInProgressTestSubscription = updateModifyInProgressTestObservable
-            .map(response => {
-                if (response.status !== 400) {
-                    return response.json();
-                }
-                return [];
-            })
+            .map(response => response.json())
             .subscribe(json => {
-                if (json.ErrorCode === undefined ||json.length===0) {
-                    if (__this.checkForModifyInProgressException(json)) {
-                        alert('Unable to Save because of having some error/exception.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
-                        // __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
-                        //  __this.router.navigate(['ConfirmationModifyInProgress']);
+                
+                if (json.ErrorCode === 0 && json.TestingSessionId > 0) {
+                    if ((json.alreadyStartedExceptions === null && json.windowExceptions === null) || (json.alreadyStartedExceptions.length === 0 && json.windowExceptions.length === 0) ) {
+                        __this.moveToConfirmationModifyInProgress();
+                    }
+                    else {
+                        let isSuccess: boolean = __this.checkForStartedTestException(json, false);
+                        if (isSuccess)
+                            this.moveToConfirmationModifyInProgress();
                     }
                 }
                 else {
-                    if (json.ErrorCode === 0 && json.TestingSessionId > 0 && json.TimingExceptions === null && json.TestAlreadyStartedExceptions === null) {
-
-                        __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
-                        __this.router.navigate(['/tests/confirmation-modify-in-progress']);
-                    }
-                    else
-                        alert('Unable to Save because of having either Timing or StudentAlreadyStartedTest exception.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
+                    alert('Unable to Save because of having either Timing or StudentAlreadyStartedTest exception.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
+                    __this.checkForStartedTestException(json, false);
                 }
             },
-            error => console.log(error)
-            );
+            error => {
+                alert('Unable to Save because of having some error/exception.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
+                __this.checkForStartedTestException(JSON.parse(error._body), true);
+            });
     }
     resolveUpdateModifyInProgressTestURL(url: string): string {
         return url.replace('§testSessionId', this.testScheduleModel.scheduleId.toString());
     }
 
-    checkForModifyInProgressException(_json: any): boolean {
-        //    if (_json.windowExceptions.length)
-        //    { return false; }
-
-        //    if (_json.repeaterExceptions) {
-        //        if (_json.repeaterExceptions.AlternateTestInfo.length) { return false; }
-        //        if (_json.repeaterExceptions.StudentRepeaterExceptions.length) { return false; }
-        //        if (_json.repeaterExceptions.StudentAlternateTestInfo.length) { return false; }
-        //    }
-
-        //    if (_json.alreadyStartedExceptions.length) { return false; }
+    moveToConfirmationModifyInProgress(): void {
+        debugger;
+        
+        this.testScheduleModel.selectedStudents = this.selectedStudents;
+        this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
+        this.router.navigate(['/tests/confirmation-modify-in-progress']);
+    }
+    checkForStartedTestException(_json: any, hasToCheckOtherExceptions: boolean): boolean {
+        if (_json.alreadyStartedExceptions) {
+            if (_json.alreadyStartedExceptions.length) {
+                let _studentStartedTest = _json.alreadyStartedExceptions;
+                let isStartedTestStudentRemoved = this.HasStudentStartedTestException(_studentStartedTest);
+                if (!isStartedTestStudentRemoved && hasToCheckOtherExceptions) {
+                    this.checkWindowExceptions(_json);
+                }
+                else
+                    this.moveToConfirmationModifyInProgress();
+            }
+            else {
+                if (hasToCheckOtherExceptions)
+                    this.checkWindowExceptions(_json);
+            }
+        }
+        else {
+            if (hasToCheckOtherExceptions)
+                this.checkWindowExceptions(_json);
+        }
         return true;
+    }
+    checkWindowExceptions(_json: any): void {
+        let timingExceptions: any;
+
+        if (_json.windowExceptions && _json.windowExceptions.length > 0) {
+            let studentPayEnabledInstitution: boolean;
+
+            studentPayEnabledInstitution = this.auth.isStudentPayEnabledInstitution(this.testScheduleModel.institutionId);
+            if (studentPayEnabledInstitution) {
+                this._selfPayStudent = _.filter(_json.windowExceptions, { 'IgnoreExceptionIfStudentPay': true });
+                timingExceptions = _.filter(_json.windowExceptions, { 'IgnoreExceptionIfStudentPay': false });
+            }
+            else
+                timingExceptions = _json.windowExceptions;
+        }
+
+        if (timingExceptions) {
+            if (timingExceptions.length > 0) {
+                alert('Timing exception');
+                this.HasWindowException(timingExceptions);
+            }
+            else
+                this.checkTestExceptions(_json);
+        }
+        else if ((JSON.stringify(_json.repeaterExceptions)).length > 0) {
+            this.checkTestExceptions(_json);
+        }
+        else if (this._selfPayStudent.length>0) {
+            alert('Having some self-pay exception');
+            this.HasStudentPayException();
+        }
+        else
+            this.moveToConfirmationModifyInProgress();
+
+    }
+    checkTestExceptions(_json: any): void {
+        //if (_json.repeaterExceptions.AlternateTestInfo.length) { return false; }
+        //if (_json.repeaterExceptions.StudentRepeaterExceptions.length) { return false; }
+        //if (_json.repeaterExceptions.StudentAlternateTestInfo.length) { return false; }
+        alert('Having some Test exception');
+        this.resolveExceptions(_json.repeaterExceptions, this);
     }
 
     setClasses(AssigendTestStarted: boolean): string {
@@ -2000,6 +2069,44 @@ export class AddStudents implements OnInit, OnDestroy {
     confirmCancelChanges(e): void {
         $('#cancelChangesPopup').modal('show');
         e.preventDefault();
+    }
+
+    HasStudentStartedTestException(TestAlreadyStartedExceptions: any): boolean {
+        debugger;
+        let __this = this;
+        let isStudentRemovedIfStartedTest = false;
+        let studentHasStartedTest: SelectedStudentModel[] = [];
+        let studentRemainInSession: SelectedStudentModel[] = [];
+
+        _.forEach(TestAlreadyStartedExceptions, (student, key) => {
+            studentHasStartedTest.push(_.find(this.testScheduleModel.selectedStudents, { 'StudentId': student.StudentId }));
+            studentRemainInSession.push(_.find(this.selectedStudents, { 'StudentId': student.StudentId }));
+        });
+
+        let studentRemovedFromSession: SelectedStudentModel[];
+        studentRemovedFromSession = _.difference(studentHasStartedTest, studentRemainInSession);
+        if (studentRemovedFromSession.length > 0) {
+            isStudentRemovedIfStartedTest = true;
+            if (this.loader)
+                this.loader.destroy();
+            this.dynamicComponentLoader.loadNextToLocation(StudentAlreadyStartedTestPopup, this.viewContainerRef)
+                .then(hasStartedTest => {
+                    this.loader = hasStartedTest;
+                    $('#studentAlreadyStartedTestModal').modal('show');
+                    hasStartedTest.instance.studentHasStartedTestException = studentHasStartedTest;
+                    hasStartedTest.instance.testSchedule = this.testScheduleModel;
+                    //retester.instance.canRemoveStudents = false;
+                    hasStartedTest.instance.studentHasStartedTestExceptionPopupContinue.subscribe((e) => {
+                        $('#studentAlreadyStartedTestModal').modal('hide');
+                        this.moveToConfirmationModifyInProgress();
+                    });
+                    hasStartedTest.instance.studentHasStartedTestExceptionPopupClose.subscribe((e) => {
+                        $('#studentAlreadyStartedTestModal').modal('hide');
+                    });
+
+                });
+        }
+        return isStudentRemovedIfStartedTest;
     }
 
     //........ Modify In Progress changes End........
