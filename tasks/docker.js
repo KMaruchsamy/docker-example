@@ -32,3 +32,22 @@ gulp.task('create_zip', function(){
         .pipe(plugins.zip('nursing-adminapp-' + app_version + '.zip'))
         .pipe(gulp.dest('dist'));
 });
+
+// To run: NODE_ENV=multi gulp prepare_multi_config
+gulp.task('prepare_multi_config', function () {
+    gulp.src('ebs_multi/resources_' + env + '.config')
+        .pipe(plugins.rename({
+            dirname: '',
+            basename: 'resources',
+            extname: '.config'
+        }))
+        .pipe(gulp.dest('.ebextensions'));
+
+    gulp.src('ebs_multi/Dockerrun_' + env + '.aws.json')
+        .pipe(plugins.rename({
+            dirname: '',
+            basename: 'Dockerrun.aws',
+            extname: '.json'
+        }))
+        .pipe(gulp.dest('.'));
+});

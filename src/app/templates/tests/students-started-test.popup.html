@@ -3,19 +3,23 @@
         <button aria-label="Close" class="close close-large-icon" data-dismiss="modal" type="button"></button>
         <div class="modal-full-overlay-content">
             <div class="modal-header">
-                <p class="icon clock-alert-icon center"></p>
-                <h4 class="attention center" id="noAlternativeTestModal">Students Have Started Tests In This Testing Session </h4>
+                <p class="icon center" [class.clock-alert-icon]="pageName==='scheduletest'" [class.red-triangle-alert-large]="pageName==='addstudents'"></p>
+                <h4 class="attention center" id="studentsStartedTestHeader">{{mainHeader}} </h4>
             </div>
             <div class="modal-body">
-               
+
                 <div class="thin-section">
                     <p class="text-larger-teal">
-                         <b>The following students have already started tests in this testing session:</b> 
+                        <b>{{mainContent}}</b>
+                    </p>
+
+                    <p *ngIf="pageName==='addstudents'">
+                        {{subContent}}
                     </p>
                     <table class="table-no-row-borders">
-                        <tbody class="text-larger-purple border-top">                           
+                        <tbody class="text-larger-purple border-top">
                             <tr *ngFor="let student of students">
-                                <td><b>{{student.StudentFirstName}}, {{student.StudentFirstName}}</b></td>
+                                <td><b>{{student.StudentLastName}}, {{student.StudentFirstName}}</b></td>
                                 <td>{{student.StudentTestName}}</td>
                             </tr>
                         </tbody>
@@ -25,8 +29,13 @@
 
             </div>
             <!--end modal body Student Pay-->
-            <div class="modal-footer thin-section">
+            <div class="modal-footer thin-section" *ngIf="pageName==='scheduletest'">
                 <button type="button" id="studentsStartedTestButton" class="button" (click)="OK($event);">OK</button>
+            </div>
+
+            <div class="modal-footer" *ngIf="pageName==='addstudents'">
+                <a href="javascript:void(0)" (click)="back($event);" class="anchor-button anchor-button-left center">{{cancelButtonText}}</a>
+                <button class="button" (click)="OK($event);">{{okButtonText}}</button>
             </div>
         </div>
     </div>

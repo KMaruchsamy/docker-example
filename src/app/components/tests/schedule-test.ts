@@ -842,6 +842,11 @@ export class ScheduleTest implements OnInit, OnDestroy {
             this.testScheduleModel.scheduleStartTime = moment(this.startTime).toDate();
             this.testScheduleModel.scheduleEndTime = moment(this.endTime).toDate();
             if (this.modifyInProgress) {
+                let closeSession: boolean = false;
+                if (moment(this.testScheduleModel.scheduleEndTime).isSame(new Date(), 'minutes')) {
+                    $('#endModifyInProgressSession').modal('show');
+                    return;
+                }
                 this.saveModifyInProgress();
             }
             else {
@@ -861,7 +866,8 @@ export class ScheduleTest implements OnInit, OnDestroy {
         return url.replace('§scheduleId', (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0).toString());
     }
 
-    saveModifyInProgress() {
+    saveModifyInProgress(closeSession: boolean = false) {
+
         let input = {
             TestingSessionWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
             TestingSessionWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format()
@@ -899,40 +905,70 @@ export class ScheduleTest implements OnInit, OnDestroy {
         scheduleTestObservable
             .map(response => response.json())
             .subscribe(json => {
-                debugger;
                 __this.valid = true;
                 // clearTimeout(loaderTimer);
                 // $('#loader').modal('hide');
                 let result = json;
                 if (result.TestingSessionId && result.TestingSessionId > 0
                     && result.ErrorCode === 0
-                    && !result.TimingExceptions
-                    && !result.TestAlreadyStartedExceptions) {
+                    && (!result.TimingExceptions || result.TimingExceptions.length === 0)
+                    && (!result.TestAlreadyStartedExceptions || result.TestAlreadyStartedExceptions.length === 0)
+                    && (!result.windowExceptions || result.windowExceptions.length === 0)
+                    && (!result.alreadyStartedExceptions || result.alreadyStartedExceptions.length === 0)) {
                     // __this.testScheduleModel.scheduleId = result.TestingSessionId;
                     // __this.sStorage.setItem('testschedule', JSON.stringify(__this.testScheduleModel));
                     __this.overrideRouteCheck = true;
                     __this.router.navigate(['/tests']);
                 }
-                else {
-                    __this.handleExceptions(result, __this);
+                else if (closeSession) {
+                    __this.overrideRouteCheck = true;
+                    __this.router.navigate(['/tests']);
                 }
-            }, error => console.log(error));
+                else
+                    __this.handleExceptions(result, __this);
+
+            }, error => {
+                let json = error.json();
+                if (!closeSession
+                    && ((json.TimingExceptions && json.TimingExceptions.length > 0)
+                        || (json.TestAlreadyStartedExceptions && json.TestAlreadyStartedExceptions.length > 0)
+                        || (json.windowExceptions && json.windowExceptions.length > 0)
+                        || (json.alreadyStartedExceptions && json.alreadyStartedExceptions.length > 0)))
+                    __this.handleExceptions(json, __this);
+                else
+                    console.log(error);
+            });
     }
 
     handleExceptions(result: any, __this: any) {
-        if (result.TimingExceptions && result.TimingExceptions.length > 0) {
-            let studentPayEnabledInstitution: boolean;
-            studentPayEnabledInstitution = __this.auth.isStudentPayEnabledInstitution(__this.testScheduleModel.institutionId);
-            if (studentPayEnabledInstitution) {
-                __this.studentPayExceptions = _.filter(result.TimingExceptions, { 'IgnoreExceptionIfStudentPay': true });
-                __this.timingExceptions = _.filter(result.TimingExceptions, { 'IgnoreExceptionIfStudentPay': false });
+        __this.studentPayExceptions = [];
+        __this.timingExceptions = [];
+        __this.testStartedExceptions = [];
+        console.log(result);
+        if ((result.TimingExceptions && result.TimingExceptions.length > 0) || (result.windowExceptions && result.windowExceptions.length > 0)) {
+            if (result.TimingExceptions && result.TimingExceptions.length > 0) {
+                __this.studentPayExceptions = result.TimingExceptions;
             }
-            else
-                __this.timingExceptions = result.TimingExceptions
+            else if (result.windowExceptions && result.windowExceptions.length > 0) {
+                let studentPayEnabledInstitution: boolean;
+                studentPayEnabledInstitution = __this.auth.isStudentPayEnabledInstitution(__this.testScheduleModel.institutionId);
+                if (studentPayEnabledInstitution) {
+                    __this.studentPayExceptions = _.filter(result.windowExceptions, { 'IgnoreExceptionIfStudentPay': true });
+                    __this.timingExceptions = _.filter(result.windowExceptions, { 'IgnoreExceptionIfStudentPay': false });
+                }
+                else
+                    __this.timingExceptions = result.windowExceptions
+            }
         }
-        if (result.TestAlreadyStartedExceptions && result.TestAlreadyStartedExceptions.length > 0) {
-            __this.testStartedExceptions = result.TestAlreadyStartedExceptions;
-            $('#studentsStartedTest').modal('show');
+        if ((result.TestAlreadyStartedExceptions && result.TestAlreadyStartedExceptions.length > 0) || (result.alreadyStartedExceptions && result.alreadyStartedExceptions.length > 0)) {
+            if (result.TestAlreadyStartedExceptions && result.TestAlreadyStartedExceptions.length > 0) {
+                __this.testStartedExceptions = result.TestAlreadyStartedExceptions;
+                $('#studentsStartedTest').modal('show');
+            }
+            else if (result.alreadyStartedExceptions && result.alreadyStartedExceptions.length > 0) {
+                __this.testStartedExceptions = result.alreadyStartedExceptions;
+                $('#studentsStartedTest').modal('show');
+            }
         }
         else if (__this.timingExceptions && __this.timingExceptions.length > 0)
             $('#modalTimingException').modal('show');
@@ -1082,7 +1118,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
     }
 
     studentsStartedTestPopupOK(e): void {
-        console.log(e);
         $('#studentsStartedTest').modal('hide');
         if (this.timingExceptions && this.timingExceptions.length > 0)
             $('#modalTimingException').modal('show');
@@ -1110,4 +1145,13 @@ export class ScheduleTest implements OnInit, OnDestroy {
         this.router.navigate(['/tests']);
     }
 
+
+    endSession(): void {
+        $('#endModifyInProgressSession').modal('hide');
+        this.saveModifyInProgress(true);
+    }
+
+    cancelEndSession(e): void {
+        $('#endModifyInProgressSession').modal('hide');
+    }
 }
