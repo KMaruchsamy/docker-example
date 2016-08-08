@@ -1399,7 +1399,7 @@ export class AddStudents implements OnInit, OnDestroy {
         $('#alertPopup').modal('hide');
         this.overrideRouteCheck = true;
         if (this.modify)
-            this.router.navigate(['/tests', 'modify', 'review-test']);
+            this.router.navigate(['/tests', 'modify', 'schedule-test']);
         else
             this.router.navigate(['/tests/schedule-test']);
     }

@@ -109,10 +109,10 @@ export class ManageTests implements OnInit, OnDestroy {
                     let unsortedCompletedTests = _.filter(__this.tests, function (test) {
                         return (test.Status == __this.testStatus.Completed);
                     });
-                    __this.completedTests = _.sortBy(unsortedCompletedTests, function (_test) {
+                    __this.completedTests = _.orderBy(unsortedCompletedTests, function (_test) {
                         _test.nextDay = moment(_test.TestingWindowStart).isBefore(_test.TestingWindowEnd, 'day');
                         return moment(_test.TestingWindowStart).toDate()
-                    });
+                    },['desc']);
 
                     let unsortedScheduledTests = _.filter(__this.tests, function (test) {
                         test.nextDay = moment(test.TestingWindowStart).isBefore(test.TestingWindowEnd, 'day');
