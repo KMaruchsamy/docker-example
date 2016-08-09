@@ -18,6 +18,7 @@ import {SortPipe} from '../../pipes/sort.pipe';
 
 export class RetesterNoAlternatePopup implements OnInit {
     @Input() studentRepeaters: any;
+    @Input() modifyInProgress: boolean = false;
     @Output() retesterNoAlternatePopupOK = new EventEmitter();
     @Output() retesterNoAlternatePopupCancel = new EventEmitter();
     sStorage: any;

@@ -16,9 +16,9 @@
                     <p *ngIf="pageName==='addstudents'">
                         {{subContent}}
                     </p>
-                    <table class="table-no-row-borders">
-                        <tbody class="text-larger-purple border-top">
-                            <tr *ngFor="let student of students">
+                    <table [class.table-no-row-borders]="pageName==='scheduletest'">
+                        <tbody class="text-larger-purple" [class.border-top]="pageName==='scheduletest'">
+                            <tr *ngFor="let student of students| sort:'asc':'StudentLastName'">
                                 <td><b>{{student.StudentLastName}}, {{student.StudentFirstName}}</b></td>
                                 <td>{{student.StudentTestName}}</td>
                             </tr>
@@ -34,8 +34,8 @@
             </div>
 
             <div class="modal-footer" *ngIf="pageName==='addstudents'">
-                <a href="javascript:void(0)" (click)="back($event);" class="anchor-button anchor-button-left center">{{cancelButtonText}}</a>
-                <button class="button" (click)="OK($event);">{{okButtonText}}</button>
+                <button type="button" class="anchor-button anchor-button-left prototype-dismiss1" data-dismiss="modal" (click)="back($event);">Go back to Add/Remove Students</button>
+                <a href="javascript:void();" class="button" id="continueToConfirmation" (click)="OK($event);">Continue</a>
             </div>
         </div>
     </div>
