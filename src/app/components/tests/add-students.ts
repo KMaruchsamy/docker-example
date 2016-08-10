@@ -1058,7 +1058,6 @@ export class AddStudents implements OnInit, OnDestroy {
 
     }
     HasWindowException(_studentWindowException: any): void {
-        debugger;
         if (_studentWindowException.length != 0) {
             if (this.loader)
                 this.loader.destroy();
@@ -1096,7 +1095,6 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     HasStudentPayException(): void {
-        debugger;
         if (!this.modifyInProgress) this.markSelfPayStudents();
         if (this._selfPayStudent.length > 0) {
             if (this.loader)
@@ -1112,7 +1110,7 @@ export class AddStudents implements OnInit, OnDestroy {
                     retester.instance.selfPayStudentExceptionPopupClose.subscribe((e) => {
                         $('#selfPayStudentModal').modal('hide');
                         if (this.modifyInProgress) {
-                            this.moveToConfirmationModifyInProgress();
+                            this.updateModifyInProgress(true);
                         }
                         else {
                             if (this.modify)
@@ -1126,7 +1124,7 @@ export class AddStudents implements OnInit, OnDestroy {
         }
         else {
             if (this.modifyInProgress) {
-                this.moveToConfirmationModifyInProgress();
+                this.updateModifyInProgress(true);
             }
             else {
                 if (this.modify)
@@ -1171,7 +1169,6 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     resolveExceptions(objException: any, __this: any): boolean {
-        debugger;
         let repeaterExceptions: any;
         repeaterExceptions = objException;
         if (objException) {
@@ -1850,11 +1847,13 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     Verify_SaveTestClick(): void {
-        console.log('TestScheduleModel with previous Selected student' + this.testScheduleModel);
+        this.sStorage.setItem('prevtestschedule', JSON.stringify(this.testScheduleModel));
+        console.log('TestScheduleModel with previous students' + this.testScheduleModel);
+
         this.updateModifyInProgress();
     }
 
-    updateModifyInProgress(): void {
+    updateModifyInProgress(closeSession: boolean = false): void {
 
         let input = {
             TestingSessionId: (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0),
@@ -1866,35 +1865,37 @@ export class AddStudents implements OnInit, OnDestroy {
             TestingWindowStart: this.testScheduleModel.scheduleStartTime,
             TestingWindowEnd: this.testScheduleModel.scheduleEndTime,
             FacultyMemberId: this.testScheduleModel.facultyMemberId,
-            Students: this.selectedStudents,
+            Students: (closeSession ? this.testScheduleModel.selectedStudents : this.selectedStudents),
             LastCohortSelectedId: this.testScheduleModel.lastselectedcohortId,
             LastSubjectSelectedId: this.testScheduleModel.subjectId,
             PageSavedOn: ''//TODO need to add the logic for this one ..
         };
-        this.sStorage.setItem('prevtestschedule', JSON.stringify(this.testScheduleModel));
+
         let __this = this;
         let updateModifyInProgressTestURL = this.resolveUpdateModifyInProgressTestURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateModifyInProgressStudents}`);
         let updateModifyInProgressTestObservable: Observable<Response> = this.testService.modifyInProgressScheduleTests(updateModifyInProgressTestURL, JSON.stringify(input));
         this.updateModifyInProgressTestSubscription = updateModifyInProgressTestObservable
             .map(response => response.json())
             .subscribe(json => {
-                
-                if (json.ErrorCode === 0 && json.TestingSessionId > 0) {
-                    if ((json.alreadyStartedExceptions === null && json.windowExceptions === null) || (json.alreadyStartedExceptions.length === 0 && json.windowExceptions.length === 0) ) {
-                        __this.moveToConfirmationModifyInProgress();
+                if (!closeSession) {
+                    if (json.ErrorCode === 0 && json.TestingSessionId > 0) {
+                        if ((json.alreadyStartedExceptions === null && json.windowExceptions === null) || (json.alreadyStartedExceptions.length === 0 && json.windowExceptions.length === 0)) {
+                            __this.moveToConfirmationModifyInProgress();
+                        }
+                        else {
+                            __this.checkForStartedTestException(json);
+                        }
                     }
                     else {
-                        __this.checkForStartedTestException(json, false);
+                        __this.checkForStartedTestException(json);
                     }
                 }
                 else {
-                    alert('Unable to Save because of having either Timing or StudentAlreadyStartedTest exception.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
-                    __this.checkForStartedTestException(json, false);
+                    __this.moveToConfirmationModifyInProgress();
                 }
             },
             error => {
-                alert('Unable to Save because of having some error/exception.This will take care once Dev team started working on Modify-in-progress exception stories.. ');
-                __this.checkForStartedTestException(JSON.parse(error._body), true);
+                __this.checkForStartedTestException(JSON.parse(error._body));
             });
     }
     resolveUpdateModifyInProgressTestURL(url: string): string {
@@ -1902,28 +1903,25 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     moveToConfirmationModifyInProgress(): void {
-        debugger;        
         this.testScheduleModel.selectedStudents = this.selectedStudents;
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         this.router.navigate(['/tests/confirmation-modify-in-progress']);
     }
-    checkForStartedTestException(_json: any, hasToCheckOtherExceptions: boolean): void {
+    checkForStartedTestException(_json: any): void {
         if (_json.alreadyStartedExceptions) {
-            if (_json.alreadyStartedExceptions.length>0) {
-               this.HasStudentStartedTestException(_json, hasToCheckOtherExceptions);
+            if (_json.alreadyStartedExceptions.length > 0) {
+                this.HasStudentStartedTestException(_json);
             }
             else {
-                if (hasToCheckOtherExceptions)
-                    this.checkWindowExceptions(_json);
+                this.checkWindowExceptions(_json);
             }
         }
         else {
-            if (hasToCheckOtherExceptions)
-                this.checkWindowExceptions(_json);
+            this.checkWindowExceptions(_json);
         }
     }
     checkWindowExceptions(_json: any): void {
-        let timingExceptions: any;
+        let timingExceptions: any ;
 
         if (_json.windowExceptions && _json.windowExceptions.length > 0) {
             let studentPayEnabledInstitution: boolean;
@@ -1937,19 +1935,20 @@ export class AddStudents implements OnInit, OnDestroy {
                 timingExceptions = _json.windowExceptions;
         }
 
-        if (timingExceptions) {
-            if (timingExceptions.length > 0) {
-                alert('Timing exception');
-                this.HasWindowException(timingExceptions);
+        if (timingExceptions && timingExceptions.length > 0) {
+            this.HasWindowException(timingExceptions);
+           
+        }
+        else if (_json.repeaterExceptions){
+            if ((JSON.stringify(_json.repeaterExceptions)).length > 0) 
+                this.checkTestExceptions(_json);
+            else if (this._selfPayStudent.length > 0) {
+                this.HasStudentPayException();
             }
             else
-                this.checkTestExceptions(_json);
+                this.moveToConfirmationModifyInProgress();
         }
-        else if ((JSON.stringify(_json.repeaterExceptions)).length > 0) {
-            this.checkTestExceptions(_json);
-        }
-        else if (this._selfPayStudent.length>0) {
-            alert('Having some self-pay exception');
+        else if (this._selfPayStudent.length > 0) {
             this.HasStudentPayException();
         }
         else
@@ -1957,7 +1956,8 @@ export class AddStudents implements OnInit, OnDestroy {
 
     }
     checkTestExceptions(_json: any): void {
-        alert('Having some Test exception');
+        this.testScheduleModel.selectedStudents = this.selectedStudents;
+        this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         this.resolveExceptions(_json.repeaterExceptions, this);
     }
 
@@ -1979,7 +1979,6 @@ export class AddStudents implements OnInit, OnDestroy {
             .subscribe((json) => {
                 _this.refreshStudentsWhoStarted = json;
                 if (_this.refreshStudentsWhoStarted.length > 0) {
-                    //   _this.RefreshTestScheduleModalInSession();
                     let studentsInSession = _.map(_this.selectedStudents, 'StudentId');
                     let studentToRemove = _.difference(studentsInSession, _this.refreshStudentsWhoStarted);
                     _.each(studentToRemove, function (studentid) {
@@ -2005,28 +2004,6 @@ export class AddStudents implements OnInit, OnDestroy {
         return url.replace('§testingSessionId', this.testScheduleModel.scheduleId.toString()).replace('§filter', this.filterStatus);
     }
 
-    //RefreshTestScheduleModalInSession(): void {
-    //    let __this = this;
-    //    let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`);
-    //    let scheduleObservable: Observable<Response> = this.testService.getScheduleById(scheduleURL);
-    //    this.scheduleSubscription = scheduleObservable
-    //        .map(response => response.json())
-    //        .subscribe((json) => {
-    //            if (json) {
-    //                let _schedule: TestScheduleModel = __this.testService.mapTestScheduleObjects(json);
-    //                if (_schedule) {
-    //                    __this.sStorage.setItem('testschedule', JSON.stringify(_schedule));
-    //                }
-    //            }
-    //        },
-    //        error => console.log(error));
-    //}
-
-
-    //resolveScheduleURL(url: string): string {
-    //    return url.replace('§scheduleId', this.testScheduleModel.scheduleId.toString());
-    //}
-
     getRetesterClass(student: SelectedStudentModel): string {
         if (this.modifyInProgress) {
             return this.getClassName(this.getRetester(student));
@@ -2050,12 +2027,12 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     confirmCancelChanges(e): void {
-        $('#cancelChangesPopup').modal('show');
+        if (this.modifyInProgress)
+            $('#cancelModifyInProgress').modal('show');
         e.preventDefault();
     }
 
-    HasStudentStartedTestException(studentExceptions: any, hasToCheckOtherExceptions: boolean): void {
-        debugger;
+    HasStudentStartedTestException(studentExceptions: any): void {
         let __this = this;
         let studentRemovedFromSession: any[] = [];
         let TestAlreadyStartedExceptions: any = studentExceptions.alreadyStartedExceptions;
@@ -2066,7 +2043,7 @@ export class AddStudents implements OnInit, OnDestroy {
                 studentRemovedFromSession.push(student);
         });
 
-       
+
         if (studentRemovedFromSession.length > 0) {
             _.forEach(studentRemovedFromSession, (student, key) => {
                 __this.selectedStudents.push(_.find(this.testScheduleModel.selectedStudents, { 'StudentId': student.StudentId }));
@@ -2086,7 +2063,7 @@ export class AddStudents implements OnInit, OnDestroy {
                     hasStartedTest.instance.pageName = "addstudents";
                     hasStartedTest.instance.onOK.subscribe((e) => {
                         $('#studentsStartedTest').modal('hide');
-                        this.ProceedToNextExceptionCheck(studentExceptions, hasToCheckOtherExceptions);
+                        this.checkWindowExceptions(studentExceptions);
                     });
                     hasStartedTest.instance.onBack.subscribe((e) => {
                         $('#studentsStartedTest').modal('hide');
@@ -2095,16 +2072,9 @@ export class AddStudents implements OnInit, OnDestroy {
                 });
         }
         else {
-            this.ProceedToNextExceptionCheck(studentExceptions, hasToCheckOtherExceptions);
+            this.checkWindowExceptions(studentExceptions);
         }
     }
 
-    ProceedToNextExceptionCheck(result, hasToCheckOtherExceptions): void {
-        if (hasToCheckOtherExceptions) {
-            this.checkWindowExceptions(result);
-        }
-        else
-            this.moveToConfirmationModifyInProgress();
-    }
     //........ Modify In Progress changes End........
 }
