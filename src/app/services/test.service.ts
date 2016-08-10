@@ -26,7 +26,8 @@ export class TestService {
             'Authorization': self.auth.authheader
         });
         let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
+            headers: headers,
+            body:''
         });
         return requestOptions;
     }
@@ -219,7 +220,8 @@ export class TestService {
     }
 
 
-    getAllScheduleTests(url: string) :Observable<Response>{
+    getAllScheduleTests(url: string): Observable<Response>{
+        debugger;
         return this.http.get(url, this.getRequestOptions());
     }
 
