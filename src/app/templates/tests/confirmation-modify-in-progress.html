@@ -3,7 +3,7 @@
     <div class="section">
         <div class="container-medium-width center">
             <i class="icon checkmark-green-circle-icon"></i>
-            <h2 class="margin-1em-top-bottom center">Your changes to the test in progress have been made.</h2>
+            <h2 class="margin-1em-top-bottom center">{{ isAnyChange ? 'Your changes to the test in progress have been made.' : 'No changes were made to this testing session.'}}</h2>
         </div>
         <div class="container-narrow">
             <p class="text-larger-teal"><b>Test In Progress: {{testName}}</b></p>

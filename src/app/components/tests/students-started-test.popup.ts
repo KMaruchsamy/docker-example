@@ -11,11 +11,13 @@ import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {links} from '../../constants/config';
 import {TestScheduleModel} from '../../models/testSchedule.model';
+import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({
     selector: 'students-started-test-popup',
     templateUrl: 'templates/tests/students-started-test.popup.html',
-    directives: [NgFor, NgIf]
+    directives: [NgFor, NgIf],
+    pipes: [SortPipe]
 })
 
 export class StudentsStartedTest implements OnInit {

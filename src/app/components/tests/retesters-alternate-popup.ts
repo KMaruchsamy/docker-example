@@ -20,6 +20,7 @@ export class RetesterAlternatePopup implements OnDestroy {
     @Input() testScheduledSudents: Object[];
     @Input() testTakenStudents: Object[];
     @Input() testSchedule: TestScheduleModel;
+    @Input() modifyInProgress: boolean = false;
     @Output() retesterAlternatePopupOK = new EventEmitter();
     @Output() retesterAlternatePopupCancel = new EventEmitter();
     changes: Object[] = [];
@@ -33,6 +34,7 @@ export class RetesterAlternatePopup implements OnDestroy {
     chkTestSchedule: boolean = false;
     chkRdbTestTaken: boolean = true;
     chkRdbTestSchedule: boolean = true;
+    
     constructor(public common: Common) {
 
     }

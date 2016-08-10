@@ -26,6 +26,7 @@ export class ConfirmationModifyInProgress implements OnInit, OnDestroy {
     testName: string = "";
     deactivateSubscription: Subscription;
     destinationRoute: string;
+    isAnyChange: boolean = false;
 
     constructor(private activatedRoute: ActivatedRoute, public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public titleService: Title) {
 
@@ -65,5 +66,7 @@ export class ConfirmationModifyInProgress implements OnInit, OnDestroy {
         let _newStudentList: SelectedStudentModel[] = _testScheduleModal.selectedStudents;
         this.removedStudents = _.differenceWith(_prevStudentList, _newStudentList, _.isEqual);
         this.studentsAdded = _.differenceWith(_newStudentList, _prevStudentList, _.isEqual);
+        if (this.removedStudents.length > 0 || this.studentsAdded.length > 0)
+            this.isAnyChange = true;
     }
 }
