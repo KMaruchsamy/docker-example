@@ -52,3 +52,13 @@
     </form>
 
 </main>
+
+<terms-of-use [showTerms]="showTerms"
+              (buttonEvent)="confirm()"
+              (cancelEvent)="onCancel()"
+              [showX]="false"
+              [showCancel]="true"
+              [showCheckbox]="true"
+              [buttonText]="'Confirm'" 
+              [termsAccepted]="false"
+></terms-of-use>  

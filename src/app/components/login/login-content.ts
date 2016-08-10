@@ -1,10 +1,12 @@
 import {Component, NgZone, OnDestroy} from '@angular/core';
 import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {NgIf} from '@angular/common';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import * as _ from 'lodash';
 import {links} from '../../constants/config';
 import {general, login} from '../../constants/error-messages';
+import {TermsOfUse} from '../terms-of-use/terms-of-use';
 import {Angulartics2On} from 'angulartics2';
 import {Response} from '@angular/http';
 import {Observable, Subscription} from 'rxjs/Rx';
@@ -13,7 +15,7 @@ import {Observable, Subscription} from 'rxjs/Rx';
     selector: 'login-content',
     providers: [Auth, Common],
     templateUrl: 'templates/login/login-content.html',
-    directives: [ROUTER_DIRECTIVES, Angulartics2On]
+    directives: [ROUTER_DIRECTIVES, Angulartics2On, TermsOfUse]
 })
 
 export class LoginContent implements OnDestroy {
@@ -31,6 +33,8 @@ export class LoginContent implements OnDestroy {
     hdURL: any;
     hdExceptionURL: any;
     loginSubscription: Subscription;
+    showTerms: boolean = false;
+    termSubscription: Subscription;
     constructor(private zone: NgZone, public router: Router, public auth: Auth, public common: Common) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
@@ -43,6 +47,8 @@ export class LoginContent implements OnDestroy {
     ngOnDestroy(): void {
         if (this.loginSubscription)
             this.loginSubscription.unsubscribe();
+        if(this.termSubscription) 
+            this.termSubscription.unsubscribe();
     }
 
     onSignIn(txtUserName, txtPassword, rdFaculty, rdStudent, errorContainer, btnSignIn, event) {
@@ -76,7 +82,13 @@ export class LoginContent implements OnDestroy {
                         self.sStorage.setItem('institutions', JSON.stringify(json.Institutions));
                         self.sStorage.setItem('securitylevel', json.SecurityLevel);
                         self.sStorage.setItem('username', json.UserName);
+                        self.sStorage.setItem('isenrollmentagreementsigned', json.IsEnrollmentAgreementSigned);
                         self.auth.refresh();
+                        if (!json.IsEnrollmentAgreementSigned) {
+                            self.showTerms = true;
+                            return;
+                        }
+
                         if (userType === 'student') {
                             self.prepareRedirectToStudentSite('Login');
                         }
@@ -235,8 +247,28 @@ export class LoginContent implements OnDestroy {
         }
 
     }
+
+  saveAcceptedTerms() {
+      let apiURL = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.terms}?email=${this.auth.useremail}&isChecked=true`;
+      let termsObservable: Observable<Response> = this.auth.saveAcceptedTerms(apiURL);
+      
+      this.termSubscription = termsObservable.subscribe(
+              respose => {
+                 if (respose.ok) {
+                    this.router.navigate(['/home']);
+                 }
+
+      }, error=> console.log(error))
+  }
+
+    confirm(e) {
+      this.saveAcceptedTerms();
+    }
+
+    onCancel(e) {
+        this.showTerms = false;
+        this.router.navigate(['/logout']);
+    }
+
+
 }
-
-
-
-
