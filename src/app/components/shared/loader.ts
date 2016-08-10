@@ -7,8 +7,7 @@ import {Auth} from '../../services/auth';
     selector: 'loader',
     providers:[Auth],
     templateUrl: 'templates/shared/loader.html',
-    directives: [ROUTER_DIRECTIVES],
-    inputs:['loaderMessage','greetingMessage']
+    directives: [ROUTER_DIRECTIVES]
 })
 
 export class Loader implements OnInit{

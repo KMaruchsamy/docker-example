@@ -11,7 +11,6 @@ import {TestScheduleModel} from '../../models/testSchedule.model';
     templateUrl: 'templates/tests/time-exception-popup.html',
     directives: [ROUTER_DIRECTIVES],
     providers: [Common],
-    inputs: ['studentWindowException','canRemoveStudents'],
     pipes: [ParseDatePipe,SortPipe]
 })
 

@@ -52,7 +52,7 @@ export class LoginContent implements OnDestroy {
     }
 
     onSignIn(txtUserName, txtPassword, rdFaculty, rdStudent, errorContainer, btnSignIn, event) {
-        // event.preventDefault();
+        event.preventDefault();
         let self = this;
         let useremail = '';
         let password = '';
