@@ -178,7 +178,10 @@
                         document:
                         </p>
                         <a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/technical_requirements.pdf" target="_blank" class="icon pdf-download-icon block">Technical Requirements (as of June 2015)</a>
+                        <button class="unstyled-button anchor-button margin-1em-top" (click)="showModal()">Faculty Terms of Use</button>
                     </div>
+
+
 
                     <div class="text-section">
                         <h3 class="h5 teal">Roster and Student Access</h3>
@@ -1633,3 +1636,14 @@
     </div>
 
 </main>
+
+ <terms-of-use [showTerms]="showTerms"
+               [showX]="true"
+               (closeEvent)="closeModal()"
+               (cancelEvent)="closeModal()"
+               [showCheckbox]="false"
+               [buttonText] = "'Close'" 
+               (buttonEvent)="closeModal()"
+               [showCancel]="false"
+               [termsAccepted]="true">
+</terms-of-use> 
