@@ -9,7 +9,7 @@ import {Observable, Subscription} from 'rxjs/Rx';
 @Component({
     selector: 'test-header',
     templateUrl: 'templates/tests/test-header.html',
-    inputs: ['testSchedule', 'scheduleStep', 'hideCancelButton'],
+    inputs: ['scheduleStep'],
     directives: [ROUTER_DIRECTIVES, NgIf, ConfirmationPopup],
     pipes: [ParseDatePipe]
 })

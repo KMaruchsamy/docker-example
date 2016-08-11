@@ -2,6 +2,7 @@
 import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {Http, Response} from '@angular/http';
 import {Observable, Subscription} from 'rxjs/Rx';
+import {NgIf} from '@angular/common';
 import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
@@ -9,12 +10,13 @@ import {PasswordHeader} from '../password/password-header';
 import {Validations} from '../../services/validations';
 import {links, errorcodes} from '../../constants/config';
 import {temp_password, general} from '../../constants/error-messages';
+import {TermsOfUse} from '../terms-of-use/terms-of-use';
 
 @Component({
     selector: 'set-password-first-time',
     providers: [Auth, Common, Validations],
     templateUrl: 'templates/password/set-password-first-time.html',
-    directives: [PasswordHeader, ROUTER_DIRECTIVES]
+    directives: [PasswordHeader, ROUTER_DIRECTIVES, TermsOfUse]
 })
 
 export class SetPasswordFirstTime implements OnInit, OnDestroy {
@@ -22,6 +24,7 @@ export class SetPasswordFirstTime implements OnInit, OnDestroy {
     sStorage: any;
     temproaryPasswordSubscription: Subscription;
     errorCodes: any;
+    showTerms: boolean = false;
     constructor(public router: Router, public auth: Auth, public common: Common, public validations: Validations, public titleService: Title) {
 
     }
@@ -108,11 +111,21 @@ export class SetPasswordFirstTime implements OnInit, OnDestroy {
         txtnPassword.value = '';
         txtcPassword.value = '';
     }
+    // When this page is used, use redirect function instead of other redirect functions below
+    // redirect() {
+    //     if (!this.auth.isEnrollmentAgreementSigned) {
+    //         this.showTerms = true;
+    //         return;
+    //     } else {
+    //         this.router.navigate(['/home']);
+    //     }
+    // }
 
     RedirectToLogin(event) {
         event.preventDefault();
         this.router.navigate(['/']);
     }
+
     RedirectToHome(event) {
         event.preventDefault();
         this.router.navigate(['/home']);

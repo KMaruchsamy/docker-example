@@ -26,7 +26,8 @@ export class TestService {
             'Authorization': self.auth.authheader
         });
         let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
+            headers: headers,
+            body:''
         });
         return requestOptions;
     }
@@ -219,7 +220,8 @@ export class TestService {
     }
 
 
-    getAllScheduleTests(url: string) :Observable<Response>{
+    getAllScheduleTests(url: string): Observable<Response>{
+        debugger;
         return this.http.get(url, this.getRequestOptions());
     }
 
@@ -398,12 +400,12 @@ export class TestService {
                     if (!this.checkIfTestHasStarted(institutionID, testScheduleModel.savedStartTime, testScheduleModel.savedEndTime, modifyInProgress)) {
                         return false;
                     }
-                    // alert that The testing window you specified has expired and needs to be changed
-                    if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                }    
+                 // alert that The testing window you specified has expired and needs to be changed
+                if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
                         $('#alertPopup').modal('show');
                         return false;
-                    }
-                }      
+                }  
             }
         }
 

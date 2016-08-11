@@ -12,7 +12,6 @@ import {SortPipe} from '../../pipes/sort.pipe';
     templateUrl: 'templates/tests/retesters-noalternate-popup.html',
     directives: [ROUTER_DIRECTIVES, NgIf, NgFor],
     providers: [Common],
-    inputs: ['studentRepeaters'],
     pipes:[SortPipe]    
 })
 

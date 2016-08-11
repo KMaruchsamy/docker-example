@@ -35,6 +35,7 @@ export class LoginContent implements OnDestroy {
     loginSubscription: Subscription;
     showTerms: boolean = false;
     termSubscription: Subscription;
+    userType: string = 'admin';
     constructor(private zone: NgZone, public router: Router, public auth: Auth, public common: Common) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
@@ -47,12 +48,12 @@ export class LoginContent implements OnDestroy {
     ngOnDestroy(): void {
         if (this.loginSubscription)
             this.loginSubscription.unsubscribe();
-        if(this.termSubscription) 
+        if (this.termSubscription)
             this.termSubscription.unsubscribe();
     }
 
     onSignIn(txtUserName, txtPassword, rdFaculty, rdStudent, errorContainer, btnSignIn, event) {
-        // event.preventDefault();
+        event.preventDefault();
         let self = this;
         let useremail = '';
         let password = '';
@@ -60,14 +61,14 @@ export class LoginContent implements OnDestroy {
             useremail = txtUserName.value.toString().trim();
         password = txtPassword.value;
         if (this.validate(useremail, password, errorContainer)) {
-            let userType = '';
             if (rdFaculty.checked)
-                userType = 'admin';
+                this.userType = 'admin';
             else
-                userType = 'student';
+                this.userType = 'student';
+
 
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.authenticationapi;
-            let loginObservable: Observable<Response> = this.auth.login(apiURL, useremail, password, userType);
+            let loginObservable: Observable<Response> = this.auth.login(apiURL, useremail, password, this.userType);
             this.loginSubscription = loginObservable.subscribe(
                 respose => {
                     let json = respose.json();
@@ -89,7 +90,7 @@ export class LoginContent implements OnDestroy {
                             return;
                         }
 
-                        if (userType === 'student') {
+                        if (this.userType === 'student') {
                             self.prepareRedirectToStudentSite('Login');
                         }
                         else {
@@ -125,6 +126,18 @@ export class LoginContent implements OnDestroy {
             txtPassword.value = '';
         }
 
+    }
+
+    directToCorrectPage() {        
+        if (this.userType === 'student') {
+            this.prepareRedirectToStudentSite('Login');
+        } else {
+            if (this.auth.istemppassword) {
+                this.router.navigate(['/set-password-first-time']);
+            } else {
+                this.router.navigate(['/home']);
+            }
+        }
     }
 
     prepareRedirectToStudentSite(returnPage) {
@@ -248,21 +261,24 @@ export class LoginContent implements OnDestroy {
 
     }
 
-  saveAcceptedTerms() {
-      let apiURL = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.terms}?email=${this.auth.useremail}&isChecked=true`;
-      let termsObservable: Observable<Response> = this.auth.saveAcceptedTerms(apiURL);
-      
-      this.termSubscription = termsObservable.subscribe(
-              respose => {
-                 if (respose.ok) {
-                    this.router.navigate(['/home']);
-                 }
+    saveAcceptedTerms() {
+        let apiURL = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.terms}?email=${this.auth.useremail}&isChecked=true`;
+        let termsObservable: Observable<Response> = this.auth.saveAcceptedTerms(apiURL);
 
-      }, error=> console.log(error))
-  }
+        this.termSubscription = termsObservable.subscribe(
+            respose => {
+                if (respose.ok) {
+                    this.showTerms = false;
+                    this.sStorage.setItem('isenrollmentagreementsigned', true);
+                    this.auth.isEnrollmentAgreementSigned = true;
+                    this.directToCorrectPage();
+                }
+
+            }, error => console.log(error))
+    }
 
     confirm(e) {
-      this.saveAcceptedTerms();
+        this.saveAcceptedTerms();
     }
 
     onCancel(e) {
