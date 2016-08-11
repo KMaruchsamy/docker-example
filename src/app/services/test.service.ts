@@ -398,12 +398,12 @@ export class TestService {
                     if (!this.checkIfTestHasStarted(institutionID, testScheduleModel.savedStartTime, testScheduleModel.savedEndTime, modifyInProgress)) {
                         return false;
                     }
-                    // alert that The testing window you specified has expired and needs to be changed
-                    if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                }    
+                 // alert that The testing window you specified has expired and needs to be changed
+                if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
                         $('#alertPopup').modal('show');
                         return false;
-                    }
-                }      
+                }  
             }
         }
 
