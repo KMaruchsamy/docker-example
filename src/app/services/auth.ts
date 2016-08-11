@@ -20,6 +20,7 @@ export class Auth {
   securitylevel: number;
   username: string;
   common: Common;
+  isEnrollmentAgreementSigned: boolean;
   constructor(private http: Http) {
     this.common = new Common();
     this.sStorage = this.common.getStorage();
@@ -35,6 +36,7 @@ export class Auth {
     this.institutions = this.sStorage.getItem('institutions');
     this.securitylevel = this.sStorage.getItem('securitylevel');
     this.username = this.sStorage.getItem('username');
+    this.isEnrollmentAgreementSigned = this.sStorage.getItem('isenrollmentagreementsigned');
   }
 
 
@@ -51,11 +53,12 @@ export class Auth {
     this.institutions = this.sStorage.getItem('institutions');
     this.securitylevel = this.sStorage.getItem('securitylevel');
     this.username = this.sStorage.getItem('username');
+    this.isEnrollmentAgreementSigned = this.sStorage.getItem('isenrollmentagreementsigned');
   }
 
 
   isAuth() {
-    return !!this.token;
+    return (!!this.token && !!this.isEnrollmentAgreementSigned);
   }
 
   getUser() {
@@ -133,4 +136,18 @@ export class Auth {
         });
         return this.http.post(url, body, requestOptions);
   }
+
+    saveAcceptedTerms(url): Observable<Response> {
+      let self = this;
+      let headers: Headers = new Headers({
+          'Accept': 'application/json',
+          'Authorization': this.authheader,
+          'Content-Type': 'application/json'
+      });
+      let requestOptions: RequestOptions = new RequestOptions({
+          headers: headers
+      });
+      return this.http.post(url, {}, requestOptions);
+  }
+  
 }

@@ -8,7 +8,6 @@ import {DropdownMenu} from '../controls/dropdown-menu';
 @Component({
 	selector:'page-header',
     providers:[Auth],
-    inputs:['showCover','ariaDisabled', 'hideDropdown'],
     templateUrl:'templates/shared/page-header.html',
     directives: [ROUTER_DIRECTIVES,DropdownMenu,NgClass,RouterLinkActive]
 })
