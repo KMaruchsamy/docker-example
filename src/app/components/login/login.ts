@@ -16,7 +16,7 @@ import {Auth} from '../../services/auth';
 })
 export class Login implements OnInit {
     constructor(public logger: Logger, public auth: Auth, public router: Router, public titleService: Title) {
-        if (auth.isAuth())
+        if (this.auth.isAuth())
             this.router.navigate(['/home']);
         this.initialize();
         this.reset();
