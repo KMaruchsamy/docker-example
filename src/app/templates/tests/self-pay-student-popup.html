@@ -11,7 +11,7 @@
                 <div class="margin-1em-bottom">
                     <span class="text-larger-teal">
                         <b>
-                          {{isModifyInProgress?'The following student accounts have been deactivated due to non-payment.They will not be able to access their test unless their balance is paid in full.':' The following student accounts have been deactivated due to non-payment. These students will not be able to access their test during the specified testing window unless their balance is paid in full at least two business days prior to test day.'}} 
+                          {{isModifyInProgress?'The following student accounts have been deactivated due to non-payment. They will not be able to access their test unless their balance is paid in full.':' The following student accounts have been deactivated due to non-payment. These students will not be able to access their test during the specified testing window unless their balance is paid in full at least two business days prior to test day.'}} 
                         </b>
                     </span>
                     <span class="text-larger" *ngIf="!isModifyInProgress"> Students should be encouraged to pay their past due balance as soon as possible.</span>
