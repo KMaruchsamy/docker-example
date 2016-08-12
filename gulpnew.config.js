@@ -93,7 +93,7 @@ module.exports = function () {
         builder: {
             normalize: true,
             minify: true,
-            mangle: true,
+            mangle: false,
             runtime: false,
             globalDefs: { DEBUG: false, ENV: 'production' }
         }
