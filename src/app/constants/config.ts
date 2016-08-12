@@ -26,6 +26,7 @@ export const links = {
             resetfacultypasswordafterloginapi: "admin/resetPasswordAfterLogin",
             resetstudentpassword: "admin/sendStudentEmail",
             profilesapi: "profile",
+            terms: "admin/enrollmentAgreement",
             test: {
                 subjects: "scheduling/institutions/§institutionid/subjects?testType=§testtype",
                 tests: "scheduling/institutions/§institutionid/tests?subject=§subject&testType=§testtype&searchString=§searchString", //Added Searchstring parameter.

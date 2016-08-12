@@ -86,6 +86,8 @@ export class AddStudents implements OnInit, OnDestroy {
     modifyInProgress: boolean = false;
     refreshStudentsWhoStarted: number[];
     filterStatus: string = "assignedTestStarted";  // constant to pass into endpoint as a parameter
+    doesWentThroughTestException: boolean = false;
+    previousSelectedStudentList: SelectedStudentModel[] = []; // To Assign previous selected student for Modify In Progress scenario....
 
     constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public selectedStudentModel: SelectedStudentModel, public common: Common,
         public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location, public viewContainerRef: ViewContainerRef, public titleService: Title) {
@@ -266,7 +268,9 @@ export class AddStudents implements OnInit, OnDestroy {
     initialize(): void {
         this.ResetData();
         let savedSchedule = this.testService.getTestSchedule();
+        
         if (savedSchedule) {
+            this.previousSelectedStudentList = savedSchedule.selectedStudents;
             if (this.modify) {
                 let testStatus: number = this.testService.getTestStatusFromTimezone(savedSchedule.institutionId, savedSchedule.savedStartTime, savedSchedule.savedEndTime);
                 if (testStatus === 0)
@@ -1095,7 +1099,7 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     HasStudentPayException(): void {
-        if (!this.modifyInProgress) this.markSelfPayStudents();
+        this.markSelfPayStudents();
         if (this._selfPayStudent.length > 0) {
             if (this.loader)
                 this.loader.destroy();
@@ -1103,7 +1107,7 @@ export class AddStudents implements OnInit, OnDestroy {
                 .then(retester => {
                     this.loader = retester;
                     $('#selfPayStudentModal').modal('show');
-                    if (!this.modifyInProgress) this.markSelfPayStudents();
+                    this.markSelfPayStudents();
                     retester.instance.selfPayStudentException = this._selfPayStudent;
                     retester.instance.testSchedule = this.testScheduleModel;
                     retester.instance.isModifyInProgress = this.modifyInProgress ? true : false;
@@ -1805,7 +1809,7 @@ export class AddStudents implements OnInit, OnDestroy {
         let isRemoved: boolean = false;
         let isAdded: boolean = false;
         if (this.selectedStudentCount > 0) {
-            let _selectedStudent = this.testScheduleModel.selectedStudents;
+            let _selectedStudent = this.previousSelectedStudentList; //this.testScheduleModel.selectedStudents;
 
             let newlyAddedStudent = _.difference(this.selectedStudents, _selectedStudent);
 
@@ -1816,7 +1820,7 @@ export class AddStudents implements OnInit, OnDestroy {
                 let isStudentExist = false;
                 let studentExistInSession: SelectedStudentModel[] = [];
                 _.forEach(newlyAddedStudent, function (obj) {
-                    _.forEach(__this.testScheduleModel.selectedStudents, function (o) {
+                    _.forEach(_selectedStudent, function (o) {
                         let _studentExist: SelectedStudentModel;
                         if (o.StudentId === obj.StudentId) {
                             _studentExist = o;
@@ -1854,7 +1858,11 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     updateModifyInProgress(closeSession: boolean = false): void {
-
+        if (this.doesWentThroughTestException) {
+            this.testScheduleModel.selectedStudents = _.filter(this.testScheduleModel.selectedStudents, { 'MarkedToRemove': false });
+        }
+        else
+            this.testScheduleModel.selectedStudents = this.selectedStudents;
         let input = {
             TestingSessionId: (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0),
             SessionName: this.testScheduleModel.scheduleName,
@@ -1895,7 +1903,7 @@ export class AddStudents implements OnInit, OnDestroy {
                 }
             },
             error => {
-                __this.checkForStartedTestException(JSON.parse(error._body));
+                    __this.checkForStartedTestException(JSON.parse(error._body));
             });
     }
     resolveUpdateModifyInProgressTestURL(url: string): string {
@@ -1903,7 +1911,7 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     moveToConfirmationModifyInProgress(): void {
-        this.testScheduleModel.selectedStudents = this.selectedStudents;
+        this.testScheduleModel.selectedStudents = this.doesWentThroughTestException ? this.testScheduleModel.selectedStudents : this.selectedStudents;
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         this.router.navigate(['/tests/confirmation-modify-in-progress']);
     }
@@ -1958,6 +1966,7 @@ export class AddStudents implements OnInit, OnDestroy {
     checkTestExceptions(_json: any): void {
         this.testScheduleModel.selectedStudents = this.selectedStudents;
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
+        this.doesWentThroughTestException = true;
         this.resolveExceptions(_json.repeaterExceptions, this);
     }
 

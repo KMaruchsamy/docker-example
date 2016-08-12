@@ -1,9 +1,11 @@
 ﻿import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {NgIf} from '@angular/common';
 import {Response, RequestOptions} from '@angular/http';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {Title} from '@angular/platform-browser';
 import {Location} from '@angular/common';
+import {TermsOfUse} from '../terms-of-use/terms-of-use';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';
@@ -15,7 +17,7 @@ import {general, reset_password, temp_password, login} from '../../constants/err
     selector: 'reset-password',
     providers: [Auth, Common, Validations],
     templateUrl: 'templates/password/reset-password.html',
-    directives: [PasswordHeader, ROUTER_DIRECTIVES]
+    directives: [PasswordHeader, ROUTER_DIRECTIVES, TermsOfUse]
 })
 
 export class ResetPassword implements OnInit, OnDestroy {
@@ -27,6 +29,8 @@ export class ResetPassword implements OnInit, OnDestroy {
     temporaryPasswordSubscription: Subscription;
     authenticateSubscription: Subscription;
     errorCodes: any;
+    showTerms: boolean = false;
+    termSubscription: Subscription;
     constructor(public router: Router, public auth: Auth, public common: Common, public location: Location, public validations: Validations, public titleService: Title) {
 
     }
@@ -36,6 +40,8 @@ export class ResetPassword implements OnInit, OnDestroy {
             this.temporaryPasswordSubscription.unsubscribe();
         if (this.authenticateSubscription)
             this.authenticateSubscription.unsubscribe();
+        if(this.termSubscription) 
+            this.termSubscription.unsubscribe();
     }
 
     ngOnInit(): void {
@@ -127,9 +133,39 @@ export class ResetPassword implements OnInit, OnDestroy {
         txtcPassword.value = '';
     }
 
-    RedirectToLogin(event) {
+    redirect(event) {
         event.preventDefault();
-        this.router.navigate(['/']);
+        if (!this.auth.isEnrollmentAgreementSigned) {
+            this.showTerms = true;
+            return;
+        } else {
+            this.router.navigate(['/home']);
+        }
+    }
+
+    saveAcceptedTerms() {
+        let apiURL = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.terms}?email=${this.auth.useremail}&isChecked=true`;
+        let termsObservable: Observable<Response> = this.auth.saveAcceptedTerms(apiURL);
+        
+        this.termSubscription = termsObservable.subscribe(
+                respose => {
+                    if (respose.ok) {
+                    this.showTerms = false;
+                    this.sStorage.setItem('isenrollmentagreementsigned', true);
+                    this.auth.isEnrollmentAgreementSigned = true;
+                    this.router.navigate(['/home']);
+                    }
+
+        }, error=> console.log(error))
+    }
+
+    confirm(e) {
+        this.saveAcceptedTerms();
+    }
+
+    onCancel(e) {
+        this.showTerms = false;
+        this.router.navigate(['/logout']);
     }
 
     // route(path, e) {
@@ -216,6 +252,8 @@ export class ResetPassword implements OnInit, OnDestroy {
                     // self.sStorage.setItem('institutions', name);
                     self.sStorage.setItem('institutions', JSON.stringify(json.Institutions));
                     self.sStorage.setItem('securitylevel', json.SecurityLevel);
+                    self.sStorage.setItem('isenrollmentagreementsigned', json.IsEnrollmentAgreementSigned);
+                    self.auth.refresh();
                 }
                 else {
                     self.showError(login.auth_failed, errorContainer);
@@ -224,4 +262,5 @@ export class ResetPassword implements OnInit, OnDestroy {
                 self.showError(general.exception, errorContainer);
             });
     }
+
 }

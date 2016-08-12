@@ -3,9 +3,9 @@ import {Router, ROUTER_DIRECTIVES, CanActivate} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {Auth} from '../../services/auth';
 import {Common} from '../../services/common';
-import {links, constants} from '../../constants/config';
+import {links} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
-import {PageFooter} from '../shared/page-footer';
+import {TermsOfUse} from '../terms-of-use/terms-of-use';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {Utility} from '../../scripts/utility';
 import {Angulartics2On} from 'angulartics2';
@@ -18,11 +18,13 @@ import {Angulartics2On} from 'angulartics2';
     },
 
     providers: [Auth, Utility, Common],
-    directives: [PageHeader, PageFooter, ROUTER_DIRECTIVES, Angulartics2On],
+    directives: [PageHeader, ROUTER_DIRECTIVES, Angulartics2On, TermsOfUse],
     pipes: [ParseDatePipe]
 })
 export class UserGuide implements OnInit {
     activeId: string;
+    showTerms: boolean = false;
+    termsAccepted: boolean = true;
     constructor(public router: Router, public auth: Auth, public common: Common, public titleService: Title) {
     }
 
@@ -31,6 +33,8 @@ export class UserGuide implements OnInit {
         this.titleService.setTitle('Faculty User Guide – Kaplan Nursing');
         $(document).scrollTop(0);
         this.activeId = '#whatsNew';
+        this.termsAccepted = true;
+        console.log(this.termsAccepted);
         }
         else {
             this.redirectToLogin();
@@ -100,6 +104,13 @@ export class UserGuide implements OnInit {
         e.preventDefault();
     }
 
+    showModal() {
+        this.showTerms = true;
+    }
+
+    closeModal(e) {
+        this.showTerms = false;
+    }
+
 }
-   
    

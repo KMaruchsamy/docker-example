@@ -18,6 +18,20 @@ export class TestService {
         this.auth.refresh();
     }
 
+    private getRequestOptionsWithEmptyBody(): RequestOptions {
+        let self = this;
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.auth.authheader
+        });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers,
+            body: ''
+        });
+        return requestOptions;
+    }
+
     private getRequestOptions(): RequestOptions {
         let self = this;
         let headers: Headers = new Headers({
@@ -65,47 +79,32 @@ export class TestService {
     }
 
     getSubjects(url): Observable<Response> {
-        let self = this;
-        let headers: Headers = new Headers({
-            'Accept': 'application/json',
-            'Authorization': self.auth.authheader
-        });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
-        });
-        return this.http.get(url, requestOptions);
+        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
 
     getTests(url): Observable<Response> {
-        let self = this;
-       	let headers: Headers = new Headers({
-            'Accept': 'application/json',
-            'Authorization': self.auth.authheader
-        });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
-        });
-        return this.http.get(url, requestOptions);
+        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
     getOpenIntegratedTests(url): Observable<Response> {
-       let self = this;
+        let self = this;
        	let headers: Headers = new Headers({
             'Accept': 'application/json',
         });
         let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
+            headers: headers,
+            body: ''
         });
         return this.http.get(url, requestOptions);
     }
 
     getActiveCohorts(url): Observable<Response> {
-        return this.http.get(url, this.getRequestOptions());
+        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
     getFaculty(url: string): any {
-       return this.http.get(url, this.getRequestOptions());
+        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
     getFacultySync(url: string): any {
@@ -137,26 +136,35 @@ export class TestService {
 
 
     getRetesters(url: string, input: string): Observable<Response> {
-         return this.http.post(url,input, this.getRequestOptions())
+        return this.http.post(url, input, this.getRequestOptions())
     }
 
 
     scheduleTests(url: string, input: string): Observable<Response> {
-        return this.http.post(url,input, this.getRequestOptions())
+        let self = this;
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.auth.authheader
+        });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        return this.http.post(url, input, requestOptions);
     }
 
     modifyScheduleTests(url: string, input: string): Observable<Response> {
-        return this.http.put(url,input, this.getRequestOptions())
+        return this.http.put(url, input, this.getRequestOptions())
     }
 
 
 
     getScheduleById(url: string): Observable<Response> {
-        return this.http.get(url, this.getRequestOptions());
+        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
     getSearchStudent(url: string): Observable<Response> {
-       return this.http.get(url, this.getRequestOptions());
+        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
     mapTestScheduleObjects(objTestScheduleModel): TestScheduleModel {
@@ -219,12 +227,12 @@ export class TestService {
     }
 
 
-    getAllScheduleTests(url: string) :Observable<Response>{
-        return this.http.get(url, this.getRequestOptions());
+    getAllScheduleTests(url: string): Observable<Response> {
+        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
 
-    renameSession(url: string, input: string): Observable<Response> {      
+    renameSession(url: string, input: string): Observable<Response> {
         return this.http.put(url, input, this.getRequestOptions());
     }
 
@@ -354,10 +362,10 @@ export class TestService {
         let mStartTime = moment(savedStartTime);
         let timeDifference = (mStartTime.diff(institutionCurrentTime, 'seconds'));
 
-         return timeDifference;
+        return timeDifference;
     }
 
-    getTestStartTime(testScheduleModel: TestScheduleModel, institutionId: number): any{
+    getTestStartTime(testScheduleModel: TestScheduleModel, institutionId: number): any {
         let institutionTimezone: string = this.common.getTimezone(institutionId);
         let institutionCurrentTime = moment.tz(new Date(), institutionTimezone);
         let testStartTime = moment(testScheduleModel.scheduleStartTime);
@@ -398,12 +406,12 @@ export class TestService {
                     if (!this.checkIfTestHasStarted(institutionID, testScheduleModel.savedStartTime, testScheduleModel.savedEndTime, modifyInProgress)) {
                         return false;
                     }
-                    // alert that The testing window you specified has expired and needs to be changed
-                    if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
-                        $('#alertPopup').modal('show');
-                        return false;
-                    }
-                }      
+                }
+                // alert that The testing window you specified has expired and needs to be changed
+                if (moment(scheduleEndTime).isBefore(institutionCurrentTime)) {
+                    $('#alertPopup').modal('show');
+                    return false;
+                }
             }
         }
 
@@ -449,45 +457,45 @@ export class TestService {
             return _.some(testScheduleModel.selectedStudents, { 'StudentPay': true });
     }
 
-    updateScheduleDates(url:string, input :string): Observable<Response>{
+    updateScheduleDates(url: string, input: string): Observable<Response> {
         return this.http.put(url, input, this.getRequestOptions());
     }
 
     modifyInProgressScheduleTests(url: string, input: string): Observable<Response> {
         return this.http.put(url, input, this.getRequestOptions())
     }
-    
-    checkIfTestHasStarted(institutionId: number, testStartTime: any, testEndTime: any, modifyInProgress: boolean=false): any {
-        if ((!modifyInProgress) && (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) === 0 )) {
+
+    checkIfTestHasStarted(institutionId: number, testStartTime: any, testEndTime: any, modifyInProgress: boolean = false): any {
+        if ((!modifyInProgress) && (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) === 0)) {
             $('#testStarted').modal('show');
-            return false; 
-        //let user know test session has completely passed and they can no longer make changes (in Modify and Modify in Progress)
-        } else if (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) === -1 ) {
+            return false;
+            //let user know test session has completely passed and they can no longer make changes (in Modify and Modify in Progress)
+        } else if (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) === -1) {
             $('#testPassed').modal('show');
             return false;
-        } else 
-        return true;
+        } else
+            return true;
     }
 
-     showTestStartingWarningModals(modify: boolean, institutionID: number, savedStartTime: any, testEndTime: any): any {
-        if ((modify)&&(this.getTestStatusFromTimezone(institutionID, savedStartTime, testEndTime) === 1)) {
+    showTestStartingWarningModals(modify: boolean, institutionID: number, savedStartTime: any, testEndTime: any): any {
+        if ((modify) && (this.getTestStatusFromTimezone(institutionID, savedStartTime, testEndTime) === 1)) {
             let timeDiff = this.checkIfTestStartingSoon(institutionID, savedStartTime);
             let convertToMinutes = 60;
             let waitTime = 0;
             if (timeDiff >= 10 * convertToMinutes) {
                 waitTime = timeDiff - 10 * convertToMinutes;
                 let waitTimePlus5 = waitTime + 5 * convertToMinutes;
-                setTimeout(()=> {
+                setTimeout(() => {
                     $('#testStartingin10').modal('show');
                 }, waitTime * 1000)
-                setTimeout(()=> {
+                setTimeout(() => {
                     $('#testStartingin10').modal('hide');
                     $('#testStartingin5').modal('show');
                 }, waitTimePlus5 * 1000)
             }
             else if (timeDiff >= 5 * convertToMinutes) {
                 waitTime = timeDiff - 5 * convertToMinutes;
-                setTimeout(()=> {
+                setTimeout(() => {
                     $('#testStartingin5').modal('show');
                 }, waitTime * 1000)
             }

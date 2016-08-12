@@ -6,8 +6,7 @@ import {Common} from '../../services/common';
     selector: 'confirmation-popup',
     providers: [Common],
     templateUrl: 'templates/shared/confirmation.popup.html',
-    directives: [ROUTER_DIRECTIVES],
-    inputs: ['cancelButtonText', 'okButtonText', 'message']
+    directives: [ROUTER_DIRECTIVES]
 })
 
 export class ConfirmationPopup {

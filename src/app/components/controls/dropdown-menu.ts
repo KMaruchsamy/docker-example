@@ -5,7 +5,6 @@ import {Auth} from '../../services/auth';
 
 @Component({
     selector: 'dropdown-menu',
-    inputs: ['ariaDisabled'],
     templateUrl: 'templates/controls/dropdown-menu.html',
     providers:[Auth],
     directives: [ROUTER_DIRECTIVES]
