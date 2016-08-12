@@ -36,9 +36,8 @@ export class Auth {
     this.institutions = this.sStorage.getItem('institutions');
     this.securitylevel = this.sStorage.getItem('securitylevel');
     this.username = this.sStorage.getItem('username');
-    this.isEnrollmentAgreementSigned = this.sStorage.getItem('isenrollmentagreementsigned');
+    this.isEnrollmentAgreementSigned = this.sStorage.getItem('isenrollmentagreementsigned') === 'true';
   }
-
 
   refresh() {
     this.token = this.sStorage.getItem('jwt');
