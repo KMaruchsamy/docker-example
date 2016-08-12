@@ -1099,7 +1099,7 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     HasStudentPayException(): void {
-        if (!this.modifyInProgress) this.markSelfPayStudents();
+        this.markSelfPayStudents();
         if (this._selfPayStudent.length > 0) {
             if (this.loader)
                 this.loader.destroy();
@@ -1107,7 +1107,7 @@ export class AddStudents implements OnInit, OnDestroy {
                 .then(retester => {
                     this.loader = retester;
                     $('#selfPayStudentModal').modal('show');
-                    if (!this.modifyInProgress) this.markSelfPayStudents();
+                    this.markSelfPayStudents();
                     retester.instance.selfPayStudentException = this._selfPayStudent;
                     retester.instance.testSchedule = this.testScheduleModel;
                     retester.instance.isModifyInProgress = this.modifyInProgress ? true : false;
@@ -1861,6 +1861,8 @@ export class AddStudents implements OnInit, OnDestroy {
         if (this.doesWentThroughTestException) {
             this.testScheduleModel.selectedStudents = _.filter(this.testScheduleModel.selectedStudents, { 'MarkedToRemove': false });
         }
+        else
+            this.testScheduleModel.selectedStudents = this.selectedStudents;
         let input = {
             TestingSessionId: (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0),
             SessionName: this.testScheduleModel.scheduleName,
