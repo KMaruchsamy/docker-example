@@ -4,18 +4,17 @@ import {Title} from '@angular/platform-browser';
 import {LoginHeader} from './login-header';
 import {LoginContent} from './login-content';
 import {LoginFooter} from './login-footer';
-import {Logger} from '../../scripts/logger';
 import {Auth} from '../../services/auth';
 
 
 @Component({
     selector: 'login',
-    providers: [Logger, Auth],
+    providers: [ Auth],
     templateUrl: 'templates/login/login.html',
     directives: [LoginHeader, LoginContent, LoginFooter]
 })
 export class Login implements OnInit {
-    constructor(public logger: Logger, public auth: Auth, public router: Router, public titleService: Title) {
+    constructor(public auth: Auth, public router: Router, public titleService: Title) {
         if (this.auth.isAuth())
             this.router.navigate(['/home']);
         this.initialize();
