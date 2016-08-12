@@ -15,7 +15,6 @@ import {UserGuide} from './components/userguide/userguide';
 import {SetPasswordFirstTime} from './components/password/set-password-first-time';
 import {Account} from './components/account/account';
 import {Page} from './scripts/page';
-import {Logger} from './scripts/logger';
 import {ChooseInstitution} from './components/shared/choose-institution';
 import {ProfileDescription} from './components/home/profile-description';
 import {ExceptionHandler} from '@angular/core';
