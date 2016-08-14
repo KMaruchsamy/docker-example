@@ -46,14 +46,14 @@ import {Subscription} from 'rxjs/Rx';
     directives: [ROUTER_DIRECTIVES, RouterOutlet, RouterLink]
 })
 
-export class App implements OnInit, OnDestroy{
+export class App implements OnInit, OnDestroy {
     browserSubscription: Subscription;
     constructor(public router: Router, private applicationRef: ApplicationRef, public angulartics2: Angulartics2, public angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics, public titleService: Title) {
-        this.browserSubscription=this.router.events.subscribe(() => {
-            this.applicationRef.tick();
-            setTimeout(() => {
-                this.applicationRef.tick();
-            }, 100);
+        this.browserSubscription = router.events.subscribe((uri) => {
+            if ((Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0) || false || !!document.documentMode) // IE
+            {
+                applicationRef.zone.run(() => applicationRef.tick());
+            }
         });
     }
     public setTitle(newTitle: string) {
@@ -64,9 +64,9 @@ export class App implements OnInit, OnDestroy{
         this.setTitle('Kaplan Nursing');
     }
 
-    ngOnDestroy(): void{
+    ngOnDestroy(): void {
         if (this.browserSubscription)
-            this.browserSubscription.unsubscribe();    
+            this.browserSubscription.unsubscribe();
     }
 }
 
