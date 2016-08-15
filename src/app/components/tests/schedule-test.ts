@@ -180,10 +180,8 @@ export class ScheduleTest implements OnInit, OnDestroy {
                 this.modifyInProgress = true;
         }
 
-        if (this.testScheduleModel.currentStep < 2)
-            this.testScheduleModel.currentStep = 2;
+        this.testScheduleModel.currentStep = 2;
         this.testScheduleModel.activeStep = 2;
-
     }
 
     initializeControls() {
