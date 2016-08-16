@@ -51,8 +51,8 @@ export class App implements OnInit, OnDestroy {
     browserSubscription: Subscription;
     constructor(public router: Router, private applicationRef: ApplicationRef, public angulartics2: Angulartics2, public angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics, public titleService: Title) {
         this.browserSubscription = router.events.subscribe((uri) => {
-            if (event instanceof NavigationEnd) {
-                ga('send', 'pageview', event.urlAfterRedirects);
+            if (uri instanceof NavigationEnd) {
+                ga('send', 'pageview', uri.urlAfterRedirects);
             }
             if ((Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0) || false || !!document.documentMode) // IE
             {
