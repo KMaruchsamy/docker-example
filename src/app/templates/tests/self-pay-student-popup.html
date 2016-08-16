@@ -1,6 +1,6 @@
 ﻿<div class="modal modal-full-overlay fade" id="selfPayStudentModal" tabindex="-1" role="dialog" aria-labelledby="selfPayStudentWarning">
     <div role="document">
-        <button aria-label="Close" class="close close-large-icon" data-dismiss="modal" type="button"></button>
+        <button aria-label="Close" *ngIf="!isModifyInProgress" class="close close-large-icon" data-dismiss="modal" type="button"></button>
         <div class="modal-full-overlay-content">
             <div class="modal-header">
                 <p class="icon red-triangle-alert-large center"></p>
