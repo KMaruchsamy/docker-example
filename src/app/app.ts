@@ -1,7 +1,7 @@
 import {Component, provide, enableProdMode, ComponentRef, ApplicationRef, OnInit, OnDestroy} from '@angular/core';
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {Title} from '@angular/platform-browser';
-import {Router, RouterOutlet, RouterLink, ROUTER_DIRECTIVES} from '@angular/router';
+import {Router, RouterOutlet, RouterLink, ROUTER_DIRECTIVES, NavigationEnd} from '@angular/router';
 import {HTTP_PROVIDERS, Http} from '@angular/http';
 import {Home} from './components/home/home';
 import {Login} from './components/login/login';
@@ -39,6 +39,7 @@ import {Angulartics2} from 'angulartics2';
 import {Angulartics2GoogleAnalytics} from 'angulartics2/src/providers/angulartics2-google-analytics';
 import {ConfirmationModifyInProgress} from './components/tests/confirmation-modify-in-progress';
 import {Subscription} from 'rxjs/Rx';
+declare let ga: Function;
 @Component({
     selector: 'app',
     template: `<router-outlet></router-outlet>`,
@@ -50,6 +51,9 @@ export class App implements OnInit, OnDestroy {
     browserSubscription: Subscription;
     constructor(public router: Router, private applicationRef: ApplicationRef, public angulartics2: Angulartics2, public angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics, public titleService: Title) {
         this.browserSubscription = router.events.subscribe((uri) => {
+            if (event instanceof NavigationEnd) {
+                ga('send', 'pageview', event.urlAfterRedirects);
+            }
             if ((Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0) || false || !!document.documentMode) // IE
             {
                 applicationRef.zone.run(() => applicationRef.tick());
