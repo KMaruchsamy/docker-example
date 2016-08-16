@@ -180,10 +180,8 @@ export class ScheduleTest implements OnInit, OnDestroy {
                 this.modifyInProgress = true;
         }
 
-        if (this.testScheduleModel.currentStep < 2)
-            this.testScheduleModel.currentStep = 2;
+        this.testScheduleModel.currentStep = 2;
         this.testScheduleModel.activeStep = 2;
-
     }
 
     initializeControls() {
@@ -1045,7 +1043,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
 
     validateDates(): boolean {
         if (this.testScheduleModel) {
-
             let institutionTimezone: string = this.common.getTimezone(this.testScheduleModel.institutionId);
             let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
 
@@ -1088,13 +1085,13 @@ export class ScheduleTest implements OnInit, OnDestroy {
                             moment(this.testScheduleModel.savedEndTime).minute(),
                             moment(this.testScheduleModel.savedEndTime).second()
                         )).format('YYYY-MM-DD HH:mm:ss');
-                        // show The testing window you specified has expired and needs to be changed modal if end time is at least a minute before current time only
-                        if (moment(scheduleEndTime).isBefore(institutionCurrentTime, 'minute')) {
-                            $('#alertPopup').modal('show');
-                            return false;
-                        }
                     }
                 } //closes if this.modify
+                 // show The testing window you specified has expired and needs to be changed modal if end time is at least a minute before current time only
+                if (moment(scheduleEndTime).isBefore(institutionCurrentTime, 'minute')) {
+                    $('#alertPopup').modal('show');
+                    return false;
+                }
             }
         }
         return true;

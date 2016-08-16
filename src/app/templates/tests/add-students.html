@@ -101,7 +101,7 @@
                 </div>
                 <!--end left-grid-->
                 <div class="grid right-grid">
-                    <div class="top-section"  [class.modify]="modifyInProgress" [class.active]="modifyInProgress">
+                    <div class="top-section"  [class.modify]="modifyInProgress" [class.active]="modify || modifyInProgress">
                         <h4 class="white-text h6 no-margin-bottom" id="studentAddedToTestingSession">Students in Testing Session ({{selectedStudentCount}})</h4>
                     </div>
                     <div class="section-medium-thin container-narrow lightbulb-icon-container-flush-text" *ngIf="selectedStudentCount === 0" id="selectedStudentsContainer">

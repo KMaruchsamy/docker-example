@@ -11,8 +11,10 @@
 </div>
 <div *ngIf="testSchedule.currentStep>1 && testSchedule.activeStep!==1 && testSchedule.activeStep!==5 && !modifyInProgress" class="thin-section test-summary-heading" [class.test-summary-heading-modify]="modify">
     <div class="container-medium-width" [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
-        <div *ngIf="testSchedule.currentStep>1 " class="test-summary-heading-details"><span>Test: <b>{{testSchedule.testName}}</b></span>
-            <a href="#" target="_self" [routerLink]="modify ? ['/tests' , 'modify', 'choose-test',testSchedule.institutionId] :  ['/tests/choose-test' , testSchedule.institutionId]" class="link-darker">Change test</a></div>
+        <div *ngIf="testSchedule.currentStep>1 " class="test-summary-heading-details">
+            <span>Test: <b>{{testSchedule.testName}}</b></span>
+            <a href="#" target="_self" [routerLink]="modify ? ['/tests' , 'modify', 'choose-test',testSchedule.institutionId] :  ['/tests/choose-test' , testSchedule.institutionId]" class="link-darker">Change test</a>
+        </div>
         <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>            
             <template [ngIf]="!nextDay">
                 {{testSchedule?.scheduleStartTime|parseDate:'ddd'}} {{testSchedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule?.scheduleStartTime|parseDate:'h:mma'}}

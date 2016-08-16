@@ -1090,8 +1090,10 @@ export class AddStudents implements OnInit, OnDestroy {
             if (this.testScheduleModel && this.testScheduleModel.selectedStudents && this.testScheduleModel.selectedStudents.length > 0) {
                 _.forEach(this._selfPayStudent, (student, key) => {
                     let selectedStudent: SelectedStudentModel = _.find(this.testScheduleModel.selectedStudents, { 'StudentId': student.StudentId });
-                    if (selectedStudent)
+                    if (selectedStudent) {
+                        selectedStudent.MarkedToRemove = false;
                         selectedStudent.StudentPay = true;
+                    }
                 });
                 this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
             }
@@ -1851,7 +1853,7 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     Verify_SaveTestClick(): void {
-        this.sStorage.setItem('prevtestschedule', JSON.stringify(this.testScheduleModel));
+        this.sStorage.setItem('prevtestschedule', JSON.stringify(this.previousSelectedStudentList));
         console.log('TestScheduleModel with previous students' + this.testScheduleModel);
 
         this.updateModifyInProgress();

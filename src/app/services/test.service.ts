@@ -223,6 +223,7 @@ export class TestService {
         headers.append('Content-Type', 'application/json');
         let options: RequestOptions = new RequestOptions();
         options.headers = headers;
+        options.body = '';
         return this.http.delete(url, options);
     }
 

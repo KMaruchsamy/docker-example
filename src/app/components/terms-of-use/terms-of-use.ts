@@ -34,23 +34,27 @@ import {Angulartics2On} from 'angulartics2';
         right: 17px; 
     }
     .terms {
-        height: 450px;
+        height: 400px;
         overflow: auto;
         padding: 15px 15px 20px 15px;
         border: 2px solid gainsboro;
         border-radius: 4px;
     }
+    .branding-logo {
+      margin-bottom: .25em;     
+      margin-top: 0;
+    }
     @media (min-height: 800px) {
         .terms {
             height: 600px;
         }
+        .branding-logo {
+            margin-bottom: .5em;
+            margin-top: .25em;
+        }
     }
     header > h1 {
       margin-bottom: 0;
-    }
-    .branding-logo {
-      margin-bottom: .5em;
-      margin-top: .25em;
     }
     .agree-button {
       padding: .8em 3em;
