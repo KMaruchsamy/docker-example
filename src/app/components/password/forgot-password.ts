@@ -6,13 +6,12 @@ import {Title} from '@angular/platform-browser';
 import {Common} from '../../services/common';
 import {PasswordHeader} from '../password/password-header';
 import {Validations} from '../../services/validations';
-import {Logger} from '../../scripts/logger';
 import {links, errorcodes} from '../../constants/config';
 import {general, forgot_password} from '../../constants/error-messages';
 
 @Component({
     selector: 'forgot-password',
-    providers: [Common, Validations, Logger],
+    providers: [Common, Validations],
     templateUrl: 'templates/password/forgot-password.html',
     directives: [PasswordHeader]
 })
@@ -24,7 +23,7 @@ export class ForgotPassword implements OnInit, OnDestroy {
     apiServer: string;
     forgotPasswordSubscription: Subscription;
     errorCodes: any;
-    constructor(private http: Http, public router: Router, public common: Common, public validations: Validations, public logger: Logger, public titleService: Title) {
+    constructor(private http: Http, public router: Router, public common: Common, public validations: Validations, public titleService: Title) {
 
     }
 
