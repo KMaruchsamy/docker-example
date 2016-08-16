@@ -62,7 +62,7 @@ export class ConfirmationModifyInProgress implements OnInit, OnDestroy {
     initialization(): void {
         let _testScheduleModal = JSON.parse(this.sStorage.getItem('testschedule'));
         this.testName = _testScheduleModal.testName;
-        let _prevStudentList: SelectedStudentModel[] = JSON.parse(this.sStorage.getItem('prevtestschedule')).selectedStudents;
+        let _prevStudentList: SelectedStudentModel[] = JSON.parse(this.sStorage.getItem('prevtestschedule'));
         let _newStudentList: SelectedStudentModel[] = _testScheduleModal.selectedStudents;
         this.removedStudents = _.differenceWith(_prevStudentList, _newStudentList, _.isEqual);
         this.studentsAdded = _.differenceWith(_newStudentList, _prevStudentList, _.isEqual);
