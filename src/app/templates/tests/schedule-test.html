@@ -111,7 +111,8 @@
 
 <self-pay-student-popup
         [selfPayStudentException]="studentPayExceptions"
-        isModifyInProgress=true
+        [isModifyInProgress]="modifyInProgress"
+        [pageName]="'scheduletest'"
         (selfPayStudentExceptionPopupClose)="onCloseSelfPayExceptionsPopup(e)">
 </self-pay-student-popup>
 
