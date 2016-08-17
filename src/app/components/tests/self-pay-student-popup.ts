@@ -14,6 +14,8 @@ import {SortPipe} from '../../pipes/sort.pipe';
 
 export class SelfPayStudentPopup implements OnInit, OnDestroy {
     @Input() selfPayStudentException: any;
+    @Input() isModifyInProgress: boolean = false;
+    @Input() pageName: string="";
     @Output() selfPayStudentExceptionPopupClose = new EventEmitter();
     sStorage: any;
     constructor(public common: Common) {

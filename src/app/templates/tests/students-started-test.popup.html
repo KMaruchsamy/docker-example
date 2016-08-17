@@ -1,6 +1,6 @@
 <div class="modal modal-full-overlay fade" id="studentsStartedTest" tabindex="-1" role="dialog" aria-labelledby="studentsStartedTestWarning">
     <div role="document">
-        <button aria-label="Close" class="close close-large-icon" data-dismiss="modal" type="button"></button>
+        <button aria-label="Close"  *ngIf="pageName==='addstudents'" class="close close-large-icon" data-dismiss="modal" type="button"></button>
         <div class="modal-full-overlay-content">
             <div class="modal-header">
                 <p class="icon center" [class.clock-alert-icon]="pageName==='scheduletest'" [class.red-triangle-alert-large]="pageName==='addstudents'"></p>
