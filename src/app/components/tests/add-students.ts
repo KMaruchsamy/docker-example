@@ -1860,7 +1860,12 @@ export class AddStudents implements OnInit, OnDestroy {
     }
 
     updateModifyInProgress(closeSession: boolean = false): void {
+
         if (this.doesWentThroughTestException) {
+            _.forEach(this.testScheduleModel.selectedStudents, function (student, key) {
+                if (typeof student.MarkedToRemove === 'undefined') // Mark to removal to false for undefied...
+                    student.MarkedToRemove = false;
+            });
             this.testScheduleModel.selectedStudents = _.filter(this.testScheduleModel.selectedStudents, { 'MarkedToRemove': false });
         }
         else
@@ -2056,10 +2061,6 @@ export class AddStudents implements OnInit, OnDestroy {
 
 
         if (studentRemovedFromSession.length > 0) {
-            _.forEach(studentRemovedFromSession, (student, key) => {
-                __this.selectedStudents.push(_.find(this.testScheduleModel.selectedStudents, { 'StudentId': student.StudentId }));
-
-            });
             if (this.loader)
                 this.loader.destroy();
             this.dynamicComponentLoader.loadNextToLocation(StudentsStartedTest, this.viewContainerRef)
@@ -2074,6 +2075,10 @@ export class AddStudents implements OnInit, OnDestroy {
                     hasStartedTest.instance.pageName = "addstudents";
                     hasStartedTest.instance.onOK.subscribe((e) => {
                         $('#studentsStartedTest').modal('hide');
+                        _.forEach(studentRemovedFromSession, (student, key) => {
+                            __this.selectedStudents.push(_.find(this.previousSelectedStudentList, { 'StudentId': student.StudentId }));
+
+                        });
                         this.checkWindowExceptions(studentExceptions);
                     });
                     hasStartedTest.instance.onBack.subscribe((e) => {
