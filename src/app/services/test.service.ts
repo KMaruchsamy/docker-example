@@ -181,6 +181,7 @@ export class TestService {
             _testScheduleModel.savedStartTime = objTestScheduleModel.TestingWindowStart;
             _testScheduleModel.savedEndTime = objTestScheduleModel.TestingWindowEnd;
             _testScheduleModel.institutionId = objTestScheduleModel.InstitutionId;
+            _testScheduleModel.institutionName = (_.has(objTestScheduleModel, 'InstitutionName') ? objTestScheduleModel.InstitutionName : '');
             _testScheduleModel.lastselectedcohortId = objTestScheduleModel.LastCohortSelectedId;
             _testScheduleModel.facultyMemberId = objTestScheduleModel.FacultyMemberId;
             _testScheduleModel.pageSavedOn = objTestScheduleModel.PageSavedOn;
@@ -189,6 +190,7 @@ export class TestService {
             _testScheduleModel.adminLastName = objTestScheduleModel.AdminLastName;
             _testScheduleModel.facultyFirstName = objTestScheduleModel.FacultyFirstName;
             _testScheduleModel.facultyLastName = objTestScheduleModel.FacultyLastName;
+            _testScheduleModel.status = (_.has(objTestScheduleModel, 'Status') ? objTestScheduleModel.Status : '');
             if (objTestScheduleModel.Students && objTestScheduleModel.Students.length > 0) {
                 _.forEach(objTestScheduleModel.Students, function (student, key) {
                     let _student = new SelectedStudentModel();
@@ -274,11 +276,11 @@ export class TestService {
 
         if (tests != undefined && tests.length > 0) {
             let sortedTests: any;
-            if (columnName === '#schDateTH' || columnName === '#cmpDateTH') {
+            if (_.includes(columnName,'#schDateTH') || _.includes(columnName,'#cmpDateTH')) {
                 sortedTests = tests.sort(function (a, b) {
-                    if (moment(a.TestingWindowStart).isBefore(b.TestingWindowStart)) //sort string ascending
+                    if (moment(a.scheduleStartTime).isBefore(b.scheduleStartTime)) //sort string ascending
                         return asc == 1 ? 1 : -1
-                    if (moment(a.TestingWindowStart).isAfter(b.TestingWindowStart))
+                    if (moment(a.scheduleStartTime).isAfter(b.scheduleStartTime))
                         return asc == 1 ? -1 : 1
                     return 0 //default return value (no sorting)
                 });
@@ -287,17 +289,17 @@ export class TestService {
                 sortedTests = tests.sort(function (a, b) {
                     let strA: string;
                     let strB: string;
-                    if (columnName === '#schSessionTH' || columnName === '#cmpSessionTH') {
-                        strA = a.SessionName.toLowerCase();
-                        strB = b.SessionName.toLowerCase();
+                    if (_.includes(columnName,'#schSessionTH') || _.includes(columnName,'#cmpSessionTH')) {
+                        strA = a.scheduleName.toLowerCase();
+                        strB = b.scheduleName.toLowerCase();
                     }
-                    else if (columnName === '#schFacultyTH' || columnName === '#cmpFacultyTH') {
-                        strA = a.FacultyFirstName.toLowerCase();
-                        strB = b.FacultyFirstName.toLowerCase();
+                    else if (_.includes(columnName,'#schFacultyTH') || _.includes(columnName,'#cmpFacultyTH')) {
+                        strA = a.facultyFirstName.toLowerCase();
+                        strB = b.facultyFirstName.toLowerCase();
                     }
-                    else if (columnName === '#schAdminTH' || columnName === '#cmpAdminTH') {
-                        strA = a.AdminFirstName.toLowerCase();
-                        strB = b.AdminFirstName.toLowerCase();
+                    else if (_.includes(columnName,'#schAdminTH') || _.includes(columnName,'#cmpAdminTH')) {
+                        strA = a.adminFirstName.toLowerCase();
+                        strB = b.adminFirstName.toLowerCase();
                     }
 
                     if (strA < strB) //sort string ascending

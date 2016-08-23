@@ -18,6 +18,7 @@ import {RoundPipe} from '../../pipes/round.pipe';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {Utility} from '../../scripts/utility';
 import * as _ from 'lodash';
+import {TestsModal} from '../../models/tests.modal';
 // import '../../plugins/dropdown.js';
 // import '../../plugins/bootstrap-select.min.js';
 // // import '../../plugins/jquery.dataTables.min.js';
@@ -31,7 +32,7 @@ import * as _ from 'lodash';
 @Component({
     selector: 'manage-tests',
     templateUrl: 'templates/tests/manage-tests.html',
-    providers: [TestService, Auth, TestScheduleModel, Utility, Common],
+    providers: [TestService, Auth, TestScheduleModel, Utility, Common, TestsModal],
     host: {
         '(window:resize)': 'resize($event)'
     },
@@ -43,11 +44,12 @@ import * as _ from 'lodash';
 export class ManageTests implements OnInit, OnDestroy {
     testDate: string;
     apiServer: string;
-    tests: Object[] = [];
-    completedTests: Object[] = [];
-    scheduleTests: Object[] = [];
-    inProgressTests: Object[] = [];
+    tests: Array<TestScheduleModel> = [];
+    completedTests: Array<TestsModal> = [];
+    scheduleTests: Array<TestsModal> = [];
+    inProgressTests: Array<TestsModal> = [];
     scheduleIdToDelete: number = 0;
+    institutionIdToDelete: number = 0;
     programId: number = 0;
     institutionRN: number = 0;
     institutionPN: number = 0;
@@ -65,8 +67,7 @@ export class ManageTests implements OnInit, OnDestroy {
     testStatus: any;
     isMultiCampus: boolean = false;
     Campus: Object[] = [];
-
-    constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public titleService: Title) { }
+    constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public titleService: Title, private testsModal: TestsModal) { }
 
     ngOnDestroy(): void {
         if (this.actionSubscription)
@@ -76,7 +77,7 @@ export class ManageTests implements OnInit, OnDestroy {
         if (this.scheduleTestsSubscription)
             this.scheduleTestsSubscription.unsubscribe();
         if (this.renameSessionSuscription)
-            this.renameSessionSuscription.unsubscribe();    
+            this.renameSessionSuscription.unsubscribe();
     }
 
 
@@ -99,6 +100,43 @@ export class ManageTests implements OnInit, OnDestroy {
         this.toggleTd();
     }
 
+
+    groupTests(tests: Array<TestScheduleModel>): Array<TestsModal> {
+        // No tests
+        if (tests.length == 0)
+            return [];
+
+        // Only one test & one institution
+        if (tests.length == 1) {
+            let tmpTestsModal = new TestsModal();
+            tmpTestsModal.institutionId = tests[0].institutionId;
+            tmpTestsModal.institutionName = tests[0].institutionName;
+            tmpTestsModal.tests = tests;
+            return [tmpTestsModal];
+        }
+
+        // Multiple tests but only one institution
+        let uniqueTests: Array<any> = _.uniqBy(tests, 'institutionId');
+        if (uniqueTests.length == 1) {
+            let tmpTestsModal = new TestsModal();
+            tmpTestsModal.institutionId = uniqueTests[0].institutionId;
+            tmpTestsModal.institutionName = uniqueTests[0].institutionName;
+            tmpTestsModal.tests = tests;
+            return [tmpTestsModal];
+        }
+
+        // Multiple tests & multiple institutions        
+        uniqueTests = _.sortBy(uniqueTests, ['institutionName']);
+        return _.map(uniqueTests, (uniqueTest) => {
+            let filteredTests: Array<TestScheduleModel> = _.filter(tests, { 'institutionId': +uniqueTest.institutionId });
+            let tmpTestsModal = new TestsModal();
+            tmpTestsModal.institutionId = uniqueTest.institutionId;
+            tmpTestsModal.institutionName = uniqueTest.institutionName;
+            tmpTestsModal.tests = filteredTests;
+            return tmpTestsModal;
+        });
+    }
+
     bindTests(): void {
         let __this = this;
         let scheduleTestsURL = `${this.apiServer}${links.api.baseurl}${links.api.admin.test.scheduletests}?adminId=${this.auth.userid}&after=${this.testDate}`;
@@ -106,33 +144,46 @@ export class ManageTests implements OnInit, OnDestroy {
         this.scheduleTestsSubscription = scheduleTestsObservable
             .map(response => response.json())
             .subscribe(json => {
-                __this.tests = json;
+                __this.tests = _.map(json, (test) => {
+                    return __this.testService.mapTestScheduleObjects(test);
+                });
                 if (__this.tests && __this.tests.length > 0) {
 
-                    let unsortedCompletedTests = _.filter(__this.tests, function (test) {
-                        return (test.Status == __this.testStatus.Completed);
-                    });
-                    __this.completedTests = _.orderBy(unsortedCompletedTests, function (_test) {
-                        _test.nextDay = moment(_test.TestingWindowStart).isBefore(_test.TestingWindowEnd, 'day');
-                        return moment(_test.TestingWindowStart).toDate()
-                    },['desc']);
-
-                    let unsortedScheduledTests = _.filter(__this.tests, function (test) {
-                        test.nextDay = moment(test.TestingWindowStart).isBefore(test.TestingWindowEnd, 'day');
-                        return (test.Status == __this.testStatus.Scheduled);
-                    });
-                    __this.scheduleTests = _.sortBy(unsortedScheduledTests, function (_test) {
-                        return moment(_test.TestingWindowStart).toDate()
+                    let unsortedInProgressTests: Array<TestScheduleModel> = _.filter(__this.tests, function (test) {
+                        return (test.status == __this.testStatus.InProgress);
                     });
 
-                    let unsortedInProgressTests = _.filter(__this.tests, function (test) {
-                        return (test.Status == __this.testStatus.InProgress);
+                    let sortedInProgressTests = _.sortBy(unsortedInProgressTests, function (_test) {
+                        _test.spanMultipleDays = moment(_test.scheduleStartTime).isBefore(_test.scheduleEndTime, 'day');
+                        return moment(_test.scheduleStartTime).toDate()
                     });
 
-                    __this.inProgressTests = _.sortBy(unsortedInProgressTests, function (_test) {
-                        _test.nextDay = moment(_test.TestingWindowStart).isBefore(_test.TestingWindowEnd, 'day');
-                        return moment(_test.TestingWindowStart).toDate()
+                    __this.inProgressTests = __this.groupTests(sortedInProgressTests);
+
+
+
+                    let unsortedScheduledTests: Array<TestScheduleModel> = _.filter(__this.tests, function (test) {
+                        test.spanMultipleDays = moment(test.scheduleStartTime).isBefore(test.scheduleEndTime, 'day');
+                        return (test.status == __this.testStatus.Scheduled);
                     });
+                    let sortedScheduleTests = _.sortBy(unsortedScheduledTests, function (_test) {
+                        return moment(_test.scheduleStartTime).toDate()
+                    });
+                    __this.scheduleTests = __this.groupTests(sortedScheduleTests);
+
+
+                    let unsortedCompletedTests: Array<TestScheduleModel> = _.filter(__this.tests, function (test) {
+                        return (test.status == __this.testStatus.Completed);
+                    });
+                    let sortedCompletedTests = _.orderBy(unsortedCompletedTests, function (_test: TestScheduleModel) {
+                        _test.spanMultipleDays = moment(_test.scheduleStartTime).isBefore(_test.scheduleEndTime, 'day');
+                        return moment(_test.scheduleStartTime).toDate()
+                    }, ['desc']);
+
+                    __this.completedTests = __this.groupTests(sortedCompletedTests);
+
+
+
 
                     setTimeout((json) => {
                         $(document).trigger("enhance.tablesaw");
@@ -177,11 +228,11 @@ export class ManageTests implements OnInit, OnDestroy {
                         console.log(testSchedule);
                         switch (route) {
                             case 'ModifyScheduleTest':
-                                this.router.navigate(['/tests','modify','schedule-test']);
+                                this.router.navigate(['/tests', 'modify', 'schedule-test']);
                                 break;
 
                             case 'ModifyAddStudents':
-                                this.router.navigate(['/tests', 'modify','add-students']);
+                                this.router.navigate(['/tests', 'modify', 'add-students']);
                                 break;
 
                             default:
@@ -222,31 +273,34 @@ export class ManageTests implements OnInit, OnDestroy {
         $('.js-rename-session').on('save', function (e, params) {
             let _sessionId = e.currentTarget.attributes['sessionId'].textContent;
             let type = e.currentTarget.attributes['type'].textContent;
+            let institutionId = e.currentTarget.attributes['institutionId'].textContent;
             let _newName = params.newValue;
             let renameSessionObservable = __this.renameSession(_sessionId, _newName);
 
             this.renameSessionSubscription = renameSessionObservable
                 .map(response => response.status)
-                .subscribe(status => {                   
+                .subscribe(status => {
                     if (status.toString() === __this.errorCodes.SUCCESS) {
                         // e.currentTarget.textContent = _newName;
-                        let renamedTest: any;
+                        let renamedTest: TestScheduleModel;
                         if (type === 'scheduled') {
-                            renamedTest = _.find(__this.scheduleTests, { 'TestingSessionId': parseInt(_sessionId) });
+                            let institution: TestsModal = <TestsModal>_.find(__this.scheduleTests, { 'institutionId': parseInt(institutionId) });
+                            renamedTest = _.find(institution.tests, { 'scheduleId': parseInt(_sessionId) });
                             if (renamedTest) {
-                                renamedTest.SessionName = _newName;
+                                renamedTest.scheduleName = _newName;
                             }
                         }
                         else {
-                            renamedTest = _.find(__this.inProgressTests, { 'TestingSessionId': parseInt(_sessionId) });
+                            let institution: TestsModal = <TestsModal>_.find(__this.inProgressTests, { 'institutionId': parseInt(institutionId) });
+                            renamedTest = _.find(institution.tests, { 'scheduleId': parseInt(_sessionId) });
                             if (renamedTest) {
-                                renamedTest.SessionName = _newName;
+                                renamedTest.scheduleName = _newName;
                             }
                         }
                     }
 
                 }, error => console.log(error));
-              
+
         });
     }
 
@@ -259,7 +313,7 @@ export class ManageTests implements OnInit, OnDestroy {
         let __this = this;
         let renameSessionURL = __this.resolveScheduleURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.renamesession}`, sessionId);
 
-        let renameSessionObservable:Observable<Response> = this.testService.renameSession(renameSessionURL, JSON.stringify(newName));
+        let renameSessionObservable: Observable<Response> = this.testService.renameSession(renameSessionURL, JSON.stringify(newName));
 
         return renameSessionObservable;
 
@@ -274,10 +328,12 @@ export class ManageTests implements OnInit, OnDestroy {
     onCancelConfirmation() {
         $('#confirmationPopup').modal('hide');
         this.scheduleIdToDelete = 0;
+        this.institutionIdToDelete = 0;
     }
 
-    showConfirmation(scheduleId: number): void {
+    showConfirmation(scheduleId: number, institutionId: number): void {
         this.scheduleIdToDelete = scheduleId;
+        this.institutionIdToDelete = institutionId;
         $('#confirmationPopup').modal('show');
     }
 
@@ -290,10 +346,19 @@ export class ManageTests implements OnInit, OnDestroy {
         let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.deleteSchedule}`, this.scheduleIdToDelete);
         let deleteObdervable: Observable<Response> = this.testService.deleteSchedule(scheduleURL);
         deleteObdervable.subscribe((res: Response) => {
-            __this.bindTests();
+            let institution: TestsModal = <TestsModal>_.find(__this.scheduleTests, { 'institutionId': +__this.institutionIdToDelete });
+            _.remove(institution.tests, (test) => {
+                return test.scheduleId === +__this.scheduleIdToDelete;
+            });
+            if (institution.tests.length === 0)
+                _.remove(__this.scheduleTests, (test) => {
+                    return test.institutionId === +__this.institutionIdToDelete;
+                });
             __this.scheduleIdToDelete = 0;
+            __this.institutionIdToDelete = 0;
         }, (error: Response) => {
             __this.scheduleIdToDelete = 0;
+            __this.institutionIdToDelete = 0;
         });
     }
 
@@ -397,117 +462,16 @@ export class ManageTests implements OnInit, OnDestroy {
         });
     }
 
+    sort(institutionId: number, tablename: string, columnname: string): void {
+        debugger;
+        if (_.includes(tablename, '#tblScheduledTests')) {
+            let institution: TestsModal = <TestsModal>_.find(this.scheduleTests, { 'institutionId': +institutionId });
+            institution.tests = this.testService.sortTests(institution.tests, tablename, columnname);
+        }
+        else if (_.includes(tablename, '#tblCompletedTests')) {
+            let institution: TestsModal = <TestsModal>_.find(this.completedTests, { 'institutionId': +institutionId });
+            institution.tests = this.testService.sortTests(institution.tests, tablename, columnname);
+        }
 
-    bindSort(tblTest: string): void {
-        let __this = this;
-        $(tblTest).find('th').off('click');
-        $(tblTest).find('th').on('click', function (e) {
-            e.preventDefault();
-            let columnId = $(this).attr('id');
-            let ascending: boolean = false;
-            if ($(this).hasClass('tablesaw-sortable-descending')) {
-                ascending = true;
-                $(this).addClass('tablesaw-sortable-ascending');
-                $(this).removeClass('tablesaw-sortable-descending');
-            }
-            else {
-                $(this).addClass('tablesaw-sortable-descending');
-                $(this).removeClass('tablesaw-sortable-ascending');
-            }
-            let tempTests: any;
-            if (tblTest === '#tblScheduledTests') {
-                if (__this.scheduleTests) {
-                    switch (columnId) {
-                        case 'dateTH':
-                            tempTests = _.sortBy(__this.scheduleTests, function (_test) {
-                                return moment(_test.TestingWindowStart).toDate();
-                            });
-                            break;
-                        case 'sessionTH':
-                            tempTests = _.sortBy(__this.scheduleTests, function (test) {
-                                return test.SessionName;
-                            });
-                            break;
-                        case 'facultyTH':
-                            tempTests = _.sortBy(__this.scheduleTests, function (_test) {
-                                return _test.FacultyFirstName + ' ' + _test.FacultyLastName;
-                            });
-                            break;
-                        case 'adminTH':
-                            tempTests = _.sortBy(__this.scheduleTests, function (_test) {
-                                return _test.AdminFirstName + ' ' + _test.AdminLastName;
-                            });
-                            break;
-
-                        default:
-                            tempTests = _.sortBy(__this.scheduleTests, function (_test) {
-                                return moment(_test.TestingWindowStart).toDate();
-                            });
-                            break;
-                    }
-
-                    if (ascending)
-                        __this.scheduleTests = tempTests;
-                    else
-                        __this.scheduleTests = tempTests.reverse();
-                }
-            }
-            else if (tblTest === '#tblCompletedTests') {
-                if (__this.completedTests) {
-                    switch (columnId) {
-                        case 'dateTH':
-                            tempTests = _.sortBy(__this.completedTests, function (_test) {
-                                return moment(_test.TestingWindowStart).toDate();
-                            });
-                            break;
-                        case 'sessionTH':
-                            tempTests = _.sortBy(__this.completedTests, function (_test) {
-                                return _test.SessionName;
-                            });
-                            break;
-                        case 'facultyTH':
-                            tempTests = _.sortBy(__this.completedTests, function (_test) {
-                                return _test.FacultyFirstName + ' ' + _test.FacultyLastName;
-                            });
-                            break;
-                        case 'adminTH':
-                            tempTests = _.sortBy(__this.completedTests, function (_test) {
-                                return _test.AdminFirstName + ' ' + _test.AdminLastName;
-                            });
-                            break;
-
-                        default:
-                            tempTests = _.sortBy(__this.completedTests, function (_test) {
-                                return moment(_test.TestingWindowStart).toDate();
-                            });
-                            break;
-                    }
-
-                    if (ascending)
-                        __this.completedTests = tempTests;
-                    else
-                        __this.completedTests = tempTests.reverse();
-                }
-            }
-
-            setTimeout((json) => {
-                $(document).trigger("enhance.tablesaw");
-                __this.configureEditor(__this);
-                __this.bindSort('#tblScheduledTests');
-                __this.bindSort('#tblCompletedTests');
-                __this.addColumnStyle($('table#tblCompletedTests'));
-                __this.addColumnStyle($('table#tblScheduledTests'));
-            });
-
-        });
-    }
-
-    sort(tablename: string, columnname: string): void {
-        if (tablename === '#tblScheduledTests')
-            this.scheduleTests = this.testService.sortTests(this.scheduleTests, tablename, columnname);
-        else if (tablename === '#tblCompletedTests')
-            this.completedTests = this.testService.sortTests(this.completedTests, tablename, columnname);
-
-        let __this = this;
     }
 }
