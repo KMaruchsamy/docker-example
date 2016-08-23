@@ -259,7 +259,7 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
             .subscribe(json => {
                 self.tests = json;
 
-                if (self.testsTable) {
+                if (self.testsTable) 
                     self.testsTable.destroy();
                     setTimeout(json => {
                         self.testsTable = $('#chooseTestTable').DataTable({
@@ -273,7 +273,7 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
                             $(this).find('.child .dtr-title br').remove();
                         });
                     });
-                }
+                
                 this.noTest = true;
             },
             error => console.log(error));
