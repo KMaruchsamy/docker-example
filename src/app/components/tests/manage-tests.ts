@@ -63,6 +63,9 @@ export class ManageTests implements OnInit, OnDestroy {
     renameSessionSuscription: Subscription;
     errorCodes: any;
     testStatus: any;
+    isMultiCampus: boolean = false;
+    Campus: Object[] = [];
+
     constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public titleService: Title) { }
 
     ngOnDestroy(): void {
@@ -313,17 +316,23 @@ export class ManageTests implements OnInit, OnDestroy {
             let institutionsPN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
             let programId = _.map(institutions, 'ProgramId');
             if (programId.length > 0)
-                this.programId = programId[0];
+                this.programId = programId.length > 1 ? programId : programId[0];
             if (institutionsRN.length > 0)
-                this.institutionRN = institutionsRN[0];
+                this.institutionRN = institutionsRN.length > 1 ? institutionsRN : institutionsRN[0];
             if (institutionsPN.length > 0)
-                this.institutionPN = institutionsPN[0];
+                this.institutionPN = institutionsPN.length > 1 ? institutionsPN : institutionsPN[0];
+            if (institutionsRN.length > 1 || institutionsPN.length > 1) {
+                this.Campus = institutions;
+                this.isMultiCampus = true;
+            }
         }
     }
 
     redirectToRoute(route: string): boolean {
         this.checkInstitutions();
-        if (this.institutionRN > 0 && this.institutionPN > 0) {
+        if (this.isMultiCampus)
+            this.router.navigateByUrl(`/choose-institution/Test/${route}`);
+        else if (this.institutionRN > 0 && this.institutionPN > 0 && !this.isMultiCampus) {
             this.router.navigateByUrl(`/choose-institution/Test/${route}/${this.institutionRN}/${this.institutionPN}`);
         }
         else {

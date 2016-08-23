@@ -145,7 +145,6 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
 
     canDeactivate(next: string): Observable<boolean> | boolean {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
-        // if (!this.modify) {
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
                 if (this.testScheduleModel.testId) {
@@ -155,7 +154,6 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
                 }
             }
         }
-        // }
         if (outOfTestScheduling)
             this.testService.clearTestScheduleObjects();
         this.overrideRouteCheck = false;

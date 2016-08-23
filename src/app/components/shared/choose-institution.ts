@@ -11,7 +11,6 @@ import {TestService} from '../../services/test.service';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {Subscription, Observable} from 'rxjs/Rx';
 import {Response} from '@angular/http';
-
 @Component({
     selector: 'choose-institution',
     providers: [Common, Auth, TestService, TestScheduleModel],
@@ -34,6 +33,9 @@ export class ChooseInstitution implements OnInit, OnDestroy {
     isTest: boolean = false;
     routeParamsSubscription: Subscription;
     subjectsSubscription: Subscription;
+    isMultiCampus: boolean = false;
+    Campus: Object[] = [];
+    institutionId: number;
     constructor(public router: Router, private activatedRoute: ActivatedRoute, public common: Common, public auth: Auth, public aLocation: Location, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
 
     }
@@ -53,11 +55,13 @@ export class ChooseInstitution implements OnInit, OnDestroy {
             this.page = params['redirectpage'];
             if (this.page === 'choose-test')
                 this.isTest = true;
-            this.institutionRN = params['idRN'];
-            this.institutionPN = params['idPN'];
+            this.checkInstitutions();
+            if (!this.isMultiCampus) {
+                this.institutionRN = params['idRN'];
+                this.institutionPN = params['idPN'];
+            }
             this.setBackMessage();
             this.titleService.setTitle('Choose a Program – Kaplan Nursing');
-            this.checkInstitutions();
         });
     }
 
@@ -108,6 +112,37 @@ export class ChooseInstitution implements OnInit, OnDestroy {
         }
         return false;
     }
+    setInstitution(institutionId: number): void {
+        this.institutionID = institutionId.toString();
+        this.institutionId = institutionId;
+    }
+    disableEnableButton(): boolean {
+        if (this.institutionId > 0) 
+            return false;
+        else
+            return true;
+    }
+    chooseCampus(): void {
+        this.apiServer = this.common.getApiServer();
+        let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
+        let subjectsObservable: Observable<Response> = this.testService.getSubjects(subjectsURL);
+        this.subjectsSubscription = subjectsObservable
+            .map(response => {
+                if (response.status !== 400) {
+                    return response.json();
+                }
+                return [];
+            })
+            .subscribe(json => {
+                if (json.length === 0) {
+                    window.open('/accounterror');
+                }
+                else {
+                    this.router.navigateByUrl(`/tests/${this.page}/${this.institutionID}`);
+                }
+            }),
+            error => console.log(error);
+    }
 
     resolveSubjectsURL(url: string): string {
         return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeId.toString());
@@ -121,13 +156,17 @@ export class ChooseInstitution implements OnInit, OnDestroy {
             let programIdRN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'ProgramId');
             let programIdPN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'ProgramId');
             if (programIdRN.length > 0)
-                this.programRN = programIdRN[0];
+                this.programRN = programIdRN.length > 1 ? programIdRN : programIdRN[0];
             if (programIdPN.length > 0)
-                this.programPN = programIdPN[0];
+                this.programPN = programIdPN.length > 1 ? programIdPN : programIdPN[0];
             if (institutionsRN.length > 0)
-                this.institutionRN = institutionsRN[0];
+                this.institutionRN = institutionsRN.length > 1 ? institutionsRN : institutionsRN[0];
             if (institutionsPN.length > 0)
-                this.institutionPN = institutionsPN[0];
+                this.institutionPN = institutionsPN.length > 1 ? institutionsPN : institutionsPN[0];
+            if (programIdRN.length > 1 || programIdPN.length > 1) {
+                this.Campus = institutions;
+                this.isMultiCampus = true;
+            }
         }
     }
 

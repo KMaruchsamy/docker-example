@@ -1,40 +1,49 @@
-<page-header [showCover]=true  [ariaDisabled]=true [hideDropdown]=true ></page-header>
+<page-header [showCover]=true [ariaDisabled]=true [hideDropdown]=true></page-header>
 <main role="main">
-		<div class="section container-medium-width">
-			<i [class.sun-icon]="isTest" [class.path-icon]="!isTest" class="icon center block"></i>
-			<h2 *ngIf = "!isTest" class="h4 teal center margin-1em-top">You’re on your way to the Kaplan Nursing Student Site.<br>Please select a program:</h2>
-            <h2 *ngIf = "isTest" class="h4 teal center margin-1em-top">Welcome! <br> Please select the program for which you’d like to schedule a test:</h2>
-			<div class="choose-program-module container-narrow hidden-extra-small-down">
-				<div class="choose-program-module-grid">
-					<h3 class="h1 center" id="RNProgram">RN</h3>
-					<button *ngIf = "!isTest" class="button centered" (click)="triggerRedirect('RN',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl,$event);" aria-labelledby="RNProgram">Select</button>
-                    <button *ngIf = "isTest" class="button centered" (click)="redirectToRoute('RN');" aria-labelledby="RNProgram">Select</button>
-				</div>
-				<div class="choose-program-module-grid">
-					<h3 class="h1 center" id="PNProgram">PN</h3>
-					<button *ngIf = "!isTest" class="button centered" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl,$event);" aria-labelledby="PNProgram">Select</button>
-                    <button *ngIf = "isTest" class="button centered" (click)="redirectToRoute('PN');" aria-labelledby="PNProgram">Select</button>
-				</div>
-			</div>
-			<div class="hidden-extra-small-up">
-				<button *ngIf = "!isTest" #btnrn class="button button-mobile-block margin-2em-top" (click)="triggerRedirect('RN',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl,$event);">RN Program</button>
-				<button *ngIf = "!isTest" #btnpn class="button button-mobile-block margin-2em-top-bottom" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl,$event);">PN Program</button>
-                
-                <button *ngIf = "isTest"  class="button button-mobile-block margin-2em-top" (click)="redirectToRoute('RN');">RN Program</button>
-				<button *ngIf = "isTest"  class="button button-mobile-block margin-2em-top-bottom" (click)="redirectToRoute('PN');">PN Program</button>
+    <div class="section" [class.container-medium-width]="!isMultiCampus" [class.container-narrow]="isMultiCampus" [class.center]="isMultiCampus" >
+        <i [class.sun-icon]="isTest" [class.path-icon]="!isTest" class="icon center block"></i>
+        <div class="section-medium-thin">
+            <h2 *ngIf="!isTest" class="h4 teal center margin-1em-top">You’re on your way to the Kaplan Nursing Student Site.<br>Please select a program:</h2>
+            <h2 *ngIf="isTest" class="h4 teal center margin-1em-top">Welcome! <br> Please select the program for which you’d like to schedule a test:</h2>
+            <div class="choose-program-module container-narrow hidden-extra-small-down" *ngIf="!isMultiCampus">
+                <div class="choose-program-module-grid">
+                    <h3 class="h1 center" id="RNProgram">RN</h3>
+                    <button *ngIf="!isTest" class="button centered" (click)="triggerRedirect('RN',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl,$event);" aria-labelledby="RNProgram">Select</button>
+                    <button *ngIf="isTest" class="button centered" (click)="redirectToRoute('RN');" aria-labelledby="RNProgram">Select</button>
+                </div>
+                <div class="choose-program-module-grid">
+                    <h3 class="h1 center" id="PNProgram">PN</h3>
+                    <button *ngIf="!isTest" class="button centered" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl,$event);" aria-labelledby="PNProgram">Select</button>
+                    <button *ngIf="isTest" class="button centered" (click)="redirectToRoute('PN');" aria-labelledby="PNProgram">Select</button>
+                </div>
+            </div>
+            <div class="hidden-extra-small-up" *ngIf="!isMultiCampus">
+                <button *ngIf="!isTest" #btnrn class="button button-mobile-block margin-2em-top" (click)="triggerRedirect('RN',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl,$event);">RN Program</button>
+                <button *ngIf="!isTest" #btnpn class="button button-mobile-block margin-2em-top-bottom" (click)="triggerRedirect('PN',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl,$event);">PN Program</button>
 
-                
-			</div>
-			<div class="center">
-				<p class="margin-1em-top-bottom text-larger" *ngIf = "!isTest" >If you’d like to switch programs later, sign in again to start a new session.</p>
-				<a (click)="goBack();" href="javascript:void(0)">{{backMessage}}</a>
-			</div>
-		</div>
+                <button *ngIf="isTest" class="button button-mobile-block margin-2em-top" (click)="redirectToRoute('RN');">RN Program</button>
+                <button *ngIf="isTest" class="button button-mobile-block margin-2em-top-bottom" (click)="redirectToRoute('PN');">PN Program</button>
+
+
+            </div>
+
+            <div class="margin-2em-top-bottom" *ngIf="isMultiCampus">
+                <select class="" #chooseCampus id="choose-campus" (change)="setInstitution(chooseCampus.value)" data-width="400" data-size="6" title='Choose an institution'>
+                    <option *ngFor="let campus of Campus; let i = index" [selected]="campus.InstitutionId==institutionId" [value]='campus.InstitutionId'>{{campus.InstitutionNameWithProgOfStudy}}</option>
+                </select>
+            </div>
+        </div>
+        <button *ngIf="isMultiCampus" id="choose-campus-button" class="button margin-1em-top margin-2em-bottom" (click)="chooseCampus()" [disabled]="disableEnableButton()">Continue</button>
+            <div class="center">
+                <p class="margin-1em-top-bottom text-larger" *ngIf="!isTest">If you’d like to switch programs later, sign in again to start a new session.</p>
+                <a (click)="goBack();" href="javascript:void(0)">{{backMessage}}</a>
+            </div>
+        </div>
 </main>
 
 <form #myform method="POST" target="_blank">
-	<input #hdinstitution type="hidden" id="institutionID" name="institutionID">
-	<input #hdtoken type="hidden" id="jwtToken" name="jwtToken">
-	<input #hdpage type="hidden" id="redirectPage" name="redirectPage">
-	<input #hdexceptionurl type="hidden" id="exceptionURL" name="exceptionURL">
+    <input #hdinstitution type="hidden" id="institutionID" name="institutionID">
+    <input #hdtoken type="hidden" id="jwtToken" name="jwtToken">
+    <input #hdpage type="hidden" id="redirectPage" name="redirectPage">
+    <input #hdexceptionurl type="hidden" id="exceptionURL" name="exceptionURL">
 </form>
