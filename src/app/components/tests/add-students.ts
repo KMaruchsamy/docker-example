@@ -419,12 +419,7 @@ export class AddStudents implements OnInit, OnDestroy {
         let subjectsObservable = this.testService.getActiveCohorts(cohortURL);
         let __this = this;
         this.subjectsSubscription = subjectsObservable
-            .map(response => {
-                if (response.status !== 400) {
-                    return response.json();
-                }
-                return [];
-            })
+            .map(response => response.json())
             .subscribe(json => {
                 __this.cohorts = json;
                 setTimeout(json => {
@@ -433,11 +428,13 @@ export class AddStudents implements OnInit, OnDestroy {
                     else
                         $('.selectpicker').selectpicker('refresh');
                 });
-
-                if (__this.cohorts.length === 0) {
+                
+            },
+            error => {
+                console.log(error);
+                if (error.status === 400)
                     this.noCohort = true;
-                }
-            }, error => console.log(error));
+            });
     }
 
 
