@@ -127,21 +127,17 @@ export class ChooseInstitution implements OnInit, OnDestroy {
         let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
         let subjectsObservable: Observable<Response> = this.testService.getSubjects(subjectsURL);
         this.subjectsSubscription = subjectsObservable
-            .map(response => {
-                if (response.status !== 400) {
-                    return response.json();
-                }
-                return [];
-            })
+            .map(response => response.json())
             .subscribe(json => {
-                if (json.length === 0) {
-                    window.open('/accounterror');
-                }
-                else {
+                if (json.length > 0) {
                     this.router.navigateByUrl(`/tests/${this.page}/${this.institutionID}`);
                 }
-            }),
-            error => console.log(error);
+            },
+            error => {
+                console.log(error);
+                if (error.status === 400)
+                    window.open('/accounterror');
+            });
     }
 
     resolveSubjectsURL(url: string): string {
