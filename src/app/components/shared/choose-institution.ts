@@ -62,6 +62,9 @@ export class ChooseInstitution implements OnInit, OnDestroy {
             }
             this.setBackMessage();
             this.titleService.setTitle('Choose a Program – Kaplan Nursing');
+            setTimeout(function(){
+                $('.selectpicker').selectpicker('refresh');
+            })
         });
     }
 

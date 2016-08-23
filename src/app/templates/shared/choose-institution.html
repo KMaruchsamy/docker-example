@@ -28,7 +28,7 @@
             </div>
 
             <div class="margin-2em-top-bottom" *ngIf="isMultiCampus">
-                <select class="" #chooseCampus id="choose-campus" (change)="setInstitution(chooseCampus.value)" data-width="400" data-size="6" title='Choose an institution'>
+                <select class="selectpicker" #chooseCampus id="choose-campus" (change)="setInstitution(chooseCampus.value)" data-width="400" data-size="6" title='Choose an institution'>
                     <option *ngFor="let campus of Campus; let i = index" [selected]="campus.InstitutionId==institutionId" [value]='campus.InstitutionId'>{{campus.InstitutionNameWithProgOfStudy}}</option>
                 </select>
             </div>
