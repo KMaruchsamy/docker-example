@@ -2,7 +2,7 @@ branch-defaults:
   default:
     environment: nursingadminapp-qa
   dev:
-    environment: nursingadminapp-dev
+    environment: nursingadminapp-dev-1
 global:
   application_name: nursing.adminapp.qa
   default_ec2_keyname: NursingUx
