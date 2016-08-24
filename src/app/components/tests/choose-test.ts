@@ -258,22 +258,8 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
             .map(response => response.json())
             .subscribe(json => {
                 self.tests = json;
+                self.bindDatatable(self);
 
-                if (self.testsTable) 
-                    self.testsTable.destroy();
-                    setTimeout(json => {
-                        self.testsTable = $('#chooseTestTable').DataTable({
-                            "paging": false,
-                            "searching": false,
-                            "responsive": true,
-                            "info": false,
-                            "ordering": false
-                        });
-                        $('#chooseTestTable').on('responsive-display.dt', function() {
-                            $(this).find('.child .dtr-title br').remove();
-                        });
-                    });
-                
                 this.noTest = true;
             },
             error => console.log(error));
@@ -476,9 +462,9 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
 
     bindTestSearchResults(search: string, setValue: boolean): void {
         let self = this;
-        this.testsTable = null;
         if (setValue) {
             self.tests = _.filter(self.searchResult, { TestName: search });
+            self.bindDatatable(self);
         }
         else {
             if (search.length != 0) {
@@ -495,10 +481,14 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
                     }
                 }
                 self.tests = _testDetails;
+                self.bindDatatable(self);
             }
             else {
-                if (this.searchResult.length != 0)
+                if (this.searchResult.length != 0) {
                     self.tests = this.searchResult;
+                    self.bindDatatable(self);
+                }
+
                 else {
                     this.noSearch = true;
                     this.noTest = false;
@@ -558,5 +548,24 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
     displayTest(testId: number): void {
         let self = this;
         self.tests = _.filter(self.searchResult, { TestId: testId });
+        self.bindDatatable(self);
+    }
+
+
+    bindDatatable(self:any): void{
+        if (self.testsTable)
+            self.testsTable.destroy();
+        setTimeout(() => {
+            self.testsTable = $('#chooseTestTable').DataTable({
+                "paging": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                "ordering": false
+            });
+            $('#chooseTestTable').on('responsive-display.dt', function () {
+                $(this).find('.child .dtr-title br').remove();
+            });
+        });
     }
 }
