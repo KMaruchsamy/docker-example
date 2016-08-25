@@ -1,6 +1,7 @@
 <page-header></page-header>
 <main role="main" class="app-main">
-    <test-header [modify]="modify" (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Choose a test' [testSchedule]="testScheduleModel"></test-header>
+    <test-header [modify]="modify" (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Choose a test'
+        [testSchedule]="testScheduleModel"></test-header>
     <div class="section section-top-thin">
         <div class="container-medium-width">
             <ul class="nav nav-tabs minimal-nav-tabs">
@@ -10,11 +11,12 @@
             <div class="tab-content">
                 <div class="tab-pane" id="chooseBySubject" [class.active]="activeChooseBySubject">
                     <select #subjectDropDown id="testSubjectOptions" (change)="loadTests(subjectDropDown.value)" class="selectpicker" data-width="400"
-                            data-size="6" title='Choose a test by subject'>
+                        data-size="6" title='Choose a test by subject'>
                         <option *ngFor="let subject of subjects; let i = index" [selected]="subject.SubjectId==subjectId" [value]='subject.SubjectId'>{{subject.SubjectName}}</option>
                     </select>
 
-                </div><!--closes tab pane-->
+                </div>
+                <!--closes tab pane-->
 
                 <div class="tab-pane" id="findByName" [class.active]="activeFindByName">
                     <div id="findByNameContainer">
@@ -22,7 +24,8 @@
                             <label class="screen-reader-only" for="findTestByName">Find by Name</label>
                             <p class="smaller text-smaller-margin">Enter a minimum of 2 characters to start searching.</p>
                             <div class="search-input">
-                                <input class="typeahead" type="search" autofocus autocomplete="off" role="search" #findtestbyname id="findTestByName" (input)="CallOnSearchInput(findtestbyname);" (keyup)="bindTypeaheadFocus(findtestbyname,findtestbyname.value);">
+                                <input class="typeahead" type="search" autofocus autocomplete="off" role="search" #findtestbyname id="findTestByName" (input)="CallOnSearchInput(findtestbyname);"
+                                    (keyup)="bindTypeaheadFocus(findtestbyname,findtestbyname.value);">
                                 <button class="button" [disabled]="!disabled" #btnTypeahead id="btnTypeahead" type="submit" (click)="bindTypeaheadSearchButton(findtestbyname.value,$event)">
                                     <img src="images/search-icon_2x.png" alt="Search Icon">
                                 </button>
@@ -36,7 +39,8 @@
                         <p class="text-larger section-medium-thin">We're sorry, there are no test names that match your search. Please try again.</p>
                     </div>
 
-                </div><!--closes tab pane-->
+                </div>
+                <!--closes tab pane-->
 
                 <div [class.hidden]="tests?.length===0" [hidden]="!noTest" class="margin-2em-top available-tests hidden clearfix" id="availableTests">
 
@@ -55,25 +59,30 @@
                         <tbody>
                             <tr *ngFor="let test of tests; let x = index">
                                 <td>{{test.TestName}}</td>
-                                <td>{{(test.NumberOfQuestionsInTest * test.SecondsPerQuestion)/60|round }} {{test.SecondsPerQuestion === 0 ? '': 'mins'}} </td>
+                                <td>{{(test.NumberOfQuestionsInTest * test.SecondsPerQuestion)/60|round }} {{test.SecondsPerQuestion
+                                    === 0 ? '': 'mins'}} </td>
                                 <td class="center">{{test.NumberOfQuestionsInTest}}</td>
                                 <td>{{test.NormingStatusName}}</td>
                                 <td class="center">
-                                    <a *ngIf="validatePDFURL(test.TopicalBlueprintLink)" [attr.href]="sanitizeURL(test.TopicalBlueprintLink)" target="_blank"><img  src="images/pdf-green-icon_2x.png" width="20" height="24" alt="open {{test.TestName}} Blueprint PDF"></a>
+                                    <a *ngIf="validatePDFURL(test.TopicalBlueprintLink)" [attr.href]="sanitizeURL(test.TopicalBlueprintLink)" target="_blank"><img src="images/pdf-green-icon_2x.png" width="20" height="24" alt="open {{test.TestName}} Blueprint PDF"></a>
                                     <img *ngIf="!validatePDFURL(test.TopicalBlueprintLink)" src="images/no-blueprint-icon.svg" width="24" height="24" alt="No Blueprint Available">
                                 </td>
                                 <td class="center">
                                     <input type="radio" [attr.testid]="test.TestId" [attr.testname]="test.TestName" [checked]="test.TestId === testScheduleModel.testId"
-                                           (change)="selectTest(test.TestId,test.TestName, subjectDropDown.value,test.NormingStatusName);" class="checkbox-image"
-                                           [attr.id]="'rdb' + test.TestName|removewhitespace" [attr.aria-label]="'Choose ' + test.TestName">
+                                        (change)="selectTest(test.TestId,test.TestName, subjectDropDown.value,test.NormingStatusName);"
+                                        class="checkbox-image" [attr.id]="'rdb' + test.TestName|removewhitespace" [attr.aria-label]="'Choose ' + test.TestName">
                                     <label [attr.for]="'rdb' + test.TestName|removewhitespace"></label>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <p [class.hidden]="tests?.length===0" class="icon info-icon-yellow section-medium-thin"><strong>Please note:</strong> Test blueprints are for faculty use only and should not be shared with students.</p>
-                    <button type="submit" (click)="saveChooseTest($event)" id="chooseDate" class="button right button-mobile-block"
-                            [disabled]=!testScheduleModel.testId>
+                    <p [class.hidden]="tests?.length===0 || noBlueprints" class="icon info-icon-yellow section-medium-thin"><strong>Please note:</strong> Test blueprints are for faculty use only and should not be shared with
+                        students.</p>
+                    <div *ngIf="activeChooseBySubject && noBlueprints" class="icon-container-flush-text margin-2em-top">
+                        <p  class="icon info-icon-yellow">Blueprints are not available for Kaplan {{subjectDropDown.options[subjectDropDown.selectedIndex].text}}
+                            tests.</p>
+                    </div>
+                    <button type="submit" (click)="saveChooseTest($event)" id="chooseDate" class="button right button-mobile-block" [disabled]=!testScheduleModel.testId>
                         Next step: Choose date and time
                     </button>
                     <!--</form>-->
@@ -81,60 +90,40 @@
 
                 <!--closes <div class="section available-tests">-->
                 <!--</section>-->
-            </div><!--closes  tab content -->
+            </div>
+            <!--closes  tab content -->
 
-        </div><!--closes container-medium-width-->
-    </div><!--closes div section-->
+        </div>
+        <!--closes container-medium-width-->
+    </div>
+    <!--closes div section-->
 </main>
 
 <page-footer></page-footer>
 
-<confirmation-popup [popupId]="'confirmationPopup'"
-                    [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
-                    [okButtonText]="'Yes, leave this page'"
-                    [cancelButtonText]="'No, stay on this page'"
-                    (onOK)="onOKConfirmation()"
-                    (onCancel)="onCancelConfirmation($event)"
-                    [hideClose]="true">
+<confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
+    [okButtonText]="'Yes, leave this page'" [cancelButtonText]="'No, stay on this page'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation($event)"
+    [hideClose]="true">
 </confirmation-popup>
 
-<alert-popup [popupId]="'alertPopup'"
-             [message]="'We’re sorry! The testing window you specified has expired and needs to be changed. Please specify a new testing window.'"
-             [okButtonText]="'OK'"
-             (onOK)="onOKAlert()"
-             [hideClose]="false">
+<alert-popup [popupId]="'alertPopup'" [message]="'We’re sorry! The testing window you specified has expired and needs to be changed. Please specify a new testing window.'"
+    [okButtonText]="'OK'" (onOK)="onOKAlert()" [hideClose]="false">
 </alert-popup>
 
-<alert-popup [popupId]="'testPassed'"
-             [message]="'We’re sorry! You can no longer modify this testing session because it has already taken place. Click or tap “OK” to go back to the Manage Tests main page.'"
-             [okButtonText]="'OK'"
-             (onOK)="cancelStartingTestChanges($event)"
-             [hideClose]="false">
-</alert-popup>  
-
-<alert-popup [popupId]="'testStarted'"
-             [message]="'We’re sorry! This testing session is now underway and you can no longer modify it from this location. Click or tap “OK” to go to the Manage Tests main page, where you will be able to make changes to this testing session.'"
-             [okButtonText]="'OK'"
-             (onOK)="cancelStartingTestChanges($event)"
-             [hideClose]="false">
+<alert-popup [popupId]="'testPassed'" [message]="'We’re sorry! You can no longer modify this testing session because it has already taken place. Click or tap “OK” to go back to the Manage Tests main page.'"
+    [okButtonText]="'OK'" (onOK)="cancelStartingTestChanges($event)" [hideClose]="false">
 </alert-popup>
 
-<test-starting-popup [popupId]="'testStartingin5'"
-                    [heading]="'Alert: Testing Session Starting in 5 Minutes'"
-                    leadParagraph="This testing session is scheduled to start in <b>5 minutes ({{testScheduleModel.scheduleStartTime|parseDate:'h:mma'}})</b>."
-                    [paragraph]="'Once this testing session is in progress, you will no longer be able to modify it from this location.'"
-                    [okButtonText]="'Continue modifying this session'"
-                    [cancelButtonText]="'Cancel changes'"
-                    (onOK)="onCancelConfirmation($event)"
-                    (onCancel)="cancelStartingTestChanges($event)">
+<alert-popup [popupId]="'testStarted'" [message]="'We’re sorry! This testing session is now underway and you can no longer modify it from this location. Click or tap “OK” to go to the Manage Tests main page, where you will be able to make changes to this testing session.'"
+    [okButtonText]="'OK'" (onOK)="cancelStartingTestChanges($event)" [hideClose]="false">
+</alert-popup>
+
+<test-starting-popup [popupId]="'testStartingin5'" [heading]="'Alert: Testing Session Starting in 5 Minutes'" leadParagraph="This testing session is scheduled to start in <b>5 minutes ({{testScheduleModel.scheduleStartTime|parseDate:'h:mma'}})</b>."
+    [paragraph]="'Once this testing session is in progress, you will no longer be able to modify it from this location.'" [okButtonText]="'Continue modifying this session'"
+    [cancelButtonText]="'Cancel changes'" (onOK)="onCancelConfirmation($event)" (onCancel)="cancelStartingTestChanges($event)">
 </test-starting-popup>
 
-<test-starting-popup [popupId]="'testStartingin10'"
-                    [heading]="'Alert: Testing Session Starting in 10 Minutes'"
-                    leadParagraph="This testing session is scheduled to start in <b>10 minutes ({{testScheduleModel.scheduleStartTime|parseDate:'h:mma'}})</b>."
-                    [paragraph]="'Once this testing session is in progress, you will no longer be able to modify it from this location.'"
-                    [okButtonText]="'Continue modifying this session'"
-                    [cancelButtonText]="'Cancel changes'"
-                    (onOK)="onCancelConfirmation($event)"
-                    (onCancel)="cancelStartingTestChanges($event)">
+<test-starting-popup [popupId]="'testStartingin10'" [heading]="'Alert: Testing Session Starting in 10 Minutes'" leadParagraph="This testing session is scheduled to start in <b>10 minutes ({{testScheduleModel.scheduleStartTime|parseDate:'h:mma'}})</b>."
+    [paragraph]="'Once this testing session is in progress, you will no longer be able to modify it from this location.'" [okButtonText]="'Continue modifying this session'"
+    [cancelButtonText]="'Cancel changes'" (onOK)="onCancelConfirmation($event)" (onCancel)="cancelStartingTestChanges($event)">
 </test-starting-popup>

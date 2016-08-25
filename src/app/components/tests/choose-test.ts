@@ -70,6 +70,7 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
     subjectsSubscription: Subscription;
     testsSubscription: Subscription;
     typeaheadTestsSubscription: Subscription;
+    noBlueprints: boolean = false;
     constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public aLocation: Location,
         public titleService: Title, private sanitizer:DomSanitizationService) {
@@ -258,6 +259,7 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
             .map(response => response.json())
             .subscribe(json => {
                 self.tests = json;
+                self.checkBlueprints();
                 self.bindDatatable(self);
 
                 this.noTest = true;
@@ -573,5 +575,12 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
         if (url && url.trim() !== '' && _.endsWith(url, '.pdf'))
             return true;
         return false;
+    }
+
+
+    checkBlueprints(){
+        this.noBlueprints = !_.some(this.tests, (test) => {
+            return (test.TopicalBlueprintLink && test.TopicalBlueprintLink.trim() !== '' && _.endsWith(test.TopicalBlueprintLink, '.pdf'));
+        });       
     }
 }
