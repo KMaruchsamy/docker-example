@@ -568,4 +568,10 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
             });
         });
     }
+
+    validatePDFURL(url: string): boolean {
+        if (url && url.trim() !== '' && _.endsWith(url, '.pdf'))
+            return true;
+        return false;
+    }
 }

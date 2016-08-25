@@ -59,7 +59,8 @@
                                 <td class="center">{{test.NumberOfQuestionsInTest}}</td>
                                 <td>{{test.NormingStatusName}}</td>
                                 <td class="center">
-                                    <a [attr.href]="sanitizeURL(test.TopicalBlueprintLink)" target="_blank"><img src="images/pdf-green-icon_2x.png" width="20" height="24" alt="open {{test.TestName}} Blueprint PDF"></a>
+                                    <a *ngIf="validatePDFURL(test.TopicalBlueprintLink)" [attr.href]="sanitizeURL(test.TopicalBlueprintLink)" target="_blank"><img  src="images/pdf-green-icon_2x.png" width="20" height="24" alt="open {{test.TestName}} Blueprint PDF"></a>
+                                    <img *ngIf="!validatePDFURL(test.TopicalBlueprintLink)" src="images/no-blueprint-icon.svg" width="24" height="24" alt="No Blueprint Available">
                                 </td>
                                 <td class="center">
                                     <input type="radio" [attr.testid]="test.TestId" [attr.testname]="test.TestName" [checked]="test.TestId === testScheduleModel.testId"
