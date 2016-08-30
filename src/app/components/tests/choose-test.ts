@@ -254,7 +254,7 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
         let self = this;
         this.subjectId = subjectID;
         this.searchString = '';
-        let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}234`);
+        let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}`);
         let testsObservable: Observable<Response> = this.testService.getTests(testsURL);
 
         this.testsSubscription = testsObservable
