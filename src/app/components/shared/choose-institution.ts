@@ -11,9 +11,10 @@ import {TestService} from '../../services/test.service';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {Subscription, Observable} from 'rxjs/Rx';
 import {Response} from '@angular/http';
+import {Log} from '../../services/log';
 @Component({
     selector: 'choose-institution',
-    providers: [Common, Auth, TestService, TestScheduleModel],
+    providers: [Common, Auth, TestService, TestScheduleModel,Log],
     templateUrl: 'templates/shared/choose-institution.html',
     directives: [PageHeader, ROUTER_DIRECTIVES, NgIf]
 })
@@ -36,7 +37,7 @@ export class ChooseInstitution implements OnInit, OnDestroy {
     isMultiCampus: boolean = false;
     Campus: Object[] = [];
     institutionId: number;
-    constructor(public router: Router, private activatedRoute: ActivatedRoute, public common: Common, public auth: Auth, public aLocation: Location, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
+    constructor(public router: Router, private activatedRoute: ActivatedRoute, public common: Common, public auth: Auth, public aLocation: Location, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title, private log: Log) {
 
     }
 

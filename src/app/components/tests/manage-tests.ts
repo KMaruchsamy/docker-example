@@ -19,6 +19,7 @@ import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {Utility} from '../../scripts/utility';
 import * as _ from 'lodash';
 import {TestsModal} from '../../models/tests.modal';
+import {Log} from '../../services/log';
 // import '../../plugins/dropdown.js';
 // import '../../plugins/bootstrap-select.min.js';
 // // import '../../plugins/jquery.dataTables.min.js';
@@ -32,7 +33,7 @@ import {TestsModal} from '../../models/tests.modal';
 @Component({
     selector: 'manage-tests',
     templateUrl: 'templates/tests/manage-tests.html',
-    providers: [TestService, Auth, TestScheduleModel, Utility, Common, TestsModal],
+    providers: [TestService, Auth, TestScheduleModel, Utility, Common, TestsModal, Log],
     host: {
         '(window:resize)': 'resize($event)'
     },
@@ -67,7 +68,7 @@ export class ManageTests implements OnInit, OnDestroy {
     testStatus: any;
     isMultiCampus: boolean = false;
     Campus: Object[] = [];
-    constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public titleService: Title, private testsModal: TestsModal) { }
+    constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public router: Router, public auth: Auth, public common: Common, public testSchedule: TestScheduleModel, public titleService: Title, private testsModal: TestsModal, private log: Log) { }
 
     ngOnDestroy(): void {
         if (this.actionSubscription)

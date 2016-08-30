@@ -22,6 +22,8 @@ import {RoundPipe} from '../../pipes/round.pipe';
 import {Utility} from '../../scripts/utility';
 import * as _ from 'lodash';
 import {Response} from '@angular/http';
+import {Log} from '../../services/log';
+
 // import {SharedDeactivateGuard} from '../shared/shared.deactivate.guard';
 // import '../../plugins/dropdown.js';
 // import '../../plugins/bootstrap-select.min.js';
@@ -33,7 +35,7 @@ import {Response} from '@angular/http';
 @Component({
     selector: 'choose-test',
     templateUrl: 'templates/tests/choose-test.html',
-    providers: [TestService, Auth, TestScheduleModel, Utility, Common],
+    providers: [TestService, Auth, TestScheduleModel, Utility, Common, Log],
     directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup, AlertPopup, TestingSessionStartingPopup, NgIf, NgFor],
     pipes: [RemoveWhitespacePipe, RoundPipe, ParseDatePipe]
 })
@@ -73,7 +75,7 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
     noBlueprints: boolean = false;
     constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public aLocation: Location,
-        public titleService: Title, private sanitizer:DomSanitizationService) {
+        public titleService: Title, private sanitizer: DomSanitizationService, private log: Log) {
     }
 
     ngOnChanges(): void {
@@ -252,7 +254,7 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
         let self = this;
         this.subjectId = subjectID;
         this.searchString = '';
-        let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}`);
+        let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}234`);
         let testsObservable: Observable<Response> = this.testService.getTests(testsURL);
 
         this.testsSubscription = testsObservable
@@ -264,8 +266,9 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
 
                 this.noTest = true;
             },
-            error => console.log(error));
-
+            error => {
+                self.log.error(error.json().Message, JSON.stringify(error))
+            });
     }
 
     saveChooseTest(e): any {

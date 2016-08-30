@@ -11,13 +11,13 @@ export class Log {
 
     }
 
-    error(error: string, stacktrace: string='', reason: string=''): any {
+    error(error: string, stacktrace: string = null, reason: string =  null): any {
         let body = JSON.stringify({
             ErrorType: error,
             ErrorDescription: stacktrace,
             Reason: reason
         });
-        let url: string = this.common.getApiServer() + links.api.baseurl + links.api.admin.logging.error;
+        let url: string = this.common.getLogServer();
         let headers: Headers = new Headers();
         headers.append('Authorization', this.auth.authheader);
         headers.append('Accept', 'application/json');
@@ -31,7 +31,7 @@ export class Log {
                  response => console.log(response),
                  error=>this.handleError,
                  () => console.log('Error logged ...')
-            );
+        );
     }
 
     handleError(error: Response): any {

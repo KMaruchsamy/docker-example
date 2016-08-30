@@ -10,10 +10,11 @@ import {TermsOfUse} from '../terms-of-use/terms-of-use';
 import {Angulartics2On} from 'angulartics2';
 import {Response} from '@angular/http';
 import {Observable, Subscription} from 'rxjs/Rx';
+import {Log} from '../../services/log';
 
 @Component({
     selector: 'login-content',
-    providers: [Auth, Common],
+    providers: [Auth, Common, Log],
     templateUrl: 'templates/login/login-content.html',
     directives: [ROUTER_DIRECTIVES, Angulartics2On, TermsOfUse]
 })
@@ -36,7 +37,7 @@ export class LoginContent implements OnDestroy {
     showTerms: boolean = false;
     termSubscription: Subscription;
     userType: string = 'admin';
-    constructor(private zone: NgZone, public router: Router, public auth: Auth, public common: Common) {
+    constructor(private zone: NgZone, public router: Router, public auth: Auth, public common: Common, private log: Log) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
         this.sStorage = this.common.getStorage();

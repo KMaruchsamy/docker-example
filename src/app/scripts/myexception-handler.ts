@@ -12,9 +12,6 @@ export class MyExceptionHandler implements ExceptionHandler {
     }
 
     call(error, stackTrace = null, reason = null) {
-        console.log("ERROR >> " + error);
-        console.log("STACKTRACE >> " + stackTrace);
-        console.log("REASON >> " + reason);
 
         let http: Http = this.injector.get(Http);
         let auth: Auth = new Auth(http);
