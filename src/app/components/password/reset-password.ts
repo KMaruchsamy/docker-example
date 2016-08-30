@@ -12,10 +12,11 @@ import {PasswordHeader} from '../password/password-header';
 import {Validations} from '../../services/validations';
 import {links, errorcodes} from '../../constants/config';
 import {general, reset_password, temp_password, login} from '../../constants/error-messages';
+import {Log} from '../../services/log';
 
 @Component({
     selector: 'reset-password',
-    providers: [Auth, Common, Validations],
+    providers: [Auth, Common, Validations, Log],
     templateUrl: 'templates/password/reset-password.html',
     directives: [PasswordHeader, ROUTER_DIRECTIVES, TermsOfUse]
 })
@@ -31,7 +32,7 @@ export class ResetPassword implements OnInit, OnDestroy {
     errorCodes: any;
     showTerms: boolean = false;
     termSubscription: Subscription;
-    constructor(public router: Router, public auth: Auth, public common: Common, public location: Location, public validations: Validations, public titleService: Title) {
+    constructor(public router: Router, public auth: Auth, public common: Common, public location: Location, public validations: Validations, public titleService: Title, private log: Log) {
 
     }
 

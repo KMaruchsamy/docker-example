@@ -22,16 +22,12 @@ import {AlertPopup} from '../shared/alert.popup';
 import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
 import {Loader} from '../shared/loader';
 import {Subscription, Observable} from 'rxjs/Rx';
-// import '../../plugins/dropdown.js';
-// import '../../plugins/bootstrap-select.min.js';
-// import '../../plugins/jquery.dataTables.min.js';
-// import '../../plugins/dataTables.responsive.js';
-// import '../../lib/modal.js';
+import {Log} from '../../services/log';
 
 @Component({
     selector: "review-test",
     templateUrl: "templates/tests/review-test.html",
-    providers: [TestService, Auth, TestScheduleModel, Common],
+    providers: [TestService, Auth, TestScheduleModel, Common, Log],
     directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, ROUTER_DIRECTIVES, RetesterAlternatePopup, RetesterNoAlternatePopup, ConfirmationPopup, TimeExceptionPopup, Loader, AlertPopup, TestingSessionStartingPopup],
     pipes: [ParseDatePipe]
 })
@@ -73,7 +69,7 @@ export class ReviewTest implements OnInit, OnDestroy {
         public testService: TestService, public auth: Auth, public common: Common,
         public router: Router, public dynamicComponentLoader: DynamicComponentLoader,
         public elementRef: ElementRef, public aLocation: Location,
-        public viewContainerRef: ViewContainerRef, public titleService: Title, private activatedRoute: ActivatedRoute) {
+        public viewContainerRef: ViewContainerRef, public titleService: Title, private activatedRoute: ActivatedRoute, private log: Log) {
 
     }
 

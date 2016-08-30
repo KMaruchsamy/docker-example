@@ -11,10 +11,11 @@ import {Validations} from '../../services/validations';
 import * as _ from 'lodash';
 import {links, errorcodes} from '../../constants/config';
 import {manage_account, general, reset_password_after_login, reset_student_password} from '../../constants/error-messages';
+import {Log} from '../../services/log';
 
 @Component({
     selector: 'account',
-    providers: [Auth, Common, Validations],
+    providers: [Auth, Common, Validations, Log],
     templateUrl: 'templates/account/account.html',
     directives: [PageHeader, PageFooter]
 })
@@ -28,7 +29,7 @@ export class Account implements OnInit, OnDestroy {
     resetStudentPasswordSubscription: Subscription;
     routeSubscription: Subscription;
     errorCodes: any;
-    constructor(private http: Http, public router: Router, private activatedRoute: ActivatedRoute, public auth: Auth, public common: Common, public validations: Validations, public titleService: Title) {
+    constructor(private http: Http, public router: Router, private activatedRoute: ActivatedRoute, public auth: Auth, public common: Common, public validations: Validations, public titleService: Title, private log: Log) {
     }
 
     ngOnDestroy(): void {
