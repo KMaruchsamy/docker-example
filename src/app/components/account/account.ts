@@ -29,6 +29,30 @@ export class Account implements OnInit, OnDestroy {
     resetStudentPasswordSubscription: Subscription;
     routeSubscription: Subscription;
     errorCodes: any;
+    firstName: string;
+    lastName: string;
+    facultyTitle: string;
+    emailId: string;
+    schoolName: Array<any>;
+    noProfileChanges: boolean = true;
+    profileChanged: boolean = false;
+    showChangeEmailSection: boolean = false;
+    changedEmail: boolean = false;
+    showChangeEmailButton: boolean = true;
+    changeEmailDisabled: boolean = true;
+    passwordReset: boolean = false;
+    resetPasswordSuccessMessage: string;
+    showHintMessage: boolean = false;
+    studentPasswordResetSuccessMessage: string;
+    studentPasswordReset: boolean = false;
+    studentEmailCleared: boolean = false;
+    // error messages
+    changeEmailErrorMessage: string;
+    changeEmailPasswordErrorMessage: string;
+    resetPasswordErrorMessage: string;
+    passwordErrorMessage: string;
+    sendStudentPasswordErrorMessage: string;
+    emailValidationEror: string;
     constructor(private http: Http, public router: Router, private activatedRoute: ActivatedRoute, public auth: Auth, public common: Common, public validations: Validations, public titleService: Title, private log: Log) {
     }
 
@@ -58,23 +82,18 @@ export class Account implements OnInit, OnDestroy {
                 this.scroll(scroll);
             }
             else {
-                $(document).scrollTop(0);
+                window.scroll(0,0);
             }
         })
-
-        // let scroll = this.routeParams.get('scroll');
-
     }
 
     getInitialize() {
-        // this.sStorage = this.common.sStorage;
         if (this.auth.isAuth()) {
-            $('#firstName').val(this.sStorage.getItem('firstname'));
-            $('#lastName').val(this.sStorage.getItem('lastname'));
-            $('#facultyTitle').val(this.sStorage.getItem('title'));
-            // this.setInstitutionName(this.sStorage.getItem('institutions'));
-            this.setInstitutionNames(JSON.parse(this.auth.institutions));
-            $('#emailId').text(this.sStorage.getItem('useremail'));
+          this.firstName = this.sStorage.getItem('firstname');
+          this.lastName = this.sStorage.getItem('lastname');
+          this.facultyTitle = this.sStorage.getItem('title');
+          this.setInstitutionNames(JSON.parse(this.auth.institutions));
+          this.emailId = this.sStorage.getItem('useremail');
         }
         else {
             this.redirectToLogin();
@@ -92,89 +111,32 @@ export class Account implements OnInit, OnDestroy {
                 break;
 
             default:
-                $(document).scrollTop(0);
+                window.scroll(0,0);
                 break;
         }
     }
-
+    
     setInstitutionNames(institutions) {
-        if (institutions !== null || institutions !== 'undefined')
-            $('#schoolName').html(_.map(institutions, 'InstitutionNameWithProgOfStudy').join('<br />'));
+        if (institutions !== null || institutions !== 'undefined') {
+            this.schoolName = _.map(institutions, 'InstitutionNameWithProgOfStudy');
+        }
     }
 
     initialize() {
         let self = this;
         if (this.auth.isAuth()) {
-            let $btnResetResetPassword = $('#btnResetResetPassword');
-            let $successResetPasswordContainer = $('#successResetPasswordContainer');
-
-            let $btnClearResetStudentPassword = $('#btnClearResetStudentPassword');
-            let $successResetStudentPasswordContainer = $('#successResetStudentPasswordContainer');
-
             self.getInitialize();
-            self.resetProfileFields();
-            self.HideChangeEmail();
-            self.initializeResetPassword();
-            self.initializeResetStudentPassword();
-
-            $('#divNewPasswordInfo').addClass('hidden');
-
-            $('#firstName').bind('input', function () {
-                self.checkfirstnamelastname();
-                self.resetProfileFields();
-            });
-            $('#lastName').bind('input', function () {
-                self.checkfirstnamelastname();
-                self.resetProfileFields();
-            });
-            $('#facultyTitle').bind('input', function () {
-                self.checkfirstnamelastname();
-                self.resetProfileFields();
-            });
-            $('#emailAddress').bind('input', function () {
-                self.checkemailpassword();
-            });
-            $('#txtPassword').bind('input', function () {
-                self.checkemailpassword();
-            });
-            $('#currentPassword').bind('input', function () {
-                self.checkpasswordlength();
-                if ($btnResetResetPassword.hasClass('hidden'))
-                    self.resetSuccess($btnResetResetPassword, $successResetPasswordContainer);
-            });
-            $('#newPassword').focus(function () {
-                $('#divNewPasswordInfo').slideDown('fast', function () {
-                    $(this).removeClass('hidden');
-                });
-            });
-            $('#newPassword').bind('input', function () {
-                self.checkpasswordlength();
-                if ($btnResetResetPassword.hasClass('hidden'))
-                    self.resetSuccess($btnResetResetPassword, $successResetPasswordContainer);
-            });
-            $('#confirmNewPassword').bind('input', function () {
-                self.checkpasswordlength();
-                if ($btnResetResetPassword.hasClass('hidden'))
-                    self.resetSuccess($btnResetResetPassword, $successResetPasswordContainer);
-            });
-            $('#resetStudentPassword').bind('input', function () {
-                self.checkstudentemail();
-                if ($btnClearResetStudentPassword.hasClass('hidden'))
-                    self.resetSuccess($btnClearResetStudentPassword, $successResetStudentPasswordContainer);
-            });
         }
         else {
             self.redirectToLogin();
         }
     }
 
-
-
     redirectToLogin() {
         this.router.navigateByUrl('/');
     }
 
-    onSubmitSaveProfile(txtFirstname, txtLastname, txtTitle, btnSaveProfile, resetSaveProfile, successContainer, event) {
+    onSubmitSaveProfile(txtFirstname, txtLastname, txtTitle, event) {
         event.preventDefault();
         let self = this;
         let fname = txtFirstname.value;
@@ -189,7 +151,7 @@ export class Account implements OnInit, OnDestroy {
             .map(response => response.status)
             .subscribe(status => {
                 if (status.toString() === this.errorCodes.SUCCESS) {
-                    self.showSuccess(resetSaveProfile, successContainer, btnSaveProfile);
+                    this.profileChanged = true;
                     self.sStorage.setItem('firstname', fname);
                     self.sStorage.setItem('lastname', lname);
                     self.sStorage.setItem('title', title);
@@ -204,26 +166,22 @@ export class Account implements OnInit, OnDestroy {
             }, error => console.log(error));
     }
 
-    onCancelSaveProfile(btnSaveProfile, event) {
+    onCancelSaveProfile() {
         event.preventDefault();
         this.getInitialize();
-        $(btnSaveProfile).attr("disabled", "true");
-        $(btnSaveProfile).attr("aria-disabled", "true");
+        this.noProfileChanges = true;
     }
 
     resetProfileFields() {
-        $('#profilecancel').removeClass('hidden');
-        $('#successmsg').addClass('hidden');
+        this.profileChanged = false;
     }
 
-    onSubmitChangeEmail(txtNewEmailId, txtPassword, btnChangeEmail, resetEmailSave, SuccessEmailContainer, EmailErrorContainer, PasswordErrorContainer, event) {
+    onSubmitChangeEmail(txtNewEmailId, txtPassword, event) {
         event.preventDefault();
         let self = this;
         let status = 0;
         let newemailid = txtNewEmailId.value;
-        this.clearError(EmailErrorContainer, SuccessEmailContainer, 1);
-        this.clearError(PasswordErrorContainer, SuccessEmailContainer, 2);
-        if (this.validateEmail(newemailid, SuccessEmailContainer, EmailErrorContainer, 0)) {
+        if (this.validations.validateEmailFormat(newemailid)) {
             let userid = this.auth.userid;
             let email = this.auth.useremail;
             let password = txtPassword.value;
@@ -238,30 +196,24 @@ export class Account implements OnInit, OnDestroy {
                 })
                 .subscribe(json => {
                     if (status.toString() === this.errorCodes.SUCCESS) {
-                        self.showSuccess(resetEmailSave, SuccessEmailContainer, btnChangeEmail);
                         self.sStorage.setItem('jwt', json.AccessToken);
                         self.sStorage.setItem('useremail', newemailid);
                         self.auth.authheader = 'Bearer ' + json.AccessToken;
                         self.auth.useremail = newemailid
-                        $('#emailId').text(newemailid);
+                        this.emailId = newemailid;
                         txtNewEmailId.value = '';
                         // self.getInitialize();
-                        setTimeout(function () {
-                            $("#changeEmailFormSubmittable").slideUp("slow", function () {
-                                $('#changeEmailFormSubmittable').addClass('hidden');
-                                $('#showChangeEmail').removeClass('hidden');
-                            });
-                        }, 3000);
+                        this.changedEmail = true;
                     }
                     else if (status.toString() === this.errorCodes.API) {
                         if (json.Payload.length > 0) {
                             if (json.Payload[0].Messages.length > 0) {
-                                self.showError(json.Payload[0].Messages[0].toString(), PasswordErrorContainer, 2);
+                                this.changeEmailPasswordErrorMessage = json.Payload[0].Messages[0].toString()
                             }
                         }
                     }
                     else {
-                        self.showError(general.exception, PasswordErrorContainer, 2);
+                        this.changeEmailPasswordErrorMessage = general.exception;
                     }
 
                     txtPassword.value = '';
@@ -270,70 +222,45 @@ export class Account implements OnInit, OnDestroy {
                     if (error.status.toString() === this.errorCodes.API) {
                         if (error.json().Payload.length > 0) {
                             if (error.json().Payload[0].Messages.length > 0) {
-                                self.showError(error.json().Payload[0].Messages[0].toString(), PasswordErrorContainer, 2);
+                                this.changeEmailPasswordErrorMessage = error.json().Payload[0].Messages[0].toString();
                             }
                         }
                     }
                     else {
-                        self.showError(general.exception, PasswordErrorContainer, 2);
+                        this.changeEmailPasswordErrorMessage = general.exception;
                     }
                     txtPassword.value = '';
                 });
         }
         else {
             txtPassword.value = '';
+            this.changeEmailErrorMessage = manage_account.email_format_validation;
         }
 
     }
-
-    showChangeEmail(btnShowChangeEmail, txtNewEmailId, txtPassword, btnChangeEmail, $event) {
-        $('#successemailmsg').addClass('hidden');
-        // $('#changeEmailFormSubmittable').show().removeClass('hidden');
-        $('#changeEmailFormSubmittable').slideDown('fast', function () {
-            $(this).removeClass('hidden');
-        });
-        $(btnShowChangeEmail).addClass('hidden');
-        $('#resetEmailSave').removeClass('hidden');
-
-        txtNewEmailId.value = "";
-        txtPassword.value = "";
-        $(btnChangeEmail).attr("disabled", "true");
-        $(btnChangeEmail).attr("aria-disabled", "true");
-        $('#spnEmailErrorMessage').text('');
-        $('#spnPasswordErrorMessage').text('');
+    
+    showChangeEmail() {
+        this.changedEmail = false;
+        this.showChangeEmailSection = true;
     }
 
-    HideChangeEmail() {
-        $('#changeEmailFormSubmittable').addClass('hidden');
-        $('#showChangeEmail').removeClass('hidden');
-        $('#successemailmsg').addClass('hidden');
+    onCancelChangeEmail() {
+        this.showChangeEmailSection = false;
+        this.changeEmailErrorMessage = '';
+        this.changeEmailPasswordErrorMessage = '';
     }
 
-    onCancelChangeEmail(txtNewEmailId, txtPassword, btnChangeEmail, event) {
-        $('#showChangeEmail').removeClass('hidden');
-        txtNewEmailId.value = "";
-        txtPassword.value = "";
-        $(btnChangeEmail).attr("disabled", "true");
-        $(btnChangeEmail).attr("aria-disabled", "true");
-        $('#spnEmailErrorMessage').text('');
-        $('#spnPasswordErrorMessage').text('');
-        // $('#changeEmailFormSubmittable').hide().addClass('hidden');
-        $('#changeEmailFormSubmittable').slideUp('fast', function () {
-            $(this).addClass('hidden');
-        });
+    showHint() {
+        this.showHintMessage = true;
     }
 
-
-
-
-
-    onSubmitResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword, btnResetResetPassword, CurrentPasswordErrorContainer, ResetPasswordErrorContainer, SuccessResetPasswordContainer, event) {
+    onSubmitResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, event) {
         event.preventDefault();
         let currentpassword = txtCurrentPassword.value;
         let newpassword = txtNewPassword.value;
         let confirmpassword = txtConfirmPassword.value;
         let status = 0;
-        if (this.validatePassword(newpassword, confirmpassword, ResetPasswordErrorContainer, SuccessResetPasswordContainer)) {
+        if (this.validatePassword(newpassword, confirmpassword)) {
             let authheader = this.auth.authheader;
             let userId = this.auth.userid;
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.resetfacultypasswordafterloginapi;
@@ -346,100 +273,62 @@ export class Account implements OnInit, OnDestroy {
                 })
                 .subscribe(json => {
                     if (status.toString() === this.errorCodes.SUCCESS) {
-                        $('#divNewPasswordInfo').slideUp('fast', function () {
-                            $(this).addClass('hidden');
-                        });
-                        SuccessResetPasswordContainer.innerHTML = reset_password_after_login.resetpass_success;
-                        self.showSuccess(btnResetResetPassword, SuccessResetPasswordContainer, btnResetPassword);
-                        self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                        this.passwordReset = true;
+                        this.showHintMessage = false;
+                        this.resetPasswordSuccessMessage = reset_password_after_login.resetpass_success;
+                        this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
+                        this.resetPasswordErrorMessage = '';
                     }
                     else if (status.toString() === this.errorCodes.API) {
                         if (json.Payload.length > 0) {
                             if (json.Payload[0].Messages.length > 0) {
-                                self.showError(json.Payload[0].Messages[0].toString(), ResetPasswordErrorContainer, 4);
-                                self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                                this.passwordErrorMessage = json.Payload[0].Messages[0].toString();
+                                this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
                             }
                         }
                     }
                     else {
-                        self.showError(general.exception, ResetPasswordErrorContainer, 4);
-                        self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                        this.passwordErrorMessage = general.exception;
+                        this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
                     }
                 }, error => {
                     if (error.status.toString() === this.errorCodes.API) {
                         if (error.json().Payload.length > 0) {
                             if (error.json().Payload[0].Messages.length > 0) {
-                                self.showError(error.json().Payload[0].Messages[0].toString(), ResetPasswordErrorContainer, 4);
-                                self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                                this.passwordErrorMessage = error.json().Payload[0].Messages[0].toString();
+                                this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
                             }
                         }
                     }
                     else {
-                        self.showError(general.exception, ResetPasswordErrorContainer, 4);
-                        self.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+                        this.passwordErrorMessage = general.exception;
+                        this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
                     }
 
                 });
         }
         else {
-            this.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
+            this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
         }
     }
 
-
-    initializeResetPassword() {
-        $('#spnCurrentPasswordErrorMessage').text('');
-        $('#spnResetPasswordErrorMessage').text('');
-        $('#errorResetPasswordContainer').addClass('hidden');
-        $('#successResetPasswordContainer').addClass('hidden');
-        $('#currentPassword').val('');
-        $('#newPassword').val('');
-        $('#confirmPassword').val('');
-        $('#btnResetPassword').attr("disabled", "true");
-        $('#btnResetPassword').attr("aria-disabled", "true");
-        $('#btnResetResetPassword').removeClass('hidden');
-    }
-
-    clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword) {
+    clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword) {
         txtNewPassword.value = '';
         txtCurrentPassword.value = '';
         txtConfirmPassword.value = '';
-        $(btnResetPassword).attr("disabled", "true");
-        $(btnResetPassword).attr("aria-disabled", "true");
     }
 
+    onCancelResetPassword() {
+        this.resetPasswordErrorMessage = '';
+        this.resetPasswordSuccessMessage = '';
+        this.showHintMessage = false;
+    }
 
-    onCancelResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword, event) {
+    onSubmitSendStudentPassword(txtResetStudentPassword, event) {
         event.preventDefault();
-        this.clearResetPassword(txtCurrentPassword, txtNewPassword, txtConfirmPassword, btnResetPassword);
-        $('#spnCurrentPasswordErrorMessage').text('');
-        $('#spnResetPasswordErrorMessage').text('');
-        $('#divNewPasswordInfo').slideUp('fast', function () {
-            $(this).addClass('hidden');
-        });
-    }
-
-
-    initializeResetStudentPassword() {
-        let $btnStudentReset = $('#btnStudentReset');
-        let $btnClearResetStudentPassword = $('#btnClearResetStudentPassword');
-        let $spnResetStudentPasswordErrorMessage = $('#spnResetStudentPasswordErrorMessage');
-        let $resetstudentpasswordErrorcontainer = $spnResetStudentPasswordErrorMessage.parent('.error');
-        $btnStudentReset.attr("disabled", "true");
-        $btnStudentReset.attr("aria-disabled", "true");
-        $btnClearResetStudentPassword.removeClass('hidden');
-        $('#resetStudentPassword').val('');
-        $spnResetStudentPasswordErrorMessage.text('');
-        if ($resetstudentpasswordErrorcontainer.length > 0)
-            $resetstudentpasswordErrorcontainer.addClass('hidden');
-        $('#successResetStudentPasswordContainer').addClass('hidden');
-    }
-
-    onSubmitResetStudentPassword(txtResetStudentPassword, btnResetStudentPassword, resetStudentPasswordErrorContainer, successResetStudentPasswordContainer, btnClearResetStudentPassword, event) {
-        event.preventDefault();
-        this.clearError(resetStudentPasswordErrorContainer, successResetStudentPasswordContainer, 5);
         let studentEmailID = txtResetStudentPassword.value;
-        if (this.validateEmail(studentEmailID, successResetStudentPasswordContainer, resetStudentPasswordErrorContainer, 1)) {
+
+        if (this.validations.validateEmailFormat(studentEmailID)) {
             let authheader = this.auth.authheader;
             let userId = this.auth.userid;
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.resetstudentpassword;
@@ -452,215 +341,88 @@ export class Account implements OnInit, OnDestroy {
                     return response.json();
                 })
                 .subscribe(json => {
+                    debugger;
                     if (status.toString() === this.errorCodes.SUCCESS) {
-                        successResetStudentPasswordContainer.innerHTML = reset_student_password.success_message;
-                        self.showSuccess(btnClearResetStudentPassword, successResetStudentPasswordContainer, btnResetStudentPassword);
-                        self.clearResetStudentPassword(txtResetStudentPassword, btnResetStudentPassword);
+                        this.studentPasswordResetSuccessMessage = reset_student_password.success_message;
+                        this.studentPasswordReset = true;
                     }
                     else if (status.toString() === this.errorCodes.API) {
                         if (json.Payload.length > 0) {
                             if (json.Payload[0].Messages.length > 0) {
-                                self.showError(json.Payload[0].Messages[0].toString(), resetStudentPasswordErrorContainer, 5);
-                                self.clearResetStudentPassword(txtResetStudentPassword, null);
+                                this.sendStudentPasswordErrorMessage = json.Payload[0].Messages[0].toString();
                             }
                         }
                     }
                     else {
-                        self.showError(general.exception, resetStudentPasswordErrorContainer, 5);
-                        self.clearResetStudentPassword(txtResetStudentPassword, null);
+                        this.sendStudentPasswordErrorMessage = general.exception;
                     }
                 }, error => {
                     if (error.status.toString() === this.errorCodes.API) {
                         if (error.json().Payload.length > 0) {
                             if (error.json().Payload[0].Messages.length > 0) {
-                                self.showError(error.json().Payload[0].Messages[0].toString(), resetStudentPasswordErrorContainer, 5);
-                                self.clearResetStudentPassword(txtResetStudentPassword, null);
+                                this.sendStudentPasswordErrorMessage = error.json().Payload[0].Messages[0].toString();
                             }
                         }
                     }
                     else {
-                        self.showError(general.exception, resetStudentPasswordErrorContainer, 5);
-                        self.clearResetStudentPassword(txtResetStudentPassword, null);
+                        this.sendStudentPasswordErrorMessage = general.exception;
                     }
 
                 });
+        } else {
+            this.sendStudentPasswordErrorMessage = manage_account.email_format_validation;
         }
-    }
-
-    clearResetStudentPassword(txtResetStudentPassword, btnClearResetStudentPassword) {
-        txtResetStudentPassword.value = '';
-        if (btnClearResetStudentPassword) {
-            $(btnClearResetStudentPassword).attr("disabled", "true");
-            $(btnClearResetStudentPassword).attr("aria-disabled", "true");
-        }
-
-    }
-
-    onCancelResetStudentPassword(txtResetStudentPassword, btnResetStudentPassword, event) {
-        txtResetStudentPassword.value = "";
-        $(btnResetStudentPassword).attr("disabled", "true");
-        $(btnResetStudentPassword).attr("aria-disabled", "true");
-        $('#spnResetStudentPasswordErrorMessage').text('');
     }
 
     checkfirstnamelastname() {
-        let fname = $('#firstName').val();
-        let lname = $('#lastName').val();
-        let title = $('#facultyTitle').val();
+        this.profileChanged = false;
+        let fname = this.firstName;
+        let lname = this.lastName;
+        let title = this.facultyTitle;
         if (fname.length > 0 && lname.length > 0) {
-            // this.sStorage = this.common.sStorage;
             let ofname = this.sStorage.getItem('firstname');
             let olname = this.sStorage.getItem('lastname');
             let otitle = this.sStorage.getItem('title');
             if (!(fname === ofname && lname === olname && title === otitle)) {
-                $('#btnProfileSave').removeAttr("disabled");
-                $('#btnProfileSave').attr("aria-disabled", "false");
-            }
-            else {
-                $('#btnProfileSave').attr("disabled", "true");
-                $('#btnProfileSave').attr("aria-disabled", "true");
+                this.noProfileChanges = false;
+            } else {
+                this.noProfileChanges = true;
             }
         }
-        else {
-            $('#btnProfileSave').attr("disabled", "true");
-            $('#btnProfileSave').attr("aria-disabled", "true");
-        }
+        // else {
+        //    this.noProfileChanges = true;
+        // }
     }
 
-    checkemailpassword() {
-        let email = $('#emailAddress').val();
-        let password = $('#txtPassword').val();
+    checkemailpassword(emailValue, passwordValue, $event) {
+        this.changedEmail = false;
+        let email = emailValue.value;
+        let password = passwordValue.value;
         if (email.length > 0 && password.length > 0) {
-            $('#ChangeEmail').removeAttr("disabled");
-            $('#ChangeEmail').attr("aria-disabled", "false");
-        }
-        else {
-            $('#ChangeEmail').attr("disabled", "true");
-            $('#ChangeEmail').attr("aria-disabled", "true");
+            this.changeEmailDisabled = false;
+        } else {
+            this.changeEmailDisabled = true;
         }
     }
 
-    checkpasswordlength() {
-        let currentpassword = $('#currentPassword').val();
-        let newpassword = $('#newPassword').val();
-        let cpassword = $('#confirmNewPassword').val();
-        if (currentpassword.length > 0 && newpassword.length > 0 && cpassword.length > 0) {
-            $('#btnResetPassword').removeAttr("disabled");
-            $('#btnResetPassword').attr("aria-disabled", "false");
-        }
-        else {
-            $('#btnResetPassword').attr("disabled", "true");
-            $('#btnResetPassword').attr("aria-disabled", "true");
-        }
-    }
-
-    checkstudentemail() {
-        let email = $('#resetStudentPassword').val();
-        if (email.length > 0) {
-            $('#btnStudentReset').removeAttr("disabled");
-            $('#btnStudentReset').attr("aria-disabled", "false");
-        }
-        else {
-            $('#btnStudentReset').attr("disabled", "true");
-            $('#btnStudentReset').attr("aria-disabled", "true");
-        }
-    }
-
-    validateEmail(email, successContainer, errorContainer, flag) {
-        if (!this.validations.validateValidEmailId(email)) {
-            if (flag == 0) {
-                this.showError(manage_account.email_format_validation, errorContainer, 1);
-            }
-            else {
-                this.showError(manage_account.email_format_validation, errorContainer, 5);
-            }
-
-            return false;
-        }
-        return true;
-    }
-
-    validatePassword(newpassword, confirmpassword, errorContainer, successContainer) {
-        this.clearError(errorContainer, successContainer, 4);
+    validatePassword(newpassword, confirmpassword) {
         if (!this.validations.comparePasswords(newpassword, confirmpassword)) {
-            this.showError(manage_account.newpass_match, errorContainer, 4);
+            this.resetPasswordErrorMessage = manage_account.newpass_match;
             return false;
         } else if (!this.validations.validateLength(newpassword)) {
-            this.showError(manage_account.newpass_character_count, errorContainer, 4);
+            this.resetPasswordErrorMessage = manage_account.newpass_character_count;
             return false;
         } else if (!this.validations.validateSpecialCharacterCount(confirmpassword) && !this.validations.validateNumberCount(confirmpassword)) {
-            this.showError(manage_account.newpass_number_specialcharacter_validation, errorContainer, 4);
+            this.resetPasswordErrorMessage = manage_account.newpass_number_specialcharacter_validation;
             return false;
         } else if (!this.validations.validateSpecialCharacterCount(confirmpassword)) {
-            this.showError(manage_account.newpass_specialcharacter_validation, errorContainer, 4);
+            this.resetPasswordErrorMessage = manage_account.newpass_specialcharacter_validation;
             return false;
         } else if (!this.validations.validateNumberCount(confirmpassword)) {
-            this.showError(manage_account.newpass_number_validation, errorContainer, 4);
+            this.resetPasswordErrorMessage = manage_account.newpass_number_validation;
             return false;
         }
         return true;
-    }
-
-    clearError(errorContainer, successContainer, fieldcount) {
-        $(successContainer).addClass("hidden");
-        let $container;
-        switch (fieldcount) {
-            case 1:
-                $container = $(errorContainer).find('#spnEmailErrorMessage');
-                break;
-            case 2:
-                $container = $(errorContainer).find('#spnPasswordErrorMessage');
-                break;
-            case 3:
-                $container = $(errorContainer).find('#spnCurrentPasswordErrorMessage');
-                break;
-            case 4:
-                $container = $(errorContainer).find('#spnResetPasswordErrorMessage');
-                break;
-            case 5:
-                $container = $(errorContainer).find('#spnResetStudentPasswordErrorMessage');
-                break;
-        }
-        let $outerContainer = $(errorContainer);
-        $container.html('');
-        $outerContainer.addClass('hidden');
-    }
-
-    showError(errorMessage, errorContainer, fieldcount) {
-        let $container = "";
-        switch (fieldcount) {
-            case 1:
-                $container = $(errorContainer).find('#spnEmailErrorMessage');
-                break;
-            case 2:
-                $container = $(errorContainer).find('#spnPasswordErrorMessage');
-                break;
-            case 3:
-                $container = $(errorContainer).find('#spnCurrentPasswordErrorMessage');
-                break;
-            case 4:
-                $container = $(errorContainer).find('#spnResetPasswordErrorMessage');
-                break;
-            case 5:
-                $container = $(errorContainer).find('#spnResetStudentPasswordErrorMessage');
-                break;
-        }
-
-        let $outerContainer = $(errorContainer);
-        $container.html(errorMessage);
-        $outerContainer.removeClass('hidden');
-    }
-
-    resetSuccess($resetLink, $successContainer) {
-        $resetLink.removeClass('hidden');
-        $successContainer.addClass('hidden');
-    }
-
-    showSuccess(resetLink, successContainer, btnSave) {
-        $(resetLink).addClass('hidden');
-        $(btnSave).attr("disabled", "true");
-        $(btnSave).attr("aria-disabled", "true");
-        $(successContainer).removeClass('hidden');
     }
 
     saveProfile(url, authheader, userid, fname, lname, title, email): Observable<Response> {
