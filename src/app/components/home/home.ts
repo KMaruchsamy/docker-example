@@ -21,12 +21,13 @@ import {Angulartics2On} from 'angulartics2';
 import {TestService} from '../../services/test.service';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {Observable, Subscription} from 'rxjs/Rx';
+import {PageScroll} from 'ng2-page-scroll/ng2-page-scroll';
 
 @Component({
     selector: 'home',
     providers: [Auth, Common, HomeService, TestService, TestScheduleModel],
     templateUrl: 'templates/home/home.html',
-    directives: [PageHeader, PageFooter, NgIf, Profile, ROUTER_DIRECTIVES, Angulartics2On, RouterLinkActive]
+    directives: [PageHeader, PageFooter, NgIf, Profile, ROUTER_DIRECTIVES, Angulartics2On, RouterLinkActive, PageScroll]
 })
 export class Home implements OnInit, OnDestroy {
     // profiles: Array<ProfileModel>;
@@ -50,7 +51,6 @@ export class Home implements OnInit, OnDestroy {
     subjectsSubscription: Subscription;
     isMultiCampus: boolean = false;
     constructor(public router: Router, public auth: Auth, public location: Location, public common: Common, public homeService: HomeService, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
-
     }
 
     ngOnDestroy() {

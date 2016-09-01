@@ -75,16 +75,7 @@ export class Account implements OnInit, OnDestroy {
         this.sStorage = this.common.getStorage();
         this.apiServer = this.common.getApiServer();
         this.initialize();
-
-        this.routeSubscription = this.activatedRoute.params.subscribe(params => {
-            let scroll = params['scroll'];
-            if (scroll) {
-                this.scroll(scroll);
-            }
-            else {
-                window.scroll(0,0);
-            }
-        })
+        window.scroll(0,0);
     }
 
     getInitialize() {
@@ -101,21 +92,6 @@ export class Account implements OnInit, OnDestroy {
 
     }
 
-    scroll(scroll: string): void {
-        var headerHeight = $('header').outerHeight(true) + 15;
-        switch (scroll) {
-            case "send-student-info":
-                $('html, body').animate({
-                    scrollTop: $("#sendStudentInfo").offset().top - headerHeight
-                }, 750, 'swing');
-                break;
-
-            default:
-                window.scroll(0,0);
-                break;
-        }
-    }
-    
     setInstitutionNames(institutions) {
         if (institutions !== null || institutions !== 'undefined') {
             this.schoolName = _.map(institutions, 'InstitutionNameWithProgOfStudy');
