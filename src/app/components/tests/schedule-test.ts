@@ -23,6 +23,7 @@ import {TestStartedExceptionModal} from '../../models/test-started-exceptions.mo
 import {TimingExceptionsModal} from '../../models/timing-exceptions.modal';
 import {TimeExceptionPopup} from './time-exception-popup';
 import {SelfPayStudentPopup} from './self-pay-student-popup';
+import {Log} from '../../services/log';
 // import '../../plugins/bootstrap-datepicker-1.5.min.js';
 // import '../../plugins/jquery.timepicker.js';
 // import '../../lib/modal.js';
@@ -32,7 +33,7 @@ import {SelfPayStudentPopup} from './self-pay-student-popup';
     templateUrl: 'templates/tests/schedule-test.html',
     styleUrls: ['../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css', '../../css/jquery.timepicker.css', '../../css/schedule.css'],
     encapsulation: ViewEncapsulation.None,
-    providers: [TestService, Auth, TestScheduleModel, Common, Utility, TestStartedExceptionModal, TimingExceptionsModal],
+    providers: [TestService, Auth, TestScheduleModel, Common, Utility, TestStartedExceptionModal, TimingExceptionsModal, Log],
     directives: [PageHeader, TestHeader, PageFooter, NgIf, ConfirmationPopup, AlertPopup, TestingSessionStartingPopup, StudentsStartedTest, TimeExceptionPopup, SelfPayStudentPopup],
     pipes: [ParseDatePipe]
 })
@@ -63,7 +64,7 @@ export class ScheduleTest implements OnInit, OnDestroy {
     timingExceptions: Array<TimingExceptionsModal>;
     studentPayExceptions: Array<TimingExceptionsModal>;
     constructor(private activatedRoute: ActivatedRoute, public testScheduleModel: TestScheduleModel,
-        public testService: TestService, public auth: Auth, public router: Router, public common: Common, public aLocation: Location, public titleService: Title, private utility: Utility) {
+        public testService: TestService, public auth: Auth, public router: Router, public common: Common, public aLocation: Location, public titleService: Title, private utility: Utility, private log: Log) {
     }
 
 

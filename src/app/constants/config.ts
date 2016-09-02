@@ -56,6 +56,16 @@ export const links = {
             }
         }
     },
+
+    log: {
+        local: {
+            server: "http://localhost:3000/create_log"
+        },
+        dev: {
+            server: "https://dev-nit.kaplan.com:3000/create_log"
+        },
+    },
+
     nursingit: {
         local: {
             server: "http://localhost:55611/"

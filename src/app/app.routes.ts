@@ -45,6 +45,7 @@ const APP_ROUTES: RouterConfig = [
     { path: 'account', component: Account },
     { path: 'account/:scroll', component: Account },
     { path: 'choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution },
+    { path: 'choose-institution/:frompage/:redirectpage', component: ChooseInstitution },
     { path: 'profiles/:id', component: ProfileDescription},
     { path: 'reports', component: Reports },
     { path: 'rosters', component: Rosters },

@@ -25,7 +25,7 @@
         <nav class="navigation container" role="navigation" aria-label="secondary">
             <ul class="nav-items">
                 <li class="nav-icon schedule-icon"><a href="#" (click)="redirectToRoute('choose-test');">Schedule an Integrated Test</a></li>
-                <li class="nav-icon email-icon-outline"><a [routerLink]="['/account','send-student-info']" angulartics2On="click" angularticsEvent="SigninInfoClick" angularticsCategory="LoginHelp">Send student sign in info</a></li>
+                <li class="nav-icon email-icon-outline"><a pageScroll pageScrollOffset="-15" [pageScrollDuration]="500" [routerLink]="['/account']" href="#sendStudentInfo" angulartics2On="click" angularticsEvent="SigninInfoClick" angularticsCategory="LoginHelp">Send student sign in info</a></li>
                 <li class="nav-icon info-icon-white"><a [routerLink]="['/userguide']">View user guide</a></li>
             </ul>
         </nav>

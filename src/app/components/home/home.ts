@@ -21,12 +21,13 @@ import {Angulartics2On} from 'angulartics2';
 import {TestService} from '../../services/test.service';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {Observable, Subscription} from 'rxjs/Rx';
+import {PageScroll} from 'ng2-page-scroll/ng2-page-scroll';
 
 @Component({
     selector: 'home',
     providers: [Auth, Common, HomeService, TestService, TestScheduleModel],
     templateUrl: 'templates/home/home.html',
-    directives: [PageHeader, PageFooter, NgIf, Profile, ROUTER_DIRECTIVES, Angulartics2On, RouterLinkActive]
+    directives: [PageHeader, PageFooter, NgIf, Profile, ROUTER_DIRECTIVES, Angulartics2On, RouterLinkActive, PageScroll]
 })
 export class Home implements OnInit, OnDestroy {
     // profiles: Array<ProfileModel>;
@@ -48,8 +49,8 @@ export class Home implements OnInit, OnDestroy {
     institutionID: number;
     profilesSubscription: Subscription;
     subjectsSubscription: Subscription;
+    isMultiCampus: boolean = false;
     constructor(public router: Router, public auth: Auth, public location: Location, public common: Common, public homeService: HomeService, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
-
     }
 
     ngOnDestroy() {
@@ -155,7 +156,9 @@ export class Home implements OnInit, OnDestroy {
 
     redirectToRoute(route: string): boolean {
         this.checkInstitutions();
-        if (this.institutionRN > 0 && this.institutionPN > 0) {
+        if (this.isMultiCampus)
+            this.router.navigateByUrl(`/choose-institution/home/${route}`);
+        else if (this.institutionRN > 0 && this.institutionPN > 0 && !this.isMultiCampus) {
             this.router.navigateByUrl(`/choose-institution/home/${route}/${this.institutionRN}/${this.institutionPN}`);
         }
         else {
@@ -253,11 +256,13 @@ export class Home implements OnInit, OnDestroy {
             let institutionsPN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
             let programId = _.map(institutions, 'ProgramId');
             if (programId.length > 0)
-                this.programId = programId[0];
+                this.programId = programId.length>1? programId : programId[0];
             if (institutionsRN.length > 0)
-                this.institutionRN = institutionsRN[0];
+                this.institutionRN = institutionsRN.length>1? institutionsRN : institutionsRN[0];
             if (institutionsPN.length > 0)
-                this.institutionPN = institutionsPN[0];
+                this.institutionPN = institutionsPN.length>1? institutionsPN : institutionsPN[0];
+            if (institutionsRN.length > 1 || institutionsPN.length > 1)
+                this.isMultiCampus = true;
         }
     }
 

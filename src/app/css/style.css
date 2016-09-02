@@ -503,6 +503,8 @@ ul.list-pdf-download-icon, ol.list-pdf-download-icon {
     margin-bottom: .5em; }
 
 table {
+  -webkit-font-feature-settings: "kern", "liga", "tnum";
+  -moz-font-feature-settings: "kern", "liga", "tnum";
   -ms-font-feature-settings: "kern", "liga", "tnum";
   font-feature-settings: "kern", "liga", "tnum";
   background-color: #fff;
@@ -686,6 +688,8 @@ table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTa
   border-top: 6px solid #4A7B71; }
 
 body, .body {
+  -webkit-font-feature-settings: "kern", "liga", "pnum";
+  -moz-font-feature-settings: "kern", "liga", "pnum";
   -ms-font-feature-settings: "kern", "liga", "pnum";
   font-feature-settings: "kern", "liga", "pnum";
   -webkit-font-smoothing: antialiased;
@@ -786,7 +790,8 @@ a {
   color: #C85300;
   cursor: pointer;
   text-decoration: none;
-  transition: color 0.1s linear; }
+  -webkit-transition: color 0.1s linear;
+          transition: color 0.1s linear; }
   a:active, a:focus, a:hover {
     color: #d37533; }
 
@@ -919,7 +924,8 @@ textarea {
   font-size: 100%;
   margin-bottom: 0.75em;
   padding: 0.75em;
-  transition: border-color;
+  -webkit-transition: border-color;
+          transition: border-color;
   width: 100%; }
   input[type="color"]:hover, input[type="date"]:hover, input[type="datetime"]:hover, input[type="datetime-local"]:hover, input[type="email"]:hover, input[type="month"]:hover, input[type="number"]:hover, input[type="password"]:hover, input[type="search"]:hover, input[type="tel"]:hover, input[type="text"]:hover, input[type="time"]:hover, input[type="url"]:hover, input[type="week"]:hover, input:not([type]):hover, textarea:hover,
   select[multiple=multiple]:hover,
@@ -1742,6 +1748,7 @@ main .right-grid ::-webkit-scrollbar {
           background-image: url(../images/sprite_2x.png);
           background-size: 343px 301px; } }
   .dropdown .dropdown-menu {
+    -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
     background: #676767;
     border: 2px solid #e3e3e3;
@@ -2387,17 +2394,19 @@ input.checkbox-small-image:focus + label::before {
         display: block;
         padding: 0.66667em 1.5em; } }
 
-.modal {
+.modal, .modal-full-screen {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   z-index: 99999999999;
+  -webkit-overflow-scrolling: touch;
+  outline: 0; }
+
+.modal {
   display: none;
   overflow: hidden;
-  -webkit-overflow-scrolling: touch;
-  outline: 0;
   background-color: rgba(255, 255, 255, 0.75); }
 
 .modal-open .modal {
@@ -2502,6 +2511,20 @@ input.checkbox-small-image:focus + label::before {
     max-width: 50.9375em;
     padding-bottom: 1.5em; }
   .modal-full-overlay-transparent {
+    background-color: rgba(255, 255, 255, 0.9); }
+
+.modal-full-screen {
+  background-color: #fff;
+  overflow: auto; }
+  .modal-full-screen .close {
+    position: absolute;
+    top: 17px;
+    right: 17px; }
+  .modal-full-screen-content {
+    margin: 0 auto;
+    max-width: 50.9375em;
+    padding-bottom: 1.5em; }
+  .modal-full-screen-transparent {
     background-color: rgba(255, 255, 255, 0.9); }
 
 input[type=search] {
@@ -2826,7 +2849,8 @@ input[type=search].small-search-box {
       left: 0;
       height: 0px;
       width: 100%;
-      transition: all ease-in 0.3s; }
+      -webkit-transition: all ease-in 0.3s;
+              transition: all ease-in 0.3s; }
     .footer-grid a:hover:after {
       height: 1px;
       background: #282828; }
@@ -3233,9 +3257,11 @@ select.mobile-device {
   margin-right: 12.5%; }
 
 .bootstrap-select, .selectpicker {
+  -webkit-box-flex: 0;
   -webkit-flex: none;
       -ms-flex: none;
           flex: none;
+  -webkit-box-flex: initial;
   -webkit-flex-grow: initial;
       -ms-flex-positive: initial;
           flex-grow: initial; }
@@ -4430,6 +4456,7 @@ table.dataTable tbody td {
 
 .fade {
   opacity: 0;
+  -webkit-transition: opacity .25s linear;
   transition: opacity .25s linear; }
   .fade.in {
     opacity: 1; }
@@ -4523,6 +4550,12 @@ table.dataTable tbody td {
 
 .relative-position {
   position: relative; }
+
+.vertically-centered {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%); }
 
 .margin-bottom-none {
   margin-bottom: 0; }

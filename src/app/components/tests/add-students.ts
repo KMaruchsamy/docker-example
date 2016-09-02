@@ -26,7 +26,7 @@ import {SelfPayStudentPopup} from './self-pay-student-popup';
 import {StudentsStartedTest} from './students-started-test.popup';
 import {SortPipe} from '../../pipes/sort.pipe';
 import {Utility} from '../../scripts/utility';
-
+import {Log} from '../../services/log';
 import * as _ from 'lodash';
 
 
@@ -37,7 +37,7 @@ import * as _ from 'lodash';
     styles: [`#addByName.active + #cohortStudentList .add-students-table-search {display: table; width: 100%;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
-    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup, Utility, StudentsStartedTest],
+    providers: [TestService, Auth, TestScheduleModel, SelectedStudentModel, Common, Log, RetesterAlternatePopup, RetesterNoAlternatePopup, TimeExceptionPopup, AlertPopup, SelfPayStudentPopup, Utility, StudentsStartedTest],
     directives: [PageHeader, TestHeader, PageFooter, NgFor, ConfirmationPopup, ROUTER_DIRECTIVES, AlertPopup, TestingSessionStartingPopup],
     pipes: [RemoveWhitespacePipe, SortPipe, ParseDatePipe]
 })
@@ -90,7 +90,7 @@ export class AddStudents implements OnInit, OnDestroy {
     previousSelectedStudentList: SelectedStudentModel[] = []; // To Assign previous selected student for Modify In Progress scenario....
 
     constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public auth: Auth, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public selectedStudentModel: SelectedStudentModel, public common: Common,
-        public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location, public viewContainerRef: ViewContainerRef, public titleService: Title) {
+        public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location, public viewContainerRef: ViewContainerRef, public titleService: Title, private log: Log) {
 
     }
 
@@ -419,12 +419,7 @@ export class AddStudents implements OnInit, OnDestroy {
         let subjectsObservable = this.testService.getActiveCohorts(cohortURL);
         let __this = this;
         this.subjectsSubscription = subjectsObservable
-            .map(response => {
-                if (response.status !== 400) {
-                    return response.json();
-                }
-                return [];
-            })
+            .map(response => response.json())
             .subscribe(json => {
                 __this.cohorts = json;
                 setTimeout(json => {
@@ -433,11 +428,14 @@ export class AddStudents implements OnInit, OnDestroy {
                     else
                         $('.selectpicker').selectpicker('refresh');
                 });
-
-                if (__this.cohorts.length === 0) {
+                
+            },
+            error => {
+                console.log(error);
+                __this.log.error(JSON.parse(error._body).msg, error._body);
+                if (error.status === 400)
                     this.noCohort = true;
-                }
-            }, error => console.log(error));
+            });
     }
 
 

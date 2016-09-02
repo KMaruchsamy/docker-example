@@ -166,4 +166,20 @@ export class Common {
         console.log(gmtOffset);
         return Timezones[gmtOffset];
     }
+
+    getLogServer(): string {
+        let logserver = '';
+        switch (location.hostname) {
+            case this.getHostName(links.log.local.server):
+                logserver = links.log.local.server;
+                break;
+            case this.getHostName(links.faculty.dev.server):
+                logserver = links.log.dev.server;
+                break;
+            default:
+                logserver = links.log.local.server;
+                break;
+        }
+        return logserver;
+    }
 }

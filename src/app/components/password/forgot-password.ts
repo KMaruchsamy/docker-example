@@ -101,7 +101,7 @@ export class ForgotPassword implements OnInit, OnDestroy {
     validate(emailId, errorContainer) {
         this.clearError(errorContainer);
 
-        if (!this.validations.validateValidEmailId(emailId)) {
+        if (!this.validations.validateEmailFormat(emailId)) {
             this.showError(forgot_password.email_format_validation, errorContainer);
             return false;
         }

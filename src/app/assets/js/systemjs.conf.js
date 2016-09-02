@@ -24,6 +24,9 @@
         },
         'rxjs': {
             defaultExtension: 'js'
+        },
+        'ng2-page-scroll': {
+            defaultExtension: 'js'
         }
     };
 
@@ -32,7 +35,8 @@
         '@angular',
         'rxjs',
         'lodash',
-        'angulartics2'
+        'angulartics2',
+        'ng2-page-scroll'
     ];
 
     // Add package entries for packages that expose barrels using index.js

@@ -22,6 +22,8 @@ import {RoundPipe} from '../../pipes/round.pipe';
 import {Utility} from '../../scripts/utility';
 import * as _ from 'lodash';
 import {Response} from '@angular/http';
+import {Log} from '../../services/log';
+
 // import {SharedDeactivateGuard} from '../shared/shared.deactivate.guard';
 // import '../../plugins/dropdown.js';
 // import '../../plugins/bootstrap-select.min.js';
@@ -33,7 +35,7 @@ import {Response} from '@angular/http';
 @Component({
     selector: 'choose-test',
     templateUrl: 'templates/tests/choose-test.html',
-    providers: [TestService, Auth, TestScheduleModel, Utility, Common],
+    providers: [TestService, Auth, TestScheduleModel, Utility, Common, Log],
     directives: [PageHeader, TestHeader, PageFooter, ConfirmationPopup, AlertPopup, TestingSessionStartingPopup, NgIf, NgFor],
     pipes: [RemoveWhitespacePipe, RoundPipe, ParseDatePipe]
 })
@@ -70,9 +72,10 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
     subjectsSubscription: Subscription;
     testsSubscription: Subscription;
     typeaheadTestsSubscription: Subscription;
+    noBlueprints: boolean = false;
     constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public auth: Auth, public common: Common, public utitlity: Utility,
         public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public aLocation: Location,
-        public titleService: Title, private sanitizer:DomSanitizationService) {
+        public titleService: Title, private sanitizer: DomSanitizationService, private log: Log) {
     }
 
     ngOnChanges(): void {
@@ -145,7 +148,6 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
 
     canDeactivate(next: string): Observable<boolean> | boolean {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
-        // if (!this.modify) {
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
                 if (this.testScheduleModel.testId) {
@@ -155,7 +157,6 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
                 }
             }
         }
-        // }
         if (outOfTestScheduling)
             this.testService.clearTestScheduleObjects();
         this.overrideRouteCheck = false;
@@ -260,26 +261,14 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
             .map(response => response.json())
             .subscribe(json => {
                 self.tests = json;
+                self.checkBlueprints();
+                self.bindDatatable(self);
 
-                if (self.testsTable) {
-                    self.testsTable.destroy();
-                    setTimeout(json => {
-                        self.testsTable = $('#chooseTestTable').DataTable({
-                            "paging": false,
-                            "searching": false,
-                            "responsive": true,
-                            "info": false,
-                            "ordering": false
-                        });
-                        $('#chooseTestTable').on('responsive-display.dt', function() {
-                            $(this).find('.child .dtr-title br').remove();
-                        });
-                    });
-                }
                 this.noTest = true;
             },
-            error => console.log(error));
-
+            error => {
+                self.log.error(error.json().Message, JSON.stringify(error))
+            });
     }
 
     saveChooseTest(e): any {
@@ -478,9 +467,9 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
 
     bindTestSearchResults(search: string, setValue: boolean): void {
         let self = this;
-        this.testsTable = null;
         if (setValue) {
             self.tests = _.filter(self.searchResult, { TestName: search });
+            self.bindDatatable(self);
         }
         else {
             if (search.length != 0) {
@@ -497,10 +486,14 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
                     }
                 }
                 self.tests = _testDetails;
+                self.bindDatatable(self);
             }
             else {
-                if (this.searchResult.length != 0)
+                if (this.searchResult.length != 0) {
                     self.tests = this.searchResult;
+                    self.bindDatatable(self);
+                }
+
                 else {
                     this.noSearch = true;
                     this.noTest = false;
@@ -560,5 +553,37 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
     displayTest(testId: number): void {
         let self = this;
         self.tests = _.filter(self.searchResult, { TestId: testId });
+        self.bindDatatable(self);
+    }
+
+
+    bindDatatable(self:any): void{
+        if (self.testsTable)
+            self.testsTable.destroy();
+        setTimeout(() => {
+            self.testsTable = $('#chooseTestTable').DataTable({
+                "paging": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                "ordering": false
+            });
+            $('#chooseTestTable').on('responsive-display.dt', function () {
+                $(this).find('.child .dtr-title br').remove();
+            });
+        });
+    }
+
+    validatePDFURL(url: string): boolean {
+        if (url && url.trim() !== '' && _.endsWith(url, '.pdf'))
+            return true;
+        return false;
+    }
+
+
+    checkBlueprints(){
+        this.noBlueprints = !_.some(this.tests, (test) => {
+            return (test.TopicalBlueprintLink && test.TopicalBlueprintLink.trim() !== '' && _.endsWith(test.TopicalBlueprintLink, '.pdf'));
+        });       
     }
 }

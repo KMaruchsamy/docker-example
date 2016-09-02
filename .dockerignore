@@ -11,3 +11,6 @@ ebs
 dist
 .git
 .gitignore
+bower_components
+ebs_multi
+typings

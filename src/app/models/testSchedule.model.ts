@@ -14,7 +14,8 @@ export class TestScheduleModel{
     currentStep: number = 0;
     activeStep: number = 0; 
     scheduleTiming: string = '';
-    institutionId: number =0;
+    institutionId: number = 0;
+    institutionName: string = '';    
     lastselectedcohortId: number = 0;
     selectedStudents: SelectedStudentModel[] = [];
     adminId: number = 0;
@@ -23,6 +24,8 @@ export class TestScheduleModel{
     facultyMemberId: number = 0;
     facultyFirstName: string = '';
     facultyLastName: string = '';
-    pageSavedOn: string = '';
+    pageSavedOn: string = '';  
+    status: string = '';
+    spanMultipleDays: boolean = false;
     constructor(){}
 }

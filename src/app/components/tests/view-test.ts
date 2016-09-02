@@ -16,6 +16,8 @@ import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {TestScheduleModel} from '../../models/testSchedule.model';
 import {SelectedStudentModel} from '../../models/selectedStudent-model';
 import {ConfirmationPopup} from '../shared/confirmation.popup';
+import {Log} from '../../services/log';
+
 // import '../../plugins/jquery.dataTables.min.js';
 // import '../../plugins/dataTables.responsive.js';
 // import '../../lib/modal.js';
@@ -23,7 +25,7 @@ import {ConfirmationPopup} from '../shared/confirmation.popup';
 @Component({
     selector: "view-test",
     templateUrl: "templates/tests/view-test.html",
-    providers: [TestService, Auth, TestScheduleModel, Common],
+    providers: [TestService, Auth, TestScheduleModel, Common, Log ],
     directives: [PageHeader, TestHeader, PageFooter, NgIf, NgFor, ROUTER_DIRECTIVES, ConfirmationPopup],
     pipes: [ParseDatePipe]
 })
@@ -42,7 +44,8 @@ export class ViewTest implements OnInit, OnDestroy {
     destinationRoute: string;
     paramsSubscription: Subscription;
     scheduleSubscription: Subscription;
-    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, private activatedRoute: ActivatedRoute, public titleService: Title) {
+    constructor(public auth: Auth, public common: Common, public testService: TestService, public schedule: TestScheduleModel, public router: Router, private activatedRoute: ActivatedRoute, public titleService: Title, private log: Log
+) {
 
     }
 

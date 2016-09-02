@@ -16,3 +16,7 @@ ebs/
 .dockerignore
 .gitignore
 .nvmrc
+*.yml
+bower_components/
+ebs_multi/
+typings/

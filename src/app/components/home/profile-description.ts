@@ -10,10 +10,11 @@ import {links} from '../../constants/config';
 import {PageHeader} from '../shared/page-header';
 import {PageFooter} from '../shared/page-footer';
 import {ProfileModel} from '../../models/profile-model';
+import {Log} from '../../services/log';
 
 @Component({
     selector: 'profile-description',
-    providers: [HomeService, Common],
+    providers: [HomeService, Common, Log],
     templateUrl: 'templates/home/profile-description.html',
     directives: [ROUTER_DIRECTIVES, PageHeader, PageFooter, NgFor, NgIf]
 })
@@ -23,7 +24,7 @@ export class ProfileDescription implements OnDestroy {
     apiServer: string;
     routeParametersSubscription: Subscription;
     getProfileSubscription: Subscription;
-    constructor(public activatedRoute: ActivatedRoute, public homeService: HomeService, public common: Common, public titleService: Title) {
+    constructor(public activatedRoute: ActivatedRoute, public homeService: HomeService, public common: Common, public titleService: Title, private log: Log) {
         this.apiServer = this.common.getApiServer();
         this.routeParametersSubscription = this.activatedRoute.params.subscribe(params => {
             this.kaplanAdminId = +params['id'];
