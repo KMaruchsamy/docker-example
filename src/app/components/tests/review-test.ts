@@ -359,10 +359,12 @@ export class ReviewTest implements OnInit, OnDestroy {
             TestingWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
             TestingWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format(),
             FacultyMemberId: this.testScheduleModel.facultyMemberId,
-            Students: this.testScheduleModel.selectedStudents,
-            LastCohortSelectedId: this.testScheduleModel.lastselectedcohortId,
-            LastSubjectSelectedId: this.testScheduleModel.subjectId,
-            PageSavedOn: ''//TODO need to add the logic for this one ..
+            Students: _.map(this.testScheduleModel.selectedStudents, (student: SelectedStudentModel) => { 
+                return {
+                    StudentId: student.StudentId,
+                    StudentTestId:student.StudentTestId
+                };
+            })
         };
 
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
@@ -401,7 +403,7 @@ export class ReviewTest implements OnInit, OnDestroy {
 
        this.scheduleTestSubscription = scheduleTestObservable
             .map(response => response.json())
-            .subscribe(json => {
+           .subscribe(json => {
                 __this.valid = true;
                 clearTimeout(loaderTimer);
                 $('#loader').modal('hide');
