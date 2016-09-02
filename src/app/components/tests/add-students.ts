@@ -1878,7 +1878,12 @@ export class AddStudents implements OnInit, OnDestroy {
             TestingWindowStart: this.testScheduleModel.scheduleStartTime,
             TestingWindowEnd: this.testScheduleModel.scheduleEndTime,
             FacultyMemberId: this.testScheduleModel.facultyMemberId,
-            Students: (closeSession ? this.testScheduleModel.selectedStudents : this.selectedStudents),
+            Students: _.map((closeSession ? this.testScheduleModel.selectedStudents : this.selectedStudents), (student) => {
+                return {
+                    StudentId: student.StudentId,
+                    StudentTestId:student.StudentTestId
+                }
+            }),
             LastCohortSelectedId: this.testScheduleModel.lastselectedcohortId,
             LastSubjectSelectedId: this.testScheduleModel.subjectId,
             PageSavedOn: ''//TODO need to add the logic for this one ..
