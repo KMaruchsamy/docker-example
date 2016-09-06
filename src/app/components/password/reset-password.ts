@@ -22,9 +22,6 @@ import {Log} from '../../services/log';
 })
 
 export class ResetPassword implements OnInit, OnDestroy {
-    // errorMessages: any;
-    // successMessage: string;
-    // config: any;
     apiServer: string;
     sStorage: any;
     temporaryPasswordSubscription: Subscription;
@@ -32,6 +29,9 @@ export class ResetPassword implements OnInit, OnDestroy {
     errorCodes: any;
     showTerms: boolean = false;
     termSubscription: Subscription;
+    errorMessage: string;
+    resetSuccess: boolean = false;
+    invalidLength: boolean = true;
     constructor(public router: Router, public auth: Auth, public common: Common, public location: Location, public validations: Validations, public titleService: Title, private log: Log) {
 
     }
@@ -54,7 +54,7 @@ export class ResetPassword implements OnInit, OnDestroy {
     }
 
     initialize() {
-        $(document).scrollTop(0);
+        window.scroll(0,0);
     }
 
     onResetPassword(txtnPassword, txtcPassword, btnResetPassword, lnkhomeredirect, errorContainer, successcontainer, event) {
@@ -94,31 +94,31 @@ export class ResetPassword implements OnInit, OnDestroy {
                             txtnPassword.value = "";
                             txtcPassword.value = "";
                             self.AuthanticateUser(decryptedId, newpassword, 'admin', errorContainer);
-                            self.showSuccess(successcontainer, lnkhomeredirect, btnResetPassword);
+                            this.resetSuccess = true;
                         }
                         else if (status.toString() === self.errorCodes.API) {
                             if (json.Payload.length > 0) {
                                 if (json.Payload[0].Messages.length > 0) {
-                                    self.showError(json.Payload[0].Messages[0].toString(), errorContainer);
+                                    this.errorMessage = json.Payload[0].Messages[0].toString();
                                     self.clearPasswords(txtnPassword, txtcPassword);
                                 }
                             }
                         }
                         else {
-                            self.showError(general.exception, errorContainer);
+                            this.errorMessage = general.exception;
                             self.clearPasswords(txtnPassword, txtcPassword);
                         }
                     }, error => {
                         if (error.status.toString() === this.errorCodes.API) {
                             if (error.json().Payload && error.json().Payload.length > 0) {
                                 if (error.json().Payload[0].Messages.length > 0) {
-                                    self.showError(error.json().Payload[0].Messages[0].toString(), errorContainer);
+                                    this.errorMessage = error.json().Payload[0].Messages[0].toString();
                                     self.clearPasswords(txtnPassword, txtcPassword);
                                 }
                             }
                         }
                         else {
-                            self.showError(general.exception, errorContainer);
+                            this.errorMessage = general.exception, errorContainer;
                             self.clearPasswords(txtnPassword, txtcPassword);
                         }
                     });
@@ -173,59 +173,41 @@ export class ResetPassword implements OnInit, OnDestroy {
     //     this.utility.route(path, this.router, e);
     // }
     validate(newpassword, confirmpassword, btnResetPassword, lnkhomeredirect, errorContainer, successContainer) {
-        this.clearError(errorContainer, successContainer, lnkhomeredirect);
+        this.clearError();
         if (!this.validations.comparePasswords(newpassword, confirmpassword)) {
-            this.showError(reset_password.newpass_match, errorContainer);
+            this.errorMessage = reset_password.newpass_match;
             return false;
         } else if (!this.validations.validateLength(newpassword)) {
-            this.showError(reset_password.newpass_character_count, errorContainer);
+            this.errorMessage = reset_password.newpass_character_count;
             return false;
         } else if (!this.validations.validateSpecialCharacterCount(confirmpassword) && !this.validations.validateNumberCount(confirmpassword)) {
-            this.showError(reset_password.newpass_number_specialcharacter_validation, errorContainer);
+            this.errorMessage = reset_password.newpass_number_specialcharacter_validation;
             return false;
         } else if (!this.validations.validateSpecialCharacterCount(confirmpassword)) {
-            this.showError(reset_password.newpass_specialcharacter_validation, errorContainer);
+            this.errorMessage = reset_password.newpass_specialcharacter_validation;
             return false;
         } else if (!this.validations.validateNumberCount(confirmpassword)) {
-            this.showError(reset_password.newpass_number_validation, errorContainer);
+            this.errorMessage = reset_password.newpass_number_validation;
             return false;
         }
         return true;
     }
 
-    clearError(errorContainer, successContainer, lnkhomeredirect) {
-        $(lnkhomeredirect).css("display", "none");
-        $(successContainer).css("display", "none");
-        let $container = $(errorContainer).find('span#spnErrorMessage');
-        let $outerContainer = $(errorContainer);
-        $container.html('');
-        $outerContainer.hide();
+    clearError() {
+        this.errorMessage = '';
     }
 
-    showError(errorMessage, errorContainer) {
-        let $container = $(errorContainer).find('span#spnErrorMessage');
-        let $outerContainer = $(errorContainer);
-        $container.html(errorMessage);
-        $outerContainer.show();
-    }
-    showSuccess(successContainer, lnkhomeredirect, btnResetPassword) {
-        $(lnkhomeredirect).css("display", "block");
-        $(btnResetPassword).attr("disabled", "true");
-        $(btnResetPassword).attr("aria-disabled", "true");
-        $(successContainer).css("display", "inline-block");
-    }
-    checkpasswordlength(txtnewpassword, txtConfirmPassword, btnResetPassword, event) {
+    checkpasswordlength(txtnewpassword, txtConfirmPassword, event) {
         let newpassword = txtnewpassword.value;
         let confirmpassword = txtConfirmPassword.value;
         if (newpassword.length > 0 && confirmpassword.length > 0) {
-            $(btnResetPassword).removeAttr("disabled");
-            $(btnResetPassword).attr("aria-disabled", "false");
+            this.invalidLength = false;
         }
         else {
-            $(btnResetPassword).attr("disabled", "true");
-            $(btnResetPassword).attr("aria-disabled", "true");
+            this.invalidLength = true;
         }
     }
+
     decryption(strToDecrypt) {
         let key = CryptoJS.enc.Base64.parse("MTIzNDU2NzgxMjM0NTY3OA==");
         let iv = CryptoJS.enc.Base64.parse("EBESExQVFhcYGRobHB0eHw==");
@@ -234,6 +216,7 @@ export class ResetPassword implements OnInit, OnDestroy {
         let decryptedStr = CryptoJS.AES.decrypt(decodedString, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }).toString(CryptoJS.enc.Utf8);
         return decryptedStr;
     }
+
     AuthanticateUser(useremail, password, userType, errorContainer) {
         let self = this;
         let apiURL = this.apiServer + links.api.baseurl + links.api.admin.authenticationapi;
@@ -257,10 +240,10 @@ export class ResetPassword implements OnInit, OnDestroy {
                     self.auth.refresh();
                 }
                 else {
-                    self.showError(login.auth_failed, errorContainer);
+                    this.errorMessage = login.auth_failed;
                 }
             }, error => {
-                self.showError(general.exception, errorContainer);
+                this.errorMessage = general.exception, errorContainer;
             });
     }
 
