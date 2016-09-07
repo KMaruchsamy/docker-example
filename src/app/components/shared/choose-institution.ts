@@ -164,7 +164,7 @@ export class ChooseInstitution implements OnInit, OnDestroy {
             if (institutionsPN.length > 0)
                 this.institutionPN = institutionsPN.length > 1 ? institutionsPN : institutionsPN[0];
             if (programIdRN.length > 1 || programIdPN.length > 1) {
-                this.Campus = institutions;
+                this.Campus = _.orderBy(institutions,'InstitutionName','asc');
                 this.isMultiCampus = true;
             }
         }
