@@ -5,6 +5,7 @@ import {TestScheduleModel} from './testSchedule.model';
 export class TestsModal{
     institutionId: number;
     institutionName: string;
+    institutionNameWithProgramOfStudy: string;
     tests: Array<TestScheduleModel>;
 }
 

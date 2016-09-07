@@ -29,7 +29,7 @@
                 <div class="container-medium-width">
                     <h4 class="section-heading-purple normal">Tests In Progress</h4>
                     <div *ngFor="let institution of inProgressTests" class="thin-section">
-                        <h5 class="h6">{{institution.institutionName}}</h5>
+                        <h5 class="h6">{{institution.institutionNameWithProgramOfStudy}}</h5>
                         <table *ngIf="!inProgressTests?.length==0" class="table-fixed tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none"
                             data-tablesaw-mode="stack">
                             <thead class="smaller">
@@ -83,7 +83,7 @@
             <div class="container-medium-width">
                 <h4 class="section-heading-teal normal">Scheduled Tests</h4>
                 <div *ngFor="let institution of scheduleTests" class="thin-section">
-                    <h5 class="h6">{{institution.institutionName}}</h5>
+                    <h5 class="h6">{{institution.institutionNameWithProgramOfStudy}}</h5>
                     <table *ngIf="!scheduleTests?.length==0" class="table-fixed tablesaw tablesaw-stack tablesaw-sortable" data-tablesaw-mode="stack"
                         id="{{'tblScheduledTests' + institution.institutionId}}">
                         <thead class="smaller">
@@ -157,7 +157,7 @@
             <div class="container-medium-width">
                 <h4 class="section-heading-teal normal">Completed Tests</h4>
                 <div *ngFor="let institution of completedTests" class="thin-section">
-                    <h5 class="h6">{{institution.institutionName}}</h5>
+                    <h5 class="h6">{{institution.institutionNameWithProgramOfStudy}}</h5>
                     <table *ngIf="!completedTests?.length==0" class="table-fixed tablesaw tablesaw-stack tablesaw-sortable" data-tablesaw-mode="stack"
                         id="{{'tblCompletedTests'+ institution.institutionId}}">
                         <thead class="smaller">
