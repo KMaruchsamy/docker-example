@@ -483,10 +483,14 @@ export class TestService {
 
     showTestStartingWarningModals(modify: boolean, institutionID: number, savedStartTime: any, testEndTime: any): any {
         if ((modify) && (this.getTestStatusFromTimezone(institutionID, savedStartTime, testEndTime) === 1)) {
+            //returns time difference in seconds
             let timeDiff = this.checkIfTestStartingSoon(institutionID, savedStartTime);
             let convertToMinutes = 60;
             let waitTime = 0;
-            if (timeDiff >= 10 * convertToMinutes) {
+            // check if time difference is less than or equal to token length
+            // 8 hours = 480 minutes
+            // and greater than or equal to 10 minutes
+            if (timeDiff <= 480 && timeDiff >= 10 * convertToMinutes) {
                 waitTime = timeDiff - 10 * convertToMinutes;
                 let waitTimePlus5 = waitTime + 5 * convertToMinutes;
                 setTimeout(() => {
@@ -497,7 +501,9 @@ export class TestService {
                     $('#testStartingin5').modal('show');
                 }, waitTimePlus5 * 1000)
             }
-            else if (timeDiff >= 5 * convertToMinutes) {
+            // check if time difference is less than or equal to token length
+            // and greater than or equal to 5 minutes
+            else if (timeDiff <= 480 && timeDiff >= 5 * convertToMinutes) {
                 waitTime = timeDiff - 5 * convertToMinutes;
                 setTimeout(() => {
                     $('#testStartingin5').modal('show');
