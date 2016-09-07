@@ -16,6 +16,7 @@ export class TestScheduleModel{
     scheduleTiming: string = '';
     institutionId: number = 0;
     institutionName: string = '';    
+    institutionNameWithProgramOfStudy: string = '';    
     lastselectedcohortId: number = 0;
     selectedStudents: SelectedStudentModel[] = [];
     adminId: number = 0;

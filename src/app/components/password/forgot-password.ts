@@ -23,6 +23,7 @@ export class ForgotPassword implements OnInit, OnDestroy {
     apiServer: string;
     forgotPasswordSubscription: Subscription;
     errorCodes: any;
+    errorMessage: string;
     constructor(private http: Http, public router: Router, public common: Common, public validations: Validations, public titleService: Title) {
 
     }
@@ -37,22 +38,10 @@ export class ForgotPassword implements OnInit, OnDestroy {
         this.titleService.setTitle('Forgot Password – Kaplan Nursing');
         this.apiServer = this.common.getApiServer();
         this.initialize();
-        this.reset();
     }
 
     initialize(): void {
-        $(document).scrollTop(0);
-        let self = this;
-        $('#forgotPassword').bind('input', function () {
-            self.checkpasswordlength();
-        });
-    }
-
-    reset() {
-        $('#forgotPassword').val('');
-        $('.error').hide();
-        $('#btnSend').attr("disabled", "true");
-        $('#btnSend').attr("aria-disabled", "true");
+        window.scroll(0,0);
     }
 
     onForgotPassword(txtEmailId, btnSend, errorContainer, event) {
@@ -79,17 +68,17 @@ export class ForgotPassword implements OnInit, OnDestroy {
                         self.router.navigate(['/forgot-password-confirmation']);
                     }
                     else if (status.toString() === self.errorCodes.SERVERERROR) {
-                        self.showError(forgot_password.failed_sent_mail, errorContainer);
+                        this.errorMessage = forgot_password.failed_sent_mail;
                     }
                     else {
-                        self.showError(forgot_password.invalid_emailid, errorContainer);
+                        this.errorMessage = forgot_password.invalid_emailid;
                     }
                 }, error => {
                     if (error.status.toString() === self.errorCodes.SERVERERROR) {
-                        self.showError(forgot_password.failed_sent_mail, errorContainer);
+                        this.errorMessage = forgot_password.failed_sent_mail;
                     }
                     else
-                        self.showError(forgot_password.invalid_emailid, errorContainer);
+                        this.errorMessage = forgot_password.invalid_emailid, errorContainer;
                 });
         }
     }
@@ -102,37 +91,16 @@ export class ForgotPassword implements OnInit, OnDestroy {
         this.clearError(errorContainer);
 
         if (!this.validations.validateEmailFormat(emailId)) {
-            this.showError(forgot_password.email_format_validation, errorContainer);
+            this.errorMessage = forgot_password.email_format_validation;
             return false;
         }
         return true;
     }
 
     clearError(errorContainer) {
-        let $container = $(errorContainer).find('span#spnErrorMessage');
-        let $outerContainer = $(errorContainer);
-        $container.html('');
-        $outerContainer.hide();
+        this.errorMessage = '';
     }
 
-    showError(errorMessage, errorContainer) {
-        let $container = $(errorContainer).find('span#spnErrorMessage');
-        let $outerContainer = $(errorContainer);
-        $container.html(errorMessage);
-        $outerContainer.show();
-    }
-
-    checkpasswordlength() {
-        let password = $('#forgotPassword').val();
-        if (password.length > 0) {
-            $('#btnSend').removeAttr("disabled");
-            $('#btnSend').attr("aria-disabled", "false");
-        }
-        else {
-            $('#btnSend').attr("disabled", "true");
-            $('#btnSend').attr("aria-disabled", "true");
-        }
-    }
     getEncryption(strToEncrypt) {
         let key = CryptoJS.enc.Base64.parse("MTIzNDU2NzgxMjM0NTY3OA==");
         let iv = CryptoJS.enc.Base64.parse("EBESExQVFhcYGRobHB0eHw==");

@@ -14,7 +14,7 @@ export class ResetPasswordExpired implements OnInit {
     }
 
     ngOnInit() {
-        $(document).scrollTop(0);
+        window.scroll(0,0);
         this.titleService.setTitle('Kaplan Nursing – Reset Password Expired');
     }
 }

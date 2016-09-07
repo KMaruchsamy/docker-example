@@ -2901,7 +2901,7 @@ input[type=search].small-search-box {
       .success-icon::before {
         background-image: url(../images/sprite_2x.png);
         background-size: 343px 301px; } }
-  .success-icon + a {
+  .success-icon + a, .success-container + a {
     clear: both;
     display: block;
     padding-top: 2em; }

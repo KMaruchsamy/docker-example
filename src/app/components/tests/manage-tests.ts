@@ -112,6 +112,7 @@ export class ManageTests implements OnInit, OnDestroy {
             let tmpTestsModal = new TestsModal();
             tmpTestsModal.institutionId = tests[0].institutionId;
             tmpTestsModal.institutionName = tests[0].institutionName;
+            tmpTestsModal.institutionNameWithProgramOfStudy = tests[0].institutionNameWithProgramOfStudy;
             tmpTestsModal.tests = tests;
             return [tmpTestsModal];
         }
@@ -122,6 +123,7 @@ export class ManageTests implements OnInit, OnDestroy {
             let tmpTestsModal = new TestsModal();
             tmpTestsModal.institutionId = uniqueTests[0].institutionId;
             tmpTestsModal.institutionName = uniqueTests[0].institutionName;
+            tmpTestsModal.institutionNameWithProgramOfStudy = uniqueTests[0].institutionNameWithProgramOfStudy;
             tmpTestsModal.tests = tests;
             return [tmpTestsModal];
         }
@@ -133,6 +135,7 @@ export class ManageTests implements OnInit, OnDestroy {
             let tmpTestsModal = new TestsModal();
             tmpTestsModal.institutionId = uniqueTest.institutionId;
             tmpTestsModal.institutionName = uniqueTest.institutionName;
+            tmpTestsModal.institutionNameWithProgramOfStudy = uniqueTest.institutionNameWithProgramOfStudy;
             tmpTestsModal.tests = filteredTests;
             return tmpTestsModal;
         });

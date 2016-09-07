@@ -182,6 +182,7 @@ export class TestService {
             _testScheduleModel.savedEndTime = objTestScheduleModel.TestingWindowEnd;
             _testScheduleModel.institutionId = objTestScheduleModel.InstitutionId;
             _testScheduleModel.institutionName = (_.has(objTestScheduleModel, 'InstitutionName') ? objTestScheduleModel.InstitutionName : '');
+            _testScheduleModel.institutionNameWithProgramOfStudy = (_.has(objTestScheduleModel, 'InstitutionNameWithProgOfStudy') ? objTestScheduleModel.InstitutionNameWithProgOfStudy : '');
             _testScheduleModel.lastselectedcohortId = objTestScheduleModel.LastCohortSelectedId;
             _testScheduleModel.facultyMemberId = objTestScheduleModel.FacultyMemberId;
             _testScheduleModel.pageSavedOn = objTestScheduleModel.PageSavedOn;
