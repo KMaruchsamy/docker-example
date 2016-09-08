@@ -469,12 +469,12 @@ export class TestService {
         return this.http.put(url, input, this.getRequestOptions())
     }
 
-    checkIfTestHasStarted(institutionId: number, testStartTime: any, testEndTime: any, modifyInProgress: boolean = false): any {
-        if ((!modifyInProgress) && (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) === 0)) {
+    checkIfTestHasStarted(institutionId: number, testStartTime: any, testEndTime: any, modify: boolean = false, modifyInProgress: boolean = false): any {
+        if ((modify && !modifyInProgress) && (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) === 0)) {
             $('#testStarted').modal('show');
             return false;
             //let user know test session has completely passed and they can no longer make changes (in Modify and Modify in Progress)
-        } else if (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) === -1) {
+        } else if ((modify || modifyInProgress) && (this.getTestStatusFromTimezone(institutionId, testStartTime, testEndTime) === -1)) {
             $('#testPassed').modal('show');
             return false;
         } else

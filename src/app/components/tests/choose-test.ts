@@ -272,6 +272,10 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
     }
 
     saveChooseTest(e): any {
+        this.checkIfTestHasStarted();
+            if (!this.checkIfTestHasStarted()) {
+                return false;
+        }
         this.saveTriggered = true;
         e.preventDefault();
         if (!this.validateDates())
@@ -316,7 +320,7 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
     }
 
     checkIfTestHasStarted():any {
-        return this.testService.checkIfTestHasStarted(this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modifyInProgress );
+        return this.testService.checkIfTestHasStarted(this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress );
     }
 
     selectTest(testId: number, testName: string, subjectId: number, normingStatusName): void {

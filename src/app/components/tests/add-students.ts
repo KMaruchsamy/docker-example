@@ -2037,8 +2037,17 @@ export class AddStudents implements OnInit, OnDestroy {
         else
             return this.EnableDisableButtonForDetailReview();
     }
+
+    checkIfTestHasStarted(): number {
+        return this.testService.checkIfTestHasStarted(this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress)
+    }
+
     save_ContinueButtonClick(e): void {
         e.preventDefault();
+        this.checkIfTestHasStarted();
+        if (!this.checkIfTestHasStarted()) {
+            return false;
+        }
         if (this.modifyInProgress)
             this.Verify_SaveTestClick();
         else
