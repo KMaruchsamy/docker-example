@@ -202,9 +202,7 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
             } else {
                 this.loadTests(this.subjectId);
             }
-            setTimeout(json => {
-                $('.selectpicker').selectpicker('refresh');
-            });
+            $('.selectpicker').selectpicker('refresh');
         }
         else {
             this.testScheduleModel.currentStep = 1;
