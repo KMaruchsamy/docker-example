@@ -500,11 +500,21 @@ export class AddStudents implements OnInit, OnDestroy {
                         this.cohortStudentlist = [];
 
                     setTimeout(json => {
+                        $('#cohortStudentList').removeClass('hidden');
                         _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig(551));
                         this.RefreshAllSelectionOnCohortChange();
                     });
                 },
-                error => console.log(error)
+                error => {
+                     if (_self.testsTable)
+                        _self.testsTable.destroy();
+                    this.cohortStudentlist = [];
+                    setTimeout(() => {
+                        $('#cohortStudentList').removeClass('hidden');
+                        _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig(551));
+                        this.RefreshAllSelectionOnCohortChange();
+                    });
+                }
                 );
 
 
