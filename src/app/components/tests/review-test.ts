@@ -335,12 +335,20 @@ export class ReviewTest implements OnInit, OnDestroy {
         return url.replace('§scheduleId', (this.testScheduleModel.scheduleId ? this.testScheduleModel.scheduleId : 0).toString());
     }
 
-    scheduleTest(e): void {
+    checkIfTestHasStarted(): number {
+        return this.testService.checkIfTestHasStarted(this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress)
+    }
 
+    scheduleTest(e): void {
         e.preventDefault();
         if (!this.validateDates())
             return;
 
+        this.checkIfTestHasStarted();
+        if (!this.checkIfTestHasStarted()) {
+            return;
+        }
+        
         let loaderTimer = setTimeout(function () {
             $('#loader').modal('show');
         }, 1000);

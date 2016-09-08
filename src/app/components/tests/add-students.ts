@@ -500,11 +500,21 @@ export class AddStudents implements OnInit, OnDestroy {
                         this.cohortStudentlist = [];
 
                     setTimeout(json => {
+                        $('#cohortStudentList').removeClass('hidden');
                         _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig(551));
                         this.RefreshAllSelectionOnCohortChange();
                     });
                 },
-                error => console.log(error)
+                error => {
+                     if (_self.testsTable)
+                        _self.testsTable.destroy();
+                    this.cohortStudentlist = [];
+                    setTimeout(() => {
+                        $('#cohortStudentList').removeClass('hidden');
+                        _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig(551));
+                        this.RefreshAllSelectionOnCohortChange();
+                    });
+                }
                 );
 
 
@@ -2037,8 +2047,17 @@ export class AddStudents implements OnInit, OnDestroy {
         else
             return this.EnableDisableButtonForDetailReview();
     }
+
+    checkIfTestHasStarted(): number {
+        return this.testService.checkIfTestHasStarted(this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress)
+    }
+
     save_ContinueButtonClick(e): void {
         e.preventDefault();
+        this.checkIfTestHasStarted();
+        if (!this.checkIfTestHasStarted()) {
+            return false;
+        }
         if (this.modifyInProgress)
             this.Verify_SaveTestClick();
         else

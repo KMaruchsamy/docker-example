@@ -822,16 +822,14 @@ export class ScheduleTest implements OnInit, OnDestroy {
     }
 
     checkIfTestHasStarted(): number {
-        return this.testService.checkIfTestHasStarted(this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modifyInProgress)
+        return this.testService.checkIfTestHasStarted(this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress)
     }
 
     saveDateTime(): boolean {
         //if modify flow, check first if test has already started
-        if (this.modify) {
-            this.checkIfTestHasStarted();
-            if (!this.checkIfTestHasStarted()) {
-                return false;
-            }
+        this.checkIfTestHasStarted();
+        if (!this.checkIfTestHasStarted()) {
+            return false;
         }
 
         if (!this.validateDates())
