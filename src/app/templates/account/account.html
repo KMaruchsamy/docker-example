@@ -16,7 +16,7 @@
                     <input type="text" id="lastName" #lastname aria-required="true" [(ngModel)]=lastName (ngModelChange)="checkfirstnamelastname()">
                     <label class="teal-label" for="facultyTitle">Title</label>
                     <input type="text" id="facultyTitle" #title [(ngModel)]=facultyTitle (ngModelChange)="checkfirstnamelastname()">
-                    <p *ngFor="let item of schoolName">{{schoolName}}</p>
+                    <p *ngFor="let item of schoolName">{{item}}</p>
                     <div class="margin-1em-top">
                         <button class="button  button-with-validation button-mobile-block" id="btnProfileSave" type="submit" [attr.aria-disabled]="noProfileChanges"
                         [disabled]="noProfileChanges" #profilesave (click)="onSubmitSaveProfile(firstname, lastname, title, $event)">Save changes</button>
