@@ -76,11 +76,9 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p [class.hidden]="tests?.length===0 || noBlueprints" class="icon info-icon-yellow section-medium-thin"><strong>Please note:</strong> Test blueprints are for faculty use only and should not be shared with
-                        students.</p>
-                    <div *ngIf="activeChooseBySubject && noBlueprints" class="icon-container-flush-text margin-2em-top">
-                        <p  class="icon info-icon-yellow">Blueprints are not available for Kaplan {{subjectDropDown.options[subjectDropDown.selectedIndex].text}}
-                            tests.</p>
+                    <div class="icon-container-flush-text section-medium-thin">
+                        <p *ngIf="activeChooseBySubject && missingBlueprints" [class.margin-1em-bottom]="tests?.length===0 || !noBlueprints" class="icon no-blueprint-icon">There is no blueprint available for this test.</p>
+                        <p *ngIf="tests?.length > 0 && !noBlueprints" class="icon info-icon-yellow"><strong>Please note:</strong> Test blueprints are for faculty use only and should not be shared with students.</p>
                     </div>
                     <button type="submit" (click)="saveChooseTest($event)" id="chooseDate" class="button right button-mobile-block" [disabled]=!testScheduleModel.testId>
                         Next step: Choose date and time
