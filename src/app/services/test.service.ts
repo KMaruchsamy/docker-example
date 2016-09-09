@@ -12,6 +12,9 @@ import {Common} from './common';
 export class TestService {
     // auth: Auth;
     sStorage: any;
+    clearTimeout10min;
+    clearTimeout5minAfter10;
+    clearTimeout5min;
     constructor(public http: Http, public testSchedule: TestScheduleModel, public auth: Auth, public common: Common) {
         this.http = http;
         this.sStorage = this.auth.sStorage;
@@ -482,30 +485,37 @@ export class TestService {
     }
 
     showTestStartingWarningModals(modify: boolean, institutionID: number, savedStartTime: any, testEndTime: any): any {
+        if (this.clearTimeout10min) 
+        window.clearTimeout(this.clearTimeout10min);
+        if (this.clearTimeout5minAfter10) 
+        window.clearTimeout(this.clearTimeout5minAfter10);
+        if (this.clearTimeout5min) 
+        window.clearTimeout(this.clearTimeout5min);
         if ((modify) && (this.getTestStatusFromTimezone(institutionID, savedStartTime, testEndTime) === 1)) {
             //returns time difference in seconds
             let timeDiff = this.checkIfTestStartingSoon(institutionID, savedStartTime);
-            let convertToMinutes = 60;
+            let convertToSeconds = 60;
             let waitTime = 0;
-            // check if time difference is less than or equal to token length
             // 8 hours = 480 minutes
+            let tokenTime = 480 * convertToSeconds;
+            // check if time difference is less than or equal to token length
             // and greater than or equal to 10 minutes
-            if (timeDiff <= 480 && timeDiff >= 10 * convertToMinutes) {
-                waitTime = timeDiff - 10 * convertToMinutes;
-                let waitTimePlus5 = waitTime + 5 * convertToMinutes;
-                setTimeout(() => {
+            if (timeDiff <= tokenTime && timeDiff >= (10 * convertToSeconds)) {
+                waitTime = timeDiff - (10 * convertToSeconds);
+                let waitTimePlus5 = waitTime + (5 * convertToSeconds);
+                this.clearTimeout10min = setTimeout(() => {
                     $('#testStartingin10').modal('show');
                 }, waitTime * 1000)
-                setTimeout(() => {
+                this.clearTimeout5minAfter10 = setTimeout(() => {
                     $('#testStartingin10').modal('hide');
                     $('#testStartingin5').modal('show');
                 }, waitTimePlus5 * 1000)
             }
             // check if time difference is less than or equal to token length
             // and greater than or equal to 5 minutes
-            else if (timeDiff <= 480 && timeDiff >= 5 * convertToMinutes) {
-                waitTime = timeDiff - 5 * convertToMinutes;
-                setTimeout(() => {
+            else if (timeDiff <= tokenTime && timeDiff >= (5 * convertToSeconds)) {
+                waitTime = timeDiff - (5 * convertToSeconds);
+                this.clearTimeout5min = setTimeout(() => {
                     $('#testStartingin5').modal('show');
                 }, waitTime * 1000)
             }
