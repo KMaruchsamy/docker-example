@@ -71,7 +71,7 @@ export class Home implements OnInit, OnDestroy {
         this.nurseConsultantProfile = new ProfileModel(null, null, 'NURSECONSULTANT', null, null, null, null, null, null, null, null, null, null, null);
         this.loadProfiles(self);
         this.checkInstitutions();
-        $(document).scrollTop(0);
+        window.scroll(0,0);
         this.titleService.setTitle('Faculty Home – Kaplan Nursing');
     }
 
@@ -237,7 +237,8 @@ export class Home implements OnInit, OnDestroy {
         this.hdToken.value = this.auth.token
         this.hdURL.value = this.page;
         this.hdExceptionURL.value = this.resolveExceptionPage(links.nursingit.exceptionpage);
-        $(this.form).attr('ACTION', serverURL).submit();
+        this.form.setAttribute('ACTION', serverURL);
+        this.form.submit();
     }
 
     getLatestInstitution(): number {
@@ -282,7 +283,7 @@ export class Home implements OnInit, OnDestroy {
         this.hdToken.value = this.auth.token;
         this.hdpage.value = this.page;
         this.hdExceptionURL.value = this.resolveExceptionPage(links.nursingit.exceptionpage);
-        $(this.form).attr('ACTION', serverURL).submit();
+        this.form.setAttribute('ACTION', serverURL)
+        this.form.submit();
     }
-
 }
