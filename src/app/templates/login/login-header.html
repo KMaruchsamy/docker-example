@@ -1,4 +1,4 @@
-<div class="alert alert-site-wide alert-dismissible fade in" [hidden]=true role="alert">
+<div *ngIf="sitewideAlert" class="alert alert-site-wide alert-dismissible fade in" role="alert">
     <button type="button" class="close close-white" data-dismiss="alert" aria-label="Close" #message (click)="closeMessage(message);"></button>
     <div class="container-medium-width-no-pad">
         <span>

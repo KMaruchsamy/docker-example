@@ -20,8 +20,6 @@ import {Log} from '../../services/log';
 })
 
 export class LoginContent implements OnDestroy {
-    // errorMessages:any;
-    // config:any;
     apiServer: string;
     nursingITServer: string;
     sStorage: any;
@@ -37,14 +35,17 @@ export class LoginContent implements OnDestroy {
     showTerms: boolean = false;
     termSubscription: Subscription;
     userType: string = 'admin';
+    isError: boolean = false;
+    errorMessage: string;
+    model;
     constructor(private zone: NgZone, public router: Router, public auth: Auth, public common: Common, private log: Log) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
         this.sStorage = this.common.getStorage();
         this.institutionRN = 0;
         this.institutionPN = 0;
+        this.site ="faculty" ;
     }
-
 
     ngOnDestroy(): void {
         if (this.loginSubscription)
@@ -53,7 +54,7 @@ export class LoginContent implements OnDestroy {
             this.termSubscription.unsubscribe();
     }
 
-    onSignIn(txtUserName, txtPassword, rdFaculty, rdStudent, errorContainer, btnSignIn, event) {
+    onSignIn(txtUserName, txtPassword, rdFaculty, rdStudent, event) {
         event.preventDefault();
         let self = this;
         let useremail = '';
@@ -61,7 +62,7 @@ export class LoginContent implements OnDestroy {
         if (txtUserName.value !== undefined && txtUserName.value !== '')
             useremail = txtUserName.value.toString().trim();
         password = txtPassword.value;
-        if (this.validate(useremail, password, errorContainer)) {
+        if (this.validate(useremail, password)) {
             if (rdFaculty.checked)
                 this.userType = 'admin';
             else
@@ -106,17 +107,17 @@ export class LoginContent implements OnDestroy {
                         }
                     }
                     else {
-                        self.showError(login.auth_failed, errorContainer);
+                        this.showError(login.auth_failed);
                         txtPassword.value = '';
                     }
                 },
                 error => {
                     if (error.status > 0) {
-                        self.showError(login.auth_failed, errorContainer);
+                        this.showError(login.auth_failed);
                         txtPassword.value = '';
                     }
                     else {
-                        self.showError(general.exception, errorContainer);
+                        this.showError(general.exception);
                         txtPassword.value = '';
                     }
 
@@ -172,7 +173,8 @@ export class LoginContent implements OnDestroy {
         this.hdURL.value = this.page;
         this.hdExceptionURL.value = this.resolveExceptionPage(links.nursingit.exceptionpage);
         this.auth.logout();
-        $(this.form).attr('ACTION', serverURL).submit();
+        this.form.setAttribute('ACTION', serverURL);
+        this.form.submit();
 
     }
 
@@ -188,18 +190,18 @@ export class LoginContent implements OnDestroy {
         }
     }
 
-    validate(email, password, errorContainer) {
+    validate(email, password) {
         if (!this.validateEmail(email) && !this.validatePassword(password)) {
-            this.showError(login.email_pass_required_validation, errorContainer);
+            this.showError(login.email_pass_required_validation);
             return false;
         } else if (!this.validateEmail(email)) {
-            this.showError(login.email_required_validation, errorContainer);
+            this.showError(login.email_required_validation);
             return false;
         } else if (!this.validateEmailFormat(email)) {
-            this.showError(login.email_format_validation, errorContainer);
+            this.showError(login.email_format_validation);
             return false;
         } else if (!this.validatePassword(password)) {
-            this.showError(login.pass_required_validation, errorContainer);
+            this.showError(login.pass_required_validation);
             return false;
         }
 
@@ -223,43 +225,18 @@ export class LoginContent implements OnDestroy {
         return re.test(email);
     }
 
-    clearError(errorContainer) {
-        let $container = $(errorContainer).find('span#spnErrorMessage');
-        let $outerContainer = $(errorContainer);
-        $container.html('');
-        $outerContainer.addClass('hidden');
-    }
-
-    showError(errorMessage, errorContainer) {
-        this.clearError(errorContainer);
-        let $container = $(errorContainer).find('span#spnErrorMessage');
-        let $outerContainer = $(errorContainer);
-        $container.html(errorMessage);
-        $outerContainer.removeClass('hidden').show();
+    showError(errorMessage) {
+        this.isError = true;
+        this.errorMessage = errorMessage;
     }
 
     closealert(btnClose) {
-        $(btnClose).closest('div.alert').fadeOut(function () {
-            $(this).addClass('hidden');
-        });
+        this.isError = false;
     }
+
     RedirectToForgotpassword(event) {
         event.preventDefault();
         this.router.navigate(['/forgot-password']);
-    }
-
-    radioChanged(elem, otherElem) {
-        let $elem = $(elem);
-        let $otherElem = $(otherElem);
-        if ($elem.is(':checked')) {
-            $elem.attr('aria-checked', true).attr('checked', true);
-            $otherElem.attr('aria-checked', false).removeAttr('checked');
-        }
-        else {
-            $elem.attr('aria-checked', false).removeAttr('checked');
-            $otherElem.attr('aria-checked', true).attr('checked', true);;
-        }
-
     }
 
     saveAcceptedTerms() {
@@ -286,6 +263,5 @@ export class LoginContent implements OnDestroy {
         this.showTerms = false;
         this.router.navigate(['/logout']);
     }
-
 
 }
