@@ -1,9 +1,11 @@
 <main class="sign-in" role="main">
     <form>
         <div class="container-narrow">
-            <div #errorcontainer class="alert alert-error alert-dismissible fade in hidden" role="alert">
-                <button type="button" class="close close-red" data-dismiss="alert" aria-label="Close" #close (click)="closealert(close);"></button>
-                <span id="spnErrorMessage"></span>
+            <div *ngIf="isError" #errorcontainer class="alert alert-error alert-dismissible" role="alert">
+                <button type="button" class="close close-red" aria-label="Close" #close (click)="closealert(close);"></button>
+                <span role="status" aria-live="assertive" aria-atomic="true">
+                    <span id="spnErrorMessage">{{errorMessage}}</span>
+                </span>
             </div>
             <h3 class="center white-text">Sign in</h3>
             <div class="form-group">
@@ -19,22 +21,20 @@
         <div class="section-margin">
             <div class="radio-sign-in radio-sign-in-faculty">
                 <div class="sign-in-faculty-grid radio-large">
-                    <input type="radio" #rdfaculty name="radio_button" id="faculty_site" (change)="radioChanged(rdfaculty,rdstudent);" value="faculty_site"
-                    checked aria-checked="true">
+                    <input type="radio" #rdfaculty id="faculty_site" [ngModel]="{checked: site == 'faculty'}" (ngModelChange)="site='faculty'" name="site" value="faculty">
                     <label for="faculty_site" class="h3 white-text label-bold">Faculty Site</label>
                     <p class="text-larger">Schedule tests, track your students’ performance, access teaching tools and more</p>
                 </div>
             </div>
             <div class="radio-sign-in radio-sign-in-student">
                 <div class="sign-in-student-grid radio-large">
-                    <input type="radio" name="radio_button" #rdstudent id="student_site" (change)="radioChanged(rdstudent,rdfaculty);" value="student_site"
-                    aria-checked="false">
+                    <input type="radio" #rdstudent id="student_site" [ngModel]="{checked: site == 'student'}" (ngModelChange)="site ='student'" name="site" value="student">
                     <label for="student_site" class="h3 white-text label-bold">Student Site</label>
                     <p class="text-larger">See what your students see:<br /> take practice tests, access course books, review content</p>
                 </div>
             </div>
         </div>
-        <button type="submit" class="button button-x-large button-centered" #signin (click)="onSignIn(username,password,rdfaculty,rdstudent,errorcontainer,signin,$event);"
+        <button type="submit" class="button button-x-large button-centered" #signin (click)="onSignIn(username,password,rdfaculty,rdstudent,$event);"
         id="faculty-signin">
             Sign in
         </button>

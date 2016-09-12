@@ -6,6 +6,7 @@ import {Component} from '@angular/core';
 })
 
 export class LoginHeader{
+    sitewideAlert: boolean = false;
     constructor(){}
 
     closeMessage(spnMessage):void{        

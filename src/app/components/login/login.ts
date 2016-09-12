@@ -18,7 +18,6 @@ export class Login implements OnInit {
         if (this.auth.isAuth())
             this.router.navigate(['/home']);
         this.initialize();
-        this.reset();
     }
     
     ngOnInit(): void {
@@ -26,16 +25,6 @@ export class Login implements OnInit {
     }
 
     initialize(): void {
-        $(document).scrollTop(0);
-        // $(window).bind('statechange', function() {
-        //     // Do something, inspect History.getState() to decide what
-        //     console.log('change');
-        // });
-    }
-
-    reset(): void {
-        $('#username').val('');
-        $('#password').val('');
-        $('div.alert').hide();
+        window.scroll(0,0);
     }
 }
