@@ -177,22 +177,31 @@ export class Account implements OnInit, OnDestroy {
                         self.auth.authheader = 'Bearer ' + json.AccessToken;
                         self.auth.useremail = newemailid
                         this.emailId = newemailid;
+                        // clear inputs
                         txtNewEmailId.value = '';
-                        // self.getInitialize();
+                        txtPassword.value = '';
+                        // clear any existing error messages
+                        this.changeEmailPasswordErrorMessage = '';
+                        this.changeEmailErrorMessage = '';
+
                         this.changedEmail = true;
+                        setTimeout(() => {
+                            this.changedEmail = false;
+                            this.showChangeEmailSection = false;
+                        },3000)
                     }
                     else if (status.toString() === this.errorCodes.API) {
                         if (json.Payload.length > 0) {
                             if (json.Payload[0].Messages.length > 0) {
                                 this.changeEmailPasswordErrorMessage = json.Payload[0].Messages[0].toString()
+                                txtPassword.value = '';
                             }
                         }
                     }
                     else {
                         this.changeEmailPasswordErrorMessage = general.exception;
+                        txtPassword.value = '';
                     }
-
-                    txtPassword.value = '';
                 },
                 error => {
                     if (error.status.toString() === this.errorCodes.API) {
