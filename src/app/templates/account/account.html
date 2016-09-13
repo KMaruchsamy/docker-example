@@ -20,7 +20,7 @@
                     <div class="margin-1em-top">
                         <button class="button  button-with-validation button-mobile-block" id="btnProfileSave" type="submit" [attr.aria-disabled]="noProfileChanges"
                         [disabled]="noProfileChanges" #profilesave (click)="onSubmitSaveProfile(firstname, lastname, title, $event)">Save changes</button>
-                        <input *ngIf="!profileChanged" type="reset" id="profilecancel" class="reset-input" value="Cancel changes" #profilecancel (click)="onCancelSaveProfile()">
+                        <input *ngIf="!profileChanged" type="reset" id="profilecancel" class="reset-input" value="Cancel changes" #profilecancel (click)="onCancelSaveProfile($event)">
                         <span role="status" aria-live="assertive" aria-atomic="true">
                             <span *ngIf="profileChanged" #successcontainer id="successmsg" class="success success-icon">Your changes have been saved.</span>
                         </span>

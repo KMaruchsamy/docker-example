@@ -365,16 +365,15 @@ export class TestService {
 
     checkIfTestStartingSoon(institutionId: number, savedStartTime: any): number {
         let institutionTimezone: string = this.common.getTimezone(institutionId);
-        let institutionCurrentTime = moment.tz(new Date(), institutionTimezone);
+        let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
         let mStartTime = moment(savedStartTime);
         let timeDifference = (mStartTime.diff(institutionCurrentTime, 'seconds'));
-
         return timeDifference;
     }
 
     getTestStartTime(testScheduleModel: TestScheduleModel, institutionId: number): any {
         let institutionTimezone: string = this.common.getTimezone(institutionId);
-        let institutionCurrentTime = moment.tz(new Date(), institutionTimezone);
+        let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
         let testStartTime = moment(testScheduleModel.scheduleStartTime);
 
         return testStartTime;
