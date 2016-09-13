@@ -258,7 +258,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
             'selectOnBlur': false,
             'typeaheadHighlight': false
         }).on('change', function (e) {
-            debugger;
             if (e.currentTarget.value) {
                 let startTime;
                 if (__this.startDate) {
@@ -369,7 +368,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
             'selectOnBlur': false,
             'typeaheadHighlight': false
         }).on('change', function (e) {
-            debugger;
             if (e.currentTarget.value) {
                 let endTime;
                 let minEndTime = moment(new Date()).add(30, 'minutes').format();
@@ -503,7 +501,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
             'disableTouchKeyboard': true
         }).on('hide', function (e) {
             let outputString = '';
-            debugger;
             if (e.currentTarget.value !== '') {
                 outputString = __this.parseDateString(e.currentTarget.value);
 
@@ -591,7 +588,6 @@ export class ScheduleTest implements OnInit, OnDestroy {
             orientation: 'bottom',
             'disableTouchKeyboard': true
         }).on('hide', function (e) {
-            debugger;
             let outputString = '';
             if (e.currentTarget.value !== '') {
                 outputString = __this.parseDateString(e.currentTarget.value);
@@ -840,7 +836,9 @@ export class ScheduleTest implements OnInit, OnDestroy {
             this.testScheduleModel.scheduleEndTime = moment(this.endTime).toDate();
             if (this.modifyInProgress) {
                 let closeSession: boolean = false;
-                if (moment(this.testScheduleModel.scheduleEndTime).isSame(new Date(), 'minutes')) {
+                let institutionTimezone: string = this.common.getTimezone(this.testScheduleModel.institutionId);
+                let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm');
+                if (moment(this.testScheduleModel.scheduleEndTime).isSame(institutionCurrentTime, 'minutes')) {
                     $('#endModifyInProgressSession').modal('show');
                     return;
                 }
