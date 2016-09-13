@@ -142,7 +142,7 @@ export class Account implements OnInit, OnDestroy {
             }, error => console.log(error));
     }
 
-    onCancelSaveProfile() {
+    onCancelSaveProfile(event) {
         event.preventDefault();
         this.getInitialize();
         this.noProfileChanges = true;
