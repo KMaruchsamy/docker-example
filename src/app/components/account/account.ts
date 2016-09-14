@@ -157,6 +157,9 @@ export class Account implements OnInit, OnDestroy {
         let self = this;
         let status = 0;
         let newemailid = txtNewEmailId.value;
+        // clear any existing error messages
+        this.changeEmailPasswordErrorMessage = '';
+        this.changeEmailErrorMessage = '';
         if (this.validations.validateEmailFormat(newemailid)) {
             let userid = this.auth.userid;
             let email = this.auth.useremail;
@@ -180,10 +183,6 @@ export class Account implements OnInit, OnDestroy {
                         // clear inputs
                         txtNewEmailId.value = '';
                         txtPassword.value = '';
-                        // clear any existing error messages
-                        this.changeEmailPasswordErrorMessage = '';
-                        this.changeEmailErrorMessage = '';
-
                         this.changedEmail = true;
                         setTimeout(() => {
                             this.changedEmail = false;
