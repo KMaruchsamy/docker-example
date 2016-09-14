@@ -1,0 +1,138 @@
+<section class="container-medium-width section-medium-thin">
+  <div class="large-expander" *ngFor="let cohort of rosters.cohorts">
+    <div class="relative-position">
+      <a class="large-expander-trigger" [class.collapsed]="!cohort.visible" role="button" (click)="rosterCohortStudents(cohort.cohortId)"  href="javascript:void(0)" [attr.aria-expanded]="cohort.visible" [attr.aria-controls]="'cohort' + cohort.cohortId">
+              {{cohort.cohortName}}
+              </a>
+      <span class="vertically-centered">{{cohort.studentCount}} students</span>
+    </div>
+    <div *ngIf="cohort?.students && cohort?.students?.length>0" class="collapse" [class.in]="cohort.visible" [attr.id]="'cohort' + cohort.cohortId">
+      <span><b>Student access active from {{cohort?.cohortStartDate|parseDate:'MMMM D, YYYY'}} to {{cohort?.cohortEndDate|parseDate:'MMMM D, YYYY'}}</b></span>
+      <div class="clearfix">
+        <!--<span>Cohort count last updated on August 17, 2016</span>-->
+        <a href="#" class="right mobile-left-top-margin">Submit change or update</a>
+      </div>
+      <ul [class.cohort-list]="cohort?.students && cohort?.students?.length < 37" class="three-columns-auto cells section-medium-thin" > 
+        <li *ngFor="let student of cohort.students" [class.name-multiple-icons]="true"> {{student.lastName}}, {{student.firstName}} <!-- [class.name-multiple-icons] to determine-->
+          <img *ngIf="student?.isRepeatStudent" src="images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="repeat student icon" />
+          <img *ngIf="student?.isExpriredStudent" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon multiple-icons" alt="payment alert icon"/>
+          <img *ngIf="student?.isStudentPayDeactivatedStudent" src="images/yellow-clock-icon.png" class="self-pay-alert-table-icon" alt="student access expired icon"/>
+        </li>
+      </ul>
+
+      <div class="inline-icon-container clearfix">
+        <div class="left margin-right-1em" *ngIf="cohort?.hasRepeatStudent">
+          <img src="images/repeat-icon.png" class="inline-icon" alt="payment alert icon" height="18" width="18" />
+          <span>Repeat student</span>
+        </div>
+        <div class="left" *ngIf="cohort?.hasStudentPayDeactivatedStudent">
+          <img src="images/self-pay-alert-icon.svg" class="inline-icon" alt="payment alert icon" height="18" width="18" />
+          <span>Student has been deactivated due to non-payment</span>
+        </div>
+         <div class="left" *ngIf="cohort?.hasStudentPayDeactivatedStudent">
+           <img src="images/yellow-clock-icon.png" class="inline-icon" alt="student access expired icon" height="18" width="18" />
+          <span>Student access has expired</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!cohort?.students || cohort?.students?.length===0" class="collapse" [class.in]="cohort.visible" [attr.id]="'cohort' + cohort.cohortId">
+      <p>There are no students in this cohort roster.</p>
+    </div>
+  </div>
+
+  <!--<div class="large-expander">
+    <div class="relative-position">
+      <a class="large-expander-trigger collapsed" role="button" data-toggle="collapse" href="#cohort2" aria-expanded="false" aria-controls="cohort2">
+              December 2017
+              </a>
+      <span class="vertically-centered">10 students</span>
+    </div>
+    <div class="collapse" id="cohort2">
+      <span><b>Student access active from December 1, 2015 to March 1, 2018</b></span>
+      <div class="clearfix">
+        <span>Cohort count last updated on August 23, 2016</span>
+        <a href="#" class="right mobile-left-top-margin">Submit change or update</a>
+      </div>
+      <ul class="three-columns-auto cells section-medium-thin">
+        <li>Blumenthal, Erika</li>
+        <li>Cheng, Tom</li>
+        <li>Chresomales, Potoula</li>
+        <li>Cooley, Sharon</li>
+        <li>Donahue, Felicia</li>
+        <li>Doustan, Michael</li>
+        <li>Freiman, Allison</li>
+        <li>Gardner, Pamela</li>
+        <li>Greenman, Stacey</li>
+        <li>Herron, Sean</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="large-expander">
+    <div class="relative-position">
+      <a class="large-expander-trigger collapsed" role="button" data-toggle="collapse" href="#cohort3" aria-expanded="false" aria-controls="cohort3">
+              June 2017
+              </a>
+      <span class="vertically-centered">10 students</span>
+    </div>
+    <div class="collapse" id="cohort3">
+      <span><b>Student access active from August 1, 2015 to September 30, 2017</b></span>
+      <div class="clearfix">
+        <span>Cohort count last updated on August 1, 2016</span>
+        <a href="#" class="right mobile-left-top-margin">Submit change or update</a>
+      </div>
+      <ul class="three-columns-auto cells section-medium-thin">
+        <li>Blumenthal, Erika</li>
+        <li>Cheng, Tom</li>
+        <li>Chresomales, Potoula</li>
+        <li>Cooley, Sharon</li>
+        <li>Donahue, Felicia</li>
+        <li>Doustan, Michael</li>
+        <li>Freiman, Allison</li>
+        <li>Gardner, Pamela</li>
+        <li>Greenman, Stacey</li>
+        <li>Herron, Sean</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="large-expander">
+    <div class="relative-position">
+      <a class="large-expander-trigger collapsed" role="button" data-toggle="collapse" href="#cohort4" aria-expanded="false" aria-controls="cohort4">
+              December 2016
+              </a>
+      <span class="vertically-centered">10 students</span>
+    </div>
+    <div class="collapse" id="cohort4">
+      <span><b>Student access active from August 1, 2014 to March 1, 2016</b></span>
+      <div class="clearfix">
+        <span>Cohort count last updated on August 3, 2016</span>
+        <a href="#" class="right mobile-left-top-margin">Submit change or update</a>
+      </div>
+      <ul class="three-columns-auto cells section-medium-thin">
+        <li>Blumenthal, Erika</li>
+        <li>Cheng, Tom</li>
+        <li>Chresomales, Potoula</li>
+        <li>Cooley, Sharon</li>
+        <li>Donahue, Felicia</li>
+        <li>Doustan, Michael</li>
+        <li>Freiman, Allison</li>
+        <li>Gardner, Pamela</li>
+        <li>Greenman, Stacey</li>
+        <li>Herron, Sean</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="large-expander">
+    <div class="relative-position">
+      <a class="large-expander-trigger collapsed" role="button" data-toggle="collapse" href="#cohort5" aria-expanded="false" aria-controls="cohort5">
+              Extensions
+              </a>
+      <span class="vertically-centered">0 students</span>
+    </div>
+    <div class="collapse" id="cohort5">
+      <p>There are no students in this cohort roster.</p>
+    </div>
+  </div>-->
+</section>

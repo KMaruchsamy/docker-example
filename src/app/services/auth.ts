@@ -6,44 +6,132 @@ import {Http, RequestOptions, Headers, Response} from '@angular/http';
 
 @Injectable()
 export class Auth {
-  sStorage: any;
-  token: string;
-  user: any;
-  authheader: string;
-  useremail: string;
-  istemppassword: boolean;
-  userid: number;
-  firstname: string;
-  lastname: string;
-  title: string;
-  institutions: any;
-  securitylevel: number;
-  username: string;
-  common: Common;
-  isEnrollmentAgreementSigned: boolean;
+  common: Common = new Common();
+  sStorage: any = this.common.getStorage();
+
+  // token: string;
+  get token(): any {
+    return this.sStorage.getItem('jwt');
+  }
+  set token(value: any) {
+    this.sStorage.setItem('jwt', value);
+  }
+  // user: any;
+  // authheader: string;
+  get authheader(): any {
+    return 'Bearer ' + this.token;
+  }
+
+  // useremail: string;
+  get useremail(): string {
+    return this.sStorage.getItem('useremail');
+  }
+  set useremail(value: string) {
+    this.sStorage.setItem('useremail', value);
+  }
+
+
+  // istemppassword: boolean;
+  get istemppassword(): boolean {
+    return this.sStorage.getItem('istemppassword') === 'true';
+  }
+  set istemppassword(value: boolean) {
+    this.sStorage.setItem('istemppassword', value);
+  }
+
+
+  // userid: number;
+  get userid(): number {
+    return this.sStorage.getItem('userid');
+  }
+  set userid(value: number) {
+    this.sStorage.setItem('userid', value);
+  }
+
+  // firstname: string;
+  get firstname(): string {
+    return this.sStorage.getItem('firstname');
+  }
+  set firstname(value: string) {
+    this.sStorage.setItem('firstname', value);
+  }
+
+  // lastname: string;
+  get lastname(): string {
+    return this.sStorage.getItem('lastname');
+  }
+  set lastname(value: string) {
+    this.sStorage.setItem('lastname', value);
+  }
+
+
+  // title: string;
+  get title(): string {
+    return this.sStorage.getItem('title');
+  }
+  set title(value: string) {
+    this.sStorage.setItem('title', value);
+  }
+
+
+  // institutions: any;
+  get institutions(): any {
+    return this.sStorage.getItem('institutions');
+  }
+  set institutions(value: any) {
+    this.sStorage.setItem('institutions', value);
+  }
+
+  // securitylevel: number;
+  get securitylevel(): number {
+    return this.sStorage.getItem('securitylevel');
+  }
+  set securitylevel(value: number) {
+    this.sStorage.setItem('securitylevel', value);
+  }
+
+  // username: string;
+  get username(): string {
+    return this.sStorage.getItem('username');
+  }
+  set username(value: string) {
+    this.sStorage.setItem('username', value);
+  }
+
+
+  // isEnrollmentAgreementSigned: boolean;
+ get isEnrollmentAgreementSigned(): boolean {
+   return this.sStorage.getItem('isenrollmentagreementsigned')==='true';
+  }
+  set isEnrollmentAgreementSigned(value: boolean) {
+    this.sStorage.setItem('isenrollmentagreementsigned', value);
+  }
+
+
+
   constructor(private http: Http) {
-    this.common = new Common();
-    this.sStorage = this.common.getStorage();
-    this.token = this.sStorage.getItem('jwt');
-    this.user = this.token && jwt_decode(this.token);
-    this.useremail = this.sStorage.getItem('useremail');
-    this.authheader = 'Bearer ' + this.token;
-    this.istemppassword = this.sStorage.getItem('istemppassword') === 'true';
-    this.userid = parseInt(this.sStorage.getItem('userid'));
-    this.firstname = this.sStorage.getItem('firstname');
-    this.lastname = this.sStorage.getItem('lastname');
-    this.title = this.sStorage.getItem('title');
-    this.institutions = this.sStorage.getItem('institutions');
-    this.securitylevel = this.sStorage.getItem('securitylevel');
-    this.username = this.sStorage.getItem('username');
-    this.isEnrollmentAgreementSigned = this.sStorage.getItem('isenrollmentagreementsigned') === 'true';
+    // this.common = new Common();
+    // this.sStorage = this.common.getStorage();
+    // this.token = this.sStorage.getItem('jwt');
+    // this.user = this.token && jwt_decode(this.token);
+    // this.useremail = this.sStorage.getItem('useremail');
+    // this.authheader = 'Bearer ' + this.token;
+    // this.istemppassword = this.sStorage.getItem('istemppassword') === 'true';
+    // this.userid = parseInt(this.sStorage.getItem('userid'));
+    // this.firstname = this.sStorage.getItem('firstname');
+    // this.lastname = this.sStorage.getItem('lastname');
+    // this.title = this.sStorage.getItem('title');
+    // // this.institutions = this.sStorage.getItem('institutions');
+    // this.securitylevel = this.sStorage.getItem('securitylevel');
+    // this.username = this.sStorage.getItem('username');
+    // this.isEnrollmentAgreementSigned = this.sStorage.getItem('isenrollmentagreementsigned') === 'true';
   }
 
   refresh() {
     this.token = this.sStorage.getItem('jwt');
     this.user = this.token && jwt_decode(this.token);
     this.useremail = this.sStorage.getItem('useremail');
-    this.authheader = 'Bearer ' + this.token;
+    // this.authheader = 'Bearer ' + this.token;
     this.istemppassword = this.sStorage.getItem('istemppassword') === 'true';
     this.userid = parseInt(this.sStorage.getItem('userid'));
     this.firstname = this.sStorage.getItem('firstname');
@@ -105,8 +193,8 @@ export class Auth {
   logout() {
     this.sStorage.clear();
     this.token = null;
-    this.user = null;
-    this.authheader = null;
+    // this.user = null;
+    // this.authheader = null;
     this.useremail = null;
     this.istemppassword = false;
     this.userid = null;
@@ -118,35 +206,35 @@ export class Auth {
     this.username = null;
   }
 
-  
-  settemporarypassword(url, useremail, password):Observable<Response> {
-        let self = this;
-        let headers: Headers = new Headers({
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': this.authheader
-        });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
-        });
-        let body: any = JSON.stringify({
-          useremail: useremail,
-          password: password
-        });
-        return this.http.post(url, body, requestOptions);
+
+  settemporarypassword(url, useremail, password): Observable<Response> {
+    let self = this;
+    let headers: Headers = new Headers({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': this.authheader
+    });
+    let requestOptions: RequestOptions = new RequestOptions({
+      headers: headers
+    });
+    let body: any = JSON.stringify({
+      useremail: useremail,
+      password: password
+    });
+    return this.http.post(url, body, requestOptions);
   }
 
-    saveAcceptedTerms(url): Observable<Response> {
-      let self = this;
-      let headers: Headers = new Headers({
-          'Accept': 'application/json',
-          'Authorization': this.authheader,
-          'Content-Type': 'application/json'
-      });
-      let requestOptions: RequestOptions = new RequestOptions({
-          headers: headers
-      });
-      return this.http.post(url, {}, requestOptions);
+  saveAcceptedTerms(url): Observable<Response> {
+    let self = this;
+    let headers: Headers = new Headers({
+      'Accept': 'application/json',
+      'Authorization': this.authheader,
+      'Content-Type': 'application/json'
+    });
+    let requestOptions: RequestOptions = new RequestOptions({
+      headers: headers
+    });
+    return this.http.post(url, {}, requestOptions);
   }
-  
+
 }

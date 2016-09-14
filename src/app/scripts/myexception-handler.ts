@@ -12,7 +12,7 @@ export class MyExceptionHandler implements ExceptionHandler {
     }
 
     call(error, stackTrace = null, reason = null) {
-
+        console.log(stackTrace);
         let http: Http = this.injector.get(Http);
         let auth: Auth = new Auth(http);
         auth.refresh();
