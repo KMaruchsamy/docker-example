@@ -49,8 +49,8 @@ export class Account implements OnInit, OnDestroy {
     // error messages
     changeEmailErrorMessage: string;
     changeEmailPasswordErrorMessage: string;
-    resetPasswordErrorMessage: string;
-    passwordErrorMessage: string;
+    resetNewPasswordErrorMessage: string;
+    currentPasswordErrorMessage: string;
     sendStudentPasswordErrorMessage: string;
     emailValidationEror: string;
     constructor(private http: Http, public router: Router, private activatedRoute: ActivatedRoute, public auth: Auth, public common: Common, public validations: Validations, public titleService: Title, private log: Log) {
@@ -246,6 +246,7 @@ export class Account implements OnInit, OnDestroy {
         let confirmpassword = txtConfirmPassword.value;
         let status = 0;
         if (this.validatePassword(newpassword, confirmpassword)) {
+            this.resetNewPasswordErrorMessage = '';
             let authheader = this.auth.authheader;
             let userId = this.auth.userid;
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.resetfacultypasswordafterloginapi;
@@ -257,36 +258,47 @@ export class Account implements OnInit, OnDestroy {
                     return response.json();
                 })
                 .subscribe(json => {
+                    debugger;
+                    console.log(json);
                     if (status.toString() === this.errorCodes.SUCCESS) {
                         this.passwordReset = true;
                         this.showHintMessage = false;
                         this.resetPasswordSuccessMessage = reset_password_after_login.resetpass_success;
                         this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
-                        this.resetPasswordErrorMessage = '';
                     }
                     else if (status.toString() === this.errorCodes.API) {
                         if (json.Payload.length > 0) {
                             if (json.Payload[0].Messages.length > 0) {
-                                this.passwordErrorMessage = json.Payload[0].Messages[0].toString();
+                                // Update API to return different error codes for current and new password errors so they can show below appropriate inputs
+                                // this.currentPasswordErrorMessage = json.Payload[0].Messages[0].toString();
+                                this.resetNewPasswordErrorMessage = json.Payload[0].Messages[0].toString();
                                 this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
                             }
                         }
                     }
                     else {
-                        this.passwordErrorMessage = general.exception;
+                        // Update API to return different error codes for current and new password errors so they can show below appropriate inputs
+                        // this.currentPasswordErrorMessage = general.exception;
+                        this.resetNewPasswordErrorMessage = general.exception;
                         this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
                     }
                 }, error => {
+                    debugger;
+                    console.log(error);
                     if (error.status.toString() === this.errorCodes.API) {
                         if (error.json().Payload.length > 0) {
                             if (error.json().Payload[0].Messages.length > 0) {
-                                this.passwordErrorMessage = error.json().Payload[0].Messages[0].toString();
+                                // Update API to return different error codes for current and new password errors so they can show below appropriate inputs
+                                // this.currentPasswordErrorMessage = '';
+                                this.resetNewPasswordErrorMessage = error.json().Payload[0].Messages[0].toString();
                                 this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
                             }
                         }
                     }
                     else {
-                        this.passwordErrorMessage = general.exception;
+                        // Update API to return different error codes for current and new password errors so they can show below appropriate inputs
+                        // this.currentPasswordErrorMessage = '';
+                        this.resetNewPasswordErrorMessage = general.exception;
                         this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
                     }
 
@@ -304,7 +316,7 @@ export class Account implements OnInit, OnDestroy {
     }
 
     onCancelResetPassword() {
-        this.resetPasswordErrorMessage = '';
+        this.resetNewPasswordErrorMessage = '';
         this.resetPasswordSuccessMessage = '';
         this.showHintMessage = false;
     }
@@ -326,7 +338,6 @@ export class Account implements OnInit, OnDestroy {
                     return response.json();
                 })
                 .subscribe(json => {
-                    debugger;
                     if (status.toString() === this.errorCodes.SUCCESS) {
                         this.studentPasswordResetSuccessMessage = reset_student_password.success_message;
                         this.studentPasswordReset = true;
@@ -391,20 +402,23 @@ export class Account implements OnInit, OnDestroy {
     }
 
     validatePassword(newpassword, confirmpassword) {
+        // clear current password error message
+        this.currentPasswordErrorMessage = '';
+        // validate new passwords
         if (!this.validations.comparePasswords(newpassword, confirmpassword)) {
-            this.resetPasswordErrorMessage = manage_account.newpass_match;
+            this.resetNewPasswordErrorMessage = manage_account.newpass_match;
             return false;
         } else if (!this.validations.validateLength(newpassword)) {
-            this.resetPasswordErrorMessage = manage_account.newpass_character_count;
+            this.resetNewPasswordErrorMessage = manage_account.newpass_character_count;
             return false;
         } else if (!this.validations.validateSpecialCharacterCount(confirmpassword) && !this.validations.validateNumberCount(confirmpassword)) {
-            this.resetPasswordErrorMessage = manage_account.newpass_number_specialcharacter_validation;
+            this.resetNewPasswordErrorMessage = manage_account.newpass_number_specialcharacter_validation;
             return false;
         } else if (!this.validations.validateSpecialCharacterCount(confirmpassword)) {
-            this.resetPasswordErrorMessage = manage_account.newpass_specialcharacter_validation;
+            this.resetNewPasswordErrorMessage = manage_account.newpass_specialcharacter_validation;
             return false;
         } else if (!this.validations.validateNumberCount(confirmpassword)) {
-            this.resetPasswordErrorMessage = manage_account.newpass_number_validation;
+            this.resetNewPasswordErrorMessage = manage_account.newpass_number_validation;
             return false;
         }
         return true;
