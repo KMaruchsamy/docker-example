@@ -9,7 +9,7 @@ export class RosterCohortStudentsModal {
     userExpireDate: Date;
     studentPayInstitution: boolean;
     isRepeatStudent: boolean;
-    isExpriredStudent: boolean;
+    isExpiredStudent: boolean;
     isStudentPayDeactivatedStudent: boolean;
     isDuplicate: boolean;
 }

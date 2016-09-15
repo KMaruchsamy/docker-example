@@ -2,7 +2,7 @@ import {Subscription, Observable} from 'rxjs/Rx';
 import {RosterService} from '../../services/roster.service';
 import {Common} from '../../services/common';
 import { Input } from '@angular/core';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {links} from '../../constants/config';
 import {Response} from '@angular/http';
 import {RosterCohortStudentsModal} from '../../models/roster-cohort-students.modal';
@@ -14,7 +14,7 @@ import * as _ from 'lodash';
     templateUrl: 'templates/rosters/rosters-search.html',
     directives: []
 })
-export class RostersSearch implements OnDestroy {
+export class RostersSearch implements OnInit, OnDestroy {
     _institutionId: number;
     @Input()
     set institutionId(value: number) {
@@ -34,9 +34,27 @@ export class RostersSearch implements OnDestroy {
     inactiveStudents: Array<RosterCohortStudentsModal>;
     anyRepeatStudents: boolean = false;
     anyExpiredStudents: boolean = false;
+    anyStudentPayStudents: boolean = false;
     searchTriggered: boolean = false;
 
     constructor(private common: Common, private rosterService: RosterService) { }
+
+
+    ngOnInit() {
+        $('body').on('hidden.bs.popover', function (e) {
+            $(e.target).data("bs.popover").inState.click = false;
+        });
+
+        $('body').on('click', function (e) {
+            $('[data-toggle="popover"]').each(function () {
+                //the 'is' for buttons that trigger popups
+                //the 'has' for icons within a button that triggers a popup
+                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
+        });
+    }
 
     ngOnDestroy() {
         if (this.searchStudentsSubscription)
@@ -67,10 +85,13 @@ export class RostersSearch implements OnDestroy {
         this.searchStudentsSubscription = searchStudentsObservable
             .map(response => response.json())
             .finally(() => {
-                 console.log('done!');
+                console.log('done!');
                 __this.searchTriggered = true;
+                setTimeout(() => {
+                    $('.has-popover').popover();
+                });
             })
-            .subscribe((json:any) => {
+            .subscribe((json: any) => {
                 console.log('subscribe');
                 if (json) {
                     if (json.Active && json.Active.length > 0) {
@@ -103,13 +124,17 @@ export class RostersSearch implements OnDestroy {
                 rosterCohortStudent.lastName = student.LastName;
                 rosterCohortStudent.studentId = student.StudentId;
                 rosterCohortStudent.repeatExpiryDate = student.RepeatExpiryDate;
-                rosterCohortStudent.userExpireDate = student.UserExpiryDate;
+                rosterCohortStudent.userExpireDate = student.UserExpireDate;
                 rosterCohortStudent.studentPayInstitution = student.StudentPayInstitution;
                 rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate;
-                rosterCohortStudent.isExpriredStudent = (rosterCohortStudent.userExpireDate && !rosterCohortStudent.studentPayInstitution);
-                rosterCohortStudent.isStudentPayDeactivatedStudent = (rosterCohortStudent.userExpireDate && rosterCohortStudent.studentPayInstitution);
+                rosterCohortStudent.isExpiredStudent = (!!rosterCohortStudent.userExpireDate && !rosterCohortStudent.studentPayInstitution);
+                rosterCohortStudent.isStudentPayDeactivatedStudent = (!!rosterCohortStudent.userExpireDate && rosterCohortStudent.studentPayInstitution);
 
-
+                rosterCohortStudent.isDuplicate = _.some(objStudents, function (stud: any) {
+                    return stud.StudentId !== student.StudentId
+                        && student.FirstName.toUpperCase() === stud.FirstName.toUpperCase()
+                        && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
+                });
 
                 if (!this.anyRepeatStudents) {
                     if (rosterCohortStudent.isRepeatStudent)
@@ -117,8 +142,13 @@ export class RostersSearch implements OnDestroy {
                 }
 
                 if (!this.anyExpiredStudents) {
-                    if (rosterCohortStudent.isExpriredStudent)
+                    if (rosterCohortStudent.isExpiredStudent)
                         this.anyExpiredStudents = true;
+                }
+
+                if (!this.anyStudentPayStudents) {
+                    if (rosterCohortStudent.isStudentPayDeactivatedStudent)
+                        this.anyStudentPayStudents = true;
                 }
 
                 return rosterCohortStudent;
