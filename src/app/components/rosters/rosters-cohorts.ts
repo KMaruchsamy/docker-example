@@ -107,7 +107,6 @@ export class RostersCohorts implements OnInit, OnDestroy {
         let rosterCohortStudents: Array<RosterCohortStudentsModal> = [];
         if (cohortStudents) {
             rosterCohortStudents = _.map(cohortStudents, (student: any) => {
-                debugger;
                 let rosterCohortStudent = new RosterCohortStudentsModal();
                 rosterCohortStudent.cohortId = student.CohortId;
                 rosterCohortStudent.cohortName = student.CohortName;
