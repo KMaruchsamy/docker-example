@@ -12,7 +12,7 @@
         <!--<span>Cohort count last updated on August 17, 2016</span>-->
         <a href="#" class="right mobile-left-top-margin">Submit change or update</a>
       </div>
-      <ul [class.cohort-list]="cohort?.students && cohort?.students?.length < 37" class="three-columns-auto cells section-medium-thin" > 
+      <ul [style.height.px]="cohort?.students && cohort?.students?.length < 8 ? (cohort?.students?.length*42 + 48) : auto" [class.cohort-list]="cohort?.students && cohort?.students?.length > 7 && cohort?.students?.length < 25" class="three-columns-auto cells section-medium-thin" > 
         <li *ngFor="let student of cohort.students" [class.name-multiple-icons]="true"> {{student.lastName}}, {{student.firstName}} <!-- [class.name-multiple-icons] to determine-->
           <img *ngIf="student?.isRepeatStudent" src="images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="repeat student icon" />
           <img *ngIf="student?.isExpriredStudent" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon multiple-icons" alt="payment alert icon"/>

@@ -13,7 +13,7 @@ import * as _ from 'lodash';
     templateUrl: 'templates/rosters/rosters-faq.html',
     directives: []
 })
-export class RostersFaq implements OnInit, OnDestroy {
+export class RostersFaq implements OnDestroy {
     // institutionId: number;
     // institutionName: string;
     _accountManagerId: number;
