@@ -33,21 +33,36 @@
           </tr>
           <tr *ngFor="let activeStudent of activeStudents">
             <td class="name-multiple-icons">{{activeStudent.lastName}}, {{activeStudent.firstName}}
-              <img *ngIf="!!activeStudent.repeatExpiryDate" src="images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="payment alert icon"
-              />
-              <img *ngIf="activeStudent.userExpireDate && !activeStudent.studentPayInstitution" src="images/yellow-clock-icon.png" class="multiple-icons yellow-clock"
-                alt="student access expired icon">
+               <a *ngIf="activeStudent.isDuplicate"
+                                               tabindex="0"
+                                               role="button"
+                                               data-toggle="popover"
+                                               data-placement="top"
+                                               data-trigger="click focus"
+                                               [attr.data-content]="activeStudent?.email"
+                                               class="has-popover small-popover">
+                                                <img src="images/identity-icon.png"
+                                                     alt="duplicate student name icon"
+                                                     width="24" height="24" />
+          </a>
+              <img *ngIf="!!activeStudent.isRepeatStudent" src="images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="repeat student icon" />
+              <img *ngIf="!!activeStudent.isExpiredStudent" src="images/yellow-clock-icon.png" class="multiple-icons yellow-clock" alt="student access expired icon" />
+              <img *ngIf="!!activeStudent.isStudentPayDeactivatedStudent" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon multiple-icons"  alt="payment alert icon" />
             </td>
             <td>{{activeStudent.cohortName}}</td>
           </tr>
         </table>
         <div class="inline-icon-container clearfix">
-          <div *ngIf="anyRepeatStudents" class="left margin-right-1em hidden" id="repeatIcon">
+          <div *ngIf="anyRepeatStudents" class="left margin-right-1em" id="repeatIcon">
             <img src="images/repeat-icon.png" class="inline-icon" alt="payment alert icon" height="18" width="18" />
             <span>Repeat student</span>
           </div>
-          <div *ngIf="anyExpiredStudents" class="left hidden" id="yellowClock">
-            <img src="images/yellow-clock-icon.png" class="inline-icon" alt="payment alert icon" height="18" width="18" />
+          <div *ngIf="anyExpiredStudents" class="left" id="yellowClock">
+            <img src="images/yellow-clock-icon.png" class="inline-icon" alt="student access expired icon" height="18" width="18" />
+            <span>Student access has expired</span>
+          </div>
+          <div *ngIf="anyStudentPayStudents" class="left" id="studentIcon">
+            <img src="images/self-pay-alert-icon.svg" class="inline-icon" alt="payment alert icon" />
             <span>Student access has expired</span>
           </div>
         </div>
@@ -65,7 +80,7 @@
             <td><i>{{inactiveStudent.cohortName}}</i></td>
           </tr>
         </table>
-        <button class="anchor-button right clear-search link-darker mobile-left"  (click)="clear($event)">Clear search results</button>
+        <button class="anchor-button right clear-search link-darker mobile-left" (click)="clear($event)">Clear search results</button>
       </div>
 
     </div>
