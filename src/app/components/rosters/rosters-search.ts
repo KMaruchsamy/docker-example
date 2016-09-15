@@ -71,7 +71,7 @@ export class RostersSearch implements OnInit, OnDestroy {
     searchStudents(e) {
         e.preventDefault();
 
-        this.anyRepeatStudents = this.anyExpiredStudents = false;
+        this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = false;
 
         if (!this.institutionId || !this.searchString || this.searchString === '') {
             this.activeStudents = this.inactiveStudents = [];

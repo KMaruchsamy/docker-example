@@ -5,7 +5,7 @@
         <rosters-header [institutionName]="institutionName"></rosters-header>
         <rosters-faq  [accountManagerId]="accountManagerId"></rosters-faq>
         <rosters-multicampus *ngIf="institutions && institutions.length>1" (onInstitutionChange)="onInstitutionChange($event)" ></rosters-multicampus>
-        <rosters-search [institutionId]="institutionId"></rosters-search>
+        <rosters-search *ngIf="institutionId" [institutionId]="institutionId"></rosters-search>
         <rosters-cohorts *ngIf="institutionId" [institutionId]="institutionId"></rosters-cohorts>
     </div>
 </main>
