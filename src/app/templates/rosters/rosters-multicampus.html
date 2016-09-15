@@ -1,0 +1,28 @@
+        <!-- multi-campus sections (only one of these would show at a time if applicable) -->
+
+        <!-- Search and roster sections would not show until user made a selection -->
+        <section *ngIf="showDropdown" class="container-medium-width">
+          <p class="text-larger">
+            Please choose the institution for which you’d like to view rosters:
+          </p>
+          <div class="margin-2em-bottom clearfix">
+            <select id="choose-campus" class="selectpicker margin-1em-top margin-right-1em" (change)="changeInstitution($event.target.value)" title="Choose an institution" data-width="600" data-size="6">
+              <option *ngFor="let institution of institutions" [value]="institution.InstitutionId" >{{institution.InstitutionNameWithProgOfStudy}}</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- Search and roster sections WOULD show on load with RN being the default -->
+        <section *ngIf="showRadioButton" class="container-medium-width margin-2em-bottom">
+          <div class="button-group">
+            <label>
+              <input type="radio" name="button-group" [value]="institutionIdRN" (change)="changeInstitution($event.target.value)" checked>
+              <span class="button-group-item" id="RN">RN Program Rosters</span>
+            </label>
+            <label>
+              <input type="radio" name="button-group" [value]="institutionIdPN" (change)="changeInstitution($event.target.value)">
+              <span class="button-group-item" id="PN">PN Program Rosters</span>
+            </label>
+          </div>
+        </section>
+        <!-- end multi-campus sections -->

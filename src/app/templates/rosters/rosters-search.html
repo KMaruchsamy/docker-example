@@ -1,0 +1,73 @@
+<section class="container-medium-width">
+  <div class="section-medium-thin search-container">
+    <div class="container-medium-width">
+      <div>
+        <form class="search-bar" role="form" onsubmit="return false;">
+          <label class="h6" for="findStudent"><b>Find a student by first or last name</b></label>
+          <p class="smaller">
+            Enter a minimum of 2 characters.
+          </p>
+
+          <div class="search-input">
+            <input type="search" autocomplete="off" role="search" id="findStudent" [(ngModel)]="searchString">
+            <button class="button" id="findStudentButton" (click)="searchStudents($event)" type="submit" [disabled]="!validInstitution || (searchString.length < 2)">
+                      <img src="images/search-icon_2x.png" alt="Search Icon">
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="(!activeStudents || activeStudents?.length===0) && (!inactiveStudents || inactiveStudents?.length===0) && !!searchTriggered"
+        class="margin-1em-top" id="noResults">
+        <span>We’re sorry, there are no students that match your search. Please try again.</span>
+      </div>
+
+      <div *ngIf="!!activeStudents && activeStudents.length>0" class="section-medium-thin" id="activeStudentsResults">
+        <p class="text-purple left"><b>Students in Active Cohort Rosters</b></p>
+        <button class="anchor-button right clear-search link-darker mobile-left" (click)="clear($event)">Clear search results</button>
+
+        <table class="table-fixed" id="searchResultsTable">
+          <tr class="gray-th">
+            <th scope="col">Name</th>
+            <th scope="col">Cohort</th>
+          </tr>
+          <tr *ngFor="let activeStudent of activeStudents">
+            <td class="name-multiple-icons">{{activeStudent.lastName}}, {{activeStudent.firstName}}
+              <img *ngIf="!!activeStudent.repeatExpiryDate" src="images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="payment alert icon"
+              />
+              <img *ngIf="activeStudent.userExpireDate && !activeStudent.studentPayInstitution" src="images/yellow-clock-icon.png" class="multiple-icons yellow-clock"
+                alt="student access expired icon">
+            </td>
+            <td>{{activeStudent.cohortName}}</td>
+          </tr>
+        </table>
+        <div class="inline-icon-container clearfix">
+          <div *ngIf="anyRepeatStudents" class="left margin-right-1em hidden" id="repeatIcon">
+            <img src="images/repeat-icon.png" class="inline-icon" alt="payment alert icon" height="18" width="18" />
+            <span>Repeat student</span>
+          </div>
+          <div *ngIf="anyExpiredStudents" class="left hidden" id="yellowClock">
+            <img src="images/yellow-clock-icon.png" class="inline-icon" alt="payment alert icon" height="18" width="18" />
+            <span>Student access has expired</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!!inactiveStudents && inactiveStudents.length>0" class="section-medium-thin" id="inactiveStudentsResults">
+        <p class="text-purple"><b>Students in Expired or Inactive Cohort Rosters</b></p>
+        <table class="table-fixed" id="searchResultsExpiredTable">
+          <tr class="gray-th">
+            <th scope="col">Name</th>
+            <th scope="col">Cohort</th>
+          </tr>
+          <tr *ngFor="let inactiveStudent of inactiveStudents">
+            <td><i>{{inactiveStudent.lastName}}, {{inactiveStudent.firstName}}</i></td>
+            <td><i>{{inactiveStudent.cohortName}}</i></td>
+          </tr>
+        </table>
+        <button class="anchor-button right clear-search link-darker mobile-left"  (click)="clear($event)">Clear search results</button>
+      </div>
+
+    </div>
+  </div>
+</section>

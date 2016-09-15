@@ -467,7 +467,6 @@ export class ManageTests implements OnInit, OnDestroy {
     }
 
     sort(institutionId: number, tablename: string, columnname: string): void {
-        debugger;
         if (_.includes(tablename, '#tblScheduledTests')) {
             let institution: TestsModal = <TestsModal>_.find(this.scheduleTests, { 'institutionId': +institutionId });
             institution.tests = this.testService.sortTests(institution.tests, tablename, columnname);

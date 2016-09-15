@@ -15,8 +15,8 @@ export const links = {
         prod: {
             server: "https://nursing.kaplan.com/"
         },
-        baseurl: "api/v1/", 
-        v2baseurl:"api/v2/",
+        baseurl: "api/v1/",
+        v2baseurl: "api/v2/",
         admin: {
             authenticationapi: "admin/login",
             forgotpasswordapi: "admin/forgetPassword",
@@ -46,13 +46,18 @@ export const links = {
                 refreshTestingStatus: "scheduling/refreshRetestingStatus",
                 searchStudents: "scheduling/institutions/§institutionid/students?searchString=§searchstring&testId=§testid&windowStart=§windowstart&windowEnd=§windowend",
                 modifyInProgressSearchStudents: "scheduling/modifyInProgress/studentsInInstitution?searchString=§searchString&testingSessionId=§testingSessionId",
-                modifyInProgressCohortStudent:"scheduling/modifyInProgress/cohorts/§cohortId/students?testingSessionId=§testingSessionId",
+                modifyInProgressCohortStudent: "scheduling/modifyInProgress/cohorts/§cohortId/students?testingSessionId=§testingSessionId",
                 refreshStudentsWhoStarted: "scheduling/testingSessions/§testingSessionId/students?filter=§filter",
                 updateModifyInProgressStudents: "scheduling/modifyInProgress/testingSessions/§testSessionId",
-                updateScheduleDatesModifyInProgress:"scheduling/modifyInProgress/testingSessions/§scheduleId/windowDates"
+                updateScheduleDatesModifyInProgress: "scheduling/modifyInProgress/testingSessions/§scheduleId/windowDates"
             },
             logging: {
                 error: 'error/Log'
+            },
+            rosters: {
+                cohorts: 'admin/rosters/institutions/§institutionId/cohorts',
+                cohortStudents: 'admin/rosters/cohorts/§cohortId/students',
+                search:'admin/rosters/institutions/§institutionId/students?searchString=§searchString'
             }
         }
     },
@@ -140,7 +145,7 @@ export const TestShedulingPages = {
     CONFIRMATION: 'TESTS/CONFIRMATION',
     VIEW: 'TESTS/VIEW',
     MODIFYVIEW: 'TESTS/MODIFY/VIEW',
-    CONFIRMATIONMODIFYINPROGRESS:'TESTS/CONFIRMATIONMODIFYINPROGRESS'
+    CONFIRMATIONMODIFYINPROGRESS: 'TESTS/CONFIRMATIONMODIFYINPROGRESS'
 };
 
 export const teststatus = {
@@ -177,5 +182,9 @@ export let Timezones = {
     GMTplus12: 'Pacific/Auckland',
     GMTplus13: 'Pacific/Apia',
     GMTplus14: 'Pacific/Kiritimati'
+}
+
+export const roster = {
+    classRosterForm: 'http://bit.ly/2cwvA8A'
 }
 
