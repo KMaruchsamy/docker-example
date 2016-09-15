@@ -22,7 +22,6 @@ export class TestService {
     }
 
     private getRequestOptionsWithEmptyBody(): RequestOptions {
-        debugger;
         let self = this;
         let headers: Headers = new Headers({
             'Accept': 'application/json',

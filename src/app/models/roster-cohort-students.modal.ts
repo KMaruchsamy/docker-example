@@ -11,4 +11,5 @@ export class RosterCohortStudentsModal {
     isRepeatStudent: boolean;
     isExpriredStudent: boolean;
     isStudentPayDeactivatedStudent: boolean;
+    isDuplicate: boolean;
 }

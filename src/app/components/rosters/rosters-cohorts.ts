@@ -19,7 +19,7 @@ import {Response} from '@angular/http';
     directives: [NgIf, NgFor],
     pipes: [ParseDatePipe]
 })
-export class RostersCohorts implements OnDestroy {
+export class RostersCohorts implements OnInit, OnDestroy {
     _institutionId: number;
     @Input()
     set institutionId(value: number) {
@@ -36,7 +36,21 @@ export class RostersCohorts implements OnDestroy {
 
     constructor(public rosters: RostersModal, private rosterService: RosterService, private common: Common) { }
 
+    ngOnInit() {
+        $('body').on('hidden.bs.popover', function (e) {
+            $(e.target).data("bs.popover").inState.click = false;
+        });
 
+        $('body').on('click', function (e) {
+            $('[data-toggle="popover"]').each(function () {
+                //the 'is' for buttons that trigger popups
+                //the 'has' for icons within a button that triggers a popup
+                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
+        });
+    }
 
     ngOnDestroy(): void {
         if (this.cohortSubscription)
@@ -58,6 +72,7 @@ export class RostersCohorts implements OnDestroy {
             this.rosters.accountManagerEmail = roster.AccountManagerEmail;
             this.rosters.studentPayEnabled = roster.StudentPayEnabled;
             if (roster.Cohorts.length > 0) {
+                roster.Cohorts = _.sortBy(roster.Cohorts, function (o: any) { return new Date(o.CohortEndDate); });
                 this.rosters.cohorts = _.map(roster.Cohorts, (cohort: any) => {
                     let rosterCohort = new RosterCohortsModal();
                     rosterCohort.cohortId = cohort.CohortId;
@@ -106,6 +121,13 @@ export class RostersCohorts implements OnDestroy {
                 rosterCohortStudent.isExpriredStudent = (rosterCohortStudent.userExpireDate && !rosterCohortStudent.studentPayInstitution);
                 rosterCohortStudent.isStudentPayDeactivatedStudent = (rosterCohortStudent.userExpireDate && rosterCohortStudent.studentPayInstitution);
 
+
+                rosterCohortStudent.isDuplicate = _.some(cohortStudents, function (stud: any) {
+                    return stud.StudentId !== student.StudentId
+                        && student.FirstName.toUpperCase() === stud.FirstName.toUpperCase()
+                        && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
+                });
+
                 if (!cohort.hasRepeatStudent) {
                     if (rosterCohortStudent.isRepeatStudent)
                         cohort.hasRepeatStudent = true;
@@ -153,7 +175,9 @@ export class RostersCohorts implements OnDestroy {
                         console.log(error)
                         console.log('error');
                     }, () => {
-                        console.log('done!!');
+                        setTimeout(() => {
+                            $('.has-popover').popover();
+                        });
                     });
             }
 
