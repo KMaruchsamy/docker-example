@@ -107,6 +107,7 @@ export class RostersCohorts implements OnInit, OnDestroy {
         let rosterCohortStudents: Array<RosterCohortStudentsModal> = [];
         if (cohortStudents) {
             rosterCohortStudents = _.map(cohortStudents, (student: any) => {
+                debugger;
                 let rosterCohortStudent = new RosterCohortStudentsModal();
                 rosterCohortStudent.cohortId = student.CohortId;
                 rosterCohortStudent.cohortName = student.CohortName;
@@ -115,11 +116,11 @@ export class RostersCohorts implements OnInit, OnDestroy {
                 rosterCohortStudent.lastName = student.LastName;
                 rosterCohortStudent.studentId = student.StudentId;
                 rosterCohortStudent.repeatExpiryDate = student.RepeatExpiryDate;
-                rosterCohortStudent.userExpireDate = student.UserExpiryDate;
+                rosterCohortStudent.userExpireDate = student.UserExpireDate;
                 rosterCohortStudent.studentPayInstitution = student.StudentPayInstitution;
                 rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate;
-                rosterCohortStudent.isExpriredStudent = (rosterCohortStudent.userExpireDate && !rosterCohortStudent.studentPayInstitution);
-                rosterCohortStudent.isStudentPayDeactivatedStudent = (rosterCohortStudent.userExpireDate && rosterCohortStudent.studentPayInstitution);
+                rosterCohortStudent.isExpriredStudent = (!!rosterCohortStudent.userExpireDate && !rosterCohortStudent.studentPayInstitution);
+                rosterCohortStudent.isStudentPayDeactivatedStudent = (!!rosterCohortStudent.userExpireDate && !!rosterCohortStudent.studentPayInstitution);
 
 
                 rosterCohortStudent.isDuplicate = _.some(cohortStudents, function (stud: any) {
