@@ -27,8 +27,8 @@
                                                      width="24" height="24" />
           </a>
           <img *ngIf="student?.isRepeatStudent" src="images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="repeat student icon" />
-          <img *ngIf="student?.isExpriredStudent" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon multiple-icons" alt="payment alert icon"/>
-          <img *ngIf="student?.isStudentPayDeactivatedStudent" src="images/yellow-clock-icon.png" class="self-pay-alert-table-icon" alt="student access expired icon"/>
+          <img *ngIf="student?.isStudentPayDeactivatedStudent" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon multiple-icons" alt="payment alert icon"/>
+          <img *ngIf="student?.isExpriredStudent" src="images/yellow-clock-icon.png" class="self-pay-alert-table-icon" alt="student access expired icon"/>
         </li>
       </ul>
 
@@ -41,7 +41,7 @@
           <img src="images/self-pay-alert-icon.svg" class="inline-icon" alt="payment alert icon" height="18" width="18" />
           <span>Student has been deactivated due to non-payment</span>
         </div>
-         <div class="left" *ngIf="cohort?.hasStudentPayDeactivatedStudent">
+         <div class="left" *ngIf="cohort?.hasExpiredStudent">
            <img src="images/yellow-clock-icon.png" class="inline-icon" alt="student access expired icon" height="18" width="18" />
           <span>Student access has expired</span>
         </div>
