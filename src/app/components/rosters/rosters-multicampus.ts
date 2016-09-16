@@ -26,9 +26,10 @@ export class RostersMultiCampus implements OnInit {
 
     resolveInstitutions(): void {
         if (this.auth.institutions)
-            this.institutions = JSON.parse(this.auth.institutions);
+            this.institutions = _.sortBy(JSON.parse(this.auth.institutions), (i:any) => {return i.InstitutionNameWithProgOfStudy });
         
         if (this.institutions && this.institutions.length > 1) {
+            
             if (this.institutions.length === 2) {
                  let rnInstitutions = _.filter(this.institutions, { 'ProgramofStudyName': 'RN' });
                  if (rnInstitutions.length === 1) {

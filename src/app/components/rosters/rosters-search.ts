@@ -71,7 +71,7 @@ export class RostersSearch implements OnInit, OnDestroy {
     searchStudents(e) {
         e.preventDefault();
 
-        this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = false;
+
 
         if (!this.institutionId || !this.searchString || this.searchString === '') {
             this.activeStudents = this.inactiveStudents = [];
@@ -92,28 +92,31 @@ export class RostersSearch implements OnInit, OnDestroy {
             })
             .subscribe((json: any) => {
                 if (json) {
+                    this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = false;
                     if (json.Active && json.Active.length > 0) {
-                        __this.activeStudents = __this.mapStudents(json.Active);
+                        __this.activeStudents = __this.mapStudents(json.Active, true);
                     }
                     if (json.InactiveOrExpired && json.InactiveOrExpired.length > 0) {
-                        __this.inactiveStudents = __this.mapStudents(json.InactiveOrExpired);
+                        __this.inactiveStudents = __this.mapStudents(json.InactiveOrExpired, false);
                     }
                 }
             },
             error => {
-                console.log('error');
+                this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = false;
                 this.activeStudents = this.inactiveStudents = [];
             });
 
     }
 
-    mapStudents(objStudents: Array<any>) {
+    mapStudents(objStudents: Array<any>, isActive: boolean) {
+
         if (!objStudents)
             return [];
         else if (objStudents.length === 0)
             return [];
         else
             return _.map(objStudents, (student: any) => {
+                debugger;
                 let rosterCohortStudent = new RosterCohortStudentsModal();
                 rosterCohortStudent.cohortId = student.CohortId;
                 rosterCohortStudent.cohortName = student.CohortName;
@@ -124,29 +127,33 @@ export class RostersSearch implements OnInit, OnDestroy {
                 rosterCohortStudent.repeatExpiryDate = student.RepeatExpiryDate;
                 rosterCohortStudent.userExpireDate = student.UserExpireDate;
                 rosterCohortStudent.studentPayInstitution = student.StudentPayInstitution;
-                rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate;
-                rosterCohortStudent.isExpiredStudent = (!!rosterCohortStudent.userExpireDate && !rosterCohortStudent.studentPayInstitution);
-                rosterCohortStudent.isStudentPayDeactivatedStudent = (!!rosterCohortStudent.userExpireDate && rosterCohortStudent.studentPayInstitution);
+                if (isActive) {
 
-                rosterCohortStudent.isDuplicate = _.some(objStudents, function (stud: any) {
-                    return stud.StudentId !== student.StudentId
-                        && student.FirstName.toUpperCase() === stud.FirstName.toUpperCase()
-                        && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
-                });
+                    rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate;
+                    rosterCohortStudent.isExpiredStudent = (!!rosterCohortStudent.userExpireDate && !rosterCohortStudent.studentPayInstitution);
+                    rosterCohortStudent.isStudentPayDeactivatedStudent = (!!rosterCohortStudent.userExpireDate && rosterCohortStudent.studentPayInstitution);
 
-                if (!this.anyRepeatStudents) {
-                    if (rosterCohortStudent.isRepeatStudent)
-                        this.anyRepeatStudents = true;
-                }
+                    rosterCohortStudent.isDuplicate = _.some(objStudents, function (stud: any) {
+                        return stud.StudentId !== student.StudentId
+                            && student.FirstName.toUpperCase() === stud.FirstName.toUpperCase()
+                            && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
+                    });
 
-                if (!this.anyExpiredStudents) {
-                    if (rosterCohortStudent.isExpiredStudent)
-                        this.anyExpiredStudents = true;
-                }
+                    if (!this.anyRepeatStudents) {
+                        if (rosterCohortStudent.isRepeatStudent)
+                            this.anyRepeatStudents = true;
+                    }
 
-                if (!this.anyStudentPayStudents) {
-                    if (rosterCohortStudent.isStudentPayDeactivatedStudent)
-                        this.anyStudentPayStudents = true;
+                    if (!this.anyExpiredStudents) {
+                        if (rosterCohortStudent.isExpiredStudent)
+                            this.anyExpiredStudents = true;
+                    }
+
+                    if (!this.anyStudentPayStudents) {
+                        if (rosterCohortStudent.isStudentPayDeactivatedStudent)
+                            this.anyStudentPayStudents = true;
+                    }
+
                 }
 
                 return rosterCohortStudent;
