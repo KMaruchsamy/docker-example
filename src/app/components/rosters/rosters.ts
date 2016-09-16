@@ -45,12 +45,6 @@ export class Rosters implements OnInit {
                     this.institutionName = this.institutions[0].InstitutionName;
                     this.accountManagerId = this.institutions[0].AccountManagerId;
                 }
-                // else if (this.institutions.length === 2) {
-                //     let rnInstitutions = _.filter(this.institutions, { 'ProgramofStudyName': 'RN' });
-                //     if (rnInstitutions.length === 1) {
-                //         this.accountManagerId = this.institutions[0].AccountManagerId;
-                //     }
-                // }
                 else {
                     this.latestInstitution();
                 }
@@ -71,7 +65,6 @@ export class Rosters implements OnInit {
     }
 
     onInstitutionChange(institutionId: number) {
-        console.log('----------', this.institutionId, institutionId);
         let institution: any = _.find(this.institutions, { 'InstitutionId': +institutionId });
         if (institution) {
             this.institutionId = institution.InstitutionId;

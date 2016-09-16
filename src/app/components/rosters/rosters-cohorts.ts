@@ -99,6 +99,7 @@ export class RostersCohorts implements OnInit, OnDestroy {
                     __this.loadCohorts(json);
                 }, error => {
                     console.log(error)
+                    __this.rosters = new RostersModal();
                 });
         }
     }
@@ -149,7 +150,6 @@ export class RostersCohorts implements OnInit, OnDestroy {
         cohort.studentCount = rosterCohortStudents ? rosterCohortStudents.length : 0;
         cohort.students = rosterCohortStudents;
         cohort.visible = !cohort.visible;
-        console.log(this.rosters);
     }
 
     rosterCohortStudents(cohortId: number): any {
@@ -169,11 +169,8 @@ export class RostersCohorts implements OnInit, OnDestroy {
                     .map(response => response.json())
                     .subscribe(json => {
                         __this.loadRosterCohortStudents(rosterCohort, json);
-                        console.log('Subscription');
                     }, error => {
                         __this.loadRosterCohortStudents(rosterCohort, null);
-                        console.log(error)
-                        console.log('error');
                     }, () => {
                         setTimeout(() => {
                             $('.has-popover').popover();
