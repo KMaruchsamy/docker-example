@@ -1,7 +1,7 @@
 <page-header></page-header>
 
 <main role="main" class="app-main">
-    <div class="section">
+    <div class="section margin-2em-bottom">
         <rosters-header [institutionName]="institutionName"></rosters-header>
         <rosters-faq  [accountManagerId]="accountManagerId"></rosters-faq>
         <rosters-multicampus *ngIf="institutions && institutions.length>1" (onInstitutionChange)="onInstitutionChange($event)" ></rosters-multicampus>

@@ -6,7 +6,7 @@
             Please choose the institution for which you’d like to view rosters:
           </p>
           <div class="margin-2em-bottom clearfix">
-            <select id="choose-campus" class="selectpicker margin-1em-top margin-right-1em" (change)="changeInstitution($event.target.value)" title="Choose an institution" data-width="600" data-size="6">
+            <select id="choose-campus" class="selectpicker margin-1em-top margin-right-1em" (change)="changeInstitution($event.target.value)" title="Choose an institution" data-width="600" data-size="5">
               <option *ngFor="let institution of institutions" [value]="institution.InstitutionId" >{{institution.InstitutionNameWithProgOfStudy}}</option>
             </select>
           </div>
