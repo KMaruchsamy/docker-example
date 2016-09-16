@@ -1562,7 +1562,7 @@ main .right-grid ::-webkit-scrollbar {
   -webkit-column-break-inside: avoid;
      page-break-inside: avoid;
           break-inside: avoid;
-          display: table;
+          display: inline-block;
           width: 100%;
           word-wrap: break-word;
           word-break: break-word;
