@@ -7,12 +7,15 @@
       <span class="vertically-centered">{{cohort.studentCount}} students</span>
     </div>
     <div *ngIf="cohort?.students && cohort?.students?.length>0" class="collapse" [class.in]="cohort.visible" [attr.id]="'cohort' + cohort.cohortId">
-      <span><b>Student access active from {{cohort?.cohortStartDate|parseDate:'MMMM D, YYYY'}} to {{cohort?.cohortEndDate|parseDate:'MMMM D, YYYY'}}</b></span>
       <div class="clearfix">
-        <!--<span>Cohort count last updated on August 17, 2016</span>-->
+        <span><b>Student access active from {{cohort?.cohortStartDate|parseDate:'MMMM D, YYYY'}} to {{cohort?.cohortEndDate|parseDate:'MMMM D, YYYY'}}</b></span>
         <a href="#" class="right mobile-left-top-margin">Submit change or update</a>
       </div>
-      <ul [style.height.px]="cohort?.students && cohort?.students?.length < 8 ? (cohort?.students?.length*42 + 48) : auto" [class.cohort-list]="cohort?.students && cohort?.students?.length > 7 && cohort?.students?.length < 25" class="three-columns-auto cells section-medium-thin" > 
+      <!--<div class="clearfix">
+        <span>Cohort count last updated on August 17, 2016</span>
+        <a href="#" class="right mobile-left-top-margin">Submit change or update</a>
+      </div>-->
+      <ul class="three-columns-auto cells section-medium-thin" > 
         <li *ngFor="let student of cohort.students" [class.name-multiple-icons]="true"> {{student.lastName}}, {{student.firstName}} <!-- [class.name-multiple-icons] to determine-->
         <a *ngIf="student.isDuplicate"
                                                tabindex="0"

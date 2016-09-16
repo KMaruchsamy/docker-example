@@ -856,10 +856,9 @@ b, strong, .bolded {
 @media (max-width: 47.9375em) {
   .mobile-left, .mobile-left-top-margin {
     text-align: left;
-    width: 100%; } }
-
-.mobile-left-top-margin {
-  margin-top: 1em; }
+    width: 100%; }
+    .mobile-left-top-margin {
+      margin-top: 1em; } }
 
 .dashboard-grid > h3 {
   font-size: 1.25em;
@@ -1594,11 +1593,6 @@ main .right-grid ::-webkit-scrollbar {
     -webkit-column-gap: 10px;
        -moz-column-gap: 10px;
             column-gap: 10px; } }
-
-.three-columns-auto {
-  -webkit-column-fill: auto;
-     -moz-column-fill: auto;
-          column-fill: auto; }
 
 .footer-columns {
   -webkit-columns: 4;
