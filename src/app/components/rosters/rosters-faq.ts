@@ -19,7 +19,6 @@ export class RostersFaq implements OnDestroy {
     _accountManagerId: number;
     @Input()
     set accountManagerId(value: number) {
-        console.log(value);
         this._accountManagerId = value;
         this.loadProfileDescription();
     }
@@ -58,7 +57,6 @@ export class RostersFaq implements OnDestroy {
             .map(response => response.json())
             .subscribe(json => {
                 if (json) {
-                    console.log(json);
                     self.accountManagerEmail = json.Email;
                     self.accountManagerFirstName = json.FirstName;
                     self.accountManagerLastName = json.LastName;

@@ -85,14 +85,12 @@ export class RostersSearch implements OnInit, OnDestroy {
         this.searchStudentsSubscription = searchStudentsObservable
             .map(response => response.json())
             .finally(() => {
-                console.log('done!');
                 __this.searchTriggered = true;
                 setTimeout(() => {
                     $('.has-popover').popover();
                 });
             })
             .subscribe((json: any) => {
-                console.log('subscribe');
                 if (json) {
                     if (json.Active && json.Active.length > 0) {
                         __this.activeStudents = __this.mapStudents(json.Active);
