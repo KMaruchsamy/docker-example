@@ -16,7 +16,7 @@
         <a href="#" class="right mobile-left-top-margin">Submit change or update</a>
       </div>-->
       <ul class="three-columns-auto cells section-medium-thin" > 
-        <li *ngFor="let student of cohort.students" [class.name-multiple-icons]="true"> {{student.lastName}}, {{student.firstName}} <!-- [class.name-multiple-icons] to determine-->
+        <li *ngFor="let student of cohort.students" [class.name-multiple-icons]="student?.isRepeatStudent || student?.isStudentPayDeactivatedStudent || student?.isExpiredStudent"> {{student.lastName}}, {{student.firstName}} <!-- [class.name-multiple-icons] to determine-->
         <a *ngIf="student.isDuplicate"
                                                tabindex="0"
                                                role="button"

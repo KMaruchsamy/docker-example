@@ -503,8 +503,7 @@ ul.list-pdf-download-icon, ol.list-pdf-download-icon {
     margin-bottom: .5em; }
 
 ul.cells li, ol.cells li {
-  padding: .5em;
-  padding-left: 1em;
+  padding: .5em 1em;
   border: 2px solid #e3e3e3;
   border-bottom: 1px solid #e3e3e3;
   border-top: 1px solid #e3e3e3; }
@@ -1559,6 +1558,19 @@ main .right-grid ::-webkit-scrollbar {
   .student-name {
     margin-bottom: 1em; } }
 
+.two-columns li, .three-columns li, .three-columns-auto li, .footer-columns li {
+  -webkit-column-break-inside: avoid;
+     page-break-inside: avoid;
+          break-inside: avoid;
+          display: table;
+          width: 100%;
+          word-wrap: break-word;
+          word-break: break-word;
+          -webkit-hyphens: auto;
+            -moz-hyphens: auto;
+              -ms-hyphens: auto;
+                  hyphens: auto; } 
+
 @media (min-width: 34.4375em) {
   .two-columns {
     -webkit-columns: 2;
@@ -1566,11 +1578,7 @@ main .right-grid ::-webkit-scrollbar {
             columns: 2;
     -webkit-column-gap: 10px;
        -moz-column-gap: 10px;
-            column-gap: 10px; }
-    .two-columns li {
-      -webkit-column-break-inside: avoid;
-      page-break-inside: avoid;
-      break-inside: avoid; } }
+            column-gap: 10px; } }
 
 @media (min-width: 25.9375em) {
   .three-columns, .three-columns-auto {
@@ -1579,11 +1587,7 @@ main .right-grid ::-webkit-scrollbar {
             columns: 2;
     -webkit-column-gap: 10px;
        -moz-column-gap: 10px;
-            column-gap: 10px; }
-    .three-columns li, .three-columns-auto li {
-      -webkit-column-break-inside: avoid;
-      page-break-inside: avoid;
-      break-inside: avoid; } }
+            column-gap: 10px; } }
 
 @media (min-width: 48em) {
   .three-columns, .three-columns-auto {
@@ -1601,10 +1605,6 @@ main .right-grid ::-webkit-scrollbar {
   -webkit-column-gap: 10px;
      -moz-column-gap: 10px;
           column-gap: 10px; }
-  .footer-columns li {
-    -webkit-column-break-inside: avoid;
-    page-break-inside: avoid;
-    break-inside: avoid; }
 
 /*@mixin container($local-max-width: $max-width) {
   @include clearfix;
