@@ -1,40 +1,44 @@
- .table-fixed {
-       word-wrap: break-word;
-     }
+.table-fixed {
+  word-wrap: break-word;
+}
 
-     td.name-multiple-icons, li.name-multiple-icons  {
-       padding-right: 55px !important;
-       position: relative;
-     }
+td.name-multiple-icons, li.name-multiple-icons  {
+  padding-right: 55px !important;
+  position: relative;
+}
 
-     th:last-child, td:last-child {
-       padding-left: .5em;
-     }
+th:last-child, td:last-child {
+  padding-left: .5em;
+}
 
-     @media (min-width:768px) {
-       .cohort-list {
-        height: 385px;
-      }      
-       th:first-child, td:first-child {
-         width: 40%;
-       }
-       th:last-child, td:last-child {
-         padding-left: 2em;
-       }
-     }
+@media (min-width:768px) {
+  .cohort-list {
+  height: 385px;
+}      
+  th:first-child, td:first-child {
+    width: 40%;
+  }
+  th:last-child, td:last-child {
+    padding-left: 2em;
+  }
+}
 
-     form.search-bar {
-       top: -4px;
-     }
+form.search-bar {
+  top: -4px;
+}
 
-     @media (min-width: 551px) {
-       .button-group label {
-         width: 50%;
-       }
-     }
+@media (min-width: 551px) {
+  .button-group label {
+    width: 50%;
+  }
+}
 
-     .button-group label .button-group-item {
-       font-weight: bold;
-       text-align: center;
-       width: 100%;
-     }
+.button-group label .button-group-item {
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+
+.large-expander-trigger {
+padding-right: 100px;
+}
