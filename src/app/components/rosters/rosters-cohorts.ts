@@ -21,6 +21,7 @@ import {Response} from '@angular/http';
 })
 export class RostersCohorts implements OnInit, OnDestroy {
     _institutionId: number;
+    noCohorts: Boolean = false;
     @Input()
     set institutionId(value: number) {
         this._institutionId = value;
@@ -60,7 +61,6 @@ export class RostersCohorts implements OnInit, OnDestroy {
     }
 
     loadCohorts(roster: any) {
-
         let rosterCohorts: Array<RosterCohortsModal>;
         if (roster) {
             this.rosters.institutionId = roster.InstitutionId;
@@ -96,9 +96,11 @@ export class RostersCohorts implements OnInit, OnDestroy {
             this.cohortSubscription = rosterCohortsObservable
                 .map(response => response.json())
                 .subscribe(json => {
+                    __this.noCohorts = false;
                     __this.loadCohorts(json);
                 }, error => {
                     console.log(error)
+                    __this.noCohorts = true;
                     __this.rosters = new RostersModal();
                 });
         }

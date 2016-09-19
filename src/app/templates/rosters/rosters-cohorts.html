@@ -1,4 +1,5 @@
 <section class="container-medium-width section-medium-thin">
+  <p *ngIf="noCohorts" class="text-larger">We’re sorry, there are no active cohort rosters for this institution. You can search for students in expired or inactive cohort rosters for this institution above.</p>
   <div class="large-expander" *ngFor="let cohort of rosters.cohorts">
     <div class="relative-position">
       <a class="large-expander-trigger" [class.collapsed]="!cohort.visible" role="button" (click)="rosterCohortStudents(cohort.cohortId)"  href="javascript:void(0)" [attr.aria-expanded]="cohort.visible" [attr.aria-controls]="'cohort' + cohort.cohortId">
