@@ -10,7 +10,10 @@
                 <div class="collapse" [class.in]="visiblefaq1" id="faq1">
                     <p>
                         All students enrolled in the Kaplan program are activated by the submission of rosters to your school’s dedicated Account
-                        Manager, <b>{{accountManagerFirstName}} {{accountManagerLastName}}</b> (<a href="mailto:{{accountManagerEmail}}">{{accountManagerEmail}}</a>).
+                        Manager
+                        <template [ngIf]="accountManagerId">
+                            , <b>{{accountManagerFirstName}} {{accountManagerLastName}}</b> (<a href="mailto:{{accountManagerEmail}}">{{accountManagerEmail}}</a>)
+                        </template>.
                         The rosters tell us which students to activate and classify them into cohorts labeled by month and
                         year of graduation (e.g. June 2017). Based on their cohort, students are granted access to the Kaplan
                         program for three months after graduation, which typically covers their NCLEX® testing cycle. Kaplan
@@ -57,7 +60,10 @@
                         To report any changes or updates in your rosters, submit them to your Account Manager using your
                         <a href="#">Custom Change Form</a> at least 3 business days prior to your planned billing date. For
                         urgent requests (needed within 3 business days), please contact the Faculty Hotline at <a class="link-base-color"
-                            href="tel:+1-866-920-6311"><strong>1-866-920-6311</strong></a> or your Account Manager, {{accountManagerFirstName}} {{accountManagerLastName}}, at <a class="link-base-color" href="tel:{{accountManagerPhoneNumber}}"><strong>{{accountManagerPhoneNumber}}</strong></a>.
+                            href="tel:+1-866-920-6311"><strong>1-866-920-6311</strong></a> or your Account Manager                            
+                            <template [ngIf]="accountManagerId">
+                                , {{accountManagerFirstName}} {{accountManagerLastName}}, at <a class="link-base-color" href="tel:{{accountManagerPhoneNumber}}"><strong>{{accountManagerPhoneNumber}}</strong></a>
+                            </template>.
                     </p>
                 </div>
             </div>

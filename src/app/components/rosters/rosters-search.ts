@@ -70,11 +70,9 @@ export class RostersSearch implements OnInit, OnDestroy {
 
     searchStudents(e) {
         e.preventDefault();
-
-
-
+       this.activeStudents = this.inactiveStudents = [];
         if (!this.institutionId || !this.searchString || this.searchString === '') {
-            this.activeStudents = this.inactiveStudents = [];
+            // this.activeStudents = this.inactiveStudents = [];
             return;
         }
 
@@ -127,17 +125,20 @@ export class RostersSearch implements OnInit, OnDestroy {
                 rosterCohortStudent.repeatExpiryDate = student.RepeatExpiryDate;
                 rosterCohortStudent.userExpireDate = student.UserExpireDate;
                 rosterCohortStudent.studentPayInstitution = student.StudentPayInstitution;
+
+                rosterCohortStudent.isDuplicate = _.some(objStudents, function (stud: any) {
+                    return stud.StudentId !== student.StudentId
+                        && student.FirstName.toUpperCase() === stud.FirstName.toUpperCase()
+                        && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
+                });
+
+
                 if (isActive) {
 
                     rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate;
                     rosterCohortStudent.isExpiredStudent = (!!rosterCohortStudent.userExpireDate && !rosterCohortStudent.studentPayInstitution);
                     rosterCohortStudent.isStudentPayDeactivatedStudent = (!!rosterCohortStudent.userExpireDate && rosterCohortStudent.studentPayInstitution);
 
-                    rosterCohortStudent.isDuplicate = _.some(objStudents, function (stud: any) {
-                        return stud.StudentId !== student.StudentId
-                            && student.FirstName.toUpperCase() === stud.FirstName.toUpperCase()
-                            && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
-                    });
 
                     if (!this.anyRepeatStudents) {
                         if (rosterCohortStudent.isRepeatStudent)

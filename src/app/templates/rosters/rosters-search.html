@@ -33,21 +33,16 @@
           </tr>
           <tr *ngFor="let activeStudent of activeStudents">
             <td class="name-multiple-icons">{{activeStudent.lastName}}, {{activeStudent.firstName}}
-               <a *ngIf="activeStudent.isDuplicate"
-                                               tabindex="0"
-                                               role="button"
-                                               data-toggle="popover"
-                                               data-placement="top"
-                                               data-trigger="click focus"
-                                               [attr.data-content]="activeStudent?.email"
-                                               class="has-popover small-popover">
-                                                <img src="images/identity-icon.png"
-                                                     alt="duplicate student name icon"
-                                                     width="24" height="24" />
-          </a>
-              <img *ngIf="!!activeStudent.isRepeatStudent" src="images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="repeat student icon" />
-              <img *ngIf="!!activeStudent.isExpiredStudent" src="images/yellow-clock-icon.png" class="multiple-icons yellow-clock" alt="student access expired icon" />
-              <img *ngIf="!!activeStudent.isStudentPayDeactivatedStudent" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon multiple-icons"  alt="payment alert icon" />
+              <a *ngIf="activeStudent.isDuplicate" tabindex="0" role="button" data-toggle="popover" data-placement="top" data-trigger="click focus"
+                [attr.data-content]="activeStudent?.email" class="has-popover small-popover">
+                <img src="images/identity-icon.png" alt="duplicate student name icon" width="24" height="24" />
+              </a>
+              <img *ngIf="!!activeStudent.isRepeatStudent" src="images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="repeat student icon"
+              />
+              <img *ngIf="!!activeStudent.isExpiredStudent" src="images/yellow-clock-icon.png" class="multiple-icons yellow-clock" alt="student access expired icon"
+              />
+              <img *ngIf="!!activeStudent.isStudentPayDeactivatedStudent" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon multiple-icons"
+                alt="payment alert icon" />
             </td>
             <td>{{activeStudent.cohortName}}</td>
           </tr>
@@ -76,7 +71,13 @@
             <th scope="col">Cohort</th>
           </tr>
           <tr *ngFor="let inactiveStudent of inactiveStudents">
-            <td><i>{{inactiveStudent.lastName}}, {{inactiveStudent.firstName}}</i></td>
+            <td><i>{{inactiveStudent.lastName}}, {{inactiveStudent.firstName}}</i>
+              <a *ngIf="inactiveStudent.isDuplicate" tabindex="0"
+                role="button" data-toggle="popover" data-placement="top" data-trigger="click focus" [attr.data-content]="inactiveStudent?.email"
+                class="has-popover small-popover">
+                <img src="images/identity-icon.png" alt="duplicate student name icon" width="24" height="24" />
+              </a>
+            </td>
             <td><i>{{inactiveStudent.cohortName}}</i></td>
           </tr>
         </table>
