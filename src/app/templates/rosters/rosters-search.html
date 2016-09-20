@@ -33,9 +33,9 @@
           </tr>
           <tr *ngFor="let activeStudent of activeStudents">
             <td class="name-multiple-icons">{{activeStudent.lastName}}, {{activeStudent.firstName}}
-              <a *ngIf="activeStudent.isDuplicate" tabindex="0" role="button" data-toggle="popover" data-placement="top" data-trigger="click focus"
+              <a *ngIf="activeStudent.isDuplicate" [style.margin-left.px]="3" tabindex="0" role="button" data-toggle="popover" data-placement="top" data-trigger="click focus"
                 [attr.data-content]="activeStudent?.email" class="has-popover small-popover">
-                <img src="images/identity-icon.png" alt="duplicate student name icon" width="24" height="24" />
+                <img src="images/identity-icon.png" alt="duplicate student name icon" width="22" height="22" />
               </a>
               <img *ngIf="!!activeStudent.isRepeatStudent" src="images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="repeat student icon"
               />
@@ -72,10 +72,10 @@
           </tr>
           <tr *ngFor="let inactiveStudent of inactiveStudents">
             <td><i>{{inactiveStudent.lastName}}, {{inactiveStudent.firstName}}</i>
-              <a *ngIf="inactiveStudent.isDuplicate" tabindex="0"
+              <a *ngIf="inactiveStudent.isDuplicate" tabindex="0" [style.margin-left.px]="3"
                 role="button" data-toggle="popover" data-placement="top" data-trigger="click focus" [attr.data-content]="inactiveStudent?.email"
                 class="has-popover small-popover">
-                <img src="images/identity-icon.png" alt="duplicate student name icon" width="24" height="24" />
+                <img src="images/identity-icon.png" alt="duplicate student name icon" width="22" height="22" />
               </a>
             </td>
             <td><i>{{inactiveStudent.cohortName}}</i></td>
