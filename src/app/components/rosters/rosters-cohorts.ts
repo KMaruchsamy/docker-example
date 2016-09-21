@@ -63,6 +63,7 @@ export class RostersCohorts implements OnInit, OnDestroy {
     loadCohorts(roster: any) {
         let rosterCohorts: Array<RosterCohortsModal>;
         if (roster) {
+            let extensionCohort: RosterCohortsModal;
             this.rosters.institutionId = roster.InstitutionId;
             this.rosters.institutionName = roster.InstitutionName;
             this.rosters.institutionNameWithProgOfStudy = roster.InstitutionNameWithProgOfStudy;
@@ -72,7 +73,12 @@ export class RostersCohorts implements OnInit, OnDestroy {
             this.rosters.accountManagerEmail = roster.AccountManagerEmail;
             this.rosters.studentPayEnabled = roster.StudentPayEnabled;
             if (roster.Cohorts.length > 0) {
-                roster.Cohorts = _.sortBy(roster.Cohorts, function (o: any) { return new Date(o.CohortEndDate); });
+                roster.Cohorts = _.orderBy(roster.Cohorts, function (o: any) {
+                    if (o.CohortName.toUpperCase() === 'EXTENSIONS')
+                        return new Date(0);
+                    else
+                        return new Date(o.CohortEndDate);
+                }, 'desc');
                 this.rosters.cohorts = _.map(roster.Cohorts, (cohort: any) => {
                     let rosterCohort = new RosterCohortsModal();
                     rosterCohort.cohortId = cohort.CohortId;
@@ -121,7 +127,7 @@ export class RostersCohorts implements OnInit, OnDestroy {
                 rosterCohortStudent.userExpireDate = student.UserExpireDate;
                 rosterCohortStudent.studentPayInstitution = student.StudentPayInstitution;
                 rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate;
-                rosterCohortStudent.isExpiredStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day')  && !rosterCohortStudent.studentPayInstitution);
+                rosterCohortStudent.isExpiredStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !rosterCohortStudent.studentPayInstitution);
                 rosterCohortStudent.isStudentPayDeactivatedStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !!rosterCohortStudent.studentPayInstitution);
 
 
