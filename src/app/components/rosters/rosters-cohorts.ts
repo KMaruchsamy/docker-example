@@ -121,8 +121,8 @@ export class RostersCohorts implements OnInit, OnDestroy {
                 rosterCohortStudent.userExpireDate = student.UserExpireDate;
                 rosterCohortStudent.studentPayInstitution = student.StudentPayInstitution;
                 rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate;
-                rosterCohortStudent.isExpiredStudent = (moment(rosterCohortStudent.userExpireDate).isBefore(new Date(), 'day')  && !rosterCohortStudent.studentPayInstitution);
-                rosterCohortStudent.isStudentPayDeactivatedStudent = (moment(rosterCohortStudent.userExpireDate).isBefore(new Date(), 'day') && !!rosterCohortStudent.studentPayInstitution);
+                rosterCohortStudent.isExpiredStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day')  && !rosterCohortStudent.studentPayInstitution);
+                rosterCohortStudent.isStudentPayDeactivatedStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !!rosterCohortStudent.studentPayInstitution);
 
 
                 rosterCohortStudent.isDuplicate = _.some(cohortStudents, function (stud: any) {
