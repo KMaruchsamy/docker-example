@@ -74,7 +74,7 @@ export class RostersCohorts implements OnInit, OnDestroy {
             this.rosters.studentPayEnabled = roster.StudentPayEnabled;
             if (roster.Cohorts.length > 0) {
                 roster.Cohorts = _.orderBy(roster.Cohorts, function (o: any) {
-                    if (o.CohortName.toUpperCase() === 'EXTENSIONS')
+                    if (o.CohortName.toUpperCase().indexOf('EXTENSION') != -1)
                         return new Date(0);
                     else
                         return new Date(o.CohortEndDate);
