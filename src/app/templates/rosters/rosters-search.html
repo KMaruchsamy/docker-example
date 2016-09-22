@@ -9,7 +9,7 @@
           </p>
 
           <div class="search-input">
-            <input type="search" autocomplete="off" role="search" id="findStudent" [(ngModel)]="searchString">
+            <input class="typeahead" type="search" autocomplete="off" role="search" id="findStudent" #findstudent id="findStudent" (input)="getStudentsByName($event.target.value);" [(ngModel)]="searchString">
             <button class="button" id="findStudentButton" (click)="searchStudents($event)" type="submit" [disabled]="!validInstitution || (searchString.length < 2)">
                       <img src="images/search-icon_2x.png" alt="Search Icon">
             </button>
