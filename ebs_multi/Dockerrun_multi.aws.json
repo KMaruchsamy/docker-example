@@ -28,30 +28,6 @@
           "containerPort": 80
         }
       ]
-    },
-    {
-      "name": "nursing-log-api",
-      "image": "kaptest/nursing-log-api:dev",
-      "essential": true,
-      "memory": 128,
-      "portMappings": [
-        {
-          "hostPort": 3000,
-          "containerPort": 80
-        }
-      ]
-    },
-    {
-      "name": "nursing-admin-api",
-      "image": "kaptest/nursing-admin-api:dev",
-      "essential": true,
-      "memory": 128,
-      "portMappings": [
-        {
-          "hostPort": 5000,
-          "containerPort": 80
-        }
-      ]
     }
   ]
 }
