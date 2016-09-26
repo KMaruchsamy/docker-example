@@ -36,6 +36,7 @@ export class RostersFaq implements OnDestroy {
     accountManagerLastName: string;
     accountManagerPhoneNumber: string;
     accountManagerEmail: string;
+    customChangeForm: string;
     classRosterFormUrl: string = roster.classRosterForm;
     constructor(private homeService: HomeService, private auth: Auth) {
         this.classRosterFormUrl = roster.classRosterForm;
@@ -61,7 +62,8 @@ export class RostersFaq implements OnDestroy {
                     self.accountManagerFirstName = json.FirstName;
                     self.accountManagerLastName = json.LastName;
                     self.accountManagerPhoneNumber = json.Telephone;
-                }
+                    self.customChangeForm = json.LinksForFrontEnd[0].LinkUrl;
+                } 
             },
             error => console.log(error.message),
             () => {
