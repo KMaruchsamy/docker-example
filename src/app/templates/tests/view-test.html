@@ -1,5 +1,5 @@
 <page-header></page-header>
-<main role="main" class="app-main">
+<main role="main" class="app-main view-testing-session-main">
 
     <section>
         <div class="section section-bottom-thin" [class.section-light-pink]="modifyInProgress">
@@ -9,8 +9,11 @@
                     <h3 class="page-lg-heading">View Testing Session {{modifyInProgress ? '— In Progress' : ''}}</h3>
                 </div>
 
-              <a *ngIf="modifyInProgress && (adminId==schedule?.adminId || adminId==schedule?.facultyMemberId)" [routerLink]="['/tests','modify','add-students']" class="right view-testing-session-link button-mobile-block">Add/Remove Students</a><br>
-              <a *ngIf="modifyInProgress && (adminId==schedule?.adminId || adminId==schedule?.facultyMemberId)" [routerLink]="['/tests','modify','schedule-test']" class="right view-testing-session-link button-mobile-block">Change Testing Window</a>
+                <span *ngIf="modifyInProgress && (adminId==schedule?.adminId || adminId==schedule?.facultyMemberId)">
+                    <a [routerLink]="['/tests','modify','add-students']" class="right view-testing-session-link button-mobile-block">Add/Remove Students</a><br>
+                    <a [routerLink]="['/tests','modify','schedule-test']" class="right view-testing-session-link button-mobile-block">Change Testing Window</a>
+                </span>
+
                 <div class="modify-testing-session-right" *ngIf="modify && !modifyInProgress">
                     <a [routerLink]="['/tests','modify','choose-test',schedule.institutionId]" class="button button-mobile-block">Modify this testing session</a>
                     <button class="anchor-button margin-1em-top" (click)="showConfirmation($event);">Delete this testing session</button>
