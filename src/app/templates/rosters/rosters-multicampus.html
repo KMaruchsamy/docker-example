@@ -14,15 +14,13 @@
 
         <!-- Search and roster sections WOULD show on load with RN being the default -->
         <section *ngIf="showRadioButton" class="container-medium-width margin-2em-bottom">
-          <div class="button-group">
-            <label>
-              <input type="radio" name="button-group" [value]="institutionIdRN" (change)="changeInstitution($event.target.value)" checked>
-              <span class="button-group-item" id="RN">RN Program Rosters</span>
-            </label>
-            <label>
-              <input type="radio" name="button-group" [value]="institutionIdPN" (change)="changeInstitution($event.target.value)">
-              <span class="button-group-item" id="PN">PN Program Rosters</span>
-            </label>
-          </div>
-        </section>
-        <!-- end multi-campus sections -->
+          <ul class="nav nav-tabs tabs tabs-default tabs-block-small-screen-down" role="tablist">
+            <li [class.active]="activeRN" role="presentation">
+              <a href="javascript:void(0)" [attr.data-value]="institutionIdRN" role="tab" [attr.aria-selected]="RNSelectValue" #RN (click)="changeInstitution($event.target.getAttribute('data-value'), $event)">RN Program Rosters</a>
+            </li>
+            <li [class.active]="!activeRN" role="presentation">
+              <a href="javascript:void(0)" [attr.data-value]="institutionIdPN" role="tab" [attr.aria-selected]="PNSelectValue" #PN (click)="changeInstitution($event.target.getAttribute('data-value'), $event)">PN Program Rosters</a>
+            </li>
+          </ul>
+       </section>
+      <!-- end multi-campus sections -->

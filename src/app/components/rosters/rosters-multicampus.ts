@@ -16,6 +16,9 @@ export class RostersMultiCampus implements OnInit {
     showRadioButton: boolean = false;
     institutionIdRN: number;
     institutionIdPN: number;
+    activeRN: boolean = false;
+    RNSelectValue: boolean = true;
+    PNSelectValue: boolean = false;
     constructor(private auth:Auth) {
     }
 
@@ -43,7 +46,7 @@ export class RostersMultiCampus implements OnInit {
                          this.institutionIdPN = this.institutions[0].InstitutionId;
                      }
                  }
-                this.changeInstitution(this.institutionIdRN);
+                this.changeInstitution(this.institutionIdRN, event);
             }
             else {
                 this.showDropdown = true;
@@ -59,8 +62,19 @@ export class RostersMultiCampus implements OnInit {
 
     }
 
-    changeInstitution(institutionId: number): void {
+    changeInstitution(institutionId: number, event): void {
+        event.preventDefault;
         this.onInstitutionChange.emit(institutionId);
+        if(this.activeRN) {
+            this.activeRN = false;
+            this.RNSelectValue = false;
+            this.PNSelectValue = true;
+
+        } else {
+            this.activeRN = true;
+            this.RNSelectValue = true;
+            this.PNSelectValue = false;
+        }
     }
 
 
