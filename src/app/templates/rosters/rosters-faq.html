@@ -59,7 +59,7 @@
                         <a *ngIf="accountManagerId" href="{{customChangeForm}}" target="_blank">Custom Change Form</a> 
                         at least 3 business days prior to your planned billing date. For urgent requests (needed within 3 business days), please contact the Faculty Hotline at 
                         <a class="link-base-color" href="tel:+1-866-920-6311"><strong>1-866-920-6311</strong></a> or your Account Manager<template [ngIf]="accountManagerId">, {{accountManagerFirstName}} {{accountManagerLastName}}, at 
-                        <a class="link-base-color" href="tel:{{accountManagerPhoneNumber}}"><strong>{{accountManagerPhoneNumber}}</strong></a></template>.
+                        <a class="link-base-color" href="tel:+1-{{accountManagerPhoneNumber}}"><strong>{{accountManagerPhoneNumber}}</strong></a></template>.
                     </p>
                 </div>
             </div>
