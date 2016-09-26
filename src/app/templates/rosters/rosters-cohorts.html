@@ -17,19 +17,16 @@
         <a href="#" class="right mobile-left-top-margin">Submit change or update</a>
       </div>-->
       <ul class="three-columns-auto cells section-medium-thin" > 
-        <li *ngFor="let student of cohort.students" [class.name-multiple-icons]="student?.isRepeatStudent || student?.isStudentPayDeactivatedStudent || student?.isExpiredStudent"> {{student.lastName}}, {{student.firstName}} <!-- [class.name-multiple-icons] to determine-->
-        <a *ngIf="student.isDuplicate" [style.margin-left.px]="3"
-                                               tabindex="0"
-                                               role="button"
+        <li *ngFor="let student of cohort.students" [class.name-multiple-icons]="student?.isRepeatStudent || student?.isStudentPayDeactivatedStudent || student?.isExpiredStudent"> {{student.lastName}}, {{student.firstName}}<!-- [class.name-multiple-icons] to determine-->
+        <button *ngIf="student.isDuplicate" [style.margin-left.px]="3"
                                                data-toggle="popover"
                                                data-placement="top"
-                                               data-trigger="click focus"
                                                [attr.data-content]="student?.email"
-                                               class="has-popover small-popover">
+                                               class="unstyled-button has-popover small-popover">
                                                 <img src="images/identity-icon.png"
                                                      alt="duplicate student name icon"
                                                      width="22" height="22" />
-          </a>
+          </button>
           <img *ngIf="student?.isRepeatStudent" src="images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="repeat student icon" />
           <img *ngIf="student?.isStudentPayDeactivatedStudent" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon multiple-icons" alt="payment alert icon"/>
           <img *ngIf="student?.isExpiredStudent" src="images/yellow-clock-icon.png" class="self-pay-alert-table-icon" alt="student access expired icon"/>

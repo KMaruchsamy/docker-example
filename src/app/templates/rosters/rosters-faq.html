@@ -10,10 +10,7 @@
                 <div class="collapse" [class.in]="visiblefaq1" id="faq1">
                     <p>
                         All students enrolled in the Kaplan program are activated by the submission of rosters to your school’s dedicated Account
-                        Manager
-                        <template [ngIf]="accountManagerId">
-                            , <b>{{accountManagerFirstName}} {{accountManagerLastName}}</b> (<a href="mailto:{{accountManagerEmail}}">{{accountManagerEmail}}</a>)
-                        </template>.
+                        Manager<template [ngIf]="accountManagerId">,<b> {{accountManagerFirstName}} {{accountManagerLastName}}</b> (<a href="mailto:{{accountManagerEmail}}">{{accountManagerEmail}}</a>)</template>.
                         The rosters tell us which students to activate and classify them into cohorts labeled by month and
                         year of graduation (e.g. June 2017). Based on their cohort, students are granted access to the Kaplan
                         program for three months after graduation, which typically covers their NCLEX® testing cycle. Kaplan
@@ -28,7 +25,7 @@
                 </a>
                 <div class="collapse" id="faq2" [class.in]="visiblefaq2">
                     <p>
-                        To submit a new student roster download our <a href="{{classRosterFormUrl}}">Class Roster Form</a>, fill it out, and email
+                        To submit a new student roster download our <a href="{{classRosterFormUrl}}">New Class Roster Sheet</a>, fill it out, and email
                         it to your Account Manager at least 10 business days prior to the requested access start date. Kaplan
                         will activate the student accounts based on the information in the Class Roster Form within 10 business
                         days of receipt of the form. <strong>Students will not be able to access program materials until after the roster is received and processed by Kaplan.</strong>
@@ -57,13 +54,12 @@
                 </a>
                 <div class="collapse" id="faq4" [class.in]="visiblefaq4">
                     <p>
-                        To report any changes or updates in your rosters, submit them to your Account Manager using your
-                        <a href="#">Custom Change Form</a> at least 3 business days prior to your planned billing date. For
-                        urgent requests (needed within 3 business days), please contact the Faculty Hotline at <a class="link-base-color"
-                            href="tel:+1-866-920-6311"><strong>1-866-920-6311</strong></a> or your Account Manager                            
-                            <template [ngIf]="accountManagerId">
-                                , {{accountManagerFirstName}} {{accountManagerLastName}}, at <a class="link-base-color" href="tel:{{accountManagerPhoneNumber}}"><strong>{{accountManagerPhoneNumber}}</strong></a>
-                            </template>.
+                        To report any changes or updates in your rosters, submit them to your Account Manager using your 
+                        <a *ngIf="!accountManagerId" href="https://kaptest.formstack.com/forms/kaplan_cohort_change_request_form_pt" target="_blank">Custom Change Form</a> 
+                        <a *ngIf="accountManagerId" href="{{customChangeForm}}" target="_blank">Custom Change Form</a> 
+                        at least 3 business days prior to your planned billing date. For urgent requests (needed within 3 business days), please contact the Faculty Hotline at 
+                        <a class="link-base-color" href="tel:+1-866-920-6311"><strong>1-866-920-6311</strong></a> or your Account Manager<template [ngIf]="accountManagerId">, {{accountManagerFirstName}} {{accountManagerLastName}}, at 
+                        <a class="link-base-color" href="tel:{{accountManagerPhoneNumber}}"><strong>{{accountManagerPhoneNumber}}</strong></a></template>.
                     </p>
                 </div>
             </div>
