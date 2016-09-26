@@ -126,7 +126,7 @@ export class RostersCohorts implements OnInit, OnDestroy {
                 rosterCohortStudent.repeatExpiryDate = student.RepeatExpiryDate;
                 rosterCohortStudent.userExpireDate = student.UserExpireDate;
                 rosterCohortStudent.studentPayInstitution = student.StudentPayInstitution;
-                rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate;
+                rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate && moment(rosterCohortStudent.repeatExpiryDate).isSameOrAfter(new Date(), 'day');
                 rosterCohortStudent.isExpiredStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !rosterCohortStudent.studentPayInstitution);
                 rosterCohortStudent.isStudentPayDeactivatedStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !!rosterCohortStudent.studentPayInstitution);
 
