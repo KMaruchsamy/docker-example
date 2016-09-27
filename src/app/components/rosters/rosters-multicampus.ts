@@ -7,7 +7,28 @@ import * as _ from 'lodash';
     selector: 'rosters-multicampus',
     providers: [],
     templateUrl: 'templates/rosters/rosters-multicampus.html',
-    directives: [NgIf]
+    directives: [NgIf],
+    styles: [
+    `
+    .button-group label .button-group-item {
+        font-weight: bold;
+        text-align: center;
+        width: 100%;
+    }
+    @media (min-width: 551px) {
+        .button-group label {
+            width: 50%;
+        }
+    }
+    @media (min-width:768px) {
+        .tabs li {
+            width: 50%;
+        }
+        .tabs a {
+            width: 100%;
+            text-align: center;
+        }
+    }`]
 })
 export class RostersMultiCampus implements OnInit {    
     @Output() onInstitutionChange = new EventEmitter();
@@ -66,10 +87,11 @@ export class RostersMultiCampus implements OnInit {
         } else {
             this.activeRN = false;
         }
-        if (event)
-        event.preventDefault;
+        if (event) {
+            event.preventDefault;
+            event.stopPropagation();
+        }
         this.onInstitutionChange.emit(institutionId);
-
     }
 
 }
