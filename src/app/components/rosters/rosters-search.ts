@@ -175,10 +175,10 @@ export class RostersSearch implements OnInit, OnDestroy {
     getStudentsByName(studentName: string): void {
         this.searchString = studentName;
         let self = this;
-        if (this.searchString.length === 2 && this.prevSearchText != this.searchString || 
-        (!_.startsWith(this.searchString, this.prevSearchText) && this.searchString.length >=2 && this.searchString.length > this.prevSearchText.length) || 
-        (!_.startsWith(this.prevSearchText, this.searchString) && this.searchString.length >=2 && this.searchString.length < this.prevSearchText.length) || 
-        (this.prevSearchText === '' && this.searchString.length >=2) ) {
+        if  ((this.searchString.length === 2 && this.prevSearchText != this.searchString)
+           || (this.prevSearchText === '' && this.searchString.length >= 2)
+           || (this.searchString.length >= 2 && this.prevSearchText.length > this.searchString.length)
+           || (this.searchString.length >= 2 && !_.startsWith(this.searchString, this.prevSearchText) && this.prevSearchText != this.searchString)) {
             this.prevSearchText = this.searchString;
             let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.search}`;
             url = url.replace("§institutionId", this.institutionId.toString()).replace('§searchString', this.searchString);
