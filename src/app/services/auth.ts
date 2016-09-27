@@ -129,7 +129,6 @@ export class Auth {
 
   refresh() {
     this.token = this.sStorage.getItem('jwt');
-    this.user = this.token && jwt_decode(this.token);
     this.useremail = this.sStorage.getItem('useremail');
     // this.authheader = 'Bearer ' + this.token;
     this.istemppassword = this.sStorage.getItem('istemppassword') === 'true';
@@ -147,11 +146,6 @@ export class Auth {
   isAuth() {
     return (!!this.token && !!this.isEnrollmentAgreementSigned);
   }
-
-  getUser() {
-    return this.user;
-  }
-
 
   isStudentPayEnabledInstitution(institutionId: number): boolean {
     let institutions = JSON.parse(this.institutions);
