@@ -87,10 +87,11 @@ export class RostersMultiCampus implements OnInit {
         } else {
             this.activeRN = false;
         }
-        if (event)
-        event.preventDefault;
+        if (event) {
+            event.preventDefault;
+            event.stopPropagation();
+        }
         this.onInstitutionChange.emit(institutionId);
-
     }
 
 }
