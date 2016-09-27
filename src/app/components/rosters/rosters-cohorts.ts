@@ -14,10 +14,21 @@ import {Response} from '@angular/http';
 @Component({
     selector: 'rosters-cohorts',
     providers: [RostersModal, RosterCohortsModal, RosterCohortStudentsModal, Common, RosterService],
-    encapsulation: ViewEncapsulation.None,
+    encapsulation: ViewEncapsulation.Emulated,
     templateUrl: 'templates/rosters/rosters-cohorts.html',
     directives: [NgIf, NgFor],
-    pipes: [ParseDatePipe]
+    pipes: [ParseDatePipe],
+    styles: [`
+    li.name-multiple-icons  {
+        padding-right: 55px !important;
+        position: relative;
+    }
+    .small-popover {
+        margin-left: 3px;
+    }
+    .large-expander-trigger {
+        padding-right: 100px;
+    }`]
 })
 export class RostersCohorts implements OnInit, OnDestroy {
     _institutionId: number;

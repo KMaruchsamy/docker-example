@@ -1,7 +1,7 @@
 import {Subscription, Observable} from 'rxjs/Rx';
 import {RosterService} from '../../services/roster.service';
 import {Common} from '../../services/common';
-import { Input } from '@angular/core';
+import { Input, ViewEncapsulation} from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {links} from '../../constants/config';
 import {Response} from '@angular/http';
@@ -12,7 +12,9 @@ import * as _ from 'lodash';
     selector: 'rosters-search',
     providers: [Common, RosterService],
     templateUrl: 'templates/rosters/rosters-search.html',
-    directives: []
+    directives: [],
+    encapsulation:ViewEncapsulation.Emulated,
+    styleUrls: ['../../css/rosters-search.css']
 })
 export class RostersSearch implements OnInit, OnDestroy {
     _institutionId: number;

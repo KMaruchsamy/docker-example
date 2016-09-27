@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 import { Title} from '@angular/platform-browser';
 
@@ -20,10 +20,7 @@ import { NgIf } from '@angular/common';
     selector: 'rosters',
     providers: [],
     templateUrl: 'templates/rosters/rosters.html',
-    directives: [ROUTER_DIRECTIVES, PageHeader, PageFooter, RostersFaq, RostersHeader, RostersMultiCampus, RostersCohorts, RostersSearch, NgIf],
-    encapsulation:ViewEncapsulation.None,
-    styleUrls: ['../../css/rosters.css']
-
+    directives: [ROUTER_DIRECTIVES, PageHeader, PageFooter, RostersFaq, RostersHeader, RostersMultiCampus, RostersCohorts, RostersSearch, NgIf]
 })
 
 export class Rosters implements OnInit {

@@ -18,8 +18,7 @@
       </div>-->
       <ul class="three-columns-auto cells section-medium-thin" > 
         <li *ngFor="let student of cohort.students" [class.name-multiple-icons]="student?.isRepeatStudent || student?.isStudentPayDeactivatedStudent || student?.isExpiredStudent"> {{student.lastName}}, {{student.firstName}}<!-- [class.name-multiple-icons] to determine-->
-        <button *ngIf="student.isDuplicate" [style.margin-left.px]="3"
-                                               data-toggle="popover"
+        <button *ngIf="student.isDuplicate"    data-toggle="popover"
                                                data-placement="top"
                                                [attr.data-content]="student?.email"
                                                class="unstyled-button has-popover small-popover">
