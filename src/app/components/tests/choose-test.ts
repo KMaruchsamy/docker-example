@@ -232,12 +232,10 @@ export class ChooseTest implements OnInit, OnChanges, OnDestroy {
                 this.checkIfTestHasStarted();
                 this.testService.showTestStartingWarningModals(this.modify,this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
                 setTimeout(json => {
-                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
+                    $('.selectpicker').selectpicker('refresh');
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) 
                         $('.selectpicker').selectpicker('mobile');
-                    else
-                        $('.selectpicker').selectpicker('refresh');
                 });
-                
             });
     }
 
