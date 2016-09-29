@@ -185,6 +185,6 @@ export let Timezones = {
 }
 
 export const roster = {
-    classRosterForm: 'http://bit.ly/2cwvA8A'
+    classRosterForm: 'https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Class_Roster_Form_2015-2016.xlsx'
 }
 
