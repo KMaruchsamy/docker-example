@@ -185,6 +185,6 @@ export let Timezones = {
 }
 
 export const roster = {
-    classRosterForm: 'https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Class_Roster_Form_2015-2016.xlsx'
+    classRosterForm: 'https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/kaplan-new-class-roster-sheet.xlsx'
 }
 
