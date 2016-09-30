@@ -73,7 +73,7 @@
           <tr *ngFor="let inactiveStudent of inactiveStudents">
             <td><i>{{inactiveStudent.lastName}}, {{inactiveStudent.firstName}}</i>
               <a *ngIf="inactiveStudent.isDuplicate" tabindex="0" [style.margin-left.px]="3"
-                role="button" data-toggle="popover" data-placement="top" data-trigger="click focus" [attr.data-content]="inactiveStudent?.email"
+                role="button" data-toggle="popover" data-placement="top" [attr.data-content]="inactiveStudent?.email"
                 class="has-popover small-popover">
                 <img src="images/identity-icon.png" alt="duplicate student name icon" width="22" height="22" />
               </a>
