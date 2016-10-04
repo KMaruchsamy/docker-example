@@ -177,7 +177,6 @@ export class Account implements OnInit, OnDestroy {
                     if (status.toString() === this.errorCodes.SUCCESS) {
                         self.sStorage.setItem('jwt', json.AccessToken);
                         self.sStorage.setItem('useremail', newemailid);
-                        self.auth.authheader = 'Bearer ' + json.AccessToken;
                         self.auth.useremail = newemailid
                         this.emailId = newemailid;
                         // clear inputs
@@ -257,8 +256,6 @@ export class Account implements OnInit, OnDestroy {
                     return response.json();
                 })
                 .subscribe(json => {
-                    debugger;
-                    console.log(json);
                     if (status.toString() === this.errorCodes.SUCCESS) {
                         this.passwordReset = true;
                         this.showHintMessage = false;

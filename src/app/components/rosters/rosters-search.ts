@@ -13,7 +13,7 @@ import * as _ from 'lodash';
     providers: [Common, RosterService],
     templateUrl: 'templates/rosters/rosters-search.html',
     directives: [],
-    encapsulation:ViewEncapsulation.Emulated,
+    encapsulation: ViewEncapsulation.Emulated,
     styleUrls: ['../../css/rosters-search.css']
 })
 export class RostersSearch implements OnInit, OnDestroy {
@@ -24,6 +24,8 @@ export class RostersSearch implements OnInit, OnDestroy {
         if (value)
             this.validInstitution = true;
         this.resetSearch();
+        $('.typeahead').typeahead('val', '');
+        $('.typeahead').typeahead('destroy');
     }
     get institutionId() {
         return this._institutionId;
@@ -39,8 +41,8 @@ export class RostersSearch implements OnInit, OnDestroy {
     anyStudentPayStudents: boolean = false;
     searchTriggered: boolean = false;
     prevSearchText: string = "";
-    typeaheadStudentlist: any; 
-    typeahead: any;    
+    typeaheadStudentlist: any;
+    typeahead: any;
 
     constructor(private common: Common, private rosterService: RosterService) { }
 
@@ -64,7 +66,7 @@ export class RostersSearch implements OnInit, OnDestroy {
     ngOnDestroy() {
         if (this.searchStudentsSubscription)
             this.searchStudentsSubscription.unsubscribe();
-
+        this.resetSearch();
         $('.typeahead').typeahead('val', '');
         $('.typeahead').typeahead('destroy');
     }
@@ -73,11 +75,15 @@ export class RostersSearch implements OnInit, OnDestroy {
         this.searchString = '';
         this.activeStudents = this.inactiveStudents = [];
         this.searchTriggered = false;
+        this.typeaheadStudentlist = [];
+        this.prevSearchText = '';
     }
 
+
+
     clear(e) {
-    e.preventDefault();
-    this.resetSearch();
+        e.preventDefault();
+        this.resetSearch();
         if (this.typeahead) {
             $('.typeahead').typeahead('val', '');
         }
@@ -85,7 +91,7 @@ export class RostersSearch implements OnInit, OnDestroy {
 
     filterStudents(students) {
         // need to get FirtName and LastName from each object in array and join with space to compare against search string 
-        return _.filter(students,(student:any)=> {
+        return _.filter(students, (student: any) => {
             let fullName = (student.FirstName + ' ' + student.LastName).toUpperCase();
             return fullName.indexOf(this.searchString.toUpperCase()) != -1
         });
@@ -97,26 +103,26 @@ export class RostersSearch implements OnInit, OnDestroy {
         if (!this.institutionId || !this.searchString || this.searchString === '') {
             // this.activeStudents = this.inactiveStudents = [];
             return;
-        }            
-            try {
-                if (this.typeaheadStudentlist) {
-                    this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = false;
-                    if (this.typeaheadStudentlist.Active && this.typeaheadStudentlist.Active.length > 0) {
-                        this.activeStudents = this.mapStudents(this.filterStudents(this.typeaheadStudentlist.Active), true);
-                    }
-                    if (this.typeaheadStudentlist.InactiveOrExpired && this.typeaheadStudentlist.InactiveOrExpired.length > 0) {
-                        this.inactiveStudents = this.mapStudents(this.filterStudents(this.typeaheadStudentlist.InactiveOrExpired), false);
-                    }
-                }
-                this.searchTriggered = true;
-                setTimeout(() => {
-                    $('.has-popover').popover();
-                });
-                $('.typeahead').typeahead('close');
-            } catch (error) {
+        }
+        try {
+            if (this.typeaheadStudentlist) {
                 this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = false;
-                this.activeStudents = this.inactiveStudents = [];
-            } 
+                if (this.typeaheadStudentlist.Active && this.typeaheadStudentlist.Active.length > 0) {
+                    this.activeStudents = this.mapStudents(this.filterStudents(this.typeaheadStudentlist.Active), true);
+                }
+                if (this.typeaheadStudentlist.InactiveOrExpired && this.typeaheadStudentlist.InactiveOrExpired.length > 0) {
+                    this.inactiveStudents = this.mapStudents(this.filterStudents(this.typeaheadStudentlist.InactiveOrExpired), false);
+                }
+            }
+            this.searchTriggered = true;
+            setTimeout(() => {
+                $('.has-popover').popover();
+            });
+            $('.typeahead').typeahead('close');
+        } catch (error) {
+            this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = false;
+            this.activeStudents = this.inactiveStudents = [];
+        }
     }
 
     mapStudents(objStudents: Array<any>, isActive: boolean) {
@@ -175,10 +181,10 @@ export class RostersSearch implements OnInit, OnDestroy {
     getStudentsByName(studentName: string): void {
         this.searchString = studentName;
         let self = this;
-        if  ((this.searchString.length === 2 && this.prevSearchText != this.searchString)
-           || (this.prevSearchText === '' && this.searchString.length >= 2)
-           || (this.searchString.length >= 2 && this.prevSearchText.length > this.searchString.length)
-           || (this.searchString.length >= 2 && !_.startsWith(this.searchString, this.prevSearchText) && this.prevSearchText != this.searchString)) {
+        if ((this.searchString.length === 2 && this.prevSearchText != this.searchString)
+            || (this.prevSearchText === '' && this.searchString.length >= 2)
+            || (this.searchString.length >= 2 && this.prevSearchText.length > this.searchString.length)
+            || (this.searchString.length >= 2 && !_.startsWith(this.searchString, this.prevSearchText) && this.prevSearchText != this.searchString)) {
             this.prevSearchText = this.searchString;
             let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.search}`;
             url = url.replace("§institutionId", this.institutionId.toString()).replace('§searchString', this.searchString);
@@ -190,23 +196,23 @@ export class RostersSearch implements OnInit, OnDestroy {
                         this.typeaheadStudentlist = json;
                         let typeaheadSource: Array<string> = [];
                         if (json.Active) {
-                            for (var i=0; i < json.Active.length; i++) {
-                                typeaheadSource.push(json.Active[i].FirstName + ' ' + json.Active[i].LastName );
+                            for (var i = 0; i < json.Active.length; i++) {
+                                typeaheadSource.push(json.Active[i].FirstName + ' ' + json.Active[i].LastName);
                             }
                         }
                         if (json.InactiveOrExpired) {
-                            for (var i=0; i < json.InactiveOrExpired.length; i++) {
-                                typeaheadSource.push(json.InactiveOrExpired[i].FirstName + ' ' + json.InactiveOrExpired[i].LastName );
+                            for (var i = 0; i < json.InactiveOrExpired.length; i++) {
+                                typeaheadSource.push(json.InactiveOrExpired[i].FirstName + ' ' + json.InactiveOrExpired[i].LastName);
                             }
                         }
                         if (this.typeahead) {
-                          $('.typeahead').typeahead('destroy');
+                            $('.typeahead').typeahead('destroy');
                         }
-                        
+
                         let source = new Bloodhound({
-                        local: typeaheadSource,
-                        queryTokenizer: Bloodhound.tokenizers.whitespace,
-                        datumTokenizer: Bloodhound.tokenizers.whitespace
+                            local: typeaheadSource,
+                            queryTokenizer: Bloodhound.tokenizers.whitespace,
+                            datumTokenizer: Bloodhound.tokenizers.whitespace
                         });
                         this.typeahead = $('.typeahead').typeahead({
                             hint: false,
@@ -224,7 +230,7 @@ export class RostersSearch implements OnInit, OnDestroy {
                             ev.preventDefault();
                             self.searchStudents(ev);
                         });
-                    } 
+                    }
                 },
                 error => {
                     this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = false;
