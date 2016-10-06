@@ -42,7 +42,7 @@ export class Auth {
 
   // userid: number;
   get userid(): number {
-    return this.sStorage.getItem('userid');
+    return +this.sStorage.getItem('userid');
   }
   set userid(value: number) {
     this.sStorage.setItem('userid', value);
