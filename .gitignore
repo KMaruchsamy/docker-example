@@ -207,6 +207,7 @@ Dockerrun.aws.json
 # Utilties
 TODO.md
 CHANGES.md
+*.todo
 
 # App
 tmp-app/

@@ -52,7 +52,7 @@ export const links = {
                 updateScheduleDatesModifyInProgress: "scheduling/modifyInProgress/testingSessions/§scheduleId/windowDates"
             },
             logging: {
-                error: 'error/Log'
+                error: 'error/LogService'
             },
             rosters: {
                 cohorts: 'admin/rosters/institutions/§institutionId/cohorts',

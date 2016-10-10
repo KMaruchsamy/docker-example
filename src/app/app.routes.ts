@@ -1,73 +1,72 @@
 import {provideRouter, RouterConfig } from '@angular/router';
-import {Home} from './components/home/home';
-import {Login} from './components/login/login';
-import {ResetPassword} from './components/password/reset-password';
-import {ForgotPassword} from './components/password/forgot-password';
-import {ForgotPasswordConfirmation} from './components/password/forgot-password-confirmation';
-import {ResetPasswordExpired} from './components/password/reset-password-expired';
-import {Help} from './components/help/help';
-import {UserGuide} from './components/userguide/userguide';
-import {SetPasswordFirstTime} from './components/password/set-password-first-time';
-import {Account} from './components/account/account';
-import {ChooseInstitution} from './components/shared/choose-institution';
-import {Profile} from './components/home/profile'
-import {ProfileDescription} from './components/home/profile-description';
-import {ChooseTest} from './components/tests/choose-test';
-import {ScheduleTest} from './components/tests/schedule-test';
-import {AddStudents} from './components/tests/add-students';
-import {ReviewTest} from './components/tests/review-test';
-import {PageNotFound} from './components/errors/pagenotfound';
-import {UnhandledException} from './components/errors/unhandledexception';
-import {Confirmation} from './components/tests/confirmation';
-import {ViewTest} from './components/tests/view-test';
-import {ManageTests} from './components/tests/manage-tests';
-import {Reports} from './components/reports/reports';
-import {Rosters} from './components/rosters/rosters';
-import {Groups} from './components/groups/groups';
-import {Logout} from './components/shared/logout';
-import {AccountError} from './components/errors/accounterror';
-import {LastTestingSession} from './components/tests/last-testing-session';
-import {SharedDeactivateGuard} from './components/shared/shared.deactivate.guard';
-import {ConfirmationModifyInProgress} from './components/tests/confirmation-modify-in-progress';
+import { LoginComponent } from './components/login/login.component';
+import { LogoutComponent } from './components/shared/logout.component';
+import { HomeComponent } from './components/home/home.component';
+import { ResetPasswordComponent } from './components/password/reset-password.component';
+import { ForgotPasswordComponent } from './components/password/forgot-password.component';
+import { ForgotPasswordConfirmationComponent } from './components/password/forgot-password-confirmation.component';
+import { ResetPasswordExpiredComponent } from './components/password/reset-password-expired.component';
+import { HelpComponent } from './components/help/help.component';
+import { UserGuideComponent } from './components/userguide/userguide.component';
+import { SetPasswordFirstTimeComponent } from './components/password/set-password-first-time.component';
+import { AccountComponent } from './components/account/account.component';
+import { ChooseInstitutionComponent } from './components/shared/choose-institution.component';
+import { ProfileDescriptionComponent } from './components/home/profile-description.component';
+import { ReportsComponent } from './components/reports/reports.component';
+import { RostersComponent } from './components/rosters/rosters.component';
+import { GroupsComponent } from './components/groups/groups.component';
+import { ManageTestsComponent } from './components/tests/manage-tests.component';
+import { ChooseTestComponent } from './components/tests/choose-test.component';
+import { SharedDeactivateGuard } from './guards/shared.deactivate.guard';
+import { ScheduleTestComponent } from './components/tests/schedule-test.component';
+import { AddStudentsComponent } from './components/tests/add-students.component';
+import { ReviewTestComponent } from './components/tests/review-test.component';
+import { ConfirmationComponent } from './components/tests/confirmation.component';
+import { ViewTestComponent } from './components/tests/view-test.component';
+import { LastTestingSessionComponent } from './components/tests/last-testing-session.component';
+import { ConfirmationModifyInProgressComponent } from './components/tests/confirmation-modify-in-progress.component';
+import { AccountErrorComponent } from './components/errors/accounterror.component';
+import { UnhandledExceptionComponent } from './components/errors/unhandledexception.component';
+import { PageNotFoundComponent } from './components/errors/pagenotfound.component';
 
 const APP_ROUTES: RouterConfig = [
-    { path: '', component: Login },
-    { path: 'faculty', component: Login },
-    { path: 'logout', component: Logout },
-    { path: 'home', component: Home },
-    { path: 'reset-password/:id/:expirytime', component: ResetPassword },
-    { path: 'forgot-password', component: ForgotPassword },
-    { path: 'forgot-password-confirmation', component: ForgotPasswordConfirmation },
-    { path: 'reset-password-expired', component: ResetPasswordExpired },
-    { path: 'help', component: Help },
-    { path: 'userguide', component: UserGuide },
-    { path: 'set-password-first-time', component: SetPasswordFirstTime },
-    { path: 'account', component: Account },
-    { path: 'account/:scroll', component: Account },
-    { path: 'choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitution },
-    { path: 'choose-institution/:frompage/:redirectpage', component: ChooseInstitution },
-    { path: 'profiles/:id', component: ProfileDescription},
-    { path: 'reports', component: Reports },
-    { path: 'rosters', component: Rosters },
-    { path: 'groups', component: Groups},
-    { path: 'tests', component: ManageTests, pathMatch:"full" },
-    { path: 'tests/choose-test/:institutionId', component: ChooseTest, pathMatch:"full", canDeactivate:[SharedDeactivateGuard] },
-    { path: 'tests/schedule-test', component: ScheduleTest, canDeactivate:[SharedDeactivateGuard] },
-    { path: 'tests/add-students', component: AddStudents, canDeactivate:[SharedDeactivateGuard] },
-    { path: 'tests/review', component: ReviewTest, canDeactivate:[SharedDeactivateGuard] },
-    { path: 'tests/confirmation', component: Confirmation },
-    { path: 'tests/view/:id', component: ViewTest },
-    { path: 'tests/:action/choose-test/:institutionId', component: ChooseTest, canDeactivate:[SharedDeactivateGuard] },
-    { path: 'tests/:action/schedule-test', component: ScheduleTest , canDeactivate:[SharedDeactivateGuard] },
-    { path: 'tests/:action/add-students', component: AddStudents , canDeactivate:[SharedDeactivateGuard]},
-    { path: 'tests/:action/review', component: ReviewTest, canDeactivate:[SharedDeactivateGuard]},
-    { path: 'tests/:action/view/:id', component: ViewTest },
-    { path: 'tests/:action/confirmation', component: Confirmation }, 
-    { path: 'testing-session-expired', component: LastTestingSession },
-    { path: 'tests/confirmation-modify-in-progress', component: ConfirmationModifyInProgress },
-    { path: 'accounterror', component: AccountError },
-    { path: 'error', component: UnhandledException },
-    { path: '**', component: PageNotFound },
+    { path: '', component: LoginComponent, pathMatch:"full"  },
+    { path: 'faculty', component: LoginComponent },
+    { path: 'logout', component: LogoutComponent },
+    { path: 'home', component: HomeComponent },
+    { path: 'reset-password/:id/:expirytime', component: ResetPasswordComponent },
+    { path: 'forgot-password', component: ForgotPasswordComponent },
+    { path: 'forgot-password-confirmation', component: ForgotPasswordConfirmationComponent },
+    { path: 'reset-password-expired', component: ResetPasswordExpiredComponent },
+    { path: 'help', component: HelpComponent },
+    { path: 'userguide', component: UserGuideComponent },
+    { path: 'set-password-first-time', component: SetPasswordFirstTimeComponent },
+    { path: 'account', component: AccountComponent },
+    { path: 'account/:scroll', component: AccountComponent },
+    { path: 'choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitutionComponent },
+    { path: 'choose-institution/:frompage/:redirectpage', component: ChooseInstitutionComponent },
+    { path: 'profiles/:id', component: ProfileDescriptionComponent},
+    { path: 'reports', component: ReportsComponent },
+    { path: 'rosters', component: RostersComponent },
+    { path: 'groups', component: GroupsComponent},
+    { path: 'tests', component: ManageTestsComponent, pathMatch:"full" },
+    { path: 'tests/choose-test/:institutionId', component: ChooseTestComponent, canDeactivate:[SharedDeactivateGuard] },
+    { path: 'tests/schedule-test', component: ScheduleTestComponent, canDeactivate:[SharedDeactivateGuard] },
+    { path: 'tests/add-students', component: AddStudentsComponent, canDeactivate:[SharedDeactivateGuard] },
+    { path: 'tests/review', component: ReviewTestComponent, canDeactivate:[SharedDeactivateGuard] },
+    { path: 'tests/confirmation', component: ConfirmationComponent },
+    { path: 'tests/view/:id', component: ViewTestComponent },
+    { path: 'tests/:action/choose-test/:institutionId', component: ChooseTestComponent, canDeactivate:[SharedDeactivateGuard] },
+    { path: 'tests/:action/schedule-test', component: ScheduleTestComponent , canDeactivate:[SharedDeactivateGuard] },
+    { path: 'tests/:action/add-students', component: AddStudentsComponent , canDeactivate:[SharedDeactivateGuard]},
+    { path: 'tests/:action/review', component: ReviewTestComponent, canDeactivate:[SharedDeactivateGuard]},
+    { path: 'tests/:action/view/:id', component: ViewTestComponent },
+    { path: 'tests/:action/confirmation', component: ConfirmationComponent }, 
+    { path: 'testing-session-expired', component: LastTestingSessionComponent },
+    { path: 'tests/confirmation-modify-in-progress', component: ConfirmationModifyInProgressComponent },
+    { path: 'accounterror', component: AccountErrorComponent },
+    { path: 'error', component: UnhandledExceptionComponent },
+    { path: '**', component: PageNotFoundComponent },
 ]
 
 
