@@ -11,7 +11,7 @@ import {links, errorcodes, teststatus} from '../../constants/config';
 // import {PageHeader} from '../shared/page-header';
 // import {PageFooter} from '../shared/page-footer';
 // import {TestHeader} from './test-header';
-import {TestScheduleModel} from '../../models/testschedule.model';
+import {TestScheduleModel} from '../../models/test-schedule.model';
 // import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';

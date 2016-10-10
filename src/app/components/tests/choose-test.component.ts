@@ -13,7 +13,7 @@ import {links} from '../../constants/config';
 // import {PageHeader} from '../shared/page-header';
 // import {PageFooter} from '../shared/page-footer';
 // import {TestHeader} from './test-header';
-import {TestScheduleModel} from '../../models/testschedule.model';
+import {TestScheduleModel} from '../../models/test-schedule.model';
 // import {ConfirmationPopup} from '../shared/confirmation.popup';
 // import {AlertPopup} from '../shared/alert.popup';
 // import {TestingSessionStartingPopup} from '../tests/test-starting-popup';

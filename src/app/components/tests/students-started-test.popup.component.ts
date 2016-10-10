@@ -10,7 +10,7 @@ import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 // import {AuthService} from '../../services/auth';
 // import {CommonService} from '../../services/common';
 import {links} from '../../constants/config';
-import {TestScheduleModel} from '../../models/testschedule.model';
+import {TestScheduleModel} from '../../models/test-schedule.model';
 import {SortPipe} from '../../pipes/sort.pipe';
 
 @Component({

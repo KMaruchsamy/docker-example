@@ -8,7 +8,7 @@ import {Title} from '@angular/platform-browser';
 import * as _ from 'lodash';
 import {links} from '../../constants/config';
 // import {TestService} from '../../services/test.service';
-import {TestScheduleModel} from '../../models/testschedule.model';
+import {TestScheduleModel} from '../../models/test-schedule.model';
 import {Subscription, Observable} from 'rxjs/Rx';
 import {Response} from '@angular/http';
 // import {LogService} from '../../services/log.service.service';

@@ -13,8 +13,8 @@ import {links} from '../../constants/config';
 // import {TestHeader} from './test-header';
 import * as _ from 'lodash';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
-import {TestScheduleModel} from '../../models/testschedule.model';
-import {SelectedStudentModel} from '../../models/selectedStudent-model';
+import {TestScheduleModel} from '../../models/test-schedule.model';
+import {SelectedStudentModel} from '../../models/selected-student.model';
 // import {ConfirmationPopup} from '../shared/confirmation.popup';
 // import {LogService} from '../../services/log.service.service';
 

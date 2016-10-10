@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {TestScheduleModel} from './testschedule.model';
+import {TestScheduleModel} from './test-schedule.model';
 
 @Injectable()
 export class TestsModal{

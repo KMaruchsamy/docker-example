@@ -3,7 +3,7 @@ import {ROUTER_DIRECTIVES, ActivatedRoute, RoutesRecognized, Router} from '@angu
 import {Title} from '@angular/platform-browser';
 // import {CommonService} from '../../services/common';
 // import {AuthService} from '../../services/auth';
-import {TestScheduleModel} from '../../models/testschedule.model';
+import {TestScheduleModel} from '../../models/test-schedule.model';
 // import {PageHeader} from '../shared/page-header';
 // import {PageFooter} from '../shared/page-footer';
 // import {TestHeader} from './test-header';

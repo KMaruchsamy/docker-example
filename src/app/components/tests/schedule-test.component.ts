@@ -11,7 +11,7 @@ import {links} from '../../constants/config';
 // import {PageFooter} from '../shared/page-footer';
 // import {TestHeader} from './test-header';
 import * as _ from 'lodash';
-import {TestScheduleModel} from '../../models/testschedule.model';
+import {TestScheduleModel} from '../../models/test-schedule.model';
 // import {ConfirmationPopup} from '../shared/confirmation.popup';
 // import {AlertPopup} from '../shared/alert.popup';
 import {Observable, Subscription} from 'rxjs/Rx';

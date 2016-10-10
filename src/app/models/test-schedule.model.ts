@@ -1,4 +1,4 @@
-import {SelectedStudentModel} from './selectedStudent-model';
+import {SelectedStudentModel} from './selected-student.model';
 
 export class TestScheduleModel{
     scheduleId: any = 0;

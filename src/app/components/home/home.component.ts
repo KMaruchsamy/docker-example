@@ -5,7 +5,7 @@ import {Response} from '@angular/http';
 import {Title} from '@angular/platform-browser';
 import {links} from '../../constants/config';
 import {Angulartics2On} from 'angulartics2';
-import {TestScheduleModel} from '../../models/testschedule.model';
+import {TestScheduleModel} from '../../models/test-schedule.model';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {PageScroll} from 'ng2-page-scroll/ng2-page-scroll';
 import * as _ from 'lodash';

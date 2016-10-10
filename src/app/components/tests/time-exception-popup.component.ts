@@ -4,7 +4,7 @@ import {ROUTER_DIRECTIVES} from '@angular/router';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import * as _ from 'lodash';
 import {SortPipe} from '../../pipes/sort.pipe';
-import {TestScheduleModel} from '../../models/testschedule.model';
+import {TestScheduleModel} from '../../models/test-schedule.model';
 import { CommonService } from './../../services/common.service';
 
 @Component({

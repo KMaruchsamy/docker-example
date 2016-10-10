@@ -3,15 +3,15 @@ import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/
 import {Observable} from 'rxjs/Rx';
 // import {AuthService} from './auth';
 import * as _ from 'lodash';
-// import {TestScheduleModel} from '../models/testschedule.model';
-// import {SelectedStudentModel} from '../models/selectedStudent-model';
+// import {TestScheduleModel} from '../models/test-schedule.model';
+// import {SelectedStudentModel} from '../models/selected-student.model';
 // import {TestShedulingPages} from '../constants/config';
 // import {CommonService} from './common';
-import { TestScheduleModel } from './../../models/testschedule.model';
+import { TestScheduleModel } from './../../models/test-schedule.model';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { TestShedulingPages } from './../../constants/config';
-import { SelectedStudentModel } from './../../models/selectedStudent-model';
+import { SelectedStudentModel } from './../../models/selected-student.model';
 
 @Injectable()
 export class TestService {
