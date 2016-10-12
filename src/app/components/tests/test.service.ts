@@ -200,6 +200,8 @@ export class TestService {
             _testScheduleModel.facultyFirstName = objTestScheduleModel.FacultyFirstName;
             _testScheduleModel.facultyLastName = objTestScheduleModel.FacultyLastName;
             _testScheduleModel.status = (_.has(objTestScheduleModel, 'Status') ? objTestScheduleModel.Status : '');
+            _testScheduleModel.DateCreated = objTestScheduleModel.DateCreated;
+            _testScheduleModel.LastUpdated = objTestScheduleModel.DateModified;
             if (objTestScheduleModel.Students && objTestScheduleModel.Students.length > 0) {
                 _.forEach(objTestScheduleModel.Students, function (student, key) {
                     let _student = new SelectedStudentModel();
@@ -290,6 +292,15 @@ export class TestService {
                     if (moment(a.scheduleStartTime).isBefore(b.scheduleStartTime)) //sort string ascending
                         return asc == 1 ? 1 : -1
                     if (moment(a.scheduleStartTime).isAfter(b.scheduleStartTime))
+                        return asc == 1 ? -1 : 1
+                    return 0 //default return value (no sorting)
+                });
+            }
+            else if (_.includes(columnName, '#schLastUpdatedTH') || _.includes(columnName, '#cmpLastUpdateTH')) {
+                sortedTests = tests.sort(function (a, b) {
+                    if (moment(a.LastUpdated).isBefore(b.LastUpdated)) //sort string ascending
+                        return asc == 1 ? 1 : -1
+                    if (moment(a.LastUpdated).isAfter(b.LastUpdated))
                         return asc == 1 ? -1 : 1
                     return 0 //default return value (no sorting)
                 });

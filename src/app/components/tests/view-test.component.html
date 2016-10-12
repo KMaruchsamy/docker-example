@@ -39,14 +39,6 @@
                             <td>{{schedule?.testName}}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Faculty</th>
-                            <td>{{schedule?.facultyFirstName}} {{schedule?.facultyLastName}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Scheduled by</th>
-                            <td>{{schedule?.adminFirstName}} {{schedule?.adminLastName}}</td>
-                        </tr>
-                        <tr>
                             <th scope="row">Date and Time</th>
                             <td>
                                 <template [ngIf]="!nextDay">
@@ -60,7 +52,18 @@
                                 </template>
                             </td>
                         </tr>
-                        </tbody>
+                        <tr>
+                            <th scope="row">Scheduled by</th>
+                            <td>{{schedule?.adminFirstName}} {{schedule?.adminLastName}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Faculty</th>
+                            <td>{{schedule?.facultyFirstName}} {{schedule?.facultyLastName}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Created/Modified</th>
+                            <td>{{schedule?.LastUpdated|parseDate:'MM/DD/YY'}}</td>
+                        </tr>
                     </table>
                 </div>
 

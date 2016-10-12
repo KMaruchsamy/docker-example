@@ -7,7 +7,7 @@ import {Observable} from 'rxjs/Rx';
 // import {TestService} from '../../services/test.service';
 // import {AuthService} from '../../services/auth';
 // import {CommonService} from '../../services/common';
-import {links, errorcodes, teststatus} from '../../constants/config';
+import {links, errorcodes, teststatus, Timezones} from '../../constants/config';
 // import {PageHeader} from '../shared/page-header';
 // import {PageFooter} from '../shared/page-footer';
 // import {TestHeader} from './test-header';
@@ -301,6 +301,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                             renamedTest = _.find(institution.tests, { 'scheduleId': parseInt(_sessionId) });
                             if (renamedTest) {
                                 renamedTest.scheduleName = _newName;
+                                renamedTest.LastUpdated = moment().tz(Timezones.GMTminus5).format();
                             }
                         }
                         else {
@@ -308,6 +309,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                             renamedTest = _.find(institution.tests, { 'scheduleId': parseInt(_sessionId) });
                             if (renamedTest) {
                                 renamedTest.scheduleName = _newName;
+                                renamedTest.LastUpdated = moment().tz(Timezones.GMTminus5).format();
                             }
                         }
                     }

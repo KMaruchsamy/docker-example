@@ -36,8 +36,8 @@
                                 <tr>
                                     <th class="date-time-col" scope="col">Date and Time</th>
                                     <th class="testing-session-col" scope="col">Testing Session</th>
-                                    <th scope="col">Faculty Name</th>
                                     <th scope="col">Scheduled by</th>
+                                    <th scope="col">Created/Modified</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -60,9 +60,9 @@
                                         src="/images/edit-pencil-icon_2x.png" alt="edit">
                                     </button>
                                     </td>
-                                    <td class="tablesaw-stacked-hidden">{{inProgressTest?.facultyFirstName}} {{inProgressTest?.facultyLastName}}</td>
                                     <td class="tablesaw-stacked-hidden">{{inProgressTest?.adminFirstName}} {{inProgressTest?.adminLastName}}
                                     </td>
+                                    <td class="tablesaw-stacked-hidden">{{inProgressTest?.LastUpdated|parseDate:'MM/DD/YY'}}</td>
                                     <td class="tablesaw-stacked-hidden">
                                         <a href="javascript:void(0)" (click)="view(inProgressTest?.scheduleId, $event)" class="smaller block text-extra-mobile-spacing">View</a>
                                         <a href="javascript:void(0)" *ngIf="adminId==inProgressTest?.adminId || adminId==inProgressTest?.facultyMemberId" (click)="redirectModifyInProgress('ModifyAddStudents',inProgressTest?.scheduleId,$event)"
@@ -101,17 +101,17 @@
                                     Testing Session
                                 </button>
                                 </th>
-                                <th (click)="sort(institution.institutionId,'#tblScheduledTests'+ institution.institutionId,'#schFacultyTH'+ institution.institutionId)" class="tablesaw-sortable-head tablesaw-sortable-ascending"
-                                    order="1" id="{{'schFacultyTH'+ institution.institutionId}}" scope="col">
-                                    <button class="tablesaw-sortable-btn">
-                                    Faculty Name
-                                </button>
-                                </th>
                                 <th (click)="sort(institution.institutionId,'#tblScheduledTests'+ institution.institutionId,'#schAdminTH'+ institution.institutionId)" class="tablesaw-sortable-head tablesaw-sortable-ascending"
                                     order="1" id="{{'schAdminTH'+ institution.institutionId}}" scope="col">
                                     <button class="tablesaw-sortable-btn">
                                     Scheduled by
                                 </button>
+                                </th>
+                                <th (click)="sort(institution.institutionId,'#tblScheduledTests'+ institution.institutionId,'#schLastUpdatedTH'+ institution.institutionId)" class="tablesaw-sortable-head tablesaw-sortable-ascending"
+                                    order="1" id="{{'schLastUpdatedTH'+ institution.institutionId}}" scope="col">
+                                    <button class="tablesaw-sortable-btn">
+                                        Created/Modified
+                                    </button>
                                 </th>
                                 <th scope="col"></th>
                             </tr>
@@ -135,8 +135,8 @@
                                     src="/images/edit-pencil-icon_2x.png" alt="edit">
                                 </button>
                                 </td>
-                                <td class="tablesaw-stacked-hidden">{{scheduleTest.facultyFirstName}} {{scheduleTest.facultyLastName}}</td>
                                 <td class="tablesaw-stacked-hidden">{{scheduleTest.adminFirstName}} {{scheduleTest.adminLastName}}</td>
+                                <td class="tablesaw-stacked-hidden">{{scheduleTest.LastUpdated|parseDate:'MM/DD/YY'}}</td>
                                 <td class="tablesaw-stacked-hidden">
                                     <a *ngIf="adminId!=scheduleTest?.adminId && adminId!=scheduleTest?.facultyMemberId" href="javascript:void(0)" (click)="view(scheduleTest?.scheduleId, $event,false)"
                                         class="smaller">View</a>
@@ -174,16 +174,16 @@
                                     Testing Session
                                 </button>
                                 </th>
-                                <th (click)="sort(institution.institutionId,'#tblCompletedTests'+ institution.institutionId,'#cmpFacultyTH'+ institution.institutionId)" order="1" id="{{'cmpFacultyTH'+ institution.institutionId}}" scope="col" class="tablesaw-sortable-head tablesaw-sortable-ascending">
-
-                                    <button class="tablesaw-sortable-btn">
-                                    Faculty Name
-                                </button>
-                                </th>
                                 <th (click)="sort(institution.institutionId,'#tblCompletedTests'+ institution.institutionId,'#cmpAdminTH'+ institution.institutionId)" order="1" id="{{'cmpAdminTH'+ institution.institutionId}}" scope="col" class="tablesaw-sortable-head tablesaw-sortable-ascending">
                                     <button class="tablesaw-sortable-btn">
                                     Scheduled by
                                 </button>
+                                </th>
+                                <th (click)="sort(institution.institutionId,'#tblCompletedTests'+ institution.institutionId,'#cmpLastUpdateTH'+ institution.institutionId)" order="1" id="{{'cmpLastUpdateTH'+ institution.institutionId}}" scope="col" class="tablesaw-sortable-head tablesaw-sortable-ascending">
+
+                                    <button class="tablesaw-sortable-btn">
+                                        Created/Modified
+                                    </button>
                                 </th>
                                 <th></th>
                             </tr>
@@ -202,8 +202,8 @@
                                     </template>
                                 </td>
                                 <td class="tablesaw-stacked-hidden">{{completedTest.scheduleName}}</td>
-                                <td class="tablesaw-stacked-hidden">{{completedTest.facultyFirstName}} {{completedTest.facultyLastName}}</td>
                                 <td class="tablesaw-stacked-hidden">{{completedTest.adminFirstName}} {{completedTest.adminLastName}}</td>
+                                <td class="tablesaw-stacked-hidden">{{completedTest.LastUpdated|parseDate:'MM/DD/YY'}}</td>
                                 <td class="tablesaw-stacked-hidden"><a href="javscript:void(0)" class="smaller" (click)="view(completedTest.scheduleId, $event,false)">View</a>
                                     <!--<a  href="#" class="smaller">Reports</a>-->
                                 </td>
