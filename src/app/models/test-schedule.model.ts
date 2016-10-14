@@ -28,7 +28,7 @@ export class TestScheduleModel{
     pageSavedOn: string = '';  
     status: string = '';
     spanMultipleDays: boolean = false;
-    DateCreated: any;
-    LastUpdated: any;
+    dateCreated: any;
+    lastUpdated: any;
     constructor(){}
 }

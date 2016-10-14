@@ -62,7 +62,7 @@
                                     </td>
                                     <td class="tablesaw-stacked-hidden">{{inProgressTest?.adminFirstName}} {{inProgressTest?.adminLastName}}
                                     </td>
-                                    <td class="tablesaw-stacked-hidden">{{inProgressTest?.LastUpdated|parseDate:'MM/DD/YY'}}</td>
+                                    <td class="tablesaw-stacked-hidden">{{inProgressTest?.lastUpdated|parseDate:'MM/DD/YY'}}</td>
                                     <td class="tablesaw-stacked-hidden">
                                         <a href="javascript:void(0)" (click)="view(inProgressTest?.scheduleId, $event)" class="smaller block text-extra-mobile-spacing">View</a>
                                         <a href="javascript:void(0)" *ngIf="adminId==inProgressTest?.adminId || adminId==inProgressTest?.facultyMemberId" (click)="redirectModifyInProgress('ModifyAddStudents',inProgressTest?.scheduleId,$event)"
@@ -136,7 +136,7 @@
                                 </button>
                                 </td>
                                 <td class="tablesaw-stacked-hidden">{{scheduleTest.adminFirstName}} {{scheduleTest.adminLastName}}</td>
-                                <td class="tablesaw-stacked-hidden">{{scheduleTest.LastUpdated|parseDate:'MM/DD/YY'}}</td>
+                                <td class="tablesaw-stacked-hidden">{{scheduleTest.lastUpdated|parseDate:'MM/DD/YY'}}</td>
                                 <td class="tablesaw-stacked-hidden">
                                     <a *ngIf="adminId!=scheduleTest?.adminId && adminId!=scheduleTest?.facultyMemberId" href="javascript:void(0)" (click)="view(scheduleTest?.scheduleId, $event,false)"
                                         class="smaller">View</a>
@@ -203,7 +203,7 @@
                                 </td>
                                 <td class="tablesaw-stacked-hidden">{{completedTest.scheduleName}}</td>
                                 <td class="tablesaw-stacked-hidden">{{completedTest.adminFirstName}} {{completedTest.adminLastName}}</td>
-                                <td class="tablesaw-stacked-hidden">{{completedTest.LastUpdated|parseDate:'MM/DD/YY'}}</td>
+                                <td class="tablesaw-stacked-hidden">{{completedTest.lastUpdated|parseDate:'MM/DD/YY'}}</td>
                                 <td class="tablesaw-stacked-hidden"><a href="javscript:void(0)" class="smaller" (click)="view(completedTest.scheduleId, $event,false)">View</a>
                                     <!--<a  href="#" class="smaller">Reports</a>-->
                                 </td>

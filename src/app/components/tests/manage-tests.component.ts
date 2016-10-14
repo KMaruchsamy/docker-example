@@ -301,7 +301,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                             renamedTest = _.find(institution.tests, { 'scheduleId': parseInt(_sessionId) });
                             if (renamedTest) {
                                 renamedTest.scheduleName = _newName;
-                                renamedTest.LastUpdated = moment().tz(Timezones.GMTminus5).format();
+                                renamedTest.lastUpdated = moment().tz(Timezones.GMTminus5).format();
                             }
                         }
                         else {
@@ -309,7 +309,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                             renamedTest = _.find(institution.tests, { 'scheduleId': parseInt(_sessionId) });
                             if (renamedTest) {
                                 renamedTest.scheduleName = _newName;
-                                renamedTest.LastUpdated = moment().tz(Timezones.GMTminus5).format();
+                                renamedTest.lastUpdated = moment().tz(Timezones.GMTminus5).format();
                             }
                         }
                     }
