@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import {SortPipe} from '../../pipes/sort.pipe';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import { CommonService } from './../../services/common.service';
+import * as moment from 'moment-timezone';
 
 @Component({
     selector: 'time-exception',

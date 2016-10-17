@@ -29,6 +29,7 @@ import { PageHeaderComponent } from './../shared/page-header.component';
 import { TestHeaderComponent } from './test-header.component';
 import { PageFooterComponent } from './../shared/page-footer.component';
 import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
+import * as moment from 'moment-timezone';
 
 @Component({
     selector: "view-test",

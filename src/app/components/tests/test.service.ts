@@ -12,6 +12,7 @@ import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { TestShedulingPages } from './../../constants/config';
 import { SelectedStudentModel } from './../../models/selected-student.model';
+import * as moment from 'moment-timezone';
 
 @Injectable()
 export class TestService {

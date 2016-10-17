@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { CommonService } from './../../services/common.service';
 import { RosterService } from './roster.service';
 import { RosterCohortStudentsModal } from './../../models/roster-cohort-students.model';
+import * as moment from 'moment-timezone';
 
 @Component({
     selector: 'rosters-search',

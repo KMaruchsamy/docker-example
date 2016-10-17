@@ -15,6 +15,7 @@ import { RosterCohortsModal } from './../../models/roster-cohorts.model';
 import { RosterCohortStudentsModal } from './../../models/roster-cohort-students.model';
 import { CommonService } from './../../services/common.service';
 import { RosterService } from './roster.service';
+import * as moment from 'moment-timezone';
 
 @Component({
     selector: 'rosters-cohorts',

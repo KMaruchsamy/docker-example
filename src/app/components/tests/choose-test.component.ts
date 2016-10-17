@@ -41,6 +41,7 @@ import { PageFooterComponent } from './../shared/page-footer.component';
 import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
 import { AlertPopupComponent } from './../shared/alert.popup.component';
 import { TestingSessionStartingPopupComponent } from './test-starting-popup.component';
+import * as moment from 'moment-timezone';
 
 @Component({
     selector: 'choose-test',

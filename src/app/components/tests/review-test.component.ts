@@ -37,6 +37,7 @@ import { TimeExceptionPopupComponent } from './time-exception-popup.component';
 import { LoaderComponent } from './../shared/loader.component';
 import { AlertPopupComponent } from './../shared/alert.popup.component';
 import { TestingSessionStartingPopupComponent } from './test-starting-popup.component';
+import * as moment from 'moment-timezone';
 
 @Component({
     selector: "review-test",

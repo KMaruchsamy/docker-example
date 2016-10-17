@@ -43,6 +43,7 @@ import { ConfirmationPopupComponent } from './../shared/confirmation.popup.compo
 import { PageFooterComponent } from './../shared/page-footer.component';
 import { TestHeaderComponent } from './test-header.component';
 import { PageHeaderComponent } from './../shared/page-header.component';
+import * as moment from 'moment-timezone';
 
 
 @Component({

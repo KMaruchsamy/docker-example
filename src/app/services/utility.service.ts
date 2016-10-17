@@ -1,4 +1,6 @@
-﻿export class UtilityService {
+﻿import * as moment from 'moment-timezone';
+
+export class UtilityService {
     constructor() {
     }
 

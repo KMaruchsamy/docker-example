@@ -42,6 +42,7 @@ import { TestingSessionStartingPopupComponent } from './test-starting-popup.comp
 import { StudentsStartedTestComponent } from './students-started-test.popup.component';
 import { TimeExceptionPopupComponent } from './time-exception-popup.component';
 import { SelfPayStudentPopupComponent } from './self-pay-student-popup.component';
+import * as moment from 'moment-timezone';
 
 @Component({
     selector: 'schedule-test',

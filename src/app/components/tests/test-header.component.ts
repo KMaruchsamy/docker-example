@@ -7,6 +7,7 @@ import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {Observable, Subscription} from 'rxjs/Rx';
 import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
 import { CommonService } from './../../services/common.service';
+import * as moment from 'moment-timezone';
 
 @Component({
     selector: 'test-header',
