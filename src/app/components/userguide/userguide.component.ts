@@ -96,9 +96,9 @@ export class UserGuideComponent implements OnInit {
         $(element).toggleClass('in').prev('a').toggleClass('collapsed');
 
        if ($(element).hasClass('in')) {
-        $(element).prev('a').attr('aria-expanded', true);
+        $(element).prev('a').attr('aria-expanded', 'true');
     } else  {
-        $(element).prev('a').attr('aria-expanded', false);
+        $(element).prev('a').attr('aria-expanded', 'false');
     }
    }
    
