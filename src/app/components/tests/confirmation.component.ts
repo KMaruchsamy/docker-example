@@ -53,7 +53,7 @@ export class ConfirmationComponent implements OnInit, OnDestroy {
                 this.destinationRoute = event.urlAfterRedirects;
             });
 
-        $(document).scrollTop(0);
+        window.scroll(0,0);
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigate(['/']);

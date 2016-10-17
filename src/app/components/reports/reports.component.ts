@@ -43,7 +43,7 @@ export class ReportsComponent implements OnInit {
             this.router.navigate(['/']);
         else
             this.institutionName = this.getLatestInstitution();
-        $(document).scrollTop(0);
+        window.scroll(0,0);
         this.titleService.setTitle('View Reports – Kaplan Nursing');
     }
 

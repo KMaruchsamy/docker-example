@@ -118,7 +118,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
                 this.set8HourRule();
                 this.testService.showTestStartingWarningModals(this.modify, this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
 
-                $(document).scrollTop(0);
+                window.scroll(0,0);
             });
         }
     }

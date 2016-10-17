@@ -104,7 +104,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         this.setLatestInstitution();
         this.bindTests();
         this.titleService.setTitle('Manage Tests – Kaplan Nursing');
-        $(document).scrollTop(0);
+        window.scroll(0,0);
     }
 
     resize(): void {

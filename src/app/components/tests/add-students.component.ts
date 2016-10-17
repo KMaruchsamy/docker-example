@@ -215,7 +215,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         let self = this;
         this.testsTable = null;
         this.SetPageToAddByCohort();
-        $(document).scrollTop(0);
+        window.scroll(0,0);
         this.prevStudentList = [];
 
 

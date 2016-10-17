@@ -35,7 +35,7 @@ export class UserGuideComponent implements OnInit {
     ngOnInit(): void {
         if (this.auth.isAuth()) {
         this.titleService.setTitle('Faculty User Guide – Kaplan Nursing');
-        $(document).scrollTop(0);
+        window.scroll(0,0);
         this.activeId = '#whatsNew';
         this.termsAccepted = true;
         console.log(this.termsAccepted);

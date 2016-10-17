@@ -21,7 +21,7 @@ export class ForgotPasswordConfirmationComponent implements OnInit {
         this.titleService.setTitle('Kaplan Nursing – Forgot Password Confirmation');
     }
 
-    initialize() {
-        $(document).scrollTop(0);
+    initialize(): void {
+        window.scroll(0,0);
     }
 }

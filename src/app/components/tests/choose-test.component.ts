@@ -136,7 +136,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
                     this.titleService.setTitle('Choose Test – Kaplan Nursing');
                 }
                 this.initialize();
-                $(document).scrollTop(0);
+                window.scroll(0,0);
 
             });
         }

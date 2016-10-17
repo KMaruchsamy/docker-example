@@ -172,7 +172,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         else {
             this.initialize();
         }
-        $(document).scrollTop(0);
+        window.scroll(0,0);
     }
 
 

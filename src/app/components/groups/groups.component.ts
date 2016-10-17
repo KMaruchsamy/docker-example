@@ -23,7 +23,7 @@ export class GroupsComponent implements OnInit {
             this.router.navigate(['/']);
         else
             this.institutionName = this.getLatestInstitution();
-        $(document).scrollTop(0);
+        window.scroll(0,0);
         this.titleService.setTitle('Manage Groups – Kaplan Nursing');
     }
 

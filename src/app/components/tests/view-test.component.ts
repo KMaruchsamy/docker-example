@@ -81,7 +81,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
                 this.loadTestSchedule();
             });
         }
-        $(document).scrollTop(0);
+        window.scroll(0,0);
         this.titleService.setTitle('View Testing Session – Kaplan Nursing');
     }
 
