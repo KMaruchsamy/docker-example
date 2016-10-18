@@ -1,0 +1,194 @@
+﻿import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {Http, Response} from '@angular/http';
+import {Observable, Subscription} from 'rxjs/Rx';
+import {NgIf} from '@angular/common';
+import {Title} from '@angular/platform-browser';
+// import {AuthService} from '../../services/auth';
+// import {CommonService} from '../../services/common';
+// import {PasswordHeader} from '../password/password-header';
+// import {ValidationsService} from '../../services/validations';
+import {links, errorcodes} from '../../constants/config';
+import {temp_password, general} from '../../constants/error-messages';
+// import {TermsOfUse} from '../terms-of-use/terms-of-use';
+import { AuthService } from './../../services/auth.service';
+import { CommonService } from './../../services/common.service';
+import { ValidationsService } from './../../services/validations.service';
+import { PasswordHeaderComponent } from './password-header.component';
+import { TermsOfUseComponent } from './../terms-of-use/terms-of-use.component';
+
+@Component({
+    selector: 'set-password-first-time',
+    providers: [AuthService, CommonService, ValidationsService],
+    templateUrl: 'components/password/set-password-first-time.component.html',
+    directives: [PasswordHeaderComponent, ROUTER_DIRECTIVES, TermsOfUseComponent]
+})
+
+export class SetPasswordFirstTimeComponent implements OnInit, OnDestroy {
+    apiServer: string;
+    sStorage: any;
+    temproaryPasswordSubscription: Subscription;
+    errorCodes: any;
+    showTerms: boolean = false;
+    constructor(public router: Router, public auth: AuthService, public common: CommonService, public validations: ValidationsService, public titleService: Title) {
+
+    }
+
+    ngOnDestroy(): void {
+        if (this.temproaryPasswordSubscription)
+            this.temproaryPasswordSubscription.unsubscribe();
+    }
+
+    ngOnInit(): void {
+        this.errorCodes = errorcodes;
+        this.apiServer = this.common.getApiServer();
+        this.reset();
+        this.sStorage = this.common.getStorage();
+        this.titleService.setTitle('Change Password – Kaplan Nursing');
+    }
+
+    reset() {
+        $('#newPassword').val('');
+        $('#passwordConfirmation').val('');
+        $('.error').hide();
+        $('#homelink').css("display", "none");
+        $('#successmsg').css("display", "none");
+        $('#resetPassword').attr("disabled", "true");
+        $('#resetPassword').attr("aria-disabled", "true");
+    }
+
+    onSetPasswordFirstTime(txtnPassword, txtcPassword, btnSetPassword, lnkhomeredirect, errorContainer, successcontainer, event) {
+        event.preventDefault();
+        let self = this;
+        let emailid = self.auth.useremail;
+        let newpassword = txtnPassword.value;
+        let confirmpassword = txtcPassword.value;
+        let status = '';
+        if (this.validate(newpassword, confirmpassword, btnSetPassword, lnkhomeredirect, errorContainer, successcontainer)) {
+            let apiURL = this.apiServer + links.api.baseurl + links.api.admin.settemporarypasswordapi;
+            let temporaryPasswordObservable: Observable<Response> = this.auth.settemporarypassword(apiURL, emailid, newpassword);
+            temporaryPasswordObservable
+                .map(response => {
+                    status = response.status;
+                    return response.json();
+                })
+                .subscribe(function (json) {
+                    if (status.toString() === this.errorCodes.SUCCESS) {
+                        txtnPassword.value = "";
+                        txtcPassword.value = "";
+                        self.sStorage.setItem('istemppassword', false);
+                        self.showSuccess(successcontainer, lnkhomeredirect, btnSetPassword);
+                    }
+                    else if (status.toString() === this.errorCodes.API) {
+                        if (json.Payload.length > 0) {
+                            if (json.Payload[0].Messages.length > 0) {
+                                self.showError(json.Payload[0].Messages[0].toString(), errorContainer);
+                                self.clearPasswords(txtnPassword, txtcPassword);
+                            }
+                        }
+                    }
+                    else {
+                        self.showError(general.exception, errorContainer);
+                        self.clearPasswords(txtnPassword, txtcPassword);
+                    }
+                }, error => {
+                    if (error.status.toString() === this.errorCodes.API) {
+                        if (error.json().Payload.length > 0) {
+                            if (error.json().Payload[0].Messages.length > 0) {
+                                self.showError(error.json().Payload[0].Messages[0].toString(), errorContainer);
+                                self.clearPasswords(txtnPassword, txtcPassword);
+                            }
+                        }
+                    }
+                    else {
+                        self.showError(general.exception, errorContainer);
+                        self.clearPasswords(txtnPassword, txtcPassword);
+                    }
+
+                });
+        }
+        else {
+            self.clearPasswords(txtnPassword, txtcPassword);
+        }
+    }
+
+    clearPasswords(txtnPassword, txtcPassword) {
+        txtnPassword.value = '';
+        txtcPassword.value = '';
+    }
+    // When this page is used, use redirect function instead of other redirect functions below
+    // redirect() {
+    //     if (!this.auth.isEnrollmentAgreementSigned) {
+    //         this.showTerms = true;
+    //         return;
+    //     } else {
+    //         this.router.navigate(['/home']);
+    //     }
+    // }
+
+    RedirectToLogin(event) {
+        event.preventDefault();
+        this.router.navigate(['/']);
+    }
+
+    RedirectToHome(event) {
+        event.preventDefault();
+        this.router.navigate(['/home']);
+    }
+
+    validate(newpassword, confirmpassword, btnSetPassword, lnkhomeredirect, errorContainer, successContainer) {
+        this.clearError(errorContainer, successContainer, lnkhomeredirect);
+        if (!this.validations.comparePasswords(newpassword, confirmpassword)) {
+            this.showError(temp_password.newpass_match, errorContainer);
+            return false;
+        } else if (!this.validations.validateLength(newpassword)) {
+            this.showError(temp_password.newpass_character_count, errorContainer);
+            return false;
+        } else if (!this.validations.validateSpecialCharacterCount(confirmpassword) && !this.validations.validateNumberCount(confirmpassword)) {
+            this.showError(temp_password.newpass_number_specialcharacter_validation, errorContainer);
+            return false;
+        } else if (!this.validations.validateSpecialCharacterCount(confirmpassword)) {
+            this.showError(temp_password.newpass_specialcharacter_validation, errorContainer);
+            return false;
+        } else if (!this.validations.validateNumberCount(confirmpassword)) {
+            this.showError(temp_password.newpass_number_validation, errorContainer);
+            return false;
+        }
+
+        return true;
+    }
+
+    clearError(errorContainer, successContainer, lnkhomeredirect) {
+        $(lnkhomeredirect).css("display", "none");
+        $(successContainer).css("display", "none");
+        let $container = $(errorContainer).find('span#spnErrorMessage');
+        let $outerContainer = $(errorContainer);
+        $container.html('');
+        $outerContainer.hide();
+    }
+
+    showError(errorMessage, errorContainer) {
+        let $container = $(errorContainer).find('span#spnErrorMessage');
+        let $outerContainer = $(errorContainer);
+        $container.html(errorMessage);
+        $outerContainer.show();
+    }
+    showSuccess(successContainer, lnkhomeredirect, btnSetPassword) {
+        $(lnkhomeredirect).css("display", "block");
+        $(btnSetPassword).attr("disabled", "true");
+        $(btnSetPassword).attr("aria-disabled", "true");
+        $(successContainer).css("display", "inline-block");
+    }
+    checkpasswordlength(txtNewpassword, txtConfirmPassword, btnSetPassword, event) {
+        let newpassword = txtNewpassword.value;
+        let confirmpassword = txtConfirmPassword.value;
+        if (newpassword.length > 0 && confirmpassword.length > 0) {
+            $(btnSetPassword).removeAttr("disabled");
+            $(btnSetPassword).attr("aria-disabled", "false");
+        }
+        else {
+            $(btnSetPassword).attr("disabled", "true");
+            $(btnSetPassword).attr("aria-disabled", "true");
+        }
+    }
+}

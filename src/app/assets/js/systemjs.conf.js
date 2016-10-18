@@ -27,6 +27,14 @@
         },
         'ng2-page-scroll': {
             defaultExtension: 'js'
+        },
+        'moment': {
+            main: 'moment.js',
+            defaultExtension: 'js'
+        },
+        'moment-timezone': {
+            main: 'builds/moment-timezone-with-data-2010-2020.min.js',
+            defaultExtension: 'js'
         }
     };
 
@@ -36,7 +44,9 @@
         'rxjs',
         'lodash',
         'angulartics2',
-        'ng2-page-scroll'
+        'ng2-page-scroll',
+        'moment',
+        'moment-timezone'
     ];
 
     // Add package entries for packages that expose barrels using index.js

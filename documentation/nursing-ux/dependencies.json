@@ -1,0 +1,1949 @@
+[
+  {
+    "selector": "confirmation-modify-in-progress",
+    "name": "ConfirmationModifyInProgress",
+    "label": "",
+    "file": "components/tests/confirmation-modify-in-progress.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "PageHeader",
+        "label": ""
+      },
+      {
+        "name": "NgFor",
+        "label": ""
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "TestService",
+        "label": ""
+      },
+      {
+        "name": "TestScheduleModel",
+        "label": ""
+      },
+      {
+        "name": "SelectedStudentModel",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "confirmation-modify-in-progress.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "app",
+    "name": "App",
+    "label": "",
+    "file": "src/app/app.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "RouterOutlet",
+        "label": ""
+      },
+      {
+        "name": "RouterLink",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Angulartics2GoogleAnalytics",
+        "label": ""
+      },
+      {
+        "name": "Log",
+        "label": ""
+      },
+      {
+        "name": "Auth",
+        "label": ""
+      }
+    ],
+    "templateUrl": [],
+    "styleUrls": []
+  },
+  {
+    "selector": "account",
+    "name": "Account",
+    "label": "",
+    "file": "components/account/account.component.ts",
+    "directives": [
+      {
+        "name": "PageHeader",
+        "label": ""
+      },
+      {
+        "name": "PageFooter",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "Validations",
+        "label": ""
+      },
+      {
+        "name": "Log",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "account.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "dropdown-menu",
+    "name": "DropdownMenu",
+    "label": "",
+    "file": "components/controls/dropdown-menu.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      }
+    ],
+    "templateUrl": [],
+    "styleUrls": []
+  },
+  {
+    "selector": "ng2select",
+    "name": "Ng2Select",
+    "label": "",
+    "file": "components/controls/select.component.ts",
+    "directives": [],
+    "providers": [],
+    "templateUrl": [],
+    "styleUrls": []
+  },
+  {
+    "selector": "accounterror",
+    "name": "AccountError",
+    "label": "",
+    "file": "components/errors/accounterror.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "PageHeader",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [],
+    "styleUrls": []
+  },
+  {
+    "selector": "notfound",
+    "name": "PageNotFound",
+    "label": "",
+    "file": "components/errors/pagenotfound.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "PageHeader",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [],
+    "styleUrls": []
+  },
+  {
+    "selector": "unhandled-exception",
+    "name": "UnhandledException",
+    "label": "",
+    "file": "components/errors/unhandledexception.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "PageHeader",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [],
+    "styleUrls": []
+  },
+  {
+    "selector": "groups",
+    "name": "Groups",
+    "label": "",
+    "file": "components/groups/groups.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "PageHeader",
+        "label": ""
+      },
+      {
+        "name": "PageFooter",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "groups.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "help-content",
+    "name": "HelpContent",
+    "label": "",
+    "file": "components/help/help-content.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Utility",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "help-content.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "help-header",
+    "name": "HelpHeader",
+    "label": "",
+    "file": "components/help/help-header.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "help-header.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "help",
+    "name": "Help",
+    "label": "",
+    "file": "components/help/help.component.ts",
+    "directives": [
+      {
+        "name": "HelpHeader",
+        "label": "",
+        "selector": "help-header"
+      },
+      {
+        "name": "HelpContent",
+        "label": "",
+        "selector": "help-content"
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "help.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "home",
+    "name": "Home",
+    "label": "",
+    "file": "components/home/home.component.ts",
+    "directives": [
+      {
+        "name": "PageHeader",
+        "label": ""
+      },
+      {
+        "name": "PageFooter",
+        "label": ""
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      },
+      {
+        "name": "Profile",
+        "label": ""
+      },
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "Angulartics2On",
+        "label": ""
+      },
+      {
+        "name": "RouterLinkActive",
+        "label": ""
+      },
+      {
+        "name": "PageScroll",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "HomeService",
+        "label": ""
+      },
+      {
+        "name": "TestService",
+        "label": ""
+      },
+      {
+        "name": "TestScheduleModel",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "home.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "profile-description",
+    "name": "ProfileDescription",
+    "label": "",
+    "file": "components/home/profile-description.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "PageHeader",
+        "label": ""
+      },
+      {
+        "name": "PageFooter",
+        "label": ""
+      },
+      {
+        "name": "NgFor",
+        "label": ""
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "HomeService",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "Log",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "profile-description.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "profile",
+    "name": "Profile",
+    "label": "",
+    "file": "components/home/profile.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "NgFor",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "profile.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "login-content",
+    "name": "LoginContent",
+    "label": "",
+    "file": "components/login/login-content.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "Angulartics2On",
+        "label": ""
+      },
+      {
+        "name": "TermsOfUse",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "Log",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "login-content.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "login-footer",
+    "name": "LoginFooter",
+    "label": "",
+    "file": "components/login/login-footer.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "Angulartics2On",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Utility",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "login-footer.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "login-header",
+    "name": "LoginHeader",
+    "label": "",
+    "file": "components/login/login-header.component.ts",
+    "directives": [],
+    "providers": [],
+    "templateUrl": [
+      "login-header.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "login",
+    "name": "Login",
+    "label": "",
+    "file": "components/login/login.component.ts",
+    "directives": [
+      {
+        "name": "LoginHeader",
+        "label": "",
+        "selector": "login-header"
+      },
+      {
+        "name": "LoginContent",
+        "label": "",
+        "selector": "login-content"
+      },
+      {
+        "name": "LoginFooter",
+        "label": "",
+        "selector": "login-footer"
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "login.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "forgot-password-confirmation",
+    "name": "ForgotPasswordConfirmation",
+    "label": "",
+    "file": "components/password/forgot-password-confirmation.component.ts",
+    "directives": [
+      {
+        "name": "PasswordHeader",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "forgot-password-confirmation.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "forgot-password",
+    "name": "ForgotPassword",
+    "label": "",
+    "file": "components/password/forgot-password.component.component.ts",
+    "directives": [
+      {
+        "name": "PasswordHeader",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "Validations",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "forgot-password.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "password-header",
+    "name": "PasswordHeader",
+    "label": "",
+    "file": "components/password/password-header.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "password-header.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "reset-password-expired",
+    "name": "ResetPasswordExpired",
+    "label": "",
+    "file": "components/password/reset-password-expired.component.ts",
+    "directives": [
+      {
+        "name": "PasswordHeader",
+        "label": "",
+        "selector": "password-header"
+      },
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "reset-password-expired.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "reset-password",
+    "name": "ResetPassword",
+    "label": "",
+    "file": "components/password/reset-password.component.ts",
+    "directives": [
+      {
+        "name": "PasswordHeader",
+        "label": "",
+        "selector": "password-header"
+      },
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "TermsOfUse",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "Validations",
+        "label": ""
+      },
+      {
+        "name": "Log",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "reset-password.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "set-password-first-time",
+    "name": "SetPasswordFirstTime",
+    "label": "",
+    "file": "components/password/set-password-first-time.component.ts",
+    "directives": [
+      {
+        "name": "PasswordHeader",
+        "label": "",
+        "selector": "password-header"
+      },
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "TermsOfUse",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "Validations",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "set-password-first-time.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "reports",
+    "name": "Reports",
+    "label": "",
+    "file": "components/reports/reports.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "PageHeader",
+        "label": ""
+      },
+      {
+        "name": "PageFooter",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "reports.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "rosters-cohorts",
+    "name": "RostersCohorts",
+    "label": "",
+    "file": "components/rosters/rosters-cohorts.component.ts",
+    "directives": [
+      {
+        "name": "NgIf",
+        "label": ""
+      },
+      {
+        "name": "NgFor",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "RostersModal",
+        "label": ""
+      },
+      {
+        "name": "RosterCohortsModal",
+        "label": ""
+      },
+      {
+        "name": "RosterCohortStudentsModal",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "RosterService",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "rosters-cohorts.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "rosters-faq",
+    "name": "RostersFaq",
+    "label": "",
+    "file": "components/rosters/rosters-faq.component.ts",
+    "directives": [],
+    "providers": [
+      {
+        "name": "HomeService",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "rosters-faq.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "rosters-header",
+    "name": "RostersHeader",
+    "label": "",
+    "file": "components/rosters/rosters-header.component.ts",
+    "directives": [],
+    "providers": [],
+    "templateUrl": [
+      "rosters-header.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "rosters-multicampus",
+    "name": "RostersMultiCampus",
+    "label": "",
+    "file": "components/rosters/rosters-multicampus.component.ts",
+    "directives": [
+      {
+        "name": "NgIf",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "rosters-multicampus.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "rosters-search",
+    "name": "RostersSearch",
+    "label": "",
+    "file": "components/rosters/rosters-search.component.ts",
+    "directives": [],
+    "providers": [
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "RosterService",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "rosters-search.html"
+    ],
+    "styleUrls": [
+      "../../css/rosters-search.css"
+    ]
+  },
+  {
+    "selector": "rosters",
+    "name": "Rosters",
+    "label": "",
+    "file": "components/rosters/rosters.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "PageHeader",
+        "label": ""
+      },
+      {
+        "name": "PageFooter",
+        "label": ""
+      },
+      {
+        "name": "RostersFaq",
+        "label": "",
+        "selector": "rosters-faq"
+      },
+      {
+        "name": "RostersHeader",
+        "label": "",
+        "selector": "rosters-header"
+      },
+      {
+        "name": "RostersMultiCampus",
+        "label": "",
+        "selector": "rosters-multicampus"
+      },
+      {
+        "name": "RostersCohorts",
+        "label": "",
+        "selector": "rosters-cohorts"
+      },
+      {
+        "name": "RostersSearch",
+        "label": "",
+        "selector": "rosters-search"
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "rosters.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "alert-popup",
+    "name": "AlertPopup",
+    "label": "",
+    "file": "components/shared/alert.popup.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Common",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "alert.popup.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "choose-institution",
+    "name": "ChooseInstitution",
+    "label": "",
+    "file": "components/shared/choose-institution.component.ts",
+    "directives": [
+      {
+        "name": "PageHeader",
+        "label": ""
+      },
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "TestService",
+        "label": ""
+      },
+      {
+        "name": "TestScheduleModel",
+        "label": ""
+      },
+      {
+        "name": "Log",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "choose-institution.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "confirmation-popup",
+    "name": "ConfirmationPopup",
+    "label": "",
+    "file": "components/shared/confirmation.popup.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Common",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "confirmation.popup.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "loader",
+    "name": "Loader",
+    "label": "",
+    "file": "components/shared/loader.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "loader.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "logout",
+    "name": "Logout",
+    "label": "",
+    "file": "components/shared/logout.component.ts",
+    "directives": [
+      {
+        "name": "LoginHeader",
+        "label": "",
+        "selector": "login-header"
+      },
+      {
+        "name": "LoginContent",
+        "label": "",
+        "selector": "login-content"
+      },
+      {
+        "name": "LoginFooter",
+        "label": "",
+        "selector": "login-footer"
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      }
+    ],
+    "templateUrl": [],
+    "styleUrls": []
+  },
+  {
+    "selector": "page-footer",
+    "name": "PageFooter",
+    "label": "",
+    "file": "components/shared/page-footer.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "page-footer.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "page-header",
+    "name": "PageHeader",
+    "label": "",
+    "file": "components/shared/page-header.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "DropdownMenu",
+        "label": "",
+        "selector": "dropdown-menu"
+      },
+      {
+        "name": "NgClass",
+        "label": ""
+      },
+      {
+        "name": "RouterLinkActive",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "page-header.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "terms-of-use",
+    "name": "TermsOfUse",
+    "label": "",
+    "file": "components/terms-of-use/terms-of-use.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "Angulartics2On",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "Utility",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "terms-of-use.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "add-students",
+    "name": "AddStudents",
+    "label": "",
+    "file": "components/tests/add-students.component.ts",
+    "directives": [
+      {
+        "name": "PageHeader",
+        "label": "",
+        "selector": "page-header"
+      },
+      {
+        "name": "TestHeader",
+        "label": ""
+      },
+      {
+        "name": "PageFooter",
+        "label": "",
+        "selector": "page-footer"
+      },
+      {
+        "name": "NgFor",
+        "label": ""
+      },
+      {
+        "name": "ConfirmationPopup",
+        "label": "",
+        "selector": "confirmation-popup"
+      },
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "AlertPopup",
+        "label": "",
+        "selector": "alert-popup"
+      },
+      {
+        "name": "TestingSessionStartingPopup",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "TestService",
+        "label": ""
+      },
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "TestScheduleModel",
+        "label": ""
+      },
+      {
+        "name": "SelectedStudentModel",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "Log",
+        "label": ""
+      },
+      {
+        "name": "RetesterAlternatePopup",
+        "label": ""
+      },
+      {
+        "name": "RetesterNoAlternatePopup",
+        "label": ""
+      },
+      {
+        "name": "TimeExceptionPopup",
+        "label": ""
+      },
+      {
+        "name": "AlertPopup",
+        "label": "",
+        "selector": "alert-popup"
+      },
+      {
+        "name": "SelfPayStudentPopup",
+        "label": ""
+      },
+      {
+        "name": "Utility",
+        "label": ""
+      },
+      {
+        "name": "StudentsStartedTest",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "add-students.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "choose-test",
+    "name": "ChooseTest",
+    "label": "",
+    "file": "components/tests/choose-test.component.ts",
+    "directives": [
+      {
+        "name": "PageHeader",
+        "label": "",
+        "selector": "page-header"
+      },
+      {
+        "name": "TestHeader",
+        "label": ""
+      },
+      {
+        "name": "PageFooter",
+        "label": "",
+        "selector": "page-footer"
+      },
+      {
+        "name": "ConfirmationPopup",
+        "label": "",
+        "selector": "confirmation-popup"
+      },
+      {
+        "name": "AlertPopup",
+        "label": "",
+        "selector": "alert-popup"
+      },
+      {
+        "name": "TestingSessionStartingPopup",
+        "label": ""
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      },
+      {
+        "name": "NgFor",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "TestService",
+        "label": ""
+      },
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "TestScheduleModel",
+        "label": ""
+      },
+      {
+        "name": "Utility",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "Log",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "choose-test.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "confirmation",
+    "name": "Confirmation",
+    "label": "",
+    "file": "components/tests/confirmation.component.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "PageHeader",
+        "label": "",
+        "selector": "page-header"
+      },
+      {
+        "name": "PageFooter",
+        "label": "",
+        "selector": "page-footer"
+      },
+      {
+        "name": "TestHeader",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "TestService",
+        "label": ""
+      },
+      {
+        "name": "TestScheduleModel",
+        "label": ""
+      },
+      {
+        "name": "Auth",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "confirmation.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "last-testing-session",
+    "name": "LastTestingSession",
+    "label": "",
+    "file": "components/tests/last-testing-session.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "PageHeader",
+        "label": "",
+        "selector": "page-header"
+      },
+      {
+        "name": "PageFooter",
+        "label": "",
+        "selector": "page-footer"
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "last-testing-session.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "manage-tests",
+    "name": "ManageTests",
+    "label": "",
+    "file": "components/tests/manage-tests.component.ts",
+    "directives": [
+      {
+        "name": "PageHeader",
+        "label": "",
+        "selector": "page-header"
+      },
+      {
+        "name": "TestHeader",
+        "label": ""
+      },
+      {
+        "name": "PageFooter",
+        "label": "",
+        "selector": "page-footer"
+      },
+      {
+        "name": "ConfirmationPopup",
+        "label": "",
+        "selector": "confirmation-popup"
+      },
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "TestService",
+        "label": ""
+      },
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "TestScheduleModel",
+        "label": ""
+      },
+      {
+        "name": "Utility",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "TestsModal",
+        "label": ""
+      },
+      {
+        "name": "Log",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "manage-tests.html"
+    ],
+    "styleUrls": [
+      "../../css/tablesaw.bare.css",
+      "../../css/tablesaw.overrides.css",
+      " ../../css/bootstrap-editable.css",
+      "../../css/bootstrap-editable-overrides.css"
+    ]
+  },
+  {
+    "selector": "retesters-alternate",
+    "name": "RetesterAlternatePopup",
+    "label": "",
+    "file": "components/tests/retesters-alternate-popup.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      },
+      {
+        "name": "NgFor",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Common",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "retesters-alternate-popup.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "retesters-noalternate",
+    "name": "RetesterNoAlternatePopup",
+    "label": "",
+    "file": "components/tests/retesters-noalternate-popup.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      },
+      {
+        "name": "NgFor",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Common",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "retesters-noalternate-popup.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "review-test",
+    "name": "ReviewTest",
+    "label": "",
+    "file": "components/tests/review-test.component.ts",
+    "directives": [
+      {
+        "name": "PageHeader",
+        "label": "",
+        "selector": "page-header"
+      },
+      {
+        "name": "TestHeader",
+        "label": ""
+      },
+      {
+        "name": "PageFooter",
+        "label": "",
+        "selector": "page-footer"
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      },
+      {
+        "name": "NgFor",
+        "label": ""
+      },
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "RetesterAlternatePopup",
+        "label": "",
+        "selector": "retesters-alternate"
+      },
+      {
+        "name": "RetesterNoAlternatePopup",
+        "label": "",
+        "selector": "retesters-noalternate"
+      },
+      {
+        "name": "ConfirmationPopup",
+        "label": "",
+        "selector": "confirmation-popup"
+      },
+      {
+        "name": "TimeExceptionPopup",
+        "label": ""
+      },
+      {
+        "name": "Loader",
+        "label": "",
+        "selector": "loader"
+      },
+      {
+        "name": "AlertPopup",
+        "label": "",
+        "selector": "alert-popup"
+      },
+      {
+        "name": "TestingSessionStartingPopup",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "TestService",
+        "label": ""
+      },
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "TestScheduleModel",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "Log",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "review-test.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "schedule-test",
+    "name": "ScheduleTest",
+    "label": "",
+    "file": "components/tests/schedule-test.component.ts",
+    "directives": [
+      {
+        "name": "PageHeader",
+        "label": "",
+        "selector": "page-header"
+      },
+      {
+        "name": "TestHeader",
+        "label": ""
+      },
+      {
+        "name": "PageFooter",
+        "label": "",
+        "selector": "page-footer"
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      },
+      {
+        "name": "ConfirmationPopup",
+        "label": "",
+        "selector": "confirmation-popup"
+      },
+      {
+        "name": "AlertPopup",
+        "label": "",
+        "selector": "alert-popup"
+      },
+      {
+        "name": "TestingSessionStartingPopup",
+        "label": ""
+      },
+      {
+        "name": "StudentsStartedTest",
+        "label": ""
+      },
+      {
+        "name": "TimeExceptionPopup",
+        "label": ""
+      },
+      {
+        "name": "SelfPayStudentPopup",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "TestService",
+        "label": ""
+      },
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "TestScheduleModel",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "Utility",
+        "label": ""
+      },
+      {
+        "name": "TestStartedExceptionModal",
+        "label": ""
+      },
+      {
+        "name": "TimingExceptionsModal",
+        "label": ""
+      },
+      {
+        "name": "Log",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "schedule-test.html"
+    ],
+    "styleUrls": [
+      "../../css/bootstrap-editable.css",
+      "../../css/bootstrap-editable-overrides.css",
+      "../../css/jquery.timepicker.css",
+      "../../css/schedule.css"
+    ]
+  },
+  {
+    "selector": "self-pay-student-popup",
+    "name": "SelfPayStudentPopup",
+    "label": "",
+    "file": "components/tests/self-pay-student-popup.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Common",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "self-pay-student-popup.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "students-started-test-popup",
+    "name": "StudentsStartedTest",
+    "label": "",
+    "file": "components/tests/students-started-test.popup.component.ts",
+    "directives": [
+      {
+        "name": "NgFor",
+        "label": ""
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "students-started-test.popup.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "test-header",
+    "name": "TestHeader",
+    "label": "",
+    "file": "components/tests/test-header.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      },
+      {
+        "name": "ConfirmationPopup",
+        "label": "",
+        "selector": "confirmation-popup"
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "test-header.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "test-starting-popup",
+    "name": "TestingSessionStartingPopup",
+    "label": "",
+    "file": "components/tests/test-starting-popup.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      },
+      {
+        "name": "NgFor",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "TestService",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "test-starting-popup.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "time-exception",
+    "name": "TimeExceptionPopup",
+    "label": "",
+    "file": "components/tests/time-exception-popup.component.ts",
+    "directives": [
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      }
+    ],
+    "providers": [
+      {
+        "name": "Common",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "time-exception-popup.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "view-test",
+    "name": "ViewTest",
+    "label": "",
+    "file": "components/tests/view-test.component.ts",
+    "directives": [
+      {
+        "name": "PageHeader",
+        "label": "",
+        "selector": "page-header"
+      },
+      {
+        "name": "TestHeader",
+        "label": "",
+        "selector": "test-header"
+      },
+      {
+        "name": "PageFooter",
+        "label": "",
+        "selector": "page-footer"
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      },
+      {
+        "name": "NgFor",
+        "label": ""
+      },
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "ConfirmationPopup",
+        "label": "",
+        "selector": "confirmation-popup"
+      }
+    ],
+    "providers": [
+      {
+        "name": "TestService",
+        "label": ""
+      },
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "TestScheduleModel",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      },
+      {
+        "name": "Log",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "view-test.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "userguide",
+    "name": "UserGuide",
+    "label": "",
+    "file": "components/userguide/userguide.component.ts",
+    "directives": [
+      {
+        "name": "PageHeader",
+        "label": "",
+        "selector": "page-header"
+      },
+      {
+        "name": "ROUTER_DIRECTIVES",
+        "label": ""
+      },
+      {
+        "name": "Angulartics2On",
+        "label": ""
+      },
+      {
+        "name": "TermsOfUse",
+        "label": "",
+        "selector": "terms-of-use"
+      }
+    ],
+    "providers": [
+      {
+        "name": "Auth",
+        "label": ""
+      },
+      {
+        "name": "Utility",
+        "label": ""
+      },
+      {
+        "name": "Common",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "userguide.html"
+    ],
+    "styleUrls": []
+  }
+]

@@ -6,18 +6,22 @@ import {HTTP_PROVIDERS} from '@angular/http';
 import {ExceptionHandler} from '@angular/core';
 import {MyExceptionHandler} from './scripts/myexception-handler';
 import {Angulartics2} from 'angulartics2';
-import {App} from './app';
 import {APP_ROUTES_PROVIDER} from './app.routes';
-import {SharedDeactivateGuard} from './components/shared/shared.deactivate.guard';
+import { AppComponent } from './app.component';
+import { SharedDeactivateGuard } from './guards/shared.deactivate.guard';
+import { LogService } from './services/log.service';
+import { AuthService } from './services/auth.service';
 
 enableProdMode();
 
 
-bootstrap(App, [
+bootstrap(AppComponent, [
     SharedDeactivateGuard,
     APP_ROUTES_PROVIDER,
     HTTP_PROVIDERS,
     provide(ExceptionHandler, { useClass: MyExceptionHandler }),
     Angulartics2,
-    Title    
+    Title,
+    LogService,
+    AuthService
 ])
