@@ -1584,8 +1584,11 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                     setTimeout(() => { $('.typeahead').focus(); });
                     $('.typeahead').typeahead('destroy');
                 }
-            }, error => console.log(error));
-
+            }, error => {
+                setTimeout(() => { $('.typeahead').focus(); });
+                $('.typeahead').typeahead('destroy');
+                console.log(error)
+            });
     }
 
     resolveSearchStudentURL(url: string, searctText: string): string {
