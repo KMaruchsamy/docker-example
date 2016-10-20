@@ -40,7 +40,7 @@ const APP_ROUTES: RouterConfig = [
     { path: 'reset-password-expired', component: ResetPasswordExpiredComponent },
     { path: 'help', component: HelpComponent },
     { path: 'userguide', component: UserGuideComponent },
-    { path: 'set-password-first-time', component: SetPasswordFirstTimeComponent },
+    { path: 'set-password-first-time/:id', component: SetPasswordFirstTimeComponent },
     { path: 'account', component: AccountComponent },
     { path: 'account/:scroll', component: AccountComponent },
     { path: 'choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitutionComponent },

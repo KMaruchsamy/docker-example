@@ -74,8 +74,8 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
             let urlOnlyId = url.substr(0, url.lastIndexOf('/'));
             let encryptedId = urlOnlyId.substr(urlOnlyId.lastIndexOf('/') + 1);
 
-            let decryptedId = this.decryption(encryptedId);
-            let decryptedTime = this.decryption(encryptedExpiry);
+            let decryptedId = this.common.decryption(encryptedId);
+            let decryptedTime = this.common.decryption(encryptedExpiry);
 
             let currentTime: any = new Date();
             let isExpire: any = new Date(decryptedTime) - currentTime;
@@ -214,14 +214,14 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         }
     }
 
-    decryption(strToDecrypt) {
-        let key = CryptoJS.enc.Base64.parse("MTIzNDU2NzgxMjM0NTY3OA==");
-        let iv = CryptoJS.enc.Base64.parse("EBESExQVFhcYGRobHB0eHw==");
-        // let addedEscapeIntoStr = unescape(strToDecrypt).replace(/#/g, "/").replace(/~/g, "=");
-        let decodedString = decodeURIComponent(strToDecrypt);
-        let decryptedStr = CryptoJS.AES.decrypt(decodedString, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }).toString(CryptoJS.enc.Utf8);
-        return decryptedStr;
-    }
+    //decryption(strToDecrypt) {
+    //    let key = CryptoJS.enc.Base64.parse("MTIzNDU2NzgxMjM0NTY3OA==");
+    //    let iv = CryptoJS.enc.Base64.parse("EBESExQVFhcYGRobHB0eHw==");
+    //    // let addedEscapeIntoStr = unescape(strToDecrypt).replace(/#/g, "/").replace(/~/g, "=");
+    //    let decodedString = decodeURIComponent(strToDecrypt);
+    //    let decryptedStr = CryptoJS.AES.decrypt(decodedString, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }).toString(CryptoJS.enc.Utf8);
+    //    return decryptedStr;
+    //}
 
     AuthanticateUser(useremail, password, userType, errorContainer) {
         let self = this;

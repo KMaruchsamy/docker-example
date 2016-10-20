@@ -52,14 +52,14 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
         let self = this;
         let emailid = txtEmailId.value;
 
-        let encryptedId = this.getEncryption(emailid);
+        let encryptedId = this.common.getEncryption(emailid);
 
-        let expiryhour = parseInt(links.resetemailexpire.expirytime); // Default expiry hour is 2 hours. To change hours go to config.json & change expirytime...
+        let expiryhour = parseInt(links.resetemailexpire.expirytime); // Default expiry hour is 8 hours. To change hours go to config.json & change expirytime...
         let currentTime = new Date();
         let expiryTime = new Date(currentTime.getTime() + (expiryhour * 60 * 60 * 1000));     // converting hours to milliseconds and adding to Date
 
         // Expiry Time Encryption
-        let encryptedTime = this.getEncryption(expiryTime.toString());
+        let encryptedTime = this.common.getEncryption(expiryTime.toString());
 
         if (this.validate(emailid, errorContainer)) {
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.forgotpasswordapi;
@@ -102,14 +102,6 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
     clearError(errorContainer) {
         this.errorMessage = '';
-    }
-
-    getEncryption(strToEncrypt) {
-        let key = CryptoJS.enc.Base64.parse("MTIzNDU2NzgxMjM0NTY3OA==");
-        let iv = CryptoJS.enc.Base64.parse("EBESExQVFhcYGRobHB0eHw==");
-        let encryptedStr = CryptoJS.AES.encrypt(strToEncrypt, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }).toString();
-        // let replaceEscapeFromStr = encryptedStr.replace(/\//g, "#").replace(/=/g,"~");
-        return encodeURIComponent(encryptedStr);
     }
 
     forgotpassword(url, useremail, encryptedUserEmail, expiryTime): Observable<Response> {
