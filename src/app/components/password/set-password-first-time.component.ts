@@ -37,6 +37,7 @@ export class SetPasswordFirstTimeComponent implements OnInit, OnDestroy {
     authenticateSubscription: Subscription;
     errorMessage: string;
     invalidLength: boolean = true;
+    continueTerm: string = "Continue to Terms of Use";
     constructor(public router: Router, public auth: AuthService, public location: Location, public common: CommonService, public validations: ValidationsService, public titleService: Title, public log: LogService) {
 
     }
@@ -182,6 +183,9 @@ export class SetPasswordFirstTimeComponent implements OnInit, OnDestroy {
                     self.sStorage.setItem('securitylevel', json.SecurityLevel);
                     self.sStorage.setItem('isenrollmentagreementsigned', json.IsEnrollmentAgreementSigned);
                     self.auth.refresh();
+                    if (self.auth.isEnrollmentAgreementSigned) {
+                        self.continueTerm = "Go To Home";
+                    }
                 }
                 else {
                     this.errorMessage = login.auth_failed;
