@@ -1,0 +1,76 @@
+<div class="section section-bottom-thin"  [class.section-light-pink]="modifyInProgress">
+    <div [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
+         <h2 [class.page-sm-heading-teal]="!modifyInProgress" [class.error]="modifyInProgress" [class.h5]="modifyInProgress">
+            {{modifyInProgress ?(testSchedule.activeStep ===3 ? 'Add/Remove Students' :'Change Testing Window' ): 'Manage Tests'}}
+            </h2>
+        <h3 class="page-lg-heading" [class.modify-testing-session-left]="modify">{{ modify ? (modifyInProgress ? 'Test In Progress: ' + testSchedule.testName  : 'Modify a Testing Session') : 'Schedule a Test' }}</h3>
+        <div *ngIf="modify && !hideCancelButton" class="modify-testing-session-right text-larger">
+            <button class="anchor-button" (click)="confirmCancelChanges($event)">Cancel changes</button>
+        </div>
+    </div>
+</div>
+<div *ngIf="testSchedule.currentStep>1 && testSchedule.activeStep!==1 && testSchedule.activeStep!==5 && !modifyInProgress" class="thin-section test-summary-heading" [class.test-summary-heading-modify]="modify">
+    <div class="container-medium-width" [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)">
+        <div *ngIf="testSchedule.currentStep>1 " class="test-summary-heading-details">
+            <span>Test: <b>{{testSchedule.testName}}</b></span>
+            <a href="#" target="_self" [routerLink]="modify ? ['/tests' , 'modify', 'choose-test',testSchedule.institutionId] :  ['/tests/choose-test' , testSchedule.institutionId]" class="link-darker">Change test</a>
+        </div>
+        <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>            
+            <template [ngIf]="!nextDay">
+                {{testSchedule?.scheduleStartTime|parseDate:'ddd'}} {{testSchedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule?.scheduleStartTime|parseDate:'h:mma'}}
+                &ndash; {{testSchedule?.scheduleEndTime|parseDate:'h:mma'}}
+            </template>
+            <template [ngIf]="nextDay">
+                {{testSchedule?.scheduleStartTime|parseDate:'ddd'}} {{testSchedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule?.scheduleStartTime|parseDate:'h:mma'}}
+                &ndash; {{testSchedule?.scheduleEndTime|parseDate:'h:mma'}} {{testSchedule?.scheduleEndTime|parseDate:'ddd'}}
+                {{testSchedule?.scheduleEndTime|parseDate:'MM/DD/YY'}}
+            </template>
+            </b></span>
+            <a [routerLink]="modify ? ['/tests','modify','schedule-test'] : ['/tests/schedule-test']" class="link-darker">Change date or time</a>
+        </div>
+    </div>
+</div>
+<div *ngIf="!modifyInProgress" class="thin-section" [class.section-gray]="!modify" [class.section-blue]="modify">
+    <div [class.container-medium-width]="(testSchedule.activeStep !==3)" [class.container]="(testSchedule.activeStep ===3)" class="manage-test-breadcrumb">
+        <div class="grid">
+            <div [class.completed-step]="( testSchedule.activeStep > 1)" [class.success-icon]="(testSchedule.activeStep > 1)"
+            [class.active]="testSchedule.activeStep ===1" class="breadcrumb-number">1</div>
+            <span>Choose a test</span>
+        </div>
+        <div class="grid">
+            <div [class.completed-step]="(testSchedule.activeStep > 2)" [class.success-icon]="(testSchedule.activeStep > 2)"
+            [class.active]="testSchedule.activeStep ===2" class="breadcrumb-number">2</div>
+            <span>Choose date and time</span>
+        </div>
+        <div class="grid">
+            <div [class.completed-step]="(testSchedule.activeStep > 3)" [class.success-icon]="(testSchedule.activeStep > 3)"
+            [class.active]="testSchedule.activeStep ===3" class="breadcrumb-number">3</div>
+            <span>Add students</span>
+        </div>
+        <div class="grid">
+            <div [class.completed-step]="(testSchedule.activeStep > 4)" [class.success-icon]="(testSchedule.activeStep > 4)"
+            [class.active]="testSchedule.activeStep ===4" class="breadcrumb-number">4</div>
+            <span>Add details and review</span>
+        </div>
+        <div class="grid">
+            <div class="breadcrumb-number" [class.active]="testSchedule.currentStep ===5">5</div>
+            <span>Confirmation</span>
+        </div>
+    </div>
+    <div class="mobile-breadcrumb-name hidden-small-phone-up">{{scheduleStep}}</div>
+</div>
+
+<confirmation-popup [popupId]="'cancelChangesPopup'" [message]="'Cancel changes to testing session and return to Manage Tests main page?'"
+[okButtonText]="'Yes'" [cancelButtonText]="'No, continue making changes'" (onOK)="cancelChanges()" (onCancel)="continueMakingChanges()"
+[hideClose]="true">
+</confirmation-popup>
+
+<confirmation-popup 
+[popupId]="'cancelModifyInProgress'"
+    [message]="'Cancel changes to testing session in progress and return to Manage Tests main page?'" 
+    [okButtonText] = "'Yes, cancel changes'" 
+    [cancelButtonText] = "'No, continue making changes'" 
+    (onOK)="cancelChanges()" 
+    (onCancel)="continueMakingChanges()"
+    [hideClose]="true" >
+</confirmation-popup>
