@@ -340,16 +340,19 @@ export class AccountComponent implements OnInit, OnDestroy {
                     if (status.toString() === this.errorCodes.SUCCESS) {
                         this.studentPasswordResetSuccessMessage = reset_student_password.success_message;
                         this.studentPasswordReset = true;
+                        this.sendStudentPasswordErrorMessage = '';
                     }
                     else if (status.toString() === this.errorCodes.API) {
                         if (json.Payload.length > 0) {
                             if (json.Payload[0].Messages.length > 0) {
                                 this.sendStudentPasswordErrorMessage = json.Payload[0].Messages[0].toString();
+                                this.studentPasswordReset = false;
                             }
                         }
                     }
                     else {
                         this.sendStudentPasswordErrorMessage = general.exception;
+                        this.studentPasswordReset = false;
                     }
                 }, error => {
                     if (error.status.toString() === this.errorCodes.API) {
@@ -362,10 +365,11 @@ export class AccountComponent implements OnInit, OnDestroy {
                     else {
                         this.sendStudentPasswordErrorMessage = general.exception;
                     }
-
+                    this.studentPasswordReset = false;
                 });
         } else {
             this.sendStudentPasswordErrorMessage = manage_account.email_format_validation;
+            this.studentPasswordReset = false;
         }
     }
 
