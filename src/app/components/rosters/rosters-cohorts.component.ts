@@ -25,12 +25,17 @@ import * as moment from 'moment-timezone';
     directives: [NgIf, NgFor],
     pipes: [ParseDatePipe],
     styles: [`
-    li.name-multiple-icons  {
-        padding-right: 55px !important;
+    .name-multiple-icons  {
+        top: -.75em;
+        right: -.75em;
         position: relative;
     }
+    .list-item-with-icons {
+        padding-right: 55px !important;
+    }
     .small-popover {
-        margin-left: 3px;
+        margin-left: -0.15em;
+        margin-right: .25em;
     }
     .large-expander-trigger {
         padding-right: 100px;
