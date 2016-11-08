@@ -47,7 +47,7 @@ import * as moment from 'moment-timezone';
 @Component({
     selector: 'schedule-test',
     templateUrl: 'components/tests/schedule-test.component.html',
-    styleUrls: ['../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css', '../../css/jquery.timepicker.css', 'components/tests/schedule.component.css'],
+    styleUrls: ['../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css', '../../../node_modules/timepicker/jquery.timepicker.css', 'components/tests/schedule.component.css'],
     encapsulation: ViewEncapsulation.None,
     providers: [TestService, AuthService, TestScheduleModel, CommonService, UtilityService, TestStartedExceptionModal, TimingExceptionsModal, LogService],
     directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, NgIf, ConfirmationPopupComponent, AlertPopupComponent, TestingSessionStartingPopupComponent, StudentsStartedTestComponent, TimeExceptionPopupComponent, SelfPayStudentPopupComponent],
