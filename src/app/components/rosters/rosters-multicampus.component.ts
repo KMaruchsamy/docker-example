@@ -54,6 +54,7 @@ export class RostersMultiCampusComponent implements OnInit {
             
             if (this.institutions.length === 2) {
                  let rnInstitutions = _.filter(this.institutions, { 'ProgramofStudyName': 'RN' });
+                 // if only one instition is RN show radio buttons
                  if (rnInstitutions.length === 1) {
                      this.showRadioButton = true;
                      if (this.institutions[0].ProgramofStudyName === 'RN') {
@@ -64,21 +65,30 @@ export class RostersMultiCampusComponent implements OnInit {
                          this.institutionIdRN = this.institutions[1].InstitutionId;
                          this.institutionIdPN = this.institutions[0].InstitutionId;
                      }
-                 }
+                 } 
+                 // otherwise there must be either two RN or two PN institutions in which case the dropdown should be shown
+                 else {
+                    this.showDropdown = true;
+                    this.refreshSelectpicker();
+                }
                 this.changeInstitution(this.institutionIdRN, true, null);
             }
             else {
                 this.showDropdown = true;
-                setTimeout(json => {
-                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
-                        $('.selectpicker').selectpicker('mobile');
-                    else
-                        $('.selectpicker').selectpicker('refresh');
-                });
+                this.refreshSelectpicker();
             }
 
         }
 
+    }
+
+    refreshSelectpicker(): void {
+        setTimeout(json => {
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
+                $('.selectpicker').selectpicker('mobile');
+            else
+                $('.selectpicker').selectpicker('refresh');
+        });
     }
 
     changeInstitution(institutionId: number, isRN: boolean, event): void {
