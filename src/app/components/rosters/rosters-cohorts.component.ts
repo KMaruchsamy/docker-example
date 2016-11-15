@@ -7,7 +7,7 @@ import { NgFor, NgIf } from '@angular/common';
 // import { RostersModal } from './../../models/rosters.modal';
 import { Component, Input, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import * as _ from 'lodash';
-import {links} from '../../constants/config';
+import {links, Timezones} from '../../constants/config';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {Response} from '@angular/http';
 import { RostersModal } from './../../models/rosters.model';
@@ -211,6 +211,20 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         }
 
 
+    }
+
+    isExtensionCohort(cohortName: string)
+    {
+        if (cohortName.toUpperCase().indexOf('EXTENSION') === 0)
+            return true;
+        else
+            return false;
+    }
+    isCohortAboutToExpire(cohort: RosterCohortsModal) {
+        let cohortExpiry = moment(cohort.cohortEndDate);
+        let dateAfterTwoWeek = moment().add(14, "days").tz(Timezones.GMTminus5);
+        let isExpire = cohortExpiry.isSameOrBefore(dateAfterTwoWeek);
+        return isExpire;
     }
 
 }
