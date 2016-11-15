@@ -1,4 +1,4 @@
-export class RosterCohortStudentsModal {
+export class RosterCohortStudentsModel {
     studentId: number;
     firstName: string;
     lastName: string;

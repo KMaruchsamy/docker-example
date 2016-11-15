@@ -2,8 +2,8 @@ import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 // import {CommonService} from '../../services/common';
 // import { RosterService } from './../../services/roster.service';
 import { NgFor, NgIf } from '@angular/common';
-// import { RosterCohortsModal } from './../../models/roster-cohorts.modal';
-// import { RosterCohortStudentsModal } from './../../models/roster-cohort-students.modal';
+// import { RosterCohortsModel } from './../../models/roster-cohorts.modal';
+// import { RosterCohortStudentsModel } from './../../models/roster-cohort-students.modal';
 // import { RostersModal } from './../../models/rosters.modal';
 import { Component, Input, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import * as _ from 'lodash';
@@ -11,15 +11,15 @@ import {links, Timezones} from '../../constants/config';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {Response} from '@angular/http';
 import { RostersModal } from './../../models/rosters.model';
-import { RosterCohortsModal } from './../../models/roster-cohorts.model';
-import { RosterCohortStudentsModal } from './../../models/roster-cohort-students.model';
+import { RosterCohortsModel } from './../../models/roster-cohorts.model';
+import { RosterCohortStudentsModel } from './../../models/roster-cohort-students.model';
 import { CommonService } from './../../services/common.service';
 import { RosterService } from './roster.service';
 import * as moment from 'moment-timezone';
 
 @Component({
     selector: 'rosters-cohorts',
-    providers: [RostersModal, RosterCohortsModal, RosterCohortStudentsModal, CommonService, RosterService],
+    providers: [RostersModal, RosterCohortsModel, RosterCohortStudentsModel, CommonService, RosterService],
     encapsulation: ViewEncapsulation.Emulated,
     templateUrl: 'components/rosters/rosters-cohorts.component.html',
     directives: [NgIf, NgFor],
@@ -83,9 +83,9 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
     }
 
     loadCohorts(roster: any) {
-        let rosterCohorts: Array<RosterCohortsModal>;
+        let rosterCohorts: Array<RosterCohortsModel>;
         if (roster) {
-            let extensionCohort: RosterCohortsModal;
+            let extensionCohort: RosterCohortsModel;
             this.rosters.institutionId = roster.InstitutionId;
             this.rosters.institutionName = roster.InstitutionName;
             this.rosters.institutionNameWithProgOfStudy = roster.InstitutionNameWithProgOfStudy;
@@ -102,7 +102,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
                         return new Date(o.CohortEndDate);
                 }, 'desc');
                 this.rosters.cohorts = _.map(roster.Cohorts, (cohort: any) => {
-                    let rosterCohort = new RosterCohortsModal();
+                    let rosterCohort = new RosterCohortsModel();
                     rosterCohort.cohortId = cohort.CohortId;
                     rosterCohort.cohortName = cohort.CohortName;
                     rosterCohort.cohortStartDate = cohort.CohortStartDate;
@@ -134,11 +134,11 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         }
     }
 
-    loadRosterCohortStudents(cohort: RosterCohortsModal, cohortStudents: any) {
-        let rosterCohortStudents: Array<RosterCohortStudentsModal> = [];
+    loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
+        let rosterCohortStudents: Array<RosterCohortStudentsModel> = [];
         if (cohortStudents) {
             rosterCohortStudents = _.map(cohortStudents, (student: any) => {
-                let rosterCohortStudent = new RosterCohortStudentsModal();
+                let rosterCohortStudent = new RosterCohortStudentsModel();
                 rosterCohortStudent.cohortId = student.CohortId;
                 rosterCohortStudent.cohortName = student.CohortName;
                 rosterCohortStudent.email = student.Email;
@@ -158,6 +158,11 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
                         && student.FirstName.toUpperCase() === stud.FirstName.toUpperCase()
                         && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
                 });
+
+                if (!cohort.hasDuplicateStudent) {
+                    if (rosterCohortStudent.isDuplicate)
+                        cohort.hasDuplicateStudent = true;
+                }
 
                 if (!cohort.hasRepeatStudent) {
                     if (rosterCohortStudent.isRepeatStudent)
@@ -183,7 +188,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
     }
 
     rosterCohortStudents(cohortId: number): any {
-        let rosterCohort: RosterCohortsModal = _.find(this.rosters.cohorts, { "cohortId": cohortId });
+        let rosterCohort: RosterCohortsModel = _.find(this.rosters.cohorts, { "cohortId": cohortId });
         if (rosterCohort) {
             if (rosterCohort.students || rosterCohort.visible) {
                 rosterCohort.visible = !rosterCohort.visible;

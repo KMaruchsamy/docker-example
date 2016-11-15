@@ -1,4 +1,4 @@
-import { RosterCohortsModal } from './roster-cohorts.model';
+import { RosterCohortsModel } from './roster-cohorts.model';
 
 export class RostersModal {
     institutionId: number;
@@ -9,5 +9,5 @@ export class RostersModal {
     accountManagerLastName: string;
     accountManagerEmail: string;
     studentPayEnabled: boolean;
-    cohorts: Array<RosterCohortsModal>;
+    cohorts: Array<RosterCohortsModel>;
 }
