@@ -28,6 +28,7 @@ import { ConfirmationModifyInProgressComponent } from './components/tests/confir
 import { AccountErrorComponent } from './components/errors/accounterror.component';
 import { UnhandledExceptionComponent } from './components/errors/unhandledexception.component';
 import { PageNotFoundComponent } from './components/errors/pagenotfound.component';
+import {RosterChangeNoteComponent} from './components/rosters/roster-change-note.component';
 
 const APP_ROUTES: RouterConfig = [
     { path: '', component: LoginComponent, pathMatch:"full"  },
@@ -48,6 +49,7 @@ const APP_ROUTES: RouterConfig = [
     { path: 'profiles/:id', component: ProfileDescriptionComponent},
     { path: 'reports', component: ReportsComponent },
     { path: 'rosters', component: RostersComponent },
+    { path: 'rosters/changes-note', component: RosterChangeNoteComponent },
     { path: 'groups', component: GroupsComponent},
     { path: 'tests', component: ManageTestsComponent, pathMatch:"full" },
     { path: 'tests/choose-test/:institutionId', component: ChooseTestComponent, canDeactivate:[SharedDeactivateGuard] },
@@ -65,7 +67,7 @@ const APP_ROUTES: RouterConfig = [
     { path: 'testing-session-expired', component: LastTestingSessionComponent },
     { path: 'tests/confirmation-modify-in-progress', component: ConfirmationModifyInProgressComponent },
     { path: 'accounterror', component: AccountErrorComponent },
-    { path: 'error', component: UnhandledExceptionComponent },
+    { path: 'error', component: UnhandledExceptionComponent },    
     { path: '**', component: PageNotFoundComponent },
 ]
 

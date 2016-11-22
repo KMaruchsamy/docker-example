@@ -57,7 +57,9 @@ export const links = {
             rosters: {
                 cohorts: 'admin/rosters/institutions/§institutionId/cohorts',
                 cohortStudents: 'admin/rosters/cohorts/§cohortId/students',
-                search:'admin/rosters/institutions/§institutionId/students?searchString=§searchString'
+                search: 'admin/rosters/institutions/§institutionId/students?searchString=§searchString',
+                saveUserPreference: 'preferenceService/setPreference',
+                getUserPreference: 'preferenceService/users/§userId/preferences/§preferenceTypeName?userType=§userType'
             }
         }
     },
@@ -182,6 +184,13 @@ export let Timezones = {
     GMTplus12: 'Pacific/Auckland',
     GMTplus13: 'Pacific/Apia',
     GMTplus14: 'Pacific/Kiritimati'
+}
+
+export const cohortRosterChangeUserPreference = {
+    UserType: "admin",
+    PreferenceTypeName: "CohortRosterChangeIntro",
+    PreferenceTypeShowValueName: "Show",
+    PreferenceTypeHideValueName: "Hide"
 }
 
 export const roster = {

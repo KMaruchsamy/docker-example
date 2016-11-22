@@ -6,6 +6,7 @@ import { NgFor, NgIf } from '@angular/common';
 // import { RosterCohortStudentsModel } from './../../models/roster-cohort-students.modal';
 // import { RostersModal } from './../../models/rosters.modal';
 import { Component, Input, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import {RouterLink, ROUTER_DIRECTIVES} from '@angular/router';
 import * as _ from 'lodash';
 import {links, Timezones} from '../../constants/config';
 import {Observable, Subscription} from 'rxjs/Rx';
@@ -22,7 +23,7 @@ import * as moment from 'moment-timezone';
     providers: [RostersModal, RosterCohortsModel, RosterCohortStudentsModel, CommonService, RosterService],
     encapsulation: ViewEncapsulation.Emulated,
     templateUrl: 'components/rosters/rosters-cohorts.component.html',
-    directives: [NgIf, NgFor],
+    directives: [NgIf, NgFor, RouterLink, ROUTER_DIRECTIVES],
     pipes: [ParseDatePipe],
     styles: [`
     .name-multiple-icons  {
@@ -225,7 +226,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         else
             return false;
     }
-    isCohortAboutToExpire(cohort: RosterCohortsModal) {
+    isCohortAboutToExpire(cohort: RosterCohortsModel) {
         let cohortExpiry = moment(cohort.cohortEndDate);
         let dateAfterTwoWeek = moment().add(14, "days").tz(Timezones.GMTminus5);
         let isExpire = cohortExpiry.isSameOrBefore(dateAfterTwoWeek);
