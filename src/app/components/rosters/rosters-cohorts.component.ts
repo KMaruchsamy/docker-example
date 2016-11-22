@@ -1,14 +1,10 @@
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
-// import {CommonService} from '../../services/common';
-// import { RosterService } from './../../services/roster.service';
 import { NgFor, NgIf } from '@angular/common';
-// import { RosterCohortsModel } from './../../models/roster-cohorts.modal';
-// import { RosterCohortStudentsModel } from './../../models/roster-cohort-students.modal';
-// import { RostersModal } from './../../models/rosters.modal';
 import { Component, Input, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import {RouterLink, ROUTER_DIRECTIVES} from '@angular/router';
 import * as _ from 'lodash';
-import {links, Timezones} from '../../constants/config';
+import { AuthService } from './../../services/auth.service';
+import {links, Timezones, cohortRosterChangeUserPreference} from '../../constants/config';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {Response} from '@angular/http';
 import { RostersModal } from './../../models/rosters.model';
@@ -17,10 +13,13 @@ import { RosterCohortStudentsModel } from './../../models/roster-cohort-students
 import { CommonService } from './../../services/common.service';
 import { RosterService } from './roster.service';
 import * as moment from 'moment-timezone';
+import { Router } from '@angular/router';
+import { RosterChangesModel } from '../../models/roster-changes.model';
+import {RosterCohortUserPreferenceModel} from './../../models/roster-cohort-user-preference.model';
 
 @Component({
     selector: 'rosters-cohorts',
-    providers: [RostersModal, RosterCohortsModel, RosterCohortStudentsModel, CommonService, RosterService],
+    providers: [RostersModal, RosterCohortsModel, RosterCohortStudentsModel, RosterCohortUserPreferenceModel, CommonService, RosterService, AuthService],
     encapsulation: ViewEncapsulation.Emulated,
     templateUrl: 'components/rosters/rosters-cohorts.component.html',
     directives: [NgIf, NgFor, RouterLink, ROUTER_DIRECTIVES],
@@ -45,6 +44,7 @@ import * as moment from 'moment-timezone';
 export class RostersCohortsComponent implements OnInit, OnDestroy {
     _institutionId: number;
     noCohorts: Boolean = false;
+    sStorage: any;
     @Input()
     set institutionId(value: number) {
         this._institutionId = value;
@@ -57,8 +57,11 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
     searchString: string;
     cohortSubscription: Subscription;
     cohortStudentsSubscription: Subscription;
+    apiServer: string;
+    getUserPreferenceSubscription: Subscription;
+    rosterCohortUserPreferenceModel: RosterCohortUserPreferenceModel;
 
-    constructor(public rosters: RostersModal, private rosterService: RosterService, private common: CommonService) { }
+    constructor(public rosters: RostersModal, private rosterService: RosterService, private common: CommonService, private router: Router, private auth: AuthService, private rosterChangesModel: RosterChangesModel) { }
 
     ngOnInit() {
         $('body').on('hidden.bs.popover', function (e) {
@@ -226,11 +229,41 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         else
             return false;
     }
+
     isCohortAboutToExpire(cohort: RosterCohortsModel) {
         let cohortExpiry = moment(cohort.cohortEndDate);
         let dateAfterTwoWeek = moment().add(14, "days").tz(Timezones.GMTminus5);
         let isExpire = cohortExpiry.isSameOrBefore(dateAfterTwoWeek);
         return isExpire;
+    }
+
+    getUserPreference(): void {
+        let __this = this;
+        let userPreferenceURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.rosters.getUserPreference}`;
+        userPreferenceURL = userPreferenceURL.replace('§userId', this.auth.userid.toString()).replace('§preferenceTypeName', cohortRosterChangeUserPreference.PreferenceTypeName).replace('§userType', cohortRosterChangeUserPreference.UserType);
+        let UserPreferenceObservable = this.rosterService.getRosterCohortUserPreference(userPreferenceURL);
+        this.getUserPreferenceSubscription = UserPreferenceObservable
+            .map(response => response.json())
+            .subscribe(json => {
+                __this.rosterCohortUserPreferenceModel = json;
+                if (__this.rosterCohortUserPreferenceModel.PreferenceValue === cohortRosterChangeUserPreference.PreferenceTypeHideValueName) {
+                    __this.router.navigate(['/rosters/change-update']);
+                } else {
+                   __this.router.navigate(['/rosters/changes-note']);
+                }
+
+            }, error => console.log(error));
+    }
+
+    directToChangeForm(cohortId, cohortName) {
+        this.rosterChangesModel.institutionId = this.institutionId;
+        this.rosterChangesModel.cohortId = cohortId;
+        this.rosterChangesModel.cohortName = cohortName;
+        this.sStorage = this.common.getStorage();
+        this.sStorage.setItem('rosterChangesModel', JSON.stringify(this.rosterChangesModel))
+
+        this.apiServer = this.auth.common.getApiServer();
+        this.getUserPreference();
     }
 
 }

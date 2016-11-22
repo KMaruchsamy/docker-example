@@ -6,7 +6,7 @@ import {Title} from '@angular/platform-browser';
 import * as _ from 'lodash';
 // import {PageHeader} from '../shared/page-header';
 // import {PageFooter} from '../shared/page-footer';
-// import {HomeService} from '../../services/home-service';
+// import {ProfileService} from '../../services/home-service';
 import {links} from '../../constants/config';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';

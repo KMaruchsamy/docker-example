@@ -2,6 +2,8 @@ import { Observable } from 'rxjs/Rx';
 import { RequestOptions, Headers, Http, Response } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './../../services/auth.service';
+import { ProfileModel } from './../../models/profile.model';
+
 
 @Injectable()
 export class RosterService {

@@ -14,6 +14,7 @@ import { ChooseInstitutionComponent } from './components/shared/choose-instituti
 import { ProfileDescriptionComponent } from './components/home/profile-description.component';
 import { ReportsComponent } from './components/reports/reports.component';
 import { RostersComponent } from './components/rosters/rosters.component';
+import { RostersChangesUpdatesComponent } from './components/rosters/rosters-changes-updates.component';
 import { GroupsComponent } from './components/groups/groups.component';
 import { ManageTestsComponent } from './components/tests/manage-tests.component';
 import { ChooseTestComponent } from './components/tests/choose-test.component';
@@ -50,6 +51,7 @@ const APP_ROUTES: RouterConfig = [
     { path: 'reports', component: ReportsComponent },
     { path: 'rosters', component: RostersComponent },
     { path: 'rosters/changes-note', component: RosterChangeNoteComponent },
+    { path: 'rosters/change-update', component: RostersChangesUpdatesComponent, canDeactivate:[SharedDeactivateGuard] },
     { path: 'groups', component: GroupsComponent},
     { path: 'tests', component: ManageTestsComponent, pathMatch:"full" },
     { path: 'tests/choose-test/:institutionId', component: ChooseTestComponent, canDeactivate:[SharedDeactivateGuard] },

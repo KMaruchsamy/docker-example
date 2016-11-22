@@ -66,7 +66,6 @@ export class RosterChangeNoteComponent implements OnInit, OnDestroy {
         if (this.auth.isAuth()) {
             this.titleService.setTitle('Change Note – Kaplan Nursing');
             this.apiServer = this.auth.common.getApiServer();
-            this.getUserPreference();
         }
         else
             this.router.navigate(['/']);
@@ -101,23 +100,9 @@ export class RosterChangeNoteComponent implements OnInit, OnDestroy {
         this.setUserPreferenceSubscription = UserPreferenceObservable
             .map(response => response.json())
             .subscribe(json => {
-                __this.router.navigate(['/']); //New Page route to be added here..
+                __this.router.navigate(['/rosters/change-update']);
 
             }, error => console.log(error));
     }
-
-    getUserPreference(): void {
-        let __this = this;
-        let userPreferenceURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.rosters.getUserPreference}`;
-        userPreferenceURL = userPreferenceURL.replace('§userId', this.auth.userid.toString()).replace('§preferenceTypeName', cohortRosterChangeUserPreference.PreferenceTypeName).replace('§userType', cohortRosterChangeUserPreference.UserType);
-        let UserPreferenceObservable = this.rosterService.getRosterCohortUserPreference(userPreferenceURL);
-        this.getUserPreferenceSubscription = UserPreferenceObservable
-            .map(response => response.json())
-            .subscribe(json => {
-                __this.rosterCohortUserPreferenceModel = json;
-                if (__this.rosterCohortUserPreferenceModel.PreferenceValue === cohortRosterChangeUserPreference.PreferenceTypeHideValueName)
-                    __this.router.navigate(['/']);  //New Page route get tobe added here..
-
-            }, error => console.log(error));
-    }
+    
 }

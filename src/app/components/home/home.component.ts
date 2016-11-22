@@ -11,7 +11,7 @@ import {PageScroll} from 'ng2-page-scroll/ng2-page-scroll';
 import * as _ from 'lodash';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
-import { HomeService } from './home.service';
+import { ProfileService } from './../../services/profile.service';
 import { TestService } from './../tests/test.service';
 import { PageHeaderComponent } from './../shared/page-header.component';
 import { PageFooterComponent } from './../shared/page-footer.component';
@@ -21,7 +21,7 @@ import { ProfileModel } from './../../models/profile.model';
 
 @Component({
     selector: 'home',
-    providers: [AuthService, CommonService, HomeService, TestService, TestScheduleModel],
+    providers: [AuthService, CommonService, ProfileService, TestService, TestScheduleModel],
     templateUrl: 'components/home/home.component.html',
     directives: [PageHeaderComponent, PageFooterComponent, NgIf, ProfileComponent, ROUTER_DIRECTIVES, Angulartics2On, RouterLinkActive, PageScroll]
 })
@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     profilesSubscription: Subscription;
     subjectsSubscription: Subscription;
     isMultiCampus: boolean = false;
-    constructor(public router: Router, public auth: AuthService, public location: Location, public common: CommonService, public homeService: HomeService, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
+    constructor(public router: Router, public auth: AuthService, public location: Location, public common: CommonService, public profileService: ProfileService, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
     }
 
     ngOnDestroy() {
@@ -75,7 +75,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         let institutionID = this.getLatestInstitution();
         if (institutionID > 0) {
             let url = this.apiServer + links.api.baseurl + links.api.admin.profilesapi + '?institutionId=' + institutionID;
-            let profilesObservable: Observable<Response> = this.homeService.getProfiles(url);
+            let profilesObservable: Observable<Response> = this.profileService.getProfiles(url);
             this.profilesSubscription = profilesObservable
                 .map(response => response.json())
                 .subscribe(json => {
@@ -86,7 +86,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 () => console.log('complete')
                 );
 
-            // let profilePromise = this.homeService.getProfiles(url);
+            // let profilePromise = this.profileService.getProfiles(url);
             // profilePromise.then((response) => {
             //     return response.json();
             // })
@@ -108,10 +108,10 @@ export class HomeComponent implements OnInit, OnDestroy {
             _.forEach(json, function (profile, key) {
                 if (profile && profile.KaplanAdminTypeName !== undefined) {
                     if (profile.KaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER') {
-                        self.accountManagerProfile = self.homeService.bindToModel(profile);
+                        self.accountManagerProfile = self.profileService.bindToModel(profile);
                     }
                     else {
-                        self.nurseConsultantProfile = self.homeService.bindToModel(profile);
+                        self.nurseConsultantProfile = self.profileService.bindToModel(profile);
                     }
                 }
             });
