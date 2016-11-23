@@ -1,19 +1,22 @@
-import { Observable, Subscription } from 'rxjs/Rx';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { links, roster } from '../../constants/config';
+import { Observable, Subscription } from 'rxjs/Rx';
+import { links } from '../../constants/config';
 import { Response } from '@angular/http';
-import * as _ from 'lodash';
-import { ProfileService } from './../../services/profile.service';
 import { AuthService } from './../../services/auth.service';
-
+import { ProfileService } from './../../services/profile.service';
+import { RosterChangesModel } from '../../models/roster-changes.model';
 
 @Component({
-    selector: 'rosters-faq',
+    selector: 'rosters-AM-info',
     providers: [ProfileService, AuthService],
-    templateUrl: 'components/rosters/rosters-faq.component.html',
+    templateUrl: 'components/rosters/rosters-AM-info.component.html',
+    styleUrls: ['components/rosters/rosters-AM-info.component.css'],
     directives: []
 })
-export class RostersFaqComponent implements OnDestroy {
+
+export class RostersAMInfoComponent implements OnDestroy {
+    @Input() rosterChangesModel: RosterChangesModel;
+
     _accountManagerId: number;
     @Input()
     set accountManagerId(value: number) {
@@ -24,43 +27,30 @@ export class RostersFaqComponent implements OnDestroy {
         return this._accountManagerId;
     }
 
-
-    visiblefaq1: boolean = false;
-    visiblefaq2: boolean = false;
-    visiblefaq3: boolean = false;
-    visiblefaq4: boolean = false;
     profileSubscription: Subscription;
     accountManagerFirstName: string;
     accountManagerLastName: string;
     accountManagerPhoneNumber: string;
-    accountManagerEmail: string;
-    customChangeForm: string;
-    classRosterFormUrl: string = roster.classRosterForm;
-    constructor(private profileService: ProfileService, private auth: AuthService) {
-        this.classRosterFormUrl = roster.classRosterForm;
-    }
+    accountManagerPhotoURI: string;
 
+    constructor(private profileService: ProfileService, private auth: AuthService) {}
   
-
     ngOnDestroy() {
         this.profileSubscription.unsubscribe();
     }
 
-   
-
     loadProfileDescription(): void {
         let url = `${this.auth.common.getApiServer()}${links.api.baseurl}${links.api.admin.profilesapi}/${this.accountManagerId}`;
         let profileObservable: Observable<Response> = this.profileService.getProfile(url);
-        let self: RostersFaqComponent = this;
+        let self: RostersAMInfoComponent = this;
         this.profileSubscription = profileObservable
             .map(response => response.json())
             .subscribe(json => {
                 if (json) {
-                    self.accountManagerEmail = json.Email;
-                    self.accountManagerFirstName = json.FirstName;
-                    self.accountManagerLastName = json.LastName;
-                    self.accountManagerPhoneNumber = json.Telephone;
-                    self.customChangeForm = json.LinksForFrontEnd[0].LinkUrl;
+                    self.rosterChangesModel.accountManagerFirstName = json.FirstName;
+                    self.rosterChangesModel.accountManagerLastName = json.LastName;
+                    self.rosterChangesModel.accountManagerPhoneNumber = json.Telephone;
+                    self.rosterChangesModel.accountManagerPhotoURI = json.Photo.PhotoUrl;
                 } 
             },
             error => console.log(error.message),
@@ -68,5 +58,6 @@ export class RostersFaqComponent implements OnDestroy {
                 //done callback
             });
     }
+
 }
 

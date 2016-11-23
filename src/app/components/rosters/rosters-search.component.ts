@@ -6,7 +6,7 @@ import {Response} from '@angular/http';
 import * as _ from 'lodash';
 import { CommonService } from './../../services/common.service';
 import { RosterService } from './roster.service';
-import { RosterCohortStudentsModal } from './../../models/roster-cohort-students.model';
+import { RosterCohortStudentsModel } from './../../models/roster-cohort-students.model';
 import * as moment from 'moment-timezone';
 
 @Component({
@@ -35,11 +35,12 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
     searchString: string;
     validInstitution: boolean = false;
     searchStudentsSubscription: Subscription;
-    activeStudents: Array<RosterCohortStudentsModal>;
-    inactiveStudents: Array<RosterCohortStudentsModal>;
+    activeStudents: Array<RosterCohortStudentsModel>;
+    inactiveStudents: Array<RosterCohortStudentsModel>;
     anyRepeatStudents: boolean = false;
     anyExpiredStudents: boolean = false;
     anyStudentPayStudents: boolean = false;
+    anyDuplicateStudents: boolean = false;
     searchTriggered: boolean = false;
     prevSearchText: string = "";
     typeaheadStudentlist: any;
@@ -105,7 +106,7 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
         }
         try {
             if (this.typeaheadStudentlist) {
-                this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = false;
+                this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = this.anyDuplicateStudents = false;
                 if (this.typeaheadStudentlist.Active && this.typeaheadStudentlist.Active.length > 0) {
                     this.activeStudents = this.mapStudents(this.filterStudents(this.typeaheadStudentlist.Active), true);
                 }
@@ -119,7 +120,7 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
             });
             $('.typeahead').typeahead('close');
         } catch (error) {
-            this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = false;
+            this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = this.anyDuplicateStudents = false;
             this.activeStudents = this.inactiveStudents = [];
         }
     }
@@ -131,7 +132,7 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
             return [];
         else
             return _.map(objStudents, (student: any) => {
-                let rosterCohortStudent = new RosterCohortStudentsModal();
+                let rosterCohortStudent = new RosterCohortStudentsModel();
                 rosterCohortStudent.cohortId = student.CohortId;
                 rosterCohortStudent.cohortName = student.CohortName;
                 rosterCohortStudent.email = student.Email;
@@ -154,7 +155,11 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
                     rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate && moment(rosterCohortStudent.repeatExpiryDate).isAfter(new Date(), 'day');
                     rosterCohortStudent.isExpiredStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !rosterCohortStudent.studentPayInstitution);
                     rosterCohortStudent.isStudentPayDeactivatedStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !!rosterCohortStudent.studentPayInstitution);
-
+                    
+                    if (!this.anyDuplicateStudents) {
+                    if (rosterCohortStudent.isDuplicate)
+                        this.anyDuplicateStudents = true;
+                }
 
                     if (!this.anyRepeatStudents) {
                         if (rosterCohortStudent.isRepeatStudent)
@@ -232,7 +237,7 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
                     }
                 },
                 error => {
-                    this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = false;
+                    this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = this.anyDuplicateStudents = false;
                     this.activeStudents = this.inactiveStudents = [];
                 });
         }

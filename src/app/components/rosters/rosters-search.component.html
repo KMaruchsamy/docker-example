@@ -47,6 +47,10 @@
             <td>{{activeStudent.cohortName}}</td>
           </tr>
         </table>
+        <div *ngIf="anyDuplicateStudents" class="small-icon-container-flush-text margin-1em-top">
+          <img src="images/identity-icon.png" class="duplicate-student-icon" alt="duplicate student icon" height="18" width="18"/>
+          <p>Student has the same first and last name as another student in this cohort roster. Click or tap on the icon to view the student’s email address.</p>
+        </div>
         <div class="inline-icon-container clearfix">
           <div *ngIf="anyRepeatStudents" class="left margin-right-1em" id="repeatIcon">
             <img src="images/repeat-icon.png" class="inline-icon" alt="payment alert icon" height="18" width="18" />
@@ -57,7 +61,7 @@
             <span>Student access has expired</span>
           </div>
           <div *ngIf="anyStudentPayStudents" class="left" id="studentIcon">
-            <img src="images/self-pay-alert-icon.svg" class="inline-icon" alt="payment alert icon" />
+            <img src="images/self-pay-alert-icon.svg" class="inline-icon" alt="payment alert icon" height="18" width="18"/>
             <span>Student has been deactivated due to non-payment</span>
           </div>
         </div>
