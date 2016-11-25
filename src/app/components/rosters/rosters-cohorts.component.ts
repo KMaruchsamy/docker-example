@@ -224,7 +224,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
 
     isExtensionCohort(cohortName: string)
     {
-        if (cohortName.toUpperCase().indexOf('EXTENSION') === 0)
+        if (cohortName.toUpperCase().indexOf('EXTENSION') != -1)
             return true;
         else
             return false;
