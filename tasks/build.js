@@ -62,6 +62,11 @@ gulp.task('build.assets', function (done) {
             base: config.app
         })
             .pipe(gulp.dest(config.build.path));
+
+         gulp.src(config.assets + '**/*.*', {
+            base: config.app
+        })
+            .pipe(gulp.dest(config.build.path));
       
         gulp.src(config.index)      
             .pipe(inject(
