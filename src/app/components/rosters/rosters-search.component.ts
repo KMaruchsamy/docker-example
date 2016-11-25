@@ -111,7 +111,7 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
                     this.activeStudents = this.mapStudents(this.filterStudents(this.typeaheadStudentlist.Active), true);
                 }
                 if (this.typeaheadStudentlist.InactiveOrExpired && this.typeaheadStudentlist.InactiveOrExpired.length > 0) {
-                    this.inactiveStudents = this.mapStudents(this.filterStudents(this.typeaheadStudentlist.InactiveOrExpired), false);
+                    this.inactiveStudents = this.mapStudents(this.filterStudents(this.typeaheadStudentlist.InactiveOrExpired), true);
                 }
             }
             this.searchTriggered = true;
