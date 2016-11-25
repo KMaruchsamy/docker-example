@@ -1,36 +1,41 @@
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
-// import {CommonService} from '../../services/common';
-// import { RosterService } from './../../services/roster.service';
 import { NgFor, NgIf } from '@angular/common';
-// import { RosterCohortsModal } from './../../models/roster-cohorts.modal';
-// import { RosterCohortStudentsModal } from './../../models/roster-cohort-students.modal';
-// import { RostersModal } from './../../models/rosters.modal';
 import { Component, Input, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import {RouterLink, ROUTER_DIRECTIVES} from '@angular/router';
 import * as _ from 'lodash';
-import {links} from '../../constants/config';
+import { AuthService } from './../../services/auth.service';
+import {links, Timezones, cohortRosterChangeUserPreference} from '../../constants/config';
 import {Observable, Subscription} from 'rxjs/Rx';
 import {Response} from '@angular/http';
 import { RostersModal } from './../../models/rosters.model';
-import { RosterCohortsModal } from './../../models/roster-cohorts.model';
-import { RosterCohortStudentsModal } from './../../models/roster-cohort-students.model';
+import { RosterCohortsModel } from './../../models/roster-cohorts.model';
+import { RosterCohortStudentsModel } from './../../models/roster-cohort-students.model';
 import { CommonService } from './../../services/common.service';
 import { RosterService } from './roster.service';
 import * as moment from 'moment-timezone';
+import { Router } from '@angular/router';
+import { RosterChangesModel } from '../../models/roster-changes.model';
+import {RosterCohortUserPreferenceModel} from './../../models/roster-cohort-user-preference.model';
 
 @Component({
     selector: 'rosters-cohorts',
-    providers: [RostersModal, RosterCohortsModal, RosterCohortStudentsModal, CommonService, RosterService],
+    providers: [RostersModal, RosterCohortsModel, RosterCohortStudentsModel, RosterCohortUserPreferenceModel, CommonService, RosterService, AuthService],
     encapsulation: ViewEncapsulation.Emulated,
     templateUrl: 'components/rosters/rosters-cohorts.component.html',
-    directives: [NgIf, NgFor],
+    directives: [NgIf, NgFor, RouterLink, ROUTER_DIRECTIVES],
     pipes: [ParseDatePipe],
     styles: [`
-    li.name-multiple-icons  {
-        padding-right: 55px !important;
+    .name-multiple-icons  {
+        top: -.75em;
+        right: -.75em;
         position: relative;
     }
+    .list-item-with-icons {
+        padding-right: 55px !important;
+    }
     .small-popover {
-        margin-left: 3px;
+        margin-left: -0.15em;
+        margin-right: .25em;
     }
     .large-expander-trigger {
         padding-right: 100px;
@@ -39,6 +44,7 @@ import * as moment from 'moment-timezone';
 export class RostersCohortsComponent implements OnInit, OnDestroy {
     _institutionId: number;
     noCohorts: Boolean = false;
+    sStorage: any;
     @Input()
     set institutionId(value: number) {
         this._institutionId = value;
@@ -51,8 +57,11 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
     searchString: string;
     cohortSubscription: Subscription;
     cohortStudentsSubscription: Subscription;
+    apiServer: string;
+    getUserPreferenceSubscription: Subscription;
+    rosterCohortUserPreferenceModel: RosterCohortUserPreferenceModel;
 
-    constructor(public rosters: RostersModal, private rosterService: RosterService, private common: CommonService) { }
+    constructor(public rosters: RostersModal, private rosterService: RosterService, private common: CommonService, private router: Router, private auth: AuthService, private rosterChangesModel: RosterChangesModel) { }
 
     ngOnInit() {
         $('body').on('hidden.bs.popover', function (e) {
@@ -78,9 +87,9 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
     }
 
     loadCohorts(roster: any) {
-        let rosterCohorts: Array<RosterCohortsModal>;
+        let rosterCohorts: Array<RosterCohortsModel>;
         if (roster) {
-            let extensionCohort: RosterCohortsModal;
+            let extensionCohort: RosterCohortsModel;
             this.rosters.institutionId = roster.InstitutionId;
             this.rosters.institutionName = roster.InstitutionName;
             this.rosters.institutionNameWithProgOfStudy = roster.InstitutionNameWithProgOfStudy;
@@ -97,7 +106,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
                         return new Date(o.CohortEndDate);
                 }, 'desc');
                 this.rosters.cohorts = _.map(roster.Cohorts, (cohort: any) => {
-                    let rosterCohort = new RosterCohortsModal();
+                    let rosterCohort = new RosterCohortsModel();
                     rosterCohort.cohortId = cohort.CohortId;
                     rosterCohort.cohortName = cohort.CohortName;
                     rosterCohort.cohortStartDate = cohort.CohortStartDate;
@@ -129,11 +138,11 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         }
     }
 
-    loadRosterCohortStudents(cohort: RosterCohortsModal, cohortStudents: any) {
-        let rosterCohortStudents: Array<RosterCohortStudentsModal> = [];
+    loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
+        let rosterCohortStudents: Array<RosterCohortStudentsModel> = [];
         if (cohortStudents) {
             rosterCohortStudents = _.map(cohortStudents, (student: any) => {
-                let rosterCohortStudent = new RosterCohortStudentsModal();
+                let rosterCohortStudent = new RosterCohortStudentsModel();
                 rosterCohortStudent.cohortId = student.CohortId;
                 rosterCohortStudent.cohortName = student.CohortName;
                 rosterCohortStudent.email = student.Email;
@@ -153,6 +162,11 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
                         && student.FirstName.toUpperCase() === stud.FirstName.toUpperCase()
                         && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
                 });
+
+                if (!cohort.hasDuplicateStudent) {
+                    if (rosterCohortStudent.isDuplicate)
+                        cohort.hasDuplicateStudent = true;
+                }
 
                 if (!cohort.hasRepeatStudent) {
                     if (rosterCohortStudent.isRepeatStudent)
@@ -178,7 +192,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
     }
 
     rosterCohortStudents(cohortId: number): any {
-        let rosterCohort: RosterCohortsModal = _.find(this.rosters.cohorts, { "cohortId": cohortId });
+        let rosterCohort: RosterCohortsModel = _.find(this.rosters.cohorts, { "cohortId": cohortId });
         if (rosterCohort) {
             if (rosterCohort.students || rosterCohort.visible) {
                 rosterCohort.visible = !rosterCohort.visible;
@@ -206,6 +220,50 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         }
 
 
+    }
+
+    isExtensionCohort(cohortName: string)
+    {
+        if (cohortName.toUpperCase().indexOf('EXTENSION') != -1)
+            return true;
+        else
+            return false;
+    }
+
+    isCohortAboutToExpire(cohort: RosterCohortsModel) {
+        let cohortExpiry = moment(cohort.cohortEndDate);
+        let dateAfterTwoWeek = moment().add(14, "days").tz(Timezones.GMTminus5);
+        let isExpire = cohortExpiry.isSameOrBefore(dateAfterTwoWeek);
+        return isExpire;
+    }
+
+    getUserPreference(): void {
+        let __this = this;
+        let userPreferenceURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.rosters.getUserPreference}`;
+        userPreferenceURL = userPreferenceURL.replace('§userId', this.auth.userid.toString()).replace('§preferenceTypeName', cohortRosterChangeUserPreference.PreferenceTypeName).replace('§userType', cohortRosterChangeUserPreference.UserType);
+        let UserPreferenceObservable = this.rosterService.getRosterCohortUserPreference(userPreferenceURL);
+        this.getUserPreferenceSubscription = UserPreferenceObservable
+            .map(response => response.json())
+            .subscribe(json => {
+                __this.rosterCohortUserPreferenceModel = json;
+                if (__this.rosterCohortUserPreferenceModel.PreferenceValue === cohortRosterChangeUserPreference.PreferenceTypeHideValueName) {
+                    __this.router.navigate(['/rosters/change-update']);
+                } else {
+                   __this.router.navigate(['/rosters/changes-note']);
+                }
+
+            }, error => console.log(error));
+    }
+
+    directToChangeForm(cohortId, cohortName) {
+        this.rosterChangesModel.institutionId = this.institutionId;
+        this.rosterChangesModel.cohortId = cohortId;
+        this.rosterChangesModel.cohortName = cohortName;
+        this.sStorage = this.common.getStorage();
+        this.sStorage.setItem('rosterChangesModel', JSON.stringify(this.rosterChangesModel))
+
+        this.apiServer = this.auth.common.getApiServer();
+        this.getUserPreference();
     }
 
 }

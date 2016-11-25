@@ -62,7 +62,7 @@
 
 <confirmation-popup [popupId]="'cancelChangesPopup'" [message]="'Cancel changes to testing session and return to Manage Tests main page?'"
 [okButtonText]="'Yes'" [cancelButtonText]="'No, continue making changes'" (onOK)="cancelChanges()" (onCancel)="continueMakingChanges()"
-[hideClose]="true">
+[hideClose]="false">
 </confirmation-popup>
 
 <confirmation-popup 
@@ -72,5 +72,5 @@
     [cancelButtonText] = "'No, continue making changes'" 
     (onOK)="cancelChanges()" 
     (onCancel)="continueMakingChanges()"
-    [hideClose]="true" >
+    [hideClose]="false">
 </confirmation-popup>

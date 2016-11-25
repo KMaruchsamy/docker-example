@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { SharedDeactivateGuard } from './guards/shared.deactivate.guard';
 import { LogService } from './services/log.service';
 import { AuthService } from './services/auth.service';
+import { RosterChangesModel } from './models/roster-changes.model';
 
 enableProdMode();
 
@@ -23,5 +24,6 @@ bootstrap(AppComponent, [
     Angulartics2,
     Title,
     LogService,
-    AuthService
+    AuthService,
+    RosterChangesModel
 ])

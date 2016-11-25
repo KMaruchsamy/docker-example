@@ -2,6 +2,8 @@ import { Observable } from 'rxjs/Rx';
 import { RequestOptions, Headers, Http, Response } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './../../services/auth.service';
+import { ProfileModel } from './../../models/profile.model';
+
 
 @Injectable()
 export class RosterService {
@@ -48,5 +50,20 @@ export class RosterService {
     searchStudents(url): Observable<Response> {
         return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
+    setUserPreference(url: string, input: string): Observable<Response> {
+        let self = this;
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.auth.authheader
+        });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        return this.http.post(url, input, requestOptions);
+    }
 
+    getRosterCohortUserPreference(url): Observable<Response> {
+        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
+    }
 }

@@ -101,7 +101,7 @@
 
 <confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
     [okButtonText]="'Yes, leave this page'" [cancelButtonText]="'No, stay on this page'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation($event)"
-    [hideClose]="true">
+    [hideClose]="false">
 </confirmation-popup>
 
 <alert-popup [popupId]="'alertPopup'" [message]="'We’re sorry! The testing window you specified has expired and needs to be changed. Please specify a new testing window.'"

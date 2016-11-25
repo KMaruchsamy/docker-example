@@ -1,14 +1,12 @@
 import {Injectable, Inject} from '@angular/core';
 import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
-// import {AuthService} from './auth';
-// import {ProfileModel} from '../models/profile-model';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs/Rx';
-import { AuthService } from './../../services/auth.service';
-import { ProfileModel } from './../../models/profile.model';
+import { AuthService } from './../services/auth.service';
+import { ProfileModel } from './../models/profile.model';
 
 @Injectable()
-export class HomeService {
+export class ProfileService {
 	auth: AuthService;
 	constructor(public http: Http) {	
 		this.http = http;

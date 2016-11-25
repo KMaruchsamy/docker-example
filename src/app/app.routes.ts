@@ -14,6 +14,7 @@ import { ChooseInstitutionComponent } from './components/shared/choose-instituti
 import { ProfileDescriptionComponent } from './components/home/profile-description.component';
 import { ReportsComponent } from './components/reports/reports.component';
 import { RostersComponent } from './components/rosters/rosters.component';
+import { RostersChangesUpdatesComponent } from './components/rosters/rosters-changes-updates.component';
 import { GroupsComponent } from './components/groups/groups.component';
 import { ManageTestsComponent } from './components/tests/manage-tests.component';
 import { ChooseTestComponent } from './components/tests/choose-test.component';
@@ -28,6 +29,7 @@ import { ConfirmationModifyInProgressComponent } from './components/tests/confir
 import { AccountErrorComponent } from './components/errors/accounterror.component';
 import { UnhandledExceptionComponent } from './components/errors/unhandledexception.component';
 import { PageNotFoundComponent } from './components/errors/pagenotfound.component';
+import {RosterChangeNoteComponent} from './components/rosters/roster-change-note.component';
 
 const APP_ROUTES: RouterConfig = [
     { path: '', component: LoginComponent, pathMatch:"full"  },
@@ -48,6 +50,8 @@ const APP_ROUTES: RouterConfig = [
     { path: 'profiles/:id', component: ProfileDescriptionComponent},
     { path: 'reports', component: ReportsComponent },
     { path: 'rosters', component: RostersComponent },
+    { path: 'rosters/changes-note', component: RosterChangeNoteComponent },
+    { path: 'rosters/change-update', component: RostersChangesUpdatesComponent, canDeactivate:[SharedDeactivateGuard] },
     { path: 'groups', component: GroupsComponent},
     { path: 'tests', component: ManageTestsComponent, pathMatch:"full" },
     { path: 'tests/choose-test/:institutionId', component: ChooseTestComponent, canDeactivate:[SharedDeactivateGuard] },
@@ -65,7 +69,7 @@ const APP_ROUTES: RouterConfig = [
     { path: 'testing-session-expired', component: LastTestingSessionComponent },
     { path: 'tests/confirmation-modify-in-progress', component: ConfirmationModifyInProgressComponent },
     { path: 'accounterror', component: AccountErrorComponent },
-    { path: 'error', component: UnhandledExceptionComponent },
+    { path: 'error', component: UnhandledExceptionComponent },    
     { path: '**', component: PageNotFoundComponent },
 ]
 

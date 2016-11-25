@@ -53,8 +53,8 @@ import * as moment from 'moment-timezone';
     styles: [`#addByName.active + #cohortStudentList .add-students-table-search {display: table; width: 100%;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
-    providers: [TestService, AuthService, TestScheduleModel, SelectedStudentModel, CommonService, LogService, RetesterAlternatePopupComponent, RetesterNoAlternatePopupComponent, TimeExceptionPopupComponent, AlertPopupComponent, SelfPayStudentPopupComponent, UtilityService, StudentsStartedTestComponent],
-    directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, NgFor, ConfirmationPopupComponent, ROUTER_DIRECTIVES, AlertPopupComponent, TestingSessionStartingPopupComponent],
+    providers: [TestService, AuthService, TestScheduleModel, SelectedStudentModel, CommonService, LogService, RetesterAlternatePopupComponent, RetesterNoAlternatePopupComponent, TimeExceptionPopupComponent, AlertPopupComponent, SelfPayStudentPopupComponent, UtilityService],
+    directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, NgFor, ConfirmationPopupComponent, ROUTER_DIRECTIVES, AlertPopupComponent, TestingSessionStartingPopupComponent, StudentsStartedTestComponent],
     pipes: [RemoveWhitespacePipe, SortPipe, ParseDatePipe]
 })
 
@@ -2104,7 +2104,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         if (studentRemovedFromSession.length > 0) {
             if (this.loader)
                 this.loader.destroy();
-            this.dynamicComponentLoader.loadNextToLocation(StudentsStartedTest, this.viewContainerRef)
+            this.dynamicComponentLoader.loadNextToLocation(StudentsStartedTestComponent, this.viewContainerRef)
                 .then(hasStartedTest => {
                     this.loader = hasStartedTest;
                     $('#studentsStartedTest').modal('show');
