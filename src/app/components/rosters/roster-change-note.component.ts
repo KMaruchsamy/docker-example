@@ -10,7 +10,7 @@ import {links, cohortRosterChangeUserPreference} from '../../constants/config';
 import {RosterCohortUserPreferenceModel} from './../../models/roster-cohort-user-preference.model';
 
 @Component({
-    selector: 'accounterror',
+    selector: 'rosterschangenote',
     directives: [ROUTER_DIRECTIVES, PageHeaderComponent, RouterLink],
     providers: [AuthService, CommonService, RosterService, RosterCohortUserPreferenceModel],
     template: `<page-header [hideDropdown]=true></page-header>   
@@ -19,7 +19,7 @@ import {RosterCohortUserPreferenceModel} from './../../models/roster-cohort-user
             <div class="branding-center">
                 <h1 class="center">
                 <!--If user is signed out, this link would be disabled-->
-                <a [routerLink]="['/home']">
+                <a href="javascript:void(0);">
                     <img class="branding-logo-white" src="images/logo-white_2x.png" alt="Kalplan Nursing">
                     <span class="screen-reader-only">Kaplan Nursing Faculty Home Page</span>
                 </a>

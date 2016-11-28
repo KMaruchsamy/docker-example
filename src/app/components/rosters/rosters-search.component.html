@@ -85,6 +85,10 @@
             <td><i>{{inactiveStudent.cohortName}}</i></td>
           </tr>
         </table>
+        <div *ngIf="anyDuplicateStudents" class="small-icon-container-flush-text margin-1em-top">
+          <img src="images/identity-icon.png" class="duplicate-student-icon" alt="duplicate student icon" height="18" width="18"/>
+          <p>Student has the same first and last name as another student in this cohort roster. Click or tap on the icon to view the student’s email address.</p>
+        </div>
         <button class="anchor-button right clear-search link-darker mobile-left" (click)="clear($event)">Clear search results</button>
       </div>
 
