@@ -13,22 +13,10 @@ import {RosterCohortUserPreferenceModel} from './../../models/roster-cohort-user
     selector: 'rosterschangenote',
     directives: [ROUTER_DIRECTIVES, PageHeaderComponent, RouterLink],
     providers: [AuthService, CommonService, RosterService, RosterCohortUserPreferenceModel],
-    template: `<page-header [hideDropdown]=true></page-header>   
-            <header class="inner-banner" role="banner">
-            <div class="container">
-            <div class="branding-center">
-                <h1 class="center">
-                <!--If user is signed out, this link would be disabled-->
-                <a href="javascript:void(0);">
-                    <img class="branding-logo-white" src="images/logo-white_2x.png" alt="Kalplan Nursing">
-                    <span class="screen-reader-only">Kaplan Nursing Faculty Home Page</span>
-                </a>
-                </h1>
-            </div>
-            </div>
-            </header>
+    template: `<page-header [hideDropdown]=true [showCover]=true [ariaDisabled]=true></page-header>   
+
             <main role="main" class="app-main app-main-no-nav">
-            <div class="section">
+            
             <div class="container-narrow center">
                 <i class="icon large-roster-icon"></i>
                 <h2 class="margin-1em-top">Requesting cohort roster changes or updates</h2>
@@ -47,7 +35,7 @@ import {RosterCohortUserPreferenceModel} from './../../models/roster-cohort-user
                 </div>
 
             </div>
-            </div>
+            
             </main>`
 })
 export class RosterChangeNoteComponent implements OnInit, OnDestroy {
