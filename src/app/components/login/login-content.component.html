@@ -1,0 +1,64 @@
+<main class="sign-in" role="main">
+    <form>
+        <div class="container-narrow">
+            <div *ngIf="isError" #errorcontainer class="alert alert-error alert-dismissible" role="alert">
+                <button type="button" class="close close-red" aria-label="Close" #close (click)="closealert(close);"></button>
+                <span role="status" aria-live="assertive" aria-atomic="true">
+                    <span id="spnErrorMessage">{{errorMessage}}</span>
+                </span>
+            </div>
+            <h3 class="center white-text">Sign in</h3>
+            <div class="form-group">
+                <label class="label-inline h5 white-text label-bold" for="username">Email address</label>
+                <input id="username" #username type="text" aria-required="true">
+            </div>
+            <div class="form-group">
+                <label class="label-inline h5 white-text label-bold" for="password">Password</label>
+                <input id="password" #password type="password" aria-required="true">
+            </div>
+        </div>
+
+        <div class="section-margin">
+            <div class="radio-sign-in radio-sign-in-faculty">
+                <div class="sign-in-faculty-grid radio-large">
+                    <input type="radio" #rdfaculty id="faculty_site" [(ngModel)]="site"  name="site" value="faculty">
+                    <label for="faculty_site" class="h3 white-text label-bold">Faculty Site</label>
+                    <p class="text-larger">Schedule tests, track your students’ performance, access teaching tools and more</p>
+                </div>
+            </div>
+            <div class="radio-sign-in radio-sign-in-student">
+                <div class="sign-in-student-grid radio-large">
+                    <input type="radio" #rdstudent id="student_site" [(ngModel)]="site"  name="site" value="student">
+                    <label for="student_site" class="h3 white-text label-bold">Student Site</label>
+                    <p class="text-larger">See what your students see:<br /> take practice tests, access course books, review content</p>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="button button-x-large button-centered" #signin (click)="onSignIn(username,password,rdfaculty,rdstudent,$event);"
+        id="faculty-signin">
+            Sign in
+        </button>
+    </form>
+
+    <div class="center">
+        <a [routerLink]="['/forgot-password']" class="forgot-password white-text" angulartics2On="click" angularticsEvent="ForgotPasswordClick" angularticsCategory="LoginHelp">Forgot your password?</a>
+    </div>
+
+    <form id="myForm"  method="POST" target="_blank">
+        <input  type="hidden" id="institutionID" name="institutionID">
+        <input  type="hidden" id="jwtToken" name="jwtToken">
+        <input  type="hidden" id="redirectPage" name="redirectPage">
+        <input  type="hidden" id="exceptionURL" name="exceptionURL">
+    </form>
+
+</main>
+
+<terms-of-use [showTerms]="showTerms"
+              (buttonEvent)="confirm()"
+              (cancelEvent)="onCancel()"
+              [showX]="false"
+              [showCancel]="true"
+              [showCheckbox]="true"
+              [buttonText]="'Confirm'" 
+              [termsAccepted]="false"
+></terms-of-use>  

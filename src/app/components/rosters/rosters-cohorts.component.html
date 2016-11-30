@@ -1,0 +1,58 @@
+<section class="container-medium-width section-medium-thin">
+  <p *ngIf="noCohorts" class="text-larger">We’re sorry, there are no active cohort rosters for this institution. You can search for students in expired or inactive cohort rosters for this institution above.</p>
+  <div class="large-expander" [id]="cohort.cohortId" *ngFor="let cohort of rosters.cohorts">
+    <div class="relative-position">
+      <a class="large-expander-trigger" [class.collapsed]="!cohort.visible" role="button" (click)="rosterCohortStudents(cohort.cohortId)"  href="javascript:void(0)" [attr.aria-expanded]="cohort.visible" [attr.aria-controls]="'cohort' + cohort.cohortId">
+              {{cohort.cohortName}}
+              </a>
+      <span class="vertically-centered">{{cohort.studentCount}} students</span>
+    </div>
+    <div *ngIf="cohort?.students && cohort?.students?.length>0" class="collapse" [class.in]="cohort.visible" [attr.id]="'cohort' + cohort.cohortId">
+      <div class="clearfix">
+        <span><b>Student access active from {{cohort?.cohortStartDate|parseDate:'MMMM D, YYYY'}} to {{cohort?.cohortEndDate|parseDate:'MMMM D, YYYY'}}</b></span>
+        <a (click)="directToChangeForm(cohort.cohortId, cohort.cohortName)" class="right mobile-left-top-margin" *ngIf="!isExtensionCohort(cohort.cohortName) && !isCohortAboutToExpire(cohort) && cohort?.students.length>0">Request change or update</a>
+        <a href="javascript:void(0);" class="right mobile-left-top-margin" *ngIf="((isExtensionCohort(cohort.cohortName) || isCohortAboutToExpire(cohort)) && cohort?.students.length>0)">Request extended access</a>
+      </div>
+      <!--<div class="clearfix">
+        <span>Cohort count last updated on August 17, 2016</span>
+        <a href="#" class="right mobile-left-top-margin">Submit change or update</a>
+      </div>-->
+      <ul class="three-columns-auto cells section-medium-thin" > 
+         <li *ngFor="let student of cohort.students">
+          <div [class.list-item-with-icons]="student?.isRepeatStudent || student?.isStudentPayDeactivatedStudent || student?.isExpiredStudent">
+            <button *ngIf="student.isDuplicate" data-toggle="popover" data-placement="top" [attr.data-content]="student?.email" class="unstyled-button has-popover small-popover">
+              <img src="assets/images/identity-icon.png" alt="duplicate student name icon" width="22" height="22" />
+            </button>
+            {{student.lastName}}, {{student.firstName}}
+          </div>
+         <div [class.name-multiple-icons]="student?.isRepeatStudent || student?.isStudentPayDeactivatedStudent || student?.isExpiredStudent">
+            <img *ngIf="student?.isRepeatStudent" src="assets/images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="repeat student icon" />
+            <img *ngIf="student?.isStudentPayDeactivatedStudent" src="assets/images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon multiple-icons" alt="payment alert icon"/>
+            <img *ngIf="student?.isExpiredStudent" src="assets/images/yellow-clock-icon.png" class="self-pay-alert-table-icon" alt="student access expired icon"/>
+          </div>
+        </li>
+      </ul>
+      <div *ngIf="cohort?.hasDuplicateStudent" class="small-icon-container-flush-text">
+        <img src="images/identity-icon.png" class="duplicate-student-icon" alt="duplicate student icon" height="18" width="18"/>
+        <p>Student has the same first and last name as another student in this cohort roster. Click or tap on the icon to view the student’s email address.</p>
+      </div>
+      <div class="inline-icon-container clearfix">
+        <div class="left margin-right-1em" *ngIf="cohort?.hasRepeatStudent">
+          <img src="assets/images/repeat-icon.png" class="inline-icon" alt="payment alert icon" height="18" width="18" />
+          <span>Repeat student</span>
+        </div>
+        <div class="left" *ngIf="cohort?.hasStudentPayDeactivatedStudent">
+          <img src="assets/images/self-pay-alert-icon.svg" class="inline-icon" alt="payment alert icon" height="18" width="18" />
+          <span>Student has been deactivated due to non-payment</span>
+        </div>
+         <div class="left" *ngIf="cohort?.hasExpiredStudent">
+           <img src="assets/images/yellow-clock-icon.png" class="inline-icon" alt="student access expired icon" height="18" width="18" />
+          <span>Student access has expired</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!cohort?.students || cohort?.students?.length===0" class="collapse" [class.in]="cohort.visible" [attr.id]="'cohort' + cohort.cohortId">
+      <p>There are no students in this cohort roster.</p>
+    </div>
+  </div>
+</section>

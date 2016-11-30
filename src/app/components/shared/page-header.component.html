@@ -1,0 +1,13 @@
+<header class="inner-banner" role="banner" [class.cover-header]="showCover">
+    <div class="container">
+        <div class="branding-center">
+            <h1 class="center">
+                <a [routerLink]="['/home']" routerLinkActive ="active-route" [attr.tabindex]="ariaDisabled ? -1 : null"  [attr.aria-disabled]="ariaDisabled" >
+                    <img class="branding-logo-white" src="assets/images/logo-white_2x.png" alt="Kaplan Nursing">
+                    <span class="screen-reader-only">Kaplan Nursing Faculty Home Page</span>
+                </a>
+            </h1>
+        </div>
+        <dropdown-menu [hideDropdown]="hideDropdown" [ariaDisabled]="ariaDisabled"></dropdown-menu>       
+    </div>
+</header>

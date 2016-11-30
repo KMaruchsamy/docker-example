@@ -1,0 +1,42 @@
+<div class="modal modal-full-overlay fade" id="studentsStartedTest" tabindex="-1" role="dialog" aria-labelledby="studentsStartedTestWarning">
+    <div role="document">
+        <button aria-label="Close"  *ngIf="pageName==='addstudents'" class="close close-large-icon" data-dismiss="modal" type="button"></button>
+        <div class="modal-full-overlay-content">
+            <div class="modal-header">
+                <p class="icon center" [class.clock-alert-icon]="pageName==='scheduletest'" [class.red-triangle-alert-large]="pageName==='addstudents'"></p>
+                <h4 class="attention center" id="studentsStartedTestHeader">{{mainHeader}} </h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="thin-section">
+                    <p class="text-larger-teal">
+                        <b>{{mainContent}}</b>
+                    </p>
+
+                    <p *ngIf="pageName==='addstudents'">
+                        {{subContent}}
+                    </p>
+                    <table [class.table-no-row-borders]="pageName==='scheduletest'">
+                        <tbody class="text-larger-purple" [class.border-top]="pageName==='scheduletest'">
+                            <tr *ngFor="let student of students| sort:'asc':'StudentLastName'">
+                                <td><b>{{student.StudentLastName}}, {{student.StudentFirstName}}</b></td>
+                                <td>{{student.StudentTestName}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+            <!--end modal body Student Pay-->
+            <div class="modal-footer thin-section" *ngIf="pageName==='scheduletest'">
+                <button type="button" id="studentsStartedTestButton" class="button" (click)="OK($event);">OK</button>
+            </div>
+
+            <div class="modal-footer" *ngIf="pageName==='addstudents'">
+                <button type="button" class="anchor-button anchor-button-left prototype-dismiss1" data-dismiss="modal" (click)="back($event);">Go back to Add/Remove Students</button>
+                <a href="javascript:void();" class="button" id="continueToConfirmation" (click)="OK($event);">Continue</a>
+            </div>
+        </div>
+    </div>
+</div>

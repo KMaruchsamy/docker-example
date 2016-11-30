@@ -1,0 +1,127 @@
+<page-header></page-header>
+<main role="main" class="app-main">
+
+    <test-header  [modify]="modify" [modifyInProgress]="modifyInProgress" (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Choose date and time' [testSchedule]="testScheduleModel"></test-header>
+
+    <div class="section container-medium-width">
+        <form class="clearfix" id="scheduleTest">
+            <div class="date-time-container clearfix">
+                <label class="label-inline screen-reader-only" for="startDate">Start Date (MM/DD/YYYY)</label>
+                <input #startdate type="text" autocomplete="off" class="date start required-entry" placeholder="Date" id="startDate" (keyup)="onKeyUpDate(startdate,$event);"
+                />
+                <label class="label-inline screen-reader-only" for="startTime">Start Time</label>
+                <input type="text" class="time start required-entry" autocomplete="off" placeholder="Time" id="startTime" #starttime (keyup)="onKeyUpTime(starttime,$event);"
+                />
+                <span class="date-pair-span">to</span>
+                <label class="label-inline screen-reader-only" for="endTime">End Time</label>
+                <input type="text" class="time end required-entry" placeholder="Time" autocomplete="off" id="endTime" #endtime (keyup)="onKeyUpTime(endtime,$event);"
+                />
+                <label class="label-inline screen-reader-only" for="endDate">End Date (MM/DD/YYYY)</label>
+                <input #enddate type="text" class="date end required-entry" placeholder="Date" autocomplete="off" id="endDate" (keyup)="onKeyUpDate(enddate,$event);"
+                />
+            </div>
+            <p class="error" role="alert" aria-live="assertive" aria-atomic="true">
+                <span *ngIf="invalid8hours">For security reasons, your testing window cannot be longer than 8 hours.
+                <br> Please specify a shorter testing window.
+                </span>
+            </p>
+
+            <div class="margin-2em-top form-narrow lightbulb-icon-container-flush-text">
+                <p class="icon lightbulb-icon">
+                    The dates and times you specify make up your ​<strong>testing window</strong>. This is the amount of
+                    time the test is open for a student to begin taking the test. This is not the same as the ​<strong>test duration</strong>​,
+                    which is based on the amount of questions on the test.
+                </p>
+                <p>Choosing shorter testing windows will help maintain better security.</p>
+            </div>
+            <button type="button" class="button margin-2em-top button-mobile-block right" (click)="saveDateTime($event);" [disabled]="!valid">{{modifyInProgress ? 'Verify changes and save' : 'Next step: Add students'}}</button>
+        </form>
+    </div>
+    <!--closes div containing form-->
+</main>
+<page-footer></page-footer>
+
+<confirmation-popup 
+[popupId]="'confirmationPopup'"
+    [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'" 
+    [okButtonText] = "'Yes, leave this page'" 
+    [cancelButtonText] = "'No, stay on this page'" 
+    (onOK)="onOKConfirmation()" 
+    (onCancel)="onCancelConfirmation($event)"
+    [hideClose]="false" >
+</confirmation-popup>
+
+<alert-popup 
+    [popupId]="'alertPopup'"
+    [message]="'We’re sorry! The testing window you specified has expired and needs to be changed. Please specify a new testing window.'"
+    [okButtonText] = "'OK'"     
+    (onOK)="onOKAlert()"    
+    [hideClose]="false">
+</alert-popup>
+
+<alert-popup [popupId]="'testPassed'"
+             [message]="'We’re sorry! You can no longer modify this testing session because it has already taken place. Click or tap “OK” to go back to the Manage Tests main page.'"
+             [okButtonText]="'OK'"
+             (onOK)="cancelStartingTestChanges($event)"
+             [hideClose]="false">
+</alert-popup>
+
+<alert-popup [popupId]="'testStarted'"
+             [message]="'We’re sorry! This testing session is now underway and you can no longer modify it from this location. Click or tap “OK” to go to the Manage Tests main page, where you will be able to make changes to this testing session.'"
+             [okButtonText]="'OK'"
+             (onOK)="cancelStartingTestChanges($event)"
+             [hideClose]="false">
+</alert-popup>
+
+<test-starting-popup [popupId]="'testStartingin5'"
+                    [heading]="'Alert: Testing Session Starting in 5 Minutes'"
+                    leadParagraph="This testing session is scheduled to start in <b>5 minutes ({{testScheduleModel.scheduleStartTime|parseDate:'h:mma'}})</b>."
+                    [paragraph]="'Once this testing session is in progress, you will no longer be able to modify it from this location.'"
+                    [okButtonText]="'Continue modifying this session'"
+                    [cancelButtonText]="'Cancel changes'"
+                    (onOK)="onCancelConfirmation($event)"
+                    (onCancel)="cancelStartingTestChanges($event)">
+</test-starting-popup>
+
+<test-starting-popup [popupId]="'testStartingin10'"
+                    [heading]="'Alert: Testing Session Starting in 10 Minutes'"
+                    leadParagraph="This testing session is scheduled to start in <b>10 minutes ({{testScheduleModel.scheduleStartTime|parseDate:'h:mma'}})</b>."
+                    [paragraph]="'Once this testing session is in progress, you will no longer be able to modify it from this location.'"
+                    [okButtonText]="'Continue modifying this session'"
+                    [cancelButtonText]="'Cancel changes'"
+                    (onOK)="onCancelConfirmation($event)"
+                    (onCancel)="cancelStartingTestChanges($event)">
+</test-starting-popup>
+
+
+<students-started-test-popup 
+        (onOK)="studentsStartedTestPopupOK(e);" 
+        [students]="testStartedExceptions"
+        pageName="scheduletest"
+        mainHeader="Students Have Started Tests In This Testing Session"
+        mainContent="The following students have already started tests in this testing session:">
+</students-started-test-popup>
+
+<time-exception 
+        [testSchedule]="testScheduleModel" 
+        [studentWindowException]="timingExceptions" 
+        canRemoveStudents=false
+        (windowExceptionPopupClose)="onCloseTimingExceptionsPopup(e)">
+</time-exception>
+
+<self-pay-student-popup
+        [selfPayStudentException]="studentPayExceptions"
+        [isModifyInProgress]="modifyInProgress"
+        [pageName]="'scheduletest'"
+        (selfPayStudentExceptionPopupClose)="onCloseSelfPayExceptionsPopup(e)">
+</self-pay-student-popup>
+
+<confirmation-popup 
+    popupId="endModifyInProgressSession"
+    message="You have specified a testing window that will immediately end this testing session. Students who have not started their tests will no longer be able to access them. Are you sure you want to do this? " 
+    okButtonText = "Yes, end session" 
+    cancelButtonText = "Cancel" 
+    (onOK)="endSession()" 
+    (onCancel)="cancelEndSession($event)"
+    hideClose="true" >
+</confirmation-popup>

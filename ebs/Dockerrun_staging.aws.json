@@ -1,0 +1,17 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Authentication": {
+    "Bucket": "elasticbeanstalk-us-east-1-791949374647",
+    "Key": ".dockercfg"
+  },
+  "Image": {
+    "Name": "kaptest/nursing-admin-ux:latest",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "80"
+    }
+  ],
+  "Logging": "/var/log/nginx"
+}

@@ -1,0 +1,16 @@
+node_modules
+src
+.js*
+*.js
+*.json
+*.md
+*.log
+.elasticbeanstalk
+.ebextensions
+ebs
+dist
+.git
+.gitignore
+bower_components
+ebs_multi
+typings

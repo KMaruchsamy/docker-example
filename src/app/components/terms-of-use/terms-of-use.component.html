@@ -1,0 +1,82 @@
+<div *ngIf="showTerms" class="modal-full-screen" [attr.id]="termsOfUse" tabindex="-1" role="dialog">
+   <div class="thin-section container-narrow" role="document">
+
+     <button type="button" (click)="closeModal();" *ngIf="showX" class="close close-large-icon" aria-label="Close"></button>
+      <header role="banner">
+        <h1 class="center">
+            <img class="branding-logo" src="assets/images/logo-purple_2x.png" alt="Kalplan Nursing">
+            <span class="screen-reader-only">Kaplan Nursing Faculty</span>
+        </h1>
+      </header>
+
+      <article id="terms" class="terms">
+        <h2 class="center h4">Terms of Use</h2>
+
+        <p>Welcome to Kaplan's Administrator and Faculty Resource Center (“Site”). The Site is owned by Kaplan, Inc. and operated by Kaplan Nursing (“Kaplan”). Your use of the Site is subject to the following terms and conditions.</p>
+
+        <h3 class="h6">Who Can Use This Site?</h3>
+        <p>You have been provided access to the Site in your capacity as a member of the faculty or administration of a nursing school (“Authorized User”). If you are not an Authorized User, then you are not permitted to use the Site. If you cease to be affiliated with the nursing school, then you agree to discontinue any further use of the Site and to notify Kaplan immediately. You must protect your login credentials to the Site from disclosure and are prohibited from sharing your login credentials.</p>
+
+        <h3 class="h6">What Can I Do On The Site?</h3>
+        <p>The Site provides resources to help Authorized Users prepare their students for nursing school, the NCLEX® exam, and their nursing careers. You may not copy or reproduce the videos on the Site (“Videos”) but you may allow your colleagues and students to view them by sharing your screen. PDF materials (in the Content Library, for example) may be downloaded and shared with colleagues and students for the sole purpose of teaching at the nursing school in your capacity as a faculty member.</p>
+        <p>Except as expressly permitted above, you may not download or share any other resources, which are intended solely to provide you information about Kaplan's solutions. In addition, some resources are accessible only to Authorized Users whose nursing schools have contractual relationships with Kaplan (“Institutional Partners”).</p>
+
+        <h3 class="h6">Resources for Institutional Partners</h3>
+        <p>Diagnostic and Student Progress information (“Performance Data”) is visible only to Authorized Users at Institutional Partners. Performance Data is limited to those students who have authorized Kaplan to share their progress information with the nursing school.</p>
+
+        <h3 class="h6">Copyrights</h3>
+        <p>All Program Elements including, but not limited to: Admissions Tests, Study Skills Workshops, Drug Dosage and Calculations Workshop, Secured Benchmark Tests, Focused Review Tests, Case Study Modules, Clinical Skills Modules, Nursing Assessment Test, Predictive Tests, NCLEX® Review lectures, Qbank, Question Trainer Tests, Online NCLEX Study Center, Readiness Test, applications, digital downloads, data compilations on the Site and all text, photographs, graphics, video, and audio included in them (“Site Materials”) are the property of or licensed to Kaplan. The Site contains materials that are protected by copyright, trademark, or other intellectual property rights. Except as expressly authorized, you may not download, modify, publish, transmit, create derivative works from, or in any way exploit, any component of the Site Materials.</p>
+
+        <h3 class="h6">Trademarks</h3>
+        <p>Trademarks, service marks, designs, and logos displayed on the Site, including but not limited to Kaplan and the Kaplan logo, are the registered and unregistered trademarks of Kaplan and of Kaplan's licensors.</p>
+
+        <h3 class="h6">Disclaimer and Limitation of Liability</h3>
+        <p>THIS SITE AND THE INFORMATION, CONTENTS, GRAPHICS, DOCUMENTS, AND OTHER ELEMENTS INCLUDED HEREIN (COLLECTIVELY THE "CONTENTS") ARE PROVIDED ON AN “AS IS” BASIS WITH ALL FAULTS AND WITHOUT ANY WARRANTY OF ANY KIND. KAPLAN HEREBY DISCLAIMS ALL WARRANTIES AND CONDITIONS WITH REGARD TO THE SITE'S CONTENTS, INCLUDING, WITHOUT LIMITATION, ALL IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON­INFRINGEMENT. EXCEPT AS MAY BE EXPRESSLY STATED ON THIS WEBSITE, NEITHER KAPLAN NOR ANY OF ITS OFFICERS, DIRECTORS, SHAREHOLDERS, EMPLOYEES, OR OTHER AUTHORIZED REPRESENTATIVES SHALL BE LIABLE FOR ANY DAMAGES ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SITE, OR THE INFORMATION OR CONTENTS AVAILABLE FROM THIS SITE. THIS IS A COMPREHENSIVE LIMITATION OF LIABILITY THAT APPLIES TO ALL DAMAGES OF ANY KIND, INCLUDING (WITHOUT LIMITATION) COMPENSATORY, DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES, LOSS OF DATA, INCOME OR PROFIT, LOSS OF OR DAMAGE TO PROPERTY, AND CLAIMS OF THIRD PARTIES. THE CONTENTS OF THIS SITE COULD INCLUDE TECHNICAL INACCURACIES OR TYPOGRAPHICAL ERRORS. CHANGES ARE PERIODICALLY ADDED TO THE CONTENTS OF THIS SITE. KAPLAN MAY MAKE IMPROVEMENTS, DELETIONS, CHANGES, OR OTHER MODIFICATIONS TO THIS SITE, THE CONTENTS HEREOF, AND THE PRODUCTS AND SOFTWARE DESCRIBED HEREIN AT ANY TIME WITHOUT NOTICE.</p>
+
+        <h3 class="h6">Security</h3>
+        <p>You may not share your user name or password with any other person. If you suspect that your login credentials may have been made accessible to others, then you must immediately notify Kaplan.</p>
+        
+        <h3 class="h6">Academic Integrity and Test Security</h3>
+
+        You shall <strong>NOT</strong>:
+          <ul class="default-ul">
+            <li>Knowingly procure, provide, or accept any unauthorized or pirated Kaplan materials that contains question items or answers to any examination or assignment.</li>
+            <li>Assist any other person with obtaining or using unauthorized materials.</li>
+            <li>Provide students with unreleased or secure test items EXCEPT while administering an official Kaplan test. Using secure test items in any form at any time is a violation of test security.</li>
+            <li>Provide students with answers to any secure test items</li>
+            <li>Influence student response in any way to secure test items</li>
+          </ul>
+        You shall:
+          <ul class="default-ul">
+            <li>Administer Kaplan Secure Benchmark Tests in a secure, proctored setting.</li>
+            <li>Take all reasonable precautions to prevent cheating on any Kaplan test. You acknowledge that Secured Benchmark Tests are normed and that cheating impairs a valuable asset of Kaplan.</li>
+            <li>Promptly notify Kaplan if you become aware of any possible infringement of Kaplan’s ownership rights.</li>
+          </ul>
+
+        <p>Kaplan shall promptly notify School Administration of any violation of this section and infringement of Kaplan’s ownership rights.</p>
+
+        <h3 class="h6">Additional Resources for Institutional Partners</h3>
+        <p>Upon agreement to this Terms of Use, you will receive access to the <b>Kaplan Nursing Integrated Testing Faculty User Guide</b>. The Integrated Tests are intended to assist faculty and administrators in ascertaining students’ strengths and weaknesses in recalling and understanding nursing knowledge and in applying this knowledge in clinical situations. Test results enable nursing school faculty at the end of a program to identify a student’s knowledge and learning deficits in specific content area.</p>
+        <p>As noted in the guide, and in accordance with the industry’s Fair Testing standards, Kaplan Nursing recommends that the Integrated Tests not be used as the sole criteria for progression in or graduation from a nursing program, but considered one of several indicators of students’ accomplishments in basic nursing.</p>
+        <address>
+        Notices to Kaplan<br/>
+        ATTN: Institutional Operations Dept.<br/>
+        Kaplan<br/>
+        750 Third Avenue<br/>
+        New York, NY 10017
+        </address>
+      </article>
+
+      <div class="thin-section">
+
+        <div *ngIf="showCheckbox">
+          <input type="checkbox" #confirmterms (change)="onAccept(confirmterms.checked)" class="checkbox-image" id="confirm"/>
+          <label class="label-bold" for="confirm">I confirm that I read, understood, and agree to Terms of Use.</label>
+        </div>
+        <button (click)="clickButton($event);" [disabled]="!termsAccepted" class="button agree-button button-centered">{{buttonText}}</button>
+        <button (click)="cancel($event);" *ngIf="showCancel" class="unstyled-button anchor-button button-centered">Cancel</button>
+      </div>
+
+     </div>
+  </div>  
+  
