@@ -110,6 +110,11 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     popupStudentWindowException: any;
     popupStudentsStartedTest: any;
     popupStudentExceptions: any;
+    showRetestersAlternatePopup: boolean = false;
+    showRetestersNoAlternatePopup: boolean = false;
+    showTimingExceptionPopup: boolean = false;
+    showSelfPayStudentPopup: boolean = false;
+    showStudentsStartedTestPopup: boolean = false;
     constructor(private activatedRoute: ActivatedRoute,
         public testService: TestService,
         public auth: AuthService,
@@ -1101,12 +1106,17 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
     onWindowExceptionPopupClose(e: any) {
         $('#modalTimingException').modal('hide');
+        this.showTimingExceptionPopup = false;
     }
 
     HasWindowException(_studentWindowException: any): void {
         if (_studentWindowException.length != 0) {
             this.popupStudentWindowException = _studentWindowException;
-             $('#modalTimingException').modal('show');
+            this.showTimingExceptionPopup = true;
+            setTimeout(function() {
+                $('#modalTimingException').modal('show');
+            });
+             
             // if (this.loader)
             //     this.loader.destroy();
             // this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopupComponent, this.viewContainerRef)
@@ -1144,8 +1154,10 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         }
     }
 
-    onSelfPayStudentExceptionPopupClose(retester: any) {
+    onSelfPayStudentExceptionPopupClose(e: any) {
+        debugger;
         $('#selfPayStudentModal').modal('hide');
+        this.showSelfPayStudentPopup = false;
         if (this.modifyInProgress) {
             this.updateModifyInProgress(true);
         }
@@ -1161,7 +1173,11 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         this.markSelfPayStudents();
         if (this._selfPayStudent.length > 0) {            
             this.markSelfPayStudents();
-            $('#selfPayStudentModal').modal('show');
+            this.showSelfPayStudentPopup = true;
+            setTimeout(function() {
+                $('#selfPayStudentModal').modal('show');
+            });
+            
 
             // if (this.loader)
             //     this.loader.destroy();
@@ -1338,7 +1354,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
     onRetesterNoAlternatePopupOK(testSchedule: any) {
         if (testSchedule) {
-            $('#modalNoAlternateTest').modal('hide');
+            $('#modalNoAlternateTest').modal('hide');           
             this.sStorage.setItem('testschedule', JSON.stringify(testSchedule));
             this.testScheduleModel = testSchedule;
             this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
@@ -1353,12 +1369,17 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         }
     }
     onRetesterNoAlternatePopupCancel(e: any) {
-         $('#modalNoAlternateTest').modal('hide');
+        $('#modalNoAlternateTest').modal('hide');
+        this.showRetestersNoAlternatePopup = false;
     }
 
     loadRetesterNoAlternatePopup(_studentRepeaterExceptions: any): void {
         this.popupStudentRepeaterExceptions = _studentRepeaterExceptions;
-        $('#modalNoAlternateTest').modal('show');
+        this.showRetestersNoAlternatePopup = true;
+        setTimeout(function() {
+             $('#modalNoAlternateTest').modal('show');
+        });
+       
         
         // if (this.loader)
         //     this.loader.destroy();
@@ -1395,6 +1416,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     onRetesterAlternatePopupOK(retesters: any) {
         if (retesters) {
             $('#modalAlternateTest').modal('hide');
+            // this.showRetestersAlternatePopup = false;
             this.testScheduleModel = JSON.parse(this.sStorage.getItem('testschedule'));
             this.retesterExceptions = retesters;
             this.DeleteRemovedStudentFromSession(retesters);
@@ -1411,7 +1433,8 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     }    
 
     onRetesterAlternatePopupCancel(e: any) {
-         $('#modalAlternateTest').modal('hide');
+        $('#modalAlternateTest').modal('hide');
+        this.showRetestersAlternatePopup = false;
     }
 
     loadRetesterAlternatePopup(_studentRepeaterExceptions: any): void {
@@ -1419,7 +1442,10 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         this.popupTestScheduledSudents = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 2 });
         this.popupTestTakenStudents = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 1 });
         this.popupRetesterExceptions = _studentRepeaterExceptions;
-        $('#modalAlternateTest').modal('show');
+        this.showRetestersAlternatePopup = true;
+        setTimeout(function() {
+            $('#modalAlternateTest').modal('show');
+        });
         // if (this.loader)
         //     this.loader.destroy();
 
@@ -2172,10 +2198,16 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
     onStudentsStartedTestOK(e: any) {
         $('#studentsStartedTest').modal('hide');
+        // this.showStudentsStartedTestPopup = false;
         _.forEach(this.popupStudentsStartedTest, (student, key) => {
             this.selectedStudents.push(_.find(this.previousSelectedStudentList, { 'StudentId': student.StudentId }));
         });
         this.checkWindowExceptions(this.popupStudentExceptions);
+    }
+
+    onStudentsStartedTestBack(e: any) {
+        $('#studentsStartedTest').modal('hide');
+         this.showStudentsStartedTestPopup = false;
     }
 
     HasStudentStartedTestException(studentExceptions: any): void {
@@ -2193,7 +2225,11 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         if (studentRemovedFromSession.length > 0) {
 
             this.popupStudentsStartedTest = studentRemovedFromSession;
-            $('#studentsStartedTest').modal('show');
+            this.showStudentsStartedTestPopup = true;
+            setTimeout(function() {
+                 $('#studentsStartedTest').modal('show');
+            });
+           
             // if (this.loader)
             //     this.loader.destroy();
             // this.dynamicComponentLoader.loadNextToLocation(StudentsStartedTestComponent, this.viewContainerRef)

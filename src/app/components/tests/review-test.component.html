@@ -164,7 +164,9 @@
                     (onCancel)="cancelStartingTestChanges($event)">
 </test-starting-popup>
 
+
 <retesters-noalternate
+*ngIf="showRetestersAlternatePopup" 
 [testSchedule]="testScheduleModel"
 [studentRepeaters]="popupStudentRepeaterExceptions"
 (retesterNoAlternatePopupOK) = "onRetesterNoAlternatePopupOK($event)"

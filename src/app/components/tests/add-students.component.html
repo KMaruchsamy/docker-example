@@ -206,6 +206,7 @@
 
 
 <retesters-noalternate
+*ngIf="showRetestersNoAlternatePopup" 
 [testSchedule]="testScheduleModel"
 [studentRepeaters]="popupStudentRepeaterExceptions"
 [modifyInProgress]="modifyInProgress"
@@ -214,6 +215,7 @@
 </retesters-noalternate>
 
 <retesters-alternate
+*ngIf="showRetestersAlternatePopup" 
 [retesterExceptions]="popupRetesterExceptions"
 [testTakenStudents]="popupTestTakenStudents"
 [testScheduledSudents]="popupTestScheduledSudents"
@@ -223,6 +225,7 @@
 </retesters-alternate>
 
 <time-exception
+*ngIf="showTimingExceptionPopup"
 [studentWindowException]="popupStudentWindowException"
 canRemoveStudents="false"
 [testSchedule]="testScheduleModel"
@@ -230,12 +233,14 @@ canRemoveStudents="false"
 </time-exception>
 
 <self-pay-student-popup
+*ngIf="showSelfPayStudentPopup"
 [selfPayStudentException]="_selfPayStudent"
 [isModifyInProgress]="modifyInProgress"
-(selfPayStudentExceptionPopupClose)="onSelfPayStudentExceptionPopupClose">
+(selfPayStudentExceptionPopupClose)="onSelfPayStudentExceptionPopupClose($event)">
 </self-pay-student-popup>
 
 <students-started-test-popup
+*ngIf="showStudentsStartedTestPopup"
 [students]="popupStudentsStartedTest"
 mainHeader="Students Have Started Tests In This Testing Session"
 mainContent="Since your last modifications, the following students have started tests in this testing session and can no longer be removed."

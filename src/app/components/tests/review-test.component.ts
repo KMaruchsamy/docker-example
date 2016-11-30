@@ -69,6 +69,10 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
     popupTestTakenStudents: any;
     popupTestScheduledSudents: any;
     popupStudentWindowException: any;
+    showRetestersAlternatePopup: boolean = false;
+    showRetestersNoAlternatePopup: boolean = false;
+    showTimingExceptionPopup: boolean = false;
+
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: AuthService, public common: CommonService,
         public router: Router,
@@ -552,22 +556,28 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
     onRetesterNoAlternatePopupOK(testSchedule: any) {
         if (testSchedule) {
-            $('#modalNoAlternateTest').modal('hide');
+            $('#modalNoAlternateTest').modal('hide');            
             this.sStorage.setItem('testschedule', JSON.stringify(testSchedule));
             this.testScheduleModel = this.testService.sortSchedule(testSchedule);
             this.resolveADA();
             this.validate();
             this.rebindTable();
+            this.showRetestersNoAlternatePopup = false;
         }
     }
 
     onRetesterNoAlternatePopupCancel(e: any) {
         $('#modalNoAlternateTest').modal('hide');
+        this.showRetestersNoAlternatePopup = false;
     }
 
     loadRetesterNoAlternatePopup(_studentRepeaterExceptions: any): void {
         this.popupStudentRepeaterExceptions = _studentRepeaterExceptions;
-        $('#modalNoAlternateTest').modal('show');
+        this.showRetestersNoAlternatePopup = true;
+        setTimeout(function() {
+               $('#modalNoAlternateTest').modal('show');
+        });
+     
 
         // this.dynamicComponentLoader.loadNextToLocation(RetesterNoAlternatePopupComponent, this.viewContainerRef)
         //     .then(retester => {
@@ -612,9 +622,13 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         }
     }
 
-    loadWindowExceptions(_windowExceptions: any): void {
-        $('#modalTimingException').modal('show');
+    loadWindowExceptions(_windowExceptions: any): void {       
         this.popupStudentWindowException = _windowExceptions;
+        this.showTimingExceptionPopup = true;
+        setTimeout(function() {
+             $('#modalTimingException').modal('show');
+        });
+        
 
         // this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopupComponent, this.viewContainerRef)
         //     .then(window => {
@@ -697,18 +711,24 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             }
             this.validate();
             this.rebindTable();
+            this.showRetestersAlternatePopup = false;
         }
     }
 
     onRetesterAlternatePopupCancel(e: any) {
         $('#modalAlternateTest').modal('hide');
+        this.showRetestersAlternatePopup = false;
     }
 
     loadRetesterAlternatePopup(_studentRepeaterExceptions: any): void {
         this.popupTestScheduledSudents = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 2 });
         this.popupTestTakenStudents = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 1 });
         this.popupRetesterExceptions = _studentRepeaterExceptions;
-        $('#modalAlternateTest').modal('show');
+        this.showRetestersAlternatePopup = true;
+        setTimeout(function() {
+            $('#modalAlternateTest').modal('show');
+        });
+        
 
         // if (this.loader)
         //     this.loader.destroy();
