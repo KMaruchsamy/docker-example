@@ -45,6 +45,12 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
+        "assets/css/bootstrap-editable.css",
+        "assets/css/bootstrap-editable-overrides.css",
+        "assets/css/tablesaw.bare.css",
+        "assets/css/tablesaw.overrides.css",
+        "assets/css/bootstrap-datepicker-overrides.css",
+        "assets/css/jquery.timepicker.css",
          "../node_modules/datatables/media/css/jquery.dataTables.min.css",
         "assets/css/responsive.dataTablescustom.css",
         "styles.css"
