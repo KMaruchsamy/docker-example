@@ -1,4 +1,4 @@
-import {ExceptionHandler, Injectable, Injector} from '@angular/core';
+import { Injectable, Injector, ErrorHandler} from '@angular/core';
 import {Http} from '@angular/http';
 import {Router} from '@angular/router';
 // import {LogService} from '../services/log.service.service';
@@ -9,22 +9,15 @@ import { CommonService } from './../services/common.service';
 import { LogService } from './../services/log.service';
 
 @Injectable()
-export class MyExceptionHandler implements ExceptionHandler {
-    constructor(public injector: Injector) {
+export class MyExceptionHandler implements ErrorHandler {
+    constructor(public injector: Injector, private log:LogService) {
         // console.log(this.router);
     }
 
-    call(error, stackTrace = null, reason = null) {
-        console.log(stackTrace);
-        let http: Http = this.injector.get(Http);
-        let auth: AuthService = new AuthService(http);
-        auth.refresh();
-        let common: CommonService = new CommonService();
-        let log = new LogService(auth, http, common);
-        log.error(error, stackTrace, reason);
+    handleError(error) {
+        console.error(error);       
+        this.log.error(error);
         let router: Router = this.injector.get(Router);
-
-
         router.navigate(['/error']);
     }
 }

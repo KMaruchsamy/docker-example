@@ -1,12 +1,11 @@
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {Router} from '@angular/router';
 import { CommonService } from './../../services/common.service';
 
 @Component({
     selector: 'confirmation-popup',
     providers: [CommonService],
-    templateUrl: 'components/shared/confirmation.popup.component.html',
-    directives: [ROUTER_DIRECTIVES]
+    templateUrl: './confirmation.popup.component.html',
 })
 
 export class ConfirmationPopupComponent {

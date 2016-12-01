@@ -1,20 +1,20 @@
 import {Component, Input, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {Router, ROUTER_DIRECTIVES, ActivatedRoute} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 // import {ConfirmationPopup} from '../shared/confirmation.popup';
 // import {CommonService} from '../../services/common';
 import {Observable, Subscription} from 'rxjs/Rx';
 import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
 import { CommonService } from './../../services/common.service';
-import * as moment from 'moment-timezone';
+
 
 @Component({
     selector: 'test-header',
-    templateUrl: 'components/tests/test-header.component.html',
-    inputs: ['scheduleStep'],
-    directives: [ROUTER_DIRECTIVES, NgIf, ConfirmationPopupComponent],
-    pipes: [ParseDatePipe]
+    templateUrl: './test-header.component.html',
+    inputs: ['scheduleStep']
+    // directives: [, NgIf, ConfirmationPopupComponent],
+    // pipes: [ParseDatePipe]
 })
 export class TestHeaderComponent implements OnInit, OnDestroy {
     nextDay: boolean = false;

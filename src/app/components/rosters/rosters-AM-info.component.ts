@@ -3,15 +3,13 @@ import { Observable, Subscription } from 'rxjs/Rx';
 import { links } from '../../constants/config';
 import { Response } from '@angular/http';
 import { AuthService } from './../../services/auth.service';
-import { ProfileService } from './../../services/profile.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
+import { ProfileService } from '../home/profile.service';
 
 @Component({
     selector: 'rosters-AM-info',
-    providers: [ProfileService, AuthService],
-    templateUrl: 'components/rosters/rosters-AM-info.component.html',
-    styleUrls: ['components/rosters/rosters-AM-info.component.css'],
-    directives: []
+    templateUrl: './rosters-AM-info.component.html',
+    styleUrls: ['./rosters-AM-info.component.css']
 })
 
 export class RostersAMInfoComponent implements OnDestroy {

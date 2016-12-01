@@ -1,11 +1,11 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES, ActivatedRoute} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {NgIf, Location} from '@angular/common';
 import {Title} from '@angular/platform-browser';
 // import {PageHeader} from './page-header';
 // import {AuthService} from '../../services/auth';
 // import {CommonService} from '../../services/common';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import {links} from '../../constants/config';
 // import {TestService} from '../../services/test.service';
 import {TestScheduleModel} from '../../models/test-schedule.model';
@@ -16,12 +16,12 @@ import { CommonService } from './../../services/common.service';
 import { AuthService } from './../../services/auth.service';
 import { TestService } from './../tests/test.service';
 import { LogService } from './../../services/log.service';
-import { PageHeaderComponent } from './page-header.component';
+// import { PageHeaderComponent } from './page-header.component';
 @Component({
     selector: 'choose-institution',
-    providers: [CommonService, AuthService, TestService, TestScheduleModel,LogService],
-    templateUrl: 'components/shared/choose-institution.component.html',
-    directives: [PageHeaderComponent, ROUTER_DIRECTIVES, NgIf]
+    // providers: [CommonService, AuthService, TestService, TestScheduleModel,LogService],
+    templateUrl: './choose-institution.component.html',
+    // directives: [PageHeaderComponent, NgIf]
 })
 
 export class ChooseInstitutionComponent implements OnInit, OnDestroy {
@@ -30,10 +30,10 @@ export class ChooseInstitutionComponent implements OnInit, OnDestroy {
     apiServer: string;
     testTypeId: number = 1;
     institutionID: string = null;
-    institutionRN: string;
-    institutionPN: string;
-    programRN: number = 0;
-    programPN: number = 0;
+    institutionRN: any;
+    institutionPN: any;
+    programRN:any;
+    programPN: any;
     backMessage: string;
     nursingITServer: string;
     isTest: boolean = false;

@@ -1,9 +1,7 @@
 import { Component, Input } from '@angular/core';
 @Component({
     selector: 'rosters-header',
-    providers: [],
-    templateUrl: 'components/rosters/rosters-header.component.html',
-    directives: []
+    templateUrl: './rosters-header.component.html'
 })
 export class RostersHeaderComponent {
     @Input() institutionName: string;

@@ -1,6 +1,6 @@
 // import {CommonService} from './common';
 import {Injectable} from '@angular/core';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import {Observable} from 'rxjs/Rx';
 import {Http, RequestOptions, Headers, Response} from '@angular/http';
 import { CommonService } from './common.service';

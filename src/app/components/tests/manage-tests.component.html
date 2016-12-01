@@ -57,7 +57,7 @@
                                     <td class="tablesaw-stacked-hidden">
                                         <button [attr.type]="'inprogress'" [attr.sessionId]="inProgressTest?.scheduleId" [attr.institutionId]="inProgressTest?.institutionId" [disabled]="adminId!=inProgressTest?.adminId && adminId!=inProgressTest?.facultyMemberId"
                                             class="js-rename-session unstyled-button">{{inProgressTest?.scheduleName}}<img *ngIf="adminId==inProgressTest?.adminId || adminId==inProgressTest?.facultyMemberId"
-                                        src="/images/edit-pencil-icon_2x.png" alt="edit">
+                                        src="assets/images/edit-pencil-icon_2x.png" alt="edit">
                                     </button>
                                     </td>
                                     <td class="tablesaw-stacked-hidden">{{inProgressTest?.adminFirstName}} {{inProgressTest?.adminLastName}}
@@ -132,7 +132,7 @@
                                 <td class="tablesaw-stacked-hidden">
                                     <button [attr.type]="'scheduled'" [attr.sessionId]="scheduleTest?.scheduleId" [attr.institutionId]="scheduleTest?.institutionId" [disabled]="adminId!=scheduleTest?.adminId && adminId!=scheduleTest?.facultyMemberId"
                                         class="js-rename-session unstyled-button">{{scheduleTest.scheduleName}}<img *ngIf="adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId"
-                                    src="/images/edit-pencil-icon_2x.png" alt="edit">
+                                    src="assets/images/edit-pencil-icon_2x.png" alt="edit">
                                 </button>
                                 </td>
                                 <td class="tablesaw-stacked-hidden">{{scheduleTest.adminFirstName}} {{scheduleTest.adminLastName}}</td>

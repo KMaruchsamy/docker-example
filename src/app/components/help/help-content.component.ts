@@ -1,12 +1,9 @@
 ﻿import {Component} from '@angular/core';
-import {Router,ROUTER_DIRECTIVES} from '@angular/router';
-import {UtilityService} from '../../services/utility.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector:'help-content',
-    providers:[UtilityService],
-    templateUrl:'components/help/help-content.component.html',
-    directives:[ROUTER_DIRECTIVES]
+    templateUrl:'./help-content.component.html'
 })
 export class HelpContentComponent{
 }

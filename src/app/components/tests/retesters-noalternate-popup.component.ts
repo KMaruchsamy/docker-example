@@ -1,19 +1,16 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {NgIf, NgFor} from '@angular/common';
-import {ROUTER_DIRECTIVES} from '@angular/router';
+// import {} from '@angular/router';
 // import {CommonService} from '../../services/common';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import {SelectedStudentModel} from '../../models/selected-student.model';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import {SortPipe} from '../../pipes/sort.pipe';
 import { CommonService } from './../../services/common.service';
 
 @Component({
     selector: 'retesters-noalternate',
-    templateUrl: 'components/tests/retesters-noalternate-popup.component.html',
-    directives: [ROUTER_DIRECTIVES, NgIf, NgFor],
-    providers: [CommonService],
-    pipes:[SortPipe]    
+    templateUrl: './retesters-noalternate-popup.component.html'
 })
 
 export class RetesterNoAlternatePopupComponent implements OnInit {
@@ -22,7 +19,7 @@ export class RetesterNoAlternatePopupComponent implements OnInit {
     @Output() retesterNoAlternatePopupOK = new EventEmitter();
     @Output() retesterNoAlternatePopupCancel = new EventEmitter();
     sStorage: any;
-    testSchedule: TestScheduleModel;
+    @Input() testSchedule: TestScheduleModel;
     constructor(public common: CommonService) {
 
     }

@@ -45,7 +45,7 @@
                                             <div class="search-input">
                                                 <input class="typeahead" type="search" autocomplete="off" role="search" #findstudenttoadd id="findStudentToAdd" (input)="CallOnSearchInput(findstudenttoadd);" (keyup)="FillGridWithSearch(findstudenttoadd.value,$event);" (click)="CallonSearchClick($event);">
                                                 <button class="button" disabled id="btnTypeahead" type="submit" (click)="searchStudent(findstudenttoadd.value,$event);">
-                                                    <img src="images/search-icon_2x.png" alt="Search Icon">
+                                                    <img src="assets/images/search-icon_2x.png" alt="Search Icon">
                                                 </button>
                                             </div>
                                         </form>
@@ -81,7 +81,7 @@
                                                data-trigger="click focus"
                                                [attr.data-content]="student.Email"
                                                class="duplicate-student-table-icon has-popover small-popover">
-                                                <img src="images/identity-icon.png"
+                                                <img src="assets/images/identity-icon.png"
                                                      alt="duplicate student name icon"
                                                      width="24" height="24" />
                                             </a>
@@ -159,7 +159,7 @@
                     [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
                     [okButtonText]="'Yes, leave this page'"
                     [cancelButtonText]="'No, stay on this page'"
-                    (onOK)="onOKConfirmation()"
+                    (onOK)="onOKConfirmation($event)"
                     (onCancel)="onCancelConfirmation($event)"
                     [hideClose]="false">
 </confirmation-popup>
@@ -203,3 +203,49 @@
                     (onOK)="onCancelConfirmation($event)"
                     (onCancel)="cancelStartingTestChanges($event)">
 </test-starting-popup>
+
+
+<retesters-noalternate
+*ngIf="showRetestersNoAlternatePopup" 
+[testSchedule]="testScheduleModel"
+[studentRepeaters]="popupStudentRepeaterExceptions"
+[modifyInProgress]="modifyInProgress"
+(retesterNoAlternatePopupOK) = "onRetesterNoAlternatePopupOK($event)"
+(retesterNoAlternatePopupCancel) = "onRetesterNoAlternatePopupCancel($event)">
+</retesters-noalternate>
+
+<retesters-alternate
+*ngIf="showRetestersAlternatePopup" 
+[retesterExceptions]="popupRetesterExceptions"
+[testTakenStudents]="popupTestTakenStudents"
+[testScheduledSudents]="popupTestScheduledSudents"
+[testSchedule]="testScheduleModel"
+(retesterAlternatePopupOK)="onRetesterAlternatePopupOK($event)"
+(retesterAlternatePopupCancel)="onRetesterAlternatePopupCancel($event)">
+</retesters-alternate>
+
+<time-exception
+*ngIf="showTimingExceptionPopup"
+[studentWindowException]="popupStudentWindowException"
+canRemoveStudents="false"
+[testSchedule]="testScheduleModel"
+(windowExceptionPopupClose)="onWindowExceptionPopupClose($event)">    
+</time-exception>
+
+<self-pay-student-popup
+*ngIf="showSelfPayStudentPopup"
+[selfPayStudentException]="_selfPayStudent"
+[isModifyInProgress]="modifyInProgress"
+(selfPayStudentExceptionPopupClose)="onSelfPayStudentExceptionPopupClose($event)">
+</self-pay-student-popup>
+
+<students-started-test-popup
+*ngIf="showStudentsStartedTestPopup"
+[students]="popupStudentsStartedTest"
+mainHeader="Students Have Started Tests In This Testing Session"
+mainContent="Since your last modifications, the following students have started tests in this testing session and can no longer be removed."
+subContent="These students will automatically be added back to this testing session."
+pageName="addstudents"
+(onOK)="onStudentsStartedTestOK($event)"
+(onBack)="onStudentsStartedTestBack($event)">
+</students-started-test-popup>

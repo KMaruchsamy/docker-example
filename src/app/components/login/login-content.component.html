@@ -21,14 +21,14 @@
         <div class="section-margin">
             <div class="radio-sign-in radio-sign-in-faculty">
                 <div class="sign-in-faculty-grid radio-large">
-                    <input type="radio" #rdfaculty id="faculty_site" [ngModel]="{checked: site == 'faculty'}" (ngModelChange)="site='faculty'" name="site" value="faculty">
+                    <input type="radio" #rdfaculty id="faculty_site" [(ngModel)]="site"  name="site" value="faculty">
                     <label for="faculty_site" class="h3 white-text label-bold">Faculty Site</label>
                     <p class="text-larger">Schedule tests, track your students’ performance, access teaching tools and more</p>
                 </div>
             </div>
             <div class="radio-sign-in radio-sign-in-student">
                 <div class="sign-in-student-grid radio-large">
-                    <input type="radio" #rdstudent id="student_site" [ngModel]="{checked: site == 'student'}" (ngModelChange)="site ='student'" name="site" value="student">
+                    <input type="radio" #rdstudent id="student_site" [(ngModel)]="site"  name="site" value="student">
                     <label for="student_site" class="h3 white-text label-bold">Student Site</label>
                     <p class="text-larger">See what your students see:<br /> take practice tests, access course books, review content</p>
                 </div>

@@ -1,22 +1,21 @@
-import {Component, NgZone, OnDestroy} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router';
-import {NgIf} from '@angular/common';
-import * as _ from 'lodash';
-import {links} from '../../constants/config';
-import {general, login} from '../../constants/error-messages';
-import {Angulartics2On} from 'angulartics2';
-import {Response} from '@angular/http';
-import {Observable, Subscription} from 'rxjs/Rx';
+import { Component, NgZone, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+// import * as _ from 'lodash';
+import { links } from '../../constants/config';
+import { general, login } from '../../constants/error-messages';
+// import { Angulartics2On } from 'angulartics2';
+import { Response } from '@angular/http';
+import { Observable, Subscription } from 'rxjs/Rx';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { LogService } from './../../services/log.service';
-import { TermsOfUseComponent } from './../terms-of-use/terms-of-use.component';
+// import { TermsOfUseComponent } from './../terms-of-use/terms-of-use.component';
 
 @Component({
     selector: 'login-content',
-    providers: [AuthService, CommonService, LogService],
-    templateUrl: 'components/login/login-content.component.html',
-    directives: [ROUTER_DIRECTIVES, Angulartics2On, TermsOfUseComponent]
+    // providers: [AuthService, CommonService, LogService],
+    templateUrl: './login-content.component.html',
+    // directives: [, Angulartics2On, TermsOfUseComponent]
 })
 
 export class LoginContentComponent implements OnDestroy {
@@ -38,13 +37,14 @@ export class LoginContentComponent implements OnDestroy {
     isError: boolean = false;
     errorMessage: string;
     model;
+    site: string;
     constructor(private zone: NgZone, public router: Router, public auth: AuthService, public common: CommonService, private log: LogService) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
         this.sStorage = this.common.getStorage();
         this.institutionRN = 0;
         this.institutionPN = 0;
-        this.site ="faculty" ;
+        this.site = "faculty";
     }
 
     ngOnDestroy(): void {
@@ -130,7 +130,7 @@ export class LoginContentComponent implements OnDestroy {
 
     }
 
-    directToCorrectPage() {        
+    directToCorrectPage() {
         if (this.userType === 'student') {
             this.prepareRedirectToStudentSite('Login');
         } else {
@@ -184,9 +184,9 @@ export class LoginContentComponent implements OnDestroy {
             let institutionsRN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'RN' }), 'InstitutionId');
             let institutionsPN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
             if (institutionsRN.length > 0)
-                this.institutionRN = institutionsRN[0];
+                this.institutionRN = +institutionsRN[0];
             if (institutionsPN.length > 0)
-                this.institutionPN = institutionsPN[0];
+                this.institutionPN = +institutionsPN[0];
         }
     }
 

@@ -1,17 +1,18 @@
+// import { HomeService } from './../../services/home-service';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { links, roster } from '../../constants/config';
 import { Response } from '@angular/http';
-import * as _ from 'lodash';
-import { ProfileService } from './../../services/profile.service';
+// import { AuthService } from './../../services/auth';
+// import * as _ from 'lodash';
 import { AuthService } from './../../services/auth.service';
+import { ProfileService } from '../home/profile.service';
 
 
 @Component({
     selector: 'rosters-faq',
-    providers: [ProfileService, AuthService],
-    templateUrl: 'components/rosters/rosters-faq.component.html',
-    directives: []
+    // providers: [HomeService],
+    templateUrl: './rosters-faq.component.html'
 })
 export class RostersFaqComponent implements OnDestroy {
     _accountManagerId: number;
@@ -36,7 +37,7 @@ export class RostersFaqComponent implements OnDestroy {
     accountManagerEmail: string;
     customChangeForm: string;
     classRosterFormUrl: string = roster.classRosterForm;
-    constructor(private profileService: ProfileService, private auth: AuthService) {
+    constructor(private homeService: ProfileService, private auth: AuthService) {
         this.classRosterFormUrl = roster.classRosterForm;
     }
 
@@ -50,7 +51,7 @@ export class RostersFaqComponent implements OnDestroy {
 
     loadProfileDescription(): void {
         let url = `${this.auth.common.getApiServer()}${links.api.baseurl}${links.api.admin.profilesapi}/${this.accountManagerId}`;
-        let profileObservable: Observable<Response> = this.profileService.getProfile(url);
+        let profileObservable: Observable<Response> = this.homeService.getProfile(url);
         let self: RostersFaqComponent = this;
         this.profileSubscription = profileObservable
             .map(response => response.json())

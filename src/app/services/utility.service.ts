@@ -1,6 +1,4 @@
-﻿import * as moment from 'moment-timezone';
-
-export class UtilityService {
+﻿export class UtilityService {
     constructor() {
     }
 
@@ -11,7 +9,7 @@ export class UtilityService {
 
     boldText(strtext: string): string {
         /* Get the text of the element I'm after */
-        let boldText = strtext.trim(),
+        let boldText:any = strtext.trim(),
             openSpan = '<b>', closeSpan = '</b>';
 
         /* Make the paragraph into an array */

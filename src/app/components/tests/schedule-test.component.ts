@@ -1,57 +1,26 @@
-import {Component, OnInit, AfterViewInit, ViewEncapsulation, OnDestroy} from '@angular/core';
-import {Router, ActivatedRoute, CanDeactivate, RoutesRecognized} from '@angular/router';
-import {NgIf, Location} from '@angular/common';
-import {ParseDatePipe} from '../../pipes/parsedate.pipe';
-import {Title} from '@angular/platform-browser';
-// import {TestService} from '../../services/test.service';
-// import {AuthService} from '../../services/auth';
-// import {CommonService} from '../../services/common';
-import {links} from '../../constants/config';
-// import {PageHeader} from '../shared/page-header';
-// import {PageFooter} from '../shared/page-footer';
-// import {TestHeader} from './test-header';
-import * as _ from 'lodash';
-import {TestScheduleModel} from '../../models/test-schedule.model';
-// import {ConfirmationPopup} from '../shared/confirmation.popup';
-// import {AlertPopup} from '../shared/alert.popup';
-import {Observable, Subscription} from 'rxjs/Rx';
-import {Response} from '@angular/http';
-import {UtilityService} from '../../services/utility.service';
-// import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
-// import {StudentsStartedTest} from './students-started-test.popup';
-// import {TestStartedExceptionModal} from '../../models/test-started-exceptions.modal';
-// import {TimingExceptionsModal} from '../../models/timing-exceptions.modal';
-// import {TimeExceptionPopup} from './time-exception-popup';
-// import {SelfPayStudentPopup} from './self-pay-student-popup';
-// import {LogService} from '../../services/log.service.service';
-// import '../../plugins/bootstrap-datepicker-1.5.min.js';
-// import '../../plugins/jquery.timepicker.js';
-// import '../../lib/modal.js';
+import { Component, OnInit, AfterViewInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute, CanDeactivate, RoutesRecognized, NavigationStart } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { links } from '../../constants/config';
+// import * as _ from 'lodash';
+import { TestScheduleModel } from '../../models/test-schedule.model';
+import { Observable, Subscription } from 'rxjs/Rx';
+import { Response } from '@angular/http';
+import { UtilityService } from '../../services/utility.service';
 import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { TestStartedExceptionModal } from './../../models/test-started-exceptions.model';
 import { TimingExceptionsModal } from './../../models/timing-exceptions.model';
 import { LogService } from './../../services/log.service';
-import { PageHeaderComponent } from './../shared/page-header.component';
-import { TestHeaderComponent } from './test-header.component';
-import { PageFooterComponent } from './../shared/page-footer.component';
-import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
-import { AlertPopupComponent } from './../shared/alert.popup.component';
-import { TestingSessionStartingPopupComponent } from './test-starting-popup.component';
-import { StudentsStartedTestComponent } from './students-started-test.popup.component';
-import { TimeExceptionPopupComponent } from './time-exception-popup.component';
-import { SelfPayStudentPopupComponent } from './self-pay-student-popup.component';
-import * as moment from 'moment-timezone';
 
 @Component({
     selector: 'schedule-test',
-    templateUrl: 'components/tests/schedule-test.component.html',
-    styleUrls: ['../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css', '../../css/jquery.timepicker.css', 'components/tests/schedule.component.css'],
-    encapsulation: ViewEncapsulation.None,
-    providers: [TestService, AuthService, TestScheduleModel, CommonService, UtilityService, TestStartedExceptionModal, TimingExceptionsModal, LogService],
-    directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, NgIf, ConfirmationPopupComponent, AlertPopupComponent, TestingSessionStartingPopupComponent, StudentsStartedTestComponent, TimeExceptionPopupComponent, SelfPayStudentPopupComponent],
-    pipes: [ParseDatePipe]
+    templateUrl: './schedule-test.component.html',
+    providers:[TestScheduleModel],
+    styleUrls: [
+        "./schedule.component.css"
+    ]
 })
 export class ScheduleTestComponent implements OnInit, OnDestroy {
     institutionID: number;
@@ -80,7 +49,13 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
     timingExceptions: Array<TimingExceptionsModal>;
     studentPayExceptions: Array<TimingExceptionsModal>;
     constructor(private activatedRoute: ActivatedRoute, public testScheduleModel: TestScheduleModel,
-        public testService: TestService, public auth: AuthService, public router: Router, public common: CommonService, public aLocation: Location, public titleService: Title, private utility: UtilityService, private log: LogService) {
+        public testService: TestService,
+        public auth: AuthService,
+        public router: Router,
+        public common: CommonService,
+        public titleService: Title,
+        private utility: UtilityService,
+        private log: LogService) {
     }
 
 
@@ -89,9 +64,9 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
 
         this.deactivateSubscription = this.router
             .events
-            .filter(event => event instanceof RoutesRecognized)
-            .subscribe(event => {
-                this.destinationRoute = event.urlAfterRedirects;
+            .filter(event => event instanceof NavigationStart)
+            .subscribe(e => {
+                this.destinationRoute = e.url;
             });
 
         this.sStorage = this.common.getStorage();
@@ -118,7 +93,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
                 this.set8HourRule();
                 this.testService.showTestStartingWarningModals(this.modify, this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
 
-                window.scroll(0,0);
+                window.scroll(0, 0);
             });
         }
     }
@@ -734,7 +709,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
 
 
     set8HourRule(): void {
-        let institution:any = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': +this.testScheduleModel.institutionId });
+        let institution: any = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': +this.testScheduleModel.institutionId });
         if (institution)
             this.ignore8HourRule = !institution.IsIpBlank;
 
@@ -754,7 +729,6 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
                 __this.validate(__this);
             },
             error => {
-                console.log(error);
                 __this.validate(__this);
             });
     }
@@ -955,7 +929,6 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
         __this.studentPayExceptions = [];
         __this.timingExceptions = [];
         __this.testStartedExceptions = [];
-        console.log(result);
         if ((result.TimingExceptions && result.TimingExceptions.length > 0) || (result.windowExceptions && result.windowExceptions.length > 0)) {
             if (result.TimingExceptions && result.TimingExceptions.length > 0) {
                 __this.studentPayExceptions = result.TimingExceptions;
@@ -1100,7 +1073,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
                         )).format('YYYY-MM-DD HH:mm:ss');
                     }
                 } //closes if this.modify
-                 // show The testing window you specified has expired and needs to be changed modal if end time is at least a minute before current time only
+                // show The testing window you specified has expired and needs to be changed modal if end time is at least a minute before current time only
                 if (moment(scheduleEndTime).isBefore(institutionCurrentTime, 'minute')) {
                     $('#alertPopup').modal('show');
                     return false;

@@ -1,19 +1,17 @@
 ﻿import {Component, Input, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
-import {ROUTER_DIRECTIVES} from '@angular/router';
 // import {CommonService} from '../../services/common';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import {SortPipe} from '../../pipes/sort.pipe';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import { CommonService } from './../../services/common.service';
-import * as moment from 'moment-timezone';
+
 
 @Component({
     selector: 'time-exception',
-    templateUrl: 'components/tests/time-exception-popup.component.html',
-    directives: [ROUTER_DIRECTIVES],
-    providers: [CommonService],
-    pipes: [ParseDatePipe,SortPipe]
+    templateUrl: './time-exception-popup.component.html'
+    // providers: [CommonService],
+    // pipes: [ParseDatePipe,SortPipe]
 })
 
 export class TimeExceptionPopupComponent implements OnInit, OnDestroy {

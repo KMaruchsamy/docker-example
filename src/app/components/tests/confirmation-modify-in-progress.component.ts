@@ -1,5 +1,5 @@
 ﻿import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES, ActivatedRoute, RoutesRecognized } from '@angular/router';
+import { Router, ActivatedRoute, RoutesRecognized, NavigationStart } from '@angular/router';
 import {NgFor, NgIf} from '@angular/common';
 import {Title} from '@angular/platform-browser';
 import {Subscription} from 'rxjs/Rx';
@@ -9,7 +9,7 @@ import {Subscription} from 'rxjs/Rx';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 // import {TestService} from '../../services/test.service';
 import {SelectedStudentModel} from '../../models/selected-student.model';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import {SortPipe} from '../../pipes/sort.pipe';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
@@ -18,10 +18,10 @@ import { TestService } from './test.service';
 
 @Component({
     selector: 'confirmation-modify-in-progress',
-    templateUrl: 'components/tests/confirmation-modify-in-progress.component.html',
-    providers: [AuthService, CommonService, TestService, TestScheduleModel, SelectedStudentModel],
-    directives: [ROUTER_DIRECTIVES,PageHeaderComponent, NgFor, NgIf],
-    pipes: [SortPipe]
+    templateUrl: './confirmation-modify-in-progress.component.html',
+    providers: [TestScheduleModel, SelectedStudentModel]//,
+    // directives: [,PageHeaderComponent, NgFor, NgIf],
+    // pipes: [SortPipe]
 })
 export class ConfirmationModifyInProgressComponent implements OnInit, OnDestroy {
     sStorage: any;
@@ -38,11 +38,10 @@ export class ConfirmationModifyInProgressComponent implements OnInit, OnDestroy 
    
     ngOnInit(): void {
         this.deactivateSubscription = this.router
-            .events
-            .filter(event => event instanceof RoutesRecognized)
-            .subscribe(event => {
-                console.log('Event - ' + event);
-                this.destinationRoute = event.urlAfterRedirects;
+             .events
+            .filter(event => event instanceof NavigationStart)
+            .subscribe(e => {
+                this.destinationRoute = e.url;
             });
 
         window.scroll(0,0);

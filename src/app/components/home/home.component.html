@@ -12,7 +12,7 @@
                 <div class="video video-grid-item">
                     <div class="video-wrapper">
                         <video src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/orientation/welcome_nit_faculty.mp4" type="video/mp4" controls
-                        poster="images/video-poster-frame.png" angulartics2On="click" angularticsEvent="OrientationVideoClick" angularticsCategory="VideoEngagement">
+                        poster="assets/images/video-poster-frame.png" angulartics2On="click" angularticsEvent="OrientationVideoClick" angularticsCategory="VideoEngagement">
                             Your browser does not support the video tag.
                         </video>
                     </div>
@@ -90,19 +90,14 @@
         </div>
     </div>
 
-    <!--Kaplan Account Manager/Nurse Consultant profiles-->
     <div class="kaplan-consultant-profiles-section">
         <div class="section-purple"></div>
         <div class="section-light-gray">
             <div class="bottom-grid">
-                <!--Account Manager and Nurse consultant profiles -->
                 <profile  [profile]="accountManagerProfile"></profile>
                 <profile  [profile]="nurseConsultantProfile"></profile>
-                <!--<profile *ng-for="#profile of profiles" [profile]="profile"></profile>-->
             </div>
-            <!--closes-grid-->
         </div>
-        <!--closes section lt-gray-->
     </div>
 
     <!--Modal-->

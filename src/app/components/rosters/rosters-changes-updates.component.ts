@@ -1,5 +1,5 @@
 import { Component, Input, OnInit} from '@angular/core';
-import { Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { Router } from '@angular/router';
 import { Title} from '@angular/platform-browser';
 import * as _ from 'lodash';
 import { NgIf } from '@angular/common';
@@ -16,9 +16,7 @@ import { RosterChangesService } from './roster-changes.service';
 
 @Component({
     selector: 'rosters-changes-updates',
-    providers: [CommonService, RosterChangesService],
-    templateUrl: 'components/rosters/rosters-changes-updates.component.html',
-    directives: [ROUTER_DIRECTIVES, PageHeaderComponent, PageFooterComponent, RostersAMInfoComponent, RostersChangeHeaderComponent, NgIf]
+    templateUrl: './rosters-changes-updates.component.html'
 })
 
 export class RostersChangesUpdatesComponent implements OnInit {

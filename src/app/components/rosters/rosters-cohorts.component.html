@@ -12,23 +12,23 @@
         <span><b>Student access active from {{cohort?.cohortStartDate|parseDate:'MMMM D, YYYY'}} to {{cohort?.cohortEndDate|parseDate:'MMMM D, YYYY'}}</b></span>
         <a (click)="directToChangeForm(cohort.cohortId, cohort.cohortName)" class="right mobile-left-top-margin" *ngIf="!isExtensionCohort(cohort.cohortName) && !isCohortAboutToExpire(cohort) && cohort?.students.length>0">Request change or update</a>
         <a href="javascript:void(0);" class="right mobile-left-top-margin" *ngIf="((isExtensionCohort(cohort.cohortName) || isCohortAboutToExpire(cohort)) && cohort?.students.length>0)">Request extended access</a>
-
       </div>
       <!--<div class="clearfix">
         <span>Cohort count last updated on August 17, 2016</span>
+        <a href="#" class="right mobile-left-top-margin">Submit change or update</a>
       </div>-->
       <ul class="three-columns-auto cells section-medium-thin" > 
-        <li *ngFor="let student of cohort.students">
+         <li *ngFor="let student of cohort.students">
           <div [class.list-item-with-icons]="student?.isRepeatStudent || student?.isStudentPayDeactivatedStudent || student?.isExpiredStudent">
             <button *ngIf="student.isDuplicate" data-toggle="popover" data-placement="top" [attr.data-content]="student?.email" class="unstyled-button has-popover small-popover">
-              <img src="images/identity-icon.png" alt="duplicate student name icon" width="22" height="22" />
+              <img src="assets/images/identity-icon.png" alt="duplicate student name icon" width="22" height="22" />
             </button>
             {{student.lastName}}, {{student.firstName}}
           </div>
          <div [class.name-multiple-icons]="student?.isRepeatStudent || student?.isStudentPayDeactivatedStudent || student?.isExpiredStudent">
-            <img *ngIf="student?.isRepeatStudent" src="images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="repeat student icon" />
-            <img *ngIf="student?.isStudentPayDeactivatedStudent" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon multiple-icons" alt="payment alert icon"/>
-            <img *ngIf="student?.isExpiredStudent" src="images/yellow-clock-icon.png" class="self-pay-alert-table-icon" alt="student access expired icon"/>
+            <img *ngIf="student?.isRepeatStudent" src="assets/images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="repeat student icon" />
+            <img *ngIf="student?.isStudentPayDeactivatedStudent" src="assets/images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon multiple-icons" alt="payment alert icon"/>
+            <img *ngIf="student?.isExpiredStudent" src="assets/images/yellow-clock-icon.png" class="self-pay-alert-table-icon" alt="student access expired icon"/>
           </div>
         </li>
       </ul>
@@ -38,15 +38,15 @@
       </div>
       <div class="inline-icon-container clearfix">
         <div class="left margin-right-1em" *ngIf="cohort?.hasRepeatStudent">
-          <img src="images/repeat-icon.png" class="inline-icon" alt="payment alert icon" height="18" width="18" />
+          <img src="assets/images/repeat-icon.png" class="inline-icon" alt="payment alert icon" height="18" width="18" />
           <span>Repeat student</span>
         </div>
         <div class="left" *ngIf="cohort?.hasStudentPayDeactivatedStudent">
-          <img src="images/self-pay-alert-icon.svg" class="inline-icon" alt="payment alert icon" height="18" width="18" />
+          <img src="assets/images/self-pay-alert-icon.svg" class="inline-icon" alt="payment alert icon" height="18" width="18" />
           <span>Student has been deactivated due to non-payment</span>
         </div>
          <div class="left" *ngIf="cohort?.hasExpiredStudent">
-           <img src="images/yellow-clock-icon.png" class="inline-icon" alt="student access expired icon" height="18" width="18" />
+           <img src="assets/images/yellow-clock-icon.png" class="inline-icon" alt="student access expired icon" height="18" width="18" />
           <span>Student access has expired</span>
         </div>
       </div>

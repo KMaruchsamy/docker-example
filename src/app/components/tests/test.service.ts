@@ -1,8 +1,8 @@
 import {Injectable, Inject} from '@angular/core';
-import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
+import {Http, Response, RequestOptions, Headers} from "@angular/http";
 import {Observable} from 'rxjs/Rx';
 // import {AuthService} from './auth';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 // import {TestScheduleModel} from '../models/test-schedule.model';
 // import {SelectedStudentModel} from '../models/selected-student.model';
 // import {TestShedulingPages} from '../constants/config';
@@ -12,7 +12,7 @@ import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { TestShedulingPages } from './../../constants/config';
 import { SelectedStudentModel } from './../../models/selected-student.model';
-import * as moment from 'moment-timezone';
+
 
 @Injectable()
 export class TestService {
@@ -133,8 +133,6 @@ export class TestService {
 
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                console.log(xhr.status);
-                console.log(thrownError);
             },
             async: false
         });
@@ -371,8 +369,6 @@ export class TestService {
 
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                console.log(xhr.status);
-                console.log(thrownError);
             },
             async: false
         });

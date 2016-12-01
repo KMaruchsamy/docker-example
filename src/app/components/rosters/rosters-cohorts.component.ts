@@ -1,29 +1,33 @@
-import {ParseDatePipe} from '../../pipes/parsedate.pipe';
-import { NgFor, NgIf } from '@angular/common';
+// import {ParseDatePipe} from '../../pipes/parsedate.pipe';
+// import {CommonService} from '../../services/common';
+// import { RosterService } from './../../services/roster.service';
+// import { NgFor, NgIf } from '@angular/common';
+// import { RosterCohortsModal } from './../../models/roster-cohorts.modal';
+// import { RosterCohortStudentsModal } from './../../models/roster-cohort-students.modal';
+// import { RostersModal } from './../../models/rosters.modal';
 import { Component, Input, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
-import {RouterLink, ROUTER_DIRECTIVES} from '@angular/router';
-import * as _ from 'lodash';
-import { AuthService } from './../../services/auth.service';
-import {links, Timezones, cohortRosterChangeUserPreference} from '../../constants/config';
-import {Observable, Subscription} from 'rxjs/Rx';
-import {Response} from '@angular/http';
+// import * as _ from 'lodash';
+import { links, Timezones, cohortRosterChangeUserPreference } from '../../constants/config';
+import { Observable, Subscription } from 'rxjs/Rx';
+import { Response } from '@angular/http';
 import { RostersModal } from './../../models/rosters.model';
 import { RosterCohortsModel } from './../../models/roster-cohorts.model';
 import { RosterCohortStudentsModel } from './../../models/roster-cohort-students.model';
 import { CommonService } from './../../services/common.service';
 import { RosterService } from './roster.service';
-import * as moment from 'moment-timezone';
-import { Router } from '@angular/router';
 import { RosterChangesModel } from '../../models/roster-changes.model';
-import {RosterCohortUserPreferenceModel} from './../../models/roster-cohort-user-preference.model';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { RosterCohortUserPreferenceModel } from '../../models/roster-cohort-user-preference.model';
+
 
 @Component({
     selector: 'rosters-cohorts',
-    providers: [RostersModal, RosterCohortsModel, RosterCohortStudentsModel, RosterCohortUserPreferenceModel, CommonService, RosterService, AuthService],
+    providers: [RostersModal, RosterCohortsModel, RosterCohortStudentsModel, RosterCohortUserPreferenceModel],
     encapsulation: ViewEncapsulation.Emulated,
-    templateUrl: 'components/rosters/rosters-cohorts.component.html',
-    directives: [NgIf, NgFor, RouterLink, ROUTER_DIRECTIVES],
-    pipes: [ParseDatePipe],
+    templateUrl: './rosters-cohorts.component.html',
+    // directives: [NgIf, NgFor],
+    // pipes: [ParseDatePipe],
     styles: [`
     .name-multiple-icons  {
         top: -.75em;
@@ -163,11 +167,6 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
                         && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
                 });
 
-                if (!cohort.hasDuplicateStudent) {
-                    if (rosterCohortStudent.isDuplicate)
-                        cohort.hasDuplicateStudent = true;
-                }
-
                 if (!cohort.hasRepeatStudent) {
                     if (rosterCohortStudent.isRepeatStudent)
                         cohort.hasRepeatStudent = true;
@@ -222,8 +221,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
 
     }
 
-    isExtensionCohort(cohortName: string)
-    {
+    isExtensionCohort(cohortName: string) {
         if (cohortName.toUpperCase().indexOf('EXTENSION') != -1)
             return true;
         else
@@ -249,7 +247,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
                 if (__this.rosterCohortUserPreferenceModel.PreferenceValue === cohortRosterChangeUserPreference.PreferenceTypeHideValueName) {
                     __this.router.navigate(['/rosters/change-update']);
                 } else {
-                   __this.router.navigate(['/rosters/changes-note']);
+                    __this.router.navigate(['/rosters/changes-note']);
                 }
 
             }, error => console.log(error));

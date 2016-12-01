@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 
 @Component({
 	selector:'login-header',
-	templateUrl:'components/login/login-header.component.html'
+	templateUrl:'./login-header.component.html'
 })
 
 export class LoginHeaderComponent{

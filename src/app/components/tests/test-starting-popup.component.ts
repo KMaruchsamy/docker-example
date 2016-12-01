@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, ViewEncapsulation} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {Router} from '@angular/router';
 import {NgIf, NgFor} from '@angular/common';
 // import {CommonService} from '../../services/common';
 // import {TestService} from '../../services/test.service';
@@ -9,8 +9,8 @@ import { CommonService } from './../../services/common.service';
 @Component({
     selector: 'test-starting-popup',
     providers: [CommonService, TestService],
-    templateUrl: 'components/tests/test-starting-popup.component.html',
-    directives: [ROUTER_DIRECTIVES, NgIf, NgFor],
+    templateUrl: './test-starting-popup.component.html',
+    // directives: [, NgIf, NgFor],
     encapsulation: ViewEncapsulation.None,
     styles:[`@media (min-width: 48em){
             .modal-dialog {width: 635px;}}`]

@@ -1,40 +1,40 @@
-import {Component, OnDestroy} from '@angular/core';
-import {NgFor, NgIf} from '@angular/common';
-import {ActivatedRoute, ROUTER_DIRECTIVES} from '@angular/router';
-import {Response} from '@angular/http';
-import {Observable, Subscription} from 'rxjs/Rx';
-import {Title} from '@angular/platform-browser';
-import {links} from '../../constants/config';
-import { ProfileService } from './../../services/profile.service';
+import { Component, OnDestroy } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { Response } from '@angular/http';
+import { Observable, Subscription } from 'rxjs/Rx';
+import { Title } from '@angular/platform-browser';
+import { links } from '../../constants/config';
 import { CommonService } from './../../services/common.service';
 import { LogService } from './../../services/log.service';
-import { PageHeaderComponent } from './../shared/page-header.component';
-import { PageFooterComponent } from './../shared/page-footer.component';
+// import { PageHeaderComponent } from './../shared/page-header.component';
+// import { PageFooterComponent } from './../shared/page-footer.component';
 import { ProfileModel } from './../../models/profile.model';
+import { ProfileService } from './profile.service';
 
 @Component({
     selector: 'profile-description',
-    providers: [ProfileService, CommonService, LogService],
-    templateUrl: 'components/home/profile-description.component.html',
-    directives: [ROUTER_DIRECTIVES, PageHeaderComponent, PageFooterComponent, NgFor, NgIf]
+    // providers: [HomeService, CommonService, LogService],
+    templateUrl: './profile-description.component.html'//,
+    // directives: [, PageHeaderComponent, PageFooterComponent, NgFor, NgIf]
 })
-    
+
 export class ProfileDescriptionComponent implements OnDestroy {
     kaplanAdminId: number;
     profile: ProfileModel;
     apiServer: string;
     routeParametersSubscription: Subscription;
     getProfileSubscription: Subscription;
-    
+
     constructor(public activatedRoute: ActivatedRoute, public profileService: ProfileService, public common: CommonService, public titleService: Title, private log: LogService) {
         this.apiServer = this.common.getApiServer();
         this.routeParametersSubscription = this.activatedRoute.params.subscribe(params => {
             this.kaplanAdminId = +params['id'];
-            this.profile = {}
             this.loadProfileDescription();
         });
 
     }
+
 
     ngOnDestroy(): void {
         if (this.routeParametersSubscription)

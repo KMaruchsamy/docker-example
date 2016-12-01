@@ -115,10 +115,10 @@ export const links = {
     },
     profile: {
         accountmanager: {
-            defaultimage: 'images/profile-noimage.jpg'
+            defaultimage: 'assets/images/profile-noimage.jpg'
         },
         nurseconsultant: {
-            defaultimage: 'images/profile-noimage.jpg'
+            defaultimage: 'assets/images/profile-noimage.jpg'
         }
     },
     tests: {

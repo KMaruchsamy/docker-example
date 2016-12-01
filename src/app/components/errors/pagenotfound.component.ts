@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import { PageHeaderComponent } from './../shared/page-header.component';
 
 @Component({
     selector: 'notfound',
-    directives:[ROUTER_DIRECTIVES,PageHeaderComponent],
+    // directives:[,PageHeaderComponent],
     template: `
     <page-header [hideDropdown]=true></page-header>
     <main role="main" class="app-main">

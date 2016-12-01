@@ -1,11 +1,10 @@
 ﻿import {Component} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {Router} from '@angular/router';
 import { AuthService } from './../../services/auth.service';
 @Component({
     selector: 'page-footer',
     providers:[AuthService],
-    templateUrl: 'components/shared/page-footer.component.html',
-    directives: [ROUTER_DIRECTIVES]
+    templateUrl: './page-footer.component.html',
 })
 
 export class PageFooterComponent {

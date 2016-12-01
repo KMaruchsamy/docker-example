@@ -1,11 +1,11 @@
 ﻿import {Component, OnInit} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import { PageHeaderComponent } from './../shared/page-header.component';
 
 @Component({
     selector: 'accounterror',
-    directives: [ROUTER_DIRECTIVES, PageHeaderComponent],
+    // directives: [, PageHeaderComponent],
     template: `<page-header [hideDropdown]=true></page-header>   
     <header class="inner-banner" role="banner">
       <div class="container">
@@ -13,7 +13,7 @@ import { PageHeaderComponent } from './../shared/page-header.component';
           <h1 class="center">
             <!--Link should be removed or disabled-->
             <a href="javascript:void(0)" tabindex="-1">
-              <img class="branding-logo-white" src="images/logo-white_2x.png" alt="Kalplan Nursing">
+              <img class="branding-logo-white" src="assets/images/logo-white_2x.png" alt="Kalplan Nursing">
               <span class="screen-reader-only">Kaplan Nursing Faculty Home Page</span>
             </a>
           </h1>

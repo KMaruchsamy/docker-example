@@ -1,41 +1,32 @@
-var glob = require('glob');
-var colors = require('colors');
-var seleniumPath = './node_modules/gulp-protractor/node_modules/protractor/selenium/';
-var seleniumJarPath = '';
-var jasmine2reporter = require('jasmine2-reporter').Jasmine2Reporter;
- var options = {
-    pendingSpec: false,
-    colors: {
-      pending: 'orange',
-    },
-    symbols: {
-      pending: '*  '.strikethrough, //strikethrough is a colors module feature 
-    }
-  };
+// Protractor configuration file, see link for more information
+// https://github.com/angular/protractor/blob/master/docs/referenceConf.js
 
-
-glob(seleniumPath + '*.jar',
-    function(err, files) {
-        seleniumJarPath = files[0];
-    });
+/*global jasmine */
+var SpecReporter = require('jasmine-spec-reporter');
 
 exports.config = {
-    directConnect:true,  // will not wait for web driver to start 
-    seleniumServerJar: seleniumJarPath,
-    framework:'jasmine2',
-    capabilities: {
-        'browserName': 'chrome'
-    },
-    // resultJsonOutputFile: './src/test/reporters/',
-    jasmineNodeOpts: {
-        // showColors: true,
-        defaultTimeoutInterval: 60000,
-        isVerbose: true
-    },
-    onPrepare: function () {        
-        browser.driver.manage().timeouts().implicitlyWait(60000);
-        jasmine.getEnv().addReporter(new jasmine2reporter(options));
-    },
-    allScriptsTimeout: 30000,
-    useAllAngular2AppRoots: true
+  allScriptsTimeout: 11000,
+  specs: [
+    './e2e/**/*.e2e-spec.ts'
+  ],
+  capabilities: {
+    'browserName': 'chrome'
+  },
+  directConnect: true,
+  baseUrl: 'http://localhost:4200/',
+  framework: 'jasmine',
+  jasmineNodeOpts: {
+    showColors: true,
+    defaultTimeoutInterval: 30000,
+    print: function() {}
+  },
+  useAllAngular2AppRoots: true,
+  beforeLaunch: function() {
+    require('ts-node').register({
+      project: 'e2e'
+    });
+  },
+  onPrepare: function() {
+    jasmine.getEnv().addReporter(new SpecReporter());
+  }
 };

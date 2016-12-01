@@ -82,7 +82,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let student of schedule?.selectedStudents">
-                            <td [class.name-with-pay-alert]="student.StudentPay && testStatus > -1">{{student.LastName}}<img *ngIf="student.StudentPay && testStatus > -1" src="images/self-pay-alert-icon.svg"
+                            <td [class.name-with-pay-alert]="student.StudentPay && testStatus > -1">{{student.LastName}}<img *ngIf="student.StudentPay && testStatus > -1" src="assets/images/self-pay-alert-icon.svg"
                                     class="self-pay-alert-table-icon" alt="payment alert icon" /></td>
                             <td>{{student.FirstName}}</td>
                             <td>{{student.CohortName}}</td>
@@ -99,7 +99,7 @@
                         your Account Manager.</p>
                     <p class="icon info-icon-yellow margin-1em-top" *ngIf="!hasADA">Please contact your Account Manager if there are students in your testing session who need testing accommodations.
                         Students with testing accommodations receive untimed versions of their tests.</p>
-                    <img *ngIf="anyStudentPayStudents && testStatus > -1" src="images/self-pay-alert-icon.svg" class="self-pay-alert-icon" alt="payment alert icon"
+                    <img *ngIf="anyStudentPayStudents && testStatus > -1" src="assets/images/self-pay-alert-icon.svg" class="self-pay-alert-icon" alt="payment alert icon"
                         height="22" width="22" />
                     <p *ngIf="anyStudentPayStudents && testStatus > -1">
                         These students have been deactivated due to non-payment. They will not be able to access their test during the specified

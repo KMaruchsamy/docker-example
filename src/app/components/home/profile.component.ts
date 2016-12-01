@@ -1,25 +1,11 @@
-import {Component, Input, OnInit, OnChanges,SimpleChanges} from '@angular/core';
-import {NgFor} from '@angular/common';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {Component, Input} from '@angular/core';
 import { ProfileModel } from './../../models/profile.model';
 
 
 @Component({
 	selector: 'profile',
-	templateUrl: 'components/home/profile.component.html',
-	directives: [ROUTER_DIRECTIVES, NgFor]
+	templateUrl: './profile.component.html'
 })
-export class ProfileComponent implements OnInit, OnChanges {
+export class ProfileComponent {
 	@Input() profile: ProfileModel;
-	constructor() {
-
-	}
-
-	ngOnChanges(changes:SimpleChanges): void{
-		 console.log('ngOnChanges - myProp = ' + changes['profile'].currentValue);
-	}
-
-	ngOnInit(): void {
-		console.log(this.profile);
-	}
 }

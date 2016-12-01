@@ -1,19 +1,19 @@
-import {Component, OnInit, Input, Output, ViewEncapsulation, EventEmitter} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES, CanActivate} from '@angular/router';
-import {Http, Response, Headers, RequestOptions} from '@angular/http';
-import {NgIf} from '@angular/common';
+import { Component, OnInit, Input, Output, ViewEncapsulation, EventEmitter } from '@angular/core';
+import { Router, CanActivate } from '@angular/router';
+// import { Http, Response, Headers, RequestOptions } from '@angular/http';
+// import { NgIf } from '@angular/common';
 // import {AuthService} from '../../services/auth';
 // import {CommonService} from '../../services/common';
-import {links} from '../../constants/config';
-import {UtilityService} from '../../services/utility.service';
-import {Observable, Subscription} from 'rxjs/Rx';
-import {Angulartics2On} from 'angulartics2';
+import { links } from '../../constants/config';
+import { UtilityService } from '../../services/utility.service';
+import { Observable, Subscription } from 'rxjs/Rx';
+import { Angulartics2On } from 'angulartics2';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 
 @Component({
     selector: 'terms-of-use',
-    templateUrl: 'components/terms-of-use/terms-of-use.component.html',
+    templateUrl: './terms-of-use.component.html',
     encapsulation: ViewEncapsulation.None,
     styles: [`  
     .modal-full-screen {
@@ -62,12 +62,10 @@ import { CommonService } from './../../services/common.service';
       padding: .8em 3em;
       margin-top: 1.5em;
       margin-bottom: 1em;
-    }`],
-    providers: [AuthService, UtilityService, CommonService],
-    directives: [ROUTER_DIRECTIVES, Angulartics2On]
+    }`]
 })
 export class TermsOfUseComponent {
-    
+
     termSubscription: Subscription;
     @Input() showTerms: boolean;
     @Input() showCancel: boolean;
@@ -78,7 +76,7 @@ export class TermsOfUseComponent {
     @Output() buttonEvent = new EventEmitter();
     @Output() cancelEvent = new EventEmitter();
     @Output() closeEvent = new EventEmitter();
-    constructor(private http: Http, public router: Router, public auth: AuthService, public common: CommonService) {
+    constructor() {
     }
 
     clickButton(e): void {
@@ -93,8 +91,8 @@ export class TermsOfUseComponent {
         this.closeEvent.emit(e);
     }
 
-    onAccept(accepted:boolean) {
-       this.termsAccepted = accepted;
+    onAccept(accepted: boolean) {
+        this.termsAccepted = accepted;
     }
 
 }

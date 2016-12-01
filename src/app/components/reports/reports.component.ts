@@ -1,23 +1,23 @@
-import {Component, OnInit} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router';
-import {Title} from '@angular/platform-browser';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 // import {AuthService} from '../../services/auth';
 // import {CommonService} from '../../services/common';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 // import {PageHeader} from '../shared/page-header';
 // import {PageFooter} from '../shared/page-footer';
-// import {ProfileService} from '../../services/home-service';
-import {links} from '../../constants/config';
+// import {HomeService} from '../../services/home-service';
+import { links } from '../../constants/config';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
-import { PageHeaderComponent } from './../shared/page-header.component';
-import { PageFooterComponent } from './../shared/page-footer.component';
+// import { PageHeaderComponent } from './../shared/page-header.component';
+// import { PageFooterComponent } from './../shared/page-footer.component';
 
 @Component({
     selector: 'reports',
-    providers: [AuthService, CommonService],
-    templateUrl: 'components/reports/reports.component.html',
-    directives: [ROUTER_DIRECTIVES, PageHeaderComponent, PageFooterComponent]
+    // providers: [AuthService, CommonService],
+    templateUrl: './reports.component.html'//,
+    // directives: [, PageHeaderComponent, PageFooterComponent]
 })
 
 export class ReportsComponent implements OnInit {
@@ -43,13 +43,13 @@ export class ReportsComponent implements OnInit {
             this.router.navigate(['/']);
         else
             this.institutionName = this.getLatestInstitution();
-        window.scroll(0,0);
+        window.scroll(0, 0);
         this.titleService.setTitle('View Reports – Kaplan Nursing');
     }
 
     getLatestInstitution(): string {
         if (this.auth.institutions != null && this.auth.institutions != 'undefined') {
-            let latestInstitution:any = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
+            let latestInstitution: any = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
             if (latestInstitution)
                 return latestInstitution.InstitutionName;
         }

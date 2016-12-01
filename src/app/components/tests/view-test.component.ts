@@ -1,20 +1,20 @@
-import {Component, OnInit, DynamicComponentLoader, ElementRef, OnDestroy} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES, RoutesRecognized, ActivatedRoute} from '@angular/router';
-import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
-import {Title} from '@angular/platform-browser';
-import {Observable, Subscription} from 'rxjs/Rx';
-import {NgIf, NgFor} from '@angular/common';
+import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
+import { Router, RoutesRecognized, ActivatedRoute, NavigationStart } from '@angular/router';
+import { Http, Response, RequestOptions, Headers } from "@angular/http";
+import { Title } from '@angular/platform-browser';
+import { Observable, Subscription } from 'rxjs/Rx';
+import { NgIf, NgFor } from '@angular/common';
 // import {TestService} from '../../services/test.service';
 // import {AuthService} from '../../services/auth';
 // import {CommonService} from '../../services/common';
-import {links} from '../../constants/config';
+import { links } from '../../constants/config';
 // import {PageHeader} from '../shared/page-header';
 // import {PageFooter} from '../shared/page-footer';
 // import {TestHeader} from './test-header';
-import * as _ from 'lodash';
-import {ParseDatePipe} from '../../pipes/parsedate.pipe';
-import {TestScheduleModel} from '../../models/test-schedule.model';
-import {SelectedStudentModel} from '../../models/selected-student.model';
+// import * as _ from 'lodash';
+import { ParseDatePipe } from '../../pipes/parsedate.pipe';
+import { TestScheduleModel } from '../../models/test-schedule.model';
+import { SelectedStudentModel } from '../../models/selected-student.model';
 // import {ConfirmationPopup} from '../shared/confirmation.popup';
 // import {LogService} from '../../services/log.service.service';
 
@@ -29,14 +29,14 @@ import { PageHeaderComponent } from './../shared/page-header.component';
 import { TestHeaderComponent } from './test-header.component';
 import { PageFooterComponent } from './../shared/page-footer.component';
 import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
-import * as moment from 'moment-timezone';
+
 
 @Component({
     selector: "view-test",
-    templateUrl: "components/tests/view-test.component.html",
-    providers: [TestService, AuthService, TestScheduleModel, CommonService, LogService ],
-    directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, NgIf, NgFor, ROUTER_DIRECTIVES, ConfirmationPopupComponent],
-    pipes: [ParseDatePipe]
+    templateUrl: "./view-test.component.html",
+    providers: [ TestScheduleModel]
+    // directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, NgIf, NgFor, ConfirmationPopupComponent],
+    // pipes: [ParseDatePipe]
 })
 export class ViewTestComponent implements OnInit, OnDestroy {
     studentsTable: any;
@@ -54,7 +54,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     paramsSubscription: Subscription;
     scheduleSubscription: Subscription;
     constructor(public auth: AuthService, public common: CommonService, public testService: TestService, public schedule: TestScheduleModel, public router: Router, private activatedRoute: ActivatedRoute, public titleService: Title, private log: LogService
-) {
+    ) {
 
     }
 
@@ -62,10 +62,9 @@ export class ViewTestComponent implements OnInit, OnDestroy {
 
         this.deactivateSubscription = this.router
             .events
-            .filter(event => event instanceof RoutesRecognized)
-            .subscribe(event => {
-                console.log('Event - ' + event);
-                this.destinationRoute = event.urlAfterRedirects;
+            .filter(event => event instanceof NavigationStart)
+            .subscribe(e => {
+                this.destinationRoute = e.url;
             });
 
         this.sStorage = this.common.getStorage();
@@ -81,7 +80,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
                 this.loadTestSchedule();
             });
         }
-        window.scroll(0,0);
+        window.scroll(0, 0);
         this.titleService.setTitle('View Testing Session – Kaplan Nursing');
     }
 
@@ -133,14 +132,12 @@ export class ViewTestComponent implements OnInit, OnDestroy {
                         __this.hasADA = _.some(__this.schedule.selectedStudents, { 'Ada': true });
                         __this.testStatus = __this.testService.getTestStatusFromTimezone(_schedule.institutionId, _schedule.scheduleStartTime, _schedule.scheduleEndTime);
                         __this.anyStudentPayStudents = __this.testService.anyStudentPayStudents(_schedule);
-                        console.log('>>>>>>>>>>>>>>>>>>');
-                        console.log(JSON.stringify(this.schedule));
                         let testStatus: number = __this.testService.getTestStatusFromTimezone(__this.schedule.institutionId, __this.schedule.scheduleStartTime, __this.schedule.scheduleEndTime);
                         if (testStatus === 0)
                             __this.modifyInProgress = true;
                     }
                     else
-                        __this.router.navigate(['/testing-session-expired']);
+                        __this.router.navigate(['/tests/testing-session-expired']);
 
                     if (__this.schedule) {
                         let startTime = __this.schedule.scheduleStartTime;

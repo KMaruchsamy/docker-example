@@ -5,11 +5,10 @@ import { HelpContentComponent } from './help-content.component';
 
 @Component({
     selector:'help',
-    templateUrl:'components/help/help.component.html',
-    directives:[HelpHeaderComponent, HelpContentComponent]
+    templateUrl:'./help.component.html'
 })
 export class HelpComponent implements OnInit {
-    constructor(public titleService: Title){
+    constructor(public titleService: Title) {
     }
 
     ngOnInit(): void {

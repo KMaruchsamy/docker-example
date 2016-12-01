@@ -1,5 +1,5 @@
 ﻿import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES, RouterLink} from '@angular/router';
+import {Router,  RouterLink} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import { PageHeaderComponent } from './../shared/page-header.component';
 import { RosterService } from './roster.service';
@@ -11,9 +11,8 @@ import {RosterCohortUserPreferenceModel} from './../../models/roster-cohort-user
 
 @Component({
     selector: 'rosterschangenote',
-    directives: [ROUTER_DIRECTIVES, PageHeaderComponent, RouterLink],
-    providers: [AuthService, CommonService, RosterService, RosterCohortUserPreferenceModel],
-    template: `<page-header [hideDropdown]=true [showCover]=true [ariaDisabled]=true></page-header>   
+    providers: [RosterCohortUserPreferenceModel],
+    template:  `<page-header [hideDropdown]=true [showCover]=true [ariaDisabled]=true></page-header>   
 
             <main role="main" class="app-main app-main-no-nav">
             

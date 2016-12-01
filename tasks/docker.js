@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var config = require('../gulpnew.config')();
+var config = require('./gulp.config')();
 var rename = require('gulp-rename');
 var plugins = require('gulp-load-plugins')({ lazy: true });
 var app_version = process.env.app_version || 'stg_v0';

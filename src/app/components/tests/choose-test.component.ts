@@ -1,27 +1,27 @@
-import {Component, OnInit, OnChanges, AfterViewChecked, ElementRef, OnDestroy} from '@angular/core';
-import {DomSanitizationService, SafeUrl} from '@angular/platform-browser';
-import {Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, RoutesRecognized, NavigationStart} from '@angular/router';
-import {Subscription, Observable} from 'rxjs/Rx';
-import {Location} from '@angular/common';
-import {Title} from '@angular/platform-browser';
-import {NgIf, NgFor} from '@angular/common';
-import {ParseDatePipe} from '../../pipes/parsedate.pipe';
+import { Component, OnInit, OnChanges, AfterViewChecked, ElementRef, OnDestroy } from '@angular/core';
+import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
+import { Event, Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, RoutesRecognized, NavigationStart } from '@angular/router';
+import { Subscription, Observable } from 'rxjs/Rx';
+import { Location } from '@angular/common';
+import { Title } from '@angular/platform-browser';
+import { NgIf, NgFor } from '@angular/common';
+import { ParseDatePipe } from '../../pipes/parsedate.pipe';
 // import {TestService} from '../../services/test.service';
 // import {AuthService} from '../../services/auth';
 // import {CommonService} from '../../services/common';
-import {links} from '../../constants/config';
+import { links } from '../../constants/config';
 // import {PageHeader} from '../shared/page-header';
 // import {PageFooter} from '../shared/page-footer';
 // import {TestHeader} from './test-header';
-import {TestScheduleModel} from '../../models/test-schedule.model';
+import { TestScheduleModel } from '../../models/test-schedule.model';
 // import {ConfirmationPopup} from '../shared/confirmation.popup';
 // import {AlertPopup} from '../shared/alert.popup';
 // import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
-import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
-import {RoundPipe} from '../../pipes/round.pipe';
-import {UtilityService} from '../../services/utility.service';
-import * as _ from 'lodash';
-import {Response} from '@angular/http';
+import { RemoveWhitespacePipe } from '../../pipes/removewhitespace.pipe';
+import { RoundPipe } from '../../pipes/round.pipe';
+import { UtilityService } from '../../services/utility.service';
+// import * as _ from 'lodash';
+import { Response } from '@angular/http';
 // import {LogService} from '../../services/log.service.service';
 
 // import {SharedDeactivateGuard} from '../shared/shared.deactivate.guard';
@@ -41,14 +41,15 @@ import { PageFooterComponent } from './../shared/page-footer.component';
 import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
 import { AlertPopupComponent } from './../shared/alert.popup.component';
 import { TestingSessionStartingPopupComponent } from './test-starting-popup.component';
-import * as moment from 'moment-timezone';
+
 
 @Component({
     selector: 'choose-test',
-    templateUrl: 'components/tests/choose-test.component.html',
-    providers: [TestService, AuthService, TestScheduleModel, UtilityService, CommonService, LogService],
-    directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, ConfirmationPopupComponent, AlertPopupComponent, TestingSessionStartingPopupComponent, NgIf, NgFor],
-    pipes: [RemoveWhitespacePipe, RoundPipe, ParseDatePipe]
+    templateUrl: './choose-test.component.html',
+    providers:[TestScheduleModel]
+    // providers: [TestService, AuthService, TestScheduleModel, UtilityService, CommonService, LogService]//,
+    // directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, ConfirmationPopupComponent, AlertPopupComponent, TestingSessionStartingPopupComponent, NgIf, NgFor],
+    // pipes: [RemoveWhitespacePipe, RoundPipe, ParseDatePipe]
 })
 
 export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
@@ -85,9 +86,18 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     typeaheadTestsSubscription: Subscription;
     noBlueprints: boolean = false;
     missingBlueprints: boolean = false;
-    constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public auth: AuthService, public common: CommonService, public utitlity: UtilityService,
-        public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public aLocation: Location,
-        public titleService: Title, private sanitizer: DomSanitizationService, private log: LogService) {
+    constructor(private activatedRoute: ActivatedRoute,
+        public testService: TestService,
+        public auth: AuthService,
+        public common: CommonService,
+        public utitlity: UtilityService,
+        public testScheduleModel: TestScheduleModel,
+        public elementRef: ElementRef,
+        public router: Router,
+        public aLocation: Location,
+        public titleService: Title,
+        private log: LogService,
+        private sanitizer: DomSanitizer) {
     }
 
     ngOnChanges(): void {
@@ -114,11 +124,19 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit(): void {
 
-        this.deactivateSubscription = this.router
+        // this.deactivateSubscription = this.router
+        //     .events
+        //     .filter(event => event instanceof RoutesRecognized)
+        //     .subscribe(event => {
+        //         alert(event.urlAfterRedirects);
+        //         this.destinationRoute = event.urlAfterRedirects;
+        //     });
+        
+        this.router
             .events
-            .filter(event => event instanceof RoutesRecognized)
-            .subscribe(event => {
-                this.destinationRoute = event.urlAfterRedirects;
+            .filter(event => event instanceof NavigationStart)
+            .subscribe(e => {
+                this.destinationRoute = e.url;
             });
 
 
@@ -136,7 +154,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
                     this.titleService.setTitle('Choose Test – Kaplan Nursing');
                 }
                 this.initialize();
-                window.scroll(0,0);
+                window.scroll(0, 0);
 
             });
         }
@@ -149,7 +167,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     cancelStartingTestChanges(popupId): void {
-        $('#'+ popupId).modal('hide');
+        $('#' + popupId).modal('hide');
         this.onCancelChanges();
     }
 
@@ -158,7 +176,8 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     }
 
 
-    canDeactivate(next: string): Observable<boolean> | boolean {
+    canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
+        debugger;
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
@@ -196,7 +215,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         this.activeFindByName = false;
         this.noTest = true;
         this.loadSubjects();
-        $('.typeahead').bind('typeahead:select', function(ev, suggetion) {
+        $('.typeahead').on('typeahead:select', function (ev, suggetion) {
             ev.preventDefault();
             self.bindTestSearchResults(suggetion, true);
             $('.typeahead').typeahead('close');
@@ -241,10 +260,10 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
                 this.subjects = json;
                 this.loadSchedule();
                 this.checkIfTestHasStarted();
-                this.testService.showTestStartingWarningModals(this.modify,this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
+                this.testService.showTestStartingWarningModals(this.modify, this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
                 setTimeout(json => {
                     $('.selectpicker').selectpicker('refresh');
-                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) 
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
                         $('.selectpicker').selectpicker('mobile');
                 });
             });
@@ -282,8 +301,8 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
 
     saveChooseTest(e): any {
         this.checkIfTestHasStarted();
-            if (!this.checkIfTestHasStarted()) {
-                return false;
+        if (!this.checkIfTestHasStarted()) {
+            return false;
         }
         this.saveTriggered = true;
         e.preventDefault();
@@ -328,8 +347,8 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         return this.testService.validateDates(this.testScheduleModel, this.institutionID, this.modify, this.modifyInProgress);
     }
 
-    checkIfTestHasStarted():any {
-        return this.testService.checkIfTestHasStarted(this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress );
+    checkIfTestHasStarted(): any {
+        return this.testService.checkIfTestHasStarted(this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress);
     }
 
     selectTest(testId: number, testName: string, subjectId: number, normingStatusName): void {
@@ -347,9 +366,11 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     onOKConfirmation(e: any): void {
+        debugger;
         $('#confirmationPopup').modal('hide');
         this.overrideRouteCheck = true;
         this.router.navigateByUrl(this.attemptedRoute);
+        
     }
 
     onOKAlert(): void {
@@ -462,11 +483,11 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
             {
                 name: 'testNames',
                 limit: 20,
-                source: function(search, process) {
+                source: function (search, process) {
                     var states = [];
                     var data = testNamesList
                     if (search.length >= 2) {
-                        _.forEach(data, function(state, i) {
+                        _.forEach(data, function (state, i) {
                             let name: any = state;
                             if (_.startsWith(name.toLowerCase(), search.toLowerCase())) {
                                 states.push(state);
@@ -570,7 +591,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     }
 
 
-    bindDatatable(self:any): void{
+    bindDatatable(self: any): void {
         if (self.testsTable)
             self.testsTable.destroy();
         setTimeout(() => {
@@ -594,17 +615,17 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     }
 
 
-    checkForAllBlueprints(){
+    checkForAllBlueprints() {
         // check if all blueprints are missing
-        this.noBlueprints = !_.some(this.tests, (test:any) => {
+        this.noBlueprints = !_.some(this.tests, (test: any) => {
             return (test.TopicalBlueprintLink && test.TopicalBlueprintLink.trim() !== '' && _.endsWith(test.TopicalBlueprintLink, '.pdf'));
-        });       
+        });
     }
 
-    checkMissingBlueprints(){
+    checkMissingBlueprints() {
         //check if any blueprints are missing
-        this.missingBlueprints = _.some(this.tests, (test:any) => {
-            return (!test.TopicalBlueprintLink || test.TopicalBlueprintLink.trim() === '' || ! _.endsWith(test.TopicalBlueprintLink, '.pdf'));
-        });       
+        this.missingBlueprints = _.some(this.tests, (test: any) => {
+            return (!test.TopicalBlueprintLink || test.TopicalBlueprintLink.trim() === '' || !_.endsWith(test.TopicalBlueprintLink, '.pdf'));
+        });
     }
 }

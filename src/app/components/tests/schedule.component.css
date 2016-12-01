@@ -2,34 +2,6 @@ body .datepicker, body .ui-timepicker-wrapper {
   z-index: 2001 !important;
 }
 
-body .ui-timepicker-wrapper {
-	height: 245px;
-	width: 195px;
-}
-
-.ui-timepicker-wrapper.ui-timepicker-with-duration,
-.ui-timepicker-wrapper.ui-timepicker-with-duration.ui-timepicker-step-30,
-.ui-timepicker-wrapper.ui-timepicker-with-duration.ui-timepicker-step-60 {
-	width: 195px;
-}
-
-.ui-timepicker-list li {
-	padding: 3px 0 3px .75em;
-	white-space: nowrap;
-	color: inherit !important;
-}
-
-li.ui-timepicker-selected,
-.ui-timepicker-list li:hover,
-.ui-timepicker-list .ui-timepicker-selected:hover {
-	background: #eeeeee;
-}
-
-li.ui-timepicker-selected .ui-timepicker-duration,
-.ui-timepicker-list li:hover .ui-timepicker-duration {
-  color: inherit;
-}
-
 @media (max-width: 768px) {
   body .datepicker, body .ui-timepicker-wrapper {
     border-radius: 0;

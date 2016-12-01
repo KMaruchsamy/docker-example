@@ -1,12 +1,10 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {Router} from '@angular/router';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 
 @Component({
     selector: 'rosters-change-extend-header',
-    providers: [],
-    templateUrl: 'components/rosters/rosters-change-extend-header.component.html',
-    directives: [ROUTER_DIRECTIVES]
+    templateUrl: './rosters-change-extend-header.component.html'
 })
 export class RostersChangeHeaderComponent {
     @Input() rosterChangesModel: RosterChangesModel;

@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, OnInit, OnDestroy} from '@angular/core';
-import {ROUTER_DIRECTIVES, ActivatedRoute, RoutesRecognized, Router} from '@angular/router';
+import { ActivatedRoute, RoutesRecognized, Router, NavigationStart } from '@angular/router';
 import {Title} from '@angular/platform-browser';
 // import {CommonService} from '../../services/common';
 // import {AuthService} from '../../services/auth';
@@ -20,9 +20,9 @@ import { AuthService } from './../../services/auth.service';
 
 @Component({
     selector: 'confirmation',
-    templateUrl: 'components/tests/confirmation.component.html',
-    providers: [CommonService, TestService, TestScheduleModel, AuthService],
-    directives: [ROUTER_DIRECTIVES, PageHeaderComponent, PageFooterComponent, TestHeaderComponent]
+    templateUrl: './confirmation.component.html',
+    providers: [TestScheduleModel],
+    // directives: [, PageHeaderComponent, PageFooterComponent, TestHeaderComponent]
 })
 export class ConfirmationComponent implements OnInit, OnDestroy {
     sStorage: any;
@@ -46,11 +46,10 @@ export class ConfirmationComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
 
         this.deactivateSubscription = this.router
-            .events
-            .filter(event => event instanceof RoutesRecognized)
-            .subscribe(event => {
-                console.log('Event - ' + event);
-                this.destinationRoute = event.urlAfterRedirects;
+             .events
+            .filter(event => event instanceof NavigationStart)
+            .subscribe(e => {
+                this.destinationRoute = e.url;
             });
 
         window.scroll(0,0);
@@ -71,7 +70,7 @@ export class ConfirmationComponent implements OnInit, OnDestroy {
                 if (savedSchedule)
                     this.testScheduleModel = savedSchedule;
                 else
-                    this.router.navigate(['/testing-session-expired']);
+                    this.router.navigate(['/tests/testing-session-expired']);
                 this.testScheduleModel.currentStep = 5;
                 this.testScheduleModel.activeStep = 5;
             });

@@ -1,11 +1,11 @@
-﻿import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Subscription, Observable} from 'rxjs/Rx';
-import {Router, ActivatedRoute} from '@angular/router';
-import {Http, Response, Headers, RequestOptions} from '@angular/http';
-import {Title} from '@angular/platform-browser';
-import * as _ from 'lodash';
-import {links, errorcodes} from '../../constants/config';
-import {manage_account, general, reset_password_after_login, reset_student_password} from '../../constants/error-messages';
+﻿import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription, Observable } from 'rxjs/Rx';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Title } from '@angular/platform-browser';
+// import * as _ from 'lodash';
+import { links, errorcodes } from '../../constants/config';
+import { manage_account, general, reset_password_after_login, reset_student_password } from '../../constants/error-messages';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { ValidationsService } from './../../services/validations.service';
@@ -15,9 +15,7 @@ import { PageHeaderComponent } from './../shared/page-header.component';
 
 @Component({
     selector: 'account',
-    providers: [AuthService, CommonService, ValidationsService, LogService],
-    templateUrl: 'components/account/account.component.html',
-    directives: [PageHeaderComponent, PageFooterComponent]
+    templateUrl: './account.component.html',
 })
 
 export class AccountComponent implements OnInit, OnDestroy {
@@ -75,16 +73,16 @@ export class AccountComponent implements OnInit, OnDestroy {
         this.sStorage = this.common.getStorage();
         this.apiServer = this.common.getApiServer();
         this.initialize();
-        window.scroll(0,0);
+        window.scroll(0, 0);
     }
 
     getInitialize() {
         if (this.auth.isAuth()) {
-          this.firstName = this.sStorage.getItem('firstname');
-          this.lastName = this.sStorage.getItem('lastname');
-          this.facultyTitle = this.sStorage.getItem('title');
-          this.setInstitutionNames(JSON.parse(this.auth.institutions));
-          this.emailId = this.sStorage.getItem('useremail');
+            this.firstName = this.sStorage.getItem('firstname');
+            this.lastName = this.sStorage.getItem('lastname');
+            this.facultyTitle = this.sStorage.getItem('title');
+            this.setInstitutionNames(JSON.parse(this.auth.institutions));
+            this.emailId = this.sStorage.getItem('useremail');
         }
         else {
             this.redirectToLogin();
@@ -187,7 +185,7 @@ export class AccountComponent implements OnInit, OnDestroy {
                         setTimeout(() => {
                             this.changedEmail = false;
                             this.showChangeEmailSection = false;
-                        },3000)
+                        }, 3000)
                     }
                     else if (status.toString() === this.errorCodes.API) {
                         if (json.Payload.length > 0) {
@@ -222,7 +220,7 @@ export class AccountComponent implements OnInit, OnDestroy {
         }
 
     }
-    
+
     showChangeEmail() {
         this.changedEmail = false;
         this.showChangeEmailSection = true;
@@ -257,8 +255,6 @@ export class AccountComponent implements OnInit, OnDestroy {
                     return response.json();
                 })
                 .subscribe(json => {
-                    debugger;
-                    console.log(json);
                     if (status.toString() === this.errorCodes.SUCCESS) {
                         this.passwordReset = true;
                         this.showHintMessage = false;
@@ -352,7 +348,6 @@ export class AccountComponent implements OnInit, OnDestroy {
                     }
                     else {
                         this.sendStudentPasswordErrorMessage = general.exception;
-                        this.studentPasswordReset = false;
                     }
                 }, error => {
                     if (error.status.toString() === this.errorCodes.API) {

@@ -1,6 +1,7 @@
-﻿import * as _ from 'lodash';
+﻿// import * as _ from 'lodash';
 import {links,Timezones} from '../constants/config';
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+// import * as CryptoJS from 'crypto-js';
 
 @Injectable()
 export class CommonService {
@@ -25,7 +26,7 @@ export class CommonService {
 
     getStorage() {
         if (this.isPrivateBrowsing())
-            return window.sessionStorage.__proto__;
+            return  (window.sessionStorage as any).__proto__;
         else
             return window.sessionStorage;
     }
@@ -127,7 +128,7 @@ export class CommonService {
         let sStorage = this.getStorage();
         let institutions = sStorage.getItem('institutions');
         if (institutions) {
-            let selectedInstitution = _.find(JSON.parse(institutions), { 'InstitutionId': institutionId });
+            let selectedInstitution:any = _.find(JSON.parse(institutions), { 'InstitutionId': institutionId });
             if (selectedInstitution) {
                 return selectedInstitution.HourOffset;
             }
@@ -147,7 +148,7 @@ export class CommonService {
         let sStorage = this.getStorage();
         let institutions = sStorage.getItem('institutions');
         if (institutions) {
-            let selectedInstitution = _.find(JSON.parse(institutions), { 'InstitutionId': +institutionId });
+            let selectedInstitution:any = _.find(JSON.parse(institutions), { 'InstitutionId': +institutionId });
             if (selectedInstitution) {
                 return selectedInstitution.TimeZoneName;
             }
@@ -182,7 +183,8 @@ export class CommonService {
         }
         return logserver;
     }
-    decryption(strToDecrypt) {
+
+     decryption(strToDecrypt) {
         let key = CryptoJS.enc.Base64.parse("MTIzNDU2NzgxMjM0NTY3OA==");
         let iv = CryptoJS.enc.Base64.parse("EBESExQVFhcYGRobHB0eHw==");
         let decodedString = decodeURIComponent(strToDecrypt);

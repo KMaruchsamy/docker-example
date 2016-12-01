@@ -1,21 +1,20 @@
-import {Subscription, Observable} from 'rxjs/Rx';
-import { Input, ViewEncapsulation} from '@angular/core';
+import { Subscription, Observable } from 'rxjs/Rx';
+import { Input, ViewEncapsulation } from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {links} from '../../constants/config';
-import {Response} from '@angular/http';
-import * as _ from 'lodash';
+import { links } from '../../constants/config';
+import { Response } from '@angular/http';
+// import * as _ from 'lodash';
 import { CommonService } from './../../services/common.service';
 import { RosterService } from './roster.service';
 import { RosterCohortStudentsModel } from './../../models/roster-cohort-students.model';
-import * as moment from 'moment-timezone';
+
 
 @Component({
     selector: 'rosters-search',
-    providers: [CommonService, RosterService],
-    templateUrl: 'components/rosters/rosters-search.component.html',
-    directives: [],
+    // providers: [RosterService],
+    templateUrl: './rosters-search.component.html',
     encapsulation: ViewEncapsulation.Emulated,
-    styleUrls: ['components/rosters/rosters-search.component.css']
+    styleUrls: ['./rosters-search.component.css']
 })
 export class RostersSearchComponent implements OnInit, OnDestroy {
     _institutionId: number;
@@ -120,7 +119,7 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
             });
             $('.typeahead').typeahead('close');
         } catch (error) {
-            this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = this.anyDuplicateStudents = false;
+            this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = this.anyDuplicateStudents =  false;
             this.activeStudents = this.inactiveStudents = [];
         }
     }
@@ -155,11 +154,11 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
                     rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate && moment(rosterCohortStudent.repeatExpiryDate).isAfter(new Date(), 'day');
                     rosterCohortStudent.isExpiredStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !rosterCohortStudent.studentPayInstitution);
                     rosterCohortStudent.isStudentPayDeactivatedStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !!rosterCohortStudent.studentPayInstitution);
-                    
-                    if (!this.anyDuplicateStudents) {
+
+                if (!this.anyDuplicateStudents) {
                     if (rosterCohortStudent.isDuplicate)
                         this.anyDuplicateStudents = true;
-                }
+                }                    
 
                     if (!this.anyRepeatStudents) {
                         if (rosterCohortStudent.isRepeatStudent)
@@ -229,7 +228,7 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
                                 limit: Number.MAX_VALUE
                             });
                         $('.typeahead').focus();
-                        $('.typeahead').bind('typeahead:select', function (ev, suggestion) {
+                        $('.typeahead').on('typeahead:select', function (ev, suggestion) {
                             self.searchString = suggestion;
                             ev.preventDefault();
                             self.searchStudents(ev);
@@ -237,7 +236,7 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
                     }
                 },
                 error => {
-                    this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = this.anyDuplicateStudents = false;
+                    this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = false;
                     this.activeStudents = this.inactiveStudents = [];
                 });
         }

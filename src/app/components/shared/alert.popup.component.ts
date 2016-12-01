@@ -1,10 +1,9 @@
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES} from '@angular/router';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'alert-popup',
-    templateUrl: 'components/shared/alert.popup.component.html',
-    directives: [ROUTER_DIRECTIVES]
+    templateUrl: './alert.popup.component.html',
 })
 
 export class AlertPopupComponent implements OnInit {

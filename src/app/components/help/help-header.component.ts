@@ -1,11 +1,7 @@
 ﻿import {Component} from '@angular/core';
-import {ROUTER_DIRECTIVES} from '@angular/router';
 
 @Component({
     selector:'help-header',
-    templateUrl:'components/help/help-header.component.html',
-    directives:[ROUTER_DIRECTIVES]
+    templateUrl:'./help-header.component.html'
 })
-export class HelpHeaderComponent{
-
-}
+export class HelpHeaderComponent{}

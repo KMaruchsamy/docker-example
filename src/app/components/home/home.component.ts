@@ -1,29 +1,29 @@
 import {Component, Injector, Inject, OnInit, OnDestroy} from '@angular/core';
 import {NgIf, Location} from '@angular/common';
-import {Router, RouterLink, ROUTER_DIRECTIVES, RouterLinkActive} from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {Response} from '@angular/http';
 import {Title} from '@angular/platform-browser';
 import {links} from '../../constants/config';
-import {Angulartics2On} from 'angulartics2';
+// import {Angulartics2On} from 'angulartics2';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import {Observable, Subscription} from 'rxjs/Rx';
-import {PageScroll} from 'ng2-page-scroll/ng2-page-scroll';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
-import { ProfileService } from './../../services/profile.service';
+import { ProfileService } from './profile.service';
 import { TestService } from './../tests/test.service';
-import { PageHeaderComponent } from './../shared/page-header.component';
-import { PageFooterComponent } from './../shared/page-footer.component';
-import { ProfileComponent } from './profile.component';
+// import { PageHeaderComponent } from './../shared/page-header.component';
+// import { PageFooterComponent } from './../shared/page-footer.component';
+// import { ProfileComponent } from './profile.component';
 import { ProfileModel } from './../../models/profile.model';
+// import { PageScroll } from 'ng2-page-scroll/ng2-page-scroll';
 
 
 @Component({
     selector: 'home',
-    providers: [AuthService, CommonService, ProfileService, TestService, TestScheduleModel],
-    templateUrl: 'components/home/home.component.html',
-    directives: [PageHeaderComponent, PageFooterComponent, NgIf, ProfileComponent, ROUTER_DIRECTIVES, Angulartics2On, RouterLinkActive, PageScroll]
+    // providers: [AuthService, CommonService, profileService, TestService, TestScheduleModel],
+    templateUrl: './home.component.html'//,
+    // directives: [PageHeaderComponent, PageFooterComponent, NgIf, ProfileComponent, Angulartics2On, RouterLinkActive, PageScroll]
 })
 export class HomeComponent implements OnInit, OnDestroy {
     // profiles: Array<ProfileModel>;
@@ -79,7 +79,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.profilesSubscription = profilesObservable
                 .map(response => response.json())
                 .subscribe(json => {
-                    console.log(json);
                     self.bindToModel(self, json);
                 },
                 error => console.log(error.message),
@@ -239,7 +238,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     getLatestInstitution(): number {
         if (this.auth.institutions != null && this.auth.institutions != 'undefined') {
-            let latestInstitution = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
+            let latestInstitution:any = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
             if (latestInstitution)
                 return latestInstitution.InstitutionId;
         }
@@ -253,11 +252,11 @@ export class HomeComponent implements OnInit, OnDestroy {
             let institutionsPN = _.map(_.filter(institutions, { 'ProgramofStudyName': 'PN' }), 'InstitutionId');
             let programId = _.map(institutions, 'ProgramId');
             if (programId.length > 0)
-                this.programId = programId.length>1? programId : programId[0];
+                this.programId = +(programId.length>1? programId : programId[0]);
             if (institutionsRN.length > 0)
-                this.institutionRN = institutionsRN.length>1? institutionsRN : institutionsRN[0];
+                this.institutionRN = +(institutionsRN.length>1? institutionsRN : institutionsRN[0]);
             if (institutionsPN.length > 0)
-                this.institutionPN = institutionsPN.length>1? institutionsPN : institutionsPN[0];
+                this.institutionPN = +(institutionsPN.length>1? institutionsPN : institutionsPN[0]);
             if (institutionsRN.length > 1 || institutionsPN.length > 1)
                 this.isMultiCampus = true;
         }

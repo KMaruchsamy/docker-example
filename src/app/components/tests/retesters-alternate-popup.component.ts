@@ -1,19 +1,15 @@
 ﻿import {Component, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {NgIf, NgFor} from '@angular/common';
-import {ROUTER_DIRECTIVES} from '@angular/router';
 // import {CommonService} from '../../services/common';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import {SelectedStudentModel} from '../../models/selected-student.model';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import {SortPipe} from '../../pipes/sort.pipe';
 import { CommonService } from './../../services/common.service';
 
 @Component({
     selector: 'retesters-alternate',
-    templateUrl: 'components/tests/retesters-alternate-popup.component.html',
-    providers: [CommonService],
-    directives: [ROUTER_DIRECTIVES, NgIf, NgFor],
-    pipes: [SortPipe]
+    templateUrl: './retesters-alternate-popup.component.html'
 })
 
 export class RetesterAlternatePopupComponent implements OnDestroy {

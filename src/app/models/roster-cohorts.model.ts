@@ -1,3 +1,4 @@
+// import { RosterCohortStudentsModal } from './roster-cohort-students.modal';
 import { RosterCohortStudentsModel } from './roster-cohort-students.model';
 export class RosterCohortsModel{
     cohortName: string;
@@ -7,7 +8,6 @@ export class RosterCohortsModel{
     cohortEndDate: Date;
     hasRepeatStudent: boolean;
     hasExpiredStudent: boolean;
-    hasDuplicateStudent: boolean;
     hasStudentPayDeactivatedStudent: boolean;
     students: Array<RosterCohortStudentsModel>;
     visible: boolean;

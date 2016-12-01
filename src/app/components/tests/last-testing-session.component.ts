@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {ROUTER_DIRECTIVES} from '@angular/router';
 // import {CommonService} from '../../services/common';
 // import {AuthService} from '../../services/auth';
 // import {PageHeader} from '../shared/page-header';
@@ -11,8 +10,8 @@ import { PageFooterComponent } from './../shared/page-footer.component';
 
 @Component({
     selector: 'last-testing-session',
-    templateUrl: 'components/tests/last-testing-session.component.html',
-    directives: [ROUTER_DIRECTIVES, PageHeaderComponent, PageFooterComponent]
+    templateUrl: './last-testing-session.component.html',
+    // directives: [, PageHeaderComponent, PageFooterComponent]
 })
 export class LastTestingSessionComponent{
 }

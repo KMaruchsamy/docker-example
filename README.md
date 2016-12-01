@@ -1,25 +1,31 @@
-# NursingIT.Frontend
-Nursing IT UX Improvement project which decouples UI from Platform to make it more AP based.
+# CLI21
 
-# Steps to open/execute the app in Visual studio code 
-1. Open Visual Studio Code. 
-2. Select File -> Open Folder.
-3. Navigate to the NursingIT.FrontEndApp folder and Click Open.
-4. Open the command prompt and point to the NursingIT.FrontEndApp folder.
-5. Run "npm install" to install all the dependencies. 
-6. Run "npm start" to run all the gulp tasks and open the application in the browser.
-7. The files to be deployed are in the "build" folder.
+This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.21.
 
-# Steps to open/execute the app in Visual studio 2015
-1. Open visual studio 2015.
-2. Open File -> Open -> Website. 
-3. Navigate to the NursingIT.FrontEndApp folder and Click Open.
-4. Open the command prompt and point to the NursingIT.FrontEndApp folder.
-5. Run "npm install" to install all the dependencies. 
-6. Run "npm start" to run all the gulp tasks and open the application in the browser.
-7. The files to be deployed are in the "build" folder.
+## Development server
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-# Alternative method for running the tasks  
-You can also use the Task Runner Explorer to run the tasks. Right click the task and run the task.
+## Code scaffolding
 
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class`.
 
+## Build
+
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+
+## Running unit tests
+
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Before running the tests make sure you are serving the app via `ng serve`.
+
+## Deploying to Github Pages
+
+Run `ng github-pages:deploy` to deploy to Github Pages.
+
+## Further help
+
+To get more help on the `angular-cli` use `ng --help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

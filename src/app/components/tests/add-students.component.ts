@@ -1,6 +1,6 @@
-import {Component, OnInit, OnDestroy, AfterViewInit, DynamicComponentLoader, ElementRef,
+import {Component, OnInit, OnDestroy, AfterViewInit,  ElementRef,
     ViewEncapsulation, ViewContainerRef} from '@angular/core';
-import {Router, ROUTER_DIRECTIVES, ActivatedRoute, CanDeactivate, RoutesRecognized } from '@angular/router';
+import { Router, ActivatedRoute, CanDeactivate, RoutesRecognized, NavigationStart } from '@angular/router';
 import {Response} from '@angular/http';
 import {Subscription, Observable} from 'rxjs/Rx';
 import {NgFor, Location} from '@angular/common';
@@ -27,7 +27,7 @@ import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {SortPipe} from '../../pipes/sort.pipe';
 import {UtilityService} from '../../services/utility.service';
 // import {LogService} from '../../services/log.service.service';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
@@ -43,26 +43,25 @@ import { ConfirmationPopupComponent } from './../shared/confirmation.popup.compo
 import { PageFooterComponent } from './../shared/page-footer.component';
 import { TestHeaderComponent } from './test-header.component';
 import { PageHeaderComponent } from './../shared/page-header.component';
-import * as moment from 'moment-timezone';
 
 
 @Component({
     selector: 'add-students',
-    templateUrl: 'components/tests/add-students.component.html',
+    templateUrl: './add-students.component.html',
     encapsulation: ViewEncapsulation.None,
     styles: [`#addByName.active + #cohortStudentList .add-students-table-search {display: table; width: 100%;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
-    providers: [TestService, AuthService, TestScheduleModel, SelectedStudentModel, CommonService, LogService, RetesterAlternatePopupComponent, RetesterNoAlternatePopupComponent, TimeExceptionPopupComponent, AlertPopupComponent, SelfPayStudentPopupComponent, UtilityService],
-    directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, NgFor, ConfirmationPopupComponent, ROUTER_DIRECTIVES, AlertPopupComponent, TestingSessionStartingPopupComponent, StudentsStartedTestComponent],
-    pipes: [RemoveWhitespacePipe, SortPipe, ParseDatePipe]
+    providers: [TestScheduleModel, SelectedStudentModel],
+    // directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, NgFor, ConfirmationPopupComponent, AlertPopupComponent, TestingSessionStartingPopupComponent],
+    // pipes: [RemoveWhitespacePipe, SortPipe, ParseDatePipe]
 })
 
 export class AddStudentsComponent implements OnInit, OnDestroy {
     apiServer: string;
     lastSelectedCohortID: number;
     lastSelectedCohortName: string;
-    cohorts: Object[] = [];
+    cohorts: any[] = [];
     cohortStudentlist: Object[] = [];
     selectedStudents: SelectedStudentModel[] = [];
     prevStudentList: SelectedStudentModel[] = [];
@@ -104,10 +103,30 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     filterStatus: string = "assignedTestStarted";  // constant to pass into endpoint as a parameter
     doesWentThroughTestException: boolean = false;
     previousSelectedStudentList: SelectedStudentModel[] = []; // To Assign previous selected student for Modify In Progress scenario....
-
-    constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public auth: AuthService, public testScheduleModel: TestScheduleModel, public elementRef: ElementRef, public router: Router, public selectedStudentModel: SelectedStudentModel, public common: CommonService,
-        public dynamicComponentLoader: DynamicComponentLoader, public aLocation: Location, public viewContainerRef: ViewContainerRef, public titleService: Title, private log: LogService) {
-
+    popupStudentRepeaterExceptions: any;
+    popupRetesterExceptions: any;
+    popupTestTakenStudents: any;
+    popupTestScheduledSudents: any;
+    popupStudentWindowException: any;
+    popupStudentsStartedTest: any;
+    popupStudentExceptions: any;
+    showRetestersAlternatePopup: boolean = false;
+    showRetestersNoAlternatePopup: boolean = false;
+    showTimingExceptionPopup: boolean = false;
+    showSelfPayStudentPopup: boolean = false;
+    showStudentsStartedTestPopup: boolean = false;
+    constructor(private activatedRoute: ActivatedRoute,
+        public testService: TestService,
+        public auth: AuthService,
+        public testScheduleModel: TestScheduleModel,
+        public elementRef: ElementRef,
+        public router: Router,
+        public selectedStudentModel: SelectedStudentModel,
+        public common: CommonService,
+        public aLocation: Location,
+        public viewContainerRef: ViewContainerRef,
+        public titleService: Title,
+        private log: LogService) {
     }
 
 
@@ -206,10 +225,9 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
         this.deactivateSubscription = this.router
             .events
-            .filter(event => event instanceof RoutesRecognized)
-            .subscribe(event => {
-                console.log('Event - ' + event);
-                this.destinationRoute = event.urlAfterRedirects;
+            .filter(event => event instanceof NavigationStart)
+            .subscribe(e => {
+                this.destinationRoute = e.url;
             });
 
         let self = this;
@@ -260,7 +278,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             });
 
 
-            $('.typeahead').bind('typeahead:select', function (ev, suggetion) {
+            $('.typeahead').on('typeahead:select', function (ev, suggetion) {
                 ev.preventDefault();
                 self.FilterStudentfromResult(suggetion);
             });
@@ -369,7 +387,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     ResetData(): void {
         $('#testSchedulingSelectedStudentsList').empty();
         $('#cohortStudents button').each(function () {
-            $(this).removeAttr('disabled', 'disabled');
+            $(this).removeAttr('disabled');
         });
         this.selectedStudents = [];
         this.ShowHideSelectedStudentContainer();
@@ -377,12 +395,12 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     }
 
     UpdateTestName(): void {
-        let _selectedStudent = this.testScheduleModel.selectedStudents;
-        let retesters = JSON.parse(this.sStorage.getItem('retesters'));
+        let _selectedStudent:any = this.testScheduleModel.selectedStudents;
+        let retesters:any = JSON.parse(this.sStorage.getItem('retesters'));
         for (let i = 0; i < _selectedStudent.length; i++) {
             if (retesters != null) {
                 if (retesters.length > 0) {
-                    let _retesterStudent: Object = _.filter(retesters, { 'StudentId': _selectedStudent[i].StudentId });
+                    let _retesterStudent: any = _.filter(retesters, { 'StudentId': _selectedStudent[i].StudentId });
                     if (_retesterStudent.length > 0) { }
                     else {
                         this.testScheduleModel.selectedStudents[i].StudentTestId = this.testScheduleModel.testId;
@@ -447,7 +465,6 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 
             },
             error => {
-                console.log(error);
                 __this.log.error(JSON.parse(error._body).msg, error._body);
                 if (error.status === 400)
                     this.noCohort = true;
@@ -476,9 +493,9 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             return objArray;
 
         let duplicate = false;
-        _.forEach(objArray, (obj, key) => {
+        _.forEach(objArray, (obj:any, key) => {
 
-            let duplicateArray = _.filter(objArray, function (o) { return o.StudentId !== obj.StudentId && obj.FirstName.toUpperCase() === o.FirstName.toUpperCase() && obj.LastName.toUpperCase() === o.LastName.toUpperCase() });
+            let duplicateArray = _.filter(objArray, function (o:any) { return o.StudentId !== obj.StudentId && obj.FirstName.toUpperCase() === o.FirstName.toUpperCase() && obj.LastName.toUpperCase() === o.LastName.toUpperCase() });
             if (duplicateArray.length > 0)
                 obj.duplicate = true;
             else
@@ -619,7 +636,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         if (rows.length > 0) {
             let __this = this;
             $("#cohortStudents tbody tr").each(function (index, el) {
-                let student = {};
+                let student:any = {};
                 if ($(el).attr('class').search('hidden') < 0) {
                     let buttonId = $(el).find('td:eq(4) button').attr('id');
                     if (!$('#' + buttonId).prop('disabled')) {
@@ -651,7 +668,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
     ResetAddButton(): void {
         $("#cohortStudents button").each(function (index, el) {
-            $(el).removeAttr('disabled', 'disabled');
+            $(el).removeAttr('disabled');
         });
     }
 
@@ -680,7 +697,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             $('#addAllStudents').attr('disabled', 'disabled');
         }
         else
-            $('#addAllStudents').removeAttr('disabled', 'disabled');
+            $('#addAllStudents').removeAttr('disabled');
     }
 
     DisableAddButton(): void {
@@ -703,7 +720,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             $('#cohortStudents tbody tr button').each(function (index, el) {
                 let buttonId = $(el).attr('id');
                 if (!$('#' + buttonId).prop('disabled')) {
-                    $('#addAllStudents').removeAttr('disabled', 'disabled');
+                    $('#addAllStudents').removeAttr('disabled');
                     return false;
                 }
                 else
@@ -720,7 +737,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             e.preventDefault();
             let rowId = $(this).attr('data-id');
             $(this).parent().remove();
-            _self.RemoveStudentFromList(rowId);
+            _self.RemoveStudentFromList(+rowId);
         });
     }
     RemoveStudentFromList(buttonid: number): void {
@@ -752,7 +769,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         this.selectedStudentCount = this.selectedStudents.length;
     }
 
-    AddStudent(student: Object, event): void {
+    AddStudent(student: any, event): void {
         event.preventDefault();
         $('#cohort-' + student.StudentId.toString()).attr('disabled', 'disabled');
         student.CohortId = (this.isAddByName ? student.CohortId : this.lastSelectedCohortID);
@@ -977,14 +994,13 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             this.testScheduleModel.selectedStudents = selectedStudentModelList;
         //   this.sStorage = this.auth.common.getStorage();
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
-        console.log('TestScheduleModel with Selected student' + this.testScheduleModel);
         this.WindowException();
     }
     CheckForPreviousAlternateSelection(selectedStudentModelList: any[]): void {
         let _studentList: SelectedStudentModel[] = [];
         for (let i = 0; i < selectedStudentModelList.length; i++) {
             let _retester = selectedStudentModelList[i];
-            let _retesterStudent: SelectedStudentModel = _.filter(this.prevStudentList, { 'StudentId': _retester.StudentId });
+            let _retesterStudent: SelectedStudentModel[] = _.filter(this.prevStudentList, { 'StudentId': _retester.StudentId });
             if (_retesterStudent.length > 0)
                 _studentList.push(_retesterStudent[0]);
             else
@@ -1064,7 +1080,9 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                     this.sStorage.removeItem('retesters');
                     this.HasStudentPayException();
                 }
-            }, error => console.log(error));
+            }, error => {
+                console.log(error);
+            });
 
     }
     WindowException(): void {
@@ -1085,22 +1103,34 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             }, error => console.log(error));
 
     }
+
+    onWindowExceptionPopupClose(e: any) {
+        $('#modalTimingException').modal('hide');
+        this.showTimingExceptionPopup = false;
+    }
+
     HasWindowException(_studentWindowException: any): void {
         if (_studentWindowException.length != 0) {
-            if (this.loader)
-                this.loader.destroy();
-            this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopupComponent, this.viewContainerRef)
-                .then(retester => {
-                    this.loader = retester;
-                    $('#modalTimingException').modal('show');
-                    retester.instance.studentWindowException = _studentWindowException;
-                    retester.instance.testSchedule = this.testScheduleModel;
-                    retester.instance.canRemoveStudents = false;
-                    retester.instance.windowExceptionPopupClose.subscribe((e) => {
-                        $('#modalTimingException').modal('hide');
-                    });
+            this.popupStudentWindowException = _studentWindowException;
+            this.showTimingExceptionPopup = true;
+            setTimeout(function() {
+                $('#modalTimingException').modal('show');
+            });
+             
+            // if (this.loader)
+            //     this.loader.destroy();
+            // this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopupComponent, this.viewContainerRef)
+            //     .then(retester => {
+            //         this.loader = retester;
+            //         $('#modalTimingException').modal('show');
+            //         retester.instance.studentWindowException = _studentWindowException;
+            //         retester.instance.testSchedule = this.testScheduleModel;
+            //         retester.instance.canRemoveStudents = false;
+            //         retester.instance.windowExceptionPopupClose.subscribe((e) => {
+            //             $('#modalTimingException').modal('hide');
+            //         });
 
-                });
+            //     });
         }
         else {
             if (!this.modifyInProgress)
@@ -1112,7 +1142,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     markSelfPayStudents() {
         if (this._selfPayStudent && this._selfPayStudent.length > 0) {
             if (this.testScheduleModel && this.testScheduleModel.selectedStudents && this.testScheduleModel.selectedStudents.length > 0) {
-                _.forEach(this._selfPayStudent, (student, key) => {
+                _.forEach(this._selfPayStudent, (student:any, key) => {
                     let selectedStudent: SelectedStudentModel = _.find(this.testScheduleModel.selectedStudents, { 'StudentId': student.StudentId });
                     if (selectedStudent) {
                         selectedStudent.MarkedToRemove = false;
@@ -1124,33 +1154,55 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         }
     }
 
+    onSelfPayStudentExceptionPopupClose(e: any) {
+        debugger;
+        $('#selfPayStudentModal').modal('hide');
+        this.showSelfPayStudentPopup = false;
+        if (this.modifyInProgress) {
+            this.updateModifyInProgress(true);
+        }
+        else {
+            if (this.modify)
+                this.router.navigate(['/tests', 'modify', 'review']);
+            else
+                this.router.navigate(['/tests/review']);
+        }
+    }
+
     HasStudentPayException(): void {
         this.markSelfPayStudents();
-        if (this._selfPayStudent.length > 0) {
-            if (this.loader)
-                this.loader.destroy();
-            this.dynamicComponentLoader.loadNextToLocation(SelfPayStudentPopupComponent, this.viewContainerRef)
-                .then(retester => {
-                    this.loader = retester;
-                    $('#selfPayStudentModal').modal('show');
-                    this.markSelfPayStudents();
-                    retester.instance.selfPayStudentException = this._selfPayStudent;
-                    retester.instance.testSchedule = this.testScheduleModel;
-                    retester.instance.isModifyInProgress = this.modifyInProgress ? true : false;
-                    retester.instance.selfPayStudentExceptionPopupClose.subscribe((e) => {
-                        $('#selfPayStudentModal').modal('hide');
-                        if (this.modifyInProgress) {
-                            this.updateModifyInProgress(true);
-                        }
-                        else {
-                            if (this.modify)
-                                this.router.navigate(['/tests', 'modify', 'review']);
-                            else
-                                this.router.navigate(['/tests/review']);
-                        }
-                    });
+        if (this._selfPayStudent.length > 0) {            
+            this.markSelfPayStudents();
+            this.showSelfPayStudentPopup = true;
+            setTimeout(function() {
+                $('#selfPayStudentModal').modal('show');
+            });
+            
 
-                });
+            // if (this.loader)
+            //     this.loader.destroy();
+            // this.dynamicComponentLoader.loadNextToLocation(SelfPayStudentPopupComponent, this.viewContainerRef)
+            //     .then(retester => {
+            //         this.loader = retester;
+            //         $('#selfPayStudentModal').modal('show');
+            //         this.markSelfPayStudents();
+            //         retester.instance.selfPayStudentException = this._selfPayStudent;
+            //         retester.instance.testSchedule = this.testScheduleModel;
+            //         retester.instance.isModifyInProgress = this.modifyInProgress ? true : false;
+            //         retester.instance.selfPayStudentExceptionPopupClose.subscribe((e) => {
+            //             $('#selfPayStudentModal').modal('hide');
+            //             if (this.modifyInProgress) {
+            //                 this.updateModifyInProgress(true);
+            //             }
+            //             else {
+            //                 if (this.modify)
+            //                     this.router.navigate(['/tests', 'modify', 'review']);
+            //                 else
+            //                     this.router.navigate(['/tests/review']);
+            //             }
+            //         });
+
+            //     });
         }
         else {
             if (this.modifyInProgress) {
@@ -1225,7 +1277,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 __this.hasAlternateTests = true;
 
             if (studentRepeaterExceptions.length > 0) {
-                _.forEach(studentRepeaterExceptions, function (student, key) {
+                _.forEach(studentRepeaterExceptions, function (student:any, key) {
                     let studentId = student.StudentId;
                     student.TestName = __this.testScheduleModel.testName;
                     student.NormingStatus = __this.testScheduleModel.testNormingStatus;
@@ -1236,7 +1288,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                         // if (!student.Enabled)
                         //     __this.markForRemoval(student.StudentId, true);
                         _.forEach(student.AlternateTests, function (studentAlternate, key) {
-                            let _alternateTests = _.find(alternateTests, { 'TestId': studentAlternate.TestId });
+                            let _alternateTests:any = _.find(alternateTests, { 'TestId': studentAlternate.TestId });
                             studentAlternate.TestName = _alternateTests.TestName;
                             studentAlternate.NormingStatus = _alternateTests.NormingStatusName;
                             studentAlternate.Recommended = _alternateTests.Recommended;
@@ -1265,7 +1317,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     validateChangeAlternate(): boolean {
         if (this.retesterExceptions) {
             if (this.retesterExceptions.length > 0) {
-                return _.some(this.retesterExceptions, function (retester) {
+                return _.some(this.retesterExceptions, function (retester:any) {
 
                     return retester.AlternateTests.length > 0;
                 });
@@ -1300,80 +1352,136 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         return _count;
     }
 
-    loadRetesterNoAlternatePopup(_studentRepeaterExceptions: any): void {
-        if (this.loader)
-            this.loader.destroy();
-        this.dynamicComponentLoader.loadNextToLocation(RetesterNoAlternatePopupComponent, this.viewContainerRef)
-            .then(retester => {
-                this.loader = retester;
-                $('#modalNoAlternateTest').modal('show');
-                retester.instance.studentRepeaters = _studentRepeaterExceptions;
-                retester.instance.testSchedule = this.testScheduleModel;
-                retester.instance.modifyInProgress = this.modifyInProgress;
-                retester.instance.retesterNoAlternatePopupOK.subscribe(testSchedule => {
-                    if (testSchedule) {
-                        $('#modalNoAlternateTest').modal('hide');
-                        this.sStorage.setItem('testschedule', JSON.stringify(testSchedule));
-                        this.testScheduleModel = testSchedule;
-                        this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
-                        if (this.studentCountInSession()) {
+    onRetesterNoAlternatePopupOK(testSchedule: any) {
+        if (testSchedule) {
+            $('#modalNoAlternateTest').modal('hide');           
+            this.sStorage.setItem('testschedule', JSON.stringify(testSchedule));
+            this.testScheduleModel = testSchedule;
+            this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
+            if (this.studentCountInSession()) {
 
-                            this.HasStudentPayException();
-                        }
-                        else {
-                            this.initialize();
-                            this.CheckForAllStudentSelected();
-                        }
-                    }
-                });
-                retester.instance.retesterNoAlternatePopupCancel.subscribe((e) => {
-                    $('#modalNoAlternateTest').modal('hide');
-                });
-
-            });
+                this.HasStudentPayException();
+            }
+            else {
+                this.initialize();
+                this.CheckForAllStudentSelected();
+            }
+        }
+    }
+    onRetesterNoAlternatePopupCancel(e: any) {
+        $('#modalNoAlternateTest').modal('hide');
+        this.showRetestersNoAlternatePopup = false;
     }
 
+    loadRetesterNoAlternatePopup(_studentRepeaterExceptions: any): void {
+        this.popupStudentRepeaterExceptions = _studentRepeaterExceptions;
+        this.showRetestersNoAlternatePopup = true;
+        setTimeout(function() {
+             $('#modalNoAlternateTest').modal('show');
+        });
+       
+        
+        // if (this.loader)
+        //     this.loader.destroy();
+        // this.dynamicComponentLoader.loadNextToLocation(RetesterNoAlternatePopupComponent, this.viewContainerRef)
+        //     .then(retester => {
+        //         this.loader = retester;
+        //         $('#modalNoAlternateTest').modal('show');
+        //         retester.instance.studentRepeaters = _studentRepeaterExceptions;
+        //         retester.instance.testSchedule = this.testScheduleModel;
+        //         retester.instance.modifyInProgress = this.modifyInProgress;
+        //         retester.instance.retesterNoAlternatePopupOK.subscribe(testSchedule => {
+        //             if (testSchedule) {
+        //                 $('#modalNoAlternateTest').modal('hide');
+        //                 this.sStorage.setItem('testschedule', JSON.stringify(testSchedule));
+        //                 this.testScheduleModel = testSchedule;
+        //                 this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
+        //                 if (this.studentCountInSession()) {
+
+        //                     this.HasStudentPayException();
+        //                 }
+        //                 else {
+        //                     this.initialize();
+        //                     this.CheckForAllStudentSelected();
+        //                 }
+        //             }
+        //         });
+        //         retester.instance.retesterNoAlternatePopupCancel.subscribe((e) => {
+        //             $('#modalNoAlternateTest').modal('hide');
+        //         });
+
+        //     });
+    }
+
+    onRetesterAlternatePopupOK(retesters: any) {
+        if (retesters) {
+            $('#modalAlternateTest').modal('hide');
+            // this.showRetestersAlternatePopup = false;
+            this.testScheduleModel = JSON.parse(this.sStorage.getItem('testschedule'));
+            this.retesterExceptions = retesters;
+            this.DeleteRemovedStudentFromSession(retesters);
+
+            this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
+            if (this.studentCountInSession()) {
+                this.HasStudentPayException();
+            }
+            else {
+                this.initialize();
+                this.CheckForAllStudentSelected();
+            }
+        }
+    }    
+
+    onRetesterAlternatePopupCancel(e: any) {
+        $('#modalAlternateTest').modal('hide');
+        this.showRetestersAlternatePopup = false;
+    }
 
     loadRetesterAlternatePopup(_studentRepeaterExceptions: any): void {
         _studentRepeaterExceptions = this.CheckForRetesters(_studentRepeaterExceptions);
-        let testScheduledSudents: Object[] = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 2 });
-        let testTakenStudents: Object[] = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 1 });
+        this.popupTestScheduledSudents = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 2 });
+        this.popupTestTakenStudents = _.filter(_studentRepeaterExceptions, { 'ErrorCode': 1 });
+        this.popupRetesterExceptions = _studentRepeaterExceptions;
+        this.showRetestersAlternatePopup = true;
+        setTimeout(function() {
+            $('#modalAlternateTest').modal('show');
+        });
+        // if (this.loader)
+        //     this.loader.destroy();
 
-        if (this.loader)
-            this.loader.destroy();
+        // this.dynamicComponentLoader.loadNextToLocation(RetesterAlternatePopupComponent, this.viewContainerRef)
+        //     .then(retester => {
+        //         this.loader = retester;
+        //         $('#modalAlternateTest').modal('show');
+        //         retester.instance.retesterExceptions = _studentRepeaterExceptions;
+        //         retester.instance.testTakenStudents = testTakenStudents;
+        //         retester.instance.testScheduledSudents = testScheduledSudents;
+        //         retester.instance.testSchedule = this.testScheduleModel;
+        //         retester.instance.modifyInProgress = this.modifyInProgress;
+        //         retester.instance.retesterAlternatePopupOK.subscribe((retesters) => {
+        //             if (retesters) {
+        //                 $('#modalAlternateTest').modal('hide');
+        //                 this.testScheduleModel = JSON.parse(this.sStorage.getItem('testschedule'));
+        //                 this.retesterExceptions = retesters;
+        //                 this.DeleteRemovedStudentFromSession(retesters);
 
-        this.dynamicComponentLoader.loadNextToLocation(RetesterAlternatePopupComponent, this.viewContainerRef)
-            .then(retester => {
-                this.loader = retester;
-                $('#modalAlternateTest').modal('show');
-                retester.instance.retesterExceptions = _studentRepeaterExceptions;
-                retester.instance.testTakenStudents = testTakenStudents;
-                retester.instance.testScheduledSudents = testScheduledSudents;
-                retester.instance.testSchedule = this.testScheduleModel;
-                retester.instance.modifyInProgress = this.modifyInProgress;
-                retester.instance.retesterAlternatePopupOK.subscribe((retesters) => {
-                    if (retesters) {
-                        $('#modalAlternateTest').modal('hide');
-                        this.testScheduleModel = JSON.parse(this.sStorage.getItem('testschedule'));
-                        this.retesterExceptions = retesters;
-                        this.DeleteRemovedStudentFromSession(retesters);
+        //                 this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
+        //                 if (this.studentCountInSession()) {
+        //                     this.HasStudentPayException();
+        //                 }
+        //                 else {
+        //                     this.initialize();
+        //                     this.CheckForAllStudentSelected();
+        //                 }
+        //             }
+        //         });
+        //         retester.instance.retesterAlternatePopupCancel.subscribe((e) => {
+        //             $('#modalAlternateTest').modal('hide');
+        //         });
 
-                        this.valid = this.unmarkedStudentsCount() > 0 ? true : false;
-                        if (this.studentCountInSession()) {
-                            this.HasStudentPayException();
-                        }
-                        else {
-                            this.initialize();
-                            this.CheckForAllStudentSelected();
-                        }
-                    }
-                });
-                retester.instance.retesterAlternatePopupCancel.subscribe((e) => {
-                    $('#modalAlternateTest').modal('hide');
-                });
-
-            });
+        //     });
     }
+
     DeleteRemovedStudentFromSession(_retesters: any): void {
         this.sStorage.removeItem('retesters');
         if (_retesters.length > 0) {
@@ -1406,7 +1514,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                     let _repeterExceptions: Object[] = [];
                     for (let i = 0; i < _studentRepeaterExceptions.length; i++) {
                         let _retester = _studentRepeaterExceptions[i];
-                        let _retesterStudent: Object = _.filter(retesters, { 'StudentId': _retester.StudentId });
+                        let _retesterStudent: any[] = _.filter(retesters, { 'StudentId': _retester.StudentId });
                         if (_retesterStudent.length > 0)
                             _repeterExceptions.push(_retesterStudent[0]);
                         else
@@ -1528,7 +1636,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         let mainSearchText: string = searchText;
         if (!searchText.startsWith(' ')) {
             if (searchText.length > 1) {
-                $('#btnTypeahead').removeAttr('disabled', 'disabled');
+                $('#btnTypeahead').removeAttr('disabled');
                 if (searchText.length > 2) {        // On paste the searchString....  
                     searchText = searchText.trim().substr(0, 2).toUpperCase();
                 }  // End of paste the searchString....  
@@ -1587,8 +1695,8 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             }, error => {
                 setTimeout(() => { $('.typeahead').focus(); });
                 $('.typeahead').typeahead('destroy');
-                console.log(error)
             });
+
     }
 
     resolveSearchStudentURL(url: string, searctText: string): string {
@@ -1611,9 +1719,9 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 {
                     name: 'students',
                     source: function (query, process) {
-                        let data: string = [];
+                        let data: string[] = [];
 
-                        $.each(__this.AddByNameStudentlist, function (index, el) {
+                        $.each(__this.AddByNameStudentlist, function (index, el:any) {
                             let firstName = el.FirstName.toUpperCase();
                             let lastName = el.LastName.toUpperCase();
                             let isValidToSplitCheck: boolean = true;
@@ -1700,7 +1808,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         if (searchString.length > 1) {
             if (this.AddByNameStudentlist.length > 0) {
                 let _searchStudents: Object[] = [];
-                $.each(this.AddByNameStudentlist, function (index, el) {
+                $.each(this.AddByNameStudentlist, function (index, el:any) {
                     let firstName = el.FirstName.toUpperCase();
                     let lastName = el.LastName.toUpperCase();
                     let isValidToSplitCheck: boolean = true;
@@ -1752,7 +1860,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                         resolve(_searchStudents);
                     });
 
-                    _promise.then((data) => {
+                    _promise.then((data:any) => {
                         if (_self.testsTable)
                             _self.testsTable.destroy();
                         _self.cohortStudentlist = _self.markDuplicate(data);
@@ -1819,7 +1927,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
     //........ Modify In Progress changes Start........
 
-    getRetester(student: Object): boolean {
+    getRetester(student: any): boolean {
         if (this.modifyInProgress) {
             if (student.AlternateTestAssignedInTestingSession || (!student.InTestingSession && student.StartedTestingSessionTest)) {
                 return true;
@@ -1881,8 +1989,6 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
     Verify_SaveTestClick(): void {
         this.sStorage.setItem('prevtestschedule', JSON.stringify(this.previousSelectedStudentList));
-        console.log('TestScheduleModel with previous students' + this.testScheduleModel);
-
         this.updateModifyInProgress();
     }
 
@@ -2029,7 +2135,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 if (_this.refreshStudentsWhoStarted.length > 0) {
                     let studentsInSession = _.map(_this.selectedStudents, 'StudentId');
                     let studentToRemove = _.difference(studentsInSession, _this.refreshStudentsWhoStarted);
-                    _.each(studentToRemove, function (studentid) {
+                    _.each(studentToRemove, function (studentid:any) {
                         $('#testSchedulingSelectedStudentsList button').filter("[data-id=" + studentid + "]").parent().remove();
                         _this.RemoveStudentFromList(studentid);
                     });
@@ -2071,7 +2177,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         return this.testService.checkIfTestHasStarted(this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress)
     }
 
-    save_ContinueButtonClick(e): void {
+    save_ContinueButtonClick(e) {
         e.preventDefault();
         this.checkIfTestHasStarted();
         if (!this.checkIfTestHasStarted()) {
@@ -2089,11 +2195,26 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         e.preventDefault();
     }
 
+
+    onStudentsStartedTestOK(e: any) {
+        $('#studentsStartedTest').modal('hide');
+        // this.showStudentsStartedTestPopup = false;
+        _.forEach(this.popupStudentsStartedTest, (student, key) => {
+            this.selectedStudents.push(_.find(this.previousSelectedStudentList, { 'StudentId': student.StudentId }));
+        });
+        this.checkWindowExceptions(this.popupStudentExceptions);
+    }
+
+    onStudentsStartedTestBack(e: any) {
+        $('#studentsStartedTest').modal('hide');
+         this.showStudentsStartedTestPopup = false;
+    }
+
     HasStudentStartedTestException(studentExceptions: any): void {
         let __this = this;
         let studentRemovedFromSession: any[] = [];
         let TestAlreadyStartedExceptions: any = studentExceptions.alreadyStartedExceptions;
-
+        this.popupStudentExceptions = studentExceptions;
         _.forEach(TestAlreadyStartedExceptions, (student, key) => {
             let isExist = _.some(this.selectedStudents, { 'StudentId': student.StudentId });
             if (!isExist)
@@ -2102,31 +2223,38 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
 
         if (studentRemovedFromSession.length > 0) {
-            if (this.loader)
-                this.loader.destroy();
-            this.dynamicComponentLoader.loadNextToLocation(StudentsStartedTestComponent, this.viewContainerRef)
-                .then(hasStartedTest => {
-                    this.loader = hasStartedTest;
-                    $('#studentsStartedTest').modal('show');
-                    hasStartedTest.instance.students = studentRemovedFromSession;
-                    hasStartedTest.instance.testSchedule = this.testScheduleModel;
-                    hasStartedTest.instance.mainHeader = "Students Have Started Tests In This Testing Session";
-                    hasStartedTest.instance.mainContent = "Since your last modifications, the following students have started tests in this testing session and can no longer be removed.";
-                    hasStartedTest.instance.subContent = "These students will automatically be added back to this testing session.";
-                    hasStartedTest.instance.pageName = "addstudents";
-                    hasStartedTest.instance.onOK.subscribe((e) => {
-                        $('#studentsStartedTest').modal('hide');
-                        _.forEach(studentRemovedFromSession, (student, key) => {
-                            __this.selectedStudents.push(_.find(this.previousSelectedStudentList, { 'StudentId': student.StudentId }));
 
-                        });
-                        this.checkWindowExceptions(studentExceptions);
-                    });
-                    hasStartedTest.instance.onBack.subscribe((e) => {
-                        $('#studentsStartedTest').modal('hide');
-                    });
+            this.popupStudentsStartedTest = studentRemovedFromSession;
+            this.showStudentsStartedTestPopup = true;
+            setTimeout(function() {
+                 $('#studentsStartedTest').modal('show');
+            });
+           
+            // if (this.loader)
+            //     this.loader.destroy();
+            // this.dynamicComponentLoader.loadNextToLocation(StudentsStartedTestComponent, this.viewContainerRef)
+            //     .then(hasStartedTest => {
+            //         this.loader = hasStartedTest;
+            //         $('#studentsStartedTest').modal('show');
+            //         hasStartedTest.instance.students = studentRemovedFromSession;
+            //         hasStartedTest.instance.testSchedule = this.testScheduleModel;
+            //         hasStartedTest.instance.mainHeader = "Students Have Started Tests In This Testing Session";
+            //         hasStartedTest.instance.mainContent = "Since your last modifications, the following students have started tests in this testing session and can no longer be removed.";
+            //         hasStartedTest.instance.subContent = "These students will automatically be added back to this testing session.";
+            //         hasStartedTest.instance.pageName = "addstudents";
+            //         hasStartedTest.instance.onOK.subscribe((e) => {
+            //             $('#studentsStartedTest').modal('hide');
+            //             _.forEach(studentRemovedFromSession, (student, key) => {
+            //                 __this.selectedStudents.push(_.find(this.previousSelectedStudentList, { 'StudentId': student.StudentId }));
 
-                });
+            //             });
+            //             this.checkWindowExceptions(studentExceptions);
+            //         });
+            //         hasStartedTest.instance.onBack.subscribe((e) => {
+            //             $('#studentsStartedTest').modal('hide');
+            //         });
+
+            //     });
         }
         else {
             this.checkWindowExceptions(studentExceptions);

@@ -1,7 +1,7 @@
 import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef, ViewEncapsulation, OnDestroy} from '@angular/core';
-import {Router, ActivatedRoute, CanDeactivate, ROUTER_DIRECTIVES} from '@angular/router';
+import {Router, ActivatedRoute, CanDeactivate, } from '@angular/router';
 import {Subscription} from 'rxjs/Rx';
-import {Http, Response, RequestOptions, Headers, HTTP_PROVIDERS} from "@angular/http";
+import {Http, Response, RequestOptions, Headers} from "@angular/http";
 import {Title} from '@angular/platform-browser';
 import {Observable} from 'rxjs/Rx';
 // import {TestService} from '../../services/test.service';
@@ -17,7 +17,7 @@ import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {UtilityService} from '../../services/utility.service';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 // import {TestsModal} from '../../models/tests.modal';
 // import {LogService} from '../../services/log.service.service';
 // import '../../plugins/dropdown.js';
@@ -38,19 +38,14 @@ import { ConfirmationPopupComponent } from './../shared/confirmation.popup.compo
 import { PageFooterComponent } from './../shared/page-footer.component';
 import { TestHeaderComponent } from './test-header.component';
 import { PageHeaderComponent } from './../shared/page-header.component';
-import * as moment from 'moment-timezone';
 
 @Component({
     selector: 'manage-tests',
-    templateUrl: 'components/tests/manage-tests.component.html',
-    providers: [TestService, AuthService, TestScheduleModel, UtilityService, CommonService, TestsModal, LogService],
+    templateUrl: './manage-tests.component.html',
+    providers: [TestScheduleModel, TestsModal],
     host: {
         '(window:resize)': 'resize($event)'
-    },
-    styleUrls: ['../../css/tablesaw.bare.css', '../../css/tablesaw.overrides.css', ' ../../css/bootstrap-editable.css', '../../css/bootstrap-editable-overrides.css'],
-    encapsulation: ViewEncapsulation.None,
-    directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, ConfirmationPopupComponent, ROUTER_DIRECTIVES],
-    pipes: [RemoveWhitespacePipe, RoundPipe, ParseDatePipe]
+    }
 })
 export class ManageTestsComponent implements OnInit, OnDestroy {
     testDate: string;
@@ -61,9 +56,9 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     inProgressTests: Array<TestsModal> = [];
     scheduleIdToDelete: number = 0;
     institutionIdToDelete: number = 0;
-    programId: number = 0;
-    institutionRN: number = 0;
-    institutionPN: number = 0;
+    programId: any;
+    institutionRN: any;
+    institutionPN: any;
     institutionId: number = 0;
     institutionName: string = '';
     adminId: number = 0;
@@ -78,7 +73,17 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     testStatus: any;
     isMultiCampus: boolean = false;
     Campus: Object[] = [];
-    constructor(private activatedRoute: ActivatedRoute, public testService: TestService, public router: Router, public auth: AuthService, public common: CommonService, public testSchedule: TestScheduleModel, public titleService: Title, private testsModal: TestsModal, private log: LogService) { }
+    constructor(
+        private activatedRoute: ActivatedRoute,
+        public testService: TestService,
+        public router: Router,
+        public auth: AuthService,
+        public common: CommonService,
+        public testSchedule: TestScheduleModel,
+        public titleService: Title,
+        private testsModal: TestsModal,
+        private log: LogService) { 
+    }
 
     ngOnDestroy(): void {
         if (this.actionSubscription)
@@ -239,7 +244,6 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                     let testSchedule: TestScheduleModel = __this.testService.mapTestScheduleObjects(json);
                     if (testSchedule) {
                         __this.sStorage.setItem('testschedule', JSON.stringify(testSchedule));
-                        console.log(testSchedule);
                         switch (route) {
                             case 'ModifyScheduleTest':
                                 this.router.navigate(['/tests', 'modify', 'schedule-test']);
@@ -280,8 +284,8 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         });
         //modify buttons style
         $.fn.editableform.buttons =
-            '<button type="submit" class="button editable-submit" aria-label="submit"><img src="images/button-check-white.png" alt="check icon"></button>' +
-            '<button type="button" class="unstyled-button editable-cancel" aria-label="cancel"><img src="images/button-close-icon.png" alt="x icon"></button>';
+            '<button type="submit" class="button editable-submit" aria-label="submit"><img src="assets/images/button-check-white.png" alt="check icon"></button>' +
+            '<button type="button" class="unstyled-button editable-cancel" aria-label="cancel"><img src="assets/images/button-close-icon.png" alt="x icon"></button>';
 
 
         $('.js-rename-session').on('save', function (e, params) {
@@ -410,6 +414,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     }
 
     redirectToRoute(route: string): boolean {
+        debugger;
         this.checkInstitutions();
         if (this.isMultiCampus)
             this.router.navigateByUrl(`/choose-institution/Test/${route}`);
@@ -440,7 +445,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                             window.open('/accounterror');
                         }
                         else {
-                            this.router.navigateByUrl(`/tests/choose-test/${(this.institutionPN === 0 ? this.institutionRN : this.institutionPN)}`);
+                            this.router.navigateByUrl(`/tests/choose-test/${(!this.institutionPN || this.institutionPN === 0 )? this.institutionRN : this.institutionPN}`);
                         }
                     });
             }

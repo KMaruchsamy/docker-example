@@ -84,7 +84,7 @@
                 </template>-->
                 <tr *ngFor="let student of testScheduleModel.selectedStudents;  let _student=student" [hidden]="resolveMarked(student)">
                     <td [class.name-with-pay-alert]="student.StudentPay">{{student.LastName}} 
-                        <img *ngIf="student.StudentPay" src="images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon" alt="payment alert icon"/>
+                        <img *ngIf="student.StudentPay" src="assets/images/self-pay-alert-icon.svg" class="self-pay-alert-table-icon" alt="payment alert icon"/>
                     </td>
                     <td>{{student.FirstName}}</td>
                     <td>{{student.CohortName}}</td>
@@ -99,7 +99,7 @@
         <div class="icon-container-flush-text clearfix">
             <p class="icon info-icon-yellow margin-1em-top" *ngIf="hasADA">One or more of the students you have added have testing accommodations. Their test will be untimed. For more information or to designate additional students who need testing accommodations, please contact your Account Manager.</p>
             <p class="icon info-icon-yellow margin-1em-top" *ngIf="!hasADA">Please contact your Account Manager if there are students in your testing session who need testing accommodations. Students with testing accommodations receive untimed versions of their tests.</p>
-            <img *ngIf="hasStudentPay" src="images/self-pay-alert-icon.svg" class="self-pay-alert-icon" alt="payment alert icon" height="22" width="22"/>
+            <img *ngIf="hasStudentPay" src="assets/images/self-pay-alert-icon.svg" class="self-pay-alert-icon" alt="payment alert icon" height="22" width="22"/>
             <p *ngIf="hasStudentPay">
                  These students have been deactivated due to non-payment. They will not be able to access their test during the specified testing window unless their balance is paid in full at least two business days prior to test day.
              </p>
@@ -163,3 +163,30 @@
                     (onOK)="onCancelConfirmation($event)"
                     (onCancel)="cancelStartingTestChanges($event)">
 </test-starting-popup>
+
+
+<retesters-noalternate
+*ngIf="showRetestersAlternatePopup" 
+[testSchedule]="testScheduleModel"
+[studentRepeaters]="popupStudentRepeaterExceptions"
+(retesterNoAlternatePopupOK) = "onRetesterNoAlternatePopupOK($event)"
+(retesterNoAlternatePopupCancel) = "onRetesterNoAlternatePopupCancel($event)">
+</retesters-noalternate>
+
+<retesters-alternate
+[retesterExceptions]="popupRetesterExceptions"
+[testTakenStudents]="popupTestTakenStudents"
+[testScheduledSudents]="popupTestScheduledSudents"
+[testSchedule]="testScheduleModel"
+(retesterAlternatePopupOK)="onRetesterAlternatePopupOK($event)"
+(retesterAlternatePopupCancel)="onRetesterAlternatePopupCancel($event)">
+</retesters-alternate>
+
+
+
+<time-exception
+[studentWindowException]="popupStudentWindowException"
+canRemoveStudents="true"
+[testSchedule]="testScheduleModel"
+(windowExceptionPopupClose)="onWindowExceptionPopupClose($event)">    
+</time-exception>

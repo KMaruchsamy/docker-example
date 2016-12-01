@@ -1,13 +1,11 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NgIf } from '@angular/common';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import { AuthService } from './../../services/auth.service';
 
 @Component({
     selector: 'rosters-multicampus',
-    providers: [],
-    templateUrl: 'components/rosters/rosters-multicampus.component.html',
-    directives: [NgIf],
+    templateUrl: './rosters-multicampus.component.html',
     styles: [
     `
     .button-group label .button-group-item {
