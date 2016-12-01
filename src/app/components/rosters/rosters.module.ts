@@ -24,6 +24,7 @@ import { RostersChangeHeaderComponent } from './rosters-change-extend-header.com
 import { RosterChangesService } from './roster-changes.service';
 import { RosterChangeNoteComponent } from './roster-change-note.component';
 import { RostersChangesUpdatesComponent } from './rosters-changes-updates.component';
+import {RostersChangeUpdateFormComponent} from './rosters-change-update-form.component';
 
 @NgModule({
     imports: [
@@ -45,7 +46,8 @@ import { RostersChangesUpdatesComponent } from './rosters-changes-updates.compon
         RostersAMInfoComponent,
         RostersChangeHeaderComponent,
         RosterChangeNoteComponent,
-        RostersChangesUpdatesComponent
+        RostersChangesUpdatesComponent,
+        RostersChangeUpdateFormComponent
     ],
     providers: [
         RosterService,

@@ -1,0 +1,83 @@
+﻿<section>
+    <div class="container-medium-width">
+        <div class="large-expander" id="tableExpander">
+            <div class="relative-position">
+                <a class="large-expander-trigger" role="button" data-toggle="collapse" href="#requestChanges" aria-expanded="false" aria-controls="requestChanges">
+                    Request changes to this cohort
+                </a>
+            </div>
+            <div class="collapse in" id="requestChanges">
+                <div class="relative-position">
+                    <table class="table-with-cell-padding table-striped datatable-gray-labels" id="markChangesTable">
+                        <thead>
+                            <tr class="gray-th">
+                                <th scope="col">{{rosterChangesModel.cohortName}} Students</th>
+                                <th scope="col">Move to different cohort</th>
+                                <th scope="col">Mark as repeater</th>
+                                <th scope="col">Make inactive</th>
+                                <th scope="col">Grant untimed tests</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let cohortStudent of rosterCohortsModel?.students">
+                                <td class="js-student-name">{{cohortStudent.lastName}},{{cohortStudent.firstName}}</td>
+                                <td>
+                                    <button id="btnChangeToCohort{{cohortStudent.studentId}}" class="button button-small button-light button-no-change js-choose-cohort button-fixed-width" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">Choose an active cohort</button>
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="checkbox-image js-disable js-repeat" id="chkRepeat{{cohortStudent.studentId}}" disabled />
+                                    <label for="chkRepeat"></label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="checkbox-image js-drop" id="inactive{{cohortStudent.studentId}}" />
+                                    <label for="inactive"></label>
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA{{cohortStudent.studentId}}" />
+                                    <label for="ADA"></label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    
+
+                </div><!--closes relatively positioned div containing table and modal-->
+
+                <div class="icon-container-flush-text section-top-medium-thin">
+                    <p class="icon info-icon-yellow">
+                        You can request untimed versions of Kaplan tests for students who need testing accommodations. For more information on untimed tests, see the Frequently Asked Questions on the View Rosters page.
+                    </p>
+                </div>
+
+            </div>
+        </div> <!-- end first expander-->
+       
+    </div>
+</section>
+<!--<section>
+
+    <div class="section-top-medium-thin section container-medium-width clearfix">
+        <label class="h6 text-purple" for="instructions"><b>Special Instructions for {{rosterChangesModel.accountManagerFirstName}}:</b></label>
+        <textarea id="instructions"></textarea>
+        <div class="page-action-footer margin-1em-top-bottom">
+            <button class="anchor-button anchor-button-left" data-toggle="modal" data-target="#loseWorkWarningModal">Cancel changes</button>
+            <a href="roster-changes-summary.html" class="button">Review summary of changes/updates</a>
+        </div>
+    </div>
+</section>-->
+
+<!-- Change cohort Modal -->
+<div class="modal-no-background hidden" id="changeCohortModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-small" role="document">
+        <div class="modal-content">
+
+            <button type="button" class="close close-small" aria-label="Close" (click)="CloseCohortPopup($event);"></button>
+            <div class="modal-content-small">
+                <p class="text-purple" id="studentHeading">{{studentNameToChangeRoster}}</p>
+                <button type="button" *ngFor="let roster of rostersList" class="button button-light button-unselected" id="{{roster.cohortName}}" (click)="moveToCohort(roster,$event)">{{roster.cohortName}}<img src="assets/images/green-checkmark_2x.png" class="hidden" alt="cohort selected" width="16" height="12" /></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end modal-->

@@ -1,13 +1,10 @@
 import { Component, Input, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { Title} from '@angular/platform-browser';
-import * as _ from 'lodash';
 import { NgIf } from '@angular/common';
 import { CommonService } from './../../services/common.service';
-import { PageHeaderComponent } from './../shared/page-header.component';
-import { PageFooterComponent } from './../shared/page-footer.component';
-import { RostersAMInfoComponent } from './rosters-AM-info.component';
-import { RostersChangeHeaderComponent } from './rosters-change-extend-header.component';
+
+
 
 import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
