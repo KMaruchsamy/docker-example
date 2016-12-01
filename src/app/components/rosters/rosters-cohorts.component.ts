@@ -167,6 +167,11 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
                         && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
                 });
 
+                if (!cohort.hasDuplicateStudent) {
+                    if (rosterCohortStudent.isDuplicate)
+                        cohort.hasDuplicateStudent = true;
+                }
+
                 if (!cohort.hasRepeatStudent) {
                     if (rosterCohortStudent.isRepeatStudent)
                         cohort.hasRepeatStudent = true;

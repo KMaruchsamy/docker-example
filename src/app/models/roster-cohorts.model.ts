@@ -6,6 +6,7 @@ export class RosterCohortsModel{
     studentCount: number;
     cohortStartDate: Date;
     cohortEndDate: Date;
+    hasDuplicateStudent: boolean;
     hasRepeatStudent: boolean;
     hasExpiredStudent: boolean;
     hasStudentPayDeactivatedStudent: boolean;
