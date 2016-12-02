@@ -1,0 +1,16 @@
+<page-header [hideDropdown]=true></page-header>
+<main role="main" class="app-main app-main-no-nav">
+    <div class="section">
+        <div class="container-medium-width center">
+            <i class="icon account-alert-icon"></i>
+            <h2 class="margin-1em-top">We’re sorry!<br>There’s no Kaplan Account Manager linked to this account.</h2>
+        </div>
+        <div class="container-narrow center">
+            <p class="text-larger">To request changes or updates to one or more cohort rosters, you’ll need this account linked to the Kaplan Account Manager associated with your school.</p>
+            <p class="text-larger">Please call our customer support hotline at <a href="tel:+{{supportHotline}}" class="link-base-color">{{supportHotline}}</a> (<a href="tel:{{outsideUSHotline}}" class="link-base-color">{{outsideUSHotline}}</a> outside the U.S. and Canada) and we’ll get this resolved for you right away.</p>
+            <p class="text-larger">We’re available from 8:00am to 8:00pm Monday through Friday and from 9:00am to 5:45pm on Saturdays. All times are Eastern.</p>
+            <p class="text-larger">Thank you!</p>
+            <a [routerLink]="['/rosters']">Go back to View Rosters page</a>
+        </div>
+    </div>
+</main>

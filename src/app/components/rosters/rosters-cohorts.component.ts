@@ -266,7 +266,12 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         this.sStorage.setItem('rosterChangesModel', JSON.stringify(this.rosterChangesModel))
 
         this.apiServer = this.auth.common.getApiServer();
-        this.getUserPreference();
+        // check if cohort has Account Manager associated with it
+        if (this.rosters.accountManagerId) {
+            this.getUserPreference();
+        } else {
+            this.router.navigate(['/rosters/no-account-manager']);
+        }
     }
 
 }
