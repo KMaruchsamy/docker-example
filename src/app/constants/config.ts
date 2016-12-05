@@ -197,3 +197,8 @@ export const roster = {
     classRosterForm: 'https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/kaplan-new-class-roster-sheet.xlsx'
 }
 
+export const telNumbers = {
+    supportHotline: '1-866-920-6311',
+    outsideUSCanadaSupportHotline: '+1-407-423-6620'
+}
+
