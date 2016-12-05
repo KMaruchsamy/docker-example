@@ -63,7 +63,7 @@ span.dtr-data label {
 }
 
     .modal-content-small .button {
-        margin: .25em 0;
+        margin-bottom: .5em;
         text-align: left;
         width: 100%;
         position: relative;
@@ -74,6 +74,10 @@ span.dtr-data label {
         right: 1em;
     }
 
+    .cohort-button-container {
+     max-height: 200px;
+     overflow: auto;
+   }
 #markChanges table th:last-child, #markChanges table td:last-child {
     padding-right: 0;
 }
