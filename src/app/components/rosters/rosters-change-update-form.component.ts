@@ -8,6 +8,7 @@ import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import {RosterCohortsModel} from '../../models/roster-cohorts.model';
 import {RosterCohortStudentsModel} from '../../models/roster-cohort-students.model';
+import {ChangeUpdateRosterStudentsModal} from '../../models/change-update-roster-students.model';
 import {RostersModal} from '../../models/rosters.model';
 import { CommonService } from './../../services/common.service';
 import {RosterService} from './roster.service';
@@ -31,6 +32,10 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     studentNameToChangeRoster: string;
     toChangeRosterStudentId: number;
     testsTable: any;
+    expandUpdateDiv: boolean = true;
+    rosterChangeUpdateStudents: ChangeUpdateRosterStudentsModal[];
+    enableRepeaterCheckbox: boolean = false;
+   
 
     constructor(public auth: AuthService, public router: Router, public common: CommonService, public rosterService: RosterService, public rosterCohortsModel: RosterCohortsModel, public rosters: RostersModal) { }
 
@@ -91,58 +96,72 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     }
 
     loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
-        let rosterCohortStudents: Array<RosterCohortStudentsModel> = [];
+        debugger;
+        //let rosterCohortStudents: Array<RosterCohortStudentsModel> = [];
+       // let rosterChangeUpdateStudents: Array<ChangeUpdateRosterStudentsModal>[];
         if (cohortStudents) {
-            rosterCohortStudents = _.map(cohortStudents, (student: any) => {
-                let rosterCohortStudent = new RosterCohortStudentsModel();
-                rosterCohortStudent.cohortId = student.CohortId;
-                rosterCohortStudent.cohortName = student.CohortName;
-                rosterCohortStudent.email = student.Email;
-                rosterCohortStudent.firstName = student.FirstName;
-                rosterCohortStudent.lastName = student.LastName;
-                rosterCohortStudent.studentId = student.StudentId;
-                rosterCohortStudent.repeatExpiryDate = student.RepeatExpiryDate;
-                rosterCohortStudent.userExpireDate = student.UserExpireDate;
-                rosterCohortStudent.studentPayInstitution = student.StudentPayInstitution;
-                rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate && moment(rosterCohortStudent.repeatExpiryDate).isAfter(new Date(), 'day');
-                rosterCohortStudent.isExpiredStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !rosterCohortStudent.studentPayInstitution);
-                rosterCohortStudent.isStudentPayDeactivatedStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !!rosterCohortStudent.studentPayInstitution);
+            //rosterCohortStudents = _.map(cohortStudents, (student: any) => {
+            //    let rosterCohortStudent = new RosterCohortStudentsModel();
+            //    rosterCohortStudent.cohortId = student.CohortId;
+            //    rosterCohortStudent.cohortName = student.CohortName;
+            //    rosterCohortStudent.email = student.Email;
+            //    rosterCohortStudent.firstName = student.FirstName;
+            //    rosterCohortStudent.lastName = student.LastName;
+            //    rosterCohortStudent.studentId = student.StudentId;
+            //    rosterCohortStudent.repeatExpiryDate = student.RepeatExpiryDate;
+            //    rosterCohortStudent.userExpireDate = student.UserExpireDate;
+            //    rosterCohortStudent.studentPayInstitution = student.StudentPayInstitution;
+            //    rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate && moment(rosterCohortStudent.repeatExpiryDate).isAfter(new Date(), 'day');
+            //    rosterCohortStudent.isExpiredStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !rosterCohortStudent.studentPayInstitution);
+            //    rosterCohortStudent.isStudentPayDeactivatedStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !!rosterCohortStudent.studentPayInstitution);
 
 
-                rosterCohortStudent.isDuplicate = _.some(cohortStudents, function (stud: any) {
-                    return stud.StudentId !== student.StudentId
-                        && student.FirstName.toUpperCase() === stud.FirstName.toUpperCase()
-                        && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
-                });
+            //    rosterCohortStudent.isDuplicate = _.some(cohortStudents, function (stud: any) {
+            //        return stud.StudentId !== student.StudentId
+            //            && student.FirstName.toUpperCase() === stud.FirstName.toUpperCase()
+            //            && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
+            //    });
 
-                if (!cohort.hasDuplicateStudent) {
-                    if (rosterCohortStudent.isDuplicate)
-                        cohort.hasDuplicateStudent = true;
-                }
+            //    if (!cohort.hasDuplicateStudent) {
+            //        if (rosterCohortStudent.isDuplicate)
+            //            cohort.hasDuplicateStudent = true;
+            //    }
 
-                if (!cohort.hasRepeatStudent) {
-                    if (rosterCohortStudent.isRepeatStudent)
-                        cohort.hasRepeatStudent = true;
-                }
+            //    if (!cohort.hasRepeatStudent) {
+            //        if (rosterCohortStudent.isRepeatStudent)
+            //            cohort.hasRepeatStudent = true;
+            //    }
 
-                if (!cohort.hasExpiredStudent) {
-                    if (rosterCohortStudent.isExpiredStudent)
-                        cohort.hasExpiredStudent = true;
-                }
+            //    if (!cohort.hasExpiredStudent) {
+            //        if (rosterCohortStudent.isExpiredStudent)
+            //            cohort.hasExpiredStudent = true;
+            //    }
 
-                if (!cohort.hasStudentPayDeactivatedStudent) {
-                    if (rosterCohortStudent.isStudentPayDeactivatedStudent)
-                        cohort.hasStudentPayDeactivatedStudent = true;
-                }
+            //    if (!cohort.hasStudentPayDeactivatedStudent) {
+            //        if (rosterCohortStudent.isStudentPayDeactivatedStudent)
+            //            cohort.hasStudentPayDeactivatedStudent = true;
+            //    }
 
-                return rosterCohortStudent;
+            //    return rosterCohortStudent;
+            //});
+            this.rosterChangeUpdateStudents = _.map(cohortStudents, (student: any) => {
+                let changeUpdateStudent = new ChangeUpdateRosterStudentsModal();
+                changeUpdateStudent.moveFromCohortId = student.CohortId;
+                changeUpdateStudent.moveFromCohortName = student.CohortName;
+                changeUpdateStudent.email = student.Email;
+                changeUpdateStudent.firstName = student.FirstName;
+                changeUpdateStudent.lastName = student.LastName;
+                changeUpdateStudent.studentId = student.StudentId;
+                return changeUpdateStudent;
             });
+            
+
         }
-        cohort.studentCount = rosterCohortStudents ? rosterCohortStudents.length : 0;
-        cohort.students = rosterCohortStudents;
-        cohort.visible = !cohort.visible;
-        cohort.cohortId = this.rosterChangesModel.cohortId;
-        cohort.cohortName = this.rosterChangesModel.cohortName;
+        //cohort.studentCount = rosterChangeUpdateStudents ? rosterChangeUpdateStudents.length : 0;
+        //cohort.students = rosterChangeUpdateStudents;
+        //cohort.visible = !cohort.visible;
+        //cohort.cohortId = this.rosterChangesModel.cohortId;
+        //cohort.cohortName = this.rosterChangesModel.cohortName;
         this.rosterCohorts(this._institutionId);
     }
 
@@ -214,43 +233,75 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         $('#changeCohortModal').modal('hide');
     }
     moveToCohort(_roster, e) {
+        debugger;
         e.preventDefault();
-        let modalButtonId: string = _roster.cohortId;
-        $('#' + modalButtonId).removeClass('button-unselected');
-        $('#' + modalButtonId).find('img').removeClass('hidden');
-        $('#btnChangeToCohort' + this.toChangeRosterStudentId).text(_roster.cohortName);
-        $('#btnChangeToCohort' + this.toChangeRosterStudentId).val(_roster.cohortName);
-        $('#btnChangeToCohort' + this.toChangeRosterStudentId).removeClass('button-no-change');
-        $('#chkRepeat' + this.toChangeRosterStudentId).prop('disabled', false);
-        $('#inactive' + this.toChangeRosterStudentId).prop('disabled', 'disabled');
-        $('#' + modalButtonId).removeClass('button-unselected');
+        let __this = this;
+        _.filter(this.rosterChangeUpdateStudents, function (_student) {
+            if (_student.studentId === __this.toChangeRosterStudentId) {
+                _student.moveToCohortId = _roster.cohortId;
+                _student.moveToCohortName = _roster.cohortName;
+                __this.enableRepeaterCheckbox = true;
+            }
+        });
         $('#changeCohortModal').modal('hide');
-        $('#' + modalButtonId).addClass('button-unselected');
-        $('#' + modalButtonId).find('img').addClass('hidden');
+
+        //let target = e.target || e.srcElement || e.currentTarget;
+        //let idAttr = target.attributes.id;
+        //let movetocohortid = idAttr.nodeValue;
+        //idAttr.value = _roster.cohortName;
+        //idAttr.text = _roster.cohortName;
+
+        //let modalButtonId: string = _roster.cohortId;
+        //$('#' + modalButtonId).removeClass('button-unselected');
+        //$('#' + modalButtonId).find('img').removeClass('hidden');
+
+        //$('#btnChangeToCohort' + this.toChangeRosterStudentId).text(_roster.cohortName);
+        //$('#btnChangeToCohort' + this.toChangeRosterStudentId).val(_roster.cohortName);
+        //$('#btnChangeToCohort' + this.toChangeRosterStudentId).removeClass('button-no-change');
+
+        //$('#chkRepeat' + this.toChangeRosterStudentId).prop('disabled', false);
+        //$('#inactive' + this.toChangeRosterStudentId).prop('disabled', 'disabled');
+   //     $('#' + modalButtonId).removeClass('button-unselected');
+        
+
+        //$('#' + modalButtonId).addClass('button-unselected');
+        //$('#' + modalButtonId).find('img').addClass('hidden');
     }
     expandRequestChanges(e) {
         e.preventDefault();
-        $('#requestChanges').toggleClass('in');
+        this.expandUpdateDiv = !this.expandUpdateDiv;
     }
-    callMakeInactive(_studentId, e)
+    callMakeInactive(_studentId,e)
     {
-        e.preventDefault();
-        let isChecked: boolean = $('#inactive' + _studentId).prop('checked');
-        $('#btnChangeToCohort' + _studentId).prop('disabled', isChecked);
-        $('#btnChangeToCohort' + _studentId).toggleClass('button-no-change');
-        $('#chkRepeat' + _studentId).prop('checked', false);
-        $('#chkRepeat' + _studentId).prop('disabled', isChecked);
-        $('#ADA' + _studentId).prop('disabled', isChecked);
-    }
-    callToGrantUntiedTest(_studentId, e) {
-        e.preventDefault();
-        let isChecked: boolean = $('#ADA' + _studentId).prop('checked');
-        let selectedCohort = $('#btnChangeToCohort' + _studentId).val();
-        if (selectedCohort === undefined || selectedCohort==="") {
-            $('#inactive' + _studentId).prop('checked', false);
-            $('#inactive' + _studentId).prop('disabled', isChecked);
-        }
+        e.preventDefault(); debugger;
+        let target = e.target || e.srcElement || e.currentTarget;
+        let isChecked: boolean = target.checked;
+        _.filter(this.rosterChangeUpdateStudents, function (_student) {
+            if (_student.studentId === _studentId) {
+                _student.isActive = isChecked;
+                _student.isRepeater = false;
+                _student.isGrantUntimedTest = false;
+            }
+        });
         
+    }
+    callToGrantUntimedTest(_studentId,e) {
+        e.preventDefault(); debugger;
+        let __this = this;
+        let target = e.target || e.srcElement || e.currentTarget;
+        let isChecked: boolean = target.checked;
+        _.filter(this.rosterChangeUpdateStudents, function (_student) {
+            if (_student.studentId === _studentId) {
+                _student.isGrantUntimedTest = isChecked;
+                if (_student.moveToCohortId === null) {
+                    _student.isActive = false;
+                }
+            }
+        });     
+    }
+
+    saveRequestedStudentsUpdate() {
+
     }
 }
 

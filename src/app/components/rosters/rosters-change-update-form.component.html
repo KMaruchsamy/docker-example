@@ -6,7 +6,7 @@
                     Request changes to this cohort
                 </a>
             </div>
-            <div class="collapse in" id="requestChanges">
+            <div class="collapse" [class.in]="expandUpdateDiv" id="requestChanges">
                 <div class="relative-position">
                     <table class="table-with-cell-padding table-striped datatable-gray-labels" id="markChangesTable">
                         <thead>
@@ -19,21 +19,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let cohortStudent of rosterCohortsModel?.students">
+                            <tr *ngFor="let cohortStudent of rosterChangeUpdateStudents">
                                 <td class="js-student-name">{{cohortStudent.lastName}},{{cohortStudent.firstName}}</td>
                                 <td>
-                                    <button id="btnChangeToCohort{{cohortStudent.studentId}}" data-loading-text="bind" class="button button-small button-light button-no-change js-choose-cohort button-fixed-width" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">Choose an active cohort</button>
+                                    <button id="btnChangeToCohort{{cohortStudent.studentId}}" [disabled]="cohortStudent.isActive" class="button button-small button-light js-choose-cohort button-fixed-width" [class.button-no-change]="!cohortStudent.isActive" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">{{cohortStudent.moveToCohortName ===null ?'Choose an active cohort' : cohortStudent.moveToCohortName}}</button>
                                 </td>
                                 <td>
-                                    <input type="checkbox" class="checkbox-image js-disable js-repeat" id="chkRepeat{{cohortStudent.studentId}}" disabled />
+                                    <input type="checkbox" class="checkbox-image js-disable js-repeat" id="chkRepeat{{cohortStudent.studentId}}" [disabled]="!enableRepeaterCheckbox || (cohortStudent.moveToCohortId ===null) || cohortStudent.isActive" />
                                     <label for="chkRepeat{{cohortStudent.studentId}}"></label>
                                 </td>
                                 <td>
-                                    <input type="checkbox" class="checkbox-image js-drop" id="inactive{{cohortStudent.studentId}}" (change)="callMakeInactive(cohortStudent.studentId,$event)"/>
+                                    <input type="checkbox" class="checkbox-image js-drop" id="inactive{{cohortStudent.studentId}}" (change)="callMakeInactive(cohortStudent.studentId,$event)" [disabled]="(cohortStudent.moveToCohortId !== null )|| cohortStudent.isGrantUntimedTest"/>
                                     <label for="inactive{{cohortStudent.studentId}}"></label>
                                 </td>
                                 <td>
-                                    <input type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA{{cohortStudent.studentId}}" (change)="callToGrantUntiedTest(cohortStudent.studentId,$event)" />
+                                    <input type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA{{cohortStudent.studentId}}" (change)="callToGrantUntimedTest(cohortStudent.studentId,$event)" [disabled]="cohortStudent.isActive" />
                                     <label for="ADA{{cohortStudent.studentId}}"></label>
                                 </td>
                             </tr>
@@ -49,7 +49,7 @@
                                 <div class="modal-content-small">
                                     <p class="text-purple" id="studentHeading">{{studentNameToChangeRoster}}</p>
                                     <!--<div class="cohort-button-container">-->
-                                        <button type="button" *ngFor="let roster of rostersList" class="button button-light button-unselected" id="{{roster.cohortId}}" (click)="moveToCohort(roster,$event)">{{roster.cohortName}}<img src="assets/images/green-checkmark_2x.png" class="hidden" alt="cohort selected" width="16" height="12" /></button>
+                                        <button type="button" [attr.movetocohortid]="'movetocohort_'+ roster.cohortId" *ngFor="let roster of rostersList" class="button button-light button-unselected" id="{{roster.cohortId}}" (click)="moveToCohort(roster,$event)">{{roster.cohortName}}<img src="assets/images/green-checkmark_2x.png" class="hidden" alt="cohort selected" width="16" height="12" /></button>
                                     <!--</div>-->
                                 </div>
                             </div>
