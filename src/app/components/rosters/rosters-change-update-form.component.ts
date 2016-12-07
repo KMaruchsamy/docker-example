@@ -31,6 +31,9 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     studentNameToChangeRoster: string;
     toChangeRosterStudentId: number;
     testsTable: any;
+    showRepeaterCheckboxes: boolean = true;
+    showInactiveCheckboxes: boolean = true;
+    showADACheckboxes: boolean = true;
 
     constructor(public auth: AuthService, public router: Router, public common: CommonService, public rosterService: RosterService, public rosterCohortsModel: RosterCohortsModel, public rosters: RostersModal) { }
 
@@ -71,6 +74,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 });
         }
     }
+
     bindDatatable(self: any): void {
         if (self.testsTable)
             self.testsTable.destroy();
@@ -83,13 +87,83 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 "ordering": false,
                 "scrollY": "300px",
                 "scrollCollapse": true,
+                "columns": [
+                null,
+                null,
+                { "width": "80px" },
+                { "width": "80px" },
+                { "width": "80px" }
+                ]          
             });
-            $('#markChangesTable').on('responsive-display.dt', function () {
-                $(this).find('.child .dtr-title br').remove();
+
+            let __this = this;
+
+            self.testsTable.responsive.recalc().columns.adjust();
+
+            // in responsive mode with checkboxes in child rows remove original checkboxes from the DOM as needed
+            self.testsTable.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
+                let children = $(row.child()).find('ul li').length;
+                    switch (children) {
+                        case 0:
+                            __this.showRepeaterCheckboxes = true;
+                            __this.showInactiveCheckboxes = true;
+                            __this.showADACheckboxes = true;
+                            break;
+                    case 1:
+                            __this.showRepeaterCheckboxes = true;
+                            __this.showInactiveCheckboxes = true;
+                            __this.showADACheckboxes = false;
+                            break;
+                    case 2:
+                            __this.showRepeaterCheckboxes = true;
+                            __this.showInactiveCheckboxes = false;
+                            __this.showADACheckboxes = false;
+                            break;
+                    case 3:
+                    case 4:
+                            __this.showRepeaterCheckboxes = false;
+                            __this.showInactiveCheckboxes = false;
+                            __this.showADACheckboxes = false;
+                    }
+                
             });
-        });
+
+
+            //check if on responsive resize all columns are displayed (no children) and set showCheckboxes back to true
+            // https://datatables.net/reference/event/responsive-resize
+            self.testsTable.on( 'responsive-resize.dt', function ( e, datatable, columns ) {
+                var count = columns.reduce( function (a,b) {
+                    return b === false ? a+1 : a;
+                }, 0 );
+                // count equals number of hidden columns
+                switch (count) {
+                    case 0:
+                        __this.showRepeaterCheckboxes = true;
+                        __this.showInactiveCheckboxes = true;
+                        __this.showADACheckboxes = true;
+                        break;
+                case 1:
+                        __this.showRepeaterCheckboxes = true;
+                        __this.showInactiveCheckboxes = true;
+                        __this.showADACheckboxes = false;
+                        break;
+                case 2:
+                        __this.showRepeaterCheckboxes = true;
+                        __this.showInactiveCheckboxes = false;
+                        __this.showADACheckboxes = false;
+                        break;
+                case 3:
+                case 4:
+                        __this.showRepeaterCheckboxes = false;
+                        __this.showInactiveCheckboxes = false;
+                        __this.showADACheckboxes = false;
+                }
+            });
+
+        });  // Closes setTimeout
     }
 
+    
     loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
         let rosterCohortStudents: Array<RosterCohortStudentsModel> = [];
         if (cohortStudents) {
