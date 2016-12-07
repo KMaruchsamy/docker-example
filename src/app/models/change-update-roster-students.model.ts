@@ -10,5 +10,5 @@
     isActive: boolean = null;
     isRepeater: boolean = null;
     isGrantUntimedTest: boolean = null;
-    updateType: number;  //Based on Request for change/Move/Add
+    updateType: number;  //Based on Request for change/Move/Add [1/2/3]
 }

@@ -22,40 +22,23 @@
                             <tr *ngFor="let cohortStudent of rosterChangeUpdateStudents">
                                 <td class="js-student-name">{{cohortStudent.lastName}},{{cohortStudent.firstName}}</td>
                                 <td>
-                                    <button id="btnChangeToCohort{{cohortStudent.studentId}}" [disabled]="cohortStudent.isActive" class="button button-small button-light js-choose-cohort button-fixed-width" [class.button-no-change]="!cohortStudent.isActive" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">{{cohortStudent.moveToCohortName ===null ?'Choose an active cohort' : cohortStudent.moveToCohortName}}</button>
+                                    <button id="btnChangeToCohort{{cohortStudent.studentId}}" [disabled]="cohortStudent.isActive" class="button button-small button-light js-choose-cohort button-fixed-width" [class.button-no-change]="!(cohortStudent.isActive) && !(cohortStudent.moveToCohortId !== null )" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">{{cohortStudent.moveToCohortName ===null ?'Choose an active cohort' : cohortStudent.moveToCohortName}}</button>
                                 </td>
                                 <td>
-                                    <input  *ngIf="showRepeaterCheckboxes" type="checkbox" class="checkbox-image js-disable js-repeat" id="chkRepeat{{cohortStudent.studentId}}" [disabled]="!enableRepeaterCheckbox || (cohortStudent.moveToCohortId ===null) || cohortStudent.isActive" />
+                                    <input  *ngIf="showRepeaterCheckboxes" type="checkbox" class="checkbox-image js-disable js-repeat" id="chkRepeat{{cohortStudent.studentId}}" (change)="checkRepeater(cohortStudent.studentId,$event)" [disabled]="!enableRepeaterCheckbox || (cohortStudent.moveToCohortId ===null) || cohortStudent.isActive" />
                                     <label  *ngIf="showRepeaterCheckboxes" for="chkRepeat{{cohortStudent.studentId}}"></label>
                                 </td>
                                 <td>
-                                    <input *ngIf="showInactiveCheckboxes" type="checkbox" class="checkbox-image js-drop" id="inactive{{cohortStudent.studentId}}" (change)="callMakeInactive(cohortStudent.studentId,$event)" [disabled]="(cohortStudent.moveToCohortId !== null )|| cohortStudent.isGrantUntimedTest"/>
+                                    <input *ngIf="showInactiveCheckboxes" type="checkbox" class="checkbox-image js-drop" id="inactive{{cohortStudent.studentId}}" (change)="checkInactive(cohortStudent.studentId,$event)" [disabled]="(cohortStudent.moveToCohortId !== null )|| cohortStudent.isGrantUntimedTest"/>
                                     <label *ngIf="showInactiveCheckboxes" for="inactive{{cohortStudent.studentId}}"></label>
                                 </td>
                                 <td>
-                                    <input *ngIf="showADACheckboxes" type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA{{cohortStudent.studentId}}" (change)="callToGrantUntimedTest(cohortStudent.studentId,$event)" [disabled]="cohortStudent.isActive" />
+                                    <input *ngIf="showADACheckboxes" type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA{{cohortStudent.studentId}}" (change)="checkGrantUntimedTest(cohortStudent.studentId,$event)" [disabled]="cohortStudent.isActive" />
                                     <label *ngIf="showADACheckboxes" for="ADA{{cohortStudent.studentId}}"></label>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-
-                    <!-- Change cohort Modal -->
-                    <div class="modal-no-background hidden" id="changeCohortModal" tabindex="-1" role="dialog">
-                        <div class="modal-dialog modal-small" role="document">
-                            <div class="modal-content">
-
-                                <button type="button" class="close close-small" aria-label="Close" (click)="CloseCohortPopup($event);"></button>
-                                <div class="modal-content-small">
-                                    <p class="text-purple" id="studentHeading">{{studentNameToChangeRoster}}</p>
-                                    <!--<div class="cohort-button-container">-->
-                                        <button type="button" [attr.movetocohortid]="'movetocohort_'+ roster.cohortId" *ngFor="let roster of rostersList" class="button button-light button-unselected" id="{{roster.cohortId}}" (click)="moveToCohort(roster,$event)">{{roster.cohortName}}<img src="assets/images/green-checkmark_2x.png" class="hidden" alt="cohort selected" width="16" height="12" /></button>
-                                    <!--</div>-->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end modal-->
 
                 </div><!--closes relatively positioned div containing table and modal-->
 
@@ -72,3 +55,11 @@
     </div>
 </section>
 
+
+<request-change-roster-popup *ngIf="showRequestChangePopup"
+[studentNameToChangeRoster]="studentNameToChangeRoster"
+[toChangeRosterStudentId]="toChangeRosterStudentId"
+[rosterChangesModel]="rosterChangesModel"
+[rosterChangeUpdateStudents]="rosterChangeUpdateStudents"
+(requestChangeCohortPopup)="changeCohortTo($event)">
+</request-change-roster-popup>
