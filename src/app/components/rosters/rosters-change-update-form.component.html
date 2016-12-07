@@ -2,7 +2,7 @@
     <div class="container-medium-width">
         <div class="large-expander" id="tableExpander">
             <div class="relative-position">
-                <a class="large-expander-trigger" role="button" data-toggle="collapse" (click)="expandRequestChanges($event)" aria-expanded="false" aria-controls="requestChanges">
+                <a class="large-expander-trigger-purple" role="button" data-toggle="collapse" (click)="expandRequestChanges($event)" aria-expanded="false" aria-controls="requestChanges">
                     Request changes to this cohort
                 </a>
             </div>
@@ -25,16 +25,16 @@
                                     <button id="btnChangeToCohort{{cohortStudent.studentId}}" [disabled]="cohortStudent.isActive" class="button button-small button-light js-choose-cohort button-fixed-width" [class.button-no-change]="!cohortStudent.isActive" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">{{cohortStudent.moveToCohortName ===null ?'Choose an active cohort' : cohortStudent.moveToCohortName}}</button>
                                 </td>
                                 <td>
-                                    <input type="checkbox" class="checkbox-image js-disable js-repeat" id="chkRepeat{{cohortStudent.studentId}}" [disabled]="!enableRepeaterCheckbox || (cohortStudent.moveToCohortId ===null) || cohortStudent.isActive" />
-                                    <label for="chkRepeat{{cohortStudent.studentId}}"></label>
+                                    <input  *ngIf="showRepeaterCheckboxes" type="checkbox" class="checkbox-image js-disable js-repeat" id="chkRepeat{{cohortStudent.studentId}}" [disabled]="!enableRepeaterCheckbox || (cohortStudent.moveToCohortId ===null) || cohortStudent.isActive" />
+                                    <label  *ngIf="showRepeaterCheckboxes" for="chkRepeat{{cohortStudent.studentId}}"></label>
                                 </td>
                                 <td>
-                                    <input type="checkbox" class="checkbox-image js-drop" id="inactive{{cohortStudent.studentId}}" (change)="callMakeInactive(cohortStudent.studentId,$event)" [disabled]="(cohortStudent.moveToCohortId !== null )|| cohortStudent.isGrantUntimedTest"/>
-                                    <label for="inactive{{cohortStudent.studentId}}"></label>
+                                    <input *ngIf="showInactiveCheckboxes" type="checkbox" class="checkbox-image js-drop" id="inactive{{cohortStudent.studentId}}" (change)="callMakeInactive(cohortStudent.studentId,$event)" [disabled]="(cohortStudent.moveToCohortId !== null )|| cohortStudent.isGrantUntimedTest"/>
+                                    <label *ngIf="showInactiveCheckboxes" for="inactive{{cohortStudent.studentId}}"></label>
                                 </td>
                                 <td>
-                                    <input type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA{{cohortStudent.studentId}}" (change)="callToGrantUntimedTest(cohortStudent.studentId,$event)" [disabled]="cohortStudent.isActive" />
-                                    <label for="ADA{{cohortStudent.studentId}}"></label>
+                                    <input *ngIf="showADACheckboxes" type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA{{cohortStudent.studentId}}" (change)="callToGrantUntimedTest(cohortStudent.studentId,$event)" [disabled]="cohortStudent.isActive" />
+                                    <label *ngIf="showADACheckboxes" for="ADA{{cohortStudent.studentId}}"></label>
                                 </td>
                             </tr>
                         </tbody>
