@@ -3,7 +3,18 @@
 <main role="main" class="app-main">
     <rosters-change-extend-header [rosterChangesModel]="rosterChangesModel"></rosters-change-extend-header>
     <rosters-AM-info [rosterChangesModel]="rosterChangesModel" [accountManagerId]="rosterChangesModel.accountManagerId"></rosters-AM-info>
-    <rosters-form [rosterChangesModel]="rosterChangesModel"></rosters-form>    
+    <section>
+        <div class="container-medium-width">
+            <rosters-form [rosterChangesModel]="rosterChangesModel"></rosters-form>
+            <rosters-move 
+            [rosterChangesModel]="rosterChangesModel" 
+            (moveToCohort)="moveToCohort($event)" 
+            (removeEvent)="remove($event)"
+            (updateUntimedEvent) = "updateUntimed($event)"
+            (updateRepeaterEvent) = "updateRepeater($event)"
+            ></rosters-move>
+        </div>
+    </section>
 </main>
 
 <page-footer></page-footer>
