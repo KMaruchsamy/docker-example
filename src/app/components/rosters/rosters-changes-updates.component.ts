@@ -15,14 +15,17 @@ import * as _ from 'lodash';
 @Component({
     selector: 'rosters-changes-updates',
     templateUrl: './rosters-changes-updates.component.html',
-    styleUrls: ['./rosters-changes-updates.css']
+    styles: [`textarea { min-height: 100px;}`]
 })
 
-export class RostersChangesUpdatesComponent implements OnInit {
+export class RostersChangesUpdatesComponent implements OnInit, OnDestroy {
+    sStorage: any;
+    instructions: string;
     constructor(public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
     }
 
     ngOnInit(): void {
+        this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else {
@@ -66,6 +69,14 @@ export class RostersChangesUpdatesComponent implements OnInit {
             if (studentToUpdate)
                 studentToUpdate.isRepeater = e.checked;
         }
+    }
+
+
+    redirectToReview(): void {
+        // save instructions and student roster changes to sStorage and redirect
+         this.rosterChangesModel.instructions = this.instructions;
+         this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel ));
+         this.router.navigate(['rosters, roster-changes-summary']);
     }
 
 }

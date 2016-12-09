@@ -1,4 +1,7 @@
-﻿export class ChangeUpdateRosterStudentsModal {
+﻿import { Injectable } from '@angular/core';
+
+@Injectable()
+export class ChangeUpdateRosterStudentsModal {
     studentId: number;
     moveFromCohortId: number = null;
     moveFromCohortName: string = null;
