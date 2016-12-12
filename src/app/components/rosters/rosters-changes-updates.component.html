@@ -5,7 +5,11 @@
     <rosters-AM-info [rosterChangesModel]="rosterChangesModel" [accountManagerId]="rosterChangesModel.accountManagerId"></rosters-AM-info>
     <section>
         <div class="container-medium-width">
-            <rosters-form [rosterChangesModel]="rosterChangesModel"></rosters-form>
+            <rosters-form 
+             [rosterChangesModel]="rosterChangesModel"
+             (changeUpdateRosterStudentsEvent)="changeUpdateRosterStudents($event)"
+             (changeToDifferentCohortEvent)="changeToDifferentCohort($event)"
+            ></rosters-form>
             <rosters-move 
             [rosterChangesModel]="rosterChangesModel" 
             (moveToCohort)="moveToCohort($event)" 

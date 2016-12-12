@@ -6,7 +6,8 @@
             <div class="modal-content-small">
                 <p class="text-purple" id="studentHeading">{{studentNameToChangeRoster}}</p>
                 <div class="cohort-button-container">
-                    <button type="button" *ngFor="let roster of rostersList" class="button button-light button-unselected" id="{{roster.cohortId}}" (click)="moveToCohort(roster,$event)">{{roster.cohortName}}<img src="assets/images/green-checkmark_2x.png" class="hidden" alt="cohort selected" width="16" height="12" /></button>
+                    <button type="button" *ngFor="let roster of rostersList" class="button button-light" [class.button-unselected]="rosterChangeUpdateStudents.moveToCohortId !== null" id="{{roster.cohortId}}" (click)="moveToCohort(roster,$event)">{{roster.cohortName}}
+                    <img src="assets/images/green-checkmark_2x.png" [class.hidden]="!cohortSelected" alt="cohort selected" width="16" height="12" /></button>
                 </div>
             </div>
         </div>

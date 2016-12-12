@@ -30,6 +30,8 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
     cohortSubscription: Subscription;
     noCohorts: boolean = true;
     institutionId: number;
+    sStorage: any;
+    cohortSelected: boolean = false;
 
     constructor(public auth: AuthService, public common: CommonService, public rosterService: RosterService, public rosterCohortsModel: RosterCohortsModel, public rosters: RostersModal) { }
 
@@ -38,8 +40,13 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
             this.cohortSubscription.unsubscribe();
     }
 
-    ngOnInit() {        
+    ngOnInit() {
+    this.sStorage = this.common.getStorage();
+    this.rostersList = JSON.parse(this.sStorage.getItem('rosterlist'));
+    if (this.rostersList === null || this.rostersList.length === 0) {
+        this.rostersList = [];
         this.rosterCohorts();
+    }
     }
     rosterCohorts() {
         let institutionId = this.rosterChangesModel.institutionId;
@@ -94,6 +101,7 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
                     if (__this.rosterChangesModel.cohortId !== o.cohortId)
                         __this.rostersList.push(o);
                 });
+                __this.sStorage.setItem('rosterlist', JSON.stringify(this.rostersList));
             }
         }
     }
@@ -106,14 +114,17 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
     moveToCohort(_roster, e) {
         e.preventDefault();
         let __this = this;
+        this.cohortSelected = true;
+        let updatedStudent: ChangeUpdateRosterStudentsModal;
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
             if (_student.studentId === __this.toChangeRosterStudentId) {
                 _student.moveToCohortId = _roster.cohortId;
                 _student.moveToCohortName = _roster.cohortName;
                 _student.updateType = 1;
+                updatedStudent = _student;
             }
         });
-        this.requestChangeCohortPopup.emit(this.rosterChangeUpdateStudents);
+        this.requestChangeCohortPopup.emit(updatedStudent);
     }
         
 }
