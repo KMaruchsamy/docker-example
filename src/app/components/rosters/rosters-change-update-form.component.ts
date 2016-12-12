@@ -1,5 +1,5 @@
 ﻿import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import {NgFor} from '@angular/common';
+import {NgFor, NgIf} from '@angular/common';
 import {Router} from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { links } from '../../constants/config';
@@ -8,15 +8,17 @@ import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import {RosterCohortsModel} from '../../models/roster-cohorts.model';
 import {RosterCohortStudentsModel} from '../../models/roster-cohort-students.model';
+import {ChangeUpdateRosterStudentsModal} from '../../models/change-update-roster-students.model';
 import {RostersModal} from '../../models/rosters.model';
 import { CommonService } from './../../services/common.service';
 import {RosterService} from './roster.service';
+
 
 @Component({
     selector: 'rosters-form',
     providers: [RosterCohortsModel, RostersModal],
     templateUrl: './rosters-change-update-form.component.html',
-    styleUrls: ['./rosters-change-update-form.component.css'],
+    styleUrls: ['./rosters-change-update-form.component.css']
 })
 
 export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
@@ -30,10 +32,20 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     _institutionId: number;
     studentNameToChangeRoster: string;
     toChangeRosterStudentId: number;
-
+    testsTable: any;
+    showRepeaterCheckboxes: boolean = true;
+    showInactiveCheckboxes: boolean = true;
+    showADACheckboxes: boolean = true;
+    expandUpdateDiv: boolean = true;
+    rosterChangeUpdateStudents: ChangeUpdateRosterStudentsModal[];
+    enableRepeaterCheckbox: boolean = false;
+    showRequestChangePopup: boolean = false;
+   
     constructor(public auth: AuthService, public router: Router, public common: CommonService, public rosterService: RosterService, public rosterCohortsModel: RosterCohortsModel, public rosters: RostersModal) { }
 
     ngOnDestroy(): void {
+        if (this.testsTable)
+            this.testsTable.destroy();
         if (this.cohortStudentsSubscription)
             this.cohortStudentsSubscription.unsubscribe();
         if (this.cohortSubscription)
@@ -42,14 +54,13 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        debugger;
         let cohortId: number = this.rosterChangesModel.cohortId;
         this._institutionId = this.rosterChangesModel.institutionId;
+        this.testsTable = null;
         this.getRosterCohortStudents(cohortId);
     }
 
     getRosterCohortStudents(cohortId) {
-        debugger;
         let __this = this;
         let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.cohortStudents}`;
         if (cohortId) {
@@ -59,6 +70,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 .map(response => response.json())
                 .subscribe(json => {
                     __this.loadRosterCohortStudents(__this.rosterCohortsModel, json);
+                    __this.bindDatatable(__this);
                 }, error => {
                     __this.loadRosterCohortStudents(__this.rosterCohortsModel, null);
                 }, () => {
@@ -69,138 +81,183 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
-        let rosterCohortStudents: Array<RosterCohortStudentsModel> = [];
-        if (cohortStudents) {
-            rosterCohortStudents = _.map(cohortStudents, (student: any) => {
-                let rosterCohortStudent = new RosterCohortStudentsModel();
-                rosterCohortStudent.cohortId = student.CohortId;
-                rosterCohortStudent.cohortName = student.CohortName;
-                rosterCohortStudent.email = student.Email;
-                rosterCohortStudent.firstName = student.FirstName;
-                rosterCohortStudent.lastName = student.LastName;
-                rosterCohortStudent.studentId = student.StudentId;
-                rosterCohortStudent.repeatExpiryDate = student.RepeatExpiryDate;
-                rosterCohortStudent.userExpireDate = student.UserExpireDate;
-                rosterCohortStudent.studentPayInstitution = student.StudentPayInstitution;
-                rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate && moment(rosterCohortStudent.repeatExpiryDate).isAfter(new Date(), 'day');
-                rosterCohortStudent.isExpiredStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !rosterCohortStudent.studentPayInstitution);
-                rosterCohortStudent.isStudentPayDeactivatedStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !!rosterCohortStudent.studentPayInstitution);
-
-
-                rosterCohortStudent.isDuplicate = _.some(cohortStudents, function (stud: any) {
-                    return stud.StudentId !== student.StudentId
-                        && student.FirstName.toUpperCase() === stud.FirstName.toUpperCase()
-                        && student.LastName.toUpperCase() === stud.LastName.toUpperCase()
-                });
-
-                //if (!cohort.hasDuplicateStudent) {
-                //    if (rosterCohortStudent.isDuplicate)
-                //        cohort.hasDuplicateStudent = true;
-                //}
-
-                if (!cohort.hasRepeatStudent) {
-                    if (rosterCohortStudent.isRepeatStudent)
-                        cohort.hasRepeatStudent = true;
-                }
-
-                if (!cohort.hasExpiredStudent) {
-                    if (rosterCohortStudent.isExpiredStudent)
-                        cohort.hasExpiredStudent = true;
-                }
-
-                if (!cohort.hasStudentPayDeactivatedStudent) {
-                    if (rosterCohortStudent.isStudentPayDeactivatedStudent)
-                        cohort.hasStudentPayDeactivatedStudent = true;
-                }
-
-                return rosterCohortStudent;
+    bindDatatable(self: any): void {
+        if (self.testsTable)
+            self.testsTable.destroy();
+        setTimeout(() => {
+            self.testsTable = $('#markChangesTable').DataTable({
+                "paging": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                "ordering": false,
+                "scrollY": "300px",
+                "scrollCollapse": true,
+                "columns": [
+                null,
+                null,
+                { "width": "80px" },
+                { "width": "80px" },
+                { "width": "80px" }
+                ]          
             });
-        }
-        cohort.studentCount = rosterCohortStudents ? rosterCohortStudents.length : 0;
-        cohort.students = rosterCohortStudents;
-        cohort.visible = !cohort.visible;
-        cohort.cohortId = this.rosterChangesModel.cohortId;
-        cohort.cohortName = this.rosterChangesModel.cohortName;
-        this.rosterCohorts(this._institutionId);
-    }
 
-    loadCohorts(roster: any) {
-        debugger;
-        if (roster) {
             let __this = this;
-            let extensionCohort: RosterCohortsModel;
-            this.rosters.institutionId = roster.InstitutionId;
-            this.rosters.institutionName = roster.InstitutionName;
-            this.rosters.institutionNameWithProgOfStudy = roster.InstitutionNameWithProgOfStudy;
-            this.rosters.accountManagerId = roster.AccountManagerId;
-            this.rosters.accountManagerFirstName = roster.AccountManagerFirstName;
-            this.rosters.accountManagerLastName = roster.AccountManagerLastName;
-            this.rosters.accountManagerEmail = roster.AccountManagerEmail;
-            this.rosters.studentPayEnabled = roster.StudentPayEnabled;
-            if (roster.Cohorts.length > 0) {
-                roster.Cohorts = _.orderBy(roster.Cohorts, function (o: any) {
-                    if (o.CohortName.toUpperCase().indexOf('EXTENSION') != -1)
-                        return new Date(0);
-                    else
-                        return new Date(o.CohortEndDate);
-                }, 'desc');
-                this.rosters.cohorts = _.map(roster.Cohorts, (cohort: any) => {
-                    let rosterCohort = new RosterCohortsModel();
-                    rosterCohort.cohortId = cohort.CohortId;
-                    rosterCohort.cohortName = cohort.CohortName;
-                    rosterCohort.cohortStartDate = cohort.CohortStartDate;
-                    rosterCohort.cohortEndDate = cohort.CohortEndDate;
-                    rosterCohort.studentCount = cohort.StudentCount;
-                    return rosterCohort;
-                });
-                console.log('Before filter len=' + this.rosters.cohorts.length);
-                _.filter(this.rosters.cohorts, function (o) {
-                    if (__this.rosterChangesModel.cohortId !== o.cohortId)
-                        __this.rostersList.push(o);
-                });
-                console.log('After filter len=' + this.rostersList.length);
-            }
-        }
-    }
+
+            self.testsTable.responsive.recalc().columns.adjust();
+
+            // in responsive mode with checkboxes in child rows remove original checkboxes from the DOM as needed
+            self.testsTable.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
+                let children = $(row.child()).find('ul li').length;
+                    switch (children) {
+                        case 0:
+                            __this.showRepeaterCheckboxes = true;
+                            __this.showInactiveCheckboxes = true;
+                            __this.showADACheckboxes = true;
+                            break;
+                    case 1:
+                            __this.showRepeaterCheckboxes = true;
+                            __this.showInactiveCheckboxes = true;
+                            __this.showADACheckboxes = false;
+                            break;
+                    case 2:
+                            __this.showRepeaterCheckboxes = true;
+                            __this.showInactiveCheckboxes = false;
+                            __this.showADACheckboxes = false;
+                            break;
+                    case 3:
+                    case 4:
+                            __this.showRepeaterCheckboxes = false;
+                            __this.showInactiveCheckboxes = false;
+                            __this.showADACheckboxes = false;
+                    }
+                
+            });
 
 
-    rosterCohorts(institutionId: number) {
-        let __this = this;
-        let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.cohorts}`;
-        if (institutionId) {
-            url = url.replace('§institutionId', institutionId.toString());
-            let rosterCohortsObservable: Observable<Response> = this.rosterService.getRosterCohorts(url);
-            this.cohortSubscription = rosterCohortsObservable
-                .map(response => response.json())
-                .subscribe(json => {
-                    __this.noCohorts = false;
-                    __this.loadCohorts(json);
-                }, error => {
-                    console.log(error)
-                    __this.noCohorts = true;
-                    __this.rosters = new RostersModal();
-                });
-        }
+            //check if on responsive resize all columns are displayed (no children) and set showCheckboxes back to true
+            // https://datatables.net/reference/event/responsive-resize
+            self.testsTable.on( 'responsive-resize.dt', function ( e, datatable, columns ) {
+                var count = columns.reduce( function (a,b) {
+                    return b === false ? a+1 : a;
+                }, 0 );
+                // count equals number of hidden columns
+                switch (count) {
+                    case 0:
+                        __this.showRepeaterCheckboxes = true;
+                        __this.showInactiveCheckboxes = true;
+                        __this.showADACheckboxes = true;
+                        break;
+                case 1:
+                        __this.showRepeaterCheckboxes = true;
+                        __this.showInactiveCheckboxes = true;
+                        __this.showADACheckboxes = false;
+                        break;
+                case 2:
+                        __this.showRepeaterCheckboxes = true;
+                        __this.showInactiveCheckboxes = false;
+                        __this.showADACheckboxes = false;
+                        break;
+                case 3:
+                case 4:
+                        __this.showRepeaterCheckboxes = false;
+                        __this.showInactiveCheckboxes = false;
+                        __this.showADACheckboxes = false;
+                }
+            });
+
+        });  // Closes setTimeout
     }
+
+    
+    loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
+        if (cohortStudents) {
+            this.rosterChangeUpdateStudents = _.map(cohortStudents, (student: any) => {
+                let changeUpdateStudent = new ChangeUpdateRosterStudentsModal();
+                changeUpdateStudent.moveFromCohortId = student.CohortId;
+                changeUpdateStudent.moveFromCohortName = student.CohortName;
+                changeUpdateStudent.email = student.Email;
+                changeUpdateStudent.firstName = student.FirstName;
+                changeUpdateStudent.lastName = student.LastName;
+                changeUpdateStudent.studentId = student.StudentId;
+                return changeUpdateStudent;
+            });          
+        }      
+    }
+
+    
 
     showCohortPopup(firstName,lastName,studentId,e) {
         e.preventDefault();
-        $('#changeCohortModal').modal('show');
+        this.showRequestChangePopup = true;
         this.studentNameToChangeRoster = lastName + "," + firstName;
         this.toChangeRosterStudentId = studentId;
     }
 
-    CloseCohortPopup(e) {
+   
+    expandRequestChanges(e) {
         e.preventDefault();
-        $('#changeCohortModal').modal('hide');
+        this.expandUpdateDiv = !this.expandUpdateDiv;
     }
-    moveToCohort(_roster, e) {
-        e.preventDefault(); debugger;
-        $('#btnChangeToCohort' + this.toChangeRosterStudentId).val(_roster.cohortName);
-        $('#chkRepeat' + this.toChangeRosterStudentId).prop('disabled', 'false');
-        $('#inactive' + this.toChangeRosterStudentId).prop('disabled', 'disabled');
-        $('#changeCohortModal').modal('hide');
+    checkRepeater(_studentId, e) {
+        e.preventDefault();
+        let target = e.target || e.srcElement || e.currentTarget;
+        let isChecked: boolean = target.checked;
+        _.filter(this.rosterChangeUpdateStudents, function (_student) {
+            if (_student.studentId === _studentId) {
+                _student.updateType = 1;
+                _student.isRepeater = isChecked;
+            }
+        });
+
+    }
+    checkInactive(_studentId,e)
+    {
+        e.preventDefault();
+        let target = e.target || e.srcElement || e.currentTarget;
+        let isChecked: boolean = target.checked;
+        _.filter(this.rosterChangeUpdateStudents, function (_student) {
+            if (_student.studentId === _studentId) {
+                _student.updateType = 1;
+                _student.isActive = isChecked;
+                _student.isRepeater = false;
+                _student.isGrantUntimedTest = false;
+            }
+        });
+        
+    }
+    checkGrantUntimedTest(_studentId,e) {
+        e.preventDefault();
+        let __this = this;
+        let target = e.target || e.srcElement || e.currentTarget;
+        let isChecked: boolean = target.checked;
+        _.filter(this.rosterChangeUpdateStudents, function (_student) {
+            if (_student.studentId === _studentId) {
+                _student.isGrantUntimedTest = isChecked;
+                _student.updateType = 1;
+                if (_student.moveToCohortId === null) {
+                    _student.isActive = false;
+                }
+            }
+        }); 
+       // this.saveRequestedStudentsUpdate();
+    }
+
+    changeCohortTo(_requestChangeRoster: ChangeUpdateRosterStudentsModal[]) {
+        this.rosterChangeUpdateStudents = _requestChangeRoster;
+        this.enableRepeaterCheckbox = true;
+        this.showRequestChangePopup = false;
+    }
+
+    saveRequestedStudentsUpdate() {
+        let _rosterChangeUpdateStudents : ChangeUpdateRosterStudentsModal[]=[];
+        _.filter(this.rosterChangeUpdateStudents, function (_student) {
+            if (_student.moveToCohortId !== null || _student.isActive !== null || _student.isRepeater !== null || _student.isGrantUntimedTest !== null)
+                _rosterChangeUpdateStudents.push(_student);
+
+        });
+        this.rosterChangesModel.students = _rosterChangeUpdateStudents;
+        console.log(JSON.stringify(this.rosterChangesModel.students));
     }
 }
 

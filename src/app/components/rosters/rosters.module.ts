@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { RostersComponent }   from './rosters.component';
+import { RostersComponent } from './rosters.component';
 import { RostersCohortsComponent } from './rosters-cohorts.component';
 import { RostersHeaderComponent } from './rosters-header.component';
 import { RostersFaqComponent } from './rosters-faq.component';
@@ -26,6 +26,8 @@ import { RosterChangeNoteComponent } from './roster-change-note.component';
 import { RostersChangesUpdatesComponent } from './rosters-changes-updates.component';
 import { RostersChangeUpdateFormComponent } from './rosters-change-update-form.component';
 import { RostersNoAMComponent } from './rosters-no-AM.component';
+import { RequestChangeRosterPopupComponent } from './request-change-roster-popup.component';
+import { RosterChangeMoveToCohortComponent } from './rosters-change-move-to-cohort';
 
 @NgModule({
     imports: [
@@ -49,7 +51,9 @@ import { RostersNoAMComponent } from './rosters-no-AM.component';
         RosterChangeNoteComponent,
         RostersChangesUpdatesComponent,
         RostersChangeUpdateFormComponent,
-        RostersNoAMComponent 
+        RostersNoAMComponent,
+        RequestChangeRosterPopupComponent,
+        RosterChangeMoveToCohortComponent
     ],
     providers: [
         RosterService,

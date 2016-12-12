@@ -24,7 +24,7 @@ export class RosterChangesService {
         let accountManagerInfo = this.getAccountManagerID(rosterChangesModel.institutionId);
         rosterChangesModel.accountManagerId = accountManagerInfo.accountManagerId;
         rosterChangesModel.institutionName = accountManagerInfo.institutionName;
-        
+        rosterChangesModel.students = [];
         return rosterChangesModel;
     }        
 

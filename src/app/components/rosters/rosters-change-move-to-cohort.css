@@ -1,0 +1,135 @@
+
+span.dtr-data label {
+    float: right;
+    margin-right: 1em;
+}
+
+.button-fixed-width {
+    width: 170px;
+    white-space: normal;
+}
+
+.button-no-change {
+    background-color: #eeeef6;
+    border: 1px solid #c4c6ee;
+    color: #5a5ea9;
+}
+
+    .button-no-change:hover, .button-no-change:focus, .button-no-change:active {
+        background-color: #e6e6f0;
+        color: #5a5ea9;
+    }
+
+.large-expander-trigger {
+    background-color: #eeeef6;
+    border: 1px solid #c4c6ee;
+    color: #5a5ea9;
+}
+
+    .large-expander-trigger:hover, .large-expander-trigger:focus, .large-expander-trigger:active {
+        background-color: #e6e6f0;
+        color: #5a5ea9;
+    }
+
+    .large-expander-trigger:before {
+        border-left: 8px solid #5a5ea9;
+    }
+/*add media query for smaller screens*/
+.modal-small {
+    max-width: 100%;
+    width: 400px;
+}
+
+.modal-no-background {
+    background-color: transparent;
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.modal-dialog {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    margin: 0;
+}
+
+.modal-content-small {
+    padding: .75em 1em;
+}
+
+    .modal-content-small .button {
+        margin-bottom: .5em;
+        text-align: left;
+        width: 100%;
+        position: relative;
+    }
+
+    .modal-content-small img {
+        position: absolute;
+        right: 1em;
+    }
+
+    .cohort-button-container {
+     max-height: 200px;
+     overflow: auto;
+   }
+#markChanges table th:last-child, #markChanges table td:last-child {
+    padding-right: 0;
+}
+
+@media (max-width:768px) {
+    .profile-image {
+        max-height: 110px;
+        max-width: 110px;
+    }
+}
+
+@media (min-width:768px) {
+    .tabs li {
+        width: 34%;
+    }
+
+        .tabs li:first-child,
+        .tabs li:last-child {
+            width: 33%;
+        }
+
+    .tabs a {
+        width: 100%;
+        text-align: center;
+    }
+
+    .callout-AM {
+        /*vertically center*/
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
+
+@media (min-width:768px) and (max-width: 992px) {
+    .callout-AM {
+        padding-left: 145px;
+    }
+
+    .container-purple-top .profile-image {
+        max-height: 115px;
+        max-width: 115px;
+    }
+}
+
+@media (min-width:992px) {
+    .callout-AM {
+        padding-left: 160px;
+        padding-right: 3em;
+    }
+}
+
+textarea {
+    min-height: 100px;
+}
