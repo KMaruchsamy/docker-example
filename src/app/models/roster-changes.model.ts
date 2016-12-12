@@ -13,4 +13,5 @@ export class RosterChangesModel {
     accountManagerPhoneNumber: string;
     accountManagerPhotoURI: string;
     students: Array<ChangeUpdateRosterStudentsModal>;
+    instructions?: string;
 }
