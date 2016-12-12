@@ -92,7 +92,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     setInstitutionNames(institutions) {
         if (institutions !== null || institutions !== 'undefined') {
-            this.schoolName = _.map(institutions, 'InstitutionNameWithProgOfStudy');
+            this.schoolName = (_.map(institutions, 'InstitutionNameWithProgOfStudy')).sort();
         }
     }
 
