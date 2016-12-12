@@ -18,7 +18,7 @@ import * as _ from 'lodash';
     styles: [`textarea { min-height: 100px;}`]
 })
 
-export class RostersChangesUpdatesComponent implements OnInit, OnDestroy {
+export class RostersChangesUpdatesComponent implements OnInit {
     sStorage: any;
     instructions: string;
     constructor(public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
