@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, RoutesRecognized, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { NgIf } from '@angular/common';
 import { CommonService } from './../../services/common.service';
-
-
+import { Observable } from 'rxjs/Rx';
 
 import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
@@ -21,10 +20,21 @@ import * as _ from 'lodash';
 export class RostersChangesUpdatesComponent implements OnInit {
     sStorage: any;
     instructions: string;
+    overrideRouteCheck: boolean = false;
+    attemptedRoute: string;
+    destinationRoute: string;
+
     constructor(public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
     }
 
     ngOnInit(): void {
+        this.router
+            .events
+            .filter(event => event instanceof NavigationStart)
+            .subscribe(e => {
+                this.destinationRoute = e.url;
+            });
+
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
@@ -36,8 +46,6 @@ export class RostersChangesUpdatesComponent implements OnInit {
 
 
     moveToCohort(student: ChangeUpdateRosterStudentsModal) {
-        console.log('------------------------');
-        console.log(student);
         if (!this.rosterChangesModel.students || this.rosterChangesModel.students.length === 0)
             this.rosterChangesModel.students = new Array<ChangeUpdateRosterStudentsModal>();
         this.rosterChangesModel.students.push(student);
@@ -47,7 +55,6 @@ export class RostersChangesUpdatesComponent implements OnInit {
     }
 
     remove(studentToRemove: ChangeUpdateRosterStudentsModal): void {
-        debugger;
         _.remove(this.rosterChangesModel.students, (student: ChangeUpdateRosterStudentsModal) => {
             return student.studentId === studentToRemove.studentId;
         })
@@ -69,6 +76,32 @@ export class RostersChangesUpdatesComponent implements OnInit {
             if (studentToUpdate)
                 studentToUpdate.isRepeater = e.checked;
         }
+    }
+
+    canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
+        if (!this.overrideRouteCheck) {
+            this.attemptedRoute = this.destinationRoute;
+            $('#confirmationPopup').modal('show');
+            return false;
+        }
+        this.overrideRouteCheck = false;
+        return true;
+    }
+
+    onOKConfirmation(e: any): void {
+        $('#confirmationPopup').modal('hide');
+        this.attemptedRoute = '';
+    }
+    
+    onCancelConfirmation(popupId): void {
+        $('#' + popupId).modal('hide');
+        this.overrideRouteCheck = true;
+        this.router.navigateByUrl(this.attemptedRoute);
+    }
+
+    cancelChanges(): void {
+        this.attemptedRoute = '/rosters';
+        $('#confirmationPopup').modal('show');
     }
 
 
