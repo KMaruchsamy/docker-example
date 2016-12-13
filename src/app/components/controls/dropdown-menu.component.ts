@@ -11,7 +11,6 @@ import { AuthService } from './../../services/auth.service';
 			<li><a [routerLink]="['/home']" class="menu-icon home-icon" >Home</a></li>
 			<li><a [routerLink]="['/reports']" class="menu-icon reporting-icon" >View Reports</a></li>
 			<li><a [routerLink]="['/rosters']" class="menu-icon student-icon" >View Rosters</a></li>
-			<li><a [routerLink]="['/groups']" class="menu-icon group-icon" >Manage Groups</a></li>
 			<li><a [routerLink]="['/tests']" class="menu-icon test-icon" >Manage Tests</a></li>
 			<li><a [routerLink]="['/account']" class="menu-icon manage-icon" >Manage Account</a></li>
 			<li><a href="#" class="menu-icon sign-out-icon" (click)="logout($event);">Sign Out</a></li>
