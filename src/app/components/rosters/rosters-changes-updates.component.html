@@ -5,7 +5,11 @@
     <rosters-AM-info [rosterChangesModel]="rosterChangesModel" [accountManagerId]="rosterChangesModel.accountManagerId"></rosters-AM-info>
     <section>
         <div class="container-medium-width">
-            <rosters-form [rosterChangesModel]="rosterChangesModel"></rosters-form>
+            <rosters-form 
+             [rosterChangesModel]="rosterChangesModel"
+             (changeUpdateRosterStudentsEvent)="changeUpdateRosterStudents($event)"
+             (changeToDifferentCohortEvent)="changeToDifferentCohort($event)"
+            ></rosters-form>
             <rosters-move 
             [rosterChangesModel]="rosterChangesModel" 
             (moveToCohort)="moveToCohort($event)" 
@@ -30,3 +34,8 @@
 </main>
 
 <page-footer></page-footer>
+
+<confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
+    [okButtonText]="'No, stay on this page'" [cancelButtonText]="'Yes, leave this page'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation($event)"
+    [hideClose]="false">
+</confirmation-popup>
