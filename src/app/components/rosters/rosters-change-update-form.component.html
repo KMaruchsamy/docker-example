@@ -1,6 +1,6 @@
 ﻿        <div class="large-expander" id="tableExpander">
             <div class="relative-position">
-                <a class="large-expander-trigger-purple" role="button" data-toggle="collapse" (click)="expandRequestChanges($event)" aria-expanded="false" aria-controls="requestChanges">
+                <a class="large-expander-trigger-purple" [class.collapsed]="!expandUpdateDiv" role="button" data-toggle="collapse" (click)="expandRequestChanges($event)" aria-expanded="false" aria-controls="requestChanges">
                     Request changes to this cohort
                 </a>
             </div>

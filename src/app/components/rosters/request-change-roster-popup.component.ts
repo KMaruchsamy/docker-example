@@ -31,7 +31,6 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
     noCohorts: boolean = true;
     institutionId: number;
     sStorage: any;
-    cohortSelected: boolean = false;
 
     constructor(public auth: AuthService, public common: CommonService, public rosterService: RosterService, public rosterCohortsModel: RosterCohortsModel, public rosters: RostersModal) { }
 
@@ -114,7 +113,6 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
     moveToCohort(_roster, e) {
         e.preventDefault();
         let __this = this;
-        this.cohortSelected = true;
         let updatedStudent: ChangeUpdateRosterStudentsModal;
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
             if (_student.studentId === __this.toChangeRosterStudentId) {
@@ -122,9 +120,22 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
                 _student.moveToCohortName = _roster.cohortName;
                 _student.updateType = 1;
                 updatedStudent = _student;
+                __this.updateRosterList(_roster.cohortId);
             }
         });
-        this.requestChangeCohortPopup.emit(updatedStudent);
+        setTimeout(()=> {
+            this.requestChangeCohortPopup.emit(updatedStudent);
+        },100);
+       
+    }
+
+    updateRosterList(rosterid)
+    {
+        let __this = this;
+        _.filter(this.rostersList, (o) => {
+            if (o.cohortId == rosterid)
+                o.isSelected = true;
+        });
     }
         
 }
