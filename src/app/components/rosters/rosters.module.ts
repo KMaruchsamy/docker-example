@@ -28,7 +28,7 @@ import { RostersChangeUpdateFormComponent } from './rosters-change-update-form.c
 import { RostersNoAMComponent } from './rosters-no-AM.component';
 import { RequestChangeRosterPopupComponent } from './request-change-roster-popup.component';
 import { RosterChangeMoveToCohortComponent } from './rosters-change-move-to-cohort';
-import { SharedModule } from './../shared/shared.module.ts'
+import { SharedModule } from './../shared/shared.module'
 
 @NgModule({
     imports: [
