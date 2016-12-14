@@ -2,6 +2,7 @@ import { Component, Input, OnInit} from '@angular/core';
 import * as _ from 'lodash';
 import { CommonService } from './../../services/common.service';
 import { AuthService } from './../../services/auth.service';
+import { RosterChangesPages } from './../../constants/config';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { Injectable } from '@angular/core';
 
@@ -42,6 +43,21 @@ export class RosterChangesService {
                 institutionName: institution.InstitutionName
             }
         }
+    }
+
+    outOfRostersChanges(routeName: string): boolean {
+        routeName = routeName.toUpperCase();
+        if (routeName.indexOf(RosterChangesPages.MAKECHANGES) > -1 
+            || routeName.indexOf(RosterChangesPages.REVIEWCHANGES) > -1 
+            || routeName.indexOf(RosterChangesPages.CHANGESCONFIRMATION) > -1  
+            || routeName.indexOf('ERROR') > -1)
+            return false;
+        return true;
+    }
+
+    clearRosterChangesObjects(): void {
+        this.sStorage.removeItem('rosterChangesModel');
+        this.sStorage.removeItem('rosterChanges');
     }
 
 }

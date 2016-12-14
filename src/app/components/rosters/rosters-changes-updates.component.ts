@@ -79,10 +79,16 @@ export class RostersChangesUpdatesComponent implements OnInit {
     }
 
     canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
+        let outOfRostersChanges: boolean = this.rosterChangesService.outOfRostersChanges((this.common.removeWhitespace(this.destinationRoute)));
         if (!this.overrideRouteCheck) {
-            this.attemptedRoute = this.destinationRoute;
-            $('#confirmationPopup').modal('show');
-            return false;
+            if (outOfRostersChanges) {
+                this.attemptedRoute = this.destinationRoute;
+                $('#confirmationPopup').modal('show');
+                return false;
+            }
+        }
+        if (outOfRostersChanges) {
+            this.rosterChangesService.clearRosterChangesObjects();
         }
         this.overrideRouteCheck = false;
         return true;
@@ -90,13 +96,13 @@ export class RostersChangesUpdatesComponent implements OnInit {
 
     onOKConfirmation(e: any): void {
         $('#confirmationPopup').modal('hide');
-        this.attemptedRoute = '';
+        this.overrideRouteCheck = true;
+        this.router.navigateByUrl(this.attemptedRoute);
     }
 
     onCancelConfirmation(popupId): void {
         $('#' + popupId).modal('hide');
-        this.overrideRouteCheck = true;
-        this.router.navigateByUrl(this.attemptedRoute);
+        this.attemptedRoute = '';
     }
 
     cancelChanges(): void {
@@ -107,9 +113,9 @@ export class RostersChangesUpdatesComponent implements OnInit {
 
     redirectToReview(): void {
         // save instructions and student roster changes to sStorage and redirect
-        this.rosterChangesModel.instructions = this.instructions;
-        this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel));
-        this.router.navigate(['rosters, roster-changes-summary']);
+         this.rosterChangesModel.instructions = this.instructions;
+         this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel));
+         this.router.navigate(['/rosters/roster-changes-summary']);
     }
 
     changeUpdateRosterStudents(e: any) {

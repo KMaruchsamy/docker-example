@@ -150,6 +150,11 @@ export const TestShedulingPages = {
     CONFIRMATIONMODIFYINPROGRESS: 'TESTS/CONFIRMATIONMODIFYINPROGRESS'
 };
 
+export const RosterChangesPages = {
+    MAKECHANGES: 'ROSTERS/CHANGE-UPDATE',
+    REVIEWCHANGES: 'ROSTERS/ROSTER-CHANGES-SUMMARY',
+    CHANGESCONFIRMATION: 'ROSTERS/ROSTER-CHANGES-CONFIRMATION'
+};
 export const teststatus = {
     Completed: 'Completed',
     Scheduled: 'Scheduled',
