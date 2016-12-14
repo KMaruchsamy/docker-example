@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, RoutesRecognized, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { NgIf } from '@angular/common';
@@ -24,7 +24,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
     attemptedRoute: string;
     destinationRoute: string;
 
-    constructor(public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
+    constructor(private changeDetectorRef: ChangeDetectorRef, public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
     }
 
     ngOnInit(): void {
@@ -49,8 +49,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
         if (!this.rosterChangesModel.students || this.rosterChangesModel.students.length === 0)
             this.rosterChangesModel.students = new Array<ChangeUpdateRosterStudentsModal>();
         this.rosterChangesModel.students.push(student);
-
-        console.log(this.rosterChangesModel);
+        this.rosterChangesModel.students = this.rosterChangesModel.students.slice();
 
     }
 
@@ -58,6 +57,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
         _.remove(this.rosterChangesModel.students, (student: ChangeUpdateRosterStudentsModal) => {
             return student.studentId === studentToRemove.studentId;
         })
+        this.rosterChangesModel.students = this.rosterChangesModel.students.slice();
     }
 
     updateUntimed(e: any): void {
@@ -92,7 +92,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
         $('#confirmationPopup').modal('hide');
         this.attemptedRoute = '';
     }
-    
+
     onCancelConfirmation(popupId): void {
         $('#' + popupId).modal('hide');
         this.overrideRouteCheck = true;
@@ -107,9 +107,9 @@ export class RostersChangesUpdatesComponent implements OnInit {
 
     redirectToReview(): void {
         // save instructions and student roster changes to sStorage and redirect
-         this.rosterChangesModel.instructions = this.instructions;
-         this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel ));
-         this.router.navigate(['rosters, roster-changes-summary']);
+        this.rosterChangesModel.instructions = this.instructions;
+        this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel));
+        this.router.navigate(['rosters, roster-changes-summary']);
     }
 
     changeUpdateRosterStudents(e: any) {
@@ -120,7 +120,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
                 studentToUpdate = student;
             else
                 this.rosterChangesModel.students.push(student);
-        }       
+        }
         console.log('checkRosterADA=' + JSON.stringify(this.rosterChangesModel));
     }
     changeToDifferentCohort(e: any) {

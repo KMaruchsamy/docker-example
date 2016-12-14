@@ -28,7 +28,8 @@ import { RostersChangeUpdateFormComponent } from './rosters-change-update-form.c
 import { RostersNoAMComponent } from './rosters-no-AM.component';
 import { RequestChangeRosterPopupComponent } from './request-change-roster-popup.component';
 import { RosterChangeMoveToCohortComponent } from './rosters-change-move-to-cohort';
-import { SharedModule } from './../shared/shared.module'
+import { SharedModule } from './../shared/shared.module';
+import { FilterMoveIntoPipe } from './filter-move-into.pipe';
 
 @NgModule({
     imports: [
@@ -55,7 +56,8 @@ import { SharedModule } from './../shared/shared.module'
         RostersChangeUpdateFormComponent,
         RostersNoAMComponent,
         RequestChangeRosterPopupComponent,
-        RosterChangeMoveToCohortComponent
+        RosterChangeMoveToCohortComponent,
+        FilterMoveIntoPipe
     ],
     providers: [
         RosterService,
@@ -65,7 +67,6 @@ import { SharedModule } from './../shared/shared.module'
         RosterCohortStudentsModel,
         RosterChangesModel,
         RosterChangesService
-
     ],
 })
 export class RostersModule { }

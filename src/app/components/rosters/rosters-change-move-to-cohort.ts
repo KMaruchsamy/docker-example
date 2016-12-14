@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
 import { CommonService } from '../../services/common.service';
-import { links } from '../../constants/config';
+import { links, RosterUpdateTypes } from '../../constants/config';
 import { RosterService } from './roster.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
@@ -33,7 +33,8 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
 
     constructor(
         private common: CommonService,
-        private rosterService: RosterService
+        private rosterService: RosterService,
+        private changeDetectorRef: ChangeDetectorRef
     ) { }
 
     ngOnInit() {
@@ -47,18 +48,22 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
             || (this.searchString.length >= 2 && this.prevSearchText.length > this.searchString.length)
             || (this.searchString.length >= 2 && !_.startsWith(this.searchString, this.prevSearchText) && this.prevSearchText != this.searchString)) {
             this.prevSearchText = this.searchString;
-            let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.search}`;
-            url = url.replace("§institutionId", this.rosterChangesModel.institutionId.toString()).replace('§searchString', this.searchString);
+            // let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.search}`;
+            // url = url.replace("§institutionId", this.rosterChangesModel.institutionId.toString()).replace('§searchString', this.searchString);
+
+            let url: string = "assets/json/tempdata.json";            
+
             let searchStudentsObservable: Observable<Response> = this.rosterService.searchStudents(url);
             this.searchStudentsSubscription = searchStudentsObservable
                 .map(response => response.json())
                 .subscribe((json: any) => {
+                    debugger;
                     if (json) {
                         let typeaheadSource: Array<string> = [];
-                        if (json.Active) {
-                            this.searchedStudents = json.Active;
-                            for (var i = 0; i < json.Active.length; i++) {
-                                typeaheadSource.push(json.Active[i].FirstName + ' ' + json.Active[i].LastName);
+                        if (json) {
+                            this.searchedStudents = json;
+                            for (var i = 0; i < json.length; i++) {
+                                typeaheadSource.push(json[i].FirstName + ' ' + json[i].LastName);
                             }
                         }
                         // if (json.InactiveOrExpired) {
@@ -115,8 +120,9 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
                 studentId: student.StudentId,
                 firstName: student.FirstName,
                 lastName: student.LastName,
-                updateType: 1,
-                moved: this.isStudentMoved(student.StudentId)
+                updateType: RosterUpdateTypes.MoveToThisCohort,
+                moved: this.isStudentMoved(student.StudentId),
+                isActive: student.IsActive                
             }
         });
     }
@@ -144,7 +150,6 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         let movedStudent: any = _.find(this.boundStudents, { 'studentId': student.studentId });
         if (!!movedStudent)
             movedStudent.moved = this.isStudentMoved(student.studentId);
-        console.log(this.rosterChangesModel);
     }
 
 
@@ -175,7 +180,6 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
             student: student,
             checked: e.target.checked
         });
-        console.log(this.rosterChangesModel);
     }
 
 

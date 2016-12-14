@@ -202,3 +202,10 @@ export const telNumbers = {
     outsideUSCanadaSupportHotline: '+1-407-423-6620'
 }
 
+
+export enum RosterUpdateTypes {
+    MoveToDifferentCohort = 1,
+    MoveToThisCohort = 2,
+    AddToThisCohort = 3
+}
+

@@ -11,7 +11,7 @@
     </div>
     <div [class.collapse]="collapsed" id="moveExisting">
 
-        <div *ngIf="rosterChangesModel?.students?.length>0" id="movedStudentFromSearch" class="margin-1em-top container-bordered section-medium-thin section-bottom-thin section-gray js-move-here">
+        <div *ngIf="(rosterChangesModel?.students | filtermoveinto)?.length>0" id="movedStudentFromSearch" class="margin-1em-top container-bordered section-medium-thin section-bottom-thin section-gray js-move-here">
             <div class="container-medium-width">
                 <p class="text-purple"><b>Students to be moved to June 2018 cohort roster</b></p>
                 <table class="table-with-cell-padding last-row-no-border table-transparent datatable-gray-labels" id="addedStudent1">
@@ -25,12 +25,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr role="row" class="odd" *ngFor="let selectedStudent of rosterChangesModel.students">
+                        <tr role="row" class="odd" *ngFor="let selectedStudent of rosterChangesModel.students | filtermoveinto">
                             <td tabindex="0">{{selectedStudent.lastName}}, {{selectedStudent.firstName}}</td>
                             <td>{{selectedStudent.moveFromCohortName}}</td>
-                            <td class="center"><input type="checkbox" class="checkbox-image" (change)="updateRepeater(selectedStudent, $event)" [attr.id]="'repeater_' + selectedStudent.studentId"><label [attr.for]="'repeater_' + selectedStudent.studentId"></label></td>
-                            <td class="center"><input type="checkbox" (change)="updateUntimed(selectedStudent, $event)"  class="checkbox-image" [attr.id]="'untimed_' + selectedStudent.studentId"><label [attr.for]="'untimed_' + selectedStudent.studentId"></label></td>
-                            <td><button class="button button-small button-light js-remove" (click)="remove(selectedStudent, $event)" >Remove</button></td>
+                            <td class="center"><input type="checkbox" class="checkbox-image" (change)="updateRepeater(selectedStudent, $event)"
+                                    [attr.id]="'repeater_' + selectedStudent.studentId"><label [attr.for]="'repeater_' + selectedStudent.studentId"></label></td>
+                            <td class="center"><input type="checkbox" (change)="updateUntimed(selectedStudent, $event)" class="checkbox-image"
+                                    [attr.id]="'untimed_' + selectedStudent.studentId"><label [attr.for]="'untimed_' + selectedStudent.studentId"></label></td>
+                            <td><button class="button button-small button-light js-remove" (click)="remove(selectedStudent, $event)">Remove</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -63,8 +65,12 @@
             </thead>
             <tbody>
                 <tr *ngFor="let student of boundStudents">
-                    <td>{{student.lastName}}, {{student.firstName}}</td>
-                    <td>{{student.moveFromCohortName}}</td>
+                    <td><i *ngIf="!student.isActive || student.moveFromCohortName?.toLowerCase() ==='inactive'">{{student.lastName}}, {{student.firstName}}</i>
+                        <span *ngIf="student.isActive && student.moveFromCohortName?.toLowerCase() !=='inactive'">{{student.lastName}}, {{student.firstName}}</span> </td>
+                    <td>
+                        <i *ngIf="!student.isActive || student.moveFromCohortName?.toLowerCase() ==='inactive'"> {{student.moveFromCohortName}}</i>
+                        <span *ngIf="student.isActive && student.moveFromCohortName?.toLowerCase() !=='inactive'"> {{student.moveFromCohortName}}}</span>
+                       </td>
                     <td>
                         <button [disabled]="!!student.moved" class="button button-small button-light js-move" (click)="move(student, $event)">Request move <span class="hidden-small-phone-down">to this cohort</span></button>
                     </td>
