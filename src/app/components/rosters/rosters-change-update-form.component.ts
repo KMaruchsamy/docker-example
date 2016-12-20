@@ -8,7 +8,7 @@ import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import {RosterCohortsModel} from '../../models/roster-cohorts.model';
 import {RosterCohortStudentsModel} from '../../models/roster-cohort-students.model';
-import {ChangeUpdateRosterStudentsModal} from '../../models/change-update-roster-students.model';
+import {ChangeUpdateRosterStudentsModel} from '../../models/change-update-roster-students.model';
 import {RostersModal} from '../../models/rosters.model';
 import { CommonService } from './../../services/common.service';
 import {RosterService} from './roster.service';
@@ -39,7 +39,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     showInactiveCheckboxes: boolean = true;
     showADACheckboxes: boolean = true;
     expandUpdateDiv: boolean = true;
-    rosterChangeUpdateStudents: ChangeUpdateRosterStudentsModal[];
+    rosterChangeUpdateStudents: ChangeUpdateRosterStudentsModel[];
     enableRepeaterCheckbox: boolean = false;
     showRequestChangePopup: boolean = false;
     sStorage: any;
@@ -178,7 +178,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
         if (cohortStudents) {
             this.rosterChangeUpdateStudents = _.map(cohortStudents, (student: any) => {
-                let changeUpdateStudent = new ChangeUpdateRosterStudentsModal();
+                let changeUpdateStudent = new ChangeUpdateRosterStudentsModel();
                 changeUpdateStudent.moveFromCohortId = student.CohortId;
                 changeUpdateStudent.moveFromCohortName = student.CohortName;
                 changeUpdateStudent.email = student.Email;
@@ -208,7 +208,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         e.preventDefault();
         let target = e.target || e.srcElement || e.currentTarget;
         let isChecked: boolean = target.checked;
-        let student: ChangeUpdateRosterStudentsModal;
+        let student: ChangeUpdateRosterStudentsModel;
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
             if (_student.studentId === _studentId) {
                 _student.updateType = 1;
@@ -222,7 +222,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         e.preventDefault(); 
         let target = e.target || e.srcElement || e.currentTarget;
         let isChecked: boolean = target.checked;
-        let student: ChangeUpdateRosterStudentsModal;
+        let student: ChangeUpdateRosterStudentsModel;
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
             if (_student.studentId === _studentId) {
                 _student.updateType = 1;
@@ -239,7 +239,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         let __this = this;
         let target = e.target || e.srcElement || e.currentTarget;
         let isChecked: boolean = target.checked;
-        let student: ChangeUpdateRosterStudentsModal;
+        let student: ChangeUpdateRosterStudentsModel;
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
             if (_student.studentId === _studentId) {
                 _student.isGrantUntimedTest = isChecked;
@@ -253,14 +253,14 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         this.changeUpdateRosterStudentsEvent.emit(student);
     }
 
-    changeCohortTo(_student: ChangeUpdateRosterStudentsModal) {
+    changeCohortTo(_student: ChangeUpdateRosterStudentsModel) {
         this.enableRepeaterCheckbox = true;
         this.showRequestChangePopup = false;
         this.changeToDifferentCohortEvent.emit(_student);
     }
 
     //saveRequestedStudentsUpdate() {
-    //    let _rosterChangeUpdateStudents : ChangeUpdateRosterStudentsModal[]=[];
+    //    let _rosterChangeUpdateStudents : ChangeUpdateRosterStudentsModel[]=[];
     //    _.filter(this.rosterChangeUpdateStudents, function (_student) {
     //        if (_student.moveToCohortId !== null || _student.isActive !== null || _student.isRepeater !== null || _student.isGrantUntimedTest !== null)
     //            _rosterChangeUpdateStudents.push(_student);

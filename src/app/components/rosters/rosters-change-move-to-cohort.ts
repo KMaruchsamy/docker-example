@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Response } from '@angular/http';
 import { RosterChangesModel } from '../../models/roster-changes.model';
-import { ChangeUpdateRosterStudentsModal } from '../../models/change-update-roster-students.model';
+import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import * as _ from 'lodash';
 import { reset_student_password } from '../../constants/error-messages';
 
@@ -144,7 +144,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         $('.typeahead').typeahead('close');
     }
 
-    move(student: ChangeUpdateRosterStudentsModal, e: any) {
+    move(student: ChangeUpdateRosterStudentsModel, e: any) {
         e.preventDefault();
         this.moveToCohort.emit(student);
         let movedStudent: any = _.find(this.boundStudents, { 'studentId': student.studentId });
@@ -158,7 +158,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         return !!selectedStudent;
     }
 
-    remove(student: ChangeUpdateRosterStudentsModal, e): void {
+    remove(student: ChangeUpdateRosterStudentsModel, e): void {
         e.preventDefault();
         this.removeEvent.emit(student);
         let movedStudent: any = _.find(this.boundStudents, { 'studentId': student.studentId });
@@ -167,7 +167,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         console.log(this.rosterChangesModel);
     }
 
-    updateUntimed(student: ChangeUpdateRosterStudentsModal, e: any): void {
+    updateUntimed(student: ChangeUpdateRosterStudentsModel, e: any): void {
         this.updateUntimedEvent.emit({
             student: student,
             checked: e.target.checked
@@ -175,7 +175,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         console.log(this.rosterChangesModel);
     }
 
-    updateRepeater(student: ChangeUpdateRosterStudentsModal, e:any): void {
+    updateRepeater(student: ChangeUpdateRosterStudentsModel, e:any): void {
         this.updateRepeaterEvent.emit({
             student: student,
             checked: e.target.checked

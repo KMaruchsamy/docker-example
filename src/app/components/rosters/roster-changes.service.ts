@@ -27,8 +27,14 @@ export class RosterChangesService {
         rosterChangesModel.institutionName = accountManagerInfo.institutionName;
         rosterChangesModel.students = [];
         return rosterChangesModel;
-    }        
+    }
 
+    getUpdatedRosterChangesModel(): RosterChangesModel {
+        this.sStorage = this.common.getStorage();
+        let rosterChanges = this.sStorage.getItem('rosterChanges');
+        let rosterChangesModel = this.bindJSONToModel(rosterChanges);
+        return rosterChangesModel;
+    }    
 
     bindJSONToModel(JSONString: string): RosterChangesModel {
         let parsedJSON: RosterChangesModel = JSON.parse(JSONString);

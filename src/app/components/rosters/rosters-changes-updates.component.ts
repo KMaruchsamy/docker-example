@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Rx';
 import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { RosterChangesService } from './roster-changes.service';
-import { ChangeUpdateRosterStudentsModal } from '../../models/change-update-roster-students.model';
+import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import * as _ from 'lodash';
 
 @Component({
@@ -45,16 +45,16 @@ export class RostersChangesUpdatesComponent implements OnInit {
     }
 
 
-    moveToCohort(student: ChangeUpdateRosterStudentsModal) {
+    moveToCohort(student: ChangeUpdateRosterStudentsModel) {
         if (!this.rosterChangesModel.students || this.rosterChangesModel.students.length === 0)
-            this.rosterChangesModel.students = new Array<ChangeUpdateRosterStudentsModal>();
+            this.rosterChangesModel.students = new Array<ChangeUpdateRosterStudentsModel>();
         this.rosterChangesModel.students.push(student);
         this.rosterChangesModel.students = this.rosterChangesModel.students.slice();
 
     }
 
-    remove(studentToRemove: ChangeUpdateRosterStudentsModal): void {
-        _.remove(this.rosterChangesModel.students, (student: ChangeUpdateRosterStudentsModal) => {
+    remove(studentToRemove: ChangeUpdateRosterStudentsModel): void {
+        _.remove(this.rosterChangesModel.students, (student: ChangeUpdateRosterStudentsModel) => {
             return student.studentId === studentToRemove.studentId;
         })
         this.rosterChangesModel.students = this.rosterChangesModel.students.slice();
@@ -62,8 +62,8 @@ export class RostersChangesUpdatesComponent implements OnInit {
 
     updateUntimed(e: any): void {
         if (e) {
-            let student: ChangeUpdateRosterStudentsModal = e.student;
-            let studentToUpdate: ChangeUpdateRosterStudentsModal = _.find(this.rosterChangesModel.students, { 'studentId': student.studentId });
+            let student: ChangeUpdateRosterStudentsModel = e.student;
+            let studentToUpdate: ChangeUpdateRosterStudentsModel = _.find(this.rosterChangesModel.students, { 'studentId': student.studentId });
             if (studentToUpdate)
                 studentToUpdate.isGrantUntimedTest = e.checked;
         }
@@ -71,8 +71,8 @@ export class RostersChangesUpdatesComponent implements OnInit {
 
     updateRepeater(e: any): void {
         if (e) {
-            let student: ChangeUpdateRosterStudentsModal = e.student;
-            let studentToUpdate: ChangeUpdateRosterStudentsModal = _.find(this.rosterChangesModel.students, { 'studentId': student.studentId });
+            let student: ChangeUpdateRosterStudentsModel = e.student;
+            let studentToUpdate: ChangeUpdateRosterStudentsModel = _.find(this.rosterChangesModel.students, { 'studentId': student.studentId });
             if (studentToUpdate)
                 studentToUpdate.isRepeater = e.checked;
         }
@@ -120,8 +120,8 @@ export class RostersChangesUpdatesComponent implements OnInit {
 
     changeUpdateRosterStudents(e: any) {
         if (e) {
-            let student: ChangeUpdateRosterStudentsModal = e;
-            let studentToUpdate: ChangeUpdateRosterStudentsModal = _.find(this.rosterChangesModel.students, { 'studentId': student.studentId });
+            let student: ChangeUpdateRosterStudentsModel = e;
+            let studentToUpdate: ChangeUpdateRosterStudentsModel = _.find(this.rosterChangesModel.students, { 'studentId': student.studentId });
             if (studentToUpdate)
                 studentToUpdate = student;
             else
@@ -131,8 +131,8 @@ export class RostersChangesUpdatesComponent implements OnInit {
     }
     changeToDifferentCohort(e: any) {
         if (e) {
-            let student: ChangeUpdateRosterStudentsModal = e;
-            let studentToUpdate: ChangeUpdateRosterStudentsModal = _.find(this.rosterChangesModel.students, { 'studentId': student.studentId });
+            let student: ChangeUpdateRosterStudentsModel = e;
+            let studentToUpdate: ChangeUpdateRosterStudentsModel = _.find(this.rosterChangesModel.students, { 'studentId': student.studentId });
             if (studentToUpdate) {
                 studentToUpdate.moveToCohortId = student.moveToCohortId;
                 studentToUpdate.moveToCohortName = student.moveToCohortName;

@@ -30,6 +30,9 @@ import { RequestChangeRosterPopupComponent } from './request-change-roster-popup
 import { RosterChangeMoveToCohortComponent } from './rosters-change-move-to-cohort';
 import { SharedModule } from './../shared/shared.module';
 import { FilterMoveIntoPipe } from './filter-move-into.pipe';
+import { RosterChangesSummaryComponent } from './rosters-changes-summary.component';
+import { RosterChangesSummaryTablesComponent } from './rosters-changes-summary-tables.component';
+import { RostersExtendAccessComponent } from './rosters-extend-access.component';
 
 @NgModule({
     imports: [
@@ -57,7 +60,10 @@ import { FilterMoveIntoPipe } from './filter-move-into.pipe';
         RostersNoAMComponent,
         RequestChangeRosterPopupComponent,
         RosterChangeMoveToCohortComponent,
-        FilterMoveIntoPipe
+        FilterMoveIntoPipe,
+        RosterChangesSummaryComponent,
+        RosterChangesSummaryTablesComponent,
+        RostersExtendAccessComponent
     ],
     providers: [
         RosterService,

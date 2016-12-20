@@ -1,0 +1,30 @@
+<page-header></page-header>
+
+<main role="main" class="app-main">
+    <rosters-change-extend-header [rosterChangesModel]="rosterChangesModel"></rosters-change-extend-header>
+
+    <section>
+        <div class="section-medium-thin">
+          <div class="container-medium-width">
+            <h4 class="h5">Summary of Requested Changes/Updates:</h4>
+            <rosters-changes-summary-tables></rosters-changes-summary-tables>
+
+            <div class="section-top-medium-thin section clearfix">
+              <div class="page-action-footer margin-1em-top-bottom">
+                <a [routerLink]="['/rosters/change-update']" class="anchor-button-left">Modify this request</a>
+                <button (click)="submitRequests()" class="button">Submit request to Account Manager</button>
+              </div>
+              <button class="anchor-button anchor-button-center-mobile clear right " (click)="cancelChanges()">Cancel requested changes</button>
+            </div>
+          </div>
+        </div>
+      </section>
+</main>
+
+<page-footer></page-footer>
+
+
+<confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
+    [okButtonText]="'Yes, leave this page'" [cancelButtonText]="'No, stay on this page'"  (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation($event)"
+    [hideClose]="false">
+</confirmation-popup>

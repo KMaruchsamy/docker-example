@@ -1,0 +1,69 @@
+<div *ngIf="changedStudents && changedStudents.length > 0" class="section-medium-thin section-bottom-thin">
+  <h5 class="text-larger-teal">Changes to students currently in {{rosterChangesModel.cohortName}} cohort roster</h5>
+  <table class="table-fixed table-with-cell-padding justified-ends last-row-no-border margin-1em-top-bottom">
+    <thead class="gray-th">
+      <tr>
+        <th scope="col">Name</th><th scope="col" colspan="2">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of changedStudents">
+        <td>{{student.lastName}}, {{student.firstName}}</td>
+        <td colspan="2">
+          <span *ngIf="student.isInactive">Make Inactive</span>
+          <span *ngIf="student.moveToCohortName !== null">Move to {{student.moveToCohortName}}</span>
+          <span *ngIf="student.isRepeater">Mark as repeater</span>
+          <span *ngIf="student.isGrantUntimedTest">Grant untimed tests</span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <hr class="hr-thick" />
+</div>
+<div *ngIf="movedToStudents && movedToStudents.length > 0" class="section-medium-thin section-bottom-thin">
+  <h5 class="text-larger-teal">Existing students to be moved to {{rosterChangesModel.cohortName}} cohort roster</h5>
+  <table class="table-fixed table-with-cell-padding justified-ends last-row-no-border margin-1em-top-bottom">
+    <thead class="gray-th">
+      <tr>
+        <th scope="col">Name</th><th scope="col">Move from</th><th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of movedToStudents">
+        <td>{{student.lastName}}, {{student.firstName}}</td>
+        <td>Move from {{student.moveFromCohortName}}</td>
+        <td>
+          <span *ngIf="student.isRepeater">Mark as repeater</span>
+          <span *ngIf="student.isGrantUntimedTest">Grant untimed tests</span>
+        </td>
+      </tr>
+      </tbody>
+  </table>
+  <hr class="hr-thick" />
+</div>
+<div *ngIf="addedStudents && addedStudents.length > 0" class="section-medium-thin section-bottom-thin">
+  <h5 class="text-larger-teal">New students to be added to {{rosterChangesModel.cohortName}} cohort roster</h5>
+  <table class="table-fixed table-with-cell-padding justified-ends last-row-no-border margin-1em-top-bottom">
+    <thead class="gray-th">
+      <tr>
+        <th scope="col">Name</th><th scope="col">Email</th><th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of addedStudents">
+        <td>{{student.lastName}}, {{student.firstName}}</td>
+        <td class="break-long-word">{{student.email}}</td>
+        <td>
+          <span *ngIf="student.isRepeater">Mark as repeater</span>
+          <span *ngIf="student.isGrantUntimedTest">Grant untimed tests</span>
+        </td>
+      </tr>
+      </tbody>
+  </table>
+  <hr class="hr-thick" />
+</div>
+
+<div *ngIf="rosterChangesModel?.instructions && rosterChangesModel?.instructions.length > 0" class="section-medium-thin clearfix">
+  <h5  class="text-larger-teal">Additional changes, updates, or notes for {{rosterChangesModel.accountManagerFirstName}}</h5>
+  <p class="margin-2em-bottom">{{rosterChangesModel?.instructions}}</p>
+</div>
