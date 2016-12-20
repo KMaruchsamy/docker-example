@@ -15,7 +15,7 @@ import { reset_student_password } from '../../constants/error-messages';
 @Component({
     selector: 'rosters-move',
     templateUrl: 'rosters-change-move-to-cohort.component.html',
-    styleUrls: ['./rosters-change-move-to-cohort.css']
+    styleUrls: ['./rosters-change-move-to-cohort.component.css']
 })
 export class RosterChangeMoveToCohortComponent implements OnInit {
     searchString: string;
@@ -25,6 +25,8 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     collapsed: boolean = true;
     searchedStudents: Array<any>;
     boundStudents: Array<any>;
+    rosterUpdateType: number = RosterUpdateTypes.MoveToThisCohort;
+    addedFromType: number = RosterUpdateTypes.MoveToThisCohort;
     @Input() rosterChangesModel: RosterChangesModel;
     @Output() moveToCohort = new EventEmitter();
     @Output() removeEvent = new EventEmitter();
@@ -38,6 +40,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        
     }
 
     searchStudents(studentName: string) {
@@ -48,10 +51,9 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
             || (this.searchString.length >= 2 && this.prevSearchText.length > this.searchString.length)
             || (this.searchString.length >= 2 && !_.startsWith(this.searchString, this.prevSearchText) && this.prevSearchText != this.searchString)) {
             this.prevSearchText = this.searchString;
-            // let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.search}`;
-            // url = url.replace("§institutionId", this.rosterChangesModel.institutionId.toString()).replace('§searchString', this.searchString);
-
-            let url: string = "assets/json/tempdata.json";            
+            
+            let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.moveToCohortStudents}`;
+            url = url.replace("§institutionId", this.rosterChangesModel.institutionId.toString()).replace("§cohortId", this.rosterChangesModel.cohortId.toString()).replace('§searchString', this.searchString);
 
             let searchStudentsObservable: Observable<Response> = this.rosterService.searchStudents(url);
             this.searchStudentsSubscription = searchStudentsObservable
@@ -145,6 +147,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
 
     move(student: ChangeUpdateRosterStudentsModel, e: any) {
         e.preventDefault();
+        student.addedFrom = RosterUpdateTypes.MoveToThisCohort;
         this.moveToCohort.emit(student);
         let movedStudent: any = _.find(this.boundStudents, { 'studentId': student.studentId });
         if (!!movedStudent)

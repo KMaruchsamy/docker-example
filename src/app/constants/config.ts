@@ -1,7 +1,7 @@
 export const links = {
     api: {
         local: {
-            server: "https://qa-nursing.kaptest.com/"
+            server: "https://dev01-nursing.kaptest.com/"
         },
         dev: {
             server: "https://dev01-nursing.kaptest.com/"
@@ -59,7 +59,8 @@ export const links = {
                 cohortStudents: 'admin/rosters/cohorts/§cohortId/students',
                 search: 'admin/rosters/institutions/§institutionId/students?searchString=§searchString',
                 saveUserPreference: 'preferenceService/setPreference',
-                getUserPreference: 'preferenceService/users/§userId/preferences/§preferenceTypeName?userType=§userType'
+                getUserPreference: 'preferenceService/users/§userId/preferences/§preferenceTypeName?userType=§userType',
+                moveToCohortStudents :'admin/rosters/institution/§institutionId/cohort/§cohortId/students?searchString=§searchString'
             }
         }
     },

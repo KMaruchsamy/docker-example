@@ -263,7 +263,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         this.rosterChangesModel.cohortId = cohortId;
         this.rosterChangesModel.cohortName = cohortName;
         this.sStorage = this.common.getStorage();
-        this.sStorage.setItem('rosterChangesModel', JSON.stringify(this.rosterChangesModel))
+        this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel))
         this.apiServer = this.auth.common.getApiServer();
 
         // check if cohort has Account Manager associated with it
@@ -280,7 +280,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         this.rosterChangesModel.cohortId = cohortId;
         this.rosterChangesModel.cohortName = cohortName;
         this.sStorage = this.common.getStorage();
-        this.sStorage.setItem('rosterChangesModel', JSON.stringify(this.rosterChangesModel))
+        this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel))
         this.apiServer = this.auth.common.getApiServer();
 
         // redirect to extend access page

@@ -15,4 +15,5 @@ export class ChangeUpdateRosterStudentsModel {
     isGrantUntimedTest?: boolean = null;
     isExtendAccess?: boolean = null;
     updateType?: number;  //Based on Request for change/Move/Add/Extend Access [1/2/3/4]
+    addedFrom?: number;
 }

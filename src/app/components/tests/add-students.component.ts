@@ -1155,7 +1155,6 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     }
 
     onSelfPayStudentExceptionPopupClose(e: any) {
-        debugger;
         $('#selfPayStudentModal').modal('hide');
         this.showSelfPayStudentPopup = false;
         if (this.modifyInProgress) {

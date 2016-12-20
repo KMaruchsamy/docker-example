@@ -11,7 +11,7 @@
     </div>
     <div [class.collapse]="collapsed" id="moveExisting">
 
-        <div *ngIf="(rosterChangesModel?.students | filtermoveinto)?.length>0" id="movedStudentFromSearch" class="margin-1em-top container-bordered section-medium-thin section-bottom-thin section-gray js-move-here">
+        <div *ngIf="(rosterChangesModel?.students | filterrosterchange:rosterUpdateType:addedFromType)?.length>0" id="movedStudentFromSearch" class="margin-1em-top container-bordered section-medium-thin section-bottom-thin section-gray js-move-here">
             <div class="container-medium-width">
                 <p class="text-purple"><b>Students to be moved to June 2018 cohort roster</b></p>
                 <table class="table-with-cell-padding last-row-no-border table-transparent datatable-gray-labels" id="addedStudent1">
@@ -25,12 +25,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr role="row" class="odd" *ngFor="let selectedStudent of rosterChangesModel.students | filtermoveinto">
+                        <tr role="row" class="odd" *ngFor="let selectedStudent of rosterChangesModel.students | filterrosterchange:rosterUpdateType:addedFromType">
                             <td tabindex="0">{{selectedStudent.lastName}}, {{selectedStudent.firstName}}</td>
                             <td>{{selectedStudent.moveFromCohortName}}</td>
-                            <td class="center"><input type="checkbox" class="checkbox-image" (change)="updateRepeater(selectedStudent, $event)"
+                            <td class="center"><input type="checkbox" class="checkbox-image" (change)="updateRepeater(selectedStudent, $event)" [checked]="selectedStudent?.isRepeater"
                                     [attr.id]="'repeater_' + selectedStudent.studentId"><label [attr.for]="'repeater_' + selectedStudent.studentId"></label></td>
-                            <td class="center"><input type="checkbox" (change)="updateUntimed(selectedStudent, $event)" class="checkbox-image"
+                            <td class="center"><input type="checkbox" (change)="updateUntimed(selectedStudent, $event)" class="checkbox-image" [checked]="selectedStudent?.isGrantUntimedTest"
                                     [attr.id]="'untimed_' + selectedStudent.studentId"><label [attr.for]="'untimed_' + selectedStudent.studentId"></label></td>
                             <td><button class="button button-small button-light js-remove" (click)="remove(selectedStudent, $event)">Remove</button></td>
                         </tr>

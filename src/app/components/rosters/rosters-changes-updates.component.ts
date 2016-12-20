@@ -10,6 +10,7 @@ import { RosterChangesModel } from '../../models/roster-changes.model';
 import { RosterChangesService } from './roster-changes.service';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import * as _ from 'lodash';
+import { RosterUpdateTypes } from '../../constants/config';
 
 @Component({
     selector: 'rosters-changes-updates',
@@ -40,6 +41,8 @@ export class RostersChangesUpdatesComponent implements OnInit {
             this.router.navigate(['/']);
         else {
             this.rosterChangesModel = this.rosterChangesService.getRosterChangesModel();
+            if (this.rosterChangesModel.instructions && this.rosterChangesModel.instructions != '')
+                this.instructions = this.rosterChangesModel.instructions;
             this.titleService.setTitle('Request Roster Changes – Kaplan Nursing');
         }
     }
@@ -64,6 +67,15 @@ export class RostersChangesUpdatesComponent implements OnInit {
         if (e) {
             let student: ChangeUpdateRosterStudentsModel = e.student;
             let studentToUpdate: ChangeUpdateRosterStudentsModel = _.find(this.rosterChangesModel.students, { 'studentId': student.studentId });
+            if (studentToUpdate)
+                studentToUpdate.isGrantUntimedTest = e.checked;
+        }
+    }
+
+    updateAddedStudentUntimed(e: any): void {
+        if (e) {
+            let student: ChangeUpdateRosterStudentsModel = e.student;
+            let studentToUpdate: ChangeUpdateRosterStudentsModel = _.find(this.rosterChangesModel.students, { 'email': student.email });
             if (studentToUpdate)
                 studentToUpdate.isGrantUntimedTest = e.checked;
         }
@@ -113,9 +125,9 @@ export class RostersChangesUpdatesComponent implements OnInit {
 
     redirectToReview(): void {
         // save instructions and student roster changes to sStorage and redirect
-         this.rosterChangesModel.instructions = this.instructions;
-         this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel));
-         this.router.navigate(['/rosters/roster-changes-summary']);
+        this.rosterChangesModel.instructions = this.instructions;
+        this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel));
+        this.router.navigate(['/rosters/roster-changes-summary']);
     }
 
     changeUpdateRosterStudents(e: any) {
@@ -141,5 +153,29 @@ export class RostersChangesUpdatesComponent implements OnInit {
                 this.rosterChangesModel.students.push(student);
         }
         console.log('changeToDifferentCohort=' + JSON.stringify(this.rosterChangesModel));
+    }
+
+    addToCohort(student: any) {
+        if (student) {
+            let studentToAdd = new ChangeUpdateRosterStudentsModel();
+            studentToAdd.firstName = student.firstName;
+            studentToAdd.lastName = student.lastName;
+            studentToAdd.email = student.email;
+            studentToAdd.isGrantUntimedTest = student.unTimedTest;
+            studentToAdd.updateType = RosterUpdateTypes.AddToThisCohort;
+            studentToAdd.addedFrom = RosterUpdateTypes.AddToThisCohort;
+            studentToAdd.moveToCohortId = this.rosterChangesModel.cohortId;
+            studentToAdd.moveToCohortName = this.rosterChangesModel.cohortName;
+            this.rosterChangesModel.students.push(studentToAdd);
+            this.rosterChangesModel.students = this.rosterChangesModel.students.slice();
+        }
+
+    }
+
+    removeAddedStudent(student: ChangeUpdateRosterStudentsModel) {
+        if (this.rosterChangesModel.students) {
+            _.remove(this.rosterChangesModel.students, { 'email': student.email });
+            this.rosterChangesModel.students = this.rosterChangesModel.students.slice();
+        }
     }
 }
