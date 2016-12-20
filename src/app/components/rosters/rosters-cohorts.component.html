@@ -10,8 +10,8 @@
     <div *ngIf="cohort?.students && cohort?.students?.length>0" class="collapse" [class.in]="cohort.visible" [attr.id]="'cohort' + cohort.cohortId">
       <div class="clearfix">
         <span><b>Student access active from {{cohort?.cohortStartDate|parseDate:'MMMM D, YYYY'}} to {{cohort?.cohortEndDate|parseDate:'MMMM D, YYYY'}}</b></span>
-        <a (click)="directToChangeForm(cohort.cohortId, cohort.cohortName)" class="right mobile-left-top-margin" *ngIf="!isExtensionCohort(cohort.cohortName) && !isCohortAboutToExpire(cohort) && cohort?.students.length>0">Request change or update</a>
-        <a href="javascript:void(0);" class="right mobile-left-top-margin" *ngIf="((isExtensionCohort(cohort.cohortName) || isCohortAboutToExpire(cohort)) && cohort?.students.length>0)">Request extended access</a>
+        <a href="javascript:void(0)" (click)="directToChangeForm(cohort.cohortId, cohort.cohortName)" class="right mobile-left-top-margin" *ngIf="!isExtensionCohort(cohort.cohortName) && !isCohortAboutToExpire(cohort) && cohort?.students.length>0">Request change or update</a>
+        <a href="javascript:void(0)" (click)="directToExtendAccess(cohort.cohortId, cohort.cohortName)" class="right mobile-left-top-margin" *ngIf="((isExtensionCohort(cohort.cohortName) || isCohortAboutToExpire(cohort)) && cohort?.students.length>0)">Request extended access</a>
       </div>
       <!--<div class="clearfix">
         <span>Cohort count last updated on August 17, 2016</span>
