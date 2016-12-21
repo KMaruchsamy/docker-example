@@ -4,7 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { NgIf } from '@angular/common';
 import { CommonService } from './../../services/common.service';
 import { Observable, Subscription } from 'rxjs/Rx';
-import { links } from '../../constants/config';
+import { links, RosterUpdateTypes } from '../../constants/config';
 import { Response } from '@angular/http';
 import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
@@ -132,16 +132,23 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy  {
         // update isExtendedAccess and Update Type for all students in model 
         let allStudents = this.rosterChangeUpdateStudents;
         if(this.selectAll) {
+            // check if there are already students added to the rosterChangesModel.students array and if so remove them all first
+            if (this.rosterChangesModel.students.length > 0) {
+              this.rosterChangesModel.students = [];
+            }
+            // then add all students to array
             for(var i=0; i < allStudents.length; i++) {
                 allStudents[i].isExtendAccess = true;
-                allStudents[i].updateType = 4;
+                allStudents[i].updateType = RosterUpdateTypes.ExtendAccess;
+                this.rosterChangesModel.students.push(allStudents[i]);
             }
-
         } else {
             for(var i=0; i < allStudents.length; i++) {
                 allStudents[i].isExtendAccess = false;
                 allStudents[i].updateType = null;
             }
+           // remove all students from array on uncheck of selectAll
+           this.rosterChangesModel.students = [];
         }
     }
 
@@ -151,10 +158,16 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy  {
         //if checkbox is checked find student in model and update isExtendAccess and updateType
         if (e.target.checked) {
             studentToUpdate.isExtendAccess = true;
-            studentToUpdate.updateType = 4;
+            studentToUpdate.updateType = RosterUpdateTypes.ExtendAccess;
+            //add student to rosterChangesModel.students array
+            this.rosterChangesModel.students.push(studentToUpdate);
         } else {
             studentToUpdate.isExtendAccess = false;
             studentToUpdate.updateType = null;
+            // find student to remove and remove from rosterChangesModel.students array
+            let studentToRemove = _.findIndex(this.rosterChangesModel.students, { 'studentId': studentId });
+            this.rosterChangesModel.students.splice(studentToRemove, 1);
+
         }
         //check if students with isExtendAccess is all students of not and check or uncheck select all input
         this.checkIfAllStudentsSelected();
@@ -172,10 +185,9 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy  {
 
     redirectToReview(): void {
         // save student roster changes to sStorage and redirect
-         this.rosterChangesModel.students =  _.filter(this.rosterChangesModel.students, {'isExtendAccess': true});
          this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel));
-         //add new page route here
-        //  this.router.navigate(['/rosters/roster-changes-summary']);
+        //add new page route here
+        //  this.router.navigate(['/rosters/new-page-route']);
     }
 
 }

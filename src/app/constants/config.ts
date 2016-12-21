@@ -155,7 +155,7 @@ export const RosterChangesPages = {
     MAKECHANGES: 'ROSTERS/CHANGE-UPDATE',
     REVIEWCHANGES: 'ROSTERS/ROSTER-CHANGES-SUMMARY',
     CHANGESCONFIRMATION: 'ROSTERS/ROSTER-CHANGES-CONFIRMATION'
-};
+}
 export const teststatus = {
     Completed: 'Completed',
     Scheduled: 'Scheduled',
@@ -208,10 +208,10 @@ export const telNumbers = {
     outsideUSCanadaSupportHotline: '+1-407-423-6620'
 }
 
-
 export enum RosterUpdateTypes {
     MoveToDifferentCohort = 1,
     MoveToThisCohort = 2,
-    AddToThisCohort = 3
+    AddToThisCohort = 3,
+    ExtendAccess = 4
 }
 

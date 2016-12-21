@@ -29,7 +29,7 @@
              </thead>
              <tbody>
                <tr *ngFor="let student of rosterChangeUpdateStudents">
-                 <td>{{student.lastName}} , {{student.firstName}}</td>
+                 <td>{{student.lastName}}, {{student.firstName}}</td>
                  <td>
                    <input type="checkbox" class="checkbox-image" [(ngModel)]="student.isExtendAccess" [attr.id]="student.studentId" (change)="extendAccessForStudent($event, student.studentId)"/>
                    <label [attr.for]="student.studentId"></label>
@@ -41,7 +41,7 @@
           <div class="section clearfix">
             <div class="page-action-footer">
               <button class="anchor-button anchor-button-left" (click)="cancelChanges()">Cancel</button>
-              <a class="button">Review and submit</a>
+              <button class="button" (click)="redirectToReview();" [disabled]="!(rosterChangesModel?.students.length > 0)">Review and submit</button>
             </div>
           </div>
 
