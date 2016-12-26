@@ -1,4 +1,5 @@
-﻿import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+﻿/// <reference path="roster-changes.service.ts" />
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy} from '@angular/core';
 import {NgFor, NgIf} from '@angular/common';
 import {Router} from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
@@ -35,14 +36,13 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     studentNameToChangeRoster: string;
     toChangeRosterStudentId: number;
     testsTable: any;
-    showRepeaterCheckboxes: boolean = true;
-    showInactiveCheckboxes: boolean = true;
-    showADACheckboxes: boolean = true;
     expandUpdateDiv: boolean = true;
     rosterChangeUpdateStudents: ChangeUpdateRosterStudentsModal[];
     enableRepeaterCheckbox: boolean = false;
     showRequestChangePopup: boolean = false;
     sStorage: any;
+    isResponsive: boolean = false;
+    _event: any;
 
     constructor(public auth: AuthService, public router: Router, public common: CommonService, public rosterService: RosterService, public rosterCohortsModel: RosterCohortsModel, public rosters: RostersModal) { }
 
@@ -93,7 +93,6 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
             self.testsTable = $('#markChangesTable').DataTable({
                 "paging": false,
                 "searching": false,
-                "responsive": true,
                 "info": false,
                 "ordering": false,
                 "scrollY": "300px",
@@ -104,76 +103,202 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                     { "width": "80px" },
                     { "width": "80px" },
                     { "width": "80px" }
-                ]
+                ],
+                "responsive": {
+                    details: {
+                        type: 'inline',
+                        renderer: function (api, rowIdx) {
+                            var theRow = api.row(rowIdx);
+                            let _selectedStudent: ChangeUpdateRosterStudentsModal;
+                            let _studentid: number = parseInt($(theRow.data()[1]).attr('id').split('_')[1]);
+                            _.filter(self.rosterChangeUpdateStudents, (s) => {
+                                if (s.studentId == _studentid) {
+                                    _selectedStudent = s;
+                                }
+                            });
+                            // Select hidden columns for the given row
+                            var data = api.cells(rowIdx, ':hidden').eq(0).map(function (cell) {
+                                var header = $(api.column(cell.column).header());
+                                var $html = $(api.cell(cell).data()).wrap('<div/>').parent();
+                                var _data;
+                                if (cell.column === 1) {
+                                    var _id = $('button', $html).attr('id');
+                                    $('button', $html).attr('id', _id + "-" + rowIdx.toString());  // change the element id for responsive mode
+                                    var el = $('button', $html);
+                                    self.onMoveToCohortChange(el);
+                                    _data = $html.html();
+                                }
+                                else if (cell.column === 2) {
+                                    var _id = $('input', $html).attr('id');
+                                    $('input', $html).attr('id', _id + "-" + rowIdx.toString());  // change the element id for responsive mode
+                                    var el = $('input', $html);
+                                    self.onRepeaterChange(el);
+
+                                    var _labelId = $($html[2].innerHTML).attr('for');
+                                    $('label', $html).attr('for', _labelId + "-" + rowIdx.toString()); // change the element id for responsive mode
+                                    _data = $html[0].innerHTML + $html[2].innerHTML;
+                                }
+                                else if (cell.column === 3) {
+                                    var _id = $('input', $html).attr('id');
+                                    $('input', $html).attr('id', _id + "-" + rowIdx.toString());   // change the element id for responsive mode
+                                    var el = $('input', $html);
+                                    self.onInactiveChange(el);
+
+                                    var _labelId = $($html[2].innerHTML).attr('for');
+                                    $('label', $html).attr('for', _labelId + "-" + rowIdx.toString());  // change the element id for responsive mode
+
+                                    _data = $html[0].innerHTML + $html[2].innerHTML;
+                                }
+                                else if (cell.column === 4) {
+                                    var _id = $('input', $html).attr('id');
+                                    $('input', $html).attr('id', _id + "-" + rowIdx.toString());  // change the element id for responsive mode
+                                    var el = $('input', $html);
+                                    self.onADAChange(el);
+                                    var _labelId = $($html[2].innerHTML).attr('for');
+                                    $('label', $html).attr('for', _labelId + "-" + rowIdx.toString());  // change the element id for responsive mode
+                                    _data = $html[0].innerHTML + $html[2].innerHTML;
+                                }
+
+                                return '<ul><li data-dt-row="' + cell.column + '">' +
+                                    '<span class="dtr-title">' + header.text() + '</span>' +
+                                    '<span class="dtr-data">' + _data + '</span></li></ul>';
+                            }).toArray().join('');
+
+                            return data ?
+                                $('<table/>').append(data) :
+                                false;
+                        }
+                    }
+                }
             });
 
-            let __this = this;
 
-            self.testsTable.responsive.recalc().columns.adjust();
-
-            // in responsive mode with checkboxes in child rows remove original checkboxes from the DOM as needed
-            self.testsTable.on('responsive-display', function (e, datatable, row, showHide, update) {
-                let children = $(row.child()).find('ul li').length;
-                switch (children) {
-                    case 0:
-                        __this.showRepeaterCheckboxes = true;
-                        __this.showInactiveCheckboxes = true;
-                        __this.showADACheckboxes = true;
-                        break;
-                    case 1:
-                        __this.showRepeaterCheckboxes = true;
-                        __this.showInactiveCheckboxes = true;
-                        __this.showADACheckboxes = false;
-                        break;
-                    case 2:
-                        __this.showRepeaterCheckboxes = true;
-                        __this.showInactiveCheckboxes = false;
-                        __this.showADACheckboxes = false;
-                        break;
-                    case 3:
-                    case 4:
-                        __this.showRepeaterCheckboxes = false;
-                        __this.showInactiveCheckboxes = false;
-                        __this.showADACheckboxes = false;
+            // Update original input/select on change in child row
+            $('#markChangesTable tbody').on('click', '.js-choose-cohort', function (e) {
+                let _selectedStudent: ChangeUpdateRosterStudentsModal;
+                var _id = $(e.target).attr('id').split('_')[1];
+                if (_id.indexOf('-') > 0) {
+                    let _studentid = parseInt(_id.split('-')[0]);
+                    _.filter(self.rosterChangeUpdateStudents, (s) => {
+                        if (s.studentId == _studentid) {
+                            _selectedStudent = s;
+                        }
+                    });
+                    self.showCohortPopup(_selectedStudent.firstName, _selectedStudent.lastName, _selectedStudent.studentId, e);
                 }
-                
             });
 
-
-            //check if on responsive resize all columns are displayed (no children) and set showCheckboxes back to true
-            // https://datatables.net/reference/event/responsive-resize
-            self.testsTable.on('responsive-resize.dt', function (e, datatable, columns) {
-                var count = columns.reduce(function (a, b) {
-                    return b === false ? a + 1 : a;
-                }, 0);                
-                // count equals number of hidden columns
-                switch (count) {
-                    case 0:
-                        __this.showRepeaterCheckboxes = true;
-                        __this.showInactiveCheckboxes = true;
-                        __this.showADACheckboxes = true;
-                        break;
-                    case 1:
-                        __this.showRepeaterCheckboxes = true;
-                        __this.showInactiveCheckboxes = true;
-                        __this.showADACheckboxes = false;
-                        break;
-                    case 2:
-                        __this.showRepeaterCheckboxes = true;
-                        __this.showInactiveCheckboxes = false;
-                        __this.showADACheckboxes = false;
-                        break;
-                    case 3:
-                    case 4:
-                        __this.showRepeaterCheckboxes = false;
-                        __this.showInactiveCheckboxes = false;
-                        __this.showADACheckboxes = false;
+            $('#markChangesTable tbody').on('change', '.js-repeat', function (e) {
+                var _id = $(e.target).attr('id').split('_')[1];
+                if (_id.indexOf('-') > 0) {
+                    let _studentid = parseInt(_id.split('-')[0]);
+                    self.checkRepeater(_studentid, e);
+                    self.onChangingUserSelection(e);
                 }
-            });            
+            });
+
+            $('#markChangesTable tbody').on('change', '.js-drop', function (e) {
+                var _id = $(e.target).attr('id').split('_')[1];
+                if (_id.indexOf('-') > 0) {
+                    let _studentid = parseInt(_id.split('-')[0]);
+                    self.checkInactive(_studentid, e);
+                    self.onChangingUserSelection(e);
+                }
+            });
+
+            $('#markChangesTable tbody').on('change', '.js-ADA', function (e) {
+                var _id = $(e.target).attr('id').split('_')[1];
+                if (_id.indexOf('-') > 0) {
+                    let _studentid = parseInt(_id.split('-')[0]);
+                    self.checkGrantUntimedTest(_studentid, e);
+                    self.onChangingUserSelection(e);
+                }
+            });
 
         });  // Closes setTimeout
     }
-        
+
+    onMoveToCohortChange(el)
+    {
+        let _selectedStudent: ChangeUpdateRosterStudentsModal;
+        var _id = el.attr('id').split('_')[1];
+        let _studentid = parseInt(_id.split('-')[0]);
+        _.filter(this.rosterChangeUpdateStudents, (s) => {
+            if (s.studentId == _studentid) {
+                _selectedStudent = s;
+            }
+        });
+        if (_selectedStudent.moveToCohortId !== null)
+            el.text(_selectedStudent.moveToCohortName);
+        else
+            el.text('Choose an active cohort');
+        if (!(_selectedStudent.isActive) && !(_selectedStudent.moveToCohortId !== null))
+            el.addClass('button-no-change');
+        else
+            el.removeClass('button-no-change');
+        if (_selectedStudent.isActive)
+            el.attr('disabled', 'true');
+        else
+            el.removeAttr('disabled');
+    }
+
+    onRepeaterChange(el) {
+        let _selectedStudent: ChangeUpdateRosterStudentsModal;
+        var _id = el.attr('id').split('_')[1];
+        let _studentid = parseInt(_id.split('-')[0]);
+        _.filter(this.rosterChangeUpdateStudents, (s) => {
+            if (s.studentId == _studentid) {
+                _selectedStudent = s;
+            }
+        });
+        if (!_selectedStudent.isRepeater)
+            el.removeAttr('checked');
+        else
+            el.attr('checked', 'checked');
+
+        let _isRepeater = (!this.enableRepeaterCheckbox) || (_selectedStudent.moveToCohortId === null) || (_selectedStudent.isActive !== null ? _selectedStudent.isActive : false);
+        if (_isRepeater)
+            el.attr('disabled', 'true');
+        else
+            el.removeAttr('disabled');
+    }
+    onInactiveChange(el) {
+        let _selectedStudent: ChangeUpdateRosterStudentsModal;
+        var _id = el.attr('id').split('_')[1];
+        let _studentid = parseInt(_id.split('-')[0]);
+        _.filter(this.rosterChangeUpdateStudents, (s) => {
+            if (s.studentId == _studentid) {
+                _selectedStudent = s;
+            }
+        });
+        if (_selectedStudent.isActive !== null && _selectedStudent.isActive)
+            el.attr('checked', 'true');
+        else
+            el.removeAttr('checked');
+        let _isActive: boolean = (_selectedStudent.moveToCohortId !== null) || (_selectedStudent.isGrantUntimedTest !== null ? _selectedStudent.isGrantUntimedTest : false);
+        if (_isActive)
+            el.attr('disabled', 'true');
+        else
+            el.removeAttr('disabled');
+    }
+    onADAChange(el) {
+        let _selectedStudent: ChangeUpdateRosterStudentsModal;
+        var _id = el.attr('id').split('_')[1];
+        let _studentid = parseInt(_id.split('-')[0]);
+        _.filter(this.rosterChangeUpdateStudents, (s) => {
+            if (s.studentId == _studentid) {
+                _selectedStudent = s;
+            }
+        });
+        if (_selectedStudent.isGrantUntimedTest !== null && _selectedStudent.isGrantUntimedTest)
+            el.attr('checked', 'checked');
+        else
+            el.removeAttr('checked');
+        if (_selectedStudent.isActive !== null && _selectedStudent.isActive)
+            el.attr('disabled', 'true');
+        else
+            el.removeAttr('disabled');
+    }
 
     loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
         if (cohortStudents) {
@@ -190,15 +315,45 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         }
     }
 
+    onChangingUserSelection(e) {
+        let _selectedStudent: ChangeUpdateRosterStudentsModal;
+        var _id = $(e.target).attr('id').split('_')[1];
+        let _studentid = parseInt(_id.split('-')[0]);
+        _.filter(this.rosterChangeUpdateStudents, (s) => {
+            if (s.studentId == _studentid) {
+                _selectedStudent = s;
+            }
+        });
 
+        //On cohort change selection
+        var _buttonElement = $('#' + 'btnChangeToCohort_' + _id);
+        this.onMoveToCohortChange(_buttonElement);       
+
+        //On Selection of inactive checkbox selection... Start
+        var _repeaterElement = $('#' + 'chkRepeat_' + _id);
+        this.onRepeaterChange(_repeaterElement);        
+
+        //On Selection of inactive checkbox selection... Start
+        var _inactiveElement = $('#' + 'inactive_' + _id);
+        this.onInactiveChange(_inactiveElement);        
+
+        //On Selection of ADA checkbox selection... Start   
+        var _ADAElement = $('#' + 'ADA_' + _id);
+        this.onADAChange(_ADAElement);       
+    }
 
     showCohortPopup(firstName, lastName, studentId, e) {
         e.preventDefault();
+        let target = e.target || e.srcElement || e.currentTarget;
+        var _id = $(target).attr('id').split('_')[1];
+        if (_id.indexOf('-') > 0) {
+            this.isResponsive = true;
+            this._event = e;
+        }
         this.showRequestChangePopup = true;
         this.studentNameToChangeRoster = lastName + "," + firstName;
         this.toChangeRosterStudentId = studentId;
     }
-
 
     expandRequestChanges(e) {
         e.preventDefault();
@@ -219,7 +374,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         this.changeUpdateRosterStudentsEvent.emit(student);
     }
     checkInactive(_studentId, e) {
-        e.preventDefault(); 
+        e.preventDefault();
         let target = e.target || e.srcElement || e.currentTarget;
         let isChecked: boolean = target.checked;
         let student: ChangeUpdateRosterStudentsModal;
@@ -250,24 +405,16 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 student = _student;
             }
         });
+
         this.changeUpdateRosterStudentsEvent.emit(student);
     }
 
     changeCohortTo(_student: ChangeUpdateRosterStudentsModal) {
         this.enableRepeaterCheckbox = true;
         this.showRequestChangePopup = false;
+        if (this.isResponsive)
+            this.onChangingUserSelection(this._event);
         this.changeToDifferentCohortEvent.emit(_student);
     }
 
-    //saveRequestedStudentsUpdate() {
-    //    let _rosterChangeUpdateStudents : ChangeUpdateRosterStudentsModal[]=[];
-    //    _.filter(this.rosterChangeUpdateStudents, function (_student) {
-    //        if (_student.moveToCohortId !== null || _student.isActive !== null || _student.isRepeater !== null || _student.isGrantUntimedTest !== null)
-    //            _rosterChangeUpdateStudents.push(_student);
-
-    //    });
-    //    this.rosterChangesModel.students = _rosterChangeUpdateStudents;
-    //    console.log(JSON.stringify(this.rosterChangesModel.students));
-    //}
 }
-
