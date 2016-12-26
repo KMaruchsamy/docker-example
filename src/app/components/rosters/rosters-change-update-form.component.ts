@@ -109,7 +109,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                         type: 'inline',
                         renderer: function (api, rowIdx) {
                             var theRow = api.row(rowIdx);
-                            let _selectedStudent: ChangeUpdateRosterStudentsModal;
+                            let _selectedStudent: ChangeUpdateRosterStudentsModel;
                             let _studentid: number = parseInt($(theRow.data()[1]).attr('id').split('_')[1]);
                             _.filter(self.rosterChangeUpdateStudents, (s) => {
                                 if (s.studentId == _studentid) {
@@ -175,7 +175,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
 
             // Update original input/select on change in child row
             $('#markChangesTable tbody').on('click', '.js-choose-cohort', function (e) {
-                let _selectedStudent: ChangeUpdateRosterStudentsModal;
+                let _selectedStudent: ChangeUpdateRosterStudentsModel;
                 var _id = $(e.target).attr('id').split('_')[1];
                 if (_id.indexOf('-') > 0) {
                     let _studentid = parseInt(_id.split('-')[0]);
@@ -220,84 +220,92 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
 
     onMoveToCohortChange(el)
     {
-        let _selectedStudent: ChangeUpdateRosterStudentsModal;
-        var _id = el.attr('id').split('_')[1];
-        let _studentid = parseInt(_id.split('-')[0]);
-        _.filter(this.rosterChangeUpdateStudents, (s) => {
-            if (s.studentId == _studentid) {
-                _selectedStudent = s;
-            }
-        });
-        if (_selectedStudent.moveToCohortId !== null)
-            el.text(_selectedStudent.moveToCohortName);
-        else
-            el.text('Choose an active cohort');
-        if (!(_selectedStudent.isActive) && !(_selectedStudent.moveToCohortId !== null))
-            el.addClass('button-no-change');
-        else
-            el.removeClass('button-no-change');
-        if (_selectedStudent.isActive)
-            el.attr('disabled', 'true');
-        else
-            el.removeAttr('disabled');
+        if(el.length>0){
+            let _selectedStudent: ChangeUpdateRosterStudentsModel;
+            var _id = el.attr('id').split('_')[1];
+            let _studentid = parseInt(_id.split('-')[0]);
+            _.filter(this.rosterChangeUpdateStudents, (s) => {
+                if (s.studentId == _studentid) {
+                    _selectedStudent = s;
+                }
+            });
+            if (_selectedStudent.moveToCohortId !== null)
+                el.text(_selectedStudent.moveToCohortName);
+            else
+                el.text('Choose an active cohort');
+            if (!(_selectedStudent.isInactive) && !(_selectedStudent.moveToCohortId !== null))
+                el.addClass('button-no-change');
+            else
+                el.removeClass('button-no-change');
+            if (_selectedStudent.isInactive)
+                el.attr('disabled', 'true');
+            else
+                el.removeAttr('disabled');
+        }
     }
 
     onRepeaterChange(el) {
-        let _selectedStudent: ChangeUpdateRosterStudentsModal;
-        var _id = el.attr('id').split('_')[1];
-        let _studentid = parseInt(_id.split('-')[0]);
-        _.filter(this.rosterChangeUpdateStudents, (s) => {
-            if (s.studentId == _studentid) {
-                _selectedStudent = s;
-            }
-        });
-        if (!_selectedStudent.isRepeater)
-            el.removeAttr('checked');
-        else
-            el.attr('checked', 'checked');
+        if(el.length>0){
+            let _selectedStudent: ChangeUpdateRosterStudentsModel;
+            var _id = el.attr('id').split('_')[1];
+            let _studentid = parseInt(_id.split('-')[0]);
+            _.filter(this.rosterChangeUpdateStudents, (s) => {
+                if (s.studentId == _studentid) {
+                    _selectedStudent = s;
+                }
+            });
+            if (!_selectedStudent.isRepeater)
+                el.removeAttr('checked');
+            else
+                el.attr('checked', 'checked');
 
-        let _isRepeater = (!this.enableRepeaterCheckbox) || (_selectedStudent.moveToCohortId === null) || (_selectedStudent.isActive !== null ? _selectedStudent.isActive : false);
-        if (_isRepeater)
-            el.attr('disabled', 'true');
-        else
-            el.removeAttr('disabled');
+            let _isRepeater = (!this.enableRepeaterCheckbox) || (_selectedStudent.moveToCohortId === null) || (_selectedStudent.isInactive !== null ? _selectedStudent.isInactive : false);
+            if (_isRepeater)
+                el.attr('disabled', 'true');
+            else
+                el.removeAttr('disabled');
+        }
     }
     onInactiveChange(el) {
-        let _selectedStudent: ChangeUpdateRosterStudentsModal;
-        var _id = el.attr('id').split('_')[1];
-        let _studentid = parseInt(_id.split('-')[0]);
-        _.filter(this.rosterChangeUpdateStudents, (s) => {
-            if (s.studentId == _studentid) {
-                _selectedStudent = s;
-            }
-        });
-        if (_selectedStudent.isActive !== null && _selectedStudent.isActive)
-            el.attr('checked', 'true');
-        else
-            el.removeAttr('checked');
-        let _isActive: boolean = (_selectedStudent.moveToCohortId !== null) || (_selectedStudent.isGrantUntimedTest !== null ? _selectedStudent.isGrantUntimedTest : false);
-        if (_isActive)
-            el.attr('disabled', 'true');
-        else
-            el.removeAttr('disabled');
+        if(el.length>0){
+            let _selectedStudent: ChangeUpdateRosterStudentsModel;
+            var _id = el.attr('id').split('_')[1];
+            let _studentid = parseInt(_id.split('-')[0]);
+            _.filter(this.rosterChangeUpdateStudents, (s) => {
+                if (s.studentId == _studentid) {
+                    _selectedStudent = s;
+                }
+            });
+            if (_selectedStudent.isInactive !== null && _selectedStudent.isInactive)
+                el.attr('checked', 'true');
+            else
+                el.removeAttr('checked');
+            let _isActive: boolean = (_selectedStudent.moveToCohortId !== null) || (_selectedStudent.isGrantUntimedTest !== null ? _selectedStudent.isGrantUntimedTest : false);
+            if (_isActive)
+                el.attr('disabled', 'true');
+            else
+                el.removeAttr('disabled');
+        }
     }
     onADAChange(el) {
-        let _selectedStudent: ChangeUpdateRosterStudentsModal;
-        var _id = el.attr('id').split('_')[1];
-        let _studentid = parseInt(_id.split('-')[0]);
-        _.filter(this.rosterChangeUpdateStudents, (s) => {
-            if (s.studentId == _studentid) {
-                _selectedStudent = s;
-            }
-        });
-        if (_selectedStudent.isGrantUntimedTest !== null && _selectedStudent.isGrantUntimedTest)
-            el.attr('checked', 'checked');
-        else
-            el.removeAttr('checked');
-        if (_selectedStudent.isActive !== null && _selectedStudent.isActive)
-            el.attr('disabled', 'true');
-        else
-            el.removeAttr('disabled');
+        if(el.length>0){
+            let _selectedStudent: ChangeUpdateRosterStudentsModel;
+            var _id = el.attr('id').split('_')[1];
+            let _studentid = parseInt(_id.split('-')[0]);
+            _.filter(this.rosterChangeUpdateStudents, (s) => {
+                if (s.studentId == _studentid) {
+                    _selectedStudent = s;
+                }
+            });
+            if (_selectedStudent.isGrantUntimedTest !== null && _selectedStudent.isGrantUntimedTest)
+                el.attr('checked', 'checked');
+            else
+                el.removeAttr('checked');
+            if (_selectedStudent.isInactive !== null && _selectedStudent.isInactive)
+                el.attr('disabled', 'true');
+            else
+                el.removeAttr('disabled');
+        }
     }
 
     loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
@@ -316,15 +324,9 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     }
 
     onChangingUserSelection(e) {
-        let _selectedStudent: ChangeUpdateRosterStudentsModal;
+        let _selectedStudent: ChangeUpdateRosterStudentsModel;
         var _id = $(e.target).attr('id').split('_')[1];
-        let _studentid = parseInt(_id.split('-')[0]);
-        _.filter(this.rosterChangeUpdateStudents, (s) => {
-            if (s.studentId == _studentid) {
-                _selectedStudent = s;
-            }
-        });
-
+       
         //On cohort change selection
         var _buttonElement = $('#' + 'btnChangeToCohort_' + _id);
         this.onMoveToCohortChange(_buttonElement);       
@@ -381,7 +383,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
             if (_student.studentId === _studentId) {
                 _student.updateType = 1;
-                _student.isActive = isChecked;
+                _student.isInactive= isChecked;
                 _student.isRepeater = false;
                 _student.isGrantUntimedTest = false;
                 student = _student;
@@ -400,7 +402,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 _student.isGrantUntimedTest = isChecked;
                 _student.updateType = 1;
                 if (_student.moveToCohortId === null) {
-                    _student.isActive = false;
+                    _student.isInactive = false;
                 }
                 student = _student;
             }
