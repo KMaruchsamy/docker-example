@@ -3,7 +3,42 @@
 <main role="main" class="app-main">
     <rosters-change-extend-header [rosterChangesModel]="rosterChangesModel"></rosters-change-extend-header>
     <rosters-AM-info [rosterChangesModel]="rosterChangesModel" [accountManagerId]="rosterChangesModel.accountManagerId"></rosters-AM-info>
-    <rosters-form [rosterChangesModel]="rosterChangesModel"></rosters-form>    
+    <section>
+        <div class="container-medium-width">
+            <rosters-form [rosterChangesModel]="rosterChangesModel" (changeUpdateRosterStudentsEvent)="changeUpdateRosterStudents($event)"
+                (changeToDifferentCohortEvent)="changeToDifferentCohort($event)"></rosters-form>
+            <rosters-move [rosterChangesModel]="rosterChangesModel" (moveToCohort)="moveToCohort($event)" (removeEvent)="remove($event)"
+                (updateUntimedEvent)="updateUntimed($event)" (updateRepeaterEvent)="updateRepeater($event)"></rosters-move>
+            <rosters-add-to-cohort 
+            [rosterChangesModel]="rosterChangesModel" 
+            (addToCohortEvent)="addToCohort($event)" 
+            (removeAddedStudentEvent)="removeAddedStudent($event)"
+            (moveExistingStudentEvent)="moveToCohort($event)"
+            (updateUntimedEvent)="updateUntimed($event)"
+            (updateRepeaterEvent)="updateRepeater($event)"
+            (updateAddedStudentUntimedEvent)="updateAddedStudentUntimed($event)"
+            (removeMovedStudentEvent)="remove($event)">
+            </rosters-add-to-cohort>
+
+        </div>
+    </section>
+
+    <section>
+        <div class="section-top-medium-thin section container-medium-width clearfix">
+            <label class="h6 text-purple" for="instructions"><b>Request other changes/updates or add notes for {{rosterChangesModel.accountManagerFirstName}}</b></label>
+            <p>Use this area to request updates such as name/email changes or to provide additional information.</p>
+            <textarea id="instructions" [(ngModel)]="instructions"></textarea>
+            <div class="page-action-footer margin-1em-top-bottom">
+                <button class="anchor-button anchor-button-left" (click)="cancelChanges()">Cancel changes</button>
+                <button (click)="redirectToReview()" class="button" [disabled]="(!rosterChangesModel?.students || rosterChangesModel?.students?.length === 0) && (!instructions || instructions?.length === 0)">Review summary of changes/updates</button>
+            </div>
+        </div>
+    </section>
 </main>
 
 <page-footer></page-footer>
+
+<confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
+    [okButtonText]="'Yes, leave this page'" [cancelButtonText]="'No, stay on this page'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation($event)"
+    [hideClose]="false">
+</confirmation-popup>

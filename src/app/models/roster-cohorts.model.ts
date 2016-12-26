@@ -12,4 +12,5 @@ export class RosterCohortsModel{
     hasStudentPayDeactivatedStudent: boolean;
     students: Array<RosterCohortStudentsModel>;
     visible: boolean;
+    isSelected: boolean = false;
 }

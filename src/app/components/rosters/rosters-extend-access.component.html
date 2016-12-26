@@ -1,0 +1,59 @@
+<page-header></page-header>
+
+    <main role="main" class="app-main">
+
+      <rosters-change-extend-header [rosterChangesModel]="rosterChangesModel" [pageType]="'extendAccess'"></rosters-change-extend-header>
+
+      <section>
+        <div class="thin-section">
+          <div class="container-medium-width">
+            <p class="text-larger">
+              Based on their cohort, students are granted access to the Kaplan program for three months after graduation, which typically covers their NCLEX<sup>®</sup> testing cycle. Check “Extend access” for each student needing an additional 3-month extension beyond this standard access window.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container-medium-width">
+          <div class="margin-1em-bottom">
+            <input type="checkbox" class="checkbox-image" [attr.id]="selectAll" name="selectAll" [(ngModel)]="selectAll" (ngModelChange)="selectAllStudents($event)"/>
+            <label [attr.for]="selectAll"><b>Select all</b></label>
+          </div>
+
+          <table class="table-with-cell-padding table-striped" id="markChangesTable">
+             <thead>
+               <tr class="gray-th">
+                 <th scope="col">{{rosterChangesModel.cohortName}} Students</th><th scope="col">Extend access</th>
+               </tr>
+             </thead>
+             <tbody>
+               <tr *ngFor="let student of rosterChangeUpdateStudents">
+                 <td>{{student.lastName}}, {{student.firstName}}</td>
+                 <td>
+                   <input type="checkbox" class="checkbox-image" [(ngModel)]="student.isExtendAccess" [attr.id]="student.studentId" (change)="extendAccessForStudent($event, student.studentId)"/>
+                   <label [attr.for]="student.studentId"></label>
+                 </td>
+               </tr>
+             </tbody>
+          </table>
+
+          <div class="section clearfix">
+            <div class="page-action-footer">
+              <button class="anchor-button anchor-button-left" (click)="cancelChanges()">Cancel</button>
+              <button class="button" (click)="redirectToReview();" [disabled]="!(rosterChangesModel?.students.length > 0)">Review and submit</button>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+     </main>
+
+<page-footer></page-footer>
+
+<confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
+    [okButtonText]="'Yes, leave this page'" [cancelButtonText]="'No, stay on this page'"  (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation($event)"
+    [hideClose]="false">
+</confirmation-popup>

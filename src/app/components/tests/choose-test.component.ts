@@ -177,7 +177,6 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
 
 
     canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-        debugger;
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
@@ -366,7 +365,6 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     onOKConfirmation(e: any): void {
-        debugger;
         $('#confirmationPopup').modal('hide');
         this.overrideRouteCheck = true;
         this.router.navigateByUrl(this.attemptedRoute);

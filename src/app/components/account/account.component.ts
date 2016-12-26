@@ -92,7 +92,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     setInstitutionNames(institutions) {
         if (institutions !== null || institutions !== 'undefined') {
-            this.schoolName = _.map(institutions, 'InstitutionNameWithProgOfStudy');
+            this.schoolName = (_.map(institutions, 'InstitutionNameWithProgOfStudy')).sort();
         }
     }
 
@@ -278,7 +278,6 @@ export class AccountComponent implements OnInit, OnDestroy {
                         this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
                     }
                 }, error => {
-                    debugger;
                     console.log(error);
                     if (error.status.toString() === this.errorCodes.API) {
                         if (error.json().Payload.length > 0) {

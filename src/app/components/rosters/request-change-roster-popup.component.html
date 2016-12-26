@@ -1,0 +1,15 @@
+﻿<div class="modal-no-background" id="changeCohortModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-small" role="document">
+        <div class="modal-content">
+
+            <button type="button" class="close close-small" aria-label="Close" (click)="CloseCohortPopup($event);"></button>
+            <div class="modal-content-small">
+                <p class="text-purple" id="studentHeading"><b>{{studentNameToChangeRoster}}</b></p>
+                <div class="cohort-button-container">
+                    <button type="button" *ngFor="let roster of rostersList" class="button button-light button-unselected" id="{{roster.cohortId}}" (click)="moveToCohort(roster,$event)">{{roster.cohortName}}
+                    <img src="assets/images/green-checkmark_2x.png" [class.hidden]="!roster.isSelected" alt="cohort selected" width="16" height="12" /></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
