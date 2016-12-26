@@ -13,7 +13,6 @@ export interface ComponentCanDeactivate {
 @Injectable()
 export class SharedDeactivateGuard implements CanDeactivate<ComponentCanDeactivate> {
   canDeactivate(component: ComponentCanDeactivate, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-    debugger;
     return component.canDeactivate ? component.canDeactivate(route, state) : true;
   }
 }
@@ -22,7 +21,6 @@ export class SharedDeactivateGuard implements CanDeactivate<ComponentCanDeactiva
 // @Injectable()
 // export class SharedDeactivateGuard implements CanDeactivate<any> {
 //   canDeactivate(component: any, route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-//     debugger;
 //     return component.canDeactivate ? component.canDeactivate() : true
 //   }
 // }

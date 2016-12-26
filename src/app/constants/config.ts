@@ -1,7 +1,7 @@
 export const links = {
     api: {
         local: {
-            server: "https://qa-nursing.kaptest.com/"
+            server: "https://dev01-nursing.kaptest.com/"
         },
         dev: {
             server: "https://dev01-nursing.kaptest.com/"
@@ -59,7 +59,8 @@ export const links = {
                 cohortStudents: 'admin/rosters/cohorts/§cohortId/students',
                 search: 'admin/rosters/institutions/§institutionId/students?searchString=§searchString',
                 saveUserPreference: 'preferenceService/setPreference',
-                getUserPreference: 'preferenceService/users/§userId/preferences/§preferenceTypeName?userType=§userType'
+                getUserPreference: 'preferenceService/users/§userId/preferences/§preferenceTypeName?userType=§userType',
+                moveToCohortStudents :'admin/rosters/institution/§institutionId/cohort/§cohortId/students?searchString=§searchString'
             }
         }
     },
@@ -150,6 +151,11 @@ export const TestShedulingPages = {
     CONFIRMATIONMODIFYINPROGRESS: 'TESTS/CONFIRMATIONMODIFYINPROGRESS'
 };
 
+export const RosterChangesPages = {
+    MAKECHANGES: 'ROSTERS/CHANGE-UPDATE',
+    REVIEWCHANGES: 'ROSTERS/ROSTER-CHANGES-SUMMARY',
+    CHANGESCONFIRMATION: 'ROSTERS/ROSTER-CHANGES-CONFIRMATION'
+}
 export const teststatus = {
     Completed: 'Completed',
     Scheduled: 'Scheduled',
@@ -200,5 +206,12 @@ export const roster = {
 export const telNumbers = {
     supportHotline: '1-866-920-6311',
     outsideUSCanadaSupportHotline: '+1-407-423-6620'
+}
+
+export enum RosterUpdateTypes {
+    MoveToDifferentCohort = 1,
+    MoveToThisCohort = 2,
+    AddToThisCohort = 3,
+    ExtendAccess = 4
 }
 

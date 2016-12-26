@@ -9,7 +9,7 @@ import { RosterChangesModel } from '../../models/roster-changes.model';
 export class RostersChangeHeaderComponent {
     @Input() rosterChangesModel: RosterChangesModel;
     @Input() institutionName: string;
-    @Input() cohortName: string;
+    @Input() pageType: string;
 
     sStorage: any;
     accountManagerId: number;

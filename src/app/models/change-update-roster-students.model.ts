@@ -1,17 +1,19 @@
 ﻿import { Injectable } from '@angular/core';
 
 @Injectable()
-export class ChangeUpdateRosterStudentsModal {
+export class ChangeUpdateRosterStudentsModel {
     studentId: number;
     moveFromCohortId: number = null;
     moveFromCohortName: string = null;
-    moveToCohortId: number = null;
-    moveToCohortName: string = null;
+    moveToCohortId?: number = null;
+    moveToCohortName?: string = null;
     firstName: string;
     lastName: string;
     email: string;
-    isActive: boolean = null;
-    isRepeater: boolean = null;
-    isGrantUntimedTest: boolean = null;
-    updateType: number;  //Based on Request for change/Move/Add [1/2/3]
+    isInactive?: boolean = null;
+    isRepeater?: boolean = null;
+    isGrantUntimedTest?: boolean = null;
+    isExtendAccess?: boolean = null;
+    updateType?: number;  //Based on Request for change/Move/Add/Extend Access [1/2/3/4]
+    addedFrom?: number;
 }

@@ -10,7 +10,7 @@ import {RosterService} from './roster.service';
 import {RosterCohortsModel} from '../../models/roster-cohorts.model';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import {RostersModal} from '../../models/rosters.model';
-import {ChangeUpdateRosterStudentsModal} from '../../models/change-update-roster-students.model';
+import {ChangeUpdateRosterStudentsModel} from '../../models/change-update-roster-students.model';
 
 @Component({
     selector: 'request-change-roster-popup',
@@ -21,7 +21,7 @@ import {ChangeUpdateRosterStudentsModal} from '../../models/change-update-roster
 
 export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
     @Input() rosterChangesModel: RosterChangesModel;
-    @Input() rosterChangeUpdateStudents: ChangeUpdateRosterStudentsModal[];
+    @Input() rosterChangeUpdateStudents: ChangeUpdateRosterStudentsModel[];
     @Input() studentNameToChangeRoster: string;
     @Input() toChangeRosterStudentId: number;
     @Output() requestChangeCohortPopup = new EventEmitter();
@@ -113,7 +113,7 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
     moveToCohort(_roster, e) {
         e.preventDefault();
         let __this = this;
-        let updatedStudent: ChangeUpdateRosterStudentsModal;
+        let updatedStudent: ChangeUpdateRosterStudentsModel;
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
             if (_student.studentId === __this.toChangeRosterStudentId) {
                 _student.moveToCohortId = _roster.cohortId;

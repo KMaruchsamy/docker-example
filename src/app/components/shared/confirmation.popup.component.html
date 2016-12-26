@@ -9,8 +9,8 @@
            </h5>
             </div>
             <div class="modal-footer">
-                <a href="javascript:void(0)" (click)="onCancel($event);" class="anchor-button anchor-button-left center">{{cancelButtonText}}</a>
-                <button class="button" (click)="onOK($event);">{{okButtonText}}</button>
+                <a href="javascript:void(0)" (click)="onOK($event);" class="anchor-button anchor-button-left center">{{okButtonText}}</a>
+                <button (click)="onCancel($event);" class="button">{{cancelButtonText}}</button>
             </div>
         </div>
     </div>

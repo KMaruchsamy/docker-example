@@ -278,7 +278,6 @@ export class AccountComponent implements OnInit, OnDestroy {
                         this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
                     }
                 }, error => {
-                    debugger;
                     console.log(error);
                     if (error.status.toString() === this.errorCodes.API) {
                         if (error.json().Payload.length > 0) {

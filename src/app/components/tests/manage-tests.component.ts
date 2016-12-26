@@ -414,7 +414,6 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     }
 
     redirectToRoute(route: string): boolean {
-        debugger;
         this.checkInstitutions();
         if (this.isMultiCampus)
             this.router.navigateByUrl(`/choose-institution/Test/${route}`);

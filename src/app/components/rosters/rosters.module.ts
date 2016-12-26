@@ -27,8 +27,13 @@ import { RostersChangesUpdatesComponent } from './rosters-changes-updates.compon
 import { RostersChangeUpdateFormComponent } from './rosters-change-update-form.component';
 import { RostersNoAMComponent } from './rosters-no-AM.component';
 import { RequestChangeRosterPopupComponent } from './request-change-roster-popup.component';
-import { RosterChangeMoveToCohortComponent } from './rosters-change-move-to-cohort';
-import { SharedModule } from './../shared/shared.module.ts'
+import { RosterChangeMoveToCohortComponent } from './rosters-change-move-to-cohort.component';
+import { SharedModule } from './../shared/shared.module';
+import { RosterChangesSummaryComponent } from './rosters-changes-summary.component';
+import { RosterChangesSummaryTablesComponent } from './rosters-changes-summary-tables.component';
+import { RostersExtendAccessComponent } from './rosters-extend-access.component';
+import { FilterRosterChange } from './filter-roster-change.pipe';
+import { RosterChangeAddToCohortComponent } from './rosters-change-add-to-cohort.component';
 
 @NgModule({
     imports: [
@@ -55,7 +60,12 @@ import { SharedModule } from './../shared/shared.module.ts'
         RostersChangeUpdateFormComponent,
         RostersNoAMComponent,
         RequestChangeRosterPopupComponent,
-        RosterChangeMoveToCohortComponent
+        RosterChangeMoveToCohortComponent,
+        RosterChangesSummaryComponent,
+        RosterChangesSummaryTablesComponent,
+        RostersExtendAccessComponent,
+        RosterChangeAddToCohortComponent,
+        FilterRosterChange
     ],
     providers: [
         RosterService,
@@ -65,7 +75,6 @@ import { SharedModule } from './../shared/shared.module.ts'
         RosterCohortStudentsModel,
         RosterChangesModel,
         RosterChangesService
-
     ],
 })
 export class RostersModule { }
