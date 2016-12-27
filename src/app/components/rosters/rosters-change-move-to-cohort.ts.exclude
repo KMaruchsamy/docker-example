@@ -17,7 +17,7 @@ import { reset_student_password } from '../../constants/error-messages';
     templateUrl: 'rosters-change-move-to-cohort.component.html',
     styleUrls: ['./rosters-change-move-to-cohort.css']
 })
-export class RosterChangeMoveToCohortComponent implements OnInit {
+export class RosterChangeMoveToCohortComponentOld implements OnInit {
     searchString: string;
     prevSearchText: string;
     searchStudentsSubscription: Subscription;
