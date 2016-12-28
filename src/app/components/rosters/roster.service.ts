@@ -49,7 +49,7 @@ export class RosterService {
         return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
-     setUserPreference(url: string, input: string): Observable<Response> {
+    setUserPreference(url: string, input: string): Observable<Response> {
         let self = this;
         let headers: Headers = new Headers({
             'Accept': 'application/json',
@@ -63,6 +63,10 @@ export class RosterService {
     }
 
     getRosterCohortUserPreference(url): Observable<Response> {
+        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
+    }
+
+    addEmailValidation(url): Observable<Response> {
         return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
