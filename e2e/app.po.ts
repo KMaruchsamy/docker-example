@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class CLI21Page {
+export class Cli21Page {
   navigateTo() {
     return browser.get('/');
   }

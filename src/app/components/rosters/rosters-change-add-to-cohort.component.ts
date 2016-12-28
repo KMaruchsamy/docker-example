@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs/Rx';
 
 @Component({
     selector: 'rosters-add-to-cohort',
-    templateUrl: 'rosters-change-add-to-cohort.component.html',
+    templateUrl: './rosters-change-add-to-cohort.component.html',
     styleUrls: ['./rosters-change-move-to-cohort.component.css']
 })
 export class RosterChangeAddToCohortComponent implements OnInit {
@@ -79,7 +79,7 @@ export class RosterChangeAddToCohortComponent implements OnInit {
 
 
         let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.addEmailValidation}`;
-        url = url.replace("§institutionId", this.rosterChangesModel.institutionId.toString()).replace("§cohortId", this.rosterChangesModel.cohortId.toString()).replace('§searchEmailId', this.email);
+        url = url.replace("§institutionId", this.rosterChangesModel.institutionId.toString()).replace("§cohortId", this.rosterChangesModel.cohortId.toString()).replace('§searchString', this.email);
 
         let emailValidateObservable = this.rosterSerivice.addEmailValidation(url);
         this.emailValidateSubscription = emailValidateObservable

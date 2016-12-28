@@ -61,7 +61,7 @@ export const links = {
                 saveUserPreference: 'preferenceService/setPreference',
                 getUserPreference: 'preferenceService/users/§userId/preferences/§preferenceTypeName?userType=§userType',
                 moveToCohortStudents: 'admin/rosters/institution/§institutionId/cohort/§cohortId/students?searchString=§searchString',
-                addEmailValidation:'admin/rosters/students?searchEmailId=§searchEmailId'
+                addEmailValidation:'admin/rosters/institutions/§institutionId/students?searchString=§searchString'
             }
         }
     },

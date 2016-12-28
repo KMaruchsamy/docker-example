@@ -14,7 +14,7 @@ import { reset_student_password } from '../../constants/error-messages';
 
 @Component({
     selector: 'rosters-move',
-    templateUrl: 'rosters-change-move-to-cohort.component.html',
+    templateUrl: './rosters-change-move-to-cohort.component.html',
     styleUrls: ['./rosters-change-move-to-cohort.component.css']
 })
 export class RosterChangeMoveToCohortComponent implements OnInit {
