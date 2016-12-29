@@ -7,7 +7,6 @@ import { RosterChangesModel } from '../../models/roster-changes.model';
 import { Injectable } from '@angular/core';
 
 @Injectable()
-
 export class RosterChangesService {
     sStorage: any;
     accountManagerId: number;

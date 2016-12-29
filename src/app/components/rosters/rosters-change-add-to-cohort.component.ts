@@ -2,10 +2,14 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ValidationsService } from '../../services/validations.service';
 import { RosterUpdateTypes } from '../../constants/config';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
+import { RosterService } from './roster.service';
+import { links } from '../../constants/config';
+import { CommonService } from '../../services/common.service';
+import { Subscription } from 'rxjs/Rx';
 
 @Component({
     selector: 'rosters-add-to-cohort',
-    templateUrl: 'rosters-change-add-to-cohort.component.html',
+    templateUrl: './rosters-change-add-to-cohort.component.html',
     styleUrls: ['./rosters-change-move-to-cohort.component.css']
 })
 export class RosterChangeAddToCohortComponent implements OnInit {
@@ -25,10 +29,11 @@ export class RosterChangeAddToCohortComponent implements OnInit {
     @Output() updateRepeaterEvent = new EventEmitter();
     @Output() updateAddedStudentUntimedEvent = new EventEmitter();
     existingStudents: Array<ChangeUpdateRosterStudentsModel> = [];
-    constructor(private validations: ValidationsService) { }
+    emailValidateSubscription: Subscription;
+    constructor(private common: CommonService, private validations: ValidationsService, private rosterSerivice: RosterService) { }
 
-    ngOnInit() { 
-        
+    ngOnInit() {
+
     }
 
     checkValid(): void {
@@ -45,49 +50,68 @@ export class RosterChangeAddToCohortComponent implements OnInit {
             alert('Student with the same email already added ..');
             return;
         }
-            
 
-        let sameEmailStudents: Array<any> = [{
-            studentId: 245543,
-            firstName: "Candice",
-            lastName: "Allen",
-            email: "callen@mailinator.com",
-            cohortId: 5148,
-            cohortName: "Inactive",
-            repeatExpiryDate: null,
-            userExpireDate: null,
-            studentPayInstitution: true,
-            isActive: false
-        },
-        {
-            studentId: 100959,
-            firstName: "Cassandra",
-            lastName: "Amos",
-            email: "amoscr@mailinator.com",
-            cohortId: 3330,
-            cohortName: "May 2012",
-            repeatExpiryDate: null,
-            userExpireDate: null,
-            studentPayInstitution: true,
-            isActive: false
-        }];
 
-        let sameEmailStudent: any = _.find(sameEmailStudents, { 'email': this.email });
-        if (sameEmailStudent) {
-            this.existingStudents.push(sameEmailStudent)
-        }
-        else {
-            this.addToCohortEvent.emit({
-                firstName: this.firstName,
-                lastName: this.lastName,
-                email: this.email,
-                unTimedTest: this.untimed,
-                updateType: RosterUpdateTypes.AddToThisCohort,
-                addedFrom: RosterUpdateTypes.AddToThisCohort
-            });
-        }
-        this.resetModal();
-        this.checkValid();
+        // let sameEmailStudents: Array<any> = [{
+        //     studentId: 245543,
+        //     firstName: "Candice",
+        //     lastName: "Allen",
+        //     email: "callen@mailinator.com",
+        //     cohortId: 5148,
+        //     cohortName: "Inactive",
+        //     repeatExpiryDate: null,
+        //     userExpireDate: null,
+        //     studentPayInstitution: true,
+        //     isActive: false
+        // },
+        // {
+        //     studentId: 100959,
+        //     firstName: "Cassandra",
+        //     lastName: "Amos",
+        //     email: "amoscr@mailinator.com",
+        //     cohortId: 3330,
+        //     cohortName: "May 2012",
+        //     repeatExpiryDate: null,
+        //     userExpireDate: null,
+        //     studentPayInstitution: true,
+        //     isActive: false
+        // }];
+
+
+        let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.addEmailValidation}`;
+        url = url.replace("§institutionId", this.rosterChangesModel.institutionId.toString()).replace("§cohortId", this.rosterChangesModel.cohortId.toString()).replace('§searchString', this.email);
+
+        let emailValidateObservable = this.rosterSerivice.addEmailValidation(url);
+        this.emailValidateSubscription = emailValidateObservable
+            .map(response => response.json())
+            .finally(() => {
+                this.resetModal();
+                this.checkValid();
+            })
+            .subscribe((json: any) => {
+                if (json && json.StudentId && json.StudentId > 0) {
+                    let existingStudent: ChangeUpdateRosterStudentsModel = new ChangeUpdateRosterStudentsModel();
+                    existingStudent.studentId = json.studentId;
+                    existingStudent.firstName = json.firstName;
+                    existingStudent.lastName = json.lastName;
+                    existingStudent.email = json.email;
+                    existingStudent.moveFromCohortId = json.cohortId;
+                    existingStudent.moveFromCohortName = json.cohortName;
+                    this.existingStudents.push(existingStudent);
+                }
+                else {
+                    this.addToCohortEvent.emit({
+                        firstName: this.firstName,
+                        lastName: this.lastName,
+                        email: this.email,
+                        unTimedTest: this.untimed,
+                        updateType: RosterUpdateTypes.AddToThisCohort,
+                        addedFrom: RosterUpdateTypes.AddToThisCohort
+                    });
+                }
+            }, error => console.log(error));
+
+
     }
 
     private resetModal() {
@@ -132,7 +156,7 @@ export class RosterChangeAddToCohortComponent implements OnInit {
         console.log(this.rosterChangesModel);
     }
 
-    updateRepeater(student: ChangeUpdateRosterStudentsModel, e:any): void {
+    updateRepeater(student: ChangeUpdateRosterStudentsModel, e: any): void {
         this.updateRepeaterEvent.emit({
             student: student,
             checked: e.target.checked
