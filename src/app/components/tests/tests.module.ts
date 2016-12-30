@@ -28,7 +28,7 @@ import { SharedModule } from './../shared/shared.module';
 import { PipesModule } from './../../pipes/pipes.module';
 import { TestsRoutingModule } from './tests.routing.module';
 import { TestScheduleModel } from '../../models/test-schedule.model';
-
+import { ManageTestsMultiCampusComponent } from './manage-tests-multicampus.component';
 
 @NgModule({
     imports: [
@@ -56,7 +56,8 @@ import { TestScheduleModel } from '../../models/test-schedule.model';
         TestHeaderComponent,
         TestingSessionStartingPopupComponent,
         TimeExceptionPopupComponent,
-        ViewTestComponent
+        ViewTestComponent,
+        ManageTestsMultiCampusComponent
     ],
     providers: [
         TestScheduleModel

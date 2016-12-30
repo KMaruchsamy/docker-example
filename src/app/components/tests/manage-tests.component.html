@@ -15,7 +15,7 @@
                     <b>Information on tests scheduled through our 
             old process will not appear here.</b>
                 </p>
-                <p>You can view upcoming tests that have been scheduled through our old process by accessing the ​<b>Tests Scheduled by Date</b>                    report from the <a [routerLink]="['/reports']">View Reports</a> page.
+                <p>You can view upcoming tests that have been scheduled through our old process by accessing the ​<b>Tests Scheduled by Date</b> report from the <a [routerLink]="['/reports']">View Reports</a> page.
                 </p>
                 <p class="no-margin-bottom">
                     If you have any questions, please contact your Account Manager. You can find your Account Manager’s contact details on the
@@ -24,6 +24,9 @@
             </div>
         </div>
 
+       <manage-tests-multicampus *ngIf="institutions && institutions.length > 9" (onInstitutionChange)="onInstitutionChange($event)"></manage-tests-multicampus>
+       
+       <section *ngIf="institutionId || institutions && institutions.length < 10">
         <div class="section-medium-thin section-clearfix">
             <div class="thin-section" [class.section-light-pink]="!inProgressTests?.length==0">
                 <div class="container-medium-width">
@@ -214,6 +217,7 @@
                 <p *ngIf="completedTests?.length==0">There have been no completed tests over the last three months.</p>
             </div>
         </div>
+       </section>
     </div>
 </main>
 <page-footer></page-footer>
