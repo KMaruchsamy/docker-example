@@ -4,31 +4,12 @@ import {Subscription} from 'rxjs/Rx';
 import {Http, Response, RequestOptions, Headers} from "@angular/http";
 import {Title} from '@angular/platform-browser';
 import {Observable} from 'rxjs/Rx';
-// import {TestService} from '../../services/test.service';
-// import {AuthService} from '../../services/auth';
-// import {CommonService} from '../../services/common';
 import {links, errorcodes, teststatus, Timezones} from '../../constants/config';
-// import {PageHeader} from '../shared/page-header';
-// import {PageFooter} from '../shared/page-footer';
-// import {TestHeader} from './test-header';
 import {TestScheduleModel} from '../../models/test-schedule.model';
-// import {ConfirmationPopup} from '../shared/confirmation.popup';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';
 import {ParseDatePipe} from '../../pipes/parsedate.pipe';
 import {UtilityService} from '../../services/utility.service';
-// import * as _ from 'lodash';
-// import {TestsModal} from '../../models/tests.modal';
-// import {LogService} from '../../services/log.service.service';
-// import '../../plugins/dropdown.js';
-// import '../../plugins/bootstrap-select.min.js';
-// // import '../../plugins/jquery.dataTables.min.js';
-// // import '../../plugins/dataTables.responsive.js';
-// import '../../lib/modal.js';
-// import '../../lib/tooltip.js';
-// import '../../lib/popover.js';
-// import '../../lib/bootstrap-editable.min.js';
-// import '../../lib/tablesaw.js';
 import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
@@ -38,6 +19,7 @@ import { ConfirmationPopupComponent } from './../shared/confirmation.popup.compo
 import { PageFooterComponent } from './../shared/page-footer.component';
 import { TestHeaderComponent } from './test-header.component';
 import { PageHeaderComponent } from './../shared/page-header.component';
+import { ManageTestsMultiCampusComponent } from './manage-tests-multicampus.component'
 
 @Component({
     selector: 'manage-tests',
@@ -59,7 +41,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     programId: any;
     institutionRN: any;
     institutionPN: any;
-    institutionId: number = 0;
+    institutionId: number;
     institutionName: string = '';
     adminId: number = 0;
     sStorage: any;
@@ -73,6 +55,8 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     testStatus: any;
     isMultiCampus: boolean = false;
     Campus: Object[] = [];
+    institutions: Array<any> = [];
+
     constructor(
         private activatedRoute: ActivatedRoute,
         public testService: TestService,
@@ -98,18 +82,29 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
 
     ngOnInit(): void {
-        this.errorCodes = errorcodes;
-        this.testStatus = teststatus;
-        this.sStorage = this.common.getStorage();
-        this.testService.clearTestScheduleObjects();
-        this.apiServer = this.common.getApiServer();
-        this.testDate = moment(new Date()).subtract(3, 'month').format('L');
-        this.adminId = this.auth.userid;
-        this.checkInstitutions();
-        this.setLatestInstitution();
-        this.bindTests();
-        this.titleService.setTitle('Manage Tests – Kaplan Nursing');
-        window.scroll(0,0);
+        if (!this.auth.isAuth())
+            this.router.navigate(['/']);
+        else {
+            if (this.auth.institutions) {
+                this.institutions = JSON.parse(this.auth.institutions);
+                this.errorCodes = errorcodes;
+                this.testStatus = teststatus;
+                this.sStorage = this.common.getStorage();
+                this.testService.clearTestScheduleObjects();
+                this.apiServer = this.common.getApiServer();
+                this.testDate = moment(new Date()).subtract(3, 'month').format('L');
+                this.adminId = this.auth.userid;
+                this.checkInstitutions();
+                this.setLatestInstitution();
+                // if less than 10 institutions show all tests on load
+                if (this.institutions.length < 10) {
+                    this.bindTests();
+                }
+            }
+            this.titleService.setTitle('Manage Tests – Kaplan Nursing');
+            window.scroll(0,0);
+
+        }
     }
 
     resize(): void {
@@ -157,8 +152,12 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     }
 
     bindTests(): void {
+         //clear existing tests array in case this returns no tests for any of the arrays with multicampus dropdown
+        this.completedTests = [];
+        this.scheduleTests = [];
+        this.inProgressTests = [];
         let __this = this;
-        let scheduleTestsURL = `${this.apiServer}${links.api.baseurl}${links.api.admin.test.scheduletests}?adminId=${this.auth.userid}&after=${this.testDate}`;
+        let scheduleTestsURL = `${this.apiServer}${links.api.baseurl}${links.api.admin.test.scheduletests}?adminId=${this.auth.userid}&after=${this.testDate}&institutionId=${this.institutionId}`;
         let scheduleTestsObservable: Observable<Response> = this.testService.getAllScheduleTests(scheduleTestsURL);
         this.scheduleTestsSubscription = scheduleTestsObservable
             .map(response => response.json())
@@ -386,7 +385,6 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         if (this.auth.institutions != null && this.auth.institutions != 'undefined') {
             let latestInstitution:any = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
             if (latestInstitution) {
-                this.institutionId = latestInstitution.InstitutionId;
                 this.institutionName = latestInstitution.InstitutionName;
             }
         }
@@ -413,6 +411,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Called when user clicks to schedule a test
     redirectToRoute(route: string): boolean {
         this.checkInstitutions();
         if (this.isMultiCampus)
@@ -454,6 +453,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         }
         return false;
     }
+
     resolveSubjectsURL(url: string): string {
         return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeId.toString());
     }
@@ -491,6 +491,15 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             let institution: TestsModal = <TestsModal>_.find(this.completedTests, { 'institutionId': +institutionId });
             institution.tests = this.testService.sortTests(institution.tests, tablename, columnname);
         }
-
     }
+
+    onInstitutionChange(institutionId: number) {
+        let institution: any = _.find(this.institutions, { 'InstitutionId': +institutionId });
+        if (institution) {
+            this.institutionId = institution.InstitutionId;
+            this.institutionName = institution.InstitutionNameWithProgOfStudy;
+            this.bindTests();
+        }
+    }
+
 }
