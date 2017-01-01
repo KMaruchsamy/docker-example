@@ -1,18 +1,19 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, OnChanges } from '@angular/core';
 import { ValidationsService } from '../../services/validations.service';
-import { RosterUpdateTypes } from '../../constants/config';
+import { RosterUpdateTypes, errorcodes } from '../../constants/config';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import { RosterService } from './roster.service';
 import { links } from '../../constants/config';
 import { CommonService } from '../../services/common.service';
 import { Subscription } from 'rxjs/Rx';
+import { rosters, general } from '../../constants/error-messages';
 
 @Component({
     selector: 'rosters-add-to-cohort',
     templateUrl: './rosters-change-add-to-cohort.component.html',
     styleUrls: ['./rosters-change-move-to-cohort.component.css']
 })
-export class RosterChangeAddToCohortComponent implements OnInit {
+export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
     collapsed: boolean = true;
     @Input() rosterChangesModel;
     valid: boolean = false;
@@ -30,10 +31,17 @@ export class RosterChangeAddToCohortComponent implements OnInit {
     @Output() updateAddedStudentUntimedEvent = new EventEmitter();
     existingStudents: Array<ChangeUpdateRosterStudentsModel> = [];
     emailValidateSubscription: Subscription;
+    errorMessage: string;
     constructor(private common: CommonService, private validations: ValidationsService, private rosterSerivice: RosterService) { }
 
     ngOnInit() {
 
+    }
+
+    ngAfterViewInit() {
+        this.bindTablesaw('addTable', this);
+        this.bindTablesaw('moveTable', this);
+        this.bindTablesaw('alreadyExistsStudent', this);
     }
 
     checkValid(): void {
@@ -47,60 +55,35 @@ export class RosterChangeAddToCohortComponent implements OnInit {
 
         let alreadyAdded: boolean = _.some(this.rosterChangesModel.students, { 'email': this.email });
         if (alreadyAdded) {
-            alert('Student with the same email already added ..');
+            this.errorMessage = rosters.student_already_added;
             return;
         }
 
-
-        // let sameEmailStudents: Array<any> = [{
-        //     studentId: 245543,
-        //     firstName: "Candice",
-        //     lastName: "Allen",
-        //     email: "callen@mailinator.com",
-        //     cohortId: 5148,
-        //     cohortName: "Inactive",
-        //     repeatExpiryDate: null,
-        //     userExpireDate: null,
-        //     studentPayInstitution: true,
-        //     isActive: false
-        // },
-        // {
-        //     studentId: 100959,
-        //     firstName: "Cassandra",
-        //     lastName: "Amos",
-        //     email: "amoscr@mailinator.com",
-        //     cohortId: 3330,
-        //     cohortName: "May 2012",
-        //     repeatExpiryDate: null,
-        //     userExpireDate: null,
-        //     studentPayInstitution: true,
-        //     isActive: false
-        // }];
-
-
         let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.addEmailValidation}`;
-        url = url.replace("§institutionId", this.rosterChangesModel.institutionId.toString()).replace("§cohortId", this.rosterChangesModel.cohortId.toString()).replace('§searchString', this.email);
-
+        url = url.replace("§institutionId", this.rosterChangesModel.institutionId.toString()).replace('§searchEmailId', this.email);
+        let __this = this;
         let emailValidateObservable = this.rosterSerivice.addEmailValidation(url);
         this.emailValidateSubscription = emailValidateObservable
             .map(response => response.json())
-            .finally(() => {
-                this.resetModal();
-                this.checkValid();
-            })
             .subscribe((json: any) => {
-                if (json && json.StudentId && json.StudentId > 0) {
-                    let existingStudent: ChangeUpdateRosterStudentsModel = new ChangeUpdateRosterStudentsModel();
-                    existingStudent.studentId = json.studentId;
-                    existingStudent.firstName = json.firstName;
-                    existingStudent.lastName = json.lastName;
-                    existingStudent.email = json.email;
-                    existingStudent.moveFromCohortId = json.cohortId;
-                    existingStudent.moveFromCohortName = json.cohortName;
-                    this.existingStudents.push(existingStudent);
+                if (json && json.length > 0) {
+                    let existingStudent: any = {};
+                    json.forEach(e => {
+                        if (e.InstitutionId === +__this.rosterChangesModel.institutionId) {
+                            existingStudent.studentId = e.StudentId;
+                            existingStudent.firstName = e.FirstName;
+                            existingStudent.lastName = e.LastName;
+                            existingStudent.email = e.Email;
+                            existingStudent.moveFromCohortId = e.CohortId;
+                            existingStudent.moveFromCohortName = e.CohortName;
+                            existingStudent.expired = ((!!e.CohortEndDate && moment(e.CohortEndDate).isBefore(new Date())) || (!!e.UserExpireDate && moment(e.UserExpireDate).isBefore(new Date())));
+                            this.existingStudents.push(existingStudent);
+                            this.bindTablesaw('alreadyExistsStudent', __this);
+                        }
+                    });
                 }
                 else {
-                    this.addToCohortEvent.emit({
+                    __this.addToCohortEvent.emit({
                         firstName: this.firstName,
                         lastName: this.lastName,
                         email: this.email,
@@ -108,8 +91,18 @@ export class RosterChangeAddToCohortComponent implements OnInit {
                         updateType: RosterUpdateTypes.AddToThisCohort,
                         addedFrom: RosterUpdateTypes.AddToThisCohort
                     });
+                    this.bindTablesaw('addTable', __this);
                 }
-            }, error => console.log(error));
+            }, (error) => {
+                if (+error.status === +errorcodes.API)
+                    __this.errorMessage = error.json().msg;
+                else
+                    __this.errorMessage = general.exception;
+                this.checkValid();
+            }, () => {
+                this.resetModal();
+                this.checkValid();
+            });
 
 
     }
@@ -132,13 +125,14 @@ export class RosterChangeAddToCohortComponent implements OnInit {
     }
 
     moveExistingStudent(student: any, e: any) {
+        let __this = this;
         let studentToMove: ChangeUpdateRosterStudentsModel = new ChangeUpdateRosterStudentsModel();
         studentToMove.studentId = student.studentId;
         studentToMove.firstName = student.firstName;
         studentToMove.lastName = student.lastName;
         studentToMove.email = student.email;
-        studentToMove.moveFromCohortId = student.cohortId;
-        studentToMove.moveFromCohortName = student.cohortName;
+        studentToMove.moveFromCohortId = student.moveFromCohortId;
+        studentToMove.moveFromCohortName = student.moveFromCohortName;
         studentToMove.moveToCohortId = this.rosterChangesModel.cohortId;
         studentToMove.moveToCohortName = this.rosterChangesModel.cohortName;
         studentToMove.isInactive = !student.isActive;
@@ -146,6 +140,7 @@ export class RosterChangeAddToCohortComponent implements OnInit {
         studentToMove.addedFrom = RosterUpdateTypes.AddToThisCohort;
         this.moveExistingStudentEvent.emit(studentToMove);
         _.remove(this.existingStudents, { 'studentId': +studentToMove.studentId });
+        this.bindTablesaw('moveTable', __this);
     }
 
     updateUntimed(student: ChangeUpdateRosterStudentsModel, e: any) {
@@ -173,6 +168,24 @@ export class RosterChangeAddToCohortComponent implements OnInit {
         this.updateAddedStudentUntimedEvent.emit({
             student: student,
             checked: e.target.checked
+        });
+    }
+
+    bindTablesaw(tableId: string, __this: any) {
+        setTimeout(function () {
+            $(document).trigger("enhance.tablesaw");
+            __this.toggleTd(tableId);
+        });
+    }
+
+    toggleTd(tableId: string) {
+        let $td = $('#' + tableId).find('tr td:first-child');
+        $td.unbind('click');
+        $td.on('click', function () {
+            var $tr = $(this).parent('tr');
+            var $hiddenTd = $tr.find('td').not($(this));
+            $tr.toggleClass('tablesaw-stacked-hidden-border');
+            $hiddenTd.toggleClass('tablesaw-stacked-hidden');
         });
     }
 

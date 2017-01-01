@@ -49,11 +49,11 @@ export class RostersChangesUpdatesComponent implements OnInit {
 
 
     moveToCohort(student: ChangeUpdateRosterStudentsModel) {
+        debugger;
         if (!this.rosterChangesModel.students || this.rosterChangesModel.students.length === 0)
             this.rosterChangesModel.students = new Array<ChangeUpdateRosterStudentsModel>();
         this.rosterChangesModel.students.push(student);
         this.rosterChangesModel.students = this.rosterChangesModel.students.slice();
-
     }
 
     remove(studentToRemove: ChangeUpdateRosterStudentsModel): void {
