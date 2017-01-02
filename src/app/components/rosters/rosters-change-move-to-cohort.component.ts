@@ -162,11 +162,10 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     }
 
     move(student: ChangeUpdateRosterStudentsModel, e: any) {
-        debugger;
         let __this = this;
         e.preventDefault();
         student.addedFrom = RosterUpdateTypes.MoveToThisCohort;
-        this.moveToCohort.emit(student);
+        this.moveToCohort.emit(Object.assign({}, student));
         let movedStudent: any = _.find(this.boundStudents, { 'studentId': student.studentId });
         if (!!movedStudent)
             movedStudent.moved = this.isStudentMoved(student.studentId);
@@ -184,7 +183,6 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     }
 
     remove(student: ChangeUpdateRosterStudentsModel, e): void {
-        debugger;
         e.preventDefault();
         this.removeEvent.emit(student);
         let movedStudent: any = _.find(this.boundStudents, { 'studentId': student.studentId });
