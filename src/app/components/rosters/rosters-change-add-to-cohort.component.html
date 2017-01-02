@@ -25,9 +25,9 @@
                             <td>{{student.lastName}}, {{student.firstName}}</td>
                             <td class="tablesaw-stacked-hidden">{{student.email}}</td>
                             <td class="center tablesaw-stacked-hidden">
-                                <input type="checkbox" class="checkbox-image" [attr.id]="'untimedTest' + student.studentId" (change)="updateAddedStudentUntimed(student, $event)"
+                                <input type="checkbox" class="checkbox-image" [attr.id]="'untimedTest' + student.email" (change)="updateAddedStudentUntimed(student, $event)"
                                     [checked]="student?.isGrantUntimedTest">
-                                <label [attr.for]="'untimedTest' + student.studentId"></label>
+                                <label [attr.for]="'untimedTest' + student.email"></label>
                             </td>
                             <td class="all tablesaw-stacked-hidden">
                                 <button class="button button-light button-small js-remove" (click)="removeAddedStudent(student, $event)">Remove</button>
