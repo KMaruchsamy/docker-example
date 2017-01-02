@@ -133,3 +133,41 @@ span.dtr-data label {
 textarea {
     min-height: 100px;
 }
+
+
+ @media screen and (max-width: 600px) {
+
+    /*table#addedStudent1 {
+      border: 0;
+    }
+
+    table#addedStudent1 thead {
+      display: none;
+    }
+
+    table#addedStudent1 tr {
+      margin-bottom: 10px;
+      display: block;
+      border-bottom: 2px solid #ddd;
+    }
+
+    table#addedStudent1 tr td:first-child{
+        padding: 0;
+    }
+
+    table#addedStudent1 tr td:not(:first-child){
+        display: none;
+    }
+
+    table#addedStudent1 td {
+      display: block;
+      text-align: right;
+      border-bottom: 1px dotted #ccc;
+    }
+
+    table#addedStudent1 td:last-child {
+      border-bottom: 0;
+    }*/
+
+    
+  }

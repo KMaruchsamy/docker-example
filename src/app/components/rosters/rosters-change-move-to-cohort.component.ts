@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 import { links, RosterUpdateTypes } from '../../constants/config';
 import { RosterService } from './roster.service';
@@ -15,7 +15,10 @@ import { reset_student_password } from '../../constants/error-messages';
 @Component({
     selector: 'rosters-move',
     templateUrl: './rosters-change-move-to-cohort.component.html',
-    styleUrls: ['./rosters-change-move-to-cohort.component.css']
+    styleUrls: ['./rosters-change-move-to-cohort.component.css'],
+    host: {
+        '(window:resize)': 'resize($event)'
+    }
 })
 export class RosterChangeMoveToCohortComponent implements OnInit {
     searchString: string;
@@ -32,7 +35,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     @Output() removeEvent = new EventEmitter();
     @Output() updateUntimedEvent = new EventEmitter();
     @Output() updateRepeaterEvent = new EventEmitter();
-
+    
     constructor(
         private common: CommonService,
         private rosterService: RosterService,
@@ -40,7 +43,13 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        
+        // $(document).trigger("enhance.tablesaw");
+        this.toggleTd();
+    }
+
+    resize(e) {
+        // $(document).trigger("enhance.tablesaw");
+        this.toggleTd();
     }
 
     searchStudents(studentName: string) {
@@ -51,7 +60,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
             || (this.searchString.length >= 2 && this.prevSearchText.length > this.searchString.length)
             || (this.searchString.length >= 2 && !_.startsWith(this.searchString, this.prevSearchText) && this.prevSearchText != this.searchString)) {
             this.prevSearchText = this.searchString;
-            
+
             let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.moveToCohortStudents}`;
             url = url.replace("§institutionId", this.rosterChangesModel.institutionId.toString()).replace("§cohortId", this.rosterChangesModel.cohortId.toString()).replace('§searchString', this.searchString);
 
@@ -92,7 +101,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
                                 limit: Number.MAX_VALUE
                             });
                         $('.typeahead').focus();
-                        $('.typeahead').on('typeahead:select', function(ev, suggestion) {
+                        $('.typeahead').on('typeahead:select', function (ev, suggestion) {
                             self.searchString = suggestion;
                             self.bindStudents();
                             ev.preventDefault();
@@ -118,12 +127,13 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
             return {
                 moveFromCohortId: student.CohortId,
                 moveFromCohortName: student.CohortName,
+                moveFromCohortExpired: (!!student.CohortEndDate && moment(student.CohortEndDate).isBefore(new Date())) || (!!student.UserExpireDate && moment(student.UserExpireDate).isBefore(new Date())),
                 studentId: student.StudentId,
                 firstName: student.FirstName,
                 lastName: student.LastName,
                 updateType: RosterUpdateTypes.MoveToThisCohort,
                 moved: this.isStudentMoved(student.StudentId),
-                isActive: student.IsActive                
+                isActive: student.IsActiveCohort
             }
         });
     }
@@ -131,9 +141,15 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
 
 
     bindStudents(): void {
-        this.boundStudents = null;
+        let __this = this;
+        this.boundStudents = [];
         if (this.searchStudents && this.searchStudents.length > 0) {
             this.boundStudents = this.mapStudents(this.filterStudents(this.searchedStudents, this.searchString));
+            setTimeout(function () {
+                $(document).trigger("enhance.tablesaw");
+                __this.toggleTd();
+            });
+            console.log(this.boundStudents);
         }
 
     }
@@ -146,12 +162,18 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     }
 
     move(student: ChangeUpdateRosterStudentsModel, e: any) {
+        let __this = this;
         e.preventDefault();
         student.addedFrom = RosterUpdateTypes.MoveToThisCohort;
-        this.moveToCohort.emit(student);
+        this.moveToCohort.emit(Object.assign({}, student));
         let movedStudent: any = _.find(this.boundStudents, { 'studentId': student.studentId });
         if (!!movedStudent)
             movedStudent.moved = this.isStudentMoved(student.studentId);
+        console.log(this.rosterChangesModel.students);
+        // setTimeout(function () {
+        //    $(document).trigger("enhance.tablesaw");
+        //     __this.toggleTd();
+        // });
     }
 
 
@@ -177,13 +199,22 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         console.log(this.rosterChangesModel);
     }
 
-    updateRepeater(student: ChangeUpdateRosterStudentsModel, e:any): void {
+    updateRepeater(student: ChangeUpdateRosterStudentsModel, e: any): void {
         this.updateRepeaterEvent.emit({
             student: student,
             checked: e.target.checked
         });
     }
 
-
+    toggleTd() {
+        $('tr td:first-child').unbind('click');
+        $('tr td:first-child').on('click', function () {
+            var $firstTd = $(this);
+            var $tr = $(this).parent('tr');
+            var $hiddenTd = $tr.find('td').not($(this));
+            $tr.toggleClass('tablesaw-stacked-hidden-border');
+            $hiddenTd.toggleClass('tablesaw-stacked-hidden');
+        });
+    }
 
 }

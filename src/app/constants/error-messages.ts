@@ -61,3 +61,8 @@ export const manage_account = {
 export const reset_student_password = {
     success_message: "Your student will receive an email with their user name and password in a few minutes."
 };
+
+
+export const rosters = {
+    student_already_added: 'You have already added this student'
+};
