@@ -53,7 +53,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         this.toggleTd();
     }
 
-    searchStudents(studentName: string) {
+    searchStudents(studentName: string, buttonTriggered: boolean = false) {
         this.noStudents = false;
         this.searchString = studentName;
         let self = this;
@@ -69,6 +69,13 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
             let searchStudentsObservable: Observable<Response> = this.rosterService.searchStudents(url);
             this.searchStudentsSubscription = searchStudentsObservable
                 .map(response => response.json())
+                .finally(() => {
+                    if (buttonTriggered) {
+                        $('.typeahead').typeahead('close');
+                        this.bindStudents();
+                    }
+
+                })
                 .subscribe((json: any) => {
                     if (json) {
                         let typeaheadSource: Array<string> = [];
@@ -145,29 +152,33 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     bindStudents(): void {
         let __this = this;
         this.boundStudents = [];
-        if (this.searchStudents && this.searchStudents.length > 0) {
+        if (this.searchedStudents && this.searchedStudents.length > 0) {
             this.boundStudents = this.mapStudents(this.filterStudents(this.searchedStudents, this.searchString));
             if (this.boundStudents.length === 0)
                 this.noStudents = true;
             else
-                this.noStudents = false;    
+                this.noStudents = false;
             setTimeout(function () {
                 // $(document).trigger("enhance.tablesaw");
                 __this.toggleTd();
             });
             console.log(this.boundStudents);
         }
-        else 
-             this.noStudents = true; 
-        
+        else
+            this.noStudents = true;
+
 
     }
 
     searchButtonClick(searchString: string, e: any): void {
         e.preventDefault();
-        this.searchString = searchString;
-        this.bindStudents();
-        $('.typeahead').typeahead('close');
+        // this.searchString = searchString;
+        // this.bindStudents();
+
+        this.searchString = '';
+        this.prevSearchText = '';
+        this.searchStudents(searchString, true);
+
     }
 
     move(student: ChangeUpdateRosterStudentsModel, e: any) {
@@ -223,6 +234,16 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
             $tr.toggleClass('tablesaw-stacked-hidden-border');
             $hiddenTd.toggleClass('tablesaw-stacked-hidden');
         });
+    }
+
+    clearSearchResults(searchInput, e) {
+        e.preventDefault();
+        searchInput.value = '';
+        this.boundStudents = [];
+        this.searchedStudents = [];
+        this.searchString = '';
+        this.prevSearchText = '';
+        $('.typeahead').typeahead('destroy');
     }
 
 }
