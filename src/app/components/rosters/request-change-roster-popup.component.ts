@@ -71,7 +71,8 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
     loadCohorts(roster: any) {
         if (roster) {
             let __this = this;
-            let extensionCohort: RosterCohortsModel;
+            let _keepInCohort: any;
+            let seperateExtensionCohort: RosterCohortsModel[]=[];
             this.rosters.institutionId = roster.InstitutionId;
             this.rosters.institutionName = roster.InstitutionName;
             this.rosters.institutionNameWithProgOfStudy = roster.InstitutionNameWithProgOfStudy;
@@ -84,12 +85,15 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
                 roster.Cohorts = _.orderBy(roster.Cohorts, function (o: any) {
                     if (o.CohortName.toUpperCase().indexOf('EXTENSION') != -1)
                         return new Date(0);
-                    else
+                    else {
+                        seperateExtensionCohort.push(o);
                         return new Date(o.CohortEndDate);
+                    }
                 }, 'desc');
-                this.rosters.cohorts = _.map(roster.Cohorts, (cohort: any) => {
+               
+                this.rosters.cohorts = _.map(seperateExtensionCohort, (cohort: any) => {
                     let rosterCohort = new RosterCohortsModel();
-                    rosterCohort.cohortId = cohort.CohortId;
+                    rosterCohort.cohortId = cohort.CohortId;                    
                     rosterCohort.cohortName = cohort.CohortName;
                     rosterCohort.cohortStartDate = cohort.CohortStartDate;
                     rosterCohort.cohortEndDate = cohort.CohortEndDate;
@@ -99,7 +103,10 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
                 _.filter(this.rosters.cohorts, function (o) {
                     if (__this.rosterChangesModel.cohortId !== o.cohortId)
                         __this.rostersList.push(o);
+                    else 
+                        _keepInCohort = o;
                 });
+                this.rostersList.push(_keepInCohort);
                 __this.sStorage.setItem('rosterlist', JSON.stringify(this.rostersList));
             }
         }

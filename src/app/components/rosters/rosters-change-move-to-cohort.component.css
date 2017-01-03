@@ -133,3 +133,10 @@ span.dtr-data label {
 textarea {
     min-height: 100px;
 }
+
+
+ @media (max-width: 699px) {
+     .tablesaw tr td:first-child{
+         padding-left:0;
+     }  
+  }

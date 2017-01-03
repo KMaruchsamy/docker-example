@@ -61,7 +61,7 @@ export const links = {
                 saveUserPreference: 'preferenceService/setPreference',
                 getUserPreference: 'preferenceService/users/§userId/preferences/§preferenceTypeName?userType=§userType',
                 moveToCohortStudents: 'admin/rosters/institution/§institutionId/cohort/§cohortId/students?searchString=§searchString',
-                addEmailValidation:'admin/rosters/institutions/§institutionId/students?searchString=§searchString'
+                addEmailValidation: 'admin/rosters/institution/§institutionId/student?searchEmailId=§searchEmailId'
             }
         }
     },
@@ -209,18 +209,18 @@ export const telNumbers = {
     outsideUSCanadaSupportHotline: '+1-407-423-6620'
 }
 
-// export enum RosterUpdateTypes {
-//     MoveToDifferentCohort = 1,
-//     MoveToThisCohort = 2,
-//     AddToThisCohort = 3,
-//     ExtendAccess = 4
-// }
-
-export const RosterUpdateTypes = {
-    MoveToDifferentCohort : 1,
-    MoveToThisCohort : 2,
-    AddToThisCohort : 3,
-    ExtendAccess : 4
+export enum RosterUpdateTypes {
+    MoveToDifferentCohort = 1,
+    MoveToThisCohort = 2,
+    AddToThisCohort = 3,
+    ExtendAccess = 4
 }
+
+// export const RosterUpdateTypes = {
+//     MoveToDifferentCohort : 1,
+//     MoveToThisCohort : 2,
+//     AddToThisCohort : 3,
+//     ExtendAccess : 4
+// }
 
 

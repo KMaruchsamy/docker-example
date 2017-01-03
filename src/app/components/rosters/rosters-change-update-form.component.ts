@@ -353,7 +353,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
             this._event = e;
         }
         this.showRequestChangePopup = true;
-        this.studentNameToChangeRoster = lastName + "," + firstName;
+        this.studentNameToChangeRoster = lastName + ", " + firstName;
         this.toChangeRosterStudentId = studentId;
     }
 

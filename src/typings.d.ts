@@ -67,6 +67,8 @@ interface JQuery {
 // Need to be replaced with the typings of responsive datatable ProfileComponent.
 interface JQuery {
     DataTable(param?: any): any;
+    data(str: any): any;
+    table(): any;
 }
 
 

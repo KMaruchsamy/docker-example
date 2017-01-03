@@ -11,10 +11,12 @@
     </div>
     <div [class.collapse]="collapsed" id="moveExisting">
 
-        <div *ngIf="(rosterChangesModel?.students | filterrosterchange:rosterUpdateType:addedFromType)?.length>0" id="movedStudentFromSearch" class="margin-1em-top container-bordered section-medium-thin section-bottom-thin section-gray js-move-here">
+        <div *ngIf="(rosterChangesModel?.students | filterrosterchange:rosterUpdateType:addedFromType)?.length>0" id="movedStudentFromSearch"
+            class="margin-1em-top container-bordered section-medium-thin section-bottom-thin section-gray js-move-here">
             <div class="container-medium-width">
                 <p class="text-purple"><b>Students to be moved to June 2018 cohort roster</b></p>
-                <table class="table-with-cell-padding last-row-no-border table-transparent datatable-gray-labels" id="addedStudent1">
+                <table data-tablesaw-mode="stack" class="table-with-cell-padding tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border last-row-no-border table-transparent datatable-gray-labels "
+                    id="addedStudent1">
                     <thead>
                         <tr class="gray-th">
                             <th scope="col">Name</th>
@@ -25,14 +27,34 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr role="row" class="odd" *ngFor="let selectedStudent of rosterChangesModel.students | filterrosterchange:rosterUpdateType:addedFromType">
-                            <td tabindex="0">{{selectedStudent.lastName}}, {{selectedStudent.firstName}}</td>
-                            <td>{{selectedStudent.moveFromCohortName}}</td>
-                            <td class="center"><input type="checkbox" class="checkbox-image" (change)="updateRepeater(selectedStudent, $event)" [checked]="selectedStudent?.isRepeater"
-                                    [attr.id]="'repeater_' + selectedStudent.studentId"><label [attr.for]="'repeater_' + selectedStudent.studentId"></label></td>
-                            <td class="center"><input type="checkbox" (change)="updateUntimed(selectedStudent, $event)" class="checkbox-image" [checked]="selectedStudent?.isGrantUntimedTest"
-                                    [attr.id]="'untimed_' + selectedStudent.studentId"><label [attr.for]="'untimed_' + selectedStudent.studentId"></label></td>
-                            <td><button class="button button-small button-light js-remove" (click)="remove(selectedStudent, $event)">Remove</button></td>
+                        <tr class="tablesaw-stacked-hidden-border" role="row" [class.odd]="i%2===1" [class.even]="i%2===0" *ngFor="let selectedStudent of rosterChangesModel.students | filterrosterchange:rosterUpdateType:addedFromType; let i =index">
+                            <td tabindex="0">
+                                <b class="tablesaw-cell-label">Name</b>
+                                <span class="tablesaw-cell-content">{{selectedStudent.lastName}}, {{selectedStudent.firstName}}</span>
+                            </td>
+                            <td class="tablesaw-stacked-hidden">
+                                <b class="tablesaw-cell-label">Move From</b>
+                                <span class="tablesaw-cell-content">{{selectedStudent.moveFromCohortName}}</span>
+                            </td>
+                            <td class="center tablesaw-stacked-hidden">
+                                <b class="tablesaw-cell-label">Mark as repeater</b>
+                                <span class="tablesaw-cell-content">
+                                    <input type="checkbox" class="checkbox-image" (change)="updateRepeater(selectedStudent, $event)"
+                                    [checked]="selectedStudent?.isRepeater" [attr.id]="'repeater_' + selectedStudent.studentId">
+                                    <label [attr.for]="'repeater_' + selectedStudent.studentId"></label>
+                                </span>
+
+                            </td>
+                            <td class="center tablesaw-stacked-hidden">
+                                <b class="tablesaw-cell-label">Grant untimed tests</b>
+                                <span class="tablesaw-cell-content">
+                                     <input type="checkbox" (change)="updateUntimed(selectedStudent, $event)" class="checkbox-image"
+                                    [checked]="selectedStudent?.isGrantUntimedTest" [attr.id]="'untimed_' + selectedStudent.studentId">
+                                    <label [attr.for]="'untimed_' + selectedStudent.studentId"></label>
+                                </span>
+
+                            </td>
+                            <td class="tablesaw-stacked-hidden"><button class="button button-small button-light js-remove " (click)="remove(selectedStudent, $event)">Remove</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -41,42 +63,53 @@
 
         <div class="section-medium-thin">
             <form class="search-bar" role="form" onsubmit="return false;">
-                <label class="h6" for="findStudent1"><b>Find a student by first or last name</b></label>
-                <p class="smaller">
-                    Enter a minimum of 2 characters.
-                </p>
-                <div class="search-input">
-                    <input #searchTypeahead type="search" class="typeahead" role="search" (input)="searchStudents($event.target.value)" id="searchStudent"
-                        name="searchStudent">
-                    <button class="button" id="findStudentButton" type="submit" [disabled]="!searchString || searchString.length<2" (click)="searchButtonClick(searchTypeahead.value,$event);">
+<label class="h6" for="findStudent1"><b>Find a student by first or last name</b></label>
+<p class="smaller">
+    Enter a minimum of 2 characters.
+</p>
+<div class="search-input">
+    <input #searchTypeahead type="search" class="typeahead" role="search" (input)="searchStudents($event.target.value)" id="searchStudent"
+        name="searchStudent">
+    <button class="button" id="findStudentButton" type="submit" [disabled]="!searchString || searchString.length<2" (click)="searchButtonClick(searchTypeahead.value,$event);">
                           <img src="assets/images/search-icon_2x.png" alt="Search Icon">
                     </button>
-                </div>
-            </form>
-        </div>
+</div>
+</form>
+</div>
 
-        <table class="table-fixed last-row-no-border" id="searchResultsTable" *ngIf="boundStudents && boundStudents.length>0">
-            <thead>
-                <tr class="gray-th">
-                    <th scope="col">Name</th>
-                    <th scope="col">Cohort</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let student of boundStudents">
-                    <td><i *ngIf="!student.isActive || student.moveFromCohortName?.toLowerCase() ==='inactive'">{{student.lastName}}, {{student.firstName}}</i>
-                        <span *ngIf="student.isActive && student.moveFromCohortName?.toLowerCase() !=='inactive'">{{student.lastName}}, {{student.firstName}}</span> </td>
-                    <td>
-                        <i *ngIf="!student.isActive || student.moveFromCohortName?.toLowerCase() ==='inactive'"> {{student.moveFromCohortName}}</i>
-                        <span *ngIf="student.isActive && student.moveFromCohortName?.toLowerCase() !=='inactive'"> {{student.moveFromCohortName}}}</span>
-                       </td>
-                    <td>
-                        <button [disabled]="!!student.moved" class="button button-small button-light js-move" (click)="move(student, $event)">Request move <span class="hidden-small-phone-down">to this cohort</span></button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<table data-tablesaw-mode="stack" class="table-fixed  tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none"
+    id="searchResultsTable" *ngIf="boundStudents && boundStudents.length>0">
+    <thead>
+        <tr class="gray-th">
+            <th scope="col">Name</th>
+            <th scope="col">Cohort</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="tablesaw-stacked-hidden-border" *ngFor="let student of boundStudents">
+            <td>
+                <b class="tablesaw-cell-label">Name</b>
+                <span class="tablesaw-cell-content">
+                    <i *ngIf="!student.isActive || student.moveFromCohortName?.toLowerCase() ==='inactive'">{{student.lastName}}, {{student.firstName}}</i>
+                    <span *ngIf="student.isActive && student.moveFromCohortName?.toLowerCase() !=='inactive'">{{student.lastName}}, {{student.firstName}}</span>
+                </span>
+
+            </td>
+            <td class="tablesaw-stacked-hidden">
+                <b class="tablesaw-cell-label">Cohort</b>
+                <span class="tablesaw-cell-content">
+                    <i *ngIf="!student.isActive || student.moveFromCohortName?.toLowerCase() ==='inactive'"> {{student.moveFromCohortName}}</i>
+                    <span *ngIf="student.isActive && student.moveFromCohortName?.toLowerCase() !=='inactive'"> {{student.moveFromCohortName}}</span>
+                </span>
+
+            </td>
+            <td class="tablesaw-stacked-hidden">
+                <button [disabled]="!!student.moved || student?.moveFromCohortExpired" class="button button-small button-light js-move" (click)="move(student, $event)">Request move <span class="hidden-small-phone-down">to this cohort</span></button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
 </div>
 <!-- End second expander -->
