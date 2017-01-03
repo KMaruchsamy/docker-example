@@ -10,7 +10,7 @@ import { RosterChangesModel } from '../../models/roster-changes.model';
 import { RosterChangesService } from './roster-changes.service';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import * as _ from 'lodash';
-import { RosterUpdateTypes } from '../../constants/config';
+import { RosterUpdateTypes, RosterChangesPages } from '../../constants/config';
 
 @Component({
     selector: 'rosters-changes-updates',
@@ -49,7 +49,6 @@ export class RostersChangesUpdatesComponent implements OnInit {
 
 
     moveToCohort(student: ChangeUpdateRosterStudentsModel) {
-        debugger;
         if (!this.rosterChangesModel.students || this.rosterChangesModel.students.length === 0)
             this.rosterChangesModel.students = new Array<ChangeUpdateRosterStudentsModel>();
         this.rosterChangesModel.students.push(student);
@@ -109,6 +108,9 @@ export class RostersChangesUpdatesComponent implements OnInit {
     onOKConfirmation(e: any): void {
         $('#confirmationPopup').modal('hide');
         this.overrideRouteCheck = true;
+        if (this.attemptedRoute === RosterChangesPages.CHANGESNOTE) {
+            this.attemptedRoute = RosterChangesPages.VIEWROSTERS;
+        }
         this.router.navigateByUrl(this.attemptedRoute);
     }
 

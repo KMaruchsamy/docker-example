@@ -44,8 +44,8 @@ import { RosterChangeAddToCohortComponent } from './rosters-change-add-to-cohort
         PageModule,
         PipesModule,
         SharedModule,
-        RostersRoutingModule,
-    ],
+        RostersRoutingModule
+   ],
     exports: [],
     declarations: [
         RostersComponent,

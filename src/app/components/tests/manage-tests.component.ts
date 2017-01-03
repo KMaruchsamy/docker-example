@@ -381,14 +381,13 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         });
     }
 
-    setLatestInstitution(): number {
+    setLatestInstitution(): void {
         if (this.auth.institutions != null && this.auth.institutions != 'undefined') {
             let latestInstitution:any = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
             if (latestInstitution) {
                 this.institutionName = latestInstitution.InstitutionName;
             }
         }
-        return 0;
     }
 
 
@@ -497,7 +496,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         let institution: any = _.find(this.institutions, { 'InstitutionId': +institutionId });
         if (institution) {
             this.institutionId = institution.InstitutionId;
-            this.institutionName = institution.InstitutionNameWithProgOfStudy;
+            this.institutionName = institution.InstitutionName;
             this.bindTests();
         }
     }

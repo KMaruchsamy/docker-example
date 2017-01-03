@@ -155,7 +155,9 @@ export const TestShedulingPages = {
 export const RosterChangesPages = {
     MAKECHANGES: 'ROSTERS/CHANGE-UPDATE',
     REVIEWCHANGES: 'ROSTERS/ROSTER-CHANGES-SUMMARY',
-    CHANGESCONFIRMATION: 'ROSTERS/ROSTER-CHANGES-CONFIRMATION'
+    CHANGESCONFIRMATION: 'ROSTERS/ROSTER-CHANGES-CONFIRMATION',
+    CHANGESNOTE: '/rosters/changes-note',
+    VIEWROSTERS: '/rosters'
 }
 export const teststatus = {
     Completed: 'Completed',
