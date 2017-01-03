@@ -72,7 +72,6 @@
         "../node_modules/datatables-responsive/js/dataTables.responsive.js",
         "../node_modules/timepicker/jquery.timepicker.min.js",
         "../node_modules/tablesaw/dist/tablesaw.js",
-        "../node_modules/tablesaw/dist/tablesaw-init.js",
         "../node_modules/typeahead.js/dist/typeahead.bundle.js",
         "../bower_components/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.js"
       ],
