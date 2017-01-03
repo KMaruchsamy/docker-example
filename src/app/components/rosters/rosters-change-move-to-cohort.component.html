@@ -74,6 +74,9 @@
                           <img src="assets/images/search-icon_2x.png" alt="Search Icon">
                     </button>
 </div>
+<div *ngIf="noStudents" class="margin-1em-top">
+    <span>{{noStudentsErrorMessage}}</span>
+</div>
 </form>
 </div>
 
