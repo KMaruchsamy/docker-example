@@ -18,7 +18,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let cohortStudent of rosterChangeUpdateStudents">
-                                <td class="js-student-name">{{cohortStudent.lastName}},{{cohortStudent.firstName}}</td>
+                                <td class="js-student-name">{{cohortStudent.lastName}}, {{cohortStudent.firstName}}</td>
                                 <td>
                                     <button  id="btnChangeToCohort_{{cohortStudent.studentId}}" [disabled]="cohortStudent.isInactive" class="button button-small button-light js-choose-cohort button-fixed-width" [class.button-no-change]="!(cohortStudent.isInactive) && !(cohortStudent.moveToCohortId !== null )" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">{{cohortStudent.moveToCohortName ===null ?'Choose an active cohort' : cohortStudent.moveToCohortName}}</button>
                                 </td>
