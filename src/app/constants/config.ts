@@ -1,7 +1,7 @@
 export const links = {
     api: {
         local: {
-            server: "https://dev01-nursing.kaptest.com/"
+            server: "https://qa-nursing.kaptest.com/"
         },
         dev: {
             server: "https://dev01-nursing.kaptest.com/"
