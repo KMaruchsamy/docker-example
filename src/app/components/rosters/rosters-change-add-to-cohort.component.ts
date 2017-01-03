@@ -173,7 +173,7 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
 
     bindTablesaw(tableId: string, __this: any) {
         setTimeout(function () {
-            $(document).trigger("enhance.tablesaw");
+            // $(document).trigger("enhance.tablesaw");
             __this.toggleTd(tableId);
         });
     }

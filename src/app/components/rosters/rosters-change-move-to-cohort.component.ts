@@ -146,7 +146,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         if (this.searchStudents && this.searchStudents.length > 0) {
             this.boundStudents = this.mapStudents(this.filterStudents(this.searchedStudents, this.searchString));
             setTimeout(function () {
-                $(document).trigger("enhance.tablesaw");
+                // $(document).trigger("enhance.tablesaw");
                 __this.toggleTd();
             });
             console.log(this.boundStudents);
@@ -170,10 +170,9 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         if (!!movedStudent)
             movedStudent.moved = this.isStudentMoved(student.studentId);
         console.log(this.rosterChangesModel.students);
-        // setTimeout(function () {
-        //    $(document).trigger("enhance.tablesaw");
-        //     __this.toggleTd();
-        // });
+        setTimeout(function () {
+            __this.toggleTd();
+        });
     }
 
 
