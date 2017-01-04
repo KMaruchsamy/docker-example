@@ -4,7 +4,7 @@
 
 <div class="large-expander">
     <div class="relative-position">
-        <a class="large-expander-trigger" [class.collapsed]="collapsed" (click)="collapsed=!collapsed" role="button" aria-expanded="false"
+        <a class="large-expander-trigger-purple" [class.collapsed]="collapsed" (click)="collapsed=!collapsed" role="button" aria-expanded="false"
             aria-controls="moveExisting">
                   Request to move existing students to this cohort
         </a>
@@ -15,7 +15,7 @@
             class="margin-1em-top container-bordered section-medium-thin section-bottom-thin section-gray js-move-here">
             <div class="container-medium-width">
                 <p class="text-purple"><b>Students to be moved to June 2018 cohort roster</b></p>
-                <table data-tablesaw-mode="stack" class="table-with-cell-padding tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border last-row-no-border table-transparent datatable-gray-labels "
+                <table data-tablesaw-mode="stack" class="table-with-cell-padding tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border table-transparent datatable-gray-labels "
                     id="addedStudent1">
                     <thead>
                         <tr class="gray-th">
@@ -23,7 +23,7 @@
                             <th scope="col">Move from</th>
                             <th class="centered-th" scope="col">Mark as repeater</th>
                             <th class="centered-th" scope="col">Grant untimed tests</th>
-                            <th scope="col" class="all"></th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,7 +54,7 @@
                                 </span>
 
                             </td>
-                            <td class="tablesaw-stacked-hidden"><button class="button button-small button-light js-remove " (click)="remove(selectedStudent, $event)">Remove</button></td>
+                            <td class="center tablesaw-stacked-hidden"><button class="button button-small button-light js-remove tablesaw-cell-content" (click)="remove(selectedStudent, $event)">Remove</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -137,7 +137,7 @@
                 </span>
 
             </td>
-            <td class="tablesaw-stacked-hidden">
+            <td class="center tablesaw-stacked-hidden">
                 <button [disabled]="!!student.moved || student?.moveFromCohortExpired || student?.sameCohort" class="button button-small button-light js-move" (click)="move(student, $event)">Request move <span class="hidden-small-phone-down">to this cohort</span></button>
             </td>
         </tr>

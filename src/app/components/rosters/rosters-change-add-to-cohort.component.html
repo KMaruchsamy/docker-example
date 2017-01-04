@@ -1,6 +1,6 @@
 <div class="large-expander">
     <div class="relative-position">
-        <a class="large-expander-trigger" (click)="collapsed=!collapsed" [class.collapsed]="collapsed" role="button" [attr.aria-expanded]="!collapsed"
+        <a class="large-expander-trigger-purple" (click)="collapsed=!collapsed" [class.collapsed]="collapsed" role="button" [attr.aria-expanded]="!collapsed"
             aria-controls="requestAddNew">
                   Request to add new students to this cohort
                 </a>
@@ -11,14 +11,14 @@
             class="margin-2em-top container-bordered section-medium-thin section-bottom-thin section-gray" id="addedStudents">
             <div class="container-medium-width">
                 <p class="text-purple"><b>Students to be added to {{rosterChangesModel.cohortName}} cohort roster</b></p>
-                <table class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none table-with-cell-padding last-row-no-border table-transparent datatable-gray-labels"
+                <table class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none table-with-cell-padding table-transparent datatable-gray-labels"
                     id="addTable">
                     <thead>
                         <tr class="gray-th">
                             <th scope="col">Name</th>
                             <th scope="col">Email Address</th>
-                            <th class="centered-th" scope="col" class="all">Grant untimed tests</th>
-                            <th scope="col" class="all"></th>
+                            <th class="centered-th" scope="col">Grant untimed tests</th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,8 +38,8 @@
                                 <label [attr.for]="'untimedTest' + student.email"></label></span>
 
                             </td>
-                            <td class="all tablesaw-stacked-hidden">
-                                <button class="button button-light button-small js-remove" (click)="removeAddedStudent(student, $event)">Remove</button>
+                            <td class="center tablesaw-stacked-hidden">
+                                <button class="button button-light button-small js-remove tablesaw-cell-content" (click)="removeAddedStudent(student, $event)">Remove</button>
                             </td>
                         </tr>
                     </tbody>
@@ -51,7 +51,7 @@
             class="margin-1em-top container-bordered section-medium-thin section-bottom-thin section-gray" id="addNewMoved">
             <div class="container-medium-width">
                 <p class="text-purple"><b>Students to be moved to {{rosterChangesModel.cohortName}} cohort roster</b></p>
-                <table data-tablesaw-mode="stack" class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none table-with-cell-padding last-row-no-border table-transparent datatable-gray-labels"
+                <table data-tablesaw-mode="stack" class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none table-with-cell-padding table-transparent datatable-gray-labels"
                     id="moveTable">
                     <thead>
                         <tr class="gray-th">
@@ -59,7 +59,7 @@
                             <th scope="col">Move from</th>
                             <th class="centered-th" scope="col">Mark as repeater</th>
                             <th class="centered-th" scope="col">Grant untimed tests</th>
-                            <th scope="col" class="all"></th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,8 +86,8 @@
                                 <label [attr.for]="'untimedTest1' + student.studentId"></label></span>
 
                             </td>
-                            <td class="tablesaw-stacked-hidden">
-                                <button class="button button-light button-small js-remove" (click)="removeMovedStudent(student,$event)">Remove</button>
+                            <td class="center tablesaw-stacked-hidden">
+                                <button class="button button-light button-small js-remove tablesaw-cell-content" (click)="removeMovedStudent(student,$event)">Remove</button>
                             </td>
                         </tr>
                     </tbody>
@@ -124,7 +124,7 @@
 
         <div *ngIf="existingStudents?.length>0" class="section-bottom-medium-thin" id="alreadyExists">
             <strong>This student already has a Kaplan account:</strong>
-            <table data-tablesaw-mode="stack" class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border table-with-cell-padding justified-ends last-row-no-border margin-1em-bottom datatable-gray-labels"
+            <table data-tablesaw-mode="stack" class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border table-with-cell-padding justified-ends margin-1em-bottom datatable-gray-labels"
                 id="alreadyExistsStudent">
                 <thead>
                     <tr class="gray-th">
