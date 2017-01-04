@@ -32,6 +32,8 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
     existingStudents: Array<ChangeUpdateRosterStudentsModel> = [];
     emailValidateSubscription: Subscription;
     errorMessage: string;
+    showExpiredMessage: boolean = false;
+    expiredMessage: string = rosters.expired_message;
     constructor(private common: CommonService, private validations: ValidationsService, private rosterSerivice: RosterService) { }
 
     ngOnInit() {
@@ -78,6 +80,7 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
                             existingStudent.moveFromCohortName = e.CohortName;
                             existingStudent.expired = ((!!e.CohortEndDate && moment(e.CohortEndDate).isBefore(new Date())) || (!!e.UserExpireDate && moment(e.UserExpireDate).isBefore(new Date())));
                             this.existingStudents.push(existingStudent);
+                            this.showExpiredMessage = _.some(this.existingStudents, 'expired');
                             this.bindTablesaw('alreadyExistsStudent', __this);
                         }
                     });
@@ -119,8 +122,9 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
         this.removeAddedStudentEvent.emit(student);
     }
 
-    clearToAddStudents(e: any) {
+    clearToAddStudents(e: any) {        
         e.preventDefault();
+        this.showExpiredMessage = false;
         this.existingStudents = [];
     }
 

@@ -143,7 +143,13 @@
         </tr>
     </tbody>
 </table>
-<button *ngIf="boundStudents && boundStudents.length>0" class="anchor-button margin-1em-top-bottom" (click)="clearSearchResults(searchTypeahead, $event)" id="clearResults">Clear search results</button>
+<div *ngIf="showExpiredMessage" class="icon-container-flush-text section-top-medium-thin">
+    <p class="icon info-icon-yellow">
+       {{expiredMessage}}
+    </p>
+</div>
+<button *ngIf="boundStudents && boundStudents.length>0" class="anchor-button margin-1em-top-bottom" (click)="clearSearchResults(searchTypeahead, $event)"
+    id="clearResults">Clear search results</button>
 </div>
 </div>
 <!-- End second expander -->
