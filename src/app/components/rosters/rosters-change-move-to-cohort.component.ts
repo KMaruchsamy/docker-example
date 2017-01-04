@@ -144,7 +144,8 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
                 lastName: student.LastName,
                 updateType: RosterUpdateTypes.MoveToThisCohort,
                 moved: this.isStudentMoved(student.StudentId),
-                isActive: student.IsActiveCohort
+                isActive: student.IsActiveCohort,
+                sameCohort: !!(student.CohortId === this.rosterChangesModel.cohortId)
             }
         });
     }

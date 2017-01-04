@@ -144,7 +144,7 @@
                             <span class="tablesaw-cell-content"> {{student.moveFromCohortName}}</span>
                         </td>
                         <td class="tablesaw-stacked-hidden">
-                            <button [disabled]="student?.expired" class="button button-small button-light" (click)="moveExistingStudent(student,$event)"
+                            <button [disabled]="student?.expired || student?.sameCohort" class="button button-small button-light" (click)="moveExistingStudent(student,$event)"
                                 id="moveExistingStudentButton">Request move <span class="hidden-small-phone-down">to this cohort</span></button>
                         </td>
                     </tr>
