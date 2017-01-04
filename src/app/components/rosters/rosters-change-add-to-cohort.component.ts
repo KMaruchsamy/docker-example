@@ -7,6 +7,7 @@ import { links } from '../../constants/config';
 import { CommonService } from '../../services/common.service';
 import { Subscription } from 'rxjs/Rx';
 import { rosters, general } from '../../constants/error-messages';
+import { RosterChangesModel } from '../../models/roster-changes.model';
 
 @Component({
     selector: 'rosters-add-to-cohort',
@@ -15,7 +16,7 @@ import { rosters, general } from '../../constants/error-messages';
 })
 export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
     collapsed: boolean = true;
-    @Input() rosterChangesModel;
+    @Input() rosterChangesModel:RosterChangesModel;
     valid: boolean = false;
     firstName: string;
     lastName: string;
@@ -79,6 +80,7 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
                             existingStudent.moveFromCohortId = e.CohortId;
                             existingStudent.moveFromCohortName = e.CohortName;
                             existingStudent.expired = ((!!e.CohortEndDate && moment(e.CohortEndDate).isBefore(new Date())) || (!!e.UserExpireDate && moment(e.UserExpireDate).isBefore(new Date())));
+                            existingStudent.sameCohort = (e.CohortId === __this.rosterChangesModel.cohortId);
                             this.existingStudents.push(existingStudent);
                             this.showExpiredMessage = _.some(this.existingStudents, 'expired');
                             this.bindTablesaw('alreadyExistsStudent', __this);
