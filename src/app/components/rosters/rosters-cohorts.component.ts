@@ -281,7 +281,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
     }
 
 
-    }
+    
 
 }
 
