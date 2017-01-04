@@ -5,9 +5,14 @@
             <button type="button" class="close close-small" aria-label="Close" (click)="CloseCohortPopup($event);"></button>
             <div class="modal-content-small">
                 <p class="text-purple" id="studentHeading"><b>{{studentNameToChangeRoster}}</b></p>
-                <div class="cohort-button-container">
-                    <button type="button" *ngFor="let roster of rostersList" class="button button-light button-unselected" id="{{roster.cohortId}}" (click)="moveToCohort(roster,$event)">{{rosterChangesModel.cohortId===roster.cohortId ? ('Keep in ' + roster.cohortName) :  roster.cohortName}}
-                    <img src="assets/images/green-checkmark_2x.png" [class.hidden]="!roster.isSelected" alt="cohort selected" width="16" height="12" /></button>
+                <div class="cohort-button-container" >
+                    <div *ngIf="rostersList.length>1">
+                        <button type="button" *ngFor="let roster of rostersList" class="button button-light button-unselected" id="{{roster.cohortId}}" (click)="moveToCohort(roster,$event)">
+                            {{rosterChangesModel.cohortId===roster.cohortId ? ('Keep in ' + roster.cohortName) :  roster.cohortName}}
+                            <img src="assets/images/green-checkmark_2x.png" [class.hidden]="!roster.isSelected" alt="cohort selected" width="16" height="12" />
+                        </button>
+                    </div>
+                    <h6 *ngIf="rostersList.length==1" style="text-align:center;color:#D0011B;"> We're sorry, there are no active cohorts available to which to move this student.</h6>
                 </div>
             </div>
         </div>

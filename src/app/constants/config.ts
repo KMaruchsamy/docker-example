@@ -1,7 +1,7 @@
 export const links = {
     api: {
         local: {
-            server: "https://dev01-nursing.kaptest.com/"
+            server: "https://qa-nursing.kaptest.com/"
         },
         dev: {
             server: "https://dev01-nursing.kaptest.com/"
@@ -155,7 +155,9 @@ export const TestShedulingPages = {
 export const RosterChangesPages = {
     MAKECHANGES: 'ROSTERS/CHANGE-UPDATE',
     REVIEWCHANGES: 'ROSTERS/ROSTER-CHANGES-SUMMARY',
-    CHANGESCONFIRMATION: 'ROSTERS/ROSTER-CHANGES-CONFIRMATION'
+    CHANGESCONFIRMATION: 'ROSTERS/ROSTER-CHANGES-CONFIRMATION',
+    CHANGESNOTE: '/rosters/changes-note',
+    VIEWROSTERS: '/rosters'
 }
 export const teststatus = {
     Completed: 'Completed',

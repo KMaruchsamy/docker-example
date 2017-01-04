@@ -74,10 +74,43 @@
                           <img src="assets/images/search-icon_2x.png" alt="Search Icon">
                     </button>
 </div>
+<div *ngIf="noStudents" class="margin-1em-top">
+    <span>{{noStudentsErrorMessage}}</span>
+</div>
 </form>
 </div>
+<!--<table class="table-fixed  last-row-no-border" id="searchResultsTable" *ngIf="boundStudents && boundStudents.length>0">
+    <thead>
+        <tr class="gray-th">
+            <th scope="col">Name</th>
+            <th scope="col">Cohort</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let student of boundStudents">
+            <td>
 
-<table data-tablesaw-mode="stack" class="table-fixed  tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none"
+                <i *ngIf="!student.isActive || student.moveFromCohortName?.toLowerCase() ==='inactive'">{{student.lastName}}, {{student.firstName}}</i>
+                <span *ngIf="student.isActive && student.moveFromCohortName?.toLowerCase() !=='inactive'">{{student.lastName}}, {{student.firstName}}</span>
+
+            </td>
+            <td>
+
+                <i *ngIf="!student.isActive || student.moveFromCohortName?.toLowerCase() ==='inactive'"> {{student.moveFromCohortName}}</i>
+                <span *ngIf="student.isActive && student.moveFromCohortName?.toLowerCase() !=='inactive'"> {{student.moveFromCohortName}}</span>
+
+
+            </td>
+            <td>
+                <button [disabled]="!!student.moved || student?.moveFromCohortExpired" class="button button-small button-light js-move" (click)="move(student, $event)">Request move <span class="hidden-small-phone-down">to this cohort</span></button>
+            </td>
+        </tr>
+    </tbody>
+</table>-->
+
+
+<table data-tablesaw-mode="stack" class="table-fixed tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none"
     id="searchResultsTable" *ngIf="boundStudents && boundStudents.length>0">
     <thead>
         <tr class="gray-th">
@@ -110,6 +143,7 @@
         </tr>
     </tbody>
 </table>
+<button *ngIf="boundStudents && boundStudents.length>0" class="anchor-button margin-1em-top-bottom" (click)="clearSearchResults(searchTypeahead, $event)" id="clearResults">Clear search results</button>
 </div>
 </div>
 <!-- End second expander -->
