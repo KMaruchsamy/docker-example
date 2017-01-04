@@ -48,7 +48,7 @@ export class RosterChangesService {
         if (institution) {
             return {
                 accountManagerId: institution.AccountManagerId,
-                institutionName: institution.InstitutionName
+                institutionName: institution.InstitutionNameWithProgOfStudy
             }
         }
     }

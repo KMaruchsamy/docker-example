@@ -258,23 +258,8 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
             }, error => console.log(error));
     }
 
-    directToChangeForm(cohortId, cohortName) {
-        this.rosterChangesModel.institutionId = this.institutionId;
-        this.rosterChangesModel.cohortId = cohortId;
-        this.rosterChangesModel.cohortName = cohortName;
-        this.sStorage = this.common.getStorage();
-        this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel))
-        this.apiServer = this.auth.common.getApiServer();
 
-        // check if cohort has Account Manager associated with it
-        if (this.rosters.accountManagerId) {
-            this.getUserPreference();
-        } else {
-            this.router.navigate(['/rosters/no-account-manager']);
-        }
-    }
-
-    directToExtendAccess(cohortId, cohortName) {
+    directToChangeOrExtendForm(cohortId, cohortName, targetRoute) {
         //save model
         this.rosterChangesModel.institutionId = this.institutionId;
         this.rosterChangesModel.cohortId = cohortId;
@@ -282,9 +267,20 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         this.sStorage = this.common.getStorage();
         this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel))
         this.apiServer = this.auth.common.getApiServer();
+        // check if cohort has Account Manager associated with it
+        if (this.rosters.accountManagerId) {
+            if(targetRoute === 'change-form') {
+                this.getUserPreference();
+            } else {
+            // redirect to extend access page
+            this.router.navigate(['/rosters/extend-access']);
+            }
+        } else {
+            this.router.navigate(['/rosters/no-account-manager']);
+        }
+    }
 
-        // redirect to extend access page
-        this.router.navigate(['/rosters/extend-access']);
+
     }
 
 }

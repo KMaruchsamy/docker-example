@@ -11,7 +11,8 @@
             class="margin-2em-top container-bordered section-medium-thin section-bottom-thin section-gray" id="addedStudents">
             <div class="container-medium-width">
                 <p class="text-purple"><b>Students to be added to {{rosterChangesModel.cohortName}} cohort roster</b></p>
-                <table  class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none table-with-cell-padding last-row-no-border table-transparent datatable-gray-labels" id="addTable">
+                <table class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none table-with-cell-padding last-row-no-border table-transparent datatable-gray-labels"
+                    id="addTable">
                     <thead>
                         <tr class="gray-th">
                             <th scope="col">Name</th>
@@ -22,20 +23,20 @@
                     </thead>
                     <tbody>
                         <tr class="tablesaw-stacked-hidden-border" *ngFor="let student of rosterChangesModel.students | filterrosterchange:rosterUpdateType.AddToThisCohort:rosterUpdateType.AddToThisCohort">
-                            <td data-label="Name" >
-                                 <b class="tablesaw-cell-label">Name</b>
+                            <td data-label="Name">
+                                <b class="tablesaw-cell-label">Name</b>
                                 <span class="tablesaw-cell-content">{{student.lastName}}, {{student.firstName}}</span>
-                                </td>
+                            </td>
                             <td data-label="email" class="tablesaw-stacked-hidden">
-                                 <b class="tablesaw-cell-label">Email Address</b>
+                                <b class="tablesaw-cell-label">Email Address</b>
                                 <span class="tablesaw-cell-content">{{student.email}}</span>
                             </td>
                             <td class="center tablesaw-stacked-hidden">
-                                 <b class="tablesaw-cell-label">Grant untimed tests</b>
+                                <b class="tablesaw-cell-label">Grant untimed tests</b>
                                 <span class="tablesaw-cell-content"><input type="checkbox" class="checkbox-image" [attr.id]="'untimedTest' + student.email" (change)="updateAddedStudentUntimed(student, $event)"
                                     [checked]="student?.isGrantUntimedTest">
                                 <label [attr.for]="'untimedTest' + student.email"></label></span>
-                                
+
                             </td>
                             <td class="all tablesaw-stacked-hidden">
                                 <button class="button button-light button-small js-remove" (click)="removeAddedStudent(student, $event)">Remove</button>
@@ -50,7 +51,8 @@
             class="margin-1em-top container-bordered section-medium-thin section-bottom-thin section-gray" id="addNewMoved">
             <div class="container-medium-width">
                 <p class="text-purple"><b>Students to be moved to {{rosterChangesModel.cohortName}} cohort roster</b></p>
-                <table data-tablesaw-mode="stack" class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none table-with-cell-padding last-row-no-border table-transparent datatable-gray-labels" id="moveTable">
+                <table data-tablesaw-mode="stack" class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none table-with-cell-padding last-row-no-border table-transparent datatable-gray-labels"
+                    id="moveTable">
                     <thead>
                         <tr class="gray-th">
                             <th scope="col">Name</th>
@@ -63,26 +65,26 @@
                     <tbody>
                         <tr class="tablesaw-stacked-hidden-border" *ngFor="let student of rosterChangesModel?.students|filterrosterchange:rosterUpdateType.MoveToThisCohort:rosterUpdateType.AddToThisCohort">
                             <td>
-                                 <b class="tablesaw-cell-label">Name</b>
+                                <b class="tablesaw-cell-label">Name</b>
                                 <span class="tablesaw-cell-content"> {{student.lastName}}, {{student.firstName}}</span>
-                               </td>
+                            </td>
                             <td class="tablesaw-stacked-hidden">
-                                 <b class="tablesaw-cell-label">Move from</b>
+                                <b class="tablesaw-cell-label">Move from</b>
                                 <span class="tablesaw-cell-content">{{student.moveFromCohortName}}</span>
-                                </td>
+                            </td>
                             <td class="center tablesaw-stacked-hidden">
-                                 <b class="tablesaw-cell-label">Move from</b>
+                                <b class="tablesaw-cell-label">Move from</b>
                                 <span class="tablesaw-cell-content">  <input type="checkbox" class="checkbox-image" [attr.id]="'repeater1' + student.studentId" (change)="updateRepeater(student, $event)"
                                     [checked]="student?.isRepeater">
                                 <label [attr.for]="'repeater1' + student.studentId"></label></span>
-                               
+
                             </td>
                             <td class="center tablesaw-stacked-hidden">
-                                 <b class="tablesaw-cell-label">Mark as repeater</b>
+                                <b class="tablesaw-cell-label">Mark as repeater</b>
                                 <span class="tablesaw-cell-content">  <input type="checkbox" class="checkbox-image" [attr.id]="'untimedTest1' + student.studentId" (change)="updateUntimed(student, $event)"
                                     [checked]="student?.isGrantUntimedTest">
                                 <label [attr.for]="'untimedTest1' + student.studentId"></label></span>
-                               
+
                             </td>
                             <td class="tablesaw-stacked-hidden">
                                 <button class="button button-light button-small js-remove" (click)="removeMovedStudent(student,$event)">Remove</button>
@@ -122,7 +124,8 @@
 
         <div *ngIf="existingStudents?.length>0" class="section-bottom-medium-thin" id="alreadyExists">
             <strong>This student already has a Kaplan account:</strong>
-            <table data-tablesaw-mode="stack" class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border table-with-cell-padding justified-ends last-row-no-border margin-1em-bottom datatable-gray-labels" id="alreadyExistsStudent">
+            <table data-tablesaw-mode="stack" class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border table-with-cell-padding justified-ends last-row-no-border margin-1em-bottom datatable-gray-labels"
+                id="alreadyExistsStudent">
                 <thead>
                     <tr class="gray-th">
                         <th scope="col">Name</th>
@@ -134,18 +137,24 @@
                     <tr class="tablesaw-stacked-hidden-border" *ngFor="let student of existingStudents">
                         <td>
                             <b class="tablesaw-cell-label">Name</b>
-                                <span class="tablesaw-cell-content"> {{student.lastName}}, {{student.firstName}}
+                            <span class="tablesaw-cell-content"> {{student.lastName}}, {{student.firstName}}
                             <br />{{student.email}}</span>
-                            </td>
+                        </td>
                         <td class="tablesaw-stacked-hidden"> <b class="tablesaw-cell-label">Cohort</b>
-                                <span class="tablesaw-cell-content"> {{student.moveFromCohortName}}</span>
-                            </td>
+                            <span class="tablesaw-cell-content"> {{student.moveFromCohortName}}</span>
+                        </td>
                         <td class="tablesaw-stacked-hidden">
-                            <button [disabled]="student?.expired" class="button button-small button-light" (click)="moveExistingStudent(student,$event)" id="moveExistingStudentButton">Request move <span class="hidden-small-phone-down">to this cohort</span></button>
+                            <button [disabled]="student?.expired" class="button button-small button-light" (click)="moveExistingStudent(student,$event)"
+                                id="moveExistingStudentButton">Request move <span class="hidden-small-phone-down">to this cohort</span></button>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <div *ngIf="showExpiredMessage" class="icon-container-flush-text section-top-medium-thin">
+                <p class="icon info-icon-yellow">
+                    {{expiredMessage}}
+                </p>
+            </div>
             <button class="anchor-button" (click)="clearToAddStudents($event)">Clear results</button>
 
         </div>

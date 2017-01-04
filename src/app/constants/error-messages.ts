@@ -65,5 +65,6 @@ export const reset_student_password = {
 
 export const rosters = {
     student_already_added: 'You have already added this student',
-    no_students :'We’re sorry, there are no students that match your search. Please try again.'
+    no_students: 'We’re sorry, there are no students that match your search. Please try again.',
+    expired_message : 'Students with expired access or in cohorts with expired access cannot be moved. Please contact your Account Manager for assistance.'
 };

@@ -37,6 +37,8 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     @Output() updateRepeaterEvent = new EventEmitter();
     noStudents: boolean = false;
     noStudentsErrorMessage: string = rosters.no_students;
+    showExpiredMessage: boolean = false;
+    expiredMessage: string = rosters.expired_message;
     constructor(
         private common: CommonService,
         private rosterService: RosterService,
@@ -158,6 +160,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
                 this.noStudents = true;
             else
                 this.noStudents = false;
+            this.showExpiredMessage = _.some(this.boundStudents, 'moveFromCohortExpired');
             setTimeout(function () {
                 // $(document).trigger("enhance.tablesaw");
                 __this.toggleTd();
@@ -243,6 +246,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         this.searchedStudents = [];
         this.searchString = '';
         this.prevSearchText = '';
+        this.showExpiredMessage = false;
         $('.typeahead').typeahead('destroy');
     }
 
