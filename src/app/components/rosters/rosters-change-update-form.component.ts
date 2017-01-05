@@ -96,7 +96,6 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 "info": false,
                 "ordering": false,
                 "scrollY": "300px",
-                "scrollCollapse": true,
                 "columns": [
                     null,
                     null,

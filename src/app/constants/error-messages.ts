@@ -65,6 +65,10 @@ export const reset_student_password = {
 
 export const rosters = {
     student_already_added: 'You have already added this student',
+    student_has_kaplan_account: 'This student already has a Kaplan account:',   
+    student_has_kaplan_account_expired : 'This student already has a Kaplan account, but their access has expired. Please contact your Account Manager for more information.',
+    student_has_kaplan_account_different_institution: 'This student already has a Kaplan account, but cannot be moved to this cohort at this time. Please contact your Account Manager for more information',
+    student_already_in_cohort: 'Student is already in this cohort',
     no_students: 'We’re sorry, there are no students that match your search. Please try again.',
-    expired_message : 'Students with expired access or in cohorts with expired access cannot be moved. Please contact your Account Manager for assistance.'
+    expired_message : 'Students with expired access cannot be moved. Please contact your Account Manager for assistance.'
 };
