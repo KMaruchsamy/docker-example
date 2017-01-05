@@ -122,9 +122,9 @@
             </p>
         </form>
 
-        <div *ngIf="existingStudents?.length>0" class="section-bottom-medium-thin" id="alreadyExists">
-            <strong>This student already has a Kaplan account:</strong>
-            <table data-tablesaw-mode="stack" class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border table-with-cell-padding justified-ends margin-1em-bottom datatable-gray-labels"
+        <div *ngIf="!!existingStudent && !!existingStudent?.studentId" class="section-bottom-medium-thin" id="alreadyExists">
+            <p><strong>{{message}}</strong></p>
+            <table  data-tablesaw-mode="stack" class="tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border table-with-cell-padding justified-ends margin-1em-bottom datatable-gray-labels"
                 id="alreadyExistsStudent">
                 <thead>
                     <tr class="gray-th">
@@ -134,29 +134,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="tablesaw-stacked-hidden-border" *ngFor="let student of existingStudents">
+                    <tr class="tablesaw-stacked-hidden-border">
                         <td>
                             <b class="tablesaw-cell-label">Name</b>
-                            <span class="tablesaw-cell-content"> {{student.lastName}}, {{student.firstName}}
-                            <br />{{student.email}}</span>
+                            <span class="tablesaw-cell-content"> {{existingStudent?.lastName}}, {{existingStudent?.firstName}}
+                            <br />{{existingStudent?.email}}</span>
                         </td>
                         <td class="tablesaw-stacked-hidden"> <b class="tablesaw-cell-label">Cohort</b>
-                            <span class="tablesaw-cell-content"> {{student.moveFromCohortName}}</span>
+                            <span class="tablesaw-cell-content"> {{existingStudent?.moveFromCohortName}}</span>
                         </td>
                         <td class="tablesaw-stacked-hidden">
-                            <button [disabled]="student?.expired || student?.sameCohort" class="button button-small button-light" (click)="moveExistingStudent(student,$event)"
+                            <button [disabled]="existingStudent?.expired || existingStudent?.sameCohort" class="button button-small button-light" (click)="moveExistingStudent(existingStudent,$event)"
                                 id="moveExistingStudentButton">Request move <span class="hidden-small-phone-down">to this cohort</span></button>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <div *ngIf="showExpiredMessage" class="icon-container-flush-text section-top-medium-thin">
+            <!--<div *ngIf="showExpiredMessage" class="icon-container-flush-text section-top-medium-thin">
                 <p class="icon info-icon-yellow">
                     {{expiredMessage}}
                 </p>
-            </div>
+            </div>-->
             <button class="anchor-button" (click)="clearToAddStudents($event)">Clear results</button>
 
+        </div>
+
+
+        <div *ngIf="!existingStudent?.studentId && !!existingStudent?.email" class="section-bottom-medium-thin">
+           <p><strong>{{message}}</strong></p>
+            <p class="text-larger-margin">{{existingStudent?.email}}</p>
+            <button class="anchor-button" (click)="clearToAddStudents($event)">Clear results</button>
         </div>
     </div>
 </div>

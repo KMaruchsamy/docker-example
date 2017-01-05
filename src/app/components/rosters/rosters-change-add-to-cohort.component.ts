@@ -16,7 +16,7 @@ import { RosterChangesModel } from '../../models/roster-changes.model';
 })
 export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
     collapsed: boolean = true;
-    @Input() rosterChangesModel:RosterChangesModel;
+    @Input() rosterChangesModel: RosterChangesModel;
     valid: boolean = false;
     firstName: string;
     lastName: string;
@@ -30,11 +30,13 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
     @Output() updateUntimedEvent = new EventEmitter();
     @Output() updateRepeaterEvent = new EventEmitter();
     @Output() updateAddedStudentUntimedEvent = new EventEmitter();
-    existingStudents: Array<ChangeUpdateRosterStudentsModel> = [];
+    // existingStudents: Array<ChangeUpdateRosterStudentsModel> = [];
+    existingStudent: any;
     emailValidateSubscription: Subscription;
     errorMessage: string;
     showExpiredMessage: boolean = false;
     expiredMessage: string = rosters.expired_message;
+    message: string = '';
     constructor(private common: CommonService, private validations: ValidationsService, private rosterSerivice: RosterService) { }
 
     ngOnInit() {
@@ -70,19 +72,26 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
             .map(response => response.json())
             .subscribe((json: any) => {
                 if (json && json.length > 0) {
-                    let existingStudent: any = {};
+
                     json.forEach(e => {
                         if (e.InstitutionId === +__this.rosterChangesModel.institutionId) {
-                            existingStudent.studentId = e.StudentId;
-                            existingStudent.firstName = e.FirstName;
-                            existingStudent.lastName = e.LastName;
-                            existingStudent.email = e.Email;
-                            existingStudent.moveFromCohortId = e.CohortId;
-                            existingStudent.moveFromCohortName = e.CohortName;
-                            existingStudent.expired = ((!!e.CohortEndDate && moment(e.CohortEndDate).isBefore(new Date())) || (!!e.UserExpireDate && moment(e.UserExpireDate).isBefore(new Date())));
-                            existingStudent.sameCohort = (e.CohortId === __this.rosterChangesModel.cohortId);
-                            this.existingStudents.push(existingStudent);
-                            this.showExpiredMessage = _.some(this.existingStudents, 'expired');
+                            __this.existingStudent = {};
+                            __this.existingStudent.studentId = e.StudentId;
+                            __this.existingStudent.firstName = e.FirstName;
+                            __this.existingStudent.lastName = e.LastName;
+                            __this.existingStudent.email = e.Email;
+                            __this.existingStudent.moveFromCohortId = e.CohortId;
+                            __this.existingStudent.moveFromCohortName = e.CohortName;
+                            __this.existingStudent.expired = ((!!e.CohortEndDate && moment(e.CohortEndDate).isBefore(new Date())) || (!!e.UserExpireDate && moment(e.UserExpireDate).isBefore(new Date())));
+                            __this.existingStudent.sameCohort = (e.CohortId === __this.rosterChangesModel.cohortId);
+                            // this.existingStudents.push(existingStudent);
+                            // this.showExpiredMessage = __this.existingStudent.expired;
+                            if (__this.existingStudent.expired)
+                                __this.message = rosters.student_has_kaplan_account_expired;
+                            else if (__this.existingStudent.sameCohort)
+                                __this.message = rosters.student_already_in_cohort;
+                            else
+                                __this.message = rosters.student_has_kaplan_account;
                             this.bindTablesaw('alreadyExistsStudent', __this);
                         }
                     });
@@ -99,11 +108,18 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
                     this.bindTablesaw('addTable', __this);
                 }
             }, (error) => {
-                if (+error.status === +errorcodes.API)
-                    __this.errorMessage = error.json().msg;
+                this.message = '';
+                __this.existingStudent = null;
+                if (+error.status === +errorcodes.API) {
+                    __this.existingStudent = {};
+                    __this.existingStudent.email = __this.email;
+                    __this.message = rosters.student_has_kaplan_account_different_institution;
+                    __this.checkValid();
+                }
                 else
                     __this.errorMessage = general.exception;
-                this.checkValid();
+                __this.resetModal();
+                __this.checkValid();
             }, () => {
                 this.resetModal();
                 this.checkValid();
@@ -124,10 +140,10 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
         this.removeAddedStudentEvent.emit(student);
     }
 
-    clearToAddStudents(e: any) {        
+    clearToAddStudents(e: any) {
         e.preventDefault();
         this.showExpiredMessage = false;
-        this.existingStudents = [];
+        this.existingStudent = null;
     }
 
     moveExistingStudent(student: any, e: any) {
@@ -145,7 +161,8 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
         studentToMove.updateType = RosterUpdateTypes.MoveToThisCohort;
         studentToMove.addedFrom = RosterUpdateTypes.AddToThisCohort;
         this.moveExistingStudentEvent.emit(studentToMove);
-        _.remove(this.existingStudents, { 'studentId': +studentToMove.studentId });
+        // _.remove(this.existingStudents, { 'studentId': +studentToMove.studentId });
+        __this.existingStudent = null;
         this.bindTablesaw('moveTable', __this);
     }
 
