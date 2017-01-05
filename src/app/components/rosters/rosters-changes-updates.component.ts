@@ -148,13 +148,19 @@ export class RostersChangesUpdatesComponent implements OnInit {
             let student: ChangeUpdateRosterStudentsModel = e;
             let studentToUpdate: ChangeUpdateRosterStudentsModel = _.find(this.rosterChangesModel.students, { 'studentId': student.studentId });
             if (studentToUpdate) {
-                studentToUpdate.moveToCohortId = student.moveToCohortId;
-                studentToUpdate.moveToCohortName = student.moveToCohortName;
+                if (student.moveToCohortId !== null) {
+                    studentToUpdate.moveToCohortId = student.moveToCohortId;
+                    studentToUpdate.moveToCohortName = student.moveToCohortName;
+                }
+                else
+                    _.remove(this.rosterChangesModel.students, function (s) {
+                        return s.studentId == student.studentId;
+                    });
             }
             else
-                this.rosterChangesModel.students.push(student);
+                if (student.moveToCohortId !== null)
+                    this.rosterChangesModel.students.push(student);
         }
-        console.log('changeToDifferentCohort=' + JSON.stringify(this.rosterChangesModel));
     }
 
     addToCohort(student: any) {

@@ -1,4 +1,4 @@
-﻿import { Component, Input,Output, OnInit, OnDestroy ,EventEmitter} from '@angular/core';
+﻿import { Component, Input, Output, OnInit, OnDestroy, EventEmitter} from '@angular/core';
 import {NgFor} from '@angular/common';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { links } from '../../constants/config';
@@ -40,12 +40,12 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-    this.sStorage = this.common.getStorage();
-    this.rostersList = JSON.parse(this.sStorage.getItem('rosterlist'));
-    if (this.rostersList === null || this.rostersList.length === 0) {
-        this.rostersList = [];
-        this.rosterCohorts();
-    }
+        this.sStorage = this.common.getStorage();
+        this.rostersList = JSON.parse(this.sStorage.getItem('rosterlist'));
+        if (this.rostersList === null || this.rostersList.length === 0) {
+            this.rostersList = [];
+            this.rosterCohorts();
+        }
     }
     rosterCohorts() {
         let institutionId = this.rosterChangesModel.institutionId;
@@ -72,7 +72,7 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
         if (roster) {
             let __this = this;
             let _keepInCohort: any;
-            let seperateExtensionCohort: RosterCohortsModel[]=[];
+            let seperateExtensionCohort: RosterCohortsModel[] = [];
             this.rosters.institutionId = roster.InstitutionId;
             this.rosters.institutionName = roster.InstitutionName;
             this.rosters.institutionNameWithProgOfStudy = roster.InstitutionNameWithProgOfStudy;
@@ -90,10 +90,10 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
                         return new Date(o.CohortEndDate);
                     }
                 }, 'desc');
-               
+
                 this.rosters.cohorts = _.map(seperateExtensionCohort, (cohort: any) => {
                     let rosterCohort = new RosterCohortsModel();
-                    rosterCohort.cohortId = cohort.CohortId;                    
+                    rosterCohort.cohortId = cohort.CohortId;
                     rosterCohort.cohortName = cohort.CohortName;
                     rosterCohort.cohortStartDate = cohort.CohortStartDate;
                     rosterCohort.cohortEndDate = cohort.CohortEndDate;
@@ -103,7 +103,7 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
                 _.filter(this.rosters.cohorts, function (o) {
                     if (__this.rosterChangesModel.cohortId !== o.cohortId)
                         __this.rostersList.push(o);
-                    else 
+                    else
                         _keepInCohort = o;
                 });
                 this.rostersList.push(_keepInCohort);
@@ -111,7 +111,7 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
             }
         }
     }
-   
+
     CloseCohortPopup(e) {
         e.preventDefault();
         this.requestChangeCohortPopup.emit(this.rosterChangeUpdateStudents);
@@ -123,26 +123,33 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
         let updatedStudent: ChangeUpdateRosterStudentsModel;
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
             if (_student.studentId === __this.toChangeRosterStudentId) {
-                _student.moveToCohortId = _roster.cohortId;
-                _student.moveToCohortName = _roster.cohortName;
+                if (__this.rosterChangesModel.cohortId !== _roster.cohortId) {
+                    _student.moveToCohortId = _roster.cohortId;
+                    _student.moveToCohortName = _roster.cohortName;
+                }
+                else {
+                    _student.moveToCohortId = null;
+                    _student.moveToCohortName = null;
+                }
                 _student.updateType = 1;
                 updatedStudent = _student;
                 __this.updateRosterList(_roster.cohortId);
             }
         });
-        setTimeout(()=> {
+        setTimeout(() => {
             this.requestChangeCohortPopup.emit(updatedStudent);
-        },100);
-       
+        }, 100);
+
     }
 
-    updateRosterList(rosterid)
-    {
+    updateRosterList(rosterid) {
         let __this = this;
         _.filter(this.rostersList, (o) => {
-            if (o.cohortId == rosterid)
+            if (o.cohortId == rosterid && __this.rosterChangesModel.cohortId !== rosterid)
                 o.isSelected = true;
+            else
+                o.isSelected = false;
         });
     }
-        
+
 }
