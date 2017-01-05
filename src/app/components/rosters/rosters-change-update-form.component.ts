@@ -95,7 +95,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 "searching": false,
                 "info": false,
                 "ordering": false,
-                "scrollY": "300px",
+                "scrollY": this.rosterChangeUpdateStudents.length > 6 ? "300px" : false,
                 "columns": [
                     null,
                     null,
