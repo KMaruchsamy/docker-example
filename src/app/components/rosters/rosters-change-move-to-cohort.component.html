@@ -138,7 +138,7 @@
 
             </td>
             <td class="center tablesaw-stacked-hidden">
-                <button [disabled]="!!student.moved || student?.moveFromCohortExpired || student?.sameCohort" class="button button-small button-light js-move" (click)="move(student, $event)">Request move <span class="hidden-small-phone-down">to this cohort</span></button>
+                <button [disabled]="!!student.moved || student?.moveFromCohortExpired || student?.sameCohort" class="button button-small button-light js-move" (click)="move(student, $event)">{{student?.buttonText}}</button>
             </td>
         </tr>
     </tbody>
