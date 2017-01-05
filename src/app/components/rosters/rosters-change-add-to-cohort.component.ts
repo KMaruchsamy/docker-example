@@ -84,6 +84,7 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
                             __this.existingStudent.moveFromCohortName = e.CohortName;
                             __this.existingStudent.expired = ((!!e.CohortEndDate && moment(e.CohortEndDate).isBefore(new Date())) || (!!e.UserExpireDate && moment(e.UserExpireDate).isBefore(new Date())));
                             __this.existingStudent.sameCohort = (e.CohortId === __this.rosterChangesModel.cohortId);
+                            __this.existingStudent.buttonText = __this.getButtonText(__this.existingStudent.expired, __this.existingStudent.sameCohort);
                             // this.existingStudents.push(existingStudent);
                             // this.showExpiredMessage = __this.existingStudent.expired;
                             if (__this.existingStudent.expired)
@@ -126,6 +127,14 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
             });
 
 
+    }
+
+    protected getButtonText(expired: boolean, sameCohort: boolean): string {
+        if (expired)
+            return rosters.btn_access_expired;
+        else if (sameCohort)
+            return rosters.btn_same_cohort;            
+        return `Request move to this cohort`;
     }
 
     private resetModal() {

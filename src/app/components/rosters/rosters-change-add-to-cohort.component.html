@@ -145,7 +145,7 @@
                         </td>
                         <td class="tablesaw-stacked-hidden">
                             <button [disabled]="existingStudent?.expired || existingStudent?.sameCohort" class="button button-small button-light" (click)="moveExistingStudent(existingStudent,$event)"
-                                id="moveExistingStudentButton">Request move <span class="hidden-small-phone-down">to this cohort</span></button>
+                                id="moveExistingStudentButton" > {{existingStudent?.buttonText}}</button>
                         </td>
                     </tr>
                 </tbody>
