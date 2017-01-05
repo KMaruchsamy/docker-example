@@ -20,18 +20,18 @@
                             <tr *ngFor="let cohortStudent of rosterChangeUpdateStudents">
                                 <td class="js-student-name">{{cohortStudent.lastName}}, {{cohortStudent.firstName}}</td>
                                 <td>
-                                    <button  id="btnChangeToCohort_{{cohortStudent.studentId}}" [disabled]="cohortStudent.isInactive" class="button button-small button-light js-choose-cohort button-fixed-width" [class.button-no-change]="!(cohortStudent.isInactive) && !(cohortStudent.moveToCohortId !== null )" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">{{cohortStudent.moveToCohortName ===null ?'Choose an active cohort' : cohortStudent.moveToCohortName}}</button>
+                                    <button  id="btnChangeToCohort_{{cohortStudent.studentId}}" [disabled]="cohortStudent.isInactive ||(cohortStudent.userExpiryDate !== null )" class="button button-small button-light js-choose-cohort button-fixed-width" [class.button-no-change]="(cohortStudent.userExpiryDate === null && !(cohortStudent.isInactive) && !(cohortStudent.moveToCohortId !== null ))" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">{{cohortStudent.moveToCohortName ===null ?'Choose an active cohort' : cohortStudent.moveToCohortName}}</button>
                                 </td>
                                 <td>
-                                    <input  type="checkbox" class="checkbox-image js-disable js-repeat" [checked]="cohortStudent.isRepeater" id="chkRepeat_{{cohortStudent.studentId}}" (change)="checkRepeater(cohortStudent.studentId,$event)" [disabled]="!enableRepeaterCheckbox || (cohortStudent.moveToCohortId ===null) || cohortStudent.isInactive" />
+                                    <input  type="checkbox" class="checkbox-image js-disable js-repeat" [checked]="cohortStudent.isRepeater" id="chkRepeat_{{cohortStudent.studentId}}" (change)="checkRepeater(cohortStudent.studentId,$event)" [disabled]="!enableRepeaterCheckbox || (cohortStudent.moveToCohortId ===null) || cohortStudent.isInactive || (cohortStudent.userExpiryDate !== null )" />
                                     <label  for="chkRepeat_{{cohortStudent.studentId}}"></label>
                                 </td>
                                 <td>
-                                    <input  type="checkbox" [checked]="cohortStudent.isInactive" class="checkbox-image js-drop" id="inactive_{{cohortStudent.studentId}}" (change)="checkInactive(cohortStudent.studentId,$event)" [disabled]="(cohortStudent.moveToCohortId !== null )|| cohortStudent.isGrantUntimedTest"/>
+                                    <input  type="checkbox" [checked]="cohortStudent.isInactive" class="checkbox-image js-drop" id="inactive_{{cohortStudent.studentId}}" (change)="checkInactive(cohortStudent.studentId,$event)" [disabled]="(cohortStudent.userExpiryDate !== null )||(cohortStudent.moveToCohortId !== null )|| cohortStudent.isGrantUntimedTest"/>
                                     <label  for="inactive_{{cohortStudent.studentId}}"></label>
                                 </td>
                                 <td>
-                                    <input  [checked]="cohortStudent.isGrantUntimedTest" type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA_{{cohortStudent.studentId}}" (change)="checkGrantUntimedTest(cohortStudent.studentId,$event)" [disabled]="cohortStudent.isInactive" />
+                                    <input  [checked]="cohortStudent.isGrantUntimedTest" type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA_{{cohortStudent.studentId}}" (change)="checkGrantUntimedTest(cohortStudent.studentId,$event)" [disabled]="cohortStudent.isInactive || (cohortStudent.userExpiryDate !== null )" />
                                     <label  for="ADA_{{cohortStudent.studentId}}"></label>
                                 </td>
                             </tr>
