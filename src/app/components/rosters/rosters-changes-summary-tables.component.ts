@@ -22,6 +22,8 @@ export class RosterChangesSummaryTablesComponent implements OnInit {
     changedStudents: Array<any>;
     movedToStudents: Array<any>;
     addedStudents: Array<any>;
+    hasActionMoved: boolean;
+    hasActionAdded: boolean;
 
     constructor(public auth: AuthService, public router: Router, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
     }
@@ -35,6 +37,7 @@ export class RosterChangesSummaryTablesComponent implements OnInit {
             this.findMovedFromThisCohortStudents();
             this.findMovedToThisCohortStudents();
             this.findAddedStudents();
+            this.findActions();
         }
     }
 
@@ -48,6 +51,16 @@ export class RosterChangesSummaryTablesComponent implements OnInit {
 
     findAddedStudents(): void {
         this.addedStudents =  _.filter(this.rosterChangesModel.students, ['updateType', RosterUpdateTypes.AddToThisCohort]);
+    }
+
+    findActions(): void {
+        let movedHasRepeaters = _.filter(this.movedToStudents, ['isRepeater', true]);
+        let movedHasUntimedTests = _.filter(this.movedToStudents, ['isGrantUntimedTest', true]);
+        this.hasActionMoved = ( movedHasRepeaters.length > 0 || movedHasUntimedTests.length > 0 );
+
+        let addedHasRepeaters = _.filter(this.addedStudents, ['isRepeater', true]);
+        let addedHasUntimedTests = _.filter(this.addedStudents, ['isGrantUntimedTest', true]);
+        this.hasActionAdded = ( addedHasRepeaters.length > 0 || addedHasUntimedTests.length > 0 );
     }
 
 

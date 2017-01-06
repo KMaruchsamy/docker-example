@@ -25,13 +25,13 @@
   <table class="table-fixed table-with-cell-padding justified-ends last-row-no-border margin-1em-top-bottom">
     <thead class="gray-th">
       <tr>
-        <th scope="col">Name</th><th scope="col">Move from</th><th scope="col">Action</th>
+        <th scope="col">Name</th><th scope="col">Current Cohort</th><th scope="col"><span *ngIf="hasActionMoved">Action</span></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let student of movedToStudents">
         <td>{{student.lastName}}, {{student.firstName}}</td>
-        <td>Move from {{student.moveFromCohortName}}</td>
+        <td>{{student.moveFromCohortName}}</td>
         <td>
           <span *ngIf="student.isRepeater">Mark as repeater</span>
           <span *ngIf="student.isGrantUntimedTest">Grant untimed tests</span>
@@ -46,7 +46,7 @@
   <table class="table-fixed table-with-cell-padding justified-ends last-row-no-border margin-1em-top-bottom">
     <thead class="gray-th">
       <tr>
-        <th scope="col">Name</th><th scope="col">Email</th><th scope="col">Action</th>
+        <th scope="col">Name</th><th scope="col">Email</th><th scope="col"><span *ngIf="hasActionAdded">Action</span></th>
       </tr>
     </thead>
     <tbody>

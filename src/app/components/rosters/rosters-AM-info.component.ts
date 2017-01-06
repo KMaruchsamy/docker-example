@@ -48,6 +48,7 @@ export class RostersAMInfoComponent implements OnDestroy {
                     self.rosterChangesModel.accountManagerFirstName = json.FirstName;
                     self.rosterChangesModel.accountManagerLastName = json.LastName;
                     self.rosterChangesModel.accountManagerPhoneNumber = json.Telephone;
+                    self.rosterChangesModel.accountManagerEmail = json.Email;
                     self.rosterChangesModel.accountManagerPhotoURI = json.Photo.PhotoUrl;
                 } 
             },
