@@ -1,3 +1,5 @@
+<h4 class="h5" *ngIf="!extendAccessStudents">Summary of Requested Changes/Updates:</h4>
+
 <div *ngIf="changedStudents && changedStudents.length > 0" class="section-medium-thin section-bottom-thin">
   <h5 class="text-larger-teal">Changes to students currently in {{rosterChangesModel.cohortName}} cohort roster</h5>
   <table class="table-fixed table-with-cell-padding justified-ends last-row-no-border margin-1em-top-bottom">
@@ -66,4 +68,11 @@
 <div *ngIf="rosterChangesModel?.instructions && rosterChangesModel?.instructions.length > 0" class="section-medium-thin clearfix">
   <h5  class="text-larger-teal">Additional changes, updates, or notes for {{rosterChangesModel.accountManagerFirstName}}</h5>
   <p class="margin-2em-bottom">{{rosterChangesModel?.instructions}}</p>
+</div>
+
+<div *ngIf="extendAccessStudents && extendAccessStudents.length > 0">
+  <h5 class="text-larger-teal">The following students will receive a 3-month extension of their Kaplan resources:</h5>
+  <ul>
+    <li *ngFor="let student of extendAccessStudents">{{student.lastName}}, {{student.firstName}}</li>
+  </ul>
 </div>
