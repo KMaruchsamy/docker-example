@@ -95,8 +95,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 "searching": false,
                 "info": false,
                 "ordering": false,
-                "scrollY": "300px",
-                "scrollCollapse": true,
+                "scrollY": this.rosterChangeUpdateStudents.length > 6 ? "300px" : false,
                 "columns": [
                     null,
                     null,
@@ -233,11 +232,11 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 el.text(_selectedStudent.moveToCohortName);
             else
                 el.text('Choose an active cohort');
-            if (!(_selectedStudent.isInactive) && !(_selectedStudent.moveToCohortId !== null))
+            if (_selectedStudent.userExpiryDate === null && !(_selectedStudent.isInactive) && !(_selectedStudent.moveToCohortId !== null))
                 el.addClass('button-no-change');
             else
                 el.removeClass('button-no-change');
-            if (_selectedStudent.isInactive)
+            if (_selectedStudent.isInactive || (_selectedStudent.userExpiryDate !== null))
                 el.attr('disabled', 'true');
             else
                 el.removeAttr('disabled');
@@ -259,7 +258,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
             else
                 el.attr('checked', 'checked');
 
-            let _isRepeater = (!this.enableRepeaterCheckbox) || (_selectedStudent.moveToCohortId === null) || (_selectedStudent.isInactive !== null ? _selectedStudent.isInactive : false);
+            let _isRepeater = (!this.enableRepeaterCheckbox) || (_selectedStudent.moveToCohortId === null) || (_selectedStudent.isInactive !== null ? _selectedStudent.isInactive : false || (_selectedStudent.userExpiryDate !== null));
             if (_isRepeater)
                 el.attr('disabled', 'true');
             else
@@ -280,7 +279,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 el.attr('checked', 'true');
             else
                 el.removeAttr('checked');
-            let _isActive: boolean = (_selectedStudent.moveToCohortId !== null) || (_selectedStudent.isGrantUntimedTest !== null ? _selectedStudent.isGrantUntimedTest : false);
+            let _isActive: boolean = (_selectedStudent.userExpiryDate !== null) || (_selectedStudent.moveToCohortId !== null) || (_selectedStudent.isGrantUntimedTest !== null ? _selectedStudent.isGrantUntimedTest : false);
             if (_isActive)
                 el.attr('disabled', 'true');
             else
@@ -301,7 +300,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 el.attr('checked', 'checked');
             else
                 el.removeAttr('checked');
-            if (_selectedStudent.isInactive !== null && _selectedStudent.isInactive)
+            if (_selectedStudent.isInactive !== null && _selectedStudent.isInactive || (_selectedStudent.userExpiryDate !== null))
                 el.attr('disabled', 'true');
             else
                 el.removeAttr('disabled');
@@ -318,6 +317,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 changeUpdateStudent.firstName = student.FirstName;
                 changeUpdateStudent.lastName = student.LastName;
                 changeUpdateStudent.studentId = student.StudentId;
+                changeUpdateStudent.userExpiryDate = student.UserExpireDate;
                 return changeUpdateStudent;
             });
         }
@@ -412,11 +412,15 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     }
 
     changeCohortTo(_student: ChangeUpdateRosterStudentsModel) {
-        this.enableRepeaterCheckbox = true;
         this.showRequestChangePopup = false;
-        if (this.isResponsive)
-            this.onChangingUserSelection(this._event);
-        this.changeToDifferentCohortEvent.emit(_student);
+        if (_student !== undefined) {
+            this.enableRepeaterCheckbox = true;            
+            if (this.isResponsive)
+                this.onChangingUserSelection(this._event);
+            this.changeToDifferentCohortEvent.emit(_student);
+        }
+        else
+            this.enableRepeaterCheckbox = false; 
     }
 
     //saveRequestedStudentsUpdate() {
