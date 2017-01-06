@@ -136,8 +136,13 @@ export class RostersChangesUpdatesComponent implements OnInit {
         if (e) {
             let student: ChangeUpdateRosterStudentsModel = e;
             let studentToUpdate: ChangeUpdateRosterStudentsModel = _.find(this.rosterChangesModel.students, { 'studentId': student.studentId });
-            if (studentToUpdate)
+            if (studentToUpdate) {
                 studentToUpdate = student;
+                if (studentToUpdate.moveToCohortId == null && !studentToUpdate.isRepeater && !studentToUpdate.isInactive && !studentToUpdate.isGrantUntimedTest)
+                    _.remove(this.rosterChangesModel.students, function (s) {
+                        return s.studentId == student.studentId;
+                    });
+            }
             else
                 this.rosterChangesModel.students.push(student);
         }
