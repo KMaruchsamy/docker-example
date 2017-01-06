@@ -11,6 +11,7 @@ export class RosterChangesModel {
     accountManagerFirstName: string;
     accountManagerLastName: string;
     accountManagerPhoneNumber: string;
+    accountManagerEmail: string;
     accountManagerPhotoURI: string;
     students: Array<ChangeUpdateRosterStudentsModel>;
     instructions?: string;
