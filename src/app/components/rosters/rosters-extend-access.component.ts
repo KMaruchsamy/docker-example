@@ -186,8 +186,7 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy  {
     redirectToReview(): void {
         // save student roster changes to sStorage and redirect
          this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel));
-        //add new page route here
-        //  this.router.navigate(['/rosters/new-page-route']);
+         this.router.navigate(['rosters/roster-changes-summary']);
     }
 
 }

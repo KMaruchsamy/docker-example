@@ -40,7 +40,11 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
     constructor(private common: CommonService, private validations: ValidationsService, private rosterSerivice: RosterService) { }
 
     ngOnInit() {
+        this.showPanels();
+    }
 
+     showPanels() {
+        this.collapsed = !_.some(this.rosterChangesModel.students,{ 'updateType': +RosterUpdateTypes.AddToThisCohort })
     }
 
     ngAfterViewInit() {

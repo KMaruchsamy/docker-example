@@ -3,7 +3,6 @@ import { Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterSt
 import { NgIf } from '@angular/common';
 import { CommonService } from './../../services/common.service';
 
-import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { RosterChangesService } from './roster-changes.service';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
@@ -22,20 +21,21 @@ export class RosterChangesSummaryTablesComponent implements OnInit {
     changedStudents: Array<any>;
     movedToStudents: Array<any>;
     addedStudents: Array<any>;
+    extendAccessStudents: Array<any>;
+    hasActionMoved: boolean;
+    hasActionAdded: boolean;
 
-    constructor(public auth: AuthService, public router: Router, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
+    constructor(public router: Router, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
     }
 
     ngOnInit(): void {
         this.sStorage = this.common.getStorage();
-        if (!this.auth.isAuth())
-            this.router.navigate(['/']);
-        else {
-            this.rosterChangesModel = this.rosterChangesService.getUpdatedRosterChangesModel();
-            this.findMovedFromThisCohortStudents();
-            this.findMovedToThisCohortStudents();
-            this.findAddedStudents();
-        }
+        this.rosterChangesModel = this.rosterChangesService.getUpdatedRosterChangesModel();
+        this.findMovedFromThisCohortStudents();
+        this.findMovedToThisCohortStudents();
+        this.findAddedStudents();
+        this.findActions();
+        this.findExtendAccessStudents();
     }
 
     findMovedFromThisCohortStudents(): void {
@@ -48,6 +48,20 @@ export class RosterChangesSummaryTablesComponent implements OnInit {
 
     findAddedStudents(): void {
         this.addedStudents =  _.filter(this.rosterChangesModel.students, ['updateType', RosterUpdateTypes.AddToThisCohort]);
+    }
+
+    findExtendAccessStudents(): void {
+        this.extendAccessStudents =  _.filter(this.rosterChangesModel.students, ['updateType', RosterUpdateTypes.ExtendAccess ]);
+    }
+
+    findActions(): void {
+        let movedHasRepeaters = _.filter(this.movedToStudents, ['isRepeater', true]);
+        let movedHasUntimedTests = _.filter(this.movedToStudents, ['isGrantUntimedTest', true]);
+        this.hasActionMoved = ( movedHasRepeaters.length > 0 || movedHasUntimedTests.length > 0 );
+
+        let addedHasRepeaters = _.filter(this.addedStudents, ['isRepeater', true]);
+        let addedHasUntimedTests = _.filter(this.addedStudents, ['isGrantUntimedTest', true]);
+        this.hasActionAdded = ( addedHasRepeaters.length > 0 || addedHasUntimedTests.length > 0 );
     }
 
 
