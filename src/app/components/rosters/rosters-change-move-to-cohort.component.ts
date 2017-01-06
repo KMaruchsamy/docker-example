@@ -47,12 +47,18 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
 
     ngOnInit() {
         // $(document).trigger("enhance.tablesaw");
+        this.showPanels();
         this.toggleTd();
+
     }
 
     resize(e) {
         // $(document).trigger("enhance.tablesaw");
         this.toggleTd();
+    }
+
+    showPanels() {
+        this.collapsed = !_.some(this.rosterChangesModel.students,{ 'updateType': +RosterUpdateTypes.MoveToThisCohort, 'addedFrom': +RosterUpdateTypes.MoveToThisCohort })
     }
 
     searchStudents(studentName: string, buttonTriggered: boolean = false) {

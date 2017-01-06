@@ -14,7 +14,7 @@
         <div *ngIf="(rosterChangesModel?.students | filterrosterchange:rosterUpdateType:addedFromType)?.length>0" id="movedStudentFromSearch"
             class="margin-1em-top container-bordered section-medium-thin section-bottom-thin section-gray js-move-here">
             <div class="container-medium-width">
-                <p class="text-purple"><b>Students to be moved to June 2018 cohort roster</b></p>
+                <p class="text-purple"><b>Students to be moved to {{rosterChangesModel?.cohortName}} cohort roster</b></p>
                 <table data-tablesaw-mode="stack" class="table-with-cell-padding tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border table-transparent datatable-gray-labels "
                     id="addedStudent1">
                     <thead>
@@ -138,14 +138,15 @@
 
             </td>
             <td class="center tablesaw-stacked-hidden">
-                <button [disabled]="!!student.moved || student?.moveFromCohortExpired || student?.sameCohort" class="button button-small button-light js-move" (click)="move(student, $event)">{{student?.buttonText}}</button>
+                <button [disabled]="!!student.moved || student?.moveFromCohortExpired || student?.sameCohort" class="button button-small button-light js-move"
+                    (click)="move(student, $event)">{{student?.buttonText}}</button>
             </td>
         </tr>
     </tbody>
 </table>
 <div *ngIf="showExpiredMessage" class="icon-container-flush-text section-top-medium-thin">
     <p class="icon info-icon-yellow">
-       {{expiredMessage}}
+        {{expiredMessage}}
     </p>
 </div>
 <button *ngIf="boundStudents && boundStudents.length>0" class="anchor-button margin-1em-top-bottom" (click)="clearSearchResults(searchTypeahead, $event)"
