@@ -3,14 +3,19 @@
         <div class="container-medium-width">
             <h4 class="h6 margin-1em-bottom">Frequently Asked Questions</h4>
             <div class="expander">
-                <a class="expander-trigger expander-trigger-no-line-thin text-larger" [class.collapsed]="!visiblefaq1" role="button" href="javascript:void(0)" 
-                    [attr.aria-expanded]="visiblefaq1" aria-controls="faq1" (click)="visiblefaq1 ? visiblefaq1=false : visiblefaq1=true">
-                What are cohort rosters?
+                <a class="expander-trigger expander-trigger-no-line-thin text-larger" [class.collapsed]="!visiblefaq1" role="button" href="javascript:void(0)"
+                   [attr.aria-expanded]="visiblefaq1" aria-controls="faq1" (click)="visiblefaq1 ? visiblefaq1=false : visiblefaq1=true">
+                    What are cohort rosters?
                 </a>
                 <div class="collapse" [class.in]="visiblefaq1" id="faq1">
                     <p>
                         All students enrolled in the Kaplan program are activated by the submission of rosters to your school’s dedicated Account
-                        Manager<template [ngIf]="accountManagerId">,<b> {{accountManagerFirstName}} {{accountManagerLastName}}</b> (<a href="mailto:{{accountManagerEmail}}">{{accountManagerEmail}}</a>)</template>.
+                        Manager
+                        <template [ngIf]="accountManagerId">
+                            ,
+                            <b> {{accountManagerFirstName}} {{accountManagerLastName}}</b> (
+                            <a href="mailto:{{accountManagerEmail}}">{{accountManagerEmail}}</a>)
+                        </template>.
                         The rosters tell us which students to activate and classify them into cohorts labeled by month and
                         year of graduation (e.g. June 2017). Based on their cohort, students are granted access to the Kaplan
                         program for three months after graduation, which typically covers their NCLEX® testing cycle. Kaplan
@@ -19,9 +24,9 @@
                 </div>
             </div>
             <div class="expander">
-                <a class="expander-trigger expander-trigger-no-line-thin text-larger" role="button" data-toggle="collapse" href="javascript:void(0)" 
-                     [attr.aria-expanded]="visiblefaq3" aria-controls="faq2" [class.collapsed]="!visiblefaq2" (click)="visiblefaq2 ? visiblefaq2=false : visiblefaq2=true">
-                  How do I submit a new cohort roster?
+                <a class="expander-trigger expander-trigger-no-line-thin text-larger" role="button" data-toggle="collapse" href="javascript:void(0)"
+                   [attr.aria-expanded]="visiblefaq3" aria-controls="faq2" [class.collapsed]="!visiblefaq2" (click)="visiblefaq2 ? visiblefaq2=false : visiblefaq2=true">
+                    How do I submit a new cohort roster?
                 </a>
                 <div class="collapse" id="faq2" [class.in]="visiblefaq2">
                     <p>
@@ -36,9 +41,9 @@
                 </div>
             </div>
             <div class="expander">
-                <a class="expander-trigger expander-trigger-no-line-thin text-larger" role="button" data-toggle="collapse" href="javascript:void(0)" 
-                     [attr.aria-expanded]="visiblefaq3" aria-controls="faq3" [class.collapsed]="!visiblefaq3" (click)="visiblefaq3 ? visiblefaq3=false : visiblefaq3=true">
-                What happens after I submit a cohort roster?
+                <a class="expander-trigger expander-trigger-no-line-thin text-larger" role="button" data-toggle="collapse" href="javascript:void(0)"
+                   [attr.aria-expanded]="visiblefaq3" aria-controls="faq3" [class.collapsed]="!visiblefaq3" (click)="visiblefaq3 ? visiblefaq3=false : visiblefaq3=true">
+                    What happens after I submit a cohort roster?
                 </a>
                 <div class="collapse" id="faq3" [class.in]="visiblefaq3">
                     <p>
@@ -48,18 +53,29 @@
                 </div>
             </div>
             <div class="expander">
-                <a class="expander-trigger expander-trigger-no-line-thin text-larger" role="button" data-toggle="collapse" href="javascript:void(0)" 
-                     [attr.aria-expanded]="visiblefaq4" aria-controls="faq4" [class.collapsed]="!visiblefaq4" (click)="visiblefaq4 ? visiblefaq4=false : visiblefaq4=true">
-                How do I submit a change or update?
+                <a class="expander-trigger expander-trigger-no-line-thin text-larger" role="button" data-toggle="collapse" href="javascript:void(0)"
+                   [attr.aria-expanded]="visiblefaq4" aria-controls="faq4" [class.collapsed]="!visiblefaq4" (click)="visiblefaq4 ? visiblefaq4=false : visiblefaq4=true">
+                    How do I submit a change or update?
                 </a>
                 <div class="collapse" id="faq4" [class.in]="visiblefaq4">
                     <p>
-                        To report any changes or updates in your rosters, submit them to your Account Manager using your 
-                        <a *ngIf="!accountManagerId" href="https://kaptest.formstack.com/forms/kaplan_cohort_change_request_form_pt" target="_blank">Custom Change Form</a> 
-                        <a *ngIf="accountManagerId" href="{{customChangeForm}}" target="_blank">Custom Change Form</a> 
-                        at least 3 business days prior to your planned billing date. For urgent requests (needed within 3 business days), please contact the Faculty Hotline at 
-                        <a class="link-base-color" href="tel:+1-866-920-6311"><strong>1-866-920-6311</strong></a> or your Account Manager<template [ngIf]="accountManagerId">, {{accountManagerFirstName}} {{accountManagerLastName}}, at 
-                        <a class="link-base-color" href="tel:+1-{{accountManagerPhoneNumber}}"><strong>{{accountManagerPhoneNumber}}</strong></a></template>.
+                        To submit a request for a roster change or update, click on the “Request change or update” link within the appropriate cohort roster. You can ask your Account Manager to make the following changes or updates:
+                    </p>
+                    <ul class="bullet paragraph-spacing-bottom-list">
+                        <li>
+                            Move a student to a different cohort or move a student from a different cohort to the current cohort (for example, if the student’s graduation date has changed).
+                        </li>
+                        <li>Make a student in the current cohort inactive (for example, if the student has withdrawn for the semester or left the school).</li>
+                        <li>Add a new student to the current cohort to enable access to Kaplan resources.</li>
+                        <li>Request untimed versions of Kaplan tests for students in the cohort needing testing accommodations. <i><b>Note:</b> Students with testing accommodations are allowed to continue taking their test after the standard duration has passed. Once their test times down to zero, the student will see a window asking them to confirm they want to continue; upon clicking “OK”, their test will become untimed. It is up to the proctor to ensure that students taking untimed tests receive the correct amount of time for which they are eligible.</i></li>
+                        <li>At the appropriate time, extend a student’s access to Kaplan resources beyond the standard access window (three months after the cohort’s graduation date, which typically covers their NCLEX® testing cycle). Access can be extended for another three months within 14 days of the cohort’s scheduled access expiration date.</li>
+                    </ul>
+                    <br/><p>
+                        <b>Please note</b>: Cohort rosters will not immediately reflect requested changes or updates submitted through this process. Requests for changes or updates will be submitted to your Account Manager, who will process them within (2) business days and inform you via email when your changes have been processed. For urgent requests (needed within 3 business days), please contact the Faculty Hotline at <a class="link-base-color" href="tel:+1-866-920-6311"><strong>1-866-920-6311</strong></a> or your Account Manager
+                        <template [ngIf]="accountManagerId">
+                            , {{accountManagerFirstName}} {{accountManagerLastName}}, at
+                            <a class="link-base-color" href="tel:+1-{{accountManagerPhoneNumber}}"><strong>{{accountManagerPhoneNumber}}</strong></a>
+                        </template>.
                     </p>
                 </div>
             </div>
