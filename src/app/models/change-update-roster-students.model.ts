@@ -14,7 +14,7 @@ export class ChangeUpdateRosterStudentsModel {
     isRepeater?: boolean = null;
     isGrantUntimedTest?: boolean = null;
     isExtendAccess?: boolean = null;
-    userExpiryDate?: Date = null;
+    userExpiryDate?: boolean = null;
     updateType?: number;  //Based on Request for change/Move/Add/Extend Access [1/2/3/4]
     addedFrom?: number;
 }

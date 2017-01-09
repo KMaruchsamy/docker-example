@@ -43,6 +43,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     sStorage: any;
     isResponsive: boolean = false;
     _event: any;
+    hasUserExpiryCount: number = 0;
 
     constructor(public auth: AuthService, public router: Router, public common: CommonService, public rosterService: RosterService, public rosterCohortsModel: RosterCohortsModel, public rosters: RostersModal) { }
 
@@ -232,11 +233,11 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 el.text(_selectedStudent.moveToCohortName);
             else
                 el.text('Choose an active cohort');
-            if (_selectedStudent.userExpiryDate === null && !(_selectedStudent.isInactive) && !(_selectedStudent.moveToCohortId !== null))
+            if (!_selectedStudent.userExpiryDate && !(_selectedStudent.isInactive) && !(_selectedStudent.moveToCohortId !== null))
                 el.addClass('button-no-change');
             else
                 el.removeClass('button-no-change');
-            if (_selectedStudent.isInactive || (_selectedStudent.userExpiryDate !== null))
+            if (_selectedStudent.isInactive || _selectedStudent.userExpiryDate)
                 el.attr('disabled', 'true');
             else
                 el.removeAttr('disabled');
@@ -258,7 +259,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
             else
                 el.attr('checked', 'checked');
 
-            let _isRepeater = (!this.enableRepeaterCheckbox) || (_selectedStudent.moveToCohortId === null) || (_selectedStudent.isInactive !== null ? _selectedStudent.isInactive : false || (_selectedStudent.userExpiryDate !== null));
+            let _isRepeater = (!this.enableRepeaterCheckbox) || (_selectedStudent.moveToCohortId === null) || (_selectedStudent.isInactive !== null ? _selectedStudent.isInactive : false || _selectedStudent.userExpiryDate);
             if (_isRepeater)
                 el.attr('disabled', 'true');
             else
@@ -279,7 +280,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 el.attr('checked', 'true');
             else
                 el.removeAttr('checked');
-            let _isActive: boolean = (_selectedStudent.userExpiryDate !== null) || (_selectedStudent.moveToCohortId !== null) || (_selectedStudent.isGrantUntimedTest !== null ? _selectedStudent.isGrantUntimedTest : false);
+            let _isActive: boolean = _selectedStudent.userExpiryDate || (_selectedStudent.moveToCohortId !== null) || (_selectedStudent.isGrantUntimedTest !== null ? _selectedStudent.isGrantUntimedTest : false);
             if (_isActive)
                 el.attr('disabled', 'true');
             else
@@ -300,7 +301,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 el.attr('checked', 'checked');
             else
                 el.removeAttr('checked');
-            if (_selectedStudent.isInactive !== null && _selectedStudent.isInactive || (_selectedStudent.userExpiryDate !== null))
+            if (_selectedStudent.isInactive !== null && _selectedStudent.isInactive || _selectedStudent.userExpiryDate)
                 el.attr('disabled', 'true');
             else
                 el.removeAttr('disabled');
@@ -317,7 +318,17 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 changeUpdateStudent.firstName = student.FirstName;
                 changeUpdateStudent.lastName = student.LastName;
                 changeUpdateStudent.studentId = student.StudentId;
-                changeUpdateStudent.userExpiryDate = student.UserExpireDate;
+                if (student.UserExpireDate !== null) {
+                    if (moment(student.UserExpireDate).isAfter(Date.now(), 'day')) {
+                        changeUpdateStudent.userExpiryDate = false;
+                    }
+                    else {
+                        changeUpdateStudent.userExpiryDate = true;
+                        this.hasUserExpiryCount += 1;
+                    }
+                }
+                else
+                    changeUpdateStudent.userExpiryDate = false;
                 return changeUpdateStudent;
             });
         }
