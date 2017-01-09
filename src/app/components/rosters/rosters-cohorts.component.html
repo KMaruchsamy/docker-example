@@ -1,4 +1,4 @@
-<section class="container-medium-width section-medium-thin">
+<section class="container-medium-width section-medium-thin" id="roster-cohorts">
   <p *ngIf="noCohorts" class="text-larger">We’re sorry, there are no active cohort rosters for this institution. You can search for students in expired or inactive cohort rosters for this institution above.</p>
   <div class="large-expander" [id]="cohort.cohortId" *ngFor="let cohort of rosters.cohorts">
     <div class="relative-position">
@@ -13,11 +13,12 @@
         <a href="javascript:void(0)" (click)="directToChangeOrExtendForm(cohort.cohortId, cohort.cohortName, 'change-form')" class="right mobile-left-top-margin hidden-for-print" *ngIf="!isExtensionCohort(cohort.cohortName) && !isCohortAboutToExpire(cohort) && cohort?.students.length>0">Request change or update</a>
         <a href="javascript:void(0)" (click)="directToChangeOrExtendForm(cohort.cohortId, cohort.cohortName, 'extend-access')" class="right mobile-left-top-margin hidden-for-print" *ngIf="((isExtensionCohort(cohort.cohortName) || isCohortAboutToExpire(cohort)) && cohort?.students.length>0)">Request extended access</a>
       </div>
+      <button class="icon print-icon anchor-button section-top-thin" (click)="printRoster(cohort.cohortId);">Print this cohort roster</button>
       <!--<div class="clearfix">
         <span>Cohort count last updated on August 17, 2016</span>
         <a href="#" class="right mobile-left-top-margin">Submit change or update</a>
       </div>-->
-      <ul class="three-columns-auto cells section-medium-thin" > 
+      <ul class="three-columns-auto cells section-bottom-medium-thin section-top-thin" > 
          <li *ngFor="let student of cohort.students">
           <div [class.list-item-with-icons]="student?.isRepeatStudent || student?.isStudentPayDeactivatedStudent || student?.isExpiredStudent">
             <button *ngIf="student.isDuplicate" data-toggle="popover" data-placement="top" [attr.data-content]="student?.email" class="unstyled-button has-popover small-popover">
