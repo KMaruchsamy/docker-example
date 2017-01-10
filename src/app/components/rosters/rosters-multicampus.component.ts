@@ -26,6 +26,16 @@ import { AuthService } from './../../services/auth.service';
             width: 100%;
             text-align: center;
         }
+    }
+    @media print {
+        .tabs li:not(.active) {
+            display: none;
+        }
+        .tabs li.active a {
+            background-color: white;
+            border-top: 1px solid #cacaca;
+            color: #6c6c6c;
+        }
     }`]
 })
 export class RostersMultiCampusComponent implements OnInit {    
