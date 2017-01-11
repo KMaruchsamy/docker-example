@@ -48,6 +48,8 @@ import { RosterCohortUserPreferenceModel } from '../../models/roster-cohort-user
 export class RostersCohortsComponent implements OnInit, OnDestroy {
     _institutionId: number;
     noCohorts: Boolean = false;
+    hiddenForPrint: Boolean = false;
+    cohortToPrint: number;
     sStorage: any;
     @Input()
     set institutionId(value: number) {
@@ -280,8 +282,14 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         }
     }
 
-
-    
+    printRoster(cohortId) {
+        this.cohortToPrint = cohortId;
+        this.hiddenForPrint = true;
+        setTimeout(() => {
+            window.print();
+            this.hiddenForPrint = false;
+        })
+    }  
 
 }
 
