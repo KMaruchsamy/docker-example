@@ -20,7 +20,7 @@ import * as _ from 'lodash';
     styles: [`textarea { min-height: 100px;}`]
 })
 
-export class RostersExtendAccessComponent implements OnInit, OnDestroy  {
+export class RostersExtendAccessComponent implements OnInit, OnDestroy {
     sStorage: any;
     instructions: string;
     overrideRouteCheck: boolean = false;
@@ -31,6 +31,7 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy  {
     _institutionId: number;
     selectAll: boolean = false;
     allSelected: boolean = false;
+    extendAccessStudents: Array<any>;
     rosterChangeUpdateStudents: ChangeUpdateRosterStudentsModel[];
 
     constructor(private changeDetectorRef: ChangeDetectorRef, public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, 
@@ -53,8 +54,6 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy  {
             });
 
         this.sStorage = this.common.getStorage();
-
-
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else {
@@ -93,8 +92,32 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy  {
                 changeUpdateStudent.studentId = student.StudentId;
                 return changeUpdateStudent;
             });
+            this.loadUpdatedCohortStudents();
         }
     }
+
+    loadUpdatedCohortStudents() {
+        // in case user is going back to modify changes, get updated model
+        let rosterChangesUpdatedModel = this.rosterChangesService.getUpdatedRosterChangesModel();
+        // check if any students have already been updated and return an array of students
+        let extendAccessStudents =  _.filter(rosterChangesUpdatedModel.students, ['updateType', RosterUpdateTypes.ExtendAccess ]);
+        if (extendAccessStudents.length > 0) {
+            // update flags for those students in original model
+            _.each(extendAccessStudents, ( extendedAccessStudent: any) => {
+                let eachStudent = _.find(this.rosterChangeUpdateStudents, ['studentId', extendedAccessStudent.studentId]);
+                if (eachStudent) {
+                    eachStudent.isExtendAccess = true;
+                    eachStudent.updateType = RosterUpdateTypes.ExtendAccess;
+                }
+            });
+            // check if select all input should be checked
+            if (this.rosterChangeUpdateStudents.length === extendAccessStudents.length) {
+                this.selectAll = true;
+            } else {
+                this.selectAll = false;
+            }
+        }
+    } 
 
     canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
         let outOfRostersChanges: boolean = this.rosterChangesService.outOfRostersChanges((this.common.removeWhitespace(this.destinationRoute)));
@@ -184,7 +207,9 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy  {
     }
 
     redirectToReview(): void {
-        // save student roster changes to sStorage and redirect
+         // sort extended students by last name in case user added once and then added more students
+         this.rosterChangesModel.students = _.sortBy(this.rosterChangesModel.students, ['lastName']);
+         // save student roster changes to sStorage and redirect
          this.sStorage.setItem('rosterChanges', JSON.stringify(this.rosterChangesModel));
          this.router.navigate(['rosters/roster-changes-summary']);
     }

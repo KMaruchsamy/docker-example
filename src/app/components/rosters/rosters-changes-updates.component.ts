@@ -44,6 +44,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
             if (this.rosterChangesModel.instructions && this.rosterChangesModel.instructions != '')
                 this.instructions = this.rosterChangesModel.instructions;
             this.titleService.setTitle('Request Roster Changes – Kaplan Nursing');
+            window.scroll(0, 0);
         }
     }
 

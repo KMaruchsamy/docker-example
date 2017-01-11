@@ -5,10 +5,10 @@
 
   <section>
     <div class="container-medium-width">
-      <rosters-changes-summary-tables></rosters-changes-summary-tables>
+      <rosters-changes-summary-tables #summaryTables></rosters-changes-summary-tables>
       <div class="section-top-medium-thin section clearfix">
         <div class="page-action-footer margin-1em-top-bottom">
-          <a [routerLink]="['/rosters/change-update']" class="anchor-button-left">Modify this request</a>
+          <button (click)="summaryTables.checkPrevRoute()" class="anchor-button anchor-button-left">Modify this request</button>
           <button (click)="submitRequests()" class="button">Submit request to Account Manager</button>
         </div>
         <button class="anchor-button anchor-button-center-mobile clear right " (click)="cancelChanges()">Cancel requested changes</button>
