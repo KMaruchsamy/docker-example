@@ -49,7 +49,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         // $(document).trigger("enhance.tablesaw");
         this.showPanels();
         this.toggleTd();
-       // this.bindPopover();
+        this.bindPopover();
     }
 
 
