@@ -124,7 +124,7 @@
 
                 <b class="tablesaw-cell-label">Name</b>
 
-                <span class="tablesaw-cell-content">
+                <div class="tablesaw-cell-content">
                     <i *ngIf="!student.isActive || student.moveFromCohortName?.toLowerCase() ==='inactive'">{{student.lastName}}, {{student.firstName}}</i>
                     <span *ngIf="student.isActive && student.moveFromCohortName?.toLowerCase() !=='inactive'">{{student.lastName}}, {{student.firstName}}</span>
                     <button *ngIf="student.duplicate" data-toggle="popover" data-placement="top"
