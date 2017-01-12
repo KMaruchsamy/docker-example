@@ -8,12 +8,13 @@ import { AuthService } from './../../services/auth.service';
 	<div class="dropdown-container">
 		<a href="javascript:void(0)"  id="lnkMenu"  role="button" class="dropdown-button" data-toggle="dropdown"  [attr.aria-disabled]="ariaDisabled" aria-haspopup="true">Main Menu</a>
 		<ul class="dropdown-menu dropdown-select">
-			<li><a [routerLink]="['/home']" class="menu-icon home-icon" >Home</a></li>
-			<li><a [routerLink]="['/reports']" class="menu-icon reporting-icon" >View Reports</a></li>
-			<li><a [routerLink]="['/rosters']" class="menu-icon student-icon" >View Rosters</a></li>
-			<li><a [routerLink]="['/tests']" class="menu-icon test-icon" >Manage Tests</a></li>
-			<li><a [routerLink]="['/account']" class="menu-icon manage-icon" >Manage Account</a></li>
-			<li><a href="#" class="menu-icon sign-out-icon" (click)="logout($event);">Sign Out</a></li>
+			<li><a [routerLink]="['/home']" class="menu-icon home-icon">Home</a></li>
+			<li><a [routerLink]="['/reports']" class="menu-icon reporting-icon">View Reports</a></li>
+			<li><a [routerLink]="['/rosters']" class="menu-icon student-icon">View Rosters</a></li>
+			<li><a [routerLink]="['/tests']" class="menu-icon test-icon">Manage Tests</a></li>
+			<li><a [routerLink]="['/account']" class="menu-icon manage-icon">Manage Account</a></li>
+            <li><a [routerLink]="['/userguide']" class="menu-icon userguide-icon">User Guide</a></li>
+			<li><a href="javascript:void(0)" class="menu-icon sign-out-icon" (click)="logout($event);">Sign Out</a></li>
 		</ul>
 	</div>
 </nav>`
