@@ -58,6 +58,7 @@ export class RosterChangesService {
         if (routeName.indexOf(RosterChangesPages.MAKECHANGES) > -1
             || routeName.indexOf(RosterChangesPages.REVIEWCHANGES) > -1
             || routeName.indexOf(RosterChangesPages.CHANGESCONFIRMATION) > -1
+            || routeName.indexOf(RosterChangesPages.EXTENDACCESS) > -1     
             || routeName.indexOf('ERROR') > -1)
             return false;
         return true;
