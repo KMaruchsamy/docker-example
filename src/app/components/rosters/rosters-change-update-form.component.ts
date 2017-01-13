@@ -42,8 +42,8 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     showRequestChangePopup: boolean = false;
     sStorage: any;
     isResponsive: boolean = false;
+    showDuplicateStudentMessage: boolean = false;
     _event: any;
-    hasUserExpiryCount: number = 0;
 
     constructor(public auth: AuthService, public router: Router, public common: CommonService, public rosterService: RosterService, public rosterCohortsModel: RosterCohortsModel, public rosters: RostersModal) { }
 
@@ -64,6 +64,23 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         this._institutionId = this.rosterChangesModel.institutionId;
         this.testsTable = null;
         this.getRosterCohortStudents(cohortId);
+        this.bindPopover();
+    }
+
+    bindPopover() {
+        $('body').on('hidden.bs.popover', function (e) {
+            $(e.target).data("bs.popover").inState.click = false;
+        });
+
+        $('body').on('click', function (e) {
+            $('[data-toggle="popover"]').each(function () {
+                //the 'is' for buttons that trigger popups
+                //the 'has' for icons within a button that triggers a popup
+                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
+        });
     }
 
     getRosterCohortStudents(cohortId) {
@@ -219,8 +236,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         });  // Closes setTimeout
     }
 
-    onMoveToCohortChange(el)
-    {
+    onMoveToCohortChange(el){
         if(el.length>0){
             let _selectedStudent: ChangeUpdateRosterStudentsModel;
             var _id = el.attr('id').split('_')[1];
@@ -319,20 +335,32 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 changeUpdateStudent.firstName = student.FirstName;
                 changeUpdateStudent.lastName = student.LastName;
                 changeUpdateStudent.studentId = student.StudentId;
+                changeUpdateStudent.isDuplicate = this.checkDuplicate(cohortStudents, student)
                 if (student.UserExpireDate !== null) {
                     if (moment(student.UserExpireDate).isAfter(Date.now(), 'day')) {
                         changeUpdateStudent.userExpiryDate = false;
                     }
                     else {
                         changeUpdateStudent.userExpiryDate = true;
-                        this.hasUserExpiryCount += 1;
                     }
                 }
                 else
                     changeUpdateStudent.userExpiryDate = false;
                 return changeUpdateStudent;
             });
+            this.showDuplicateStudentMessage = _.some(this.rosterChangeUpdateStudents, ['isDuplicate', true]);
+            setTimeout(function () {
+                $('[data-toggle="popover"]').popover();
+            });
         }
+    }
+
+    checkDuplicate(students: Array<any>, duplicateStudent: any): boolean {
+        return _.some(students, (student) => {
+            return (student.StudentId !== duplicateStudent.StudentId)
+                && (student.FirstName.toLowerCase() === duplicateStudent.FirstName.toLowerCase())
+                && (student.LastName.toLowerCase() === duplicateStudent.LastName.toLowerCase())
+        });
     }
 
     onChangingUserSelection(e) {

@@ -60,3 +60,7 @@
 #markChanges table th:last-child, #markChanges table td:last-child {
     padding-right: 0;
 }
+
+.small-popover {
+    margin-left: 5px;
+}
