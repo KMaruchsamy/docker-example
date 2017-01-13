@@ -194,6 +194,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                     let _studentid = parseInt(_id.split('-')[0]);
                     self.checkRepeater(_studentid, e);
                     self.onChangingUserSelection(e);
+
                 }
             });
 
@@ -231,7 +232,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
             });
             if (_selectedStudent.moveToCohortId !== null)
                 el.text(_selectedStudent.moveToCohortName);
-            else
+            else 
                 el.text('Choose an active cohort');
             if (!_selectedStudent.userExpiryDate && !(_selectedStudent.isInactive) && !(_selectedStudent.moveToCohortId !== null))
                 el.addClass('button-no-change');
@@ -352,7 +353,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
 
         //On Selection of ADA checkbox selection... Start   
         var _ADAElement = $('#' + 'ADA_' + _id);
-        this.onADAChange(_ADAElement);       
+        this.onADAChange(_ADAElement);  
     }
 
     showCohortPopup(firstName, lastName, studentId, e) {
@@ -426,23 +427,17 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         this.showRequestChangePopup = false;
         if (_student !== undefined) {
             this.enableRepeaterCheckbox = true;            
-            if (this.isResponsive)
+            if (this.isResponsive) {
+                let _id = $(this._event.target).attr('id').split('_')[1];
+                var el = $('#' + 'chkRepeat_' + _id);
                 this.onChangingUserSelection(this._event);
+                el.prop('checked', _student.isRepeater);
+            }
             this.changeToDifferentCohortEvent.emit(_student);
         }
         else
             this.enableRepeaterCheckbox = false; 
     }
-
-    //saveRequestedStudentsUpdate() {
-    //    let _rosterChangeUpdateStudents : ChangeUpdateRosterStudentsModal[]=[];
-    //    _.filter(this.rosterChangeUpdateStudents, function (_student) {
-    //        if (_student.moveToCohortId !== null || _student.isActive !== null || _student.isRepeater !== null || _student.isGrantUntimedTest !== null)
-    //            _rosterChangeUpdateStudents.push(_student);
-
-    //    });
-    //    this.rosterChangesModel.students = _rosterChangeUpdateStudents;
-    //    console.log(JSON.stringify(this.rosterChangesModel.students));
-    //}
+    
 }
 

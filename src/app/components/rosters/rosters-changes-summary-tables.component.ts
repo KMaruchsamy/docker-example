@@ -54,6 +54,14 @@ export class RosterChangesSummaryTablesComponent implements OnInit {
         this.extendAccessStudents =  _.filter(this.rosterChangesModel.students, ['updateType', RosterUpdateTypes.ExtendAccess ]);
     }
 
+    checkPrevRoute(): void {
+        if(this.extendAccessStudents.length > 0) {
+            this.router.navigate(['/rosters/extend-access']);
+        } else {
+            this.router.navigate(['/rosters/change-update']);
+        }
+    }
+
     findActions(): void {
         let movedHasRepeaters = _.filter(this.movedToStudents, ['isRepeater', true]);
         let movedHasUntimedTests = _.filter(this.movedToStudents, ['isGrantUntimedTest', true]);

@@ -106,7 +106,7 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
                     else
                         _keepInCohort = o;
                 });
-                this.rostersList.push(_keepInCohort);
+                this.rostersList.splice(0, 0, _keepInCohort);
                 __this.sStorage.setItem('rosterlist', JSON.stringify(this.rostersList));
             }
         }
@@ -130,6 +130,7 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
                 else {
                     _student.moveToCohortId = null;
                     _student.moveToCohortName = null;
+                    _student.isRepeater = false;
                 }
                 _student.updateType = 1;
                 updatedStudent = _student;

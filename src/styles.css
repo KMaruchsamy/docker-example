@@ -1951,17 +1951,6 @@ main .right-grid ::-webkit-scrollbar {
       background-image: url(assets/images/sprite_2x.png);
       background-size: 341px 312px; } }
 
-.group-icon:before {
-  background-image: url(assets/images/sprite.png);
-  background-position: -320px -86px;
-  width: 21px;
-  height: 14px;
-  margin-top: 4px; }
-  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
-    .group-icon:before {
-      background-image: url(assets/images/sprite_2x.png);
-      background-size: 341px 312px; } }
-
 .test-icon:before {
   background-image: url(assets/images/sprite.png);
   background-position: -312px -245px;
@@ -1981,6 +1970,16 @@ main .right-grid ::-webkit-scrollbar {
   margin-top: 3px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .manage-icon:before {
+      background-image: url(assets/images/sprite_2x.png);
+      background-size: 341px 312px; } }
+
+.userguide-icon::before {
+  background-image: url(assets/images/sprite.png);
+  background-position: -287px -221px;
+  width: 22px;
+  height: 22px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .userguide-icon::before {
       background-image: url(assets/images/sprite_2x.png);
       background-size: 341px 312px; } }
 

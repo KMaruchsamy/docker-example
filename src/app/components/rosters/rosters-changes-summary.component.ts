@@ -22,6 +22,7 @@ export class RosterChangesSummaryComponent implements OnInit {
     overrideRouteCheck: boolean = false;
     attemptedRoute: string;
     destinationRoute: string;
+    isExtendedAccess: boolean = false;
 
     constructor(public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
     }
@@ -40,7 +41,7 @@ export class RosterChangesSummaryComponent implements OnInit {
         else {
             this.rosterChangesModel = this.rosterChangesService.getUpdatedRosterChangesModel();
             this.titleService.setTitle('Roster Change Request Summary – Kaplan Nursing');
-
+            window.scroll(0, 0);
         }
     }
 
