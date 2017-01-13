@@ -149,10 +149,9 @@
         </tr>
     </tbody>
 </table>
-<div *ngIf="showExpiredMessage" class="icon-container-flush-text section-top-medium-thin">
-    <p class="icon info-icon-yellow">
-        {{expiredMessage}}
-    </p>
+<div *ngIf="showDuplicateStudentMessage" class="small-icon-container-flush-text section-top-medium-thin">
+    <img src="assets/images/identity-icon.png" class="duplicate-student-icon" alt="duplicate student icon" height="18" width="18"/>
+    <p>Student has the same first and last name as another student in this cohort roster. Click or tap on the icon to view the student’s email address.</p>
 </div>
 <button *ngIf="boundStudents && boundStudents.length>0" class="anchor-button margin-1em-top-bottom" (click)="clearSearchResults(searchTypeahead, $event)"
     id="clearResults">Clear search results</button>
