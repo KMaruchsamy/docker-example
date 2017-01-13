@@ -6,6 +6,10 @@
     color: inherit;
 }
 
+.small-popover {
+    margin-left: 5px;
+}
+
 /*unstacked layout*/
 @media (max-width: 699px){
     .tablesaw tr > td:first-child::after {
@@ -37,3 +41,4 @@
      text-align: center;
  }
 }
+

@@ -49,7 +49,24 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         // $(document).trigger("enhance.tablesaw");
         this.showPanels();
         this.toggleTd();
+        this.bindPopover();
+    }
 
+
+    bindPopover() {
+        $('body').on('hidden.bs.popover', function (e) {
+            $(e.target).data("bs.popover").inState.click = false;
+        });
+
+        $('body').on('click', function (e) {
+            $('[data-toggle="popover"]').each(function () {
+                //the 'is' for buttons that trigger popups
+                //the 'has' for icons within a button that triggers a popup
+                if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
+        });
     }
 
     resize(e) {
@@ -58,7 +75,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     }
 
     showPanels() {
-        this.collapsed = !_.some(this.rosterChangesModel.students,{ 'updateType': +RosterUpdateTypes.MoveToThisCohort, 'addedFrom': +RosterUpdateTypes.MoveToThisCohort })
+        this.collapsed = !_.some(this.rosterChangesModel.students, { 'updateType': +RosterUpdateTypes.MoveToThisCohort, 'addedFrom': +RosterUpdateTypes.MoveToThisCohort })
     }
 
     searchStudents(studentName: string, buttonTriggered: boolean = false) {
@@ -148,12 +165,22 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
                 studentId: student.StudentId,
                 firstName: student.FirstName,
                 lastName: student.LastName,
+                email: student.Email,
                 updateType: RosterUpdateTypes.MoveToThisCohort,
                 moved: this.isStudentMoved(student.StudentId),
                 isActive: student.IsActiveCohort,
                 sameCohort: !!(student.CohortId === this.rosterChangesModel.cohortId),
-                buttonText : this.getButtonText((!!student.CohortEndDate && moment(student.CohortEndDate).isBefore(new Date())) || (!!student.UserExpireDate && moment(student.UserExpireDate).isBefore(new Date())), !!(student.CohortId === this.rosterChangesModel.cohortId))
+                buttonText: this.getButtonText((!!student.CohortEndDate && moment(student.CohortEndDate).isBefore(new Date())) || (!!student.UserExpireDate && moment(student.UserExpireDate).isBefore(new Date())), !!(student.CohortId === this.rosterChangesModel.cohortId)),
+                duplicate: this.checkDuplicate(students, student)
             }
+        });
+    }
+
+    checkDuplicate(students: Array<any>, duplicateStudent: any): boolean {
+        return _.some(students, (student) => {
+            return (student.StudentId !== duplicateStudent.StudentId)
+                && (student.FirstName.toLowerCase() === duplicateStudent.FirstName.toLowerCase())
+                && (student.LastName.toLowerCase() === duplicateStudent.LastName.toLowerCase())
         });
     }
 
@@ -161,7 +188,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         if (expired)
             return rosters.btn_access_expired;
         else if (sameCohort)
-            return rosters.btn_same_cohort;            
+            return rosters.btn_same_cohort;
         return `Request move to this cohort`;
     }
 
@@ -172,6 +199,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         this.boundStudents = [];
         if (this.searchedStudents && this.searchedStudents.length > 0) {
             this.boundStudents = this.mapStudents(this.filterStudents(this.searchedStudents, this.searchString));
+
             if (this.boundStudents.length === 0)
                 this.noStudents = true;
             else
@@ -179,6 +207,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
             this.showExpiredMessage = _.some(this.boundStudents, 'moveFromCohortExpired');
             setTimeout(function () {
                 // $(document).trigger("enhance.tablesaw");
+                $('[data-toggle="popover"]').popover();
                 __this.toggleTd();
             });
             console.log(this.boundStudents);

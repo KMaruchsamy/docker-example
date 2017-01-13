@@ -109,7 +109,6 @@
     </tbody>
 </table>-->
 
-
 <table data-tablesaw-mode="stack" class="table-fixed tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none"
     id="searchResultsTable" *ngIf="boundStudents && boundStudents.length>0">
     <thead>
@@ -122,11 +121,17 @@
     <tbody>
         <tr class="tablesaw-stacked-hidden-border" *ngFor="let student of boundStudents">
             <td>
+
                 <b class="tablesaw-cell-label">Name</b>
-                <span class="tablesaw-cell-content">
+
+                <div class="tablesaw-cell-content">
                     <i *ngIf="!student.isActive || student.moveFromCohortName?.toLowerCase() ==='inactive'">{{student.lastName}}, {{student.firstName}}</i>
                     <span *ngIf="student.isActive && student.moveFromCohortName?.toLowerCase() !=='inactive'">{{student.lastName}}, {{student.firstName}}</span>
-                </span>
+                    <button *ngIf="student.duplicate" data-toggle="popover" data-placement="top"
+                        [attr.data-content]="student?.email" class="unstyled-button has-popover small-popover">
+                        <img src="assets/images/identity-icon.png" alt="duplicate student name icon" width="24" height="24" />
+                    </button>
+                </div>
 
             </td>
             <td class="tablesaw-stacked-hidden">
