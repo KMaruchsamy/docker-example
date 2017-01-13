@@ -147,7 +147,6 @@ export class RostersChangesUpdatesComponent implements OnInit {
             else
                 this.rosterChangesModel.students.push(student);
         }
-        console.log('checkRosterADA=' + JSON.stringify(this.rosterChangesModel));
     }
     changeToDifferentCohort(e: any) {
         if (e) {
@@ -158,10 +157,17 @@ export class RostersChangesUpdatesComponent implements OnInit {
                     studentToUpdate.moveToCohortId = student.moveToCohortId;
                     studentToUpdate.moveToCohortName = student.moveToCohortName;
                 }
-                else
-                    _.remove(this.rosterChangesModel.students, function (s) {
-                        return s.studentId == student.studentId;
-                    });
+                else {
+                    if (studentToUpdate.moveToCohortId == null && !studentToUpdate.isRepeater && !studentToUpdate.isInactive && !studentToUpdate.isGrantUntimedTest)
+                        _.remove(this.rosterChangesModel.students, function (s) {
+                            return s.studentId == student.studentId;
+                        });
+                    else
+                        _.filter(this.rosterChangesModel.students, function (s) {
+                            if (s.studentId == student.studentId)
+                                s = student;
+                        });
+                        }                   
             }
             else
                 if (student.moveToCohortId !== null)
