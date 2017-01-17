@@ -160,7 +160,6 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
             return {
                 moveFromCohortId: student.CohortId,
                 moveFromCohortName: student.CohortName,
-                moveFromCohortExpired: (!!student.CohortEndDate && moment(student.CohortEndDate).isBefore(new Date())) || (!!student.UserExpireDate && moment(student.UserExpireDate).isBefore(new Date())),
                 studentId: student.StudentId,
                 firstName: student.FirstName,
                 lastName: student.LastName,
@@ -169,7 +168,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
                 moved: this.isStudentMoved(student.StudentId),
                 isActive: student.IsActiveCohort,
                 sameCohort: !!(student.CohortId === this.rosterChangesModel.cohortId),
-                buttonText: this.getButtonText((!!student.CohortEndDate && moment(student.CohortEndDate).isBefore(new Date())) || (!!student.UserExpireDate && moment(student.UserExpireDate).isBefore(new Date())), !!(student.CohortId === this.rosterChangesModel.cohortId)),
+                buttonText: this.getButtonText(!!(student.CohortId === this.rosterChangesModel.cohortId)),
                 duplicate: this.checkDuplicate(students, student)
             }
         });
@@ -183,10 +182,8 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         });
     }
 
-    protected getButtonText(expired: boolean, sameCohort: boolean): string {
-        if (expired)
-            return rosters.btn_access_expired;
-        else if (sameCohort)
+    protected getButtonText(sameCohort: boolean): string {
+        if (sameCohort)
             return rosters.btn_same_cohort;
         return `Request move to this cohort`;
     }

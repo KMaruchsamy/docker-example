@@ -34,8 +34,6 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
     existingStudent: any;
     emailValidateSubscription: Subscription;
     errorMessage: string;
-    showExpiredMessage: boolean = false;
-    expiredMessage: string = rosters.expired_message;
     message: string = '';
     constructor(private common: CommonService, private validations: ValidationsService, private rosterSerivice: RosterService) { }
 
@@ -86,14 +84,9 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
                             __this.existingStudent.email = e.Email;
                             __this.existingStudent.moveFromCohortId = e.CohortId;
                             __this.existingStudent.moveFromCohortName = e.CohortName;
-                            __this.existingStudent.expired = ((!!e.CohortEndDate && moment(e.CohortEndDate).isBefore(new Date())) || (!!e.UserExpireDate && moment(e.UserExpireDate).isBefore(new Date())));
                             __this.existingStudent.sameCohort = (e.CohortId === __this.rosterChangesModel.cohortId);
-                            __this.existingStudent.buttonText = __this.getButtonText(__this.existingStudent.expired, __this.existingStudent.sameCohort);
-                            // this.existingStudents.push(existingStudent);
-                            // this.showExpiredMessage = __this.existingStudent.expired;
-                            if (__this.existingStudent.expired)
-                                __this.message = rosters.student_has_kaplan_account_expired;
-                            else if (__this.existingStudent.sameCohort)
+                            __this.existingStudent.buttonText = __this.getButtonText(__this.existingStudent.sameCohort);
+                            if (__this.existingStudent.sameCohort)
                                 __this.message = rosters.student_already_in_cohort;
                             else
                                 __this.message = rosters.student_has_kaplan_account;
@@ -133,10 +126,8 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
 
     }
 
-    protected getButtonText(expired: boolean, sameCohort: boolean): string {
-        if (expired)
-            return rosters.btn_access_expired;
-        else if (sameCohort)
+    protected getButtonText(sameCohort: boolean): string {
+        if (sameCohort)
             return rosters.btn_same_cohort;            
         return `Request move to this cohort`;
     }
@@ -155,7 +146,6 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
 
     clearToAddStudents(e: any) {
         e.preventDefault();
-        this.showExpiredMessage = false;
         this.existingStudent = null;
     }
 
