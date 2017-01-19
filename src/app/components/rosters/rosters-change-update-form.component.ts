@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy} from '@angul
 import {NgFor, NgIf} from '@angular/common';
 import {Router} from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
-import { links } from '../../constants/config';
+import { links, RosterUpdateTypes } from '../../constants/config';
 import { Response } from '@angular/http';
 import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
@@ -325,7 +325,12 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
+        loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
+        let savedData: RosterChangesModel = JSON.parse(this.sStorage.getItem('rosterChanges'));
+        let savedStudents: Array<ChangeUpdateRosterStudentsModel> = [];
+        if (savedData && savedData.students && savedData.students.length > 0) {
+            savedStudents = _.filter(savedData.students, { 'updateType': RosterUpdateTypes.MoveToDifferentCohort });
+        }
         if (cohortStudents) {
             this.rosterChangeUpdateStudents = _.map(cohortStudents, (student: any) => {
                 let changeUpdateStudent = new ChangeUpdateRosterStudentsModel();
@@ -346,6 +351,27 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 }
                 else
                     changeUpdateStudent.userExpiryDate = false;
+
+                if (savedStudents.length > 0) {
+                    let savedStudent: ChangeUpdateRosterStudentsModel = _.find(savedStudents, { 'studentId': student.StudentId });
+                    if (savedStudent) {
+                        if (_.has(savedStudent, 'moveToCohortId'))
+                            changeUpdateStudent.moveToCohortId = savedStudent.moveToCohortId;
+
+                        if (_.has(savedStudent, 'moveToCohortName'))
+                            changeUpdateStudent.moveToCohortName = savedStudent.moveToCohortName;
+
+                        if (_.has(savedStudent, 'isInactive'))
+                            changeUpdateStudent.isInactive = savedStudent.isInactive;
+
+                        if (_.has(savedStudent, 'isRepeater'))
+                            changeUpdateStudent.isRepeater = savedStudent.isRepeater;
+
+                        if (_.has(savedStudent, 'isGrantUntimedTest'))
+                            changeUpdateStudent.isGrantUntimedTest = savedStudent.isGrantUntimedTest;
+                    }
+                }
+
                 return changeUpdateStudent;
             });
             this.showDuplicateStudentMessage = _.some(this.rosterChangeUpdateStudents, ['isDuplicate', true]);
