@@ -138,7 +138,12 @@ export class RostersChangesUpdatesComponent implements OnInit {
             let student: ChangeUpdateRosterStudentsModel = e;
             let studentToUpdate: ChangeUpdateRosterStudentsModel = _.find(this.rosterChangesModel.students, { 'studentId': student.studentId });
             if (studentToUpdate) {
-                studentToUpdate = student;
+                // studentToUpdate = student;
+                studentToUpdate.isGrantUntimedTest = student.isGrantUntimedTest;
+                studentToUpdate.isInactive = student.isInactive;
+                studentToUpdate.isRepeater = student.isRepeater;
+                studentToUpdate.moveToCohortId = student.moveToCohortId;
+                studentToUpdate.moveToCohortName = student.moveToCohortName;
                 if (studentToUpdate.moveToCohortId == null && !studentToUpdate.isRepeater && !studentToUpdate.isInactive && !studentToUpdate.isGrantUntimedTest)
                     _.remove(this.rosterChangesModel.students, function (s) {
                         return s.studentId == student.studentId;
@@ -158,7 +163,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
                     studentToUpdate.moveToCohortName = student.moveToCohortName;
                 }
                 else {
-                    if (studentToUpdate.moveToCohortId == null && !studentToUpdate.isRepeater && !studentToUpdate.isInactive && !studentToUpdate.isGrantUntimedTest)
+                    if (student.moveToCohortId == null && !student.isRepeater && !student.isInactive && !student.isGrantUntimedTest)
                         _.remove(this.rosterChangesModel.students, function (s) {
                             return s.studentId == student.studentId;
                         });
