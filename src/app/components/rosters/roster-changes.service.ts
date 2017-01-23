@@ -21,6 +21,10 @@ export class RosterChangesService {
         this.sStorage = this.common.getStorage();
         let rosterChanges = this.sStorage.getItem('rosterChanges');
         let rosterChangesModel = this.bindJSONToModel(rosterChanges);
+        // set user info to include in email to faculty after change request has been successful
+        rosterChangesModel.facultyEmail = this.sStorage.getItem('useremail');
+        rosterChangesModel.facultyFirstName = this.sStorage.getItem('firstname');
+        rosterChangesModel.facultyLastName = this.sStorage.getItem('lastname');
         if (!rosterChangesModel.accountManagerId) {
             let accountManagerInfo = this.getAccountManagerID(rosterChangesModel.institutionId);
             rosterChangesModel.accountManagerId = accountManagerInfo.accountManagerId;

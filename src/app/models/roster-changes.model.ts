@@ -10,9 +10,12 @@ export class RosterChangesModel {
     accountManagerId: number;
     accountManagerFirstName: string;
     accountManagerLastName: string;
-    accountManagerPhoneNumber: string;
+    accountManagerPhoneNumber?: string;
     accountManagerEmail: string;
-    accountManagerPhotoURI: string;
+    accountManagerPhotoURI?: string;
     students: Array<ChangeUpdateRosterStudentsModel>;
     instructions?: string;
+    facultyFirstName: string;
+    facultyLastName: string;
+    facultyEmail: string;
 }
