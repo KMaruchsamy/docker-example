@@ -25,11 +25,6 @@ export class RosterChangesService {
         rosterChangesModel.facultyEmail = this.sStorage.getItem('useremail');
         rosterChangesModel.facultyFirstName = this.sStorage.getItem('firstname');
         rosterChangesModel.facultyLastName = this.sStorage.getItem('lastname');
-        if (!rosterChangesModel.accountManagerId) {
-            let accountManagerInfo = this.getAccountManagerID(rosterChangesModel.institutionId);
-            rosterChangesModel.accountManagerId = accountManagerInfo.accountManagerId;
-            rosterChangesModel.institutionName = accountManagerInfo.institutionName;
-        }
         if (!rosterChangesModel.students)
             rosterChangesModel.students = [];
         return rosterChangesModel;
@@ -45,16 +40,6 @@ export class RosterChangesService {
     bindJSONToModel(JSONString: string): RosterChangesModel {
         let parsedJSON: RosterChangesModel = JSON.parse(JSONString);
         return parsedJSON;
-    }
-
-    getAccountManagerID(institutionId: number) {
-        let institution: any = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': +institutionId });
-        if (institution) {
-            return {
-                accountManagerId: institution.AccountManagerId,
-                institutionName: institution.InstitutionNameWithProgOfStudy
-            }
-        }
     }
 
     outOfRostersChanges(routeName: string): boolean {
