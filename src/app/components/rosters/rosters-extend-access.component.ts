@@ -12,7 +12,6 @@ import { RosterCohortsModel } from '../../models/roster-cohorts.model';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import { RosterService } from './roster.service';
 import { RosterChangesService } from './roster-changes.service';
-import { ProfileService } from '../home/profile.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -30,14 +29,13 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
     cohortStudentsSubscription: Subscription;
     cohortSubscription: Subscription;
     _institutionId: number;
-    profileSubscription: Subscription;
     selectAll: boolean = false;
     allSelected: boolean = false;
     extendAccessStudents: Array<any>;
     rosterChangeUpdateStudents: ChangeUpdateRosterStudentsModel[];
 
     constructor(private changeDetectorRef: ChangeDetectorRef, public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, 
-    private rosterCohortsModel: RosterCohortsModel, private rosterChangesService: RosterChangesService, private rosterService: RosterService, private profileService: ProfileService) {
+    private rosterCohortsModel: RosterCohortsModel, private rosterChangesService: RosterChangesService, private rosterService: RosterService) {
     }
 
     ngOnDestroy(): void {
@@ -45,8 +43,6 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
             this.cohortStudentsSubscription.unsubscribe();
         if (this.cohortSubscription)
             this.cohortSubscription.unsubscribe();
-        if (this.profileSubscription)
-            this.profileSubscription.unsubscribe();
     }
 
     ngOnInit(): void {
@@ -65,7 +61,6 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
             let cohortId: number = this.rosterChangesModel.cohortId;
             this._institutionId = this.rosterChangesModel.institutionId;
             this.getRosterCohortStudents(cohortId);
-            this.loadProfileDescription();
             this.titleService.setTitle('Request Extended Access – Kaplan Nursing');
             window.scroll(0, 0);
         }
@@ -209,24 +204,6 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
       } else {
           this.selectAll = false;
       }
-    }
-
-    loadProfileDescription(): void {
-        let url = `${this.auth.common.getApiServer()}${links.api.baseurl}${links.api.admin.profilesapi}/${this.rosterChangesModel.accountManagerId}`;
-        let profileObservable: Observable<Response> = this.profileService.getProfile(url);
-        this.profileSubscription = profileObservable
-            .map(response => response.json())
-            .subscribe(json => {
-                if (json) {
-                    this.rosterChangesModel.accountManagerFirstName = json.FirstName;
-                    this.rosterChangesModel.accountManagerLastName = json.LastName;
-                    this.rosterChangesModel.accountManagerEmail = json.Email;
-                } 
-            },
-            error => console.log(error.message),
-            () => {
-                //done callback
-            });
     }
 
     redirectToReview(): void {
