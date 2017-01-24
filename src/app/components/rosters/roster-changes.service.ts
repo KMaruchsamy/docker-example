@@ -21,11 +21,10 @@ export class RosterChangesService {
         this.sStorage = this.common.getStorage();
         let rosterChanges = this.sStorage.getItem('rosterChanges');
         let rosterChangesModel = this.bindJSONToModel(rosterChanges);
-        if (!rosterChangesModel.accountManagerId) {
-            let accountManagerInfo = this.getAccountManagerID(rosterChangesModel.institutionId);
-            rosterChangesModel.accountManagerId = accountManagerInfo.accountManagerId;
-            rosterChangesModel.institutionName = accountManagerInfo.institutionName;
-        }
+        // set user info to include in email to faculty after change request has been successful
+        rosterChangesModel.facultyEmail = this.sStorage.getItem('useremail');
+        rosterChangesModel.facultyFirstName = this.sStorage.getItem('firstname');
+        rosterChangesModel.facultyLastName = this.sStorage.getItem('lastname');
         if (!rosterChangesModel.students)
             rosterChangesModel.students = [];
         return rosterChangesModel;
@@ -41,16 +40,6 @@ export class RosterChangesService {
     bindJSONToModel(JSONString: string): RosterChangesModel {
         let parsedJSON: RosterChangesModel = JSON.parse(JSONString);
         return parsedJSON;
-    }
-
-    getAccountManagerID(institutionId: number) {
-        let institution: any = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': +institutionId });
-        if (institution) {
-            return {
-                accountManagerId: institution.AccountManagerId,
-                institutionName: institution.InstitutionNameWithProgOfStudy
-            }
-        }
     }
 
     outOfRostersChanges(routeName: string): boolean {

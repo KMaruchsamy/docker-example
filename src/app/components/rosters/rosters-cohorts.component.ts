@@ -98,7 +98,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
             let extensionCohort: RosterCohortsModel;
             this.rosters.institutionId = roster.InstitutionId;
             this.rosters.institutionName = roster.InstitutionName;
-            this.rosters.institutionNameWithProgOfStudy = roster.InstitutionNameWithProgOfStudy;
+            this.rosters.programOfStudy = roster.ProgramOfStudyName;
             this.rosters.accountManagerId = roster.AccountManagerId;
             this.rosters.accountManagerFirstName = roster.AccountManagerFirstName;
             this.rosters.accountManagerLastName = roster.AccountManagerLastName;
@@ -264,6 +264,12 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
     directToChangeOrExtendForm(cohortId, cohortName, targetRoute) {
         //save model
         this.rosterChangesModel.institutionId = this.institutionId;
+        this.rosterChangesModel.institutionName = this.rosters.institutionName;
+        this.rosterChangesModel.programOfStudy = this.rosters.programOfStudy;
+        this.rosterChangesModel.accountManagerId = this.rosters.accountManagerId;
+        this.rosterChangesModel.accountManagerFirstName = this.rosters.accountManagerFirstName;
+        this.rosterChangesModel.accountManagerLastName = this.rosters.accountManagerLastName;
+        this.rosterChangesModel.accountManagerEmail = this.rosters.accountManagerEmail;
         this.rosterChangesModel.cohortId = cohortId;
         this.rosterChangesModel.cohortName = cohortName;
         this.sStorage = this.common.getStorage();

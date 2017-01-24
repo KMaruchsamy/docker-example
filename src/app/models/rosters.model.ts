@@ -3,7 +3,7 @@ import { RosterCohortsModel } from './roster-cohorts.model';
 export class RostersModal {
     institutionId: number;
     institutionName: string;
-    institutionNameWithProgOfStudy: string;
+    programOfStudy: string;
     accountManagerId: number;
     accountManagerFirstName: string;
     accountManagerLastName: string;

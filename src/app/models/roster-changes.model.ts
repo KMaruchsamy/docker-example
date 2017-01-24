@@ -5,14 +5,18 @@ import { ChangeUpdateRosterStudentsModel } from './change-update-roster-students
 export class RosterChangesModel {
     institutionId: number;
     institutionName: string;
+    programOfStudy: string;
     cohortId: number;
     cohortName: string;
     accountManagerId: number;
     accountManagerFirstName: string;
     accountManagerLastName: string;
-    accountManagerPhoneNumber: string;
+    accountManagerPhoneNumber?: string;
     accountManagerEmail: string;
-    accountManagerPhotoURI: string;
+    accountManagerPhotoURI?: string;
     students: Array<ChangeUpdateRosterStudentsModel>;
     instructions?: string;
+    facultyFirstName: string;
+    facultyLastName: string;
+    facultyEmail: string;
 }
