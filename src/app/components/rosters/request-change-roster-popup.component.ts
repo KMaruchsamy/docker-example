@@ -73,13 +73,6 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
             let __this = this;
             let _keepInCohort: any;
             let seperateExtensionCohort: RosterCohortsModel[] = [];
-            this.rosters.institutionId = roster.InstitutionId;
-            this.rosters.institutionName = roster.InstitutionName;
-            this.rosters.institutionNameWithProgOfStudy = roster.InstitutionNameWithProgOfStudy;
-            this.rosters.accountManagerId = roster.AccountManagerId;
-            this.rosters.accountManagerFirstName = roster.AccountManagerFirstName;
-            this.rosters.accountManagerLastName = roster.AccountManagerLastName;
-            this.rosters.accountManagerEmail = roster.AccountManagerEmail;
             this.rosters.studentPayEnabled = roster.StudentPayEnabled;
             if (roster.Cohorts.length > 0) {
                 roster.Cohorts = _.orderBy(roster.Cohorts, function (o: any) {
