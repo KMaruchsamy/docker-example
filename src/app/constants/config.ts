@@ -155,11 +155,11 @@ export const TestShedulingPages = {
 
 export const RosterChangesPages = {
     MAKECHANGES: 'ROSTERS/CHANGE-UPDATE',
-    EXTENDACCESS: '/ROSTERS/EXTEND-ACCESS',
+    EXTENDACCESS: 'ROSTERS/EXTEND-ACCESS',
     REVIEWCHANGES: 'ROSTERS/ROSTER-CHANGES-SUMMARY',
-    CHANGESCONFIRMATION: 'ROSTERS/ROSTER-CHANGES-CONFIRMATION',
-    CHANGESNOTE: '/rosters/changes-note',
-    VIEWROSTERS: '/rosters'
+    CHANGESCONFIRMATION: 'ROSTERS/CONFIRMATION',
+    CHANGESNOTE: 'rosters/changes-note',
+    VIEWROSTERS: 'rosters'
 }
 export const teststatus = {
     Completed: 'Completed',
