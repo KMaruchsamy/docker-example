@@ -5,6 +5,8 @@ import { AuthService } from './../../services/auth.service';
 import { RosterChangesPages } from './../../constants/config';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { Injectable } from '@angular/core';
+import {Http, Response, RequestOptions, Headers} from "@angular/http";
+import {Observable} from 'rxjs/Rx';
 
 @Injectable()
 export class RosterChangesService {
@@ -14,7 +16,9 @@ export class RosterChangesService {
     institutionName: string;
     cohortName: string;
     institutions: Array<any> = [];
-    constructor(public auth: AuthService, private common: CommonService, private rosterChangesModel: RosterChangesModel) {
+
+    constructor(public auth: AuthService, private common: CommonService, private rosterChangesModel: RosterChangesModel, private http: Http) {
+        this.http = http;
     }
 
     getRosterChangesModel(): RosterChangesModel {
@@ -58,4 +62,19 @@ export class RosterChangesService {
         this.sStorage.removeItem('rosterChanges');
     }
 
+    updateRosterChanges(url: string, input: string): Observable<Response> {
+        return this.http.post(url, input, this.getRequestOptions())
+    }
+    private getRequestOptions(): RequestOptions {
+        let self = this;
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.auth.authheader
+        });
+        let requestOptions: RequestOptions = new RequestOptions({
+            headers: headers
+        });
+        return requestOptions;
+    }
 }

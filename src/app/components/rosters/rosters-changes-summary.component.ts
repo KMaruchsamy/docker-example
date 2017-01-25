@@ -3,14 +3,15 @@ import { Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterSt
 import { Title } from '@angular/platform-browser';
 import { NgIf } from '@angular/common';
 import { CommonService } from './../../services/common.service';
-import { Observable } from 'rxjs/Rx';
-
+import { Observable, Subscription } from 'rxjs/Rx';
+import { Response } from '@angular/http';
 import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { RosterChangesService } from './roster-changes.service';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import { RosterChangesSummaryTablesComponent } from './rosters-changes-summary-tables.component';
 import * as _ from 'lodash';
+import {links} from '../../constants/config';
 
 @Component({
     selector: 'rosters-changes-summary',
@@ -41,7 +42,7 @@ export class RosterChangesSummaryComponent implements OnInit {
         else {
             this.rosterChangesModel = this.rosterChangesService.getUpdatedRosterChangesModel();
             this.titleService.setTitle('Roster Change Request Summary – Kaplan Nursing');
-            window.scroll(0, 0);
+            window.scroll(0, 0); 
         }
     }
 
@@ -76,6 +77,44 @@ export class RosterChangesSummaryComponent implements OnInit {
         this.attemptedRoute = '/rosters';
         $('#confirmationPopup').modal('show');
     }
+    submitRequests(): void {
+        //console.log('modal='+this.rosterChangesModel)
+        let input = {
+            "SubmitterId": this.auth.userid,
+            "CohortId": this.rosterChangesModel.cohortId,
+            "InstitutionId": this.rosterChangesModel.institutionId,
+            "SpecialRequestNote": this.rosterChangesModel.instructions == null ? "" : this.rosterChangesModel.instructions,
+            "AccountManagerId": this.rosterChangesModel.accountManagerId,
+            "RosterRequestStudents": _.map(this.rosterChangesModel.students, (_student)=> {
+                return {
+                    StudentId: (_student.studentId == null) ? 0 : _student.studentId,
+                    MoveFromCohortId: _student.moveFromCohortId,
+                    MoveToCohortId: _student.moveToCohortId,
+                    IsRepeater: _student.isRepeater,
+                    IsInActive: _student.isInactive,
+                    IsGrantUntimedTest: _student.isGrantUntimedTest,
+                    IsExtendAccess: _student.isExtendAccess,
+                    EmailId: _student.email,
+                    FirstName: _student.firstName,
+                    LastName: _student.lastName
+                }
+            })
+        };
 
+        let rosterChangeUpdateObservable: Observable<Response>;
+        let rosterChangeUpdateURL = '';
+        rosterChangeUpdateURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.rosters.saveRosterCohortChanges}`;
+        rosterChangeUpdateObservable = this.rosterChangesService.updateRosterChanges(rosterChangeUpdateURL, JSON.stringify(input));
 
+        let __this = this;
+        rosterChangeUpdateObservable
+            .map(response => response.json())
+            .subscribe(json => {
+                let result = json;
+                console.log('result='+result);                
+
+            }, error => {
+                    console.log(error);
+            });
+    }   
 }
