@@ -7,7 +7,8 @@ export const messages = {
 };
 
 export const general = {
-    exception: "We're sorry, an error has occurred. Please try again."
+    exception: "We're sorry, an error has occurred. Please try again.",
+    requestException: "We're sorry! Your request did not go through. Please try again."
 };
 
 export const login = {
