@@ -17,6 +17,7 @@ import { TestService } from './../tests/test.service';
 // import { ProfileComponent } from './profile.component';
 import { ProfileModel } from './../../models/profile.model';
 // import { PageScroll } from 'ng2-page-scroll/ng2-page-scroll';
+declare var Appcues: any;
 
 
 @Component({
@@ -46,6 +47,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     profilesSubscription: Subscription;
     subjectsSubscription: Subscription;
     isMultiCampus: boolean = false;
+    sStorage: any;
+    userEmail: string
+    userId: number;
+    firstName: string;
+    lastName: string;
     constructor(public router: Router, public auth: AuthService, public location: Location, public common: CommonService, public profileService: ProfileService, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
     }
 
@@ -62,6 +68,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.redirectToPage();
         this.initialize();
         // this.profiles = [];
+        this.sStorage = this.common.getStorage();
+        this.getUserInfo();
         let self = this;
         this.accountManagerProfile = new ProfileModel(null, null, 'ACCOUNTMANAGER', null, null, null, null, null, null, null, null, null, null, null);
         this.nurseConsultantProfile = new ProfileModel(null, null, 'NURSECONSULTANT', null, null, null, null, null, null, null, null, null, null, null);
@@ -69,6 +77,21 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.checkInstitutions();
         window.scroll(0,0);
         this.titleService.setTitle('Faculty Home – Kaplan Nursing');
+    }
+
+    getUserInfo(): void {
+        this.userEmail = this.sStorage.getItem('useremail');
+        this.userId = this.sStorage.getItem('userid');
+        this.firstName = this.sStorage.getItem('firstname');
+        this.lastName = this.sStorage.getItem('lastname');
+
+        Appcues.identify(this.userId, {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.userEmail,
+        userId: this.userId
+      });
+
     }
 
     loadProfiles(self): void {

@@ -35,6 +35,9 @@ export class RostersComponent implements OnInit {
     institutionId: number;
     institutionName: string;
     institutions: Array<any> = [];
+    // facultyFirstName: string;
+    // facultyLastName: string;
+    // facultyEmail: string;
     constructor(public auth: AuthService, public router: Router, public titleService: Title) {
     }
 
