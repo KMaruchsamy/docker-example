@@ -29,7 +29,7 @@
                                     <button  id="btnChangeToCohort_{{cohortStudent.studentId}}" [disabled]="cohortStudent.isInactive || cohortStudent.userExpiryDate" class="button button-small button-light js-choose-cohort button-fixed-width" [class.button-no-change]="(!cohortStudent.userExpiryDate && !(cohortStudent.isInactive) && !(cohortStudent.moveToCohortId !== null ))" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">{{cohortStudent.moveToCohortName ===null ?'Choose an active cohort' : cohortStudent.moveToCohortName}}</button>
                                 </td>
                                 <td>
-                                    <input  type="checkbox" class="checkbox-image js-disable js-repeat" [checked]="cohortStudent.isRepeater" id="chkRepeat_{{cohortStudent.studentId}}" (change)="checkRepeater(cohortStudent.studentId,$event)" [disabled]="!enableRepeaterCheckbox || (cohortStudent.moveToCohortId ===null) || cohortStudent.isInactive || cohortStudent.userExpiryDate" />
+                                    <input  type="checkbox" class="checkbox-image js-disable js-repeat" [checked]="cohortStudent.isRepeater" id="chkRepeat_{{cohortStudent.studentId}}" (change)="checkRepeater(cohortStudent.studentId,$event)" [disabled]="(cohortStudent.moveToCohortId ===null) || cohortStudent.isInactive || cohortStudent.userExpiryDate" />
                                     <label  for="chkRepeat_{{cohortStudent.studentId}}"></label>
                                 </td>
                                 <td>

@@ -61,7 +61,8 @@ export const links = {
                 saveUserPreference: 'preferenceService/setPreference',
                 getUserPreference: 'preferenceService/users/§userId/preferences/§preferenceTypeName?userType=§userType',
                 moveToCohortStudents: 'admin/rosters/institution/§institutionId/cohort/§cohortId/students?searchString=§searchString',
-                addEmailValidation: 'admin/rosters/institution/§institutionId/student?searchEmailId=§searchEmailId'
+                addEmailValidation: 'admin/rosters/institution/§institutionId/student?searchEmailId=§searchEmailId',
+                saveRosterCohortChanges:'admin/rosters/RequestChange'
             }
         }
     },
@@ -154,11 +155,11 @@ export const TestShedulingPages = {
 
 export const RosterChangesPages = {
     MAKECHANGES: 'ROSTERS/CHANGE-UPDATE',
-    EXTENDACCESS: '/ROSTERS/EXTEND-ACCESS',
+    EXTENDACCESS: 'ROSTERS/EXTEND-ACCESS',
     REVIEWCHANGES: 'ROSTERS/ROSTER-CHANGES-SUMMARY',
-    CHANGESCONFIRMATION: 'ROSTERS/ROSTER-CHANGES-CONFIRMATION',
-    CHANGESNOTE: '/rosters/changes-note',
-    VIEWROSTERS: '/rosters'
+    CHANGESCONFIRMATION: 'ROSTERS/CONFIRMATION',
+    CHANGESNOTE: 'rosters/changes-note',
+    VIEWROSTERS: 'rosters'
 }
 export const teststatus = {
     Completed: 'Completed',

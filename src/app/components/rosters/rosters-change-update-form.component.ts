@@ -276,7 +276,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
             else
                 el.attr('checked', 'checked');
 
-            let _isRepeater = (!this.enableRepeaterCheckbox) || (_selectedStudent.moveToCohortId === null) || (_selectedStudent.isInactive !== null ? _selectedStudent.isInactive : false || _selectedStudent.userExpiryDate);
+            let _isRepeater = (_selectedStudent.moveToCohortId === null) || (_selectedStudent.isInactive !== null ? _selectedStudent.isInactive : false || _selectedStudent.userExpiryDate);
             if (_isRepeater)
                 el.attr('disabled', 'true');
             else
@@ -480,7 +480,6 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     changeCohortTo(_student: ChangeUpdateRosterStudentsModel) {
         this.showRequestChangePopup = false;
         if (_student !== undefined) {
-            this.enableRepeaterCheckbox = true;            
             if (this.isResponsive) {
                 let _id = $(this._event.target).attr('id').split('_')[1];
                 var el = $('#' + 'chkRepeat_' + _id);
@@ -489,8 +488,6 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
             }
             this.changeToDifferentCohortEvent.emit(_student);
         }
-        else
-            this.enableRepeaterCheckbox = false; 
     }
     
 }

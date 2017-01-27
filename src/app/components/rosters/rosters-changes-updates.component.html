@@ -30,7 +30,7 @@
             <textarea id="instructions" [(ngModel)]="instructions"></textarea>
             <div class="page-action-footer margin-1em-top-bottom">
                 <button class="anchor-button anchor-button-left" (click)="cancelChanges()">Cancel changes</button>
-                <button (click)="redirectToReview()" class="button" [disabled]="(!rosterChangesModel?.students || rosterChangesModel?.students?.length === 0) && (!instructions || instructions?.length === 0)">Review summary of changes/updates</button>
+                <button (click)="redirectToReview()" class="button" [disabled]="(!rosterChangesModel?.students || rosterChangesModel?.students?.length === 0) && (!instructions || instructions?.length === 0)">Review summary of changes<span class="hidden-extra-small-down">/updates</span></button>
             </div>
         </div>
     </section>
