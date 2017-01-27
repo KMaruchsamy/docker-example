@@ -42,10 +42,14 @@
 }
 
 .modal-content-small .button {
+    line-height: 1.4;
     margin-bottom: .5em;
-    text-align: left;
-    width: 100%;
+    padding-top: .6em;
+    padding-bottom: .6em;
     position: relative;
+    text-align: left;
+    white-space: normal;
+    width: 100%;
 }
 
 .modal-content-small img {
