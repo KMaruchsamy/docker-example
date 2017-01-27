@@ -91,7 +91,7 @@ export class RosterChangesSummaryComponent implements OnInit {
                     MoveFromCohortId: _student.moveFromCohortId,
                     MoveToCohortId: _student.moveToCohortId,
                     IsRepeater: _student.isRepeater,
-                    IsInActive: _student.isInactive,
+                    MakeInActive: _student.isInactive,
                     IsGrantUntimedTest: _student.isGrantUntimedTest,
                     IsExtendAccess: _student.isExtendAccess,
                     EmailId: _student.email,
@@ -100,7 +100,7 @@ export class RosterChangesSummaryComponent implements OnInit {
                 }
             })
         };
-
+        
         let rosterChangeUpdateObservable: Observable<Response>;
         let rosterChangeUpdateURL = '';
         rosterChangeUpdateURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.rosters.saveRosterCohortChanges}`;

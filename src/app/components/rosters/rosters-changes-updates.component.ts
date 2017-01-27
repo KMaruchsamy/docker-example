@@ -151,6 +151,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
             }
             else
                 this.rosterChangesModel.students.push(student);
+            console.log("changeUpdate=" + JSON.stringify(this.rosterChangesModel.students));
         }
     }
     changeToDifferentCohort(e: any) {
@@ -177,6 +178,8 @@ export class RostersChangesUpdatesComponent implements OnInit {
             else
                 if (student.moveToCohortId !== null)
                     this.rosterChangesModel.students.push(student);
+
+            console.log("different cohort=" + JSON.stringify(this.rosterChangesModel.students));
         }
     }
 

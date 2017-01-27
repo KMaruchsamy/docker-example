@@ -107,7 +107,7 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
 
     CloseCohortPopup(e) {
         e.preventDefault();
-        this.requestChangeCohortPopup.emit(this.rosterChangeUpdateStudents);
+        this.requestChangeCohortPopup.emit();
     }
 
     moveToCohort(_roster, e) {
