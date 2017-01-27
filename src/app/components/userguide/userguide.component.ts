@@ -5,6 +5,7 @@ import { links } from '../../constants/config';
 import { UtilityService } from '../../services/utility.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
+declare var Appcues: any;
 
 @Component({
     selector: 'userguide',
@@ -26,6 +27,7 @@ export class UserGuideComponent implements OnInit {
             window.scroll(0, 0);
             this.activeId = '#whatsNew';
             this.termsAccepted = true;
+            Appcues.start(); 
         }
         else {
             this.redirectToLogin();

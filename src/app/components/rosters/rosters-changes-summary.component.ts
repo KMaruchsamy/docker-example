@@ -11,7 +11,8 @@ import { RosterChangesService } from './roster-changes.service';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import { RosterChangesSummaryTablesComponent } from './rosters-changes-summary-tables.component';
 import * as _ from 'lodash';
-import {links} from '../../constants/config';
+import {links, errorcodes} from '../../constants/config';
+import { general } from '../../constants/error-messages';
 
 @Component({
     selector: 'rosters-changes-summary',
@@ -24,6 +25,8 @@ export class RosterChangesSummaryComponent implements OnInit {
     attemptedRoute: string;
     destinationRoute: string;
     isExtendedAccess: boolean = false;
+    errorMessage: string;
+    showErrorMessage: boolean = false;
 
     constructor(public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
     }
@@ -43,6 +46,7 @@ export class RosterChangesSummaryComponent implements OnInit {
             this.rosterChangesModel = this.rosterChangesService.getUpdatedRosterChangesModel();
             this.titleService.setTitle('Roster Change Request Summary – Kaplan Nursing');
             window.scroll(0, 0); 
+            this.errorMessage = general.requestException;
         }
     }
 
@@ -77,8 +81,8 @@ export class RosterChangesSummaryComponent implements OnInit {
         this.attemptedRoute = '/rosters';
         $('#confirmationPopup').modal('show');
     }
+    
     submitRequests(): void {
-        //console.log('modal='+this.rosterChangesModel)
         let input = {
             "SubmitterId": this.auth.userid,
             "CohortId": this.rosterChangesModel.cohortId,
@@ -108,13 +112,19 @@ export class RosterChangesSummaryComponent implements OnInit {
 
         let __this = this;
         rosterChangeUpdateObservable
-            .map(response => response.json())
-            .subscribe(json => {
-                let result = json;
-                console.log('result='+result);                
-
+            .map(response => response.status)
+            .subscribe(status => {
+            if (status.toString() === errorcodes.SUCCESS) {
+                // redirect to confirmation page
+                this.router.navigate(['/rosters/confirmation']);
+                if(this.showErrorMessage)
+                    this.showErrorMessage = false;
+            }    
             }, error => {
-                    console.log(error);
+                //show error message
+                this.showErrorMessage = true;
+                console.log(error);
             });
     }   
+
 }
