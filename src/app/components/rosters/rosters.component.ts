@@ -22,7 +22,7 @@ import { Title} from '@angular/platform-browser';
 // import { RostersCohortsComponent } from './rosters-cohorts.component';
 // import { RostersSearchComponent } from './rosters-search.component';
 import { AuthService } from './../../services/auth.service';
-
+declare var Appcues: any;
 
 @Component({
     selector: 'rosters',
@@ -35,9 +35,6 @@ export class RostersComponent implements OnInit {
     institutionId: number;
     institutionName: string;
     institutions: Array<any> = [];
-    // facultyFirstName: string;
-    // facultyLastName: string;
-    // facultyEmail: string;
     constructor(public auth: AuthService, public router: Router, public titleService: Title) {
     }
 
@@ -56,7 +53,7 @@ export class RostersComponent implements OnInit {
                     this.latestInstitution();
                 }
             }
-
+            Appcues.start();
             this.titleService.setTitle('View Rosters – Kaplan Nursing');
         }
         
