@@ -100,7 +100,8 @@ export class RosterChangesSummaryComponent implements OnInit {
                     IsExtendAccess: _student.isExtendAccess,
                     EmailId: _student.email,
                     FirstName: _student.firstName,
-                    LastName: _student.lastName
+                    LastName: _student.lastName,
+                    RequestTypeId: _student.updateType
                 }
             })
         };
