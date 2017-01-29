@@ -101,7 +101,9 @@ export class RosterChangesSummaryComponent implements OnInit {
                     EmailId: _student.email,
                     FirstName: _student.firstName,
                     LastName: _student.lastName,
-                    RequestTypeId: _student.updateType
+                    RequestTypeId: _student.updateType,
+                    MoveFromCohortName: _student.moveFromCohortName, 
+                    MoveToCohortName: _student.moveToCohortName
                 }
             })
         };
