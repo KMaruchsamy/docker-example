@@ -100,11 +100,14 @@ export class RosterChangesSummaryComponent implements OnInit {
                     IsExtendAccess: _student.isExtendAccess,
                     EmailId: _student.email,
                     FirstName: _student.firstName,
-                    LastName: _student.lastName
+                    LastName: _student.lastName,
+                    RequestTypeId: _student.updateType,
+                    MoveFromCohortName: _student.moveFromCohortName, 
+                    MoveToCohortName: _student.moveToCohortName
                 }
             })
         };
-        
+      //  console.log('final request=' + JSON.stringify(input));
         let rosterChangeUpdateObservable: Observable<Response>;
         let rosterChangeUpdateURL = '';
         rosterChangeUpdateURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.rosters.saveRosterCohortChanges}`;

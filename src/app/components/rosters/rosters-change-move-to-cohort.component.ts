@@ -229,6 +229,8 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
         let __this = this;
         e.preventDefault();
         student.addedFrom = RosterUpdateTypes.MoveToThisCohort;
+        student.moveToCohortId = this.rosterChangesModel.cohortId;
+        student.moveToCohortName = this.rosterChangesModel.cohortName;
         this.moveToCohort.emit(Object.assign({}, student));
         let movedStudent: any = _.find(this.boundStudents, { 'studentId': student.studentId });
         if (!!movedStudent)

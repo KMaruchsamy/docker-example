@@ -434,7 +434,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         let student: ChangeUpdateRosterStudentsModel;
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
             if (_student.studentId === _studentId) {
-                _student.updateType = 1;
+                _student.updateType = RosterUpdateTypes.MoveToDifferentCohort; 
                 _student.isRepeater = isChecked;
                 student = _student
             }
@@ -448,7 +448,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         let student: ChangeUpdateRosterStudentsModel;
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
             if (_student.studentId === _studentId) {
-                _student.updateType = 1;
+                _student.updateType = RosterUpdateTypes.MoveToDifferentCohort; 
                 _student.isInactive= isChecked;
                 _student.isRepeater = false;
                 _student.isGrantUntimedTest = false;
@@ -466,7 +466,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
             if (_student.studentId === _studentId) {
                 _student.isGrantUntimedTest = isChecked;
-                _student.updateType = 1;
+                _student.updateType = RosterUpdateTypes.MoveToDifferentCohort; 
                 if (_student.moveToCohortId === null) {
                     _student.isInactive = false;
                 }
