@@ -1,7 +1,7 @@
 ﻿import { Component, Input, Output, OnInit, OnDestroy, EventEmitter} from '@angular/core';
 import {NgFor} from '@angular/common';
 import { Observable, Subscription } from 'rxjs/Rx';
-import { links } from '../../constants/config';
+import { links, RosterUpdateTypes } from '../../constants/config';
 import { Response } from '@angular/http';
 import { AuthService } from './../../services/auth.service';
 
@@ -125,7 +125,7 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
                     _student.moveToCohortName = null;
                     _student.isRepeater = false;
                 }
-                _student.updateType = 1;
+                _student.updateType = RosterUpdateTypes.MoveToDifferentCohort;
                 updatedStudent = _student;
                 __this.updateRosterList(_roster.cohortId);
             }

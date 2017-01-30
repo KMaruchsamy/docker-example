@@ -107,7 +107,7 @@ export class RosterChangesSummaryComponent implements OnInit {
                 }
             })
         };
-        
+      //  console.log('final request=' + JSON.stringify(input));
         let rosterChangeUpdateObservable: Observable<Response>;
         let rosterChangeUpdateURL = '';
         rosterChangeUpdateURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.rosters.saveRosterCohortChanges}`;
