@@ -82,7 +82,7 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
         }
     }
 
-  loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
+    loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
         if (cohortStudents) {
             this.rosterChangeUpdateStudents = _.map(cohortStudents, (student: any) => {
                 let changeUpdateStudent = new ChangeUpdateRosterStudentsModel();
@@ -90,6 +90,8 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
                 changeUpdateStudent.firstName = student.FirstName;
                 changeUpdateStudent.lastName = student.LastName;
                 changeUpdateStudent.studentId = student.StudentId;
+                changeUpdateStudent.moveFromCohortId = student.CohortId;
+                changeUpdateStudent.moveFromCohortName = student.CohortName;
                 return changeUpdateStudent;
             });
             this.loadUpdatedCohortStudents();
@@ -106,7 +108,7 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
             _.each(extendAccessStudents, ( extendedAccessStudent: any) => {
                 let eachStudent = _.find(this.rosterChangeUpdateStudents, ['studentId', extendedAccessStudent.studentId]);
                 if (eachStudent) {
-                    eachStudent.isExtendAccess = true;
+                    eachStudent.isExtendAccess = true;                    
                     eachStudent.updateType = RosterUpdateTypes.ExtendAccess;
                 }
             });
