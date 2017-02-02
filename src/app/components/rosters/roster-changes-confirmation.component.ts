@@ -8,6 +8,7 @@ import { RosterChangesModel } from '../../models/roster-changes.model';
 import { RosterChangesService } from './roster-changes.service';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import { RosterChangesSummaryTablesComponent } from './rosters-changes-summary-tables.component';
+declare var Appcues: any;
 
 @Component({
     selector: 'roster-changes-confirmation',
@@ -36,6 +37,7 @@ export class RosterRequestsConfirmation implements OnInit {
             this.rosterChangesModel = this.rosterChangesService.getUpdatedRosterChangesModel();
             this.titleService.setTitle('Roster Change Request Confirmation – Kaplan Nursing');
             this.submittedDate = new Date();
+            Appcues.start();
             window.scroll(0, 0);
         }
     }
