@@ -19,7 +19,7 @@ import {RosterCohortUserPreferenceModel} from './../../models/roster-cohort-user
             <div class="container-narrow center">
                 <i class="icon large-roster-icon"></i>
                 <h2 class="margin-1em-top">Requesting cohort roster changes or updates</h2>
-                <p class="text-larger">Please note: <strong>Cohort rosters will not immediately reflect changes or updates submitted through the next page</strong>. Requests for changes or updates are submitted to your Account Manager, who will process them within (2) business days.</p>
+                <p class="text-larger">Please note: <strong>Cohort rosters will not immediately reflect changes or updates submitted through the next page</strong>. Requests for changes or updates are submitted to your Account Manager, who will process them within three (3) business days.</p>
                 <p class="text-larger">Your Account Manager will inform you when your changes have been processed.</p>
 
                 <div class="margin-2em-top clearfix">
