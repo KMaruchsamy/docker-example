@@ -483,10 +483,15 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
             if (this.isResponsive) {
                 let _id = $(this._event.target).attr('id').split('_')[1];
                 var el = $('#' + 'chkRepeat_' + _id);
+                el.focus(); // Set Focus to handle through keyboard
                 this.onChangingUserSelection(this._event);
                 el.prop('checked', _student.isRepeater);
             }
+            else {
+                $('#' + 'chkRepeat_' + _student.studentId).focus();          // Set Focus to handle through keyboard
+            }
             this.changeToDifferentCohortEvent.emit(_student);
+
         }
     }
     

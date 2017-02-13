@@ -44,8 +44,9 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
         this.rostersList = JSON.parse(this.sStorage.getItem('rosterlist'));
         if (this.rostersList === null || this.rostersList.length === 0) {
             this.rostersList = [];
-            this.rosterCohorts();
+            this.rosterCohorts();           
         }
+        $('#changeCohortModal').focus();
     }
     rosterCohorts() {
         let institutionId = this.rosterChangesModel.institutionId;
