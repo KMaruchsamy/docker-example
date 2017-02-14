@@ -1,10 +1,10 @@
-import { Cli21Page } from './app.po';
+import { Cli31Page } from './app.po';
 
-describe('cli21 App', function() {
-  let page: Cli21Page;
+describe('cli31 App', function() {
+  let page: Cli31Page;
 
   beforeEach(() => {
-    page = new Cli21Page();
+    page = new Cli31Page();
   });
 
   it('should display message saying app works', () => {
