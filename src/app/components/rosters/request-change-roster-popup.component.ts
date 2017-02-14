@@ -16,7 +16,7 @@ import {ChangeUpdateRosterStudentsModel} from '../../models/change-update-roster
     selector: 'request-change-roster-popup',
     providers: [RosterCohortsModel, RosterChangesModel],
     templateUrl: './request-change-roster-popup.component.html',
-    styleUrls: ['./rosters-change-update-form.component.css']
+    styleUrls: ['./rosters-change-update-form.component.css'] 
 })
 
 export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {

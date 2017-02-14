@@ -35,7 +35,7 @@ export class RostersAMInfoComponent implements OnDestroy {
   
     ngOnDestroy() {
         if (this.profileSubscription)
-        this.profileSubscription.unsubscribe();
+            this.profileSubscription.unsubscribe();
     }
 
     loadProfileDescription(): void {
