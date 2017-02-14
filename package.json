@@ -4,7 +4,7 @@
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
-    "ng":"ng",
+    "ng": "ng",
     "start": "ng serve",
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
@@ -12,7 +12,7 @@
     "e2e": "protractor"
   },
   "private": true,
-  "dependencies": {    
+  "dependencies": {
     "@angular/common": "^2.3.1",
     "@angular/compiler": "^2.3.1",
     "@angular/core": "^2.3.1",
@@ -51,6 +51,7 @@
     "zone.js": "^0.7.2"
   },
   "devDependencies": {
+    "@angular/cli": "^1.0.0-beta.31",
     "@angular/compiler-cli": "^2.3.1",
     "@types/bootstrap": "^3.3.32",
     "@types/bootstrap-datepicker": "0.0.4",
@@ -75,9 +76,9 @@
     "@types/yargs": "^6.3.0",
     "@types/zone.js": "0.0.27",
     "angular-cli": "1.0.0-beta.24",
-    "codelyzer": "~2.0.0-beta.1",
     "bower": "1.7.9",
     "browser-sync": "^2.12.8",
+    "codelyzer": "~2.0.0-beta.1",
     "connect-history-api-fallback": "^1.2.0",
     "gulp": "3.9.1",
     "gulp-load-plugins": "^1.0.0",
