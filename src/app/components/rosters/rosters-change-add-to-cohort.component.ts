@@ -59,12 +59,13 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
     }
 
     addToCohort(): void {
-
         let alreadyAdded: boolean = _.some(this.rosterChangesModel.students, { 'email': this.email });
         if (alreadyAdded) {
             this.errorMessage = rosters.student_already_added;
             return;
         }
+        else
+            this.errorMessage = '';
 
         let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.addEmailValidation}`;
         url = url.replace("§institutionId", this.rosterChangesModel.institutionId.toString()).replace('§searchEmailId', this.email);
