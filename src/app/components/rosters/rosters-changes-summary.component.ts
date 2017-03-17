@@ -27,6 +27,7 @@ export class RosterChangesSummaryComponent implements OnInit {
     isExtendedAccess: boolean = false;
     errorMessage: string;
     showErrorMessage: boolean = false;
+    valid: boolean = true;
 
     constructor(public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
     }
@@ -83,6 +84,7 @@ export class RosterChangesSummaryComponent implements OnInit {
     }
     
     submitRequests(): void {
+        this.valid = false;
         let input = {
             "SubmitterId": this.auth.userid,
             "CohortId": this.rosterChangesModel.cohortId,

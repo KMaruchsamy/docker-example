@@ -12,7 +12,7 @@
             <span *ngIf="showErrorMessage">{{errorMessage}}</span>
           </div>
           <button (click)="summaryTables.checkPrevRoute()" class="anchor-button anchor-button-left">Modify this request</button>
-          <button (click)="submitRequests()" class="button">Submit request<span class="hidden-extra-small-down"> to Account Manager</span></button>
+          <button (click)="submitRequests()" class="button" [disabled]="!valid">Submit request<span class="hidden-extra-small-down"> to Account Manager</span></button>
         </div>
         <button class="anchor-button anchor-button-center-mobile clear right " (click)="cancelChanges()">Cancel requested changes</button>
       </div>
