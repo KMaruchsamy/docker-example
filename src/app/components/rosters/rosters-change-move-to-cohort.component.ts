@@ -272,8 +272,8 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     }
 
     toggleTd() {
-        $('tr td:first-child').unbind('click');
-        $('tr td:first-child').on('click', function () {
+        $('#moveExisting tr td:first-child, #searchResultsTable tr td:first-child').unbind('click');
+        $('#moveExisting tr td:first-child, #searchResultsTable tr td:first-child').on('click', function () {
             var $firstTd = $(this);
             var $tr = $(this).parent('tr');
             var $hiddenTd = $tr.find('td').not($(this));
