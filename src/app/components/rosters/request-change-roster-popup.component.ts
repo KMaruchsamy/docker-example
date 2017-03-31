@@ -124,7 +124,6 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
                 else {
                     _student.moveToCohortId = null;
                     _student.moveToCohortName = null;
-                    _student.isRepeater = false;
                 }
                 _student.updateType = RosterUpdateTypes.MoveToDifferentCohort;
                 updatedStudent = _student;

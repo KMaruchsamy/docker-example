@@ -82,7 +82,7 @@ export class RosterChangesSummaryComponent implements OnInit {
         this.attemptedRoute = '/rosters';
         $('#confirmationPopup').modal('show');
     }
-    
+
     submitRequests(): void {
         this.valid = false;
         let input = {
@@ -96,7 +96,7 @@ export class RosterChangesSummaryComponent implements OnInit {
                     StudentId: (_student.studentId == null) ? 0 : _student.studentId,
                     MoveFromCohortId: _student.moveFromCohortId,
                     MoveToCohortId: _student.moveToCohortId,
-                    IsRepeater: _student.isRepeater,
+                    IsRepeater: false,
                     MakeInActive: _student.isInactive,
                     IsGrantUntimedTest: _student.isGrantUntimedTest,
                     IsExtendAccess: _student.isExtendAccess,
@@ -109,7 +109,7 @@ export class RosterChangesSummaryComponent implements OnInit {
                 }
             })
         };
-      //  console.log('final request=' + JSON.stringify(input));
+       // console.log('final request=' + JSON.stringify(input));
         let rosterChangeUpdateObservable: Observable<Response>;
         let rosterChangeUpdateURL = '';
         rosterChangeUpdateURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.rosters.saveRosterCohortChanges}`;

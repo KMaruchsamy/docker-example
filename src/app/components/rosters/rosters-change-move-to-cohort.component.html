@@ -21,7 +21,6 @@
                         <tr class="gray-th">
                             <th scope="col">Name</th>
                             <th scope="col">Move from</th>
-                            <th class="centered-th" scope="col">Mark as repeater</th>
                             <th class="centered-th" scope="col">Grant untimed tests</th>
                             <th scope="col"></th>
                         </tr>
@@ -35,15 +34,6 @@
                             <td class="tablesaw-stacked-hidden">
                                 <b class="tablesaw-cell-label">Move From</b>
                                 <span class="tablesaw-cell-content">{{selectedStudent.moveFromCohortName}}</span>
-                            </td>
-                            <td class="center tablesaw-stacked-hidden">
-                                <b class="tablesaw-cell-label">Mark as repeater</b>
-                                <span class="tablesaw-cell-content">
-                                    <input type="checkbox" class="checkbox-image" (change)="updateRepeater(selectedStudent, $event)"
-                                    [checked]="selectedStudent?.isRepeater" [attr.id]="'repeater_' + selectedStudent.studentId">
-                                    <label [attr.for]="'repeater_' + selectedStudent.studentId"></label>
-                                </span>
-
                             </td>
                             <td class="center tablesaw-stacked-hidden">
                                 <b class="tablesaw-cell-label">Grant untimed tests</b>

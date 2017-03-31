@@ -8,7 +8,7 @@
             <rosters-form [rosterChangesModel]="rosterChangesModel" (changeUpdateRosterStudentsEvent)="changeUpdateRosterStudents($event)"
                 (changeToDifferentCohortEvent)="changeToDifferentCohort($event)"></rosters-form>
             <rosters-move [rosterChangesModel]="rosterChangesModel" (moveToCohort)="moveToCohort($event)" (removeEvent)="remove($event)"
-                (updateUntimedEvent)="updateUntimed($event)" (updateRepeaterEvent)="updateRepeater($event)"></rosters-move>
+                (updateUntimedEvent)="updateUntimed($event)" ></rosters-move>
             <rosters-add-to-cohort 
             [rosterChangesModel]="rosterChangesModel" 
             (addToCohortEvent)="addToCohort($event)" 
