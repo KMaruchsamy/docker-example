@@ -11,7 +11,7 @@ export class ChangeUpdateRosterStudentsModel {
     lastName: string;
     email: string;
     isInactive?: boolean = null;
-    isRepeater?: boolean = null;
+    isRepeater: boolean = false;
     isGrantUntimedTest?: boolean = null;
     isExtendAccess?: boolean = null;
     userExpiryDate?: boolean = null;

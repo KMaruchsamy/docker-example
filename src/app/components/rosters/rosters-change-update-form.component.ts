@@ -117,9 +117,8 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 "columns": [
                     null,
                     null,
-                    { "width": "80px" },
-                    { "width": "80px" },
-                    { "width": "80px" }
+                    { "width": "100px" },
+                    { "width": "100px" }
                 ],
                 "responsive": {
                     details: {
@@ -147,16 +146,6 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                                 }
                                 else if (cell.column === 2) {
                                     var _id = $('input', $html).attr('id');
-                                    $('input', $html).attr('id', _id + "-" + rowIdx.toString());  // change the element id for responsive mode
-                                    var el = $('input', $html);
-                                    self.onRepeaterChange(el);
-
-                                    var _labelId = $($html[2].innerHTML).attr('for');
-                                    $('label', $html).attr('for', _labelId + "-" + rowIdx.toString()); // change the element id for responsive mode
-                                    _data = $html[0].innerHTML + $html[2].innerHTML;
-                                }
-                                else if (cell.column === 3) {
-                                    var _id = $('input', $html).attr('id');
                                     $('input', $html).attr('id', _id + "-" + rowIdx.toString());   // change the element id for responsive mode
                                     var el = $('input', $html);
                                     self.onInactiveChange(el);
@@ -166,7 +155,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
 
                                     _data = $html[0].innerHTML + $html[2].innerHTML;
                                 }
-                                else if (cell.column === 4) {
+                                else if (cell.column === 3) {
                                     var _id = $('input', $html).attr('id');
                                     $('input', $html).attr('id', _id + "-" + rowIdx.toString());  // change the element id for responsive mode
                                     var el = $('input', $html);
@@ -205,15 +194,6 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 }
             });
 
-            $('#markChangesTable tbody').on('change', '.js-repeat', function (e) {
-                var _id = $(e.target).attr('id').split('_')[1];
-                if (_id.indexOf('-') > 0) {
-                    let _studentid = parseInt(_id.split('-')[0]);
-                    self.checkRepeater(_studentid, e);
-                    self.onChangingUserSelection(e);
-
-                }
-            });
 
             $('#markChangesTable tbody').on('change', '.js-drop', function (e) {
                 var _id = $(e.target).attr('id').split('_')[1];
@@ -364,8 +344,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                         if (_.has(savedStudent, 'isInactive'))
                             changeUpdateStudent.isInactive = savedStudent.isInactive;
 
-                        if (_.has(savedStudent, 'isRepeater'))
-                            changeUpdateStudent.isRepeater = savedStudent.isRepeater;
+                
 
                         if (_.has(savedStudent, 'isGrantUntimedTest'))
                             changeUpdateStudent.isGrantUntimedTest = savedStudent.isGrantUntimedTest;
@@ -397,9 +376,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         var _buttonElement = $('#' + 'btnChangeToCohort_' + _id);
         this.onMoveToCohortChange(_buttonElement);       
 
-        //On Selection of inactive checkbox selection... Start
-        var _repeaterElement = $('#' + 'chkRepeat_' + _id);
-        this.onRepeaterChange(_repeaterElement);        
+       
 
         //On Selection of inactive checkbox selection... Start
         var _inactiveElement = $('#' + 'inactive_' + _id);
@@ -450,7 +427,6 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
             if (_student.studentId === _studentId) {
                 _student.updateType = RosterUpdateTypes.MoveToDifferentCohort; 
                 _student.isInactive= isChecked;
-                _student.isRepeater = false;
                 _student.isGrantUntimedTest = false;
                 student = _student;
             }
@@ -478,17 +454,17 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     }
 
     changeCohortTo(_student: ChangeUpdateRosterStudentsModel) {
+        debugger;
         this.showRequestChangePopup = false;
         if (_student !== undefined) {
             if (this.isResponsive) {
                 let _id = $(this._event.target).attr('id').split('_')[1];
-                var el = $('#' + 'chkRepeat_' + _id);
+                var el = $('#' + 'inactive_' + _id);
                 el.focus(); // Set Focus to handle through keyboard
                 this.onChangingUserSelection(this._event);
-                el.prop('checked', _student.isRepeater);
             }
             else {
-                $('#' + 'chkRepeat_' + _student.studentId).focus();          // Set Focus to handle through keyboard
+                $('#' + 'inactive_' + _student.studentId).focus();          // Set Focus to handle through keyboard
             }
             this.changeToDifferentCohortEvent.emit(_student);
 
