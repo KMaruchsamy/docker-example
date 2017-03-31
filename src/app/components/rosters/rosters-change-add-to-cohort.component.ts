@@ -59,6 +59,7 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
     }
 
     addToCohort(): void {
+        this.valid = false;
         let alreadyAdded: boolean = _.some(this.rosterChangesModel.students, { 'email': this.email });
         if (alreadyAdded) {
             this.errorMessage = rosters.student_already_added;
