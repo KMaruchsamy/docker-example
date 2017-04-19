@@ -3,13 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/login/logout.component';
 import { ChooseInstitutionComponent } from './components/shared/choose-institution.component';
+import { SetPasswordFirstTimeComponent } from './components/login/set-password-first-time.component';
 
 const appRoutes: Routes = [
     { path: '', component: LoginComponent, pathMatch: 'full' },
     { path: 'faculty', component: LoginComponent },
     { path: 'logout', component: LogoutComponent },
     { path: 'choose-institution/:frompage/:redirectpage/:idRN/:idPN', component: ChooseInstitutionComponent },
-    { path: 'choose-institution/:frompage/:redirectpage', component: ChooseInstitutionComponent }
+    { path: 'choose-institution/:frompage/:redirectpage', component: ChooseInstitutionComponent },
+    { path: 'set-password-first-time/:id', component: SetPasswordFirstTimeComponent }
     // { path: 'home', loadChildren: 'app/components/home/home.module#HomeModule' },
     // { path: 'help', loadChildren: 'app/components/help/help.module#HelpModule' },
     // { path: 'account', loadChildren: 'app/components/account/account.module#AccountModule' },
