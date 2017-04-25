@@ -61,7 +61,7 @@ export class RostersFaqComponent implements OnDestroy {
                     self.accountManagerFirstName = json.FirstName;
                     self.accountManagerLastName = json.LastName;
                     self.accountManagerPhoneNumber = json.Telephone;
-                    self.customChangeForm = json.LinksForFrontEnd[0].LinkUrl;
+                    self.customChangeForm = (json.LinksForFrontEnd && json.LinksForFrontEnd.length > 0) ? json.LinksForFrontEnd[0].LinkUrl : '';
                 } 
             },
             error => console.log(error.message),
