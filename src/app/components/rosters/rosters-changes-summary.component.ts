@@ -11,7 +11,9 @@ import { RosterChangesService } from './roster-changes.service';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import { RosterChangesSummaryTablesComponent } from './rosters-changes-summary-tables.component';
 import * as _ from 'lodash';
-import {links} from '../../constants/config';
+import {links, errorcodes} from '../../constants/config';
+import { general } from '../../constants/error-messages';
+
 @Component({
     selector: 'rosters-changes-summary',
     templateUrl: './rosters-changes-summary.component.html'
@@ -23,6 +25,8 @@ export class RosterChangesSummaryComponent implements OnInit {
     attemptedRoute: string;
     destinationRoute: string;
     isExtendedAccess: boolean = false;
+    errorMessage: string;
+    showErrorMessage: boolean = false;
     valid: boolean = true;
 
     constructor(public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
@@ -42,7 +46,8 @@ export class RosterChangesSummaryComponent implements OnInit {
         else {
             this.rosterChangesModel = this.rosterChangesService.getUpdatedRosterChangesModel();
             this.titleService.setTitle('Roster Change Request Summary – Kaplan Nursing');
-            window.scroll(0, 0); 
+            window.scroll(0, 0);
+            this.errorMessage = general.requestException;
         }
     }
 
@@ -67,7 +72,7 @@ export class RosterChangesSummaryComponent implements OnInit {
         this.overrideRouteCheck = true;
         this.router.navigateByUrl(this.attemptedRoute);
     }
-    
+
     onCancelConfirmation(popupId): void {
         $('#' + popupId).modal('hide');
         this.attemptedRoute = '';
@@ -99,11 +104,12 @@ export class RosterChangesSummaryComponent implements OnInit {
                     FirstName: _student.firstName,
                     LastName: _student.lastName,
                     RequestTypeId: _student.updateType,
-                    MoveFromCohortName: _student.moveFromCohortName, 
+                    MoveFromCohortName: _student.moveFromCohortName,
                     MoveToCohortName: _student.moveToCohortName
                 }
             })
         };
+        // console.log('final request=' + JSON.stringify(input));
         let rosterChangeUpdateObservable: Observable<Response>;
         let rosterChangeUpdateURL = '';
         rosterChangeUpdateURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.rosters.saveRosterCohortChanges}`;
@@ -111,15 +117,19 @@ export class RosterChangesSummaryComponent implements OnInit {
 
         let __this = this;
         rosterChangeUpdateObservable
-            .map(response => response.json())
-            .subscribe(json => {
-                let result = json;
-                this.router.navigate(['/rosters/confirmation']);
-                console.log('result=' + result);
-
+            .map(response => response.status)
+            .subscribe(status => {
+                if (status.toString() === errorcodes.SUCCESS) {
+                    // redirect to confirmation page
+                    this.router.navigate(['/rosters/confirmation']);
+                    if (this.showErrorMessage)
+                        this.showErrorMessage = false;
+                }
             }, error => {
+                //show error message
+                this.showErrorMessage = true;
                 console.log(error);
             });
-    }   
+    }
 
 }
