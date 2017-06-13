@@ -379,7 +379,10 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             Students: _.map(this.testScheduleModel.selectedStudents, (student: SelectedStudentModel) => {
                 return {
                     StudentId: student.StudentId,
-                    StudentTestId: student.StudentTestId
+                    StudentTestId: student.StudentTestId,
+                    EmailId: student.Email,
+                    FName: student.FirstName,
+                    LName: student.LastName
                 };
             })
         };
