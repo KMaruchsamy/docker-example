@@ -69,6 +69,7 @@ interface JQuery {
     DataTable(param?: any): any;
     data(str: any): any;
     table(): any;
+    editableform: any;
 }
 
 
