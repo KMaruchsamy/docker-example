@@ -26,7 +26,7 @@ export class DropdownMenuComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.makeControlAccessible();
+       // this.makeControlAccessible();
     }
 
     makeControlAccessible(): void {
@@ -75,18 +75,18 @@ export class DropdownMenuComponent implements OnInit {
                 }
             });
 
-        $(document)
-            .on('focusout.dropdown.data-api', 'header .dropdown-menu', function(e) {
-                let $this = $(this)
-                    , that = this
-                setTimeout(function() {
-                    if (!$.contains(that, document.activeElement)) {
-                        $this.parent().removeClass('open')
-                        $this.parent().find('[data-toggle=dropdown]').attr('aria-expanded', 'false')
-                    }
-                }, 150)
-            })
-            .on('keydown.bs.dropdown.data-api', toggle + ', [role=menu]', $.fn.dropdown.Constructor.prototype.keydown)
+        // $(document)
+        //     .on('focusout.dropdown.data-api', 'header .dropdown-menu', function(e) {
+        //         let $this = $(this)
+        //             , that = this
+        //         setTimeout(function() {
+        //             if (!$.contains(that, document.activeElement)) {
+        //                 $this.parent().removeClass('open')
+        //                 $this.parent().find('[data-toggle=dropdown]').attr('aria-expanded', 'false')
+        //             }
+        //         }, 150)
+        //     })
+        //     .on('keydown.bs.dropdown.data-api', toggle + ', [role=menu]', $.fn.dropdown.Constructor.prototype.keydown)
     }
 
     logout(e) {
