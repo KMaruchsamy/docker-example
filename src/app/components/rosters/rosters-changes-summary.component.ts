@@ -46,7 +46,7 @@ export class RosterChangesSummaryComponent implements OnInit {
         else {
             this.rosterChangesModel = this.rosterChangesService.getUpdatedRosterChangesModel();
             this.titleService.setTitle('Roster Change Request Summary – Kaplan Nursing');
-            window.scroll(0, 0); 
+            window.scroll(0, 0);
             this.errorMessage = general.requestException;
         }
     }
@@ -72,7 +72,7 @@ export class RosterChangesSummaryComponent implements OnInit {
         this.overrideRouteCheck = true;
         this.router.navigateByUrl(this.attemptedRoute);
     }
-    
+
     onCancelConfirmation(popupId): void {
         $('#' + popupId).modal('hide');
         this.attemptedRoute = '';
@@ -104,12 +104,12 @@ export class RosterChangesSummaryComponent implements OnInit {
                     FirstName: _student.firstName,
                     LastName: _student.lastName,
                     RequestTypeId: _student.updateType,
-                    MoveFromCohortName: _student.moveFromCohortName, 
+                    MoveFromCohortName: _student.moveFromCohortName,
                     MoveToCohortName: _student.moveToCohortName
                 }
             })
         };
-       // console.log('final request=' + JSON.stringify(input));
+        // console.log('final request=' + JSON.stringify(input));
         let rosterChangeUpdateObservable: Observable<Response>;
         let rosterChangeUpdateURL = '';
         rosterChangeUpdateURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.rosters.saveRosterCohortChanges}`;
@@ -119,17 +119,17 @@ export class RosterChangesSummaryComponent implements OnInit {
         rosterChangeUpdateObservable
             .map(response => response.status)
             .subscribe(status => {
-            if (status.toString() === errorcodes.SUCCESS) {
-                // redirect to confirmation page
-                this.router.navigate(['/rosters/confirmation']);
-                if(this.showErrorMessage)
-                    this.showErrorMessage = false;
-            }    
+                if (status.toString() === errorcodes.SUCCESS) {
+                    // redirect to confirmation page
+                    this.router.navigate(['/rosters/confirmation']);
+                    if (this.showErrorMessage)
+                        this.showErrorMessage = false;
+                }
             }, error => {
                 //show error message
                 this.showErrorMessage = true;
                 console.log(error);
             });
-    }   
+    }
 
 }

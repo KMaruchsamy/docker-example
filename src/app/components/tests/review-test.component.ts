@@ -212,7 +212,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                     }
                     else
                         this.loadAlternateAssignmentsModify();
-
+                    
                 }
                 this.resolveADA();
                 this.anyStudentPayStudents();
