@@ -421,7 +421,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         }
         else {
             if (this.programId > 0) {
-                if (this.institutionRN == 0) {
+                if (!this.institutionRN) {
                     this.institutionID = this.institutionPN;
                 }
                 else {
