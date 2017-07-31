@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { Router, RoutesRecognized, ActivatedRoute, NavigationStart } from '@angular/router';
+import { Router, RoutesRecognized, ActivatedRoute, NavigationStart, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Http, Response, RequestOptions, Headers } from "@angular/http";
 import { Title } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs/Rx';
@@ -60,12 +60,12 @@ export class ViewTestComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        this.deactivateSubscription = this.router
-            .events
-            .filter(event => event instanceof NavigationStart)
-            .subscribe(e => {
-                this.destinationRoute = e.url;
-            });
+        // this.deactivateSubscription = this.router
+        //     .events
+        //     .filter(event => event instanceof NavigationStart)
+        //     .subscribe(e => {
+        //         this.destinationRoute = e.url;
+        //     });
 
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
@@ -84,8 +84,13 @@ export class ViewTestComponent implements OnInit, OnDestroy {
         this.titleService.setTitle('View Testing Session – Kaplan Nursing');
     }
 
+    canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean> | boolean {
+        this.destinationRoute = nextState.url;
+        return true;
+    }
 
     ngOnDestroy(): void {
+        debugger;
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (outOfTestScheduling)
             this.testService.clearTestScheduleObjects();
@@ -106,6 +111,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
 
 
     loadTestSchedule(): void {
+        debugger;
         let __this = this;
         let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`);
         let scheduleObservable: Observable<Response> = this.testService.getScheduleById(scheduleURL);
@@ -181,13 +187,13 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     }
 
 
-    onOKConfirmation(): void {
+    onOKConfirmation(e): void {
         $('#confirmationPopup').modal('hide');
         this.deleteSchedule();
 
     }
 
-    onCancelConfirmation() {
+    onCancelConfirmation(e) {
         $('#confirmationPopup').modal('hide');
     }
 

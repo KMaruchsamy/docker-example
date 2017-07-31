@@ -51,7 +51,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     actionSubscription: Subscription;
     subjectsSubscription: Subscription;
     scheduleTestsSubscription: Subscription;
-    renameSessionSuscription: Subscription;
+    renameSessionSubscription: Subscription;
     errorCodes: any;
     testStatus: any;
     isMultiCampus: boolean = false;
@@ -77,8 +77,8 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             this.subjectsSubscription.unsubscribe();
         if (this.scheduleTestsSubscription)
             this.scheduleTestsSubscription.unsubscribe();
-        if (this.renameSessionSuscription)
-            this.renameSessionSuscription.unsubscribe();
+        if (this.renameSessionSubscription)
+            this.renameSessionSubscription.unsubscribe();
     }
 
 
@@ -295,7 +295,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             let _newName = params.newValue;
             let renameSessionObservable = __this.renameSession(_sessionId, _newName);
 
-            this.renameSessionSubscription = renameSessionObservable
+            __this.renameSessionSubscription = renameSessionObservable
                 .map(response => response.status)
                 .subscribe(status => {
                     if (status.toString() === __this.errorCodes.SUCCESS) {
@@ -340,12 +340,12 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     }
 
 
-    onOKConfirmation(): void {
+    onOKConfirmation(e): void {
         $('#confirmationPopup').modal('hide');
         this.deleteSchedule();
     }
 
-    onCancelConfirmation() {
+    onCancelConfirmation(e) {
         $('#confirmationPopup').modal('hide');
         this.scheduleIdToDelete = 0;
         this.institutionIdToDelete = 0;

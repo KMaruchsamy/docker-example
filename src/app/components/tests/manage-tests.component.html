@@ -28,12 +28,12 @@
        
        <section *ngIf="institutionId || institutions && institutions.length < 10">
         <div class="section-medium-thin section-clearfix">
-            <div class="thin-section" [class.section-light-pink]="!inProgressTests?.length==0">
+            <div class="thin-section" [class.section-light-pink]="!(inProgressTests?.length==0)">
                 <div class="container-medium-width">
                     <h4 class="section-heading-purple normal">Tests In Progress</h4>
                     <div *ngFor="let institution of inProgressTests" class="thin-section">
                         <h5 class="h6">{{institution.institutionNameWithProgramOfStudy}}</h5>
-                        <table *ngIf="!inProgressTests?.length==0" class="table-fixed tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none"
+                        <table *ngIf="!(inProgressTests?.length==0)" class="table-fixed tablesaw tablesaw-stack table-transparent tablesaw-last-row-no-border margin-bottom-none"
                             data-tablesaw-mode="stack">
                             <thead class="smaller">
                                 <tr>
@@ -47,15 +47,15 @@
                             <tbody>
                                 <tr class="tablesaw-stacked-hidden-border" *ngFor="let inProgressTest of institution.tests">
                                     <td>
-                                        <template [ngIf]="!inProgressTest?.spanMultipleDays">
+                                        <ng-template [ngIf]="!inProgressTest?.spanMultipleDays">
                                             {{inProgressTest?.scheduleStartTime|parseDate:'ddd'}} {{inProgressTest?.scheduleStartTime|parseDate:'MM/DD/YY'}}
                                             <br>{{inProgressTest?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{inProgressTest?.scheduleEndTime|parseDate:'h:mma'}}
-                                        </template>
-                                        <template [ngIf]="inProgressTest?.spanMultipleDays">
+                                        </ng-template>
+                                        <ng-template [ngIf]="inProgressTest?.spanMultipleDays">
                                             {{inProgressTest?.scheduleStartTime|parseDate:'ddd'}} {{inProgressTest?.scheduleStartTime|parseDate:'MM/DD/YY'}}
                                             <br>{{inProgressTest?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{inProgressTest?.scheduleEndTime|parseDate:'h:mma'}}
                                             {{inProgressTest?.scheduleEndTime|parseDate:'ddd'}} {{inProgressTest?.scheduleEndTime|parseDate:'MM/DD/YY'}}
-                                        </template>
+                                        </ng-template>
                                     </td>
                                     <td class="tablesaw-stacked-hidden">
                                         <button [attr.type]="'inprogress'" [attr.sessionId]="inProgressTest?.scheduleId" [attr.institutionId]="inProgressTest?.institutionId" [disabled]="adminId!=inProgressTest?.adminId && adminId!=inProgressTest?.facultyMemberId"
@@ -87,7 +87,7 @@
                 <h4 class="section-heading-teal normal">Scheduled Tests</h4>
                 <div *ngFor="let institution of scheduleTests" class="thin-section">
                     <h5 class="h6">{{institution.institutionNameWithProgramOfStudy}}</h5>
-                    <table *ngIf="!scheduleTests?.length==0" class="table-fixed tablesaw tablesaw-stack tablesaw-sortable" data-tablesaw-mode="stack"
+                    <table *ngIf="!(scheduleTests?.length==0)" class="table-fixed tablesaw tablesaw-stack tablesaw-sortable" data-tablesaw-mode="stack"
                         id="{{'tblScheduledTests' + institution.institutionId}}">
                         <thead class="smaller">
                             <tr>
@@ -122,15 +122,15 @@
                         <tbody>
                             <tr class="tablesaw-stacked-hidden-border" *ngFor="let scheduleTest of institution.tests">
                                 <td [attr.starttime]="scheduleTest?.scheduleStartTime" class="column-striped">
-                                    <template [ngIf]="!scheduleTest?.spanMultipleDays">
+                                    <ng-template [ngIf]="!scheduleTest?.spanMultipleDays">
                                         {{scheduleTest?.scheduleStartTime|parseDate:'ddd'}} {{scheduleTest?.scheduleStartTime|parseDate:'MM/DD/YY'}}
                                         <br> {{scheduleTest?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{scheduleTest?.scheduleEndTime|parseDate:'h:mma'}}
-                                    </template>
-                                    <template [ngIf]="scheduleTest?.spanMultipleDays">
+                                    </ng-template>
+                                    <ng-template [ngIf]="scheduleTest?.spanMultipleDays">
                                         {{scheduleTest?.scheduleStartTime|parseDate:'ddd'}} {{scheduleTest?.scheduleStartTime|parseDate:'MM/DD/YY'}}
                                         <br> {{scheduleTest?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{scheduleTest?.scheduleEndTime|parseDate:'h:mma'}}
                                         <br> {{scheduleTest?.scheduleEndTime|parseDate:'ddd'}} {{scheduleTest?.scheduleEndTime|parseDate:'MM/DD/YY'}}
-                                    </template>
+                                    </ng-template>
                                 </td>
                                 <td class="tablesaw-stacked-hidden">
                                     <button [attr.type]="'scheduled'" [attr.sessionId]="scheduleTest?.scheduleId" [attr.institutionId]="scheduleTest?.institutionId" [disabled]="adminId!=scheduleTest?.adminId && adminId!=scheduleTest?.facultyMemberId"
@@ -161,7 +161,7 @@
                 <h4 class="section-heading-teal normal">Completed Tests</h4>
                 <div *ngFor="let institution of completedTests" class="thin-section">
                     <h5 class="h6">{{institution.institutionNameWithProgramOfStudy}}</h5>
-                    <table *ngIf="!completedTests?.length==0" class="table-fixed tablesaw tablesaw-stack tablesaw-sortable" data-tablesaw-mode="stack"
+                    <table *ngIf="!(completedTests?.length==0)" class="table-fixed tablesaw tablesaw-stack tablesaw-sortable" data-tablesaw-mode="stack"
                         id="{{'tblCompletedTests'+ institution.institutionId}}">
                         <thead class="smaller">
                             <tr>
@@ -194,15 +194,15 @@
                         <tbody>
                             <tr class="tablesaw-stacked-hidden-border" *ngFor="let completedTest of institution.tests">
                                 <td [attr.starttime]="completedTest?.scheduleStartTime" class="column-striped">
-                                    <template [ngIf]="!completedTest?.spanMultipleDays">
+                                    <ng-template [ngIf]="!completedTest?.spanMultipleDays">
                                         {{completedTest?.scheduleStartTime|parseDate:'ddd'}} {{completedTest?.scheduleStartTime|parseDate:'MM/DD/YY'}}
                                         <br> {{completedTest?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{completedTest?.scheduleEndTime|parseDate:'h:mma'}}
-                                    </template>
-                                    <template [ngIf]="completedTest?.spanMultipleDays">
+                                    </ng-template>
+                                    <ng-template [ngIf]="completedTest?.spanMultipleDays">
                                         {{completedTest?.scheduleStartTime|parseDate:'ddd'}} {{completedTest?.scheduleStartTime|parseDate:'MM/DD/YY'}}
                                         <br> {{completedTest?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{completedTest?.scheduleEndTime|parseDate:'h:mma'}}
                                         <br> {{completedTest?.scheduleEndTime|parseDate:'ddd'}} {{completedTest?.scheduleEndTime|parseDate:'MM/DD/YY'}}
-                                    </template>
+                                    </ng-template>
                                 </td>
                                 <td class="tablesaw-stacked-hidden">{{completedTest.scheduleName}}</td>
                                 <td class="tablesaw-stacked-hidden">{{completedTest.adminFirstName}} {{completedTest.adminLastName}}</td>
@@ -223,6 +223,6 @@
 <page-footer></page-footer>
 
 <confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to delete this testing session? This cannot be undone.'"
-    [okButtonText]="'Yes, delete'" [cancelButtonText]="'No, do not delete'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation($event)"
+    [okButtonText]="'Yes, delete'" [cancelButtonText]="'No, do not delete'" (onOK)="onOKConfirmation($event)" (onCancel)="onCancelConfirmation($event)"
     [hideClose]="false">
 </confirmation-popup>

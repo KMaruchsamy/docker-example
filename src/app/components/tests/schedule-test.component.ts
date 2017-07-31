@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, CanDeactivate, RoutesRecognized, NavigationStart } from '@angular/router';
+import { Router, ActivatedRoute, CanDeactivate, RoutesRecognized, NavigationStart, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { links } from '../../constants/config';
 // import * as _ from 'lodash';
@@ -62,12 +62,12 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        this.deactivateSubscription = this.router
-            .events
-            .filter(event => event instanceof NavigationStart)
-            .subscribe(e => {
-                this.destinationRoute = e.url;
-            });
+        // this.deactivateSubscription = this.router
+        //     .events
+        //     .filter(event => event instanceof NavigationStart)
+        //     .subscribe(e => {
+        //         this.destinationRoute = e.url;
+        //     });
 
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
@@ -114,7 +114,8 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
         // continue making changes after confirmation popup..
     }
 
-    canDeactivate(): Observable<boolean> | boolean {
+    canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean> | boolean {
+        this.destinationRoute = nextState.url;
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
@@ -811,7 +812,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
         return this.testService.checkIfTestHasStarted(this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress)
     }
 
-    saveDateTime(): boolean {
+    saveDateTime(e): boolean {
         //if modify flow, check first if test has already started
         this.checkIfTestHasStarted();
         if (!this.checkIfTestHasStarted()) {

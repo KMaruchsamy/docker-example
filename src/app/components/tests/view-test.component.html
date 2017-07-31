@@ -41,15 +41,15 @@
                         <tr>
                             <th scope="row">Date and Time</th>
                             <td>
-                                <template [ngIf]="!nextDay">
+                                <ng-template [ngIf]="!nextDay">
                                     {{schedule?.scheduleStartTime|parseDate:'ddd'}} {{schedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{schedule?.scheduleStartTime|parseDate:'h:mma'}}
                                     &ndash; {{schedule?.scheduleEndTime|parseDate:'h:mma'}}
-                                </template>
-                                <template [ngIf]="nextDay">
+                                </ng-template>
+                                <ng-template [ngIf]="nextDay">
                                     {{schedule?.scheduleStartTime|parseDate:'ddd'}} {{schedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{schedule?.scheduleStartTime|parseDate:'h:mma'}}
                                     &ndash; {{schedule?.scheduleEndTime|parseDate:'h:mma'}} {{schedule?.scheduleEndTime|parseDate:'ddd'}}
                                     {{schedule?.scheduleEndTime|parseDate:'MM/DD/YY'}}
-                                </template>
+                                </ng-template>
                             </td>
                         </tr>
                         <tr>
@@ -123,6 +123,6 @@
     </section>
 </main>
 <page-footer></page-footer>
-<confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to delete this testing session? This cannot be undone.'" [okButtonText]="'Yes, delete'"
-[cancelButtonText]="'No, do not delete'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation($event)" [hideClose]="false">
+<confirmation-popup popupId="confirmationPopup" message="Are you sure you want to delete this testing session? This cannot be undone." okButtonText="Yes, delete"
+cancelButtonText="No, do not delete" (onOK)="onOKConfirmation($event)" (onCancel)="onCancelConfirmation($event)" hideClose="false">
 </confirmation-popup>

@@ -26,6 +26,7 @@ export class TestingSessionStartingPopupComponent {
     @Input() hideClose: boolean;
     @Output('onCancel') cancelEvent = new EventEmitter();
     @Output('onOK') okEvent = new EventEmitter();
+    isStarted: boolean;
     constructor(public router: Router, public common: CommonService, public testService: TestService) {
     }
 

@@ -54,8 +54,8 @@
 </main>
 
 <terms-of-use [showTerms]="showTerms"
-              (buttonEvent)="confirm()"
-              (cancelEvent)="onCancel()"
+              (buttonEvent)="confirm($event)"
+              (cancelEvent)="onCancel($event)"
               [showX]="false"
               [showCancel]="true"
               [showCheckbox]="true"

@@ -16,7 +16,7 @@ import { ProfileService } from './profile.service';
     imports: [
         CommonModule,
         PageModule,
-        Ng2PageScrollModule,
+        Ng2PageScrollModule.forRoot(),
         HttpModule,
         HomeRoutingModule
     ],

@@ -1,14 +1,14 @@
-import { Cli31Page } from './app.po';
+import { ClilatestPage } from './app.po';
 
-describe('cli31 App', function() {
-  let page: Cli31Page;
+describe('clilatest App', () => {
+  let page: ClilatestPage;
 
   beforeEach(() => {
-    page = new Cli31Page();
+    page = new ClilatestPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(page.getParagraphText()).toEqual('Welcome to app!');
   });
 });

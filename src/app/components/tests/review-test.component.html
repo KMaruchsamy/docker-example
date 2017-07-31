@@ -45,15 +45,15 @@
                 <tr>
                     <th scope="row">Date and Time</th>
                     <td>
-                        <template [ngIf]="!nextDay">
+                        <ng-template [ngIf]="!nextDay">
                             {{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from
                             {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}}
-                        </template>
-                        <template [ngIf]="nextDay">
+                        </ng-template>
+                        <ng-template [ngIf]="nextDay">
                             {{testScheduleModel?.scheduleStartTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleStartTime|parseDate:'MM/DD/YY'}} from
                             {{testScheduleModel?.scheduleStartTime|parseDate:'h:mma'}} &ndash; {{testScheduleModel?.scheduleEndTime|parseDate:'h:mma'}}
                             {{testScheduleModel?.scheduleEndTime|parseDate:'ddd'}} {{testScheduleModel?.scheduleEndTime|parseDate:'MM/DD/YY'}}
-                        </template>
+                        </ng-template>
 
                     </td>
                     <td><a href="#" target="_self" [routerLink]="modify ? ['/tests','modify','schedule-test'] : ['/tests/schedule-test']">Change</a>
@@ -116,9 +116,9 @@
 </main>
 
 <page-footer></page-footer>
-<confirmation-popup [popupId]="'confirmationPopup'" [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'"
-[okButtonText]="'Yes, leave this page'" [cancelButtonText]="'No, stay on this page'" (onOK)="onOKConfirmation()" (onCancel)="onCancelConfirmation($event)"
-[hideClose]="false">
+<confirmation-popup popupId="confirmationPopup" message="Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over."
+ okButtonText="Yes, leave this page" cancelButtonText="No, stay on this page" (onOK)="onOKConfirmation($event)" (onCancel)="onCancelConfirmation($event)"
+ hideClose="false">
 </confirmation-popup>
 <loader [loaderMessage]="'Scheduling your testing session…'" [greetingMessage]="'Thank you for your patience!'"></loader>
 

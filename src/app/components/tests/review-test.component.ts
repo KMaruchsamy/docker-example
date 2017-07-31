@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewContainerRef } from '@angular/core';
-import { Router, ActivatedRoute, CanDeactivate, RoutesRecognized, NavigationStart } from '@angular/router';
+import { Router, ActivatedRoute, CanDeactivate, RoutesRecognized, NavigationStart, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { NgIf, NgFor, Location } from '@angular/common';
 import { Response } from '@angular/http';
 import { Title } from '@angular/platform-browser';
@@ -99,7 +99,8 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             this.facultySubscription.unsubscribe();
     }
 
-    canDeactivate(): Observable<boolean> | boolean {
+    canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean> | boolean {
+        this.destinationRoute = nextState.url;
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
@@ -153,12 +154,12 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
     // }
 
     ngOnInit() {
-        this.deactivateSubscription = this.router
-            .events
-            .filter(event => event instanceof NavigationStart)
-            .subscribe(e => {
-                this.destinationRoute = e.url;
-            });
+        // this.deactivateSubscription = this.router
+        //     .events
+        //     .filter(event => event instanceof NavigationStart)
+        //     .subscribe(e => {
+        //         this.destinationRoute = e.url;
+        //     });
 
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
@@ -269,7 +270,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             return false;
     }
 
-    onInput(testSessionName: string): void {
+    onInput(testSessionName: string, faculty:string): void {
         this.testScheduleModel.scheduleName = testSessionName;
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
         this.validate();

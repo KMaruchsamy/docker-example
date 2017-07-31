@@ -51,6 +51,10 @@ export class AccountComponent implements OnInit, OnDestroy {
     currentPasswordErrorMessage: string;
     sendStudentPasswordErrorMessage: string;
     emailValidationEror: string;
+    currentPasswordModel: string;
+    newPasswordModel: string;
+    confirmPasswordModel: string;
+    emailText: string;
     constructor(private http: Http, public router: Router, private activatedRoute: ActivatedRoute, public auth: AuthService, public common: CommonService, public validations: ValidationsService, public titleService: Title, private log: LogService) {
     }
 

@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, OnInit, OnDestroy} from '@angular/core';
-import { ActivatedRoute, RoutesRecognized, Router, NavigationStart } from '@angular/router';
+import { ActivatedRoute, RoutesRecognized, Router, NavigationStart, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import {Title} from '@angular/platform-browser';
 // import {CommonService} from '../../services/common';
 // import {AuthService} from '../../services/auth';
@@ -8,7 +8,7 @@ import {TestScheduleModel} from '../../models/test-schedule.model';
 // import {PageFooter} from '../shared/page-footer';
 // import {TestHeader} from './test-header';
 // import {TestService} from '../../services/test.service';
-import {Subscription} from 'rxjs/Rx';
+import { Subscription, Observable } from 'rxjs/Rx';
 // import '../../lib/modal.js';
 import { CommonService } from './../../services/common.service';
 import { TestService } from './test.service';
@@ -32,6 +32,11 @@ export class ConfirmationComponent implements OnInit, OnDestroy {
     destinationRoute: string;
     constructor(private activatedRoute: ActivatedRoute, public testScheduleModel: TestScheduleModel, public common: CommonService, public testService: TestService, public router: Router, public auth: AuthService, public titleService: Title) { }
 
+    canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean> | boolean {
+        this.destinationRoute = nextState.url;
+        return true;
+    }
+    
     ngOnDestroy(): void {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (outOfTestScheduling)
@@ -45,12 +50,12 @@ export class ConfirmationComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        this.deactivateSubscription = this.router
-             .events
-            .filter(event => event instanceof NavigationStart)
-            .subscribe(e => {
-                this.destinationRoute = e.url;
-            });
+        // this.deactivateSubscription = this.router
+        //      .events
+        //     .filter(event => event instanceof NavigationStart)
+        //     .subscribe(e => {
+        //         this.destinationRoute = e.url;
+        //     });
 
         window.scroll(0,0);
         this.sStorage = this.common.getStorage();

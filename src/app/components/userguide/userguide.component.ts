@@ -5,6 +5,7 @@ import { links } from '../../constants/config';
 import { UtilityService } from '../../services/utility.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
+import * as $ from 'jquery';
 declare var Appcues: any;
 
 @Component({
