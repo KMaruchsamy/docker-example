@@ -232,4 +232,16 @@ export class AuthService {
     return this.http.post(url, {}, requestOptions);
   }
 
+  isITSecurityEnabled(): boolean {
+      let institutions = JSON.parse(this.institutions);
+      if (institutions.length > 0) {
+          for (var i = 0; i <= institutions.length; i++) {
+              if (institutions[i].ITSecurityEnabled == true) {
+                  return true;
+              };
+          }
+          return false;
+      }
+      return false;
+  }
 }

@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Title } from '@angular/platform-browser';
 // import * as _ from 'lodash';
-import { links, errorcodes } from '../../constants/config';
+import { links, errorcodes, Examity } from '../../constants/config';
 import { manage_account, general, reset_password_after_login, reset_student_password } from '../../constants/error-messages';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
@@ -55,6 +55,8 @@ export class AccountComponent implements OnInit, OnDestroy {
     newPasswordModel: string;
     confirmPasswordModel: string;
     emailText: string;
+    examityEncryptedUserId: string;
+    ItSecurityEnabled: boolean = false;
     constructor(private http: Http, public router: Router, private activatedRoute: ActivatedRoute, public auth: AuthService, public common: CommonService, public validations: ValidationsService, public titleService: Title, private log: LogService) {
     }
 
@@ -72,6 +74,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
         this.errorCodes = errorcodes;
         this.titleService.setTitle('Manage Account – Kaplan Nursing');
         this.sStorage = this.common.getStorage();
@@ -500,4 +503,32 @@ export class AccountComponent implements OnInit, OnDestroy {
         })
         return this.http.post(url, body, requestOptions);
     }
+
+    onClickExamityProfile(ssologin): void {
+        let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
+        let examityObservable: Observable<Response> = this.setFacultyProfileInExamity(facultyAPIUrl);
+        examityObservable.subscribe(response => {
+            this.examityEncryptedUserId = response.json();
+                    ssologin.setAttribute('Action', Examity.examityLoginURL);
+                    ssologin.submit();
+        }, error => console.log(error));
+    }
+
+    setFacultyProfileInExamity(url: string): Observable<Response> {
+        let self = this;
+        let options: RequestOptions = new RequestOptions();
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.auth.authheader
+        });
+        options.headers = headers;
+        options.body = '';
+        return this.http.get(url, options);
+    }
+
+    resolveFacultyURL(url: string): string {
+        return url.replace('§adminId', this.auth.userid.toString());
+    }
+
 }
