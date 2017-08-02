@@ -20,7 +20,7 @@ import { PageFooterComponent } from './../shared/page-footer.component';
 import { TestHeaderComponent } from './test-header.component';
 import { PageHeaderComponent } from './../shared/page-header.component';
 import { ManageTestsMultiCampusComponent } from './manage-tests-multicampus.component';
-declare var Appcues: any;
+//declare var Appcues: any;
 
 @Component({
     selector: 'manage-tests',
@@ -104,7 +104,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             }
             this.titleService.setTitle('Manage Tests – Kaplan Nursing');
             window.scroll(0,0);
-            Appcues.start();
+            //Appcues.start();
         }
     }
 

@@ -17,7 +17,7 @@ import { TestService } from './../tests/test.service';
 // import { ProfileComponent } from './profile.component';
 import { ProfileModel } from './../../models/profile.model';
 // import { PageScroll } from 'ng2-page-scroll/ng2-page-scroll';
-declare var Appcues: any;
+//declare var Appcues: any;
 
 
 @Component({
@@ -85,12 +85,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.firstName = this.sStorage.getItem('firstname');
         this.lastName = this.sStorage.getItem('lastname');
 
-        Appcues.identify(this.userId, {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.userEmail,
-        userId: this.userId
-      });
+      //  Appcues.identify(this.userId, {
+      //  firstName: this.firstName,
+      //  lastName: this.lastName,
+      //  email: this.userEmail,
+      //  userId: this.userId
+      //});
 
     }
 

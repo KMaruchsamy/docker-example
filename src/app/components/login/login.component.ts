@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import { AuthService } from './../../services/auth.service';
-declare var Appcues: any;
+//declare var Appcues: any;
 
 // import { LoginHeaderComponent } from './login-header.component';
 // import { LoginContentComponent } from './login-content.component';
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     }
 
     initialize(): void {
-        Appcues.anonymous();
+        //Appcues.anonymous();
         window.scroll(0,0);
     }
 }

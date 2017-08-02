@@ -11,7 +11,7 @@ import { RosterChangesService } from './roster-changes.service';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import * as _ from 'lodash';
 import { RosterUpdateTypes, RosterChangesPages } from '../../constants/config';
-declare var Appcues: any;
+//declare var Appcues: any;
 
 @Component({
     selector: 'rosters-changes-updates',
@@ -45,7 +45,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
             if (this.rosterChangesModel.instructions && this.rosterChangesModel.instructions != '')
                 this.instructions = this.rosterChangesModel.instructions;
             this.titleService.setTitle('Request Roster Changes – Kaplan Nursing');
-            Appcues.start();
+            //Appcues.start();
             window.scroll(0, 0);
         }
     }
