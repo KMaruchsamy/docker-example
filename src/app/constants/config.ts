@@ -50,7 +50,8 @@ export const links = {
                 modifyInProgressCohortStudent: "scheduling/modifyInProgress/cohorts/§cohortId/students?testingSessionId=§testingSessionId",
                 refreshStudentsWhoStarted: "scheduling/testingSessions/§testingSessionId/students?filter=§filter",
                 updateModifyInProgressStudents: "scheduling/modifyInProgress/testingSessions/§testSessionId",
-                updateScheduleDatesModifyInProgress: "scheduling/modifyInProgress/testingSessions/§scheduleId/windowDates"
+                updateScheduleDatesModifyInProgress: "scheduling/modifyInProgress/testingSessions/§scheduleId/windowDates",
+                updateIsExamityEnabled: "scheduling/testingSessions/§scheduleId"
             },
             logging: {
                 error: 'error/LogService'

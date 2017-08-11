@@ -66,7 +66,11 @@
         <h4 class="teal" id="studentsInTestingSessionConfirmation">Students in Testing Session ({{unmarkedStudentsCount()}})</h4>
         <a [routerLink]="modify ? ['/tests','modify','add-students'] : ['/tests','add-students']">Change</a>
         <button class="right anchor-button" *ngIf="(retesterExceptions?.length>0 && hasAlternateTests) || (retesterExceptions?.length>0 && hasSavedRetesterExceptions) || (modify && retesterExceptionsModify?.length>0)" (click)="changeAlternateAssignments($event)">Change alternate test assignments</button>
-
+        
+        <div class="margin-1em-bottom" *ngIf="ItSecurityEnabled">
+            <input type="checkbox" class="checkbox-image" [attr.id]="chkExamity" name="chkExamity" [checked]="chkExamity" (change)="chkExamity = !chkExamity" />
+            <label [attr.for]="chkExamity"><b>Enable Examity</b></label>
+        </div>
         <table id="studentsInTestingSessionTable" class="dataTable-bordered table-with-cell-padding table-striped last-row-no-border">
             <thead>
                 <tr>

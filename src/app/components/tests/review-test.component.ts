@@ -72,6 +72,8 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
     showRetestersAlternatePopup: boolean = false;
     showRetestersNoAlternatePopup: boolean = false;
     showTimingExceptionPopup: boolean = false;
+    chkExamity: boolean = false;
+    ItSecurityEnabled: boolean = false;
 
     constructor(public testScheduleModel: TestScheduleModel,
         public testService: TestService, public auth: AuthService, public common: CommonService,
@@ -164,6 +166,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else {
+            this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
             this.initialize();
         }
         window.scroll(0, 0);
@@ -203,6 +206,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                     this.$txtScheduleName.val(this.testScheduleModel.scheduleName);
                 if (this.modify) {
 
+                    this.chkExamity = this.testScheduleModel.isExamity;
                     if (this.testScheduleModel.facultyMemberId !== this.testScheduleModel.adminId && this.auth.userid !== this.testScheduleModel.adminId) {
                         this.facultyAssignable = false;
                     }
@@ -213,7 +217,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                     }
                     else
                         this.loadAlternateAssignmentsModify();
-                    
+
                 }
                 this.resolveADA();
                 this.anyStudentPayStudents();
@@ -377,6 +381,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             TestingWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
             TestingWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format(),
             FacultyMemberId: this.testScheduleModel.facultyMemberId,
+            IsExamityEnabled: this.chkExamity,
             Students: _.map(this.testScheduleModel.selectedStudents, (student: SelectedStudentModel) => {
                 return {
                     StudentId: student.StudentId,
@@ -557,7 +562,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
     onRetesterNoAlternatePopupOK(testSchedule: any) {
         if (testSchedule) {
-            $('#modalNoAlternateTest').modal('hide');            
+            $('#modalNoAlternateTest').modal('hide');
             this.sStorage.setItem('testschedule', JSON.stringify(testSchedule));
             this.testScheduleModel = this.testService.sortSchedule(testSchedule);
             this.resolveADA();
@@ -576,9 +581,9 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         this.popupStudentRepeaterExceptions = _studentRepeaterExceptions;
         this.showRetestersNoAlternatePopup = true;
         setTimeout(function() {
-               $('#modalNoAlternateTest').modal('show');
+            $('#modalNoAlternateTest').modal('show');
         });
-     
+
 
         // this.dynamicComponentLoader.loadNextToLocation(RetesterNoAlternatePopupComponent, this.viewContainerRef)
         //     .then(retester => {
@@ -623,13 +628,13 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         }
     }
 
-    loadWindowExceptions(_windowExceptions: any): void {       
+    loadWindowExceptions(_windowExceptions: any): void {
         this.popupStudentWindowException = _windowExceptions;
         this.showTimingExceptionPopup = true;
         setTimeout(function() {
-             $('#modalTimingException').modal('show');
+            $('#modalTimingException').modal('show');
         });
-        
+
 
         // this.dynamicComponentLoader.loadNextToLocation(TimeExceptionPopupComponent, this.viewContainerRef)
         //     .then(window => {
@@ -729,7 +734,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         setTimeout(function() {
             $('#modalAlternateTest').modal('show');
         });
-        
+
 
         // if (this.loader)
         //     this.loader.destroy();

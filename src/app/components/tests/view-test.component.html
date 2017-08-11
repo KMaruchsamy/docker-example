@@ -70,6 +70,10 @@
 
 
                 <h4 class="teal inline">Students in Testing Session ({{schedule?.selectedStudents?.length}})</h4>
+                <div class="margin-1em-bottom" *ngIf="ItSecurityEnabled" >
+                    <input type="checkbox" class="checkbox-image" [attr.id]="chkExamityView" name="chkExamityView" [checked]="chkExamityView" disabled="disabled" />
+                    <label [attr.for]="chkExamityView"><b>Enable Examity</b></label>
+                </div>
                 <table id="studentsInTestingSessionTable" class="table-with-cell-padding table-striped last-row-no-border">
                     <thead>
                         <tr>
@@ -100,7 +104,7 @@
                     <p class="icon info-icon-yellow margin-1em-top" *ngIf="!hasADA">Please contact your Account Manager if there are students in your testing session who need testing accommodations.
                         Students with testing accommodations receive untimed versions of their tests.</p>
                     <img *ngIf="anyStudentPayStudents && testStatus > -1" src="assets/images/self-pay-alert-icon.svg" class="self-pay-alert-icon" alt="payment alert icon"
-                        height="22" width="22" />
+                         height="22" width="22" />
                     <p *ngIf="anyStudentPayStudents && testStatus > -1">
                         These students have been deactivated due to non-payment. They will not be able to access their test during the specified
                         testing window unless their balance is paid in full at least two business days prior to test day.
@@ -124,5 +128,5 @@
 </main>
 <page-footer></page-footer>
 <confirmation-popup popupId="confirmationPopup" message="Are you sure you want to delete this testing session? This cannot be undone." okButtonText="Yes, delete"
-cancelButtonText="No, do not delete" (onOK)="onOKConfirmation($event)" (onCancel)="onCancelConfirmation($event)" hideClose="false">
+                    cancelButtonText="No, do not delete" (onOK)="onOKConfirmation($event)" (onCancel)="onCancelConfirmation($event)" hideClose="false">
 </confirmation-popup>

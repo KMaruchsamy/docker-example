@@ -72,6 +72,8 @@
                                             class="smaller block text-extra-mobile-spacing">Add/Remove Students</a>
                                         <a href="javascript:void(0)" *ngIf="adminId==inProgressTest?.adminId || adminId==inProgressTest?.facultyMemberId" (click)="redirectModifyInProgress('ModifyScheduleTest',inProgressTest?.scheduleId,$event)"
                                             class="smaller block text-extra-mobile-spacing">Change Testing Window</a>
+                                        <a href="javascript:void(0)" *ngIf="ItSecurityEnabled && inProgressTest.isExamity == 1" class="smaller block text-extra-mobile-spacing" (click)="showPopup(inProgressTest?.scheduleId,inProgressTest.isExamity)">Cancel Examity Proctoring</a>
+                                        <a href="javascript:void(0)" *ngIf="ItSecurityEnabled && inProgressTest.isExamity == 0" class="smaller block text-extra-mobile-spacing" (click)="showPopup(inProgressTest?.scheduleId,inProgressTest.isExamity)">Enable Examity Proctoring</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -145,6 +147,8 @@
                                         class="smaller">View</a>
                                     <a *ngIf="adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId" href="javascript:void(0)" (click)="view(scheduleTest?.scheduleId, $event,true)"
                                         class="smaller">View/Modify</a>
+                                    <a href="javascript:void(0)"  *ngIf="ItSecurityEnabled && scheduleTest.isExamity==1"class="smaller block text-extra-mobile-spacing" (click)="showPopup(scheduleTest?.scheduleId,scheduleTest.isExamity)">Cancel Examity Proctoring</a>
+                                    <a href="javascript:void(0)" *ngIf="ItSecurityEnabled && scheduleTest.isExamity==0" class="smaller block text-extra-mobile-spacing" (click)="showPopup(scheduleTest?.scheduleId,scheduleTest.isExamity)">Enable Examity Proctoring</a>
                                     <button *ngIf="adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId" class="anchor-button smaller" (click)="showConfirmation(scheduleTest?.scheduleId,scheduleTest?.institutionId)">Delete</button>
                                 </td>
                             </tr>
@@ -208,6 +212,7 @@
                                 <td class="tablesaw-stacked-hidden">{{completedTest.adminFirstName}} {{completedTest.adminLastName}}</td>
                                 <td class="tablesaw-stacked-hidden">{{completedTest.lastUpdated|parseDate:'MM/DD/YY'}}</td>
                                 <td class="tablesaw-stacked-hidden"><a href="javscript:void(0)" class="smaller" (click)="view(completedTest.scheduleId, $event,false)">View</a>
+                                <td class="tablesaw-stacked-hidden" *ngIf="ItSecurityEnabled"><a href="javscript:void(0)" class="smaller" (click)="onClickExamityProfile(ssologin)">View Examity Report</a>
                                     <!--<a  href="#" class="smaller">Reports</a>-->
                                 </td>
                             </tr>
@@ -218,6 +223,9 @@
             </div>
         </div>
        </section>
+        <form #ssologin id="loginExamity" name="loginExamity" method="post">
+            <input name="Username" type="hidden" [value]="examityEncryptedUserId">
+        </form>
     </div>
 </main>
 <page-footer></page-footer>
@@ -226,3 +234,12 @@
     [okButtonText]="'Yes, delete'" [cancelButtonText]="'No, do not delete'" (onOK)="onOKConfirmation($event)" (onCancel)="onCancelConfirmation($event)"
     [hideClose]="false">
 </confirmation-popup>
+<confirmation-popup [popupId]="'examityEnablePopup'" [message]="'Are you sure you want to enable examity?'"
+                    [okButtonText]="'Yes, Enable'" [cancelButtonText]="'No, do not Enable'" (onOK)="onExamityEnableConfirmation($event)" (onCancel)="onCancelExamityEnable($event)"
+                    [hideClose]="false">
+</confirmation-popup>
+<confirmation-popup [popupId]="'examityDisablePopup'" [message]="'Are you sure you want to disable examity?'"
+                    [okButtonText]="'Yes, Disable'" [cancelButtonText]="'No, do not Disable'" (onOK)="onExamityEnableConfirmation($event)" (onCancel)="onCancelExamityEnable($event)"
+                    [hideClose]="false">
+</confirmation-popup>
+

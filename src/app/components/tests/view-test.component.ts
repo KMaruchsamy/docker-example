@@ -53,6 +53,8 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     destinationRoute: string;
     paramsSubscription: Subscription;
     scheduleSubscription: Subscription;
+    chkExamityView: boolean = false;
+    ItSecurityEnabled: boolean = false;
     constructor(public auth: AuthService, public common: CommonService, public testService: TestService, public schedule: TestScheduleModel, public router: Router, private activatedRoute: ActivatedRoute, public titleService: Title, private log: LogService
     ) {
 
@@ -71,6 +73,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else {
+            this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
             this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
                 let action = params['action'];
                 if (action != undefined && action.trim() !== '')
@@ -90,7 +93,6 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        debugger;
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (outOfTestScheduling)
             this.testService.clearTestScheduleObjects();
@@ -111,7 +113,6 @@ export class ViewTestComponent implements OnInit, OnDestroy {
 
 
     loadTestSchedule(): void {
-        debugger;
         let __this = this;
         let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`);
         let scheduleObservable: Observable<Response> = this.testService.getScheduleById(scheduleURL);
@@ -135,6 +136,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
 
                         }
                         __this.schedule = _schedule;
+                        __this.chkExamityView = __this.schedule.isExamity;
                         __this.hasADA = _.some(__this.schedule.selectedStudents, { 'Ada': true });
                         __this.testStatus = __this.testService.getTestStatusFromTimezone(_schedule.institutionId, _schedule.scheduleStartTime, _schedule.scheduleEndTime);
                         __this.anyStudentPayStudents = __this.testService.anyStudentPayStudents(_schedule);
