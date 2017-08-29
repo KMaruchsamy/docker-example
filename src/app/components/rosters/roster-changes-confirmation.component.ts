@@ -8,7 +8,7 @@ import { RosterChangesModel } from '../../models/roster-changes.model';
 import { RosterChangesService } from './roster-changes.service';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import { RosterChangesSummaryTablesComponent } from './rosters-changes-summary-tables.component';
-declare var Appcues: any;
+//declare var Appcues: any;
 
 @Component({
     selector: 'roster-changes-confirmation',
@@ -26,7 +26,7 @@ export class RosterRequestsConfirmation implements OnInit {
     sStorage: any;
     submittedDate: Date;
 
-    constructor(public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
+    constructor(public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, public rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
     }
 
     ngOnInit(): void {
@@ -37,7 +37,7 @@ export class RosterRequestsConfirmation implements OnInit {
             this.rosterChangesModel = this.rosterChangesService.getUpdatedRosterChangesModel();
             this.titleService.setTitle('Roster Change Request Confirmation – Kaplan Nursing');
             this.submittedDate = new Date();
-            Appcues.start();
+            //Appcues.start();
             window.scroll(0, 0);
         }
     }

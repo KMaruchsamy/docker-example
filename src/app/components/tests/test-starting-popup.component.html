@@ -13,8 +13,8 @@
          <p class="text-larger" [innerHTML]="paragraph"></p>
       </div>
       <div class="modal-footer">
-          <a href="javascript:void(0)" (click)="onCancel();" class="anchor-button anchor-button-left center">{{cancelButtonText}}</a>
-          <button class="button" (click)="onOK();">{{okButtonText}}</button>
+          <a href="javascript:void(0)" (click)="onCancel($event);" class="anchor-button anchor-button-left center">{{cancelButtonText}}</a>
+          <button class="button" (click)="onOK($event);">{{okButtonText}}</button>
       </div>
      </div>
     </div>

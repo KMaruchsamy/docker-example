@@ -46,7 +46,7 @@
     [message]="'Are you sure you want to leave this page? <br>Your work will be lost and you’ll have to start over.'" 
     [okButtonText] = "'Yes, leave this page'" 
     [cancelButtonText] = "'No, stay on this page'" 
-    (onOK)="onOKConfirmation()" 
+    (onOK)="onOKConfirmation($event)" 
     (onCancel)="onCancelConfirmation($event)"
     [hideClose]="false" >
 </confirmation-popup>
@@ -95,7 +95,7 @@
 
 
 <students-started-test-popup 
-        (onOK)="studentsStartedTestPopupOK(e);" 
+        (onOK)="studentsStartedTestPopupOK($event);" 
         [students]="testStartedExceptions"
         pageName="scheduletest"
         mainHeader="Students Have Started Tests In This Testing Session"
@@ -106,14 +106,14 @@
         [testSchedule]="testScheduleModel" 
         [studentWindowException]="timingExceptions" 
         canRemoveStudents=false
-        (windowExceptionPopupClose)="onCloseTimingExceptionsPopup(e)">
+        (windowExceptionPopupClose)="onCloseTimingExceptionsPopup($event)">
 </time-exception>
 
 <self-pay-student-popup
         [selfPayStudentException]="studentPayExceptions"
         [isModifyInProgress]="modifyInProgress"
         [pageName]="'scheduletest'"
-        (selfPayStudentExceptionPopupClose)="onCloseSelfPayExceptionsPopup(e)">
+        (selfPayStudentExceptionPopupClose)="onCloseSelfPayExceptionsPopup($event)">
 </self-pay-student-popup>
 
 <confirmation-popup 

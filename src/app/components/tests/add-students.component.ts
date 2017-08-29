@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy, AfterViewInit,  ElementRef,
     ViewEncapsulation, ViewContainerRef} from '@angular/core';
-import { Router, ActivatedRoute, CanDeactivate, RoutesRecognized, NavigationStart } from '@angular/router';
+import { Router, ActivatedRoute, CanDeactivate, RoutesRecognized, NavigationStart, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import {Response} from '@angular/http';
 import {Subscription, Observable} from 'rxjs/Rx';
 import {NgFor, Location} from '@angular/common';
@@ -130,7 +130,8 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     }
 
 
-    canDeactivate(): Observable<boolean> | boolean {
+    canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean> | boolean {
+        this.destinationRoute = nextState.url;
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (!this.overrideRouteCheck) {
             if (outOfTestScheduling) {
@@ -223,12 +224,12 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     */
     ngOnInit() {
 
-        this.deactivateSubscription = this.router
-            .events
-            .filter(event => event instanceof NavigationStart)
-            .subscribe(e => {
-                this.destinationRoute = e.url;
-            });
+        // this.deactivateSubscription = this.router
+        //     .events
+        //     .filter(event => event instanceof NavigationStart)
+        //     .subscribe(e => {
+        //         this.destinationRoute = e.url;
+        //     });
 
         let self = this;
         this.testsTable = null;
@@ -871,7 +872,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 let firstName = $(el).find('td:eq(1)').text().toUpperCase();
                 let lastName = $(el).find('td:eq(0)').text().toUpperCase();
                 _lname = lastName;
-                let searchString = $(that).val().toUpperCase();
+                let searchString = $(that).val().toString().toUpperCase();
                 if (lastName !== __this.noStudentInCohort.toUpperCase()) {
                     if (!(_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString))) {
                         $(this).addClass('hidden');
@@ -901,7 +902,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 let $span = $(this).find('span.js-selected-student');
                 let firstName = $span.text().split(',')[0].toUpperCase();
                 let lastName = $span.text().split(',')[1].replace(' ', '').toUpperCase();
-                let searchString = $(that).val().toUpperCase();
+                let searchString = $(that).val().toString().toUpperCase();
                 if (!(_.startsWith(firstName, searchString) || _.startsWith(lastName, searchString)))
                     $(this).addClass('hidden');
                 else {
@@ -913,7 +914,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
     addClearIcon(): void {
         $('.testing-add-students-container').on('keyup', '.small-search-box', function () {
-            if ($(this).val().length > 0) {
+            if ($(this).val().toString().length > 0) {
                 $(this).next('span').addClass('clear-input-values');
             } else {
                 $(this).next('span').removeClass('clear-input-values');
@@ -940,7 +941,8 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
             var $table = $('table');
             var table = $('table').DataTable();
-            table.search(this.value).draw();
+            debugger;
+            table.search((<any>this).value).draw();
             $table.find('tr').each(function () {
                 $(this).removeClass('hidden');
             });
@@ -1575,7 +1577,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         return this.testService.validateDates(this.testScheduleModel, this.testScheduleModel.institutionId, this.modify, this.modifyInProgress);
     }
 
-    AddByCohort(): void {
+    AddByCohort(e): void {
 
         this.SetPageToAddByCohort();
         let _self = this;

@@ -63,6 +63,9 @@
                             Change email address
                         </button>
                     </div>
+                    <div *ngIf="ItSecurityEnabled" class="margin-1em-top">
+                        <h3 class="h6 text-smaller-margin"><a class="mobile-button" #examityProfile (click)="onClickExamityProfile(ssologin)" href="javascript:void(0)">My Examity Profile</a></h3>
+                    </div>
                 </form>
 
             </div>
@@ -126,8 +129,8 @@
                         </p>
                     </div>
                     <div class="margin-1em-top clearfix">
-                        <button id="btnStudentReset" class="button button-with-validation button-mobile-block" type="submit" [attr.aria-disabled]="(!resetstudentpassword.value.length > 0)"
-                            [disabled]="(!resetstudentpassword.value.length > 0)" #btnresetstudentpassword (click)="onSubmitSendStudentPassword(resetstudentpassword,$event)">Send sign in info to student</button>
+                        <button id="btnStudentReset" class="button button-with-validation button-mobile-block" type="submit" [attr.aria-disabled]="!(resetstudentpassword.value.length > 0)"
+                            [disabled]="!(resetstudentpassword.value.length > 0)" #btnresetstudentpassword (click)="onSubmitSendStudentPassword(resetstudentpassword,$event)">Send sign in info to student</button>
                         <input id="btnClearResetStudentPassword" (click)="emailText=''" (click)="sendStudentPasswordErrorMessage=''" type="reset"
                             #btnclearresetstudentpassword class="reset-input reset-input-mobile-block" value="Cancel" (keypress)="0">
                         <span role="alert" aria-live="assertive" aria-atomic="true">
@@ -136,7 +139,9 @@
                     </div>
                 </form>
             </div>
-
+            <form #ssologin id="loginExamity" name="loginExamity" method="post">
+                <input name="Username" type="hidden" [value]="examityEncryptedUserId">
+            </form>
         </div>
     </div>
 </main>

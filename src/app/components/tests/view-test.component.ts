@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { Router, RoutesRecognized, ActivatedRoute, NavigationStart } from '@angular/router';
+import { Router, RoutesRecognized, ActivatedRoute, NavigationStart, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Http, Response, RequestOptions, Headers } from "@angular/http";
 import { Title } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs/Rx';
@@ -53,6 +53,8 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     destinationRoute: string;
     paramsSubscription: Subscription;
     scheduleSubscription: Subscription;
+    chkExamityView: boolean = false;
+    ItSecurityEnabled: boolean = false;
     constructor(public auth: AuthService, public common: CommonService, public testService: TestService, public schedule: TestScheduleModel, public router: Router, private activatedRoute: ActivatedRoute, public titleService: Title, private log: LogService
     ) {
 
@@ -60,17 +62,18 @@ export class ViewTestComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        this.deactivateSubscription = this.router
-            .events
-            .filter(event => event instanceof NavigationStart)
-            .subscribe(e => {
-                this.destinationRoute = e.url;
-            });
+        // this.deactivateSubscription = this.router
+        //     .events
+        //     .filter(event => event instanceof NavigationStart)
+        //     .subscribe(e => {
+        //         this.destinationRoute = e.url;
+        //     });
 
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else {
+            this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
             this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
                 let action = params['action'];
                 if (action != undefined && action.trim() !== '')
@@ -84,6 +87,10 @@ export class ViewTestComponent implements OnInit, OnDestroy {
         this.titleService.setTitle('View Testing Session – Kaplan Nursing');
     }
 
+    canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean> | boolean {
+        this.destinationRoute = nextState.url;
+        return true;
+    }
 
     ngOnDestroy(): void {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
@@ -129,6 +136,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
 
                         }
                         __this.schedule = _schedule;
+                        __this.chkExamityView = __this.schedule.isExamity;
                         __this.hasADA = _.some(__this.schedule.selectedStudents, { 'Ada': true });
                         __this.testStatus = __this.testService.getTestStatusFromTimezone(_schedule.institutionId, _schedule.scheduleStartTime, _schedule.scheduleEndTime);
                         __this.anyStudentPayStudents = __this.testService.anyStudentPayStudents(_schedule);
@@ -181,13 +189,13 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     }
 
 
-    onOKConfirmation(): void {
+    onOKConfirmation(e): void {
         $('#confirmationPopup').modal('hide');
         this.deleteSchedule();
 
     }
 
-    onCancelConfirmation() {
+    onCancelConfirmation(e) {
         $('#confirmationPopup').modal('hide');
     }
 

@@ -1678,11 +1678,11 @@
 
  <terms-of-use [showTerms]="showTerms"
                [showX]="true"
-               (closeEvent)="closeModal()"
-               (cancelEvent)="closeModal()"
-               [showCheckbox]="false"
+               (closeEvent)="closeModal($event)"
+               (cancelEvent)="closeModal($event)"
+               showCheckbox=false
                [buttonText] = "'Close'" 
-               (buttonEvent)="closeModal()"
-               [showCancel]="false"
+               (buttonEvent)="closeModal($event)"
+               showCancel=false
                [termsAccepted]="true">
 </terms-of-use> 

@@ -201,6 +201,7 @@ export class TestService {
             _testScheduleModel.status = (_.has(objTestScheduleModel, 'Status') ? objTestScheduleModel.Status : '');
             _testScheduleModel.dateCreated = objTestScheduleModel.DateCreated;
             _testScheduleModel.lastUpdated = objTestScheduleModel.DateModified;
+            _testScheduleModel.isExamity = objTestScheduleModel.IsExamityEnabled;
             if (objTestScheduleModel.Students && objTestScheduleModel.Students.length > 0) {
                 _.forEach(objTestScheduleModel.Students, function (student, key) {
                     let _student = new SelectedStudentModel();
@@ -497,12 +498,12 @@ export class TestService {
     }
 
     showTestStartingWarningModals(modify: boolean, institutionID: number, savedStartTime: any, testEndTime: any): any {
-        if (this.clearTimeout10min) 
-        window.clearTimeout(this.clearTimeout10min);
-        if (this.clearTimeout5minAfter10) 
-        window.clearTimeout(this.clearTimeout5minAfter10);
-        if (this.clearTimeout5min) 
-        window.clearTimeout(this.clearTimeout5min);
+        if (this.clearTimeout10min)
+            window.clearTimeout(this.clearTimeout10min);
+        if (this.clearTimeout5minAfter10)
+            window.clearTimeout(this.clearTimeout5minAfter10);
+        if (this.clearTimeout5min)
+            window.clearTimeout(this.clearTimeout5min);
         if ((modify) && (this.getTestStatusFromTimezone(institutionID, savedStartTime, testEndTime) === 1)) {
             //returns time difference in seconds
             let timeDiff = this.checkIfTestStartingSoon(institutionID, savedStartTime);
@@ -534,4 +535,7 @@ export class TestService {
         }
     }
 
+    enableExamity(url: string): Observable<Response> {
+        return this.http.put(url, this.getRequestOptionsWithEmptyBody());
+    }
 }

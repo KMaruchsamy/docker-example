@@ -16,7 +16,7 @@ export class MyExceptionHandler implements ErrorHandler {
 
     handleError(error) {
         console.error(error);       
-        this.log.error(error);
+      //  this.log.error(error);
         let router: Router = this.injector.get(Router);
         router.navigate(['/error']);
     }

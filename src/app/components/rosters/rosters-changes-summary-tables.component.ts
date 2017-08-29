@@ -25,7 +25,7 @@ export class RosterChangesSummaryTablesComponent implements OnInit {
     hasActionMoved: boolean;
     hasActionAdded: boolean;
 
-    constructor(public router: Router, private common: CommonService, private rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
+    constructor(public router: Router, private common: CommonService, public rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
     }
 
     ngOnInit(): void {

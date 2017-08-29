@@ -27,6 +27,7 @@ export const links = {
             resetstudentpassword: "admin/sendStudentEmail",
             profilesapi: "profile",
             terms: "admin/enrollmentAgreement",
+            examityProfileapi: "examity/adminsso/§adminId",
             test: {
                 subjects: "scheduling/institutions/§institutionid/subjects?testType=§testtype",
                 tests: "scheduling/institutions/§institutionid/tests?subject=§subject&testType=§testtype&searchString=§searchString", //Added Searchstring parameter.
@@ -49,7 +50,8 @@ export const links = {
                 modifyInProgressCohortStudent: "scheduling/modifyInProgress/cohorts/§cohortId/students?testingSessionId=§testingSessionId",
                 refreshStudentsWhoStarted: "scheduling/testingSessions/§testingSessionId/students?filter=§filter",
                 updateModifyInProgressStudents: "scheduling/modifyInProgress/testingSessions/§testSessionId",
-                updateScheduleDatesModifyInProgress: "scheduling/modifyInProgress/testingSessions/§scheduleId/windowDates"
+                updateScheduleDatesModifyInProgress: "scheduling/modifyInProgress/testingSessions/§scheduleId/windowDates",
+                updateIsExamityEnabled: "scheduling/testingSessions/§scheduleId"
             },
             logging: {
                 error: 'error/LogService'
@@ -211,6 +213,11 @@ export const roster = {
 export const telNumbers = {
     supportHotline: '1-866-920-6311',
     outsideUSCanadaSupportHotline: '+1-407-423-6620'
+}
+
+export const Examity = {
+    examityLoginURL: 'https://test.examity.com/kaplan/login.aspx',
+    examityExamStatusURL: 'https://test.examity.com/kaplan/examstatus.aspx'
 }
 
 export enum RosterUpdateTypes {

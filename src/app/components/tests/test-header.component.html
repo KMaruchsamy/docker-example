@@ -16,15 +16,15 @@
             <a href="#" target="_self" [routerLink]="modify ? ['/tests' , 'modify', 'choose-test',testSchedule.institutionId] :  ['/tests/choose-test' , testSchedule.institutionId]" class="link-darker">Change test</a>
         </div>
         <div *ngIf="testSchedule.currentStep>2" class="test-summary-heading-details"><span>Date and Time: <b>            
-            <template [ngIf]="!nextDay">
+            <ng-template [ngIf]="!nextDay">
                 {{testSchedule?.scheduleStartTime|parseDate:'ddd'}} {{testSchedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule?.scheduleStartTime|parseDate:'h:mma'}}
                 &ndash; {{testSchedule?.scheduleEndTime|parseDate:'h:mma'}}
-            </template>
-            <template [ngIf]="nextDay">
+            </ng-template>
+            <ng-template [ngIf]="nextDay">
                 {{testSchedule?.scheduleStartTime|parseDate:'ddd'}} {{testSchedule?.scheduleStartTime|parseDate:'MM/DD/YY'}} from {{testSchedule?.scheduleStartTime|parseDate:'h:mma'}}
                 &ndash; {{testSchedule?.scheduleEndTime|parseDate:'h:mma'}} {{testSchedule?.scheduleEndTime|parseDate:'ddd'}}
                 {{testSchedule?.scheduleEndTime|parseDate:'MM/DD/YY'}}
-            </template>
+            </ng-template>
             </b></span>
             <a [routerLink]="modify ? ['/tests','modify','schedule-test'] : ['/tests/schedule-test']" class="link-darker">Change date or time</a>
         </div>

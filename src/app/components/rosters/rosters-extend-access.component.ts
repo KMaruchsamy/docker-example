@@ -34,8 +34,8 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
     extendAccessStudents: Array<any>;
     rosterChangeUpdateStudents: ChangeUpdateRosterStudentsModel[];
 
-    constructor(private changeDetectorRef: ChangeDetectorRef, public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, private rosterChangesModel: RosterChangesModel, 
-    private rosterCohortsModel: RosterCohortsModel, private rosterChangesService: RosterChangesService, private rosterService: RosterService) {
+    constructor(private changeDetectorRef: ChangeDetectorRef, public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, public rosterChangesModel: RosterChangesModel, 
+    public rosterCohortsModel: RosterCohortsModel, private rosterChangesService: RosterChangesService, private rosterService: RosterService) {
     }
 
     ngOnDestroy(): void {
@@ -46,12 +46,12 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.router
-            .events
-            .filter(event => event instanceof NavigationStart)
-            .subscribe(e => {
-                this.destinationRoute = e.url;
-            });
+        // this.router
+        //     .events
+        //     .filter(event => event instanceof NavigationStart)
+        //     .subscribe(e => {
+        //         this.destinationRoute = e.url;
+        //     });
 
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
@@ -121,7 +121,8 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
         }
     } 
 
-    canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
+    canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean> | boolean {
+        this.destinationRoute = nextState.url;
         let outOfRostersChanges: boolean = this.rosterChangesService.outOfRostersChanges((this.common.removeWhitespace(this.destinationRoute)));
         if (!this.overrideRouteCheck) {
             if (outOfRostersChanges) {

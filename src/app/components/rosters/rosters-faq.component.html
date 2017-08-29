@@ -11,11 +11,11 @@
                     <p>
                         All students enrolled in the Kaplan program are activated by the submission of rosters to your school’s dedicated Account
                         Manager
-                        <template [ngIf]="accountManagerId">
+                        <ng-template [ngIf]="accountManagerId">
                             ,
                             <b> {{accountManagerFirstName}} {{accountManagerLastName}}</b> (
                             <a href="mailto:{{accountManagerEmail}}">{{accountManagerEmail}}</a>)
-                        </template>.
+                        </ng-template>.
                         The rosters tell us which students to activate and classify them into cohorts labeled by month and
                         year of graduation (e.g. June 2017). Based on their cohort, students are granted access to the Kaplan
                         program for three months after graduation, which typically covers their NCLEX® testing cycle. Kaplan

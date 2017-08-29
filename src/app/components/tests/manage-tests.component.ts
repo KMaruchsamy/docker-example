@@ -4,7 +4,7 @@ import {Subscription} from 'rxjs/Rx';
 import {Http, Response, RequestOptions, Headers} from "@angular/http";
 import {Title} from '@angular/platform-browser';
 import {Observable} from 'rxjs/Rx';
-import {links, errorcodes, teststatus, Timezones} from '../../constants/config';
+import {links, errorcodes, teststatus, Timezones, Examity} from '../../constants/config';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';
@@ -20,7 +20,7 @@ import { PageFooterComponent } from './../shared/page-footer.component';
 import { TestHeaderComponent } from './test-header.component';
 import { PageHeaderComponent } from './../shared/page-header.component';
 import { ManageTestsMultiCampusComponent } from './manage-tests-multicampus.component';
-declare var Appcues: any;
+//declare var Appcues: any;
 
 @Component({
     selector: 'manage-tests',
@@ -51,12 +51,18 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     actionSubscription: Subscription;
     subjectsSubscription: Subscription;
     scheduleTestsSubscription: Subscription;
-    renameSessionSuscription: Subscription;
+    renameSessionSubscription: Subscription;
+    enableExamitySubscription: Subscription;
     errorCodes: any;
     testStatus: any;
     isMultiCampus: boolean = false;
     Campus: Object[] = [];
     institutions: Array<any> = [];
+    examityEncryptedUserId: string;
+    ItSecurityEnabled: boolean = false;
+    isExamity: boolean = null;
+    scheduleIdToExamity: number;
+    examity: string;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -67,7 +73,8 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         public testSchedule: TestScheduleModel,
         public titleService: Title,
         private testsModal: TestsModal,
-        private log: LogService) { 
+        private log: LogService,
+        private http: Http) {
     }
 
     ngOnDestroy(): void {
@@ -77,12 +84,13 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             this.subjectsSubscription.unsubscribe();
         if (this.scheduleTestsSubscription)
             this.scheduleTestsSubscription.unsubscribe();
-        if (this.renameSessionSuscription)
-            this.renameSessionSuscription.unsubscribe();
+        if (this.renameSessionSubscription)
+            this.renameSessionSubscription.unsubscribe();
     }
 
 
     ngOnInit(): void {
+        this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else {
@@ -104,7 +112,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             }
             this.titleService.setTitle('Manage Tests – Kaplan Nursing');
             window.scroll(0,0);
-            Appcues.start();
+            //Appcues.start();
         }
     }
 
@@ -153,7 +161,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     }
 
     bindTests(): void {
-         //clear existing tests array in case this returns no tests for any of the arrays with multicampus dropdown
+        //clear existing tests array in case this returns no tests for any of the arrays with multicampus dropdown
         this.completedTests = [];
         this.scheduleTests = [];
         this.inProgressTests = [];
@@ -176,7 +184,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                         _test.spanMultipleDays = moment(_test.scheduleStartTime).isBefore(_test.scheduleEndTime, 'day');
                         return moment(_test.scheduleStartTime).toDate()
                     });
-
+                    
                     __this.inProgressTests = __this.groupTests(sortedInProgressTests);
 
 
@@ -199,7 +207,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                         return moment(_test.scheduleStartTime).toDate()
                     }, ['desc']);
 
-                    __this.completedTests = __this.groupTests(sortedCompletedTests);
+                                        __this.completedTests = __this.groupTests(sortedCompletedTests);
 
 
 
@@ -295,7 +303,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             let _newName = params.newValue;
             let renameSessionObservable = __this.renameSession(_sessionId, _newName);
 
-            this.renameSessionSubscription = renameSessionObservable
+            __this.renameSessionSubscription = renameSessionObservable
                 .map(response => response.status)
                 .subscribe(status => {
                     if (status.toString() === __this.errorCodes.SUCCESS) {
@@ -334,18 +342,15 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         let renameSessionURL = __this.resolveScheduleURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.renamesession}`, sessionId);
 
         let renameSessionObservable: Observable<Response> = this.testService.renameSession(renameSessionURL, JSON.stringify(newName));
-
         return renameSessionObservable;
-
     }
 
-
-    onOKConfirmation(): void {
+    onOKConfirmation(e): void {
         $('#confirmationPopup').modal('hide');
         this.deleteSchedule();
     }
 
-    onCancelConfirmation() {
+    onCancelConfirmation(e) {
         $('#confirmationPopup').modal('hide');
         this.scheduleIdToDelete = 0;
         this.institutionIdToDelete = 0;
@@ -502,4 +507,70 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         }
     }
 
+    onClickExamityProfile(ssologin): void {
+        let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
+        let examityObservable: Observable<Response> = this.setFacultyProfileInExamity(facultyAPIUrl);
+        examityObservable.subscribe(response => {
+            this.examityEncryptedUserId = response.json();
+            ssologin.setAttribute('Action', Examity.examityExamStatusURL);
+            ssologin.submit();
+        }, error => console.log(error));
+    }
+
+    setFacultyProfileInExamity(url: string): Observable<Response> {
+        let self = this;
+        let options: RequestOptions = new RequestOptions();
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.auth.authheader
+        });
+        options.headers = headers;
+        options.body = '';
+        return this.http.get(url, options);
+    }
+
+    resolveFacultyURL(url: string): string {
+        return url.replace('§adminId', this.auth.userid.toString());
+    }
+
+    showPopup(scheduleId: number, isExamityEnabled: boolean): void {
+        this.scheduleIdToExamity = scheduleId;
+        this.isExamity = isExamityEnabled;
+        if (this.isExamity) {
+            this.isExamity = false;
+            $('#examityDisablePopup').modal("show")
+        }
+        else {
+            this.isExamity = true;
+            $('#examityEnablePopup').modal("show")
+        }
+    }
+    onExamityEnableConfirmation(e): void {
+        $('#examityDisablePopup').modal('hide');
+        $('#examityEnablePopup').modal('hide');
+        this.enableOrCancelExamity();
+    }
+
+    onCancelExamityEnable(e) {
+        $('#examityDisablePopup').modal('hide');
+        $('#examityEnablePopup').modal('hide');
+        this.scheduleIdToExamity = 0;
+    }
+
+    enableOrCancelExamity(): any {
+        let enableExamityURL = this.resolveExamityURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateIsExamityEnabled}`, this.scheduleIdToExamity);
+        let enableExamityObservable: Observable<Response> = this.testService.enableExamity(enableExamityURL);
+        this.enableExamitySubscription = enableExamityObservable
+            .map(response => response.json())
+            .subscribe(json => {
+                if (json) {
+                    console.log("complete");
+                }
+        }, error => console.log(error));
+    }
+
+    resolveExamityURL(url: string, scheduleId: number): string {
+        return url.replace('§scheduleId', scheduleId.toString());
+    }
 }

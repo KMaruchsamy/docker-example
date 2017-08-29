@@ -2,7 +2,7 @@
     <p class="text-larger">
         Please choose the institution for which you’d like to view tests in progress, scheduled tests, and/or completed tests:
     </p>
-    <select id="choose-campus" class="selectpicker margin-1em-top margin-right-1em" (change)="changeInstitution($event.target.value)" title="Choose an institution" data-width="600" data-size="5">
+    <select id="choose-campus" class="selectpicker margin-1em-top margin-right-1em" (change)="changeInstitution($event.target.value, $event)" title="Choose an institution" data-width="600" data-size="5">
         <option *ngFor="let institution of institutions" [value]="institution.InstitutionId" >{{institution.InstitutionNameWithProgOfStudy}}</option>
     </select>
 </div>

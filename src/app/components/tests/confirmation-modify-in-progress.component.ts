@@ -1,8 +1,8 @@
 ﻿import {Component, OnInit, OnDestroy} from '@angular/core';
-import { Router, ActivatedRoute, RoutesRecognized, NavigationStart } from '@angular/router';
+import { Router, ActivatedRoute, RoutesRecognized, NavigationStart, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import {NgFor, NgIf} from '@angular/common';
 import {Title} from '@angular/platform-browser';
-import {Subscription} from 'rxjs/Rx';
+import { Subscription, Observable } from 'rxjs/Rx';
 // import {CommonService} from '../../services/common';
 // import {AuthService} from '../../services/auth';
 // import {PageHeader} from '../shared/page-header';
@@ -37,12 +37,12 @@ export class ConfirmationModifyInProgressComponent implements OnInit, OnDestroy 
     }
    
     ngOnInit(): void {
-        this.deactivateSubscription = this.router
-             .events
-            .filter(event => event instanceof NavigationStart)
-            .subscribe(e => {
-                this.destinationRoute = e.url;
-            });
+        // this.deactivateSubscription = this.router
+        //      .events
+        //     .filter(event => event instanceof NavigationStart)
+        //     .subscribe(e => {
+        //         this.destinationRoute = e.url;
+        //     });
 
         window.scroll(0,0);
         this.sStorage = this.common.getStorage();
@@ -53,7 +53,11 @@ export class ConfirmationModifyInProgressComponent implements OnInit, OnDestroy 
             this.initialization();
         }
     }
-
+    canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean> | boolean {
+        this.destinationRoute = nextState.url;
+        return true;
+    }
+    
     ngOnDestroy(): void {
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (outOfTestScheduling)

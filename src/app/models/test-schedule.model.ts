@@ -30,5 +30,6 @@ export class TestScheduleModel{
     spanMultipleDays: boolean = false;
     dateCreated: any;
     lastUpdated: any;
+    isExamity: boolean = null;
     constructor(){}
 }
