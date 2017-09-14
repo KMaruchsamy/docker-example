@@ -10,6 +10,9 @@ import { Title } from '@angular/platform-browser';
 import { links } from '../../constants/config';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
+import { Subscription, Observable } from 'rxjs/Rx';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+
 // import { PageHeaderComponent } from './../shared/page-header.component';
 // import { PageFooterComponent } from './../shared/page-footer.component';
 
@@ -33,12 +36,15 @@ export class ReportsComponent implements OnInit {
     apiServer: string;
     nursingITServer: string;
     institutionName: string;
-    constructor(public auth: AuthService, public router: Router, public common: CommonService, public titleService: Title) {
+    ItSecurityEnabled: boolean = false;
+    examityEncryptedUserId: string;
+    constructor(private http: Http, public auth: AuthService, public router: Router, public common: CommonService, public titleService: Title) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
     }
 
     ngOnInit(): void {
+        this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else
@@ -77,6 +83,33 @@ export class ReportsComponent implements OnInit {
         this.hdpage.value = this.page;
         this.hdExceptionURL.value = this.resolveExceptionPage(links.nursingit.exceptionpage);
         $(this.form).attr('ACTION', serverURL).submit();
+    }
+
+    onClickExamityProfile(ssologin, encryptedUsername_val): void {
+        let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
+        let examityObservable: Observable<Response> = this.setFacultyProfileInExamity(facultyAPIUrl);
+        examityObservable.subscribe(response => {
+            this.examityEncryptedUserId = response.json();
+            encryptedUsername_val.value = this.examityEncryptedUserId
+            ssologin.submit();
+        }, error => console.log(error));
+    }
+
+    setFacultyProfileInExamity(url: string): Observable<Response> {
+        let self = this;
+        let options: RequestOptions = new RequestOptions();
+        let headers: Headers = new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.auth.authheader
+        });
+        options.headers = headers;
+        options.body = '';
+        return this.http.get(url, options);
+    }
+
+    resolveFacultyURL(url: string): string {
+        return url.replace('§adminId', this.auth.userid.toString());
     }
 
 }

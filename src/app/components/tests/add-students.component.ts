@@ -941,7 +941,6 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
             var $table = $('table');
             var table = $('table').DataTable();
-            debugger;
             table.search((<any>this).value).draw();
             $table.find('tr').each(function () {
                 $(this).removeClass('hidden');

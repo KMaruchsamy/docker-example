@@ -454,7 +454,6 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     }
 
     changeCohortTo(_student: ChangeUpdateRosterStudentsModel) {
-        debugger;
         this.showRequestChangePopup = false;
         if (_student !== undefined) {
             if (this.isResponsive) {

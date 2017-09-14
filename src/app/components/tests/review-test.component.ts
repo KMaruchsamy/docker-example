@@ -167,6 +167,12 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             this.router.navigate(['/']);
         else {
             this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
+            if (this.ItSecurityEnabled == true) {
+                this.chkExamity = true;
+            }
+            else {
+                this.chkExamity = false;
+            }
             this.initialize();
         }
         window.scroll(0, 0);

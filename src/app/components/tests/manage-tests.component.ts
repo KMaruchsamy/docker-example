@@ -507,12 +507,12 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         }
     }
 
-    onClickExamityProfile(ssologin): void {
+    onClickExamityProfile(ssologin, encryptedUsername_val): void {
         let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
         let examityObservable: Observable<Response> = this.setFacultyProfileInExamity(facultyAPIUrl);
         examityObservable.subscribe(response => {
             this.examityEncryptedUserId = response.json();
-            ssologin.setAttribute('Action', Examity.examityExamStatusURL);
+            encryptedUsername_val.value = this.examityEncryptedUserId
             ssologin.submit();
         }, error => console.log(error));
     }
@@ -560,7 +560,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
     enableOrCancelExamity(): any {
         let enableExamityURL = this.resolveExamityURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateIsExamityEnabled}`, this.scheduleIdToExamity);
-        let enableExamityObservable: Observable<Response> = this.testService.enableExamity(enableExamityURL);
+        let enableExamityObservable: Observable<Response> = this.testService.enableExamity(enableExamityURL, this.isExamity);
         this.enableExamitySubscription = enableExamityObservable
             .map(response => response.json())
             .subscribe(json => {

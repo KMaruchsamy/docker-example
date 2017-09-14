@@ -64,7 +64,7 @@
                         </button>
                     </div>
                     <div *ngIf="ItSecurityEnabled" class="margin-1em-top">
-                        <h3 class="h6 text-smaller-margin"><a class="mobile-button" #examityProfile (click)="onClickExamityProfile(ssologin)" href="javascript:void(0)">My Examity Profile</a></h3>
+                        <h3 class="h6 text-smaller-margin"><a class="mobile-button" #examityProfile (click)="onClickExamityProfile(ssologin,encryptedUsername_val)" href="javascript:void(0)">My Examity Profile</a></h3>
                     </div>
                 </form>
 
@@ -139,10 +139,11 @@
                     </div>
                 </form>
             </div>
-            <form #ssologin id="loginExamity" name="loginExamity" method="post">
-                <input name="Username" type="hidden" [value]="examityEncryptedUserId">
+            <form #ssologin id="loginExamity" name="loginExamity" Action="https://test.examity.com/kaplan/login.aspx" method="post">
+                <input #encryptedUsername_val name="Username" type="hidden"  />
             </form>
         </div>
     </div>
 </main>
 <page-footer></page-footer>
+ 

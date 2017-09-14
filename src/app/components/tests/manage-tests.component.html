@@ -212,7 +212,7 @@
                                 <td class="tablesaw-stacked-hidden">{{completedTest.adminFirstName}} {{completedTest.adminLastName}}</td>
                                 <td class="tablesaw-stacked-hidden">{{completedTest.lastUpdated|parseDate:'MM/DD/YY'}}</td>
                                 <td class="tablesaw-stacked-hidden"><a href="javscript:void(0)" class="smaller" (click)="view(completedTest.scheduleId, $event,false)">View</a>
-                                <td class="tablesaw-stacked-hidden" *ngIf="ItSecurityEnabled"><a href="javscript:void(0)" class="smaller" (click)="onClickExamityProfile(ssologin)">View Examity Report</a>
+                                <td class="tablesaw-stacked-hidden" *ngIf="ItSecurityEnabled"><a href="javscript:void(0)" class="smaller" (click)="onClickExamityProfile(ssologin,encryptedUsername_val)">View Examity Report</a>
                                     <!--<a  href="#" class="smaller">Reports</a>-->
                                 </td>
                             </tr>
@@ -223,8 +223,8 @@
             </div>
         </div>
        </section>
-        <form #ssologin id="loginExamity" name="loginExamity" method="post">
-            <input name="Username" type="hidden" [value]="examityEncryptedUserId">
+        <form #ssologin id="loginExamity" name="loginExamity" Action="https://test.examity.com/kaplan/login.aspx" method="post">
+            <input #encryptedUsername_val name="Username" type="hidden" />
         </form>
     </div>
 </main>
