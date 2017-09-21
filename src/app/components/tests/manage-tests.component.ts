@@ -565,6 +565,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             .map(response => response.json())
             .subscribe(json => {
                 if (json) {
+                    this.ngOnInit();
                     console.log("complete");
                 }
         }, error => console.log(error));
