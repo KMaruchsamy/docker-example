@@ -535,7 +535,7 @@ export class TestService {
         }
     }
 
-    enableExamity(url: string): Observable<Response> {
-        return this.http.put(url, this.getRequestOptionsWithEmptyBody());
+    enableExamity(url: string, input: boolean): Observable<Response> {
+        return this.http.put(url, input, this.getRequestOptions());
     }
 }

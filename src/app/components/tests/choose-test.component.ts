@@ -104,7 +104,6 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        debugger;
         if (this.testsTable)
             this.testsTable.destroy();
         this.tests = [];
@@ -140,7 +139,6 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         //         this.destinationRoute = e.url;
         //     });
 
-        debugger;
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
@@ -178,7 +176,6 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
 
 
     canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean> | boolean {
-        debugger;
         this.destinationRoute = nextState.url;
         let outOfTestScheduling: boolean = this.testService.outOfTestScheduling((this.common.removeWhitespace(this.destinationRoute)));
         if (!this.overrideRouteCheck) {

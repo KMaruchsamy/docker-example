@@ -76,6 +76,10 @@
                             href="javascript:void(0)" class="margin-1em-bottom mobile-button">Module Result Comparisons by Cohort</a></li>
                     </ul>
                 </div>
+                <div class="margin-2em-bottom">
+                    <h3 class="h4 text-smaller-margin" ><a class="mobile-button" #linkReportExamityExamStaus *ngIf="ItSecurityEnabled" (click)="onClickExamityProfile(ssologin,encryptedUsername_val)">Examity Proctoring Reports</a></h3>
+                    <p>Examity Proctoring Reports</p>
+                </div>
             </div>
 
         </div>
@@ -90,4 +94,7 @@
     <input #hdtoken type="hidden" id="jwtToken" name="jwtToken">
     <input #hdpage type="hidden" id="redirectPage" name="redirectPage">
     <input #hdexceptionurl type="hidden" id="exceptionURL" name="exceptionURL">
+</form>
+<form #ssologin id="loginExamity" name="loginExamity" Action="https://test.examity.com/kaplan/login.aspx" method="post">
+    <input #encryptedUsername_val name="Username" type="hidden" />
 </form>

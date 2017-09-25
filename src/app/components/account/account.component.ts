@@ -74,7 +74,6 @@ export class AccountComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        debugger
         this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
         this.errorCodes = errorcodes;
         this.titleService.setTitle('Manage Account – Kaplan Nursing');
@@ -505,15 +504,12 @@ export class AccountComponent implements OnInit, OnDestroy {
         return this.http.post(url, body, requestOptions);
     }
 
-    onClickExamityProfile(ssologin): void {
-        debugger
+    onClickExamityProfile(ssologin, encryptedUsername_val): void {
         let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
         let examityObservable: Observable<Response> = this.setFacultyProfileInExamity(facultyAPIUrl);
         examityObservable.subscribe(response => {
-            debugger
             this.examityEncryptedUserId = response.json();
-            debugger
-                    ssologin.setAttribute('Action', Examity.examityLoginURL);
+            encryptedUsername_val.value = this.examityEncryptedUserId
                     ssologin.submit();
         }, error => console.log(error));
     }
