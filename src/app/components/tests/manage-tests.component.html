@@ -72,8 +72,8 @@
                                             class="smaller block text-extra-mobile-spacing">Add/Remove Students</a>
                                         <a href="javascript:void(0)" *ngIf="adminId==inProgressTest?.adminId || adminId==inProgressTest?.facultyMemberId" (click)="redirectModifyInProgress('ModifyScheduleTest',inProgressTest?.scheduleId,$event)"
                                             class="smaller block text-extra-mobile-spacing">Change Testing Window</a>
-                                        <a href="javascript:void(0)" *ngIf="ItSecurityEnabled && inProgressTest.isExamity == 1" class="smaller block text-extra-mobile-spacing" (click)="showPopup(inProgressTest?.scheduleId,inProgressTest.isExamity)">Cancel Examity Proctoring</a>
-                                        <a href="javascript:void(0)" *ngIf="ItSecurityEnabled && inProgressTest.isExamity == 0" class="smaller block text-extra-mobile-spacing" (click)="showPopup(inProgressTest?.scheduleId,inProgressTest.isExamity)">Enable Examity Proctoring</a>
+                                        <a href="javascript:void(0)" *ngIf="ItSecurityEnabled && inProgressTest.isExamity == 1 && adminId==inProgressTest?.adminId || adminId==inProgressTest?.facultyMemberId" class="smaller block text-extra-mobile-spacing" (click)="showPopup(inProgressTest?.scheduleId,inProgressTest.isExamity)">Cancel Examity Proctoring</a>
+                                        <a href="javascript:void(0)" *ngIf="ItSecurityEnabled && inProgressTest.isExamity == 0 && adminId==inProgressTest?.adminId || adminId==inProgressTest?.facultyMemberId" class="smaller block text-extra-mobile-spacing" (click)="showPopup(inProgressTest?.scheduleId,inProgressTest.isExamity)">Enable Examity Proctoring</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -147,9 +147,9 @@
                                         class="smaller">View</a>
                                     <a *ngIf="adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId" href="javascript:void(0)" (click)="view(scheduleTest?.scheduleId, $event,true)"
                                         class="smaller block text-extra-mobile-spacing">View/Modify</a>
-                                    <a href="javascript:void(0)"  *ngIf="ItSecurityEnabled && scheduleTest.isExamity==1"class="smaller block text-extra-mobile-spacing" (click)="showPopup(scheduleTest?.scheduleId,scheduleTest.isExamity)" >Cancel Examity Proctoring</a>
-                                    <a href="javascript:void(0)" *ngIf="ItSecurityEnabled && scheduleTest.isExamity==0" class="smaller block text-extra-mobile-spacing" (click)="showPopup(scheduleTest?.scheduleId,scheduleTest.isExamity)" >Enable Examity Proctoring</a>
-                                    <button *ngIf="adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId" class="smaller block text-extra-mobile-spacing" (click)="showConfirmation(scheduleTest?.scheduleId,scheduleTest?.institutionId)">Delete</button>
+                                    <a href="javascript:void(0)"  *ngIf="ItSecurityEnabled && scheduleTest.isExamity==1 && adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId"class="smaller block text-extra-mobile-spacing" (click)="showPopup(scheduleTest?.scheduleId,scheduleTest.isExamity)" >Cancel Examity Proctoring</a>
+                                    <a href="javascript:void(0)" *ngIf="ItSecurityEnabled && scheduleTest.isExamity==0 && adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId" class="smaller block text-extra-mobile-spacing" (click)="showPopup(scheduleTest?.scheduleId,scheduleTest.isExamity)" >Enable Examity Proctoring</a>
+                                    <button *ngIf="adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId" class="anchor-button smaller" (click)="showConfirmation(scheduleTest?.scheduleId,scheduleTest?.institutionId)">Delete</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -213,7 +213,7 @@
                                 <td class="tablesaw-stacked-hidden">{{completedTest.adminFirstName}} {{completedTest.adminLastName}}</td>
                                 <td class="tablesaw-stacked-hidden">{{completedTest.lastUpdated|parseDate:'MM/DD/YY'}}</td>
                                 <td class="tablesaw-stacked-hidden"><a href="javscript:void(0)" class="smaller" (click)="view(completedTest.scheduleId, $event,false)">View</a>
-                                <td class="smaller block text-extra-mobile-spacing tablesaw-stacked-hidden"  *ngIf="ItSecurityEnabled"><a href="javscript:void(0)" class="smaller" (click)="onClickExamityProfile(ssologin,encryptedUsername_val)">View Examity Report</a>
+                                <td class="smaller block text-extra-mobile-spacing tablesaw-stacked-hidden"  *ngIf="ItSecurityEnabled && completedTest?.isExamity == 1"><a href="javscript:void(0)" class="smaller" (click)="onClickExamityProfile(ssologin,encryptedUsername_val)">View Examity Report</a>
                                     <!--<a  href="#" class="smaller">Reports</a>-->
                                 </td>
                             </tr>

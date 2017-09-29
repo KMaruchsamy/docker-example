@@ -2013,6 +2013,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             TestingWindowStart: this.testScheduleModel.scheduleStartTime,
             TestingWindowEnd: this.testScheduleModel.scheduleEndTime,
             FacultyMemberId: this.testScheduleModel.facultyMemberId,
+            IsExamityEnabled: this.testScheduleModel.isExamity,
             Students: _.map((closeSession ? this.testScheduleModel.selectedStudents : this.selectedStudents), (student) => {
                 return {
                     StudentId: student.StudentId,
