@@ -25,7 +25,7 @@
         <nav class="navigation container" role="navigation" aria-label="secondary">
             <ul class="nav-items">
                 <li class="nav-icon schedule-icon"><a href="#" (click)="redirectToRoute('choose-test');">Schedule an Integrated Test</a></li>
-                <li class="nav-icon email-icon-outline"><a pageScroll pageScrollOffset="-15" [pageScrollDuration]="500" [routerLink]="['/account']" href="#sendStudentInfo" angulartics2On="click" angularticsEvent="SigninInfoClick" angularticsCategory="LoginHelp">Send student sign in info</a></li>
+                <!-- <li class="nav-icon email-icon-outline"><a pageScroll pageScrollOffset="-15" [pageScrollDuration]="500" [routerLink]="['/account']" href="#sendStudentInfo" angulartics2On="click" angularticsEvent="SigninInfoClick" angularticsCategory="LoginHelp">Send student sign in info</a></li> -->
                 <li class="nav-icon info-icon-white"><a [routerLink]="['/userguide']">View user guide</a></li>
             </ul>
         </nav>
@@ -64,7 +64,7 @@
                     <h2>Teaching Tools (Student Site)</h2>
                     <div class="faculty-links">
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('TestReview',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Focused Review Tests</a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" [attr.href]="atomStudyPlanLink" target="_blank">Focused Review Tests</a></h3>
                             <p>For content mastery</p>
                             <ul class="bullet">
                                 <li>Access standard tests or help students create their own</li>
@@ -72,12 +72,12 @@
                             </ul>
                         </div>
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin" *ngIf="(institutionRN>0)"><a class="mobile-button" (click)="prepareRedirectToStudentSite('CaseStudies',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('SkillsModules',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Skills Demonstration Videos</a></h3>
+                            <h3 class="h4 text-smaller-margin" *ngIf="(institutionRN>0)"><a class="mobile-button" [attr.href]="atomStudyPlanLink" target="_blank">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" [attr.href]="atomStudyPlanLink" target="_blank">Skills Demonstration Videos</a></h3>
                             <p>For practical learning simulation</p>
                         </div>
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="prepareRedirectToStudentSite('Nclex',myform,hdinstitution,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">NCLEX Resources</a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" [attr.href]="atomStudyPlanLink" target="_blank">NCLEX Resources</a></h3>
                             <p>For standardized test mastery</p>
                             <ul class="bullet">
                                 <li>Access diagnostic tests and Question Trainers</li>

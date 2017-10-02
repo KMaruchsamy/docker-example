@@ -128,6 +128,24 @@ export const links = {
     },
     tests: {
         defaultScheduleDurationHours: 3
+    },
+    atomStudyPlan:{
+        local: {
+            server: "https://www.qa01.kaptest.net"            
+        },
+        dev: {
+            server: "https://www.qa01.kaptest.net"
+        },
+        qa: {
+            server: "https://www.qa01.kaptest.net"
+        },
+        stg: {
+            server: "https://www.stg.kaptest.net/"
+        },
+        prod: {
+            server: "https://www.kaptest.com"
+        },
+        login:"rest-services/userLogin/oamLogin?oam=§facultyEmail&enc=false"
     }
 };
 
