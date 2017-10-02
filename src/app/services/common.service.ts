@@ -111,6 +111,32 @@ export class CommonService {
         return ITServer;
     }
 
+    getKaptestServer() {
+        let ITServer = '';
+        switch (location.hostname) {
+            case this.getHostName(links.faculty.local.server):
+                ITServer = links.atomStudyPlan.local.server;
+                break;
+            case this.getHostName(links.faculty.dev.server):
+                ITServer = links.atomStudyPlan.dev.server;
+                break;
+            case this.getHostName(links.faculty.qa.server):
+                ITServer = links.nursingit.qa.server;
+                break;
+            case this.getHostName(links.faculty.stg.server):
+                ITServer = links.atomStudyPlan.stg.server;
+                break;
+            case this.getHostName(links.faculty.prod.server):
+                ITServer = links.atomStudyPlan.prod.server;
+                break;
+            default:
+                ITServer = links.atomStudyPlan.local.server;
+                break;
+        }
+        return ITServer;
+    }
+
+
     isProduction(): boolean {
         let apiServer = this.getApiServer();
         return apiServer === links.api.prod.server;

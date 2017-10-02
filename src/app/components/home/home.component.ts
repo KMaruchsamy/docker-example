@@ -52,6 +52,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     userId: number;
     firstName: string;
     lastName: string;
+    atomStudyPlanLink:string;
+    kaptestServer :string;
     constructor(public router: Router, public auth: AuthService, public location: Location, public common: CommonService, public profileService: ProfileService, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
     }
 
@@ -65,6 +67,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
+        this.kaptestServer = this.common.getKaptestServer();
         this.redirectToPage();
         this.initialize();
         // this.profiles = [];
@@ -77,6 +80,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.checkInstitutions();
         window.scroll(0,0);
         this.titleService.setTitle('Faculty Home – Kaplan Nursing');
+        this.setAtomStudyPlanLink();
+    }
+
+    setAtomStudyPlanLink(){
+        this.atomStudyPlanLink = this.kaptestServer + '/' + links.atomStudyPlan.login.replace('§facultyEmail',this.userEmail);
     }
 
     getUserInfo(): void {
