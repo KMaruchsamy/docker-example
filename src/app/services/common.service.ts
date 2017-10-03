@@ -121,7 +121,7 @@ export class CommonService {
                 ITServer = links.atomStudyPlan.dev.server;
                 break;
             case this.getHostName(links.faculty.qa.server):
-                ITServer = links.nursingit.qa.server;
+                ITServer = links.atomStudyPlan.qa.server;
                 break;
             case this.getHostName(links.faculty.stg.server):
                 ITServer = links.atomStudyPlan.stg.server;

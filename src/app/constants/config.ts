@@ -131,19 +131,19 @@ export const links = {
     },
     atomStudyPlan:{
         local: {
-            server: "https://www.qa01.kaptest.net"            
+            server: "https://www.qa01.kaptest.net/"            
         },
         dev: {
-            server: "https://www.qa01.kaptest.net"
+            server: "https://www.qa01.kaptest.net/"
         },
         qa: {
-            server: "https://www.qa01.kaptest.net"
+            server: "https://www.qa01.kaptest.net/"
         },
         stg: {
             server: "https://www.stg.kaptest.net/"
         },
         prod: {
-            server: "https://www.kaptest.com"
+            server: "https://www.kaptest.com/"
         },
         login:"rest-services/userLogin/oamLogin?oam=§facultyEmail&enc=false"
     }
