@@ -152,7 +152,7 @@ export class LoginContentComponent implements OnDestroy {
     }
 
     setAtomStudyPlanLink(){
-        this.atomStudyPlanLink = this.kaptestServer + '/' + links.atomStudyPlan.login.replace('§facultyEmail',this.auth.useremail);
+        this.atomStudyPlanLink = this.kaptestServer + links.atomStudyPlan.login.replace('§facultyEmail',this.auth.useremail);
     }
     prepareRedirectToStudentSite(returnPage) {
         this.page = 'StudentHome';

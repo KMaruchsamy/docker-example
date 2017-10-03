@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     setAtomStudyPlanLink(){
-        this.atomStudyPlanLink = this.kaptestServer + '/' + links.atomStudyPlan.login.replace('§facultyEmail',this.userEmail);
+        this.atomStudyPlanLink = this.kaptestServer +  links.atomStudyPlan.login.replace('§facultyEmail',this.userEmail);
     }
 
     getUserInfo(): void {
