@@ -207,11 +207,11 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
                 this.testScheduleModel = this.testService.sortSchedule(savedSchedule);
                 this.bindFaculty();
-
+              
                 if (this.testScheduleModel.scheduleName)
                     this.$txtScheduleName.val(this.testScheduleModel.scheduleName);
                 if (this.modify) {
-
+                    this.ItSecurityEnabled = this.testScheduleModel.itSecurityEnabledInstitution;
                     this.chkExamity = this.testScheduleModel.isExamity;
                     if (this.testScheduleModel.facultyMemberId !== this.testScheduleModel.adminId && this.auth.userid !== this.testScheduleModel.adminId) {
                         this.facultyAssignable = false;

@@ -108,7 +108,12 @@ export class AuthService {
     this.sStorage.setItem('isenrollmentagreementsigned', value);
   }
 
-
+  get testSchedule(): any {
+      return this.sStorage.getItem('testschedule');
+  }
+  set testSchedule(value: any) {
+      this.sStorage.setItem('testschedule', value);
+  }
 
   constructor(private http: Http) {
     // this.common = new CommonService();
@@ -233,6 +238,21 @@ export class AuthService {
   }
 
   isITSecurityEnabled(): boolean {
+      let testInstitutionId = JSON.parse(this.testSchedule);
+      let testScheduledInstitutionId = testInstitutionId.institutionId;
+      let institutions = JSON.parse(this.institutions);
+      if (institutions.length > 0) {
+          for (var i = 0; i < institutions.length; i++) {
+              if (institutions[i].InstitutionId == testScheduledInstitutionId && institutions[i].ITSecurityEnabled == true) {
+                  return true;
+              }
+          }
+          return false;
+      }
+      return false;
+  }
+
+  isExamityEnabled(): boolean {
       let institutions = JSON.parse(this.institutions);
       if (institutions.length > 0) {
           for (var i = 0; i < institutions.length; i++) {

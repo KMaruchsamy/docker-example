@@ -44,7 +44,7 @@ export class ReportsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
+        this.ItSecurityEnabled = this.auth.isExamityEnabled();
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else

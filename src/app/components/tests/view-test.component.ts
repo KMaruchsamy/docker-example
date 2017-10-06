@@ -73,7 +73,6 @@ export class ViewTestComponent implements OnInit, OnDestroy {
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else {
-            this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
             this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
                 let action = params['action'];
                 if (action != undefined && action.trim() !== '')
@@ -136,6 +135,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
 
                         }
                         __this.schedule = _schedule;
+                        __this.ItSecurityEnabled = __this.schedule.itSecurityEnabledInstitution;
                         __this.chkExamityView = __this.schedule.isExamity;
                         __this.hasADA = _.some(__this.schedule.selectedStudents, { 'Ada': true });
                         __this.testStatus = __this.testService.getTestStatusFromTimezone(_schedule.institutionId, _schedule.scheduleStartTime, _schedule.scheduleEndTime);

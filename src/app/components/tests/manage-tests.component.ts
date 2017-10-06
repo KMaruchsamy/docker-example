@@ -90,8 +90,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
 
     ngOnInit(): void {
-        this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
-        if (!this.auth.isAuth())
+              if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else {
             if (this.auth.institutions) {
@@ -535,6 +534,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     }
 
     showPopup(scheduleId: number, isExamityEnabled: boolean): void {
+        debugger
         this.scheduleIdToExamity = scheduleId;
         this.isExamity = isExamityEnabled;
         if (this.isExamity) {
@@ -559,12 +559,14 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     }
 
     enableOrCancelExamity(): any {
+        debugger
         let enableExamityURL = this.resolveExamityURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateIsExamityEnabled}`, this.scheduleIdToExamity);
         let enableExamityObservable: Observable<Response> = this.testService.enableExamity(enableExamityURL, this.isExamity);
         this.enableExamitySubscription = enableExamityObservable
             .map(response => response.json())
             .subscribe(json => {
                 if (json) {
+                    debugger
                     this.ngOnInit();
                     console.log("complete");
                 }
