@@ -74,7 +74,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
+        this.ItSecurityEnabled = this.auth.isExamityEnabled();
         this.errorCodes = errorcodes;
         this.titleService.setTitle('Manage Account – Kaplan Nursing');
         this.sStorage = this.common.getStorage();
