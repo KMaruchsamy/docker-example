@@ -213,8 +213,8 @@
                                 <td class="tablesaw-stacked-hidden">{{completedTest.adminFirstName}} {{completedTest.adminLastName}}</td>
                                 <td class="tablesaw-stacked-hidden">{{completedTest.lastUpdated|parseDate:'MM/DD/YY'}}</td>
                                 <td class="tablesaw-stacked-hidden"><a href="javscript:void(0)" class="smaller" (click)="view(completedTest.scheduleId, $event,false)">View</a>
-                                <td class="smaller block text-extra-mobile-spacing tablesaw-stacked-hidden" *ngIf="ItSecurityEnabled && completedTest?.isExamity == 1"><a href="javscript:void(0)" class="smaller" (click)="onClickExamityProfile(ssologin,encryptedUsername_val)">View Examity Report</a>
-                                <td class="smaller block text-extra-mobile-spacing tablesaw-stacked-hidden" *ngIf="!ItSecurityEnabled || completedTest?.isExamity == 0"><a href="javscript:void(0)" class="smaller" (click)="onClickExamityProfile(ssologin,encryptedUsername_val)"></a>
+                                <td class="smaller block text-extra-mobile-spacing tablesaw-stacked-hidden" *ngIf="ItSecurityEnabled && completedTest?.isExamity == 1"><a class="smaller" (click)="onClickExamityProfile(ssologin,encryptedUsername_val)">View Examity Report</a>
+                                <td class="smaller block text-extra-mobile-spacing tablesaw-stacked-hidden" *ngIf="!ItSecurityEnabled || completedTest?.isExamity == 0"><a class="smaller" (click)="onClickExamityProfile(ssologin,encryptedUsername_val)"></a>
                                     <!--<a  href="#" class="smaller">Reports</a>-->
                                 </td>
                             </tr>
