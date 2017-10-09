@@ -48,7 +48,6 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
     testStartedExceptions: Array<TestStartedExceptionModal>;
     timingExceptions: Array<TimingExceptionsModal>;
     studentPayExceptions: Array<TimingExceptionsModal>;
-    ItSecurityEnabled: boolean = false;
     constructor(private activatedRoute: ActivatedRoute, public testScheduleModel: TestScheduleModel,
         public testService: TestService,
         public auth: AuthService,
@@ -69,7 +68,6 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
         //     .subscribe(e => {
         //         this.destinationRoute = e.url;
         //     });
-        this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
         this.sStorage = this.common.getStorage();
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
@@ -713,7 +711,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
     set8HourRule(): void {
         let institution: any = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': +this.testScheduleModel.institutionId });
         if (institution)
-            this.ignore8HourRule = !institution.IsIpBlank;
+            this.ignore8HourRule = !institution.IsIpBlank || institution.ITSecurityEnabled == 1;
 
         if (this.ignore8HourRule) {
             this.validate(this);
@@ -779,29 +777,15 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
             let seconds = duration.seconds();
             let milliseconds = duration.milliseconds();
             if (years > 0 || months > 0 || days > 0 || hours > 8) {
-                if (this.ItSecurityEnabled == true) {
-                    __this.invalid8hours = false;
-                    __this.valid = true;
-                }
-                else {
                     __this.invalid8hours = true;
                     __this.valid = false;
-                }
-              
                 return;
             }
 
             if (hours === 8) {
                 if (minutes > 0 || seconds > 0 || milliseconds > 0) {
-                    if (this.ItSecurityEnabled == true) {
-                        __this.invalid8hours = false;
-                        __this.valid = true;
-                    }
-                    else {
                         __this.invalid8hours = true;
                         __this.valid = false;
-                    }
-                  
                     return;
                 }
             }
