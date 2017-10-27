@@ -69,7 +69,7 @@
                     <h3 class="h4 text-smaller-margin"><a class="mobile-button"  #linkReportCaseWestern (click)="prepareRedirectToReports('CaseWesternReport',myform,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Skills Demonstration Video Utilization</a></h3>
                     <p>Review when and how often your students are watching these videos</p>
                 </div>
-                <div>
+                <div class="margin-2em-bottom">
                     <h3 class="h4 base-font-color">Client Simulations (Mid-Fidelity) Reports</h3>
                     <ul class="list-extra-spacing">
                         <li><a #linkReportStudentReportCardByModule (click)="prepareRedirectToReports('ReportStudentReportCardByModule',myform,hdtoken,hdpage,hdexceptionurl);"
@@ -82,7 +82,7 @@
                 </div>
                 <div class="margin-2em-bottom">
                     <h3 class="h4 text-smaller-margin" ><a class="mobile-button" #linkReportExamityExamStaus *ngIf="ItSecurityEnabled" (click)="onClickExamityProfile(ssologin,encryptedUsername_val)">Examity Proctoring Reports</a></h3>
-                    <p>Examity Proctoring Reports</p>
+                    <p *ngIf="ItSecurityEnabled">Review your students proctored exam reports in examity</p>
                 </div>
             </div>
 
