@@ -1120,10 +1120,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
     redirectToStep2(): void {
         $('#unCheckExamity').modal('hide');
-        if (this.modify)
-            this.router.navigate(['/tests', 'modify', 'schedule-test']);
-        else
-            this.router.navigate(['/tests/schedule-test']);
+        return;
     }
 
     OnChangeChkExamity($event): void {
