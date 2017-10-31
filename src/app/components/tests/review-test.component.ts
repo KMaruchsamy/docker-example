@@ -163,16 +163,12 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         //         this.destinationRoute = e.url;
         //     });
 
+
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else {
-            this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
-            if (this.ItSecurityEnabled == true) {
-                this.chkExamity = true;
-            }
-            else {
-                this.chkExamity = false;
-            }
+            
+            
             this.initialize();
         }
         window.scroll(0, 0);
@@ -206,6 +202,13 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                 }
 
                 this.testScheduleModel = this.testService.sortSchedule(savedSchedule);
+                this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
+                if (this.ItSecurityEnabled == true && (this.testScheduleModel.isExamity == undefined || !!this.testScheduleModel.isExamity)) {
+                    this.chkExamity = true;
+                }
+                else {
+                    this.chkExamity = false;
+                }
                 this.bindFaculty();
               
                 if (this.testScheduleModel.scheduleName)
@@ -361,6 +364,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
     scheduleTest(e): void {
         e.preventDefault();
+
         if (!this.validateDates())
             return;
 
@@ -395,9 +399,10 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                 };
             })
         };
-
+               
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
 
+        
         let scheduleTestObservable: Observable<Response>;
         let scheduleTestURL = '';
         var myNewStartDateTime2 = moment(new Date(
@@ -420,6 +425,19 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
         input.TestingWindowStart = myNewStartDateTime2;
         input.TestingWindowEnd = myNewEndDateTime2;
+        let isMoreThan8: boolean = false;
+        let duration = moment.duration(moment(myNewEndDateTime2).diff(moment(myNewStartDateTime2)));
+        if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8) 
+            isMoreThan8 = true; 
+        if (input.IsExamityEnabled == false && isMoreThan8 && this.auth.openIntegratedTests == false && this.auth.isInstitutionIp == false)
+        {
+            if (loaderTimer)
+            clearTimeout(loaderTimer);
+            $('#loader').modal('hide');
+            $('#unCheckExamity').modal('show');
+            this.valid = true;
+            return;
+        }
 
         if (this.modify) {
             scheduleTestURL = this.resolveModifyTestingSessionURL(`${this.auth.common.apiServer}${links.api.v2baseurl}${links.api.admin.test.modifyscheduletest}`);
@@ -434,6 +452,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             .map(response => response.json())
             .subscribe(json => {
                 __this.valid = true;
+                if (loaderTimer)
                 clearTimeout(loaderTimer);
                 $('#loader').modal('hide');
                 let result = json;
@@ -456,6 +475,8 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                 $('#loader').modal('hide');
             });
 
+
+
     }
 
     removeMarked(_students: SelectedStudentModel[]): SelectedStudentModel[] {
@@ -463,10 +484,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             return !_student.MarkedToRemove;
         });
         return resolvedStudents;
-
     }
-
-
 
     resolveExceptions(objException: any, __this: any): boolean {
         let repeaterExceptions: any;
@@ -1100,4 +1118,17 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             this.router.navigate(['/tests/schedule-test']);
     }
 
+    redirectToStep2(): void {
+        $('#unCheckExamity').modal('hide');
+        if (this.modify)
+            this.router.navigate(['/tests', 'modify', 'schedule-test']);
+        else
+            this.router.navigate(['/tests/schedule-test']);
+    }
+
+    OnChangeChkExamity($event): void {
+        this.chkExamity = $($event.target).is(':checked');
+        this.testScheduleModel.isExamity = this.chkExamity;
+        this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
+    }
 }

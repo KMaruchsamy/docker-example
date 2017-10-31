@@ -272,6 +272,8 @@ export class TestService {
         this.sStorage.removeItem('retesters');
         this.sStorage.removeItem('previousTest');
         this.sStorage.removeItem('prevtestschedule');
+        this.sStorage.removeItem('openintegratedtests');
+        this.sStorage.removeItem('isinstitutionip');
     }
 
     getAlternateExceptionsModify(): any {

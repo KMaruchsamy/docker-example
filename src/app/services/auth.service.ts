@@ -264,4 +264,18 @@ export class AuthService {
       }
       return false;
   }
+
+  get openIntegratedTests(): boolean {
+      return (this.sStorage.getItem('openintegratedtests') == "true")? true : false;
+  }
+  set openIntegratedTests(value: boolean) {
+      this.sStorage.setItem('openintegratedtests', value);
+  }
+
+  get isInstitutionIp(): boolean {
+      return (this.sStorage.getItem('isinstitutionip') == "true") ? true : false;
+  }
+  set isInstitutionIp(value: boolean) {
+      this.sStorage.setItem('isinstitutionip', value);
+  }
 }

@@ -72,8 +72,8 @@
                                                class="smaller block text-extra-mobile-spacing">Add/Remove Students</a>
                                             <a href="javascript:void(0)" style="width: 174px;" *ngIf="adminId==inProgressTest?.adminId || adminId==inProgressTest?.facultyMemberId" (click)="redirectModifyInProgress('ModifyScheduleTest',inProgressTest?.scheduleId,$event)"
                                                class="smaller block text-extra-mobile-spacing">Change Testing Window</a>
-                                            <a href="javascript:void(0)" *ngIf="inProgressTest?.itSecurityEnabledInstitution == 1 && inProgressTest.isExamity == 1 && (adminId==inProgressTest?.adminId || adminId==inProgressTest?.facultyMemberId)" class="smaller block text-extra-mobile-spacing" (click)="showPopup(inProgressTest?.scheduleId,inProgressTest.isExamity)">Cancel Examity Proctoring</a>
-                                            <a href="javascript:void(0)" *ngIf="inProgressTest?.itSecurityEnabledInstitution == 1 && inProgressTest.isExamity == 0 && (adminId==inProgressTest?.adminId || adminId==inProgressTest?.facultyMemberId)" class="smaller block text-extra-mobile-spacing" (click)="showPopup(inProgressTest?.scheduleId,inProgressTest.isExamity)">Enable Examity Proctoring</a>
+                                            <a href="javascript:void(0)" *ngIf="inProgressTest?.itSecurityEnabledInstitution == 1 && inProgressTest.isExamity == 1 && (adminId==inProgressTest?.adminId || adminId==inProgressTest?.facultyMemberId)" class="smaller block text-extra-mobile-spacing" (click)="showPopup(inProgressTest?.scheduleId,inProgressTest.isExamity,inProgressTest.scheduleStartTime,inProgressTest.scheduleEndTime,inProgressTest.testId)">Cancel Examity Proctoring</a>
+                                            <a href="javascript:void(0)" *ngIf="inProgressTest?.itSecurityEnabledInstitution == 1 && inProgressTest.isExamity == 0 && (adminId==inProgressTest?.adminId || adminId==inProgressTest?.facultyMemberId)" class="smaller block text-extra-mobile-spacing" (click)="showPopup(inProgressTest?.scheduleId,inProgressTest.isExamity,inProgressTest.scheduleStartTime,inProgressTest.scheduleEndTime,inProgressTest.testId)">Enable Examity Proctoring</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -147,8 +147,8 @@
                                            class="smaller">View</a>
                                         <a *ngIf="adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId" href="javascript:void(0)" (click)="view(scheduleTest?.scheduleId, $event,true)"
                                            class="smaller block text-extra-mobile-spacing">View/Modify</a>
-                                        <a href="javascript:void(0)" style="width: 174px;"  *ngIf="scheduleTest?.itSecurityEnabledInstitution == 1 && scheduleTest.isExamity==1 && (adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId)"class="smaller block text-extra-mobile-spacing" (click)="showPopup(scheduleTest?.scheduleId,scheduleTest.isExamity)" >Cancel Examity Proctoring</a>
-                                        <a href="javascript:void(0)" style="width: 174px;" *ngIf="scheduleTest?.itSecurityEnabledInstitution == 1 && scheduleTest.isExamity==0 && (adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId)" class="smaller block text-extra-mobile-spacing" (click)="showPopup(scheduleTest?.scheduleId,scheduleTest.isExamity)" >Enable Examity Proctoring</a>
+                                        <a href="javascript:void(0)" style="width: 174px;"  *ngIf="scheduleTest?.itSecurityEnabledInstitution == 1 && scheduleTest.isExamity==1 && (adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId)"class="smaller block text-extra-mobile-spacing" (click)="showPopupCompletedTest(scheduleTest?.scheduleId,scheduleTest.isExamity,scheduleTest.scheduleStartTime,scheduleTest.scheduleEndTime,scheduleTest.testId)" >Cancel Examity Proctoring</a>
+                                        <a href="javascript:void(0)" style="width: 174px;" *ngIf="scheduleTest?.itSecurityEnabledInstitution == 1 && scheduleTest.isExamity==0 && (adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId)" class="smaller block text-extra-mobile-spacing" (click)="showPopupCompletedTest(scheduleTest?.scheduleId,scheduleTest.isExamity,scheduleTest.scheduleStartTime,scheduleTest.scheduleEndTime,scheduleTest.testId)" >Enable Examity Proctoring</a>
                                         <button *ngIf="adminId==scheduleTest?.adminId || adminId==scheduleTest?.facultyMemberId" class="anchor-button smaller" (click)="showConfirmation(scheduleTest?.scheduleId,scheduleTest?.institutionId)">Delete</button>
                                     </td>
                                 </tr>
@@ -244,4 +244,18 @@
                     [okButtonText]="'Yes, Disable'" [cancelButtonText]="'No, do not Disable'" (onOK)="onExamityEnableConfirmation($event)" (onCancel)="onCancelExamityEnable($event)"
                     [hideClose]="false">
 </confirmation-popup>
+<alert-popup [popupId]="'unCheckExamityInCompletedTest'"
+             [message]="'For security reasons, your testing window cannot be longer than 8 hours if Examity Proctoring is disabled for this session.
+Please ​shorten your testing window to less than 8 hours by clicking View/Modify and then Disable Examity for this session.'"
+             [okButtonText]="'OK'"
+             (onOK)="redirectToStep($event)"
+             [hideClose]="false">
+</alert-popup>
+<alert-popup [popupId]="'unCheckExamityInProgressTest'"
+             [message]="'For security reasons, your testing window cannot be longer than 8 hours if Examity Proctoring is disabled for this session. 
+Please ​shorten your testing window to less than 8 hours by clicking Change Testing Window and then Disable Examity for this session.'"
+             [okButtonText]="'OK'"
+             (onOK)="redirectToStep($event)"
+             [hideClose]="false">
+</alert-popup>
 
