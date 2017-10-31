@@ -63,6 +63,9 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     isExamity: boolean = null;
     scheduleIdToExamity: number;
     examity: string;
+    openIntigratedTests: boolean;
+    institutionIPBlank: boolean;
+    eightHourSubscription: Subscription;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -533,13 +536,32 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         return url.replace('§adminId', this.auth.userid.toString());
     }
 
-    showPopup(scheduleId: number, isExamityEnabled: boolean): void {
-        debugger
+    showPopup(scheduleId: number, isExamityEnabled: boolean, startDate: any, endDate: any, testId: number): void {
         this.scheduleIdToExamity = scheduleId;
         this.isExamity = isExamityEnabled;
         if (this.isExamity) {
-            this.isExamity = false;
-            $('#examityDisablePopup').modal("show")
+            let isMoreThan8: boolean = false;
+            let duration = moment.duration(moment(endDate).diff(moment(startDate)));
+            if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8)
+                isMoreThan8 = true;
+
+            let __this = this;
+            let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
+            let openIntegratedTestsObservable: Observable<Response> = this.testService.getOpenIntegratedTests(url);
+            this.eightHourSubscription = openIntegratedTestsObservable
+                .map(response => response.json())
+                .subscribe(json => {
+                    __this.auth.openIntegratedTests = _.includes(json, testId);
+                    if (isMoreThan8 && __this.auth.openIntegratedTests == false && __this.auth.isInstitutionIp == false) {
+                        $('#unCheckExamityInProgressTest').modal('show');
+                        return;
+                    }
+                    this.isExamity = false;
+                    $('#examityDisablePopup').modal("show")
+                },
+                error => {
+                    
+                });
         }
         else {
             this.isExamity = true;
@@ -559,7 +581,6 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     }
 
     enableOrCancelExamity(): any {
-        debugger
         let enableExamityURL = this.resolveExamityURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateIsExamityEnabled}`, this.scheduleIdToExamity);
         let enableExamityObservable: Observable<Response> = this.testService.enableExamity(enableExamityURL, this.isExamity);
         this.enableExamitySubscription = enableExamityObservable
@@ -574,5 +595,44 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
     resolveExamityURL(url: string, scheduleId: number): string {
         return url.replace('§scheduleId', scheduleId.toString());
+    }
+
+    redirectToStep($event): void {
+        $('#unCheckExamityInProgressTest').modal('hide');
+        $('#unCheckExamityInCompletedTest').modal('hide');
+        return;
+    }
+
+    showPopupCompletedTest(scheduleId: number, isExamityEnabled: boolean, startDate: any, endDate: any, testId: number): void {
+        this.scheduleIdToExamity = scheduleId;
+        this.isExamity = isExamityEnabled;
+        if (this.isExamity) {
+            let isMoreThan8: boolean = false;
+            let duration = moment.duration(moment(endDate).diff(moment(startDate)));
+            if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8)
+                isMoreThan8 = true;
+
+            let __this = this;
+            let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
+            let openIntegratedTestsObservable: Observable<Response> = this.testService.getOpenIntegratedTests(url);
+            this.eightHourSubscription = openIntegratedTestsObservable
+                .map(response => response.json())
+                .subscribe(json => {
+                    __this.auth.openIntegratedTests = _.includes(json, testId);
+                    if (isMoreThan8 && __this.auth.openIntegratedTests == false && __this.auth.isInstitutionIp == false) {
+                        $('#unCheckExamityInCompletedTest').modal('show');
+                        return;
+                    }
+                    this.isExamity = false;
+                    $('#examityDisablePopup').modal("show")
+                },
+                error => {
+
+                });
+        }
+        else {
+            this.isExamity = true;
+            $('#examityEnablePopup').modal("show")
+        }
     }
 }

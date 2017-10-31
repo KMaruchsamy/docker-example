@@ -709,15 +709,16 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
 
 
     set8HourRule(): void {
+        this.sStorage.removeItem('openintegratedtests');
+        this.sStorage.removeItem('isinstitutionip');
         let institution: any = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': +this.testScheduleModel.institutionId });
         if (institution)
-            this.ignore8HourRule = !institution.IsIpBlank || institution.ITSecurityEnabled == 1;
-
+            this.ignore8HourRule = !institution.IsIpBlank || (this.testScheduleModel.isExamity != undefined ? !!this.testScheduleModel.isExamity : (institution.ITSecurityEnabled == 1));
+        this.auth.isInstitutionIp = !institution.IsIpBlank;
         if (this.ignore8HourRule) {
             this.validate(this);
             return;
         }
-
 
         let __this = this;
         let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
@@ -726,6 +727,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
             .map(response => response.json())
             .subscribe(json => {
                 __this.ignore8HourRule = _.includes(json, __this.testScheduleModel.testId);
+                __this.auth.openIntegratedTests = __this.ignore8HourRule;
                 __this.validate(__this);
             },
             error => {

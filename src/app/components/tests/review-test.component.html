@@ -68,7 +68,7 @@
         <button class="right anchor-button" *ngIf="(retesterExceptions?.length>0 && hasAlternateTests) || (retesterExceptions?.length>0 && hasSavedRetesterExceptions) || (modify && retesterExceptionsModify?.length>0)" (click)="changeAlternateAssignments($event)">Change alternate test assignments</button>
         
         <div class="margin-1em-bottom" *ngIf="ItSecurityEnabled">
-            <input type="checkbox" class="checkbox-image" [attr.id]="chkExamity" name="chkExamity" [checked]="chkExamity" (change)="chkExamity = !chkExamity" />
+            <input type="checkbox" class="checkbox-image" [attr.id]="chkExamity" name="chkExamity" [checked]="chkExamity" (change)="OnChangeChkExamity($event)" />
             <label [attr.for]="chkExamity"><b>Enable Examity</b></label>
         </div>
         <table id="studentsInTestingSessionTable" class="dataTable-bordered table-with-cell-padding table-striped last-row-no-border">
@@ -194,3 +194,20 @@ canRemoveStudents="true"
 [testSchedule]="testScheduleModel"
 (windowExceptionPopupClose)="onWindowExceptionPopupClose($event)">    
 </time-exception>
+
+<alert-popup [popupId]="'unCheckExamity'"
+             [message]="'For security reasons, your testing window cannot be longer than 8 hours if Examity Proctoring is not enabled for this session. 
+                         Please ​enable Examity for this session or return to Step 2 and ​specify a shorter testing window​​.'"
+             [okButtonText]="'OK'"
+             (onOK)="redirectToStep2($event)"
+             [hideClose]="false">
+</alert-popup>
+
+<alert-popup [popupId]="'unCheckExamityModify'"
+             [message]="'For security reasons, your testing window cannot be longer than 8 hours if Examity Proctoring is disabled for this session. 
+Please ​shorten your testing window to less than 8 hours by clicking View/Modify and then Disable Examity for this session.'"
+             [okButtonText]="'OK'"
+             (onOK)="redirectToStep($event)"
+             [hideClose]="false">
+</alert-popup>
+
