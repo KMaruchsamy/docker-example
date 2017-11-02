@@ -136,6 +136,31 @@ export class CommonService {
         return ITServer;
     }
 
+    getExamityServer() {
+        let examityServer = '';
+        switch (location.hostname) {
+            case this.getHostName(links.faculty.local.server):
+            examityServer = links.examity.local.server;
+                break;
+            case this.getHostName(links.faculty.dev.server):
+            examityServer = links.examity.dev.server;
+                break;
+            case this.getHostName(links.faculty.qa.server):
+            examityServer = links.examity.qa.server;
+                break;
+            case this.getHostName(links.faculty.stg.server):
+            examityServer = links.examity.stg.server;
+                break;
+            case this.getHostName(links.faculty.prod.server):
+            examityServer = links.examity.prod.server;
+                break;
+            default:
+            examityServer = links.examity.local.server;
+                break;
+        }
+        return examityServer;
+    }
+
 
     isProduction(): boolean {
         let apiServer = this.getApiServer();

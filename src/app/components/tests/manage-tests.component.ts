@@ -4,7 +4,7 @@ import {Subscription} from 'rxjs/Rx';
 import {Http, Response, RequestOptions, Headers} from "@angular/http";
 import {Title} from '@angular/platform-browser';
 import {Observable} from 'rxjs/Rx';
-import {links, errorcodes, teststatus, Timezones, Examity} from '../../constants/config';
+import {links, errorcodes, teststatus, Timezones} from '../../constants/config';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
 import {RoundPipe} from '../../pipes/round.pipe';
@@ -66,7 +66,8 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     openIntigratedTests: boolean;
     institutionIPBlank: boolean;
     eightHourSubscription: Subscription;
-
+    examityServer:string;
+    examityLoginURL:string;
     constructor(
         private activatedRoute: ActivatedRoute,
         public testService: TestService,
@@ -97,6 +98,8 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             this.router.navigate(['/']);
         else {
             if (this.auth.institutions) {
+                this.examityServer = this.common.getExamityServer();
+                this.examityLoginURL = this.examityServer + links.examity.login;
                 this.institutions = JSON.parse(this.auth.institutions);
                 this.errorCodes = errorcodes;
                 this.testStatus = teststatus;
