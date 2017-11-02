@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Title } from '@angular/platform-browser';
 // import * as _ from 'lodash';
-import { links, errorcodes, Examity } from '../../constants/config';
+import { links, errorcodes } from '../../constants/config';
 import { manage_account, general, reset_password_after_login, reset_student_password } from '../../constants/error-messages';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
@@ -57,6 +57,8 @@ export class AccountComponent implements OnInit, OnDestroy {
     emailText: string;
     examityEncryptedUserId: string;
     ItSecurityEnabled: boolean = false;
+    examityServer:string;
+    examityLoginURL:string;
     constructor(private http: Http, public router: Router, private activatedRoute: ActivatedRoute, public auth: AuthService, public common: CommonService, public validations: ValidationsService, public titleService: Title, private log: LogService) {
     }
 
@@ -79,6 +81,7 @@ export class AccountComponent implements OnInit, OnDestroy {
         this.titleService.setTitle('Manage Account – Kaplan Nursing');
         this.sStorage = this.common.getStorage();
         this.apiServer = this.common.getApiServer();
+        this.examityServer = this.common.getExamityServer();
         this.initialize();
         window.scroll(0, 0);
     }
@@ -90,6 +93,7 @@ export class AccountComponent implements OnInit, OnDestroy {
             this.facultyTitle = this.sStorage.getItem('title');
             this.setInstitutionNames(JSON.parse(this.auth.institutions));
             this.emailId = this.sStorage.getItem('useremail');
+            this.examityLoginURL = this.examityServer + links.examity.login;
         }
         else {
             this.redirectToLogin();

@@ -146,6 +146,25 @@ export const links = {
             server: "https://www.kaptest.com/"
         },
         login:"rest-services/userLogin/oamLogin?oam=§facultyEmail&enc=false"
+    },
+    examity : {
+        local: {
+            server: "https://test.examity.com/"            
+        },
+        dev: {
+            server: "https://test.examity.com/"
+        },
+        qa: {
+            server: "https://test.examity.com/"
+        },
+        stg: {
+            server: "https://prod.examity.com/"
+        },
+        prod: {
+            server: "https://prod.examity.com/"
+        },
+        login:"kaplan/login.aspx",
+        examstatus:"kaplan/examstatus.aspx"
     }
 };
 
@@ -233,10 +252,10 @@ export const telNumbers = {
     outsideUSCanadaSupportHotline: '+1-407-423-6620'
 }
 
-export const Examity = {
-    examityLoginURL: 'https://test.examity.com/kaplan/login.aspx',
-    examityExamStatusURL: 'https://test.examity.com/kaplan/examstatus.aspx'
-}
+// export const Examity = {
+//     examityLoginURL: 'https://test.examity.com/kaplan/login.aspx',
+//     examityExamStatusURL: 'https://test.examity.com/kaplan/examstatus.aspx'
+// }
 
 export enum RosterUpdateTypes {
     MoveToDifferentCohort = 1,

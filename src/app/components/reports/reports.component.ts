@@ -38,12 +38,16 @@ export class ReportsComponent implements OnInit {
     institutionName: string;
     ItSecurityEnabled: boolean = false;
     examityEncryptedUserId: string;
+    examityServer:string;
+    examityLoginURL:string;
     constructor(private http: Http, public auth: AuthService, public router: Router, public common: CommonService, public titleService: Title) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
     }
 
     ngOnInit(): void {
+        this.examityServer = this.common.getExamityServer();
+        this.examityLoginURL = this.examityServer + links.examity.login;
         this.ItSecurityEnabled = this.auth.isExamityEnabled();
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
