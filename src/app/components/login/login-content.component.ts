@@ -21,7 +21,7 @@ import { LogService } from './../../services/log.service';
 export class LoginContentComponent implements OnDestroy {
     apiServer: string;
     nursingITServer: string;
-    kaptestServer:string;
+    kaptestServer: string;
     sStorage: any;
     institutionRN: number;
     institutionPN: number;
@@ -39,11 +39,13 @@ export class LoginContentComponent implements OnDestroy {
     errorMessage: string;
     model;
     site: string;
-    atomStudyPlanLink:string;
+    atomStudyPlanLink: string;
+    pingFederateServer:string;
     constructor(private zone: NgZone, public router: Router, public auth: AuthService, public common: CommonService, private log: LogService) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
         this.kaptestServer = this.common.getKaptestServer();
+        this.pingFederateServer = this.common.getPingFederateServer();
         this.sStorage = this.common.getStorage();
         this.institutionRN = 0;
         this.institutionPN = 0;
@@ -146,14 +148,38 @@ export class LoginContentComponent implements OnDestroy {
         }
     }
 
-    redirectToKaptestAccountManagement(){
+    redirectToKaptestAccountManagement() {
         this.setAtomStudyPlanLink();
-        window.location.href=this.atomStudyPlanLink;
+        let self = this;
+        this.auth.getKaptestToken(this.pingFederateServer,links.pingfederate.token).subscribe(response => {
+            debugger;
+            let json = response.json();
+            if (response.ok) {
+                console.log(json);
+                self.redirectToKaptest(json.access_token);
+            }
+        }, error => {
+            alert('Error !');
+        });
     }
 
-    setAtomStudyPlanLink(){
-        this.atomStudyPlanLink = this.kaptestServer + links.atomStudyPlan.login.replace('§facultyEmail',this.auth.useremail);
+    redirectToKaptest(accessToken) {
+        this.auth.getKaptestRedirectURL(this.atomStudyPlanLink, accessToken)
+            .subscribe(response => {
+                if (response.ok) {
+                    const json = response.json();
+                    window.location.href = json.redirectUrl;
+                }
+            },
+            error => {
+                alert('Error !');
+            });
     }
+
+    setAtomStudyPlanLink() {
+        this.atomStudyPlanLink = this.kaptestServer + links.atomStudyPlan.login.replace('§facultyEmail', this.auth.useremail);
+    }
+
     prepareRedirectToStudentSite(returnPage) {
         this.page = 'StudentHome';
         this.form = document.getElementById('myForm');

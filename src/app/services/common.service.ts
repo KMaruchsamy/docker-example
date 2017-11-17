@@ -161,6 +161,31 @@ export class CommonService {
         return examityServer;
     }
 
+    getPingFederateServer() {
+        let examityServer = '';
+        switch (location.hostname) {
+            case this.getHostName(links.faculty.local.server):
+            examityServer = links.pingfederate.local.server;
+                break;
+            case this.getHostName(links.faculty.dev.server):
+            examityServer = links.pingfederate.dev.server;
+                break;
+            case this.getHostName(links.faculty.qa.server):
+            examityServer = links.pingfederate.qa.server;
+                break;
+            case this.getHostName(links.faculty.stg.server):
+            examityServer = links.pingfederate.stg.server;
+                break;
+            case this.getHostName(links.faculty.prod.server):
+            examityServer = links.pingfederate.prod.server;
+                break;
+            default:
+            examityServer = links.pingfederate.local.server;
+                break;
+        }
+        return examityServer;
+    }
+
 
     isProduction(): boolean {
         let apiServer = this.getApiServer();
