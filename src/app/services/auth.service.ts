@@ -2,7 +2,7 @@
 import {Injectable} from '@angular/core';
 // import * as _ from 'lodash';
 import {Observable} from 'rxjs/Rx';
-import {Http, RequestOptions, Headers, Response} from '@angular/http';
+import {Http, RequestOptions, Headers, Response, URLSearchParams} from '@angular/http';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -277,5 +277,40 @@ export class AuthService {
   }
   set isInstitutionIp(value: boolean) {
       this.sStorage.setItem('isinstitutionip', value);
+  }
+
+
+  getKaptestToken(url,token):Observable<Response>{
+    let self = this;
+    let authHeader :string = 'Basic ' + token;
+    let headers: Headers = new Headers({
+      'Content-Type':'application/x-www-form-urlencoded',
+      'Authorization': authHeader,
+      'Access-Control-Allow-Origin':'*'      
+    });
+
+    const body = {
+      'grant_type':'client_credentials'
+    }
+
+    let requestOptions: RequestOptions = new RequestOptions({
+      headers: headers
+    });
+    return this.http.post(url,body,requestOptions);
+  }
+
+
+  getKaptestRedirectURL(url, token):Observable<Response>{
+    let self = this;
+    let authHeader :string = 'Bearer ' + token;
+    let headers: Headers = new Headers({
+      'Content-Type':'application/json',
+      'Authorization': authHeader,
+      'Access-Control-Allow-Origin':'*'      
+    });
+    let requestOptions: RequestOptions = new RequestOptions({
+      headers: headers
+    });
+    return this.http.post(url,{},requestOptions);
   }
 }

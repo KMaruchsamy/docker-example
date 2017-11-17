@@ -165,6 +165,24 @@ export const links = {
         },
         login:"kaplan/login.aspx",
         examstatus:"kaplan/examstatus.aspx"
+    },
+    pingfederate : {
+        local: {
+            server: "https://pingfederate.qa.ktp.io/as/token.oauth2"            
+        },
+        dev: {
+            server: "https://pingfederate.qa.ktp.io/as/token.oauth2"
+        },
+        qa: {
+            server: "https://pingfederate.qa.ktp.io/as/token.oauth2"
+        },
+        stg: {
+            server: "https://pingfederate.stg.ktp.io/as/token.oauth2"
+        },
+        prod: {
+            server: "https://pingfederate.ktp.io/as/token.oauth2"
+        },
+        token:'TnVyc2luZ0lUOnRJZ1JEaWpKZnBOVGFuaW5wTnlrWHhqRkQ0MEFQZlB2RnhMMGJTVkZwTlJVR2hFVE5SOE9wd2JaaHdYbmJmcXo'
     }
 };
 
