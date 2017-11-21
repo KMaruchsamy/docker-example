@@ -64,7 +64,7 @@
                     <h2>Teaching Tools (Student Site)</h2>
                     <div class="faculty-links">
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" [attr.href]="atomStudyPlanLink" target="_blank">Focused Review Tests</a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="redirectToKaptest()" target="_blank">Focused Review Tests</a></h3>
                             <p>For content mastery</p>
                             <ul class="bullet">
                                 <li>Access standard tests or help students create their own</li>
@@ -72,12 +72,12 @@
                             </ul>
                         </div>
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin" *ngIf="(institutionRN>0)"><a class="mobile-button" [attr.href]="atomStudyPlanLink" target="_blank">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" [attr.href]="atomStudyPlanLink" target="_blank">Skills Demonstration Videos</a></h3>
+                            <h3 class="h4 text-smaller-margin" *ngIf="(institutionRN>0)"><a class="mobile-button" (click)="redirectToKaptest()" target="_blank">Client Simulations<span class="smaller-small-text"> (Mid-Fidelity)</span></a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="redirectToKaptest()" target="_blank">Skills Demonstration Videos</a></h3>
                             <p>For practical learning simulation</p>
                         </div>
                         <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" [attr.href]="atomStudyPlanLink" target="_blank">NCLEX Resources</a></h3>
+                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" (click)="redirectToKaptest()" target="_blank">NCLEX Resources</a></h3>
                             <p>For standardized test mastery</p>
                             <ul class="bullet">
                                 <li>Access diagnostic tests and Question Trainers</li>

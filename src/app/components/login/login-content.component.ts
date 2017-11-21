@@ -98,8 +98,7 @@ export class LoginContentComponent implements OnDestroy {
                         }
 
                         if (this.userType === 'student') {
-                            //self.prepareRedirectToStudentSite('Login');
-                            this.redirectToKaptestAccountManagement();
+                            this.redirectToKaptest(json.UserId, json.Email);
                         }
                         else {
                             if (json.TemporaryPassword) {
@@ -148,27 +147,15 @@ export class LoginContentComponent implements OnDestroy {
         }
     }
 
-    redirectToKaptestAccountManagement() {
-        this.setAtomStudyPlanLink();
-        let self = this;
-        this.auth.getKaptestToken(this.pingFederateServer,links.pingfederate.token).subscribe(response => {
-            debugger;
-            let json = response.json();
-            if (response.ok) {
-                console.log(json);
-                self.redirectToKaptest(json.access_token);
-            }
-        }, error => {
-            alert('Error !');
-        });
-    }
+   
 
-    redirectToKaptest(accessToken) {
-        this.auth.getKaptestRedirectURL(this.atomStudyPlanLink, accessToken)
+    redirectToKaptest(userId, email) {
+        var facultyAMLoginUrl = this.apiServer + links.api.baseurl + links.api.admin.facultyAMLoginUrl;
+        this.auth.getKaptestRedirectURL(facultyAMLoginUrl,userId, email)
             .subscribe(response => {
                 if (response.ok) {
-                    const json = response.json();
-                    window.location.href = json.redirectUrl;
+                    const redirectUrl = response.json();
+                    window.location.href = redirectUrl;
                 }
             },
             error => {
