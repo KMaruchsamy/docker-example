@@ -280,36 +280,21 @@ export class AuthService {
   }
 
 
-  getKaptestToken(url,token):Observable<Response>{
+  getKaptestRedirectURL(url,userId, email):Observable<Response>{
     let self = this;
-    let authHeader :string = 'Basic ' + token;
     let headers: Headers = new Headers({
-      'Content-Type':'application/x-www-form-urlencoded',
-      'Authorization': authHeader,
-      'Access-Control-Allow-Origin':'*'      
+      'Accept': 'application/json',
+      'Authorization': this.authheader,
+      'Content-Type': 'application/json'
     });
 
-    const body = {
-      'grant_type':'client_credentials'
-    }
-
+    let urlParams :URLSearchParams = new URLSearchParams();
+    urlParams.set('userId',userId);
+    urlParams.set('email',email);
+ 
     let requestOptions: RequestOptions = new RequestOptions({
-      headers: headers
-    });
-    return this.http.post(url,body,requestOptions);
-  }
-
-
-  getKaptestRedirectURL(url, token):Observable<Response>{
-    let self = this;
-    let authHeader :string = 'Bearer ' + token;
-    let headers: Headers = new Headers({
-      'Content-Type':'application/json',
-      'Authorization': authHeader,
-      'Access-Control-Allow-Origin':'*'      
-    });
-    let requestOptions: RequestOptions = new RequestOptions({
-      headers: headers
+      headers: headers,
+      params:urlParams
     });
     return this.http.post(url,{},requestOptions);
   }

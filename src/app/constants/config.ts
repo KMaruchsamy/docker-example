@@ -28,6 +28,8 @@ export const links = {
             profilesapi: "profile",
             terms: "admin/enrollmentAgreement",
             examityProfileapi: "examity/adminsso/§adminId",
+            accessPingToken :"admin/accessPingToken",
+            facultyAMLoginUrl : "admin/facultyAMLoginUrl",
             test: {
                 subjects: "scheduling/institutions/§institutionid/subjects?testType=§testtype",
                 tests: "scheduling/institutions/§institutionid/tests?subject=§subject&testType=§testtype&searchString=§searchString", //Added Searchstring parameter.
@@ -181,8 +183,7 @@ export const links = {
         },
         prod: {
             server: "https://pingfederate.ktp.io/as/token.oauth2"
-        },
-        token:'TnVyc2luZ0lUOnRJZ1JEaWpKZnBOVGFuaW5wTnlrWHhqRkQ0MEFQZlB2RnhMMGJTVkZwTlJVR2hFVE5SOE9wd2JaaHdYbmJmcXo'
+        }
     }
 };
 
