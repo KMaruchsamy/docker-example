@@ -56,7 +56,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     institutionID: number;
     apiServer: string;
     subjectId: number;
-    testTypeId: number;
+    testTypeIds: number[];
     subjects: Object[] = [];
     tests: Object[] = [];
     testsTable: any;
@@ -204,7 +204,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         let self = this;
         this.testsTable = null;
         this.noSearch = false;
-        this.testTypeId = 1;
+        this.testTypeIds = [1,7];
         // this.institutionID = parseInt(this.routeParams.get('institutionId'));
         this.apiServer = this.common.getApiServer();
         $('#findTestByName').typeahead('destroy');
@@ -269,11 +269,11 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     resolveTestsURL(url: string): string {
-        return url.replace('§institutionid', this.institutionID.toString()).replace('§subject', this.subjectId.toString()).replace('§testtype', this.testTypeId.toString()).replace('§searchString', this.searchString.toString());
+        return url.replace('§institutionid', this.institutionID.toString()).replace('§subject', this.subjectId.toString()).replace('§testtype', this.testTypeIds.toString()).replace('§searchString', this.searchString.toString());
     }
 
     resolveSubjectsURL(url: string): string {
-        return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeId.toString());
+        return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeIds.toString());
     }
 
     loadTests(subjectID: number): void {
