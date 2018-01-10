@@ -474,7 +474,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
 
     resolveCohortURL(url: string): string {
-        return url.replace('§institutionid', this.testScheduleModel.institutionId.toString()).replace('§windowstart', this.windowStart.toString()).replace('§windowend', this.windowEnd.toString());
+        return url.replace('§institutionid', this.testScheduleModel.institutionId.toString()).replace('§windowstart', this.windowStart.toString()).replace('§windowend', this.windowEnd.toString()).replace('§testtype', this.testScheduleModel.testType.toString());
     }
 
     resolveCohortStudentsURL(url: string): string {
@@ -1047,6 +1047,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             Students: this.testScheduleModel.selectedStudents,
             LastCohortSelectedId: this.testScheduleModel.lastselectedcohortId,
             LastSubjectSelectedId: this.testScheduleModel.subjectId,
+            testType: this.testScheduleModel.testType,
             PageSavedOn: ''//TODO need to add the logic for this one ..
         };
 
@@ -2014,6 +2015,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             TestingWindowEnd: this.testScheduleModel.scheduleEndTime,
             FacultyMemberId: this.testScheduleModel.facultyMemberId,
             IsExamityEnabled: this.testScheduleModel.isExamity,
+            TestType: this.testScheduleModel.testType,
             Students: _.map((closeSession ? this.testScheduleModel.selectedStudents : this.selectedStudents), (student) => {
                 return {
                     StudentId: student.StudentId,

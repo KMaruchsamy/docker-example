@@ -726,7 +726,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
         this.eightHourSubscription = openIntegratedTestsObservable
             .map(response => response.json())
             .subscribe(json => {
-                __this.ignore8HourRule = _.includes(json, __this.testScheduleModel.testId);
+                __this.ignore8HourRule = _.includes(json, __this.testScheduleModel.testId) || __this.testScheduleModel.testType != 1;
                 __this.auth.openIntegratedTests = __this.ignore8HourRule;
                 __this.validate(__this);
             },
