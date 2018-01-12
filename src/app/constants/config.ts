@@ -34,7 +34,7 @@ export const links = {
                 subjects: "scheduling/institutions/§institutionid/subjects?testType=§testtype",
                 tests: "scheduling/institutions/§institutionid/tests?subject=§subject&testType=§testtype&searchString=§searchString", //Added Searchstring parameter.
                 openintegratedtests: "scheduling/OpenIntegratedTests",
-                cohorts: "scheduling/institutions/§institutionid/activeCohorts?windowStart=§windowstart&windowEnd=§windowend",
+                cohorts: "scheduling/institutions/§institutionid/activeCohorts?windowStart=§windowstart&windowEnd=§windowend&testType=§testtype",
                 cohortstudents: "scheduling/cohorts/§cohortid/students?testId=§testid",
                 faculty: "scheduling/institutions/§institutionid/faculty",
                 retesters: "scheduling/checkForRetesters?institutionId=§institutionid",

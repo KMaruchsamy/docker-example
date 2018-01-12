@@ -350,12 +350,13 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         return this.testService.checkIfTestHasStarted(this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress);
     }
 
-    selectTest(testId: number, testName: string, subjectId: number, normingStatusName): void {
+    selectTest(testId: number, testName: string, subjectId: number, normingStatusName, testType: number): void {
         this.sStorage.setItem('previousTest', this.testScheduleModel.testId);
         this.testScheduleModel.subjectId = subjectId;
         this.testScheduleModel.testId = testId;
         this.testScheduleModel.testName = testName;
         this.testScheduleModel.testNormingStatus = normingStatusName;
+        this.testScheduleModel.testType = testType;
         this.sStorage.removeItem('retesters');
     }
 

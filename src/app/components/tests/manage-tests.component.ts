@@ -46,7 +46,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     institutionName: string = '';
     adminId: number = 0;
     sStorage: any;
-    testTypeId: number = 1;
+    testTypeIds: number[] = [1,7];
     institutionID: number = 0;
     actionSubscription: Subscription;
     subjectsSubscription: Subscription;
@@ -465,7 +465,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     }
 
     resolveSubjectsURL(url: string): string {
-        return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeId.toString());
+        return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeIds.toString());
     }
 
     addColumnStyle($table) {

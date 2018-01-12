@@ -69,7 +69,7 @@
                                 </td>
                                 <td class="center">
                                     <input type="radio" [attr.testid]="test.TestId" [attr.testname]="test.TestName" [checked]="test.TestId === testScheduleModel.testId"
-                                        (change)="selectTest(test.TestId,test.TestName, subjectDropDown.value,test.NormingStatusName);"
+                                        (change)="selectTest(test.TestId,test.TestName, subjectDropDown.value,test.NormingStatusName,test.TestType);"
                                         class="checkbox-image" [attr.id]="'rdb' + test.TestName|removewhitespace" [attr.aria-label]="'Choose ' + test.TestName">
                                     <label [attr.for]="'rdb' + test.TestName|removewhitespace"></label>
                                 </td>

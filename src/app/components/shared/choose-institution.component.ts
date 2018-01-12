@@ -28,7 +28,7 @@ export class ChooseInstitutionComponent implements OnInit, OnDestroy {
     fromPage: string;
     page: string;
     apiServer: string;
-    testTypeId: number = 1;
+    testTypeIds: number[]= [1,7];
     institutionID: string = null;
     institutionRN: any;
     institutionPN: any;
@@ -150,7 +150,7 @@ export class ChooseInstitutionComponent implements OnInit, OnDestroy {
     }
 
     resolveSubjectsURL(url: string): string {
-        return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeId.toString());
+        return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeIds.toString());
     }
 
     checkInstitutions(): void {
