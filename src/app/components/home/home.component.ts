@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     nursingITServer: string;
     accountManagerProfile: ProfileModel;
     nurseConsultantProfile: ProfileModel;
-    testTypeId: number;
+    testTypeIds: number[];
     institutionID: number;
     profilesSubscription: Subscription;
     subjectsSubscription: Subscription;
@@ -171,7 +171,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.hdToken = null;
         this.hdURL = null;
         this.hdpage = null;
-        this.testTypeId = 1;
+        this.testTypeIds = [1,7];
         this.institutionID = 0;
     }
 
@@ -225,7 +225,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     resolveSubjectsURL(url: string): string {
-        return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeId.toString());
+        return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeIds.toString());
     }
 
     prepareRedirectToStudentSite(page, form, hdInstitution, hdToken, hdURL, hdExceptionURL): boolean {
