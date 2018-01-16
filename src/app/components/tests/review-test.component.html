@@ -67,7 +67,7 @@
         <a [routerLink]="modify ? ['/tests','modify','add-students'] : ['/tests','add-students']">Change</a>
         <button class="right anchor-button" *ngIf="(retesterExceptions?.length>0 && hasAlternateTests) || (retesterExceptions?.length>0 && hasSavedRetesterExceptions) || (modify && retesterExceptionsModify?.length>0)" (click)="changeAlternateAssignments($event)">Change alternate test assignments</button>
         
-        <div class="margin-1em-bottom" *ngIf="ItSecurityEnabled">
+        <div class="margin-1em-bottom" *ngIf="ItSecurityEnabled && +(testScheduleModel.testType) !== 7">
             <input type="checkbox" class="checkbox-image" [attr.id]="chkExamity" name="chkExamity" [checked]="chkExamity" (change)="OnChangeChkExamity($event)" />
             <label [attr.for]="chkExamity"><b>Enable Examity</b></label>
         </div>
