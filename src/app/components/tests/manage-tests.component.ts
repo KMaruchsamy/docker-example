@@ -585,7 +585,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
     enableOrCancelExamity(): any {
         let enableExamityURL = this.resolveExamityURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateIsExamityEnabled}`, this.scheduleIdToExamity);
-        let enableExamityObservable: Observable<Response> = this.testService.enableExamity(enableExamityURL, this.isExamity);
+        let enableExamityObservable: Observable<Response> = this.testService.enableExamity(enableExamityURL, +this.isExamity);
         this.enableExamitySubscription = enableExamityObservable
             .map(response => response.json())
             .subscribe(json => {

@@ -177,7 +177,6 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
     initialize() {
         this.paramsSubscription = this.activatedRoute.params.subscribe(params => {
-
             let action = params['action'];
             if (action != undefined && action.trim() === 'modify') {
                 this.modify = true;
@@ -203,7 +202,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
                 this.testScheduleModel = this.testService.sortSchedule(savedSchedule);
                 this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
-                if (this.ItSecurityEnabled == true && (this.testScheduleModel.isExamity == undefined || !!this.testScheduleModel.isExamity)) {
+                if (this.ItSecurityEnabled == true && (this.testScheduleModel.isExamity == undefined || !!this.testScheduleModel.isExamity) && +this.testScheduleModel.testType!==7) {
                     this.chkExamity = true;
                 }
                 else {
