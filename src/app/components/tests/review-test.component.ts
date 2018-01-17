@@ -428,7 +428,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         let duration = moment.duration(moment(myNewEndDateTime2).diff(moment(myNewStartDateTime2)));
         if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8) 
             isMoreThan8 = true; 
-        if (input.IsExamityEnabled == false && isMoreThan8 && this.auth.openIntegratedTests == false && this.auth.isInstitutionIp == false)
+        if (input.IsExamityEnabled == false && isMoreThan8 && this.auth.openIntegratedTests == false && this.auth.isInstitutionIp == false && +this.testScheduleModel.testType!==7)
         {
             if (loaderTimer)
             clearTimeout(loaderTimer);
