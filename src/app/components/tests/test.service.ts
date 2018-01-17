@@ -539,7 +539,7 @@ export class TestService {
         }
     }
 
-    enableExamity(url: string, input: boolean): Observable<Response> {
-        return this.http.put(url, input, this.getRequestOptions());
+    enableExamity(url: string, input: number): Observable<Response> {
+        return this.http.put(url,input, this.getRequestOptions());
     }
 }
