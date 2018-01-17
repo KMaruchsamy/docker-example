@@ -713,7 +713,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
         this.sStorage.removeItem('isinstitutionip');
         let institution: any = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': +this.testScheduleModel.institutionId });
         if (institution)
-            this.ignore8HourRule = !institution.IsIpBlank || (this.testScheduleModel.isExamity != undefined ? !!this.testScheduleModel.isExamity : (institution.ITSecurityEnabled == 1));
+            this.ignore8HourRule = +this.testScheduleModel.testType===7 || !institution.IsIpBlank || (this.testScheduleModel.isExamity != undefined ? !!this.testScheduleModel.isExamity : (institution.ITSecurityEnabled == 1));
         this.auth.isInstitutionIp = !institution.IsIpBlank;
         if (this.ignore8HourRule) {
             this.validate(this);
