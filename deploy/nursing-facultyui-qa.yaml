@@ -1,5 +1,5 @@
 meta:
-      division: Licensure
+      division: SSI
       team_name: licensure
       suite_name: nursingfacultyui
       suite_version: 0.0.1
@@ -29,4 +29,4 @@ meta:
             cpu: 256
             mem: 2048
           health_check: tcp
-          task_role: RoleLicensureecstask
+          task_role: RoleSsiecstask
