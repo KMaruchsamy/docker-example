@@ -315,15 +315,22 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     redirectToKaptest() {
         var facultyAMLoginUrl = this.apiServer + links.api.baseurl + links.api.admin.facultyAMLoginUrl;
-        this.auth.getKaptestRedirectURL(facultyAMLoginUrl,this.userId, this.userEmail)
+        this.auth.getKaptestRedirectURL(facultyAMLoginUrl, this.userId, this.userEmail)
             .subscribe(response => {
                 if (response.ok) {
                     const redirectUrl = response.json();
-                    window.open(redirectUrl,"_blank");
+                    window.open(redirectUrl, "_blank");
+                }
+                else {
+                    try {
+                        window.open(this.atomStudyPlanLink, "_blank");
+                    } catch (error) {}
                 }
             },
             error => {
-                alert('Error !');
+                try {
+                    window.open(this.atomStudyPlanLink, "_blank");
+                } catch (error) {}
             });
     }
 }

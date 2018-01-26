@@ -98,6 +98,7 @@ export class LoginContentComponent implements OnDestroy {
                         }
 
                         if (this.userType === 'student') {
+                            this.setAtomStudyPlanLink();
                             this.redirectToKaptest(json.UserId, json.Email);
                         }
                         else {
@@ -157,9 +158,16 @@ export class LoginContentComponent implements OnDestroy {
                     const redirectUrl = response.json();
                     window.location.href = redirectUrl;
                 }
+                else{
+                    try {
+                        window.location.href = this.atomStudyPlanLink;
+                    } catch (error) {}
+                }
             },
             error => {
-                alert('Error !');
+                try {
+                    window.location.href = this.atomStudyPlanLink;
+                } catch (error) {}
             });
     }
 
