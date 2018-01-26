@@ -12,6 +12,7 @@ meta:
       containers:
         licensurenit:
           access: internal
+          task_role: RoleLicensureecstask
           docker_image: licensure-nit
           internal_port:
            - 8080
@@ -29,4 +30,4 @@ meta:
             cpu: 256
             mem: 2048
           health_check: tcp
-          task_role: RoleLicensureecstask
+          
