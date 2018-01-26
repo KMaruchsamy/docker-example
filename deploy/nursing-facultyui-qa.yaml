@@ -1,7 +1,7 @@
 meta:
-      division: SSI
-      team_name: coreservices
-      suite_name: nursing-facultyui
+      division: Licensure
+      team_name: licensure
+      suite_name: nursingfacultyui
       suite_version: 0.0.1
       suite_description: Faculty UI
       deployment:
@@ -10,9 +10,9 @@ meta:
           
     qa:
       containers:
-        licensurenit:
+        nursingfacultyui:
           access: internal
-          docker_image: licensure-nit
+          docker_image: nursing-facultyui
           internal_port:
            - 8080
           docker_registry: 526930246559.dkr.ecr.us-east-1.amazonaws.com
