@@ -1,6 +1,6 @@
 meta:
-      division: SSI
-      team_name: coreservices
+      division: LICENSURE
+      team_name: licensure
       suite_name: nursingfacultyui
       suite_version: 0.0.1
       suite_description: Faculty UI
@@ -29,4 +29,4 @@ meta:
             cpu: 256
             mem: 2048
           health_check: tcp
-          task_role: RoleSsiecstask
+          task_role: RoleLicensureecstask
