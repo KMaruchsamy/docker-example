@@ -1,7 +1,7 @@
 meta:
-      division: Licensure
-      team_name: licensure
-      suite_name: facultyui
+      division: SSI
+      team_name: coreservices
+      suite_name: nursing-facultyui
       suite_version: 0.0.1
       suite_description: Faculty UI
       deployment:
