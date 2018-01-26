@@ -1,0 +1,32 @@
+meta:
+      division: Licensure
+      team_name: nursing
+      suite_name: facultyui
+      suite_version: 0.0.1
+      suite_description: Faculty UI
+      deployment:
+        type: rolling
+        primary: green
+          
+    qa:
+      containers:
+        licensurenit:
+          access: internal
+          docker_image: licensure-nit
+          internal_port:
+           - 8080
+          docker_registry: 526930246559.dkr.ecr.us-east-1.amazonaws.com
+          image_tag:
+            rolling: 0.0.1
+            blue: blue
+            green: green    
+          platform: linux
+          routing:
+            domain_urls:
+              - nit.ktp.io
+            update_r53: true
+          resources:
+            cpu: 256
+            mem: 2048
+          health_check: tcp
+          task_role: RoleLicensureecstask
