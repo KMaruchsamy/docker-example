@@ -356,7 +356,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         this.testScheduleModel.testId = testId;
         this.testScheduleModel.testName = testName;
         this.testScheduleModel.testNormingStatus = normingStatusName;
-        this.testScheduleModel.testType = testType;
+        this.testScheduleModel.testType = (testType ? testType : 1);
         this.sStorage.removeItem('retesters');
     }
 
