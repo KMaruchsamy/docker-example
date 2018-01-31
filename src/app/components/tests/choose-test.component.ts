@@ -56,7 +56,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     institutionID: number;
     apiServer: string;
     subjectId: number;
-    testTypeIds: number[];
+    testTypeIds: number;
     subjects: Object[] = [];
     tests: Object[] = [];
     testsTable: any;
@@ -204,7 +204,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         let self = this;
         this.testsTable = null;
         this.noSearch = false;
-        this.testTypeIds = [1,7];
+        this.testTypeIds = 1
         // this.institutionID = parseInt(this.routeParams.get('institutionId'));
         this.apiServer = this.common.getApiServer();
         $('#findTestByName').typeahead('destroy');
