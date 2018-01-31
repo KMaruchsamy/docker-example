@@ -28,7 +28,7 @@ export class ChooseInstitutionComponent implements OnInit, OnDestroy {
     fromPage: string;
     page: string;
     apiServer: string;
-    testTypeIds: number[]= [1,7];
+    testTypeIds: number= 1;
     institutionID: string = null;
     institutionRN: any;
     institutionPN: any;
