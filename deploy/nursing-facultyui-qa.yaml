@@ -14,7 +14,7 @@ qa:
       access: internal
       docker_image: nursing-facultyui
       internal_port:
-       - 8080
+       - 80
       docker_registry: 526930246559.dkr.ecr.us-east-1.amazonaws.com
       image_tag:
         rolling: qa
