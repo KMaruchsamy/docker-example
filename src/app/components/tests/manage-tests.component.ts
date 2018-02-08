@@ -46,7 +46,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     institutionName: string = '';
     adminId: number = 0;
     sStorage: any;
-    testTypeIds: number = 1;
+    testTypeIds: number[] = [1,7];
     institutionID: number = 0;
     actionSubscription: Subscription;
     subjectsSubscription: Subscription;

@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     nursingITServer: string;
     accountManagerProfile: ProfileModel;
     nurseConsultantProfile: ProfileModel;
-    testTypeIds: number;
+    testTypeIds: number[];
     institutionID: number;
     profilesSubscription: Subscription;
     subjectsSubscription: Subscription;
@@ -171,7 +171,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.hdToken = null;
         this.hdURL = null;
         this.hdpage = null;
-        this.testTypeIds = 1;
+        this.testTypeIds = [1,7];
         this.institutionID = 0;
     }
 
