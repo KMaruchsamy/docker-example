@@ -70,6 +70,9 @@ export class CommonService {
             case this.getHostName(links.faculty.dev.server):
                 apiServer = links.api.dev.server;
                 break;
+            case this.getHostName(links.faculty.qa_old.server):
+                apiServer = links.api.qa.server;
+                break;
             case this.getHostName(links.faculty.qa.server):
                 apiServer = links.api.qa.server;
                 break;
@@ -94,6 +97,9 @@ export class CommonService {
                 break;
             case this.getHostName(links.faculty.dev.server):
                 ITServer = links.nursingit.dev.server;
+                break;
+            case this.getHostName(links.faculty.qa_old.server):
+                ITServer = links.nursingit.qa.server;
                 break;
             case this.getHostName(links.faculty.qa.server):
                 ITServer = links.nursingit.qa.server;
@@ -120,6 +126,9 @@ export class CommonService {
             case this.getHostName(links.faculty.dev.server):
                 ITServer = links.atomStudyPlan.dev.server;
                 break;
+            case this.getHostName(links.faculty.qa_old.server):
+                ITServer = links.atomStudyPlan.qa.server;
+                break;
             case this.getHostName(links.faculty.qa.server):
                 ITServer = links.atomStudyPlan.qa.server;
                 break;
@@ -145,6 +154,9 @@ export class CommonService {
             case this.getHostName(links.faculty.dev.server):
             examityServer = links.examity.dev.server;
                 break;
+            case this.getHostName(links.faculty.qa_old.server):
+                examityServer = links.examity.qa.server;
+                    break;
             case this.getHostName(links.faculty.qa.server):
             examityServer = links.examity.qa.server;
                 break;
@@ -170,6 +182,9 @@ export class CommonService {
             case this.getHostName(links.faculty.dev.server):
             examityServer = links.pingfederate.dev.server;
                 break;
+            case this.getHostName(links.faculty.qa_old.server):
+                examityServer = links.pingfederate.qa.server;
+                    break;
             case this.getHostName(links.faculty.qa.server):
             examityServer = links.pingfederate.qa.server;
                 break;
