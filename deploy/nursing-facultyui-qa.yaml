@@ -11,7 +11,7 @@ meta:
 stg:
   containers:
     nursingfacultyui:
-      access: internal
+      access: external
       docker_image: nursing-facultyui
       internal_port:
        - 80
