@@ -107,6 +107,9 @@ export const links = {
         dev: {
             server: "https://dev-nit.kaplan.com/"
         },
+        qa_old: {
+            server:"https://qa-nit.kaplan.com/"
+        },
         qa: {
             server:"https://nit.qa.ktp.io/"
         },
