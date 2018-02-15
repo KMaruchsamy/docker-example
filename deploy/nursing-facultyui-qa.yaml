@@ -8,7 +8,7 @@ meta:
     type: rolling
     primary: green
 
-qa:
+stg:
   containers:
     nursingfacultyui:
       access: internal
@@ -23,7 +23,7 @@ qa:
       platform: linux
       routing:
         domain_urls:
-          - nit.ktp.io
+          - nit.stg.ktp.io
         update_r53: true
       resources:
         cpu: 256
