@@ -8,6 +8,29 @@ meta:
     type: rolling
     primary: green
 
+stg:
+  containers:
+    nursingfacultyui:
+      access: internal
+      docker_image: nursing-facultyui
+      internal_port:
+       - 80
+      docker_registry: 526930246559.dkr.ecr.us-east-1.amazonaws.com
+      image_tag:
+        rolling: qa
+        blue: blue
+        green: green
+      platform: linux
+      routing:
+        domain_urls:
+          - nit.kaptest.net
+        update_r53: true
+      resources:
+        cpu: 256
+        mem: 2048
+      health_check: tcp
+      task_role: RoleLicensureecstask
+      
 qa:
   containers:
     nursingfacultyui:
@@ -23,7 +46,7 @@ qa:
       platform: linux
       routing:
         domain_urls:
-          - nit.qa.kaptest.net
+          - nit.kaptest.net
         update_r53: true
       resources:
         cpu: 256
