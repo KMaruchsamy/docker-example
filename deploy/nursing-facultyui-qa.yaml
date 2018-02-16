@@ -8,7 +8,7 @@ meta:
     type: rolling
     primary: green
 
-stg:
+qa:
   containers:
     nursingfacultyui:
       access: internal
@@ -17,13 +17,13 @@ stg:
        - 80
       docker_registry: 526930246559.dkr.ecr.us-east-1.amazonaws.com
       image_tag:
-        rolling: stg
+        rolling: qa
         blue: blue
         green: green
       platform: linux
       routing:
         domain_urls:
-          - nit.stg.ktp.io
+          - nit.stg.kaptest.net
         update_r53: true
       resources:
         cpu: 256
