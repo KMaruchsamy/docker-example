@@ -23,7 +23,7 @@ stg:
       platform: linux
       routing:
         domain_urls:
-          - nit.ktp.io
+          - nit.kaptest.com
         update_r53: true
       resources:
         cpu: 256
@@ -46,7 +46,7 @@ qa:
       platform: linux
       routing:
         domain_urls:
-          - nit.ktp.io
+          - nit.kaptest.com
         update_r53: true
       resources:
         cpu: 256
