@@ -113,17 +113,26 @@ export const links = {
         qa: {
             server:"https://nit.qa.ktp.io/"
         },
+        qa_new: {
+            server:"https://nit.qa.kaptest.com/"
+        },
         stg_old: {
             server: "https://stg-nit.kaplan.com/"
         },
         stg: {
             server: "https://nit.stg.ktp.io/"
         },
+        stg_new: {
+            server: "https://nit.stg.kaptest.com/"
+        },
         prod_old: {
             server: "https://nit.kaplan.com/"
         },
         prod: {
             server: "https://nit.ktp.io/"
+        },
+        prod_new: {
+            server: "https://nit.kaptest.com/"
         }
     },
     resetemailexpire: {

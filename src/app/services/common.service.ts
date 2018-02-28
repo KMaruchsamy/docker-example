@@ -76,16 +76,25 @@ export class CommonService {
             case this.getHostName(links.faculty.qa.server):
                 apiServer = links.api.qa.server;
                 break;
+            case this.getHostName(links.faculty.qa_new.server):
+                apiServer = links.api.qa.server;
+                break;
             case this.getHostName(links.faculty.stg_old.server):
                 apiServer = links.api.stg.server;
                 break;
             case this.getHostName(links.faculty.stg.server):
                 apiServer = links.api.stg.server;
                 break;
+            case this.getHostName(links.faculty.stg_new.server):
+                apiServer = links.api.stg.server;
+                break;
             case this.getHostName(links.faculty.prod_old.server):
                 apiServer = links.api.prod.server;
                 break;
             case this.getHostName(links.faculty.prod.server):
+                apiServer = links.api.prod.server;
+                break;
+            case this.getHostName(links.faculty.prod_new.server):
                 apiServer = links.api.prod.server;
                 break;
             default:
@@ -110,16 +119,25 @@ export class CommonService {
             case this.getHostName(links.faculty.qa.server):
                 ITServer = links.nursingit.qa.server;
                 break;
+            case this.getHostName(links.faculty.qa_new.server):
+                ITServer = links.nursingit.qa.server;
+                break;
             case this.getHostName(links.faculty.stg_old.server):
                 ITServer = links.nursingit.stg.server;
                 break;
             case this.getHostName(links.faculty.stg.server):
                 ITServer = links.nursingit.stg.server;
                 break;
+            case this.getHostName(links.faculty.stg_new.server):
+                ITServer = links.nursingit.stg.server;
+                break;
             case this.getHostName(links.faculty.prod_old.server):
                 ITServer = links.nursingit.prod.server;
                 break;
             case this.getHostName(links.faculty.prod.server):
+                ITServer = links.nursingit.prod.server;
+                break;
+            case this.getHostName(links.faculty.prod_new.server):
                 ITServer = links.nursingit.prod.server;
                 break;
             default:
@@ -144,16 +162,25 @@ export class CommonService {
             case this.getHostName(links.faculty.qa.server):
                 ITServer = links.atomStudyPlan.qa.server;
                 break;
+            case this.getHostName(links.faculty.qa_new.server):
+                ITServer = links.atomStudyPlan.qa.server;
+                break;
             case this.getHostName(links.faculty.stg_old.server):
                 ITServer = links.atomStudyPlan.stg.server;
                 break;
             case this.getHostName(links.faculty.stg.server):
                 ITServer = links.atomStudyPlan.stg.server;
                 break;
+            case this.getHostName(links.faculty.stg_new.server):
+                ITServer = links.atomStudyPlan.stg.server;
+                break;
             case this.getHostName(links.faculty.prod_old.server):
                 ITServer = links.atomStudyPlan.prod.server;
                 break;
             case this.getHostName(links.faculty.prod.server):
+                ITServer = links.atomStudyPlan.prod.server;
+                break;
+            case this.getHostName(links.faculty.prod_new.server):
                 ITServer = links.atomStudyPlan.prod.server;
                 break;
             default:
@@ -178,16 +205,25 @@ export class CommonService {
             case this.getHostName(links.faculty.qa.server):
             examityServer = links.examity.qa.server;
                 break;
+            case this.getHostName(links.faculty.qa_new.server):
+            examityServer = links.examity.qa.server;
+                break;
             case this.getHostName(links.faculty.stg_old.server):
             examityServer = links.examity.stg.server;
                 break;
             case this.getHostName(links.faculty.stg.server):
             examityServer = links.examity.stg.server;
                 break;
+            case this.getHostName(links.faculty.stg_new.server):
+            examityServer = links.examity.stg.server;
+                break;
             case this.getHostName(links.faculty.prod_old.server):
                 examityServer = links.examity.prod.server;
                     break;
             case this.getHostName(links.faculty.prod.server):
+            examityServer = links.examity.prod.server;
+                break;
+            case this.getHostName(links.faculty.prod_new.server):
             examityServer = links.examity.prod.server;
                 break;
             default:
@@ -212,16 +248,25 @@ export class CommonService {
             case this.getHostName(links.faculty.qa.server):
             examityServer = links.pingfederate.qa.server;
                 break;
+            case this.getHostName(links.faculty.qa_new.server):
+                examityServer = links.pingfederate.qa.server;
+                    break;
             case this.getHostName(links.faculty.stg_old.server):
                 examityServer = links.pingfederate.stg.server;
                     break;
             case this.getHostName(links.faculty.stg.server):
             examityServer = links.pingfederate.stg.server;
                 break;
+            case this.getHostName(links.faculty.stg_new.server):
+                examityServer = links.pingfederate.stg.server;
+                    break;
             case this.getHostName(links.faculty.prod_old.server):
                 examityServer = links.pingfederate.prod.server;
                     break;
             case this.getHostName(links.faculty.prod.server):
+            examityServer = links.pingfederate.prod.server;
+                break;
+            case this.getHostName(links.faculty.prod_new.server):
             examityServer = links.pingfederate.prod.server;
                 break;
             default:
