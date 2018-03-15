@@ -203,7 +203,7 @@ export class TestService {
             _testScheduleModel.lastUpdated = objTestScheduleModel.DateModified;
             _testScheduleModel.isExamity = objTestScheduleModel.IsExamityEnabled;
             _testScheduleModel.itSecurityEnabledInstitution = objTestScheduleModel.ItSecurityEnabledInstitution;
-            _testScheduleModel.testType = objTestScheduleModel.TestType;
+            _testScheduleModel.testType = objTestScheduleModel.TestType || 1;
             if (objTestScheduleModel.Students && objTestScheduleModel.Students.length > 0) {
                 _.forEach(objTestScheduleModel.Students, function (student, key) {
                     let _student = new SelectedStudentModel();

@@ -4,7 +4,7 @@
     }
 
     validateEmailFormat(emailId):boolean {
-        var regexItem = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+        var regexItem = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-zA-Z]{2,6}(?:\.[a-zA-Z]{2})?)$/;
         return regexItem.test(emailId);
     }
     validateLength(password):boolean{
