@@ -40,7 +40,7 @@ qa:
        - 80
       docker_registry: 526930246559.dkr.ecr.us-east-1.amazonaws.com
       image_tag:
-        rolling: 0.0.5
+        rolling: 
         blue: blue
         green: green
       platform: linux
