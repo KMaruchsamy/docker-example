@@ -98,6 +98,7 @@ export const links = {
         },
         landingpage: "NewSiteLandingPage.aspx?facultylogin=1",
         ReportingLandingPage: "UX_ALogin.aspx",
+        apolloLaunchPage:"Admin/LaunchApollo.aspx?redirectToApollo=true",
         exceptionpage: "§environment/accounterror"
     },
     faculty: {

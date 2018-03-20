@@ -3790,7 +3790,8 @@ select.mobile-device {
   float: left;
   padding-left: 3.33333%;
   padding-right: 3.33333%;
-  padding-left: 0; }
+  padding-left: 0;
+  border-right: 2px solid #e3e3e3; }
   @media (max-width: 61.9375em) {
     .reporting-tools-grid {
       width: 100%;
@@ -3827,8 +3828,7 @@ select.mobile-device {
   float: left;
   padding-left: 3.33333%;
   padding-right: 3.33333%;
-  padding-right: 0;
-  border-left: 2px solid #e3e3e3; }
+  padding-right: 0; }
   @media (max-width: 61.9375em) {
     .teaching-tools-grid {
       width: 100%;
