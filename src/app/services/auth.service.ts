@@ -1,8 +1,8 @@
 // import {CommonService} from './common';
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 // import * as _ from 'lodash';
-import {Observable} from 'rxjs/Rx';
-import {Http, RequestOptions, Headers, Response, URLSearchParams} from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+import { Http, RequestOptions, Headers, Response, URLSearchParams } from '@angular/http';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -101,18 +101,18 @@ export class AuthService {
 
 
   // isEnrollmentAgreementSigned: boolean;
- get isEnrollmentAgreementSigned(): boolean {
-   return this.sStorage.getItem('isenrollmentagreementsigned')==='true';
+  get isEnrollmentAgreementSigned(): boolean {
+    return this.sStorage.getItem('isenrollmentagreementsigned') === 'true';
   }
   set isEnrollmentAgreementSigned(value: boolean) {
     this.sStorage.setItem('isenrollmentagreementsigned', value);
   }
 
   get testSchedule(): any {
-      return this.sStorage.getItem('testschedule');
+    return this.sStorage.getItem('testschedule');
   }
   set testSchedule(value: any) {
-      this.sStorage.setItem('testschedule', value);
+    this.sStorage.setItem('testschedule', value);
   }
 
   constructor(private http: Http) {
@@ -148,6 +148,14 @@ export class AuthService {
     this.isEnrollmentAgreementSigned = this.sStorage.getItem('isenrollmentagreementsigned') === 'true';
   }
 
+  hasBetaInstitution(): boolean {
+    debugger;
+    let institutions = JSON.parse(this.institutions);
+    if(institutions.length>0){
+      return institutions[0].IsBetaInstitution;
+    }
+    return false;
+  }
 
   isAuth() {
     return (!!this.token && !!this.isEnrollmentAgreementSigned);
@@ -238,49 +246,49 @@ export class AuthService {
   }
 
   isITSecurityEnabled(): boolean {
-      let testInstitutionId = JSON.parse(this.testSchedule);
-      let testScheduledInstitutionId = testInstitutionId.institutionId;
-      let institutions = JSON.parse(this.institutions);
-      if (institutions.length > 0) {
-          for (var i = 0; i < institutions.length; i++) {
-              if (institutions[i].InstitutionId == testScheduledInstitutionId && institutions[i].ITSecurityEnabled == true) {
-                  return true;
-              }
-          }
-          return false;
+    let testInstitutionId = JSON.parse(this.testSchedule);
+    let testScheduledInstitutionId = testInstitutionId.institutionId;
+    let institutions = JSON.parse(this.institutions);
+    if (institutions.length > 0) {
+      for (var i = 0; i < institutions.length; i++) {
+        if (institutions[i].InstitutionId == testScheduledInstitutionId && institutions[i].ITSecurityEnabled == true) {
+          return true;
+        }
       }
       return false;
+    }
+    return false;
   }
 
   isExamityEnabled(): boolean {
-      let institutions = JSON.parse(this.institutions);
-      if (institutions.length > 0) {
-          for (var i = 0; i < institutions.length; i++) {
-              if (institutions[i].ITSecurityEnabled == true) {
-                  return true;
-              }
-          }
-          return false;
+    let institutions = JSON.parse(this.institutions);
+    if (institutions.length > 0) {
+      for (var i = 0; i < institutions.length; i++) {
+        if (institutions[i].ITSecurityEnabled == true) {
+          return true;
+        }
       }
       return false;
+    }
+    return false;
   }
 
   get openIntegratedTests(): boolean {
-      return (this.sStorage.getItem('openintegratedtests') == "true")? true : false;
+    return (this.sStorage.getItem('openintegratedtests') == "true") ? true : false;
   }
   set openIntegratedTests(value: boolean) {
-      this.sStorage.setItem('openintegratedtests', value);
+    this.sStorage.setItem('openintegratedtests', value);
   }
 
   get isInstitutionIp(): boolean {
-      return (this.sStorage.getItem('isinstitutionip') == "true") ? true : false;
+    return (this.sStorage.getItem('isinstitutionip') == "true") ? true : false;
   }
   set isInstitutionIp(value: boolean) {
-      this.sStorage.setItem('isinstitutionip', value);
+    this.sStorage.setItem('isinstitutionip', value);
   }
 
 
-  getKaptestRedirectURL(url,userId, email):Observable<Response>{
+  getKaptestRedirectURL(url, userId, email): Observable<Response> {
     let self = this;
     let headers: Headers = new Headers({
       'Accept': 'application/json',
@@ -288,14 +296,14 @@ export class AuthService {
       'Content-Type': 'application/json'
     });
 
-    let urlParams :URLSearchParams = new URLSearchParams();
-    urlParams.set('userId',userId);
-    urlParams.set('email',email);
- 
+    let urlParams: URLSearchParams = new URLSearchParams();
+    urlParams.set('userId', userId);
+    urlParams.set('email', email);
+
     let requestOptions: RequestOptions = new RequestOptions({
       headers: headers,
-      params:urlParams
+      params: urlParams
     });
-    return this.http.post(url,{},requestOptions);
+    return this.http.post(url, {}, requestOptions);
   }
 }

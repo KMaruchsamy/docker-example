@@ -22,9 +22,19 @@ import { ProfileModel } from './../../models/profile.model';
 
 @Component({
     selector: 'home',
-    // providers: [AuthService, CommonService, profileService, TestService, TestScheduleModel],
-    templateUrl: './home.component.html'//,
-    // directives: [PageHeaderComponent, PageFooterComponent, NgIf, ProfileComponent, Angulartics2On, RouterLinkActive, PageScroll]
+    templateUrl: './home.component.html',
+    styles:[`
+    .ad{
+        padding:2px 10px;
+        font-size:8pt;
+        border-radius:2px;
+    }
+
+    .red{
+        background-color:#BD2828;
+        color:#FFF;
+    }
+    `]
 })
 export class HomeComponent implements OnInit, OnDestroy {
     // profiles: Array<ProfileModel>;
@@ -54,6 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     lastName: string;
     atomStudyPlanLink:string;
     kaptestServer :string;
+    hasBetaInstitution:boolean = false;
     constructor(public router: Router, public auth: AuthService, public location: Location, public common: CommonService, public profileService: ProfileService, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
     }
 
@@ -81,6 +92,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         window.scroll(0,0);
         this.titleService.setTitle('Faculty Home – Kaplan Nursing');
         this.setAtomStudyPlanLink();
+        this.hasBetaInstitution = this.auth.hasBetaInstitution();
     }
 
     setAtomStudyPlanLink(){
@@ -305,7 +317,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
     redirectToReports(): void {
-        var serverURL = this.nursingITServer + links.nursingit.ReportingLandingPage;
+        var serverURL;
+        if(this.page==='ApolloStudentReportCard'){
+            serverURL = this.nursingITServer + links.nursingit.apolloLaunchPage + "&adminId=" + this.auth.userid;
+        }
+        else
+        serverURL = this.nursingITServer + links.nursingit.ReportingLandingPage;
         this.hdToken.value = this.auth.token;
         this.hdpage.value = this.page;
         this.hdExceptionURL.value = this.resolveExceptionPage(links.nursingit.exceptionpage);

@@ -36,28 +36,93 @@
             <div class="tools-link-grid">
                 <div class="reporting-tools-grid">
                     <h2>Reporting Tools</h2>
-                    <div class="faculty-links">
-                        <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportStudentCard (click)="prepareRedirectToReports('StudentReportCard',myform,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Student Report Card</a></h3>
+                    <div class="faculty-links">                        
+                        <div class="faculty-link-list" *ngIf="!hasBetaInstitution">
+                            <h3 class="h4 text-smaller-margin">
+                                <a class="mobile-button" #linkReportStudentCard (click)="prepareRedirectToReports('StudentReportCard',myform,hdtoken,hdpage,hdexceptionurl);"
+                                    href="javascript:void(0)">Student Report Card</a>
+                            </h3>
                             <span>Review your students’ performance at a glance</span>
                         </div>
-                        <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportCohortByQuestion (click)="prepareRedirectToReports('ReportCohortByQuestion',myform,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Test Result by Question</a></h3>
+                        <div class="faculty-link-list" *ngIf="!hasBetaInstitution">
+                            <h3 class="h4 text-smaller-margin">
+                                <a class="mobile-button" #linkReportCohortByQuestion (click)="prepareRedirectToReports('ReportCohortByQuestion',myform,hdtoken,hdpage,hdexceptionurl);"
+                                    href="javascript:void(0)">Test Result by Question</a>
+                            </h3>
                             <span>Review performance by topic and difficulty level</span>
                         </div>
-                        <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkReportCohortByTest (click)="prepareRedirectToReports('ReportCohortByTest',myform,hdtoken,hdpage,hdexceptionurl);"  href="javascript:void(0)">Cohort by Test</a></h3>
+                        <div class="faculty-link-list" *ngIf="!hasBetaInstitution">
+                            <h3 class="h4 text-smaller-margin">
+                                <a class="mobile-button" #linkReportCohortByTest (click)="prepareRedirectToReports('ReportCohortByTest',myform,hdtoken,hdpage,hdexceptionurl);"
+                                    href="javascript:void(0)">Cohort by Test</a>
+                            </h3>
                             <span>Review an entire cohort’s performance</span>
                         </div>
-                        <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkUtilizationReport (click)="prepareRedirectToReports('UtilizationReport',myform,hdtoken,hdpage,hdexceptionurl);"  href="javascript:void(0)">Utilization Report</a></h3>
+                        <div class="faculty-link-list" *ngIf="!hasBetaInstitution">
+                            <h3 class="h4 text-smaller-margin">
+                                <a class="mobile-button" #linkUtilizationReport (click)="prepareRedirectToReports('UtilizationReport',myform,hdtoken,hdpage,hdexceptionurl);"
+                                    href="javascript:void(0)">Utilization Report</a>
+                            </h3>
                             <span>Review how your students are using their resources</span>
                         </div>
-                        <div class="faculty-link-list">
-                            <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkCohortComparision (click)="prepareRedirectToReports('CohortComparisonsReport',myform,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Category Comparisons</a></h3>
+                        <div class="faculty-link-list" *ngIf="!hasBetaInstitution">
+                            <h3 class="h4 text-smaller-margin">
+                                <a class="mobile-button" #linkCohortComparision (click)="prepareRedirectToReports('CohortComparisonsReport',myform,hdtoken,hdpage,hdexceptionurl);"
+                                    href="javascript:void(0)">Category Comparisons</a>
+                            </h3>
                             <span>Compare cohort performance in over 80 categories</span>
                         </div>
-
+                        <div class="faculty-link-list" *ngIf="hasBetaInstitution">
+                                <h3 class="h4 text-smaller-margin">
+                                    <a class="mobile-button" #linkReportStudentCard (click)="prepareRedirectToReports('ApolloStudentReportCard',myform,hdtoken,hdpage,hdexceptionurl);"
+                                        href="javascript:void(0)">Apollo - Student Report Card <span class="ad red">NEW</span></a>
+                                </h3>
+                                <span>Review your students’ performance at a glance</span>
+                        </div>
+                        <div class="faculty-link-list" *ngIf="hasBetaInstitution">
+                                <h3 class="h4 text-smaller-margin">
+                                    <a class="mobile-button" #linkCohortComparision (click)="prepareRedirectToReports('ReportStudentCATReportCard',myform,hdtoken,hdpage,hdexceptionurl);"
+                                        href="javascript:void(0)">Computer Adaptive Test Report</a>
+                                </h3>
+                                <p>Review your students' performance on the Kaplan CAT Exams</p>
+                        </div>
+                        <div class="faculty-link-list" *ngIf="hasBetaInstitution">
+                                <h3 class="h4 text-smaller-margin">
+                                    <a class="mobile-button" #linkReportTestsScheduledbyDate (click)="prepareRedirectToReports('ReportTestsScheduledbyDate',myform,hdtoken,hdpage,hdexceptionurl);"
+                                        href="javascript:void(0)">Tests Scheduled by Date</a>
+                                </h3>
+                                <p>View upcoming tests that have been scheduled in our legacy system</p>
+                        </div>
+                        <div class="faculty-link-list" *ngIf="hasBetaInstitution && ItSecurityEnabled">
+                                <h3 class="h4 text-smaller-margin">
+                                    <a class="mobile-button" #linkReportExamityExamStaus *ngIf="ItSecurityEnabled" (click)="onClickExamityProfile(ssologin,encryptedUsername_val)">Examity Proctoring Reports</a>
+                                </h3>
+                                <p *ngIf="ItSecurityEnabled">Review your students proctored exam reports in examity</p>
+                        </div>
+                        <div class="faculty-link-list" *ngIf="hasBetaInstitution">
+                                <h3 class="h4 base-font-color">Client Simulations (Mid-Fidelity) Reports</h3>
+                                <ul class="list-extra-spacing">
+                                    <li>
+                                        <a #linkReportStudentReportCardByModule (click)="prepareRedirectToReports('ReportStudentReportCardByModule',myform,hdtoken,hdpage,hdexceptionurl);"
+                                            href="javascript:void(0)" class="margin-1em-bottom mobile-button">Individual Student Results by Module</a>
+                                    </li>
+                                    <li>
+                                        <a #linkReportCohortResultByModule (click)="prepareRedirectToReports('ReportCohortResultByModule',myform,hdtoken,hdpage,hdexceptionurl);"
+                                            href="javascript:void(0)" class="margin-1em-bottom mobile-button">Overall Cohort Results and Cohort Results by Module</a>
+                                    </li>
+                                    <li>
+                                        <a #linkReportCaseComparisonByModule (click)="prepareRedirectToReports('ReportCaseComparisonByModule',myform,hdtoken,hdpage,hdexceptionurl);"
+                                            href="javascript:void(0)" class="margin-1em-bottom mobile-button">Module Result Comparisons by Cohort</a>
+                                    </li>
+                                </ul>
+                        </div>
+                        <div class="faculty-link-list">
+                                <h3 class="h4 text-smaller-margin">
+                                    <a class="mobile-button" #linkCohortComparision (click)="prepareRedirectToReports('ReportStudentAdmissionTestReportCard',myform,hdtoken,hdpage,hdexceptionurl);"
+                                        href="javascript:void(0)">Admissions Test Report</a>
+                                </h3>
+                                <p>Review your students' performance on the Kaplan Admissions Test</p>
+                        </div>
                     </div>
                 </div>
                 <div class="teaching-tools-grid">
