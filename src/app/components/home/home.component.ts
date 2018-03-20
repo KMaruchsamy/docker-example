@@ -65,6 +65,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     atomStudyPlanLink:string;
     kaptestServer :string;
     hasBetaInstitution:boolean = false;
+    ItSecurityEnabled: boolean = false;
     constructor(public router: Router, public auth: AuthService, public location: Location, public common: CommonService, public profileService: ProfileService, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
     }
 
@@ -93,6 +94,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.titleService.setTitle('Faculty Home – Kaplan Nursing');
         this.setAtomStudyPlanLink();
         this.hasBetaInstitution = this.auth.hasBetaInstitution();
+        this.ItSecurityEnabled = this.auth.isExamityEnabled();
     }
 
     setAtomStudyPlanLink(){

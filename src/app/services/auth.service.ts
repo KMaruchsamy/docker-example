@@ -149,7 +149,6 @@ export class AuthService {
   }
 
   hasBetaInstitution(): boolean {
-    debugger;
     let institutions = JSON.parse(this.institutions);
     if(institutions.length>0){
       return institutions[0].IsBetaInstitution;
