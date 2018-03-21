@@ -1,7 +1,7 @@
 import {Component, Injector, Inject, OnInit, OnDestroy} from '@angular/core';
 import {NgIf, Location} from '@angular/common';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {Response} from '@angular/http';
+import {Response, RequestOptions} from '@angular/http';
 import {Title} from '@angular/platform-browser';
 import {links} from '../../constants/config';
 // import {Angulartics2On} from 'angulartics2';
@@ -66,6 +66,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     kaptestServer :string;
     hasBetaInstitution:boolean = false;
     ItSecurityEnabled: boolean = false;
+    examityServer:string;
+    examityLoginURL:string;
     constructor(public router: Router, public auth: AuthService, public location: Location, public common: CommonService, public profileService: ProfileService, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
     }
 
@@ -95,6 +97,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.setAtomStudyPlanLink();
         this.hasBetaInstitution = this.auth.hasBetaInstitution();
         this.ItSecurityEnabled = this.auth.isExamityEnabled();
+        this.examityServer = this.common.getExamityServer();
+        this.examityLoginURL = this.examityServer + links.examity.login;
     }
 
     setAtomStudyPlanLink(){
@@ -352,4 +356,18 @@ export class HomeComponent implements OnInit, OnDestroy {
                 } catch (error) {}
             });
     }
+
+    onClickExamityProfile(ssologin, encryptedUsername_val): void {
+        let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
+        let examityObservable: Observable<Response> = this.auth.setFacultyProfileInExamity(facultyAPIUrl);
+        examityObservable.subscribe(response => {
+            encryptedUsername_val.value = response.json();
+            ssologin.submit();
+        }, error => console.log(error));
+    }   
+
+    resolveFacultyURL(url: string): string {
+        return url.replace('§adminId', this.auth.userid.toString());
+    }
+
 }
