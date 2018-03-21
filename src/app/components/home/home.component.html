@@ -200,3 +200,7 @@
     <input #hdpage type="hidden" id="redirectPage" name="redirectPage">
     <input #hdexceptionurl type="hidden" id="exceptionURL" name="exceptionURL">
 </form>
+
+<form #ssologin id="loginExamity" name="loginExamity" target="_blank" [action]="examityLoginURL" method="post">
+    <input #encryptedUsername_val name="Username" type="hidden" />
+</form>

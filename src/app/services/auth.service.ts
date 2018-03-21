@@ -305,4 +305,17 @@ export class AuthService {
     });
     return this.http.post(url, {}, requestOptions);
   }
+
+  setFacultyProfileInExamity(url: string): Observable<Response> {
+    let self = this;
+    let options: RequestOptions = new RequestOptions();
+    let headers: Headers = new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': self.authheader
+    });
+    options.headers = headers;
+    options.body = '';
+    return this.http.get(url, options);
+}
 }
