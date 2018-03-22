@@ -11,7 +11,8 @@ import { CommonService } from '../../services/common.service';
 		<a href="javascript:void(0)"  id="lnkMenu"  role="button" class="dropdown-button" data-toggle="dropdown"  [attr.aria-disabled]="ariaDisabled" aria-haspopup="true">Main Menu</a>
 		<ul class="dropdown-menu dropdown-select">
 			<li><a [routerLink]="['/home']" class="menu-icon home-icon">Home</a></li>
-			<li><a (click)="prepareRedirectToReports('ApolloStudentReportCard',myform,hdtoken,hdpage,hdexceptionurl)" class="menu-icon reporting-icon">View Reports <span class="ad red">NEW</span></a></li>
+            <li><a *ngIf="isBetaInstitution" (click)="prepareRedirectToReports('ApolloStudentReportCard',myform,hdtoken,hdpage,hdexceptionurl)" class="menu-icon reporting-icon">View Reports <span class="ad red">NEW</span></a></li>
+            <li><a *ngIf="!isBetaInstitution" [routerLink]="['/reports']" class="menu-icon reporting-icon">View Reports <span class="ad red">NEW</span></a></li>
 			<li><a [routerLink]="['/rosters']" class="menu-icon student-icon">View Rosters</a></li>
 			<li><a [routerLink]="['/tests']" class="menu-icon test-icon">Manage Tests</a></li>
 			<li><a [routerLink]="['/account']" class="menu-icon manage-icon">Manage Account</a></li>
@@ -50,12 +51,14 @@ export class DropdownMenuComponent implements OnInit {
     page: any;
     @Input() ariaDisabled;
     @Input() hideDropdown;
+    isBetaInstitution:boolean = false;
     constructor(public router: Router, public auth: AuthService, public common:CommonService) {
     }
 
     ngOnInit() {
        // this.makeControlAccessible();
        this.nursingITServer = this.common.getNursingITServer();
+       this.isBetaInstitution = this.auth.hasBetaInstitution();
     }
 
     makeControlAccessible(): void {
