@@ -20,6 +20,7 @@
                     <li><a [class.text-purple-bold]="activeId==='#NCLEX'" href="javascript:void(0)" (click)="scroll('#NCLEX',$event)">NCLEX Preparation</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#eBooks'" href="javascript:void(0)" (click)="scroll('#eBooks',$event)">Student eBooks</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#successTutorials'" href="javascript:void(0)" (click)="scroll('#successTutorials',$event)">Nursing School Success Tutorials</a></li>
+                    <li><a [class.text-purple-bold]="activeId==='#channel'" href="javascript:void(0)" (click)="scroll('#channel',$event)">The Channel</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#reports'" href="javascript:void(0)" (click)="scroll('#reports',$event)">Creating and Viewing Reports</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#whitePapers'" href="javascript:void(0)" (click)="scroll('#whitePapers',$event)">Research and White Papers</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#needHelp'" href="javascript:void(0)" (click)="scroll('#needHelp',$event)">Need Help?</a></li>
@@ -47,7 +48,7 @@
                         <h3 class="h5 teal">Specialized Educational Webinars Available for Viewing</h3>
                         <p>Watch recordings of our informational webinars on Kaplan NCLEX resource and mid-fidelity simulation utilization.
                         </p>
-                        <p><a href="https://liveonline.kaptest.com/p9q7z4g93yw/" target="_blank"><b>Best Practices for Utilization of Kaplan NCLEX Resources</b></a></p>
+                        <!-- <p><a href="https://liveonline.kaptest.com/p9q7z4g93yw/" target="_blank"><b>Best Practices for Utilization of Kaplan NCLEX Resources</b></a></p> -->
                         <p><a href="https://liveonline.kaptest.com/p93w2j9kogw/" target="_blank"><b>Best Practices in Mid-Fidelity Simulation</b></a></p>
                     </div>
 
@@ -78,18 +79,12 @@
                         <a href="https://www.youtube.com/playlist?list=PLiuAm8LB9P5s_Yb0rSIiothfzuVsO4SFp" target="_blank" class="block">Prep Talks for Mental Strength Training</a>
                     </div>
 
-                    <div class="text-section">
+                    <!-- <div class="text-section">
                         <h3 class="h5 teal">Our Upcoming Events</h3>                      
                         <p>Taught by our expert faculty and staff, our events provide you with relevant information that is crucial to your nursing
                         practice. Our events are held in our live, online virtual classroom environment, where faculty attendees
                         are able to interact remotely by asking questions of other attendees as well as the seminar speaker. 
                         </p>
-                        <!-- <p>Our next event is <a target="_blank" href="https://s3.amazonaws.com/nursing-assets-web-ktp/admin/userguide/Teaching+Millennials+2017.pdf">Teaching Millennials</a> presented by Dr. Rebecca Oglesby, Kaplan Curriculum Specialist. The objectives for the event are to:</p>
-                        <ul class="bullet paragraph-spacing-bottom-list">
-                            <li>Compare generational characteristics</li>
-                            <li>Examine principles of education with examples specific to millennial students</li>
-                            <li>Learn how to incorporate learning strategies and technology within the classroom to engage millennials.</li>
-                        </ul> -->
                         <ul class="bullet paragraph-spacing-bottom-list">
                             <li>
                                 Inside the NCLEX, presented by Judy Hyland (no CE) - March 8, 2018 8-9 pm EST
@@ -101,23 +96,14 @@
                         <p><a href="https://www.kaptest.com/pages/nursing-educators/free-events-for-educators" target="_blank">Click here to register!</a></p>
                         <p>Kaplan also hosts regional, live events. Many are Continuing Education Events. Please contact your nurse consultant for dates and more information.
                         </p>
-                    </div>
+                    </div> -->
                 </section>
 
                 <section id="programOverview">
                     <h2>Program Overview</h2>
                     <div class="text-section">
-                        <p><b>Kaplan Nursing</b> has been developing testing products and preparing nursing students to pass the NCLEX-RN<sup>®</sup> for
-                            more than 30 years. In 1999, Kaplan Nursing launched the first version of assessment testing. Kaplan Nursing has been supporting nursing school 
-                            faculty and their students ever since.
-                        </p>
-                        <p>The <b>Kaplan Nursing Integrated Testing Program</b> is comprised of a series of online testing and remediation resources designed to 
-                        evaluate and repair the nursing knowledge of students in an undergraduate pre-licensure program. Testing results enable nursing school 
-                        faculty to identify at-risk students in real time. Early intervention changes student outcomes.
-                        </p>
-                        <p>The assets provided through the Kaplan Nursing Integrated Testing Program are briefly summarized below. Your individual program may provide 
-                            all or only some of these resources, depending on what your school has chosen.  
-                        </p>
+                        <p>Kaplan Nursing has been developing testing products and preparing nursing students to pass the NCLEX-RN® since 1999  Kaplan Nursing has been supporting nursing school faculty and their students ever since.</p>
+                        <p>The <b>Kaplan Nursing Integrated Testing Program</b> is comprised of a series of online testing and remediation resources designed to evaluate and maximize the nursing knowledge of students in an undergraduate pre-licensure program. Testing results enable nursing school faculty to identify at-risk students in real time. Early intervention changes student outcomes.</p>
                     </div>
 
                     <h3 class="h5 teal">Online Resources</h3>
@@ -217,7 +203,6 @@
                         <p>Your Kaplan Nurse Consultant can provide custom faculty training sessions that can also be held live and online for maximum schedule flexibility. To
                         schedule a faculty orientation and/or visit, please contact your Nurse Consultant. You can find your Nurse Consultant’s contact info on your
                         <a [routerLink]="['/home']">Home</a> page.
-                        Please see the <a href="javascript:void(0)" (click)="scroll('#whatsNew',$event)">What’s New</a> section of this user guide for a list of upcoming live and online general orientations.
                         </p>
                         <p>For more information on rosters, orientations, and other aspects of the Kaplan program, please see our Service Plan.</p>
                         <a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/kaplan_service_plan.pdf" target="_blank" class="icon pdf-download-icon block">Kaplan Service Plan</a>
@@ -274,16 +259,13 @@
 
                     <div class="text-section">
                         <h3 id="admissionsTest" class="h5 teal">Kaplan Nursing School Admissions Test</h3>
-                        <p>The <b>Kaplan Nursing School Admissions Test</b> evaluates the basic skills of students who have already been already admitted to the nursing program. The Nursing School Admissions
-                        Test evaluates students’ reading, math, writing, and science knowledge. The Nursing Admissions Test is administered through a separate website. If you would like access to this test, please contact your Account Manager for sign-in information and an orientation. You can find your Account Manager’s contact information on the <a [routerLink]="['/home']">Home</a> page.
+                        <p>The <b>Kaplan Nursing School Admissions Test</b> evaluates the basic skills of students who have already been already admitted to the nursing program. The Nursing School Admissions Test evaluates students’ reading, math, writing, and science knowledge. -The Nursing Admissions Test is administered through a separate website.- If you would like access to this test, please contact your Account Manager for sign-in information and an orientation. You can find your Account Manager’s contact information on the <a [routerLink]="['/home']">Home</a> page.
                         </p>
-                        <p>Please see below for a series of downloadable PDFs containing more details on this test.
+                        <p>Please see below for downloadable PDF containing more details on this test. 
                         </p>
                         <ul class="list-pdf-download-icon list-extra-spacing">
-                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Kaplan_Admissions_Test_User_Guide.pdf" target="_blank" class="icon pdf-download-icon">Kaplan Admissions Test User Guide (contains overview, test statistics, and setup instructions)</a></li>
-                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Kaplan_Admissions_Test_Proctoring_Instructions.pdf" target="_blank" class="icon pdf-download-icon">Kaplan Admissions Test Proctoring Instructions</a></li>
-                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Kaplan_Admissions_Test_Instructions_for_Students.pdf" target="_blank" class="icon pdf-download-icon">Kaplan Admissions Test Instructions for Students</a></li>
-                        </ul>
+                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Kaplan_Admissions_Test_User_Guide.pdf" target="_blank" class="icon pdf-download-icon">User Guide for Admissions Test</a></li>
+                         </ul>
                     </div>
 
                     <h3 id="integratedTesting" class="h5 teal">Integrated Testing (Secure)</h3>
@@ -771,20 +753,75 @@
 
                         <div class="text-section">
                         <h4 id="customizationOfTests" class="h6">Customization of Tests</h4>
-                        <p>If the standard specialty end-of-course tests do not match the curriculum of your nursing school course, Kaplan Nursing can customize one end-of-course test to map to your individual
-                            course syllabus. To arrange for development of a customized test, please contact your Nurse Consultant.
-                        </p>
-                        <p><strong>Kaplan Nursing requires a minimum of 12 weeks to complete development of a customized test.</strong> We will only develop one customized end-of-course test per course without additional 
-                        charge. We ask that faculty review custom tests before administering them to students. If you wish to discuss or request revisions to custom tests, please do so via email to your Nurse Consultant. Custom 
-                        tests will have no norming data because we create them for your own curriculum.
+                        <p>
+                                IF a Kaplan standard end-of-course test does not match the curriculum of a nursing school, 
+                                Kaplan Nursing can customize one end-of-course test to map to the individual course syllabus. 
+                                To arrange for the development of a customized test, please contact your Nurse Consultant Kaplan Nursing requires a minimum of 12 weeks to complete the development of a customized test. One customized end-of-course test will be developed without an additional charge. 
+                                It is highly recommended for faculty to review the test (available in student mode only) before administering to students to ensure a satisfactory match. Any revisions can then be made before students take the test. 
+                                If revisions are needed on existing custom tests, notify your Nurse Consultant. 
+                                Please note: Custom tests will not have the norming data (no percentile ranks), 
+                                however many individual questions will have data on the Test Result by Question report. 
+                                All custom tests are to be given in a secure proctored setting. A 50-75 question test will be created,
+                                 and a topic will be sent to the faculty (not to be shared with students).
                         </p>
                         </div>
 
                         <div class="text-section">
                         <h4 id="statisticalInfo" class="h6">Statistical Information</h4>
-                        <p>Our statistical manuals contain all statistical information for the Integrated Tests and Admissions Test. Information includes descriptive statistics, reliability and
-                            validity, and item statistics.
+                        <p>
+                            Our statistical manuals contain all statistical information for the Integrated Tests and Admissions Test. Information includes descriptive statistics, reliability and validity, and item statistics. Any test that was normed after the publishing of the statistical manual is listed individually below.
+
                         </p>
+
+
+                        <div>
+                            <b>Fundamentals of Nursing/Geriatrics</b>
+                            <div>
+                                87 year-old female patient recently hospitalized for pneumonia and 
+                                coping with recent death of family member is being 
+                                assessed for return to assisted living.
+                            </div>
+                        </div>
+                        <br>
+                        <div>
+                                <b>Adult Health/Type II Diabetes</b>
+                                <div>
+                                        57 year-old female newly diagnosed with Type II Diabetes.
+                                </div>
+                        </div><br>
+                        <div>
+                            <b>
+                                Pediatric Nursing/Epilepsy
+                            </b>
+                            <div>
+                                    11 year-old female with diagnosed seizure disorder who recently had a seizure at school and is brought to Emergency Department (ED).
+                            </div>
+                        </div><br>
+                        <div>
+                            <b>
+                                    Adult Health/Psychiatric Nursing
+                            </b>
+                            <div>
+                                    38 year-old male admitted through ED for acute appendicitis. History includes heavy alcohol use.
+                            </div>
+                        </div><br>
+                        <div>
+                            <b>
+                                    OB Nursing/PROM
+                            </b>
+                            <div>
+                                    27 year-old patient being admitted to hospital for possible premature rupture of membranes.
+                            </div>
+                        </div><br>
+                        <div>
+                            <b>
+                                    Adult Health/COPD
+                            </b>
+                            <div>
+                                    65 year-old male being admitted to hospital with diagnosis of exacerbation of chronic pulmonary disease with cor pulmonale.
+                            </div>
+                        </div>
+                        <br>
                         <ul class="list-pdf-download-icon list-extra-spacing paragraph-spacing-bottom-list">
                             <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Kaplan_Integrated_Test-Statistical_Analysis_Results.pdf"
                                     target="_blank" class="icon pdf-download-icon link-darker">Kaplan RN Integrated Testing Statistical Information Manual</a></li>
@@ -1606,6 +1643,13 @@
                     </div>
                 </section>
 
+                <section id="channel">
+                    <h2>The Channel</h2>
+                    <div class="text-section">
+                            This resource will provide RN and PN nursing students with classroom lectures, activities, and test items to support their current learning. It will provide students with the salient content review they’ve requested from us. It is recommended that students use the Channel resources at multiple times during their nursing education. The content focus will help students currently enrolled in nursing programs. Specific topics will enhance their reading, lectures, clinical experiences. As students move toward NCLEX preparation they will be able to use the Channel for review of content plus test-taking strategies (like Select all That Apply items) as well as NCLEX preparation. Each week the channel will have a new live session, as well as recorded lessons for students to review on demand. To access the NCLEX Channel go to your student homepage and click on the “Channel” button at the top. You will be able to identify upcoming sessions as well as recording
+                    </div>
+                </section>
+
                 <section id="reports">
                     <h2>Creating and Viewing Reports</h2>
                     <div class="text-section">
@@ -1614,7 +1658,7 @@
                         <li><a href="javascript:void(0)" (click)="scroll('#clientSimulationReports',$event)">Mid-Fidelity Client Simulation Reports</a></li>
                         </ul>
                     </div>
-
+<!-- 
                     <div class="text-section">
                         <h3 id="intergratedTestingFR" class="h5 teal">Integrated Testing, Focused Review, and NCLEX<sup>®</sup> Reports</h3>
                         <p>As a faculty member, you have access to multiple reports through your Kaplan website that provide you with a wealth of information on your students’ performance.</p>
@@ -1651,6 +1695,48 @@
                         <img class="img-responsive img-bordered-gray block margin-1em-bottom" src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/test-result-by-question.jpg" alt="test result by question report sample screenshot">
 
                         <p>Please stay tuned for some exciting updates coming soon to your Kaplan reports!</p>
+                    </div> -->
+
+                    <div class="text-section">
+                            <h3 id="intergratedTestingFR" class="h5 teal">Integrated Testing, Focused Review, and NCLEX<sup>®</sup> Reports</h3>
+                            <p>As a faculty member, you have access to multiple reports through your Kaplan website that provide you with a wealth of information on your students’ performance.</p>
+
+                            <p>
+                                    The <b>Student Report Card</b> contains most of the basic information regarding individual student performance and also provides you with a way to monitor use of online remediation resources.
+                            </p>
+                            <img class="img-responsive img-bordered-gray block margin-1em-bottom" src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Student_Report_Card.png" alt="student report card sample screenshot">
+
+                            <p>
+                                    The <b>Remediation Time by Question</b> report, which you can access by clicking on a student's remediation time within the student report card, will show you student's remediation time in seconds for each item. Answer-changing behavior is detailed mid-screen in the screen shot below.
+                            </p>
+                            <img class="img-responsive img-bordered-gray block margin-1em-bottom" src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Remediation_Time_by_Question.png" alt="student report card sample screenshot">
+                            <p>
+                                    To see a specific student's performance report, click on the student's name. 
+                                    This link will take you to the student's results by category (<b>see screen shot below</b>). 
+                                    The percentile rank (on Integrated Tests) percent correct and raw score display on the screen. 
+                                    Total time spent on the test is reflected. 
+                                    Red flags identify students who scored below the 50th percentile and/or did not remediate an average of one minute per question. The student's performance, shown in gray, according to level of difficulty, nursing process, client need category, and several other categories is provided in easy-to-understand bar graphs. 
+                                    The normed % correct is shown in blue. Categories that fall below the normed % correct for the student are highlighted in red.
+
+                            </p>
+
+                            <img class="img-responsive img-bordered-gray block margin-1em-bottom" src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Assignment_Details.png" alt="student report card sample screenshot">
+
+                            <p>
+                                    To view <b>Test Results by Question</b>, select the cohort and group (if applicable) from which you would like to view results, using the dropdown menus in the center of your screen.
+                            </p>
+                            <p>
+                                    You will see one test at a time on this report. You will be able to compare the national results (on integrated tests) by topic to your cohort's results. Focused review tests will provide you with the cohort's performance on the topic title. The percentage provided is the p-value for each question (the percentage of students who answered the question correctly).
+
+                            </p>
+                            <img class="img-responsive img-bordered-gray block margin-1em-bottom" src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Student_Group_Comparison.png" alt="student report card sample screenshot">
+
+                            <div>
+                                <b>Category Comparisons Report</b>
+                                <div>
+                                        A category comparisons report allows you to view data by cohort in over 80 different categories including, client need categories, body systems, Bloom's taxonomy, QSEN an accreditation categories, and many more. It can be accessed in your Kaplan Reporting Suite with all the other reports.
+                                </div>
+                            </div>
                     </div>
 
                     <div class="text-section">
@@ -1676,6 +1762,8 @@
                         <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/White_Paper-Remediation.pdf" target="_blank" class="icon pdf-download-icon">The Efficacy of Remediation on Nursing Student Success</a></li>
                         <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Kaplan_Nursing_Whitepaper-8_tips_to_prepare_for_NCLEX.pdf" target="_blank" class="icon pdf-download-icon">8 Tips to Help Your Students Prepare for the NCLEX<sup>®</sup></a></li>
                         <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Kaplan-Nursing-Product-Design-Whitepaper-2016.pdf" target="_blank" class="icon pdf-download-icon">Applying Customer-Centered Product Development in Nursing Education</a></li>
+                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Kaplan-and-KATTS-Whitepaper.pdf" target="_blank" class="icon pdf-download-icon">Kaplan and KATTS</a></li>
+                        
                     </ul>
                 </section>
                 
