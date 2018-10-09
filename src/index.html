@@ -33,190 +33,198 @@
   <link rel="stylesheet" href="assets/css/tablesaw.overrides.css">
   <link rel="stylesheet" href="assets/css/bootstrap-datepicker-overrides.css">
   <link rel="stylesheet" href="assets/css/jquery.timepicker.css">-->
-<style>
-  .cx-webchat .cx-form table th{
-    border-bottom:none;
-    color:#FFF;
-    line-height: inherit;
-    vertical-align: middle;
-  }
-  .cx-webchat .cx-form table{
-    margin:0;
-  }
-  
-  .cx-webchat .cx-form table td{
-    border-bottom:none;
-  }
-</style>
+  <style>
+    .cx-webchat .cx-form table th {
+      border-bottom: none;
+      color: #FFF;
+      line-height: inherit;
+      vertical-align: middle;
+    }
+
+    .cx-webchat .cx-form table {
+      margin: 0;
+    }
+
+    .cx-webchat .cx-form table td {
+      border-bottom: none;
+    }
+  </style>
   <script>
 
     var email = "";
     var oCustomExtension = null;
 
-    if(!window._genesys)window._genesys = {};
-      if(!window._gt)window._gt = [];
+    if (!window._genesys) window._genesys = {};
+    if (!window._gt) window._gt = [];
 
-  
+
     window._genesys.widgets = {
-     main: {
-           debug: true,
-           theme: "dark",
-           lang: "en",
-           customStylesheetID: "genesys_widgets_custom",
-           plugins: [
-                 "cx-webchat",
-                 "cx-webchat-service"
-           ]
-     },
-     webchat: {
-           dataURL: "http://10.78.24.79:8080/genesys/2/chat/Test",
-           apikey: "",
-           userData: {},
-           cometD: {
-                 enabled: false
-           },
-           autoInvite: {
-                 enabled: true,
-                 timeToInviteSeconds: 5,
-                 inviteTimeoutSeconds: 30
-           },
-           chatButton: {
-                 enabled: true,
-     openDelay: 1000,
-                 effectDuration: 300,
-                 hideDuringInvite: true
-           },
-           uploadsEnabled: true,
-     form:
+      main: {
+        debug: true,
+        theme: "dark",
+        lang: "en",
+        customStylesheetID: "genesys_widgets_custom",
+        plugins: [
+          "cx-webchat",
+          "cx-webchat-service"
+        ]
+      },
+      webchat: {
+        dataURL: "https://genchatprod.kaptest.com/genesys/2/chat/NIT_Faculty",
+        apikey: "",
+        userData: {},
+        cometD: {
+          enabled: false
+        },
+        autoInvite: {
+          enabled: true,
+          timeToInviteSeconds: 5,
+          inviteTimeoutSeconds: 30
+        },
+        chatButton: {
+          enabled: true,
+          openDelay: 1000,
+          effectDuration: 300,
+          hideDuringInvite: true
+        },
+        uploadsEnabled: true,
+        form:
 
-      {
+        {
           wrapper: "<table> <!--<tr><th>\{label} </th><td>{input}</td > < /tr>--></table > ",
           inputs: [
 
 
-              {
-                  id: "cx_webchat_form_firstname",
-                  name: "firstname",
-                  maxlength: "100",
-                  placeholder: "@i18n:webchat.ChatFormPlaceholderFirstName",
-                  label: "@i18n:webchat.ChatFormFirstName",
-                  validate: function(event, form, input, label, $, CXBus, Common) {
-                      if (input)
+            {
+              id: "cx_webchat_form_firstname",
+              name: "firstname",
+              maxlength: "100",
+              placeholder: "@i18n:webchat.ChatFormPlaceholderFirstName",
+              label: "@i18n:webchat.ChatFormFirstName",
+              validate: function (event, form, input, label, $, CXBus, Common) {
+                if (input) {
+                  if (input.val()) return true;
+                  else return false;
+                }
+              }
+            },
 
-                      {
-                          if (input.val()) return true;
-                          else return false;
-                      }
-      }
-              },
+            {
+              id: "cx_webchat_form_lastname",
+              name: "lastname",
+              maxlength: "100",
+              placeholder: "@i18n:webchat.ChatFormPlaceholderLastName",
+              label: "@i18n:webchat.ChatFormLastName",
+              validate: function (event, form, input, label, $, CXBus, Common) {
+                if (input) {
+                  if (input.val()) return true;
+                  else return false;
+                }
+              }
+            },
+            {
+              id: "cx_webchat_form_email",
+              name: "email",
+              maxlength: "100",
+              placeholder: "@i18n:webchat.ChatFormPlaceholderEmail",
+              label: "@i18n:webchat.ChatFormEmail",
+              validate: function (event, form, input, label, $, CXBus, Common) {
+                if (input) {
+                  if (input.val()) {
+                    email = input.val();
+                    return true;
+                  }
+                  else return false;
+                }
+              }
 
-              {
-                  id: "cx_webchat_form_lastname",
-                  name: "lastname",
-                  maxlength: "100",
-                  placeholder: "@i18n:webchat.ChatFormPlaceholderLastName",
-                  label: "@i18n:webchat.ChatFormLastName",
-                  validate: function(event, form, input, label, $, CXBus, Common) {
-                      if (input)
-
-                      {
-                          if (input.val()) return true;
-                          else return false;
-                      }
-      }
-              },
-              {
-                  id: "cx_webchat_form_email",
-                  name: "email",
-                  maxlength: "100",
-                  placeholder: "@i18n:webchat.ChatFormPlaceholderEmail",
-                  label: "@i18n:webchat.ChatFormEmail",
-                  validate: function(event, form, input, label, $, CXBus, Common) {
-                      if (input)
-
-                      {                        	
-                            if (input.val()) {
-                              email = input.val();
-                              return true;    
-                              }  
-                            else return false;
-                      }
-      }
-
-              },
-              {
-                  id: "cx_webchat_form_subject",
-                  name: "subject",
-                  placeholder: "@i18n:webchat.ChatFormPlaceholderSubject",
-                  label: "@i18n:webchat.ChatFormSubject"
-              },
-              {
-      id: "cx_webchat_form_send_chat_transcript",
-      name: "Send_Chat_Transcript"	,
-      type: "hidden"			
-      }
+            },
+            {
+              id: "cx_webchat_form_subject",
+              name: "subject",
+              placeholder: "@i18n:webchat.ChatFormPlaceholderSubject",
+              label: "@i18n:webchat.ChatFormSubject"
+            },
+            {
+              id: "cx_webchat_form_send_chat_transcript",
+              name: "Send_Chat_Transcript",
+              type: "hidden"
+            }
 
 
           ]
-      }
+        }
 
-     }
+      }
     };
 
 
-     if(!window._genesys.widgets.extensions){
-   
+    if (!window._genesys.widgets.extensions) {
+
       window._genesys.widgets.extensions = {};
-      }
-     
-    window._genesys.widgets.extensions["CustomExtension"] = function($, CXBus, Common){		
+    }
 
- 
-        //create an extension to inject our custom actions
-        oCustomExtension = CXBus.registerPlugin("CustomExtension");
-    
+    window._genesys.widgets.extensions["CustomExtension"] = function ($, CXBus, Common) {
+
+
+      //create an extension to inject our custom actions
+      oCustomExtension = CXBus.registerPlugin("CustomExtension");
+
     };
 
 
-(function(o){
-var f = function(){
-  var d = o.location;
-  o.aTags = o.aTags || [];
-  for(var i=0;i<o.aTags.length;i++){
-    var oTag = o.aTags[i];
-    var fs = d.getElementsByTagName(oTag.type)[0], e;
-    if(d.getElementById(oTag.id)) return; e = d.createElement(oTag.type); e.id = oTag.id;
-    if(oTag.type == "script"){e.src = oTag.path;}
-                      else{e.type = 'text/css';e.rel = 'stylesheet';e.href = oTag.path;}
-    if(fs){fs.parentNode.insertBefore(e, fs);}else{d.head.appendChild(e);}
-  }},ol = window.onload;
-  if(o.onload){typeof window.onload != "function"?window.onload=f:window.onload=function(){ol();f
+    (function (o) {
+      var f = function () {
+        var d = o.location;
+        o.aTags = o.aTags || [];
+        for (var i = 0; i < o.aTags.length; i++) {
+          var oTag = o.aTags[i];
+          var fs = d.getElementsByTagName(oTag.type)[0], e;
+          if (d.getElementById(oTag.id)) return; e = d.createElement(oTag.type); e.id = oTag.id;
+          if (oTag.type == "script") { e.src = oTag.path; }
+          else { e.type = 'text/css'; e.rel = 'stylesheet'; e.href = oTag.path; }
+          if (fs) { fs.parentNode.insertBefore(e, fs); } else { d.head.appendChild(e); }
+        }
+      }, ol = window.onload;
+      if (o.onload) {
+      typeof window.onload != "function" ? window.onload = f : window.onload = function () {
+        ol(); f
 
-();}}else f();
-})({location: document,
-   onload: false,
-   aTags: [{type:"script", id:"genesys-cx-widget-script", path:"\/assets\/js\/widgets.min.js"},
-   {type:"link", id:"genesys-cx-widget-styles", path:"\/assets\/css\/widgets.min.css"}]});
+          ();
+      }
+      } else f();
+    })({
+      location: document,
+      onload: false,
+      aTags: [{ type: "script", id: "genesys-cx-widget-script", path: "\/assets\/js\/widgets.min.js" },
+      { type: "link", id: "genesys-cx-widget-styles", path: "\/assets\/css\/widgets.min.css" }]
+    });
 
 
- </script>
-  
+  </script>
+
 </head>
 
 <body class="widgets-launch-font">
   <app-root></app-root>
- <!-- <script src="//fast.appcues.com/22823.js"></script>-->
+  <!-- <script src="//fast.appcues.com/22823.js"></script>-->
   <script src="assets/js/angulartics-optimized-googleanalytics.js"></script>
-<!--BEGIN QUALTRICS WEBSITE FEEDBACK SNIPPET-->
-<script type='text/javascript'>
-  (function(){var g=function(e,h,f,g){
-  this.get=function(a){for(var a=a+"=",c=document.cookie.split(";"),b=0,e=c.length;b<e;b++){for(var d=c[b];" "==d.charAt(0);)d=d.substring(1,d.length);if(0==d.indexOf(a))return d.substring(a.length,d.length)}return null};
-  this.set=function(a,c){var b="",b=new Date;b.setTime(b.getTime()+6048E5);b="; expires="+b.toGMTString();document.cookie=a+"="+c+b+"; path=/; "};
-  this.check=function(){var a=this.get(f);if(a)a=a.split(":");else if(100!=e)"v"==h&&(e=Math.random()>=e/100?0:100),a=[h,e,0],this.set(f,a.join(":"));else return!0;var c=a[1];if(100==c)return!0;switch(a[0]){case "v":return!1;case "r":return c=a[2]%Math.floor(100/c),a[2]++,this.set(f,a.join(":")),!c}return!0};
-  this.go=function(){if(this.check()){var a=document.createElement("script");a.type="text/javascript";a.src=g+ "&t=" + (new Date()).getTime();document.body&&document.body.appendChild(a)}};
-  this.start=function(){var a=this;window.addEventListener?window.addEventListener("load",function(){a.go()},!1):window.attachEvent&&window.attachEvent("onload",function(){a.go()})}};
-  try{(new g(100,"r","QSI_S_ZN_6rN0KWJrQPfaKC9","https://zn6rn0kwjrqpfakc9-kaplan.siteintercept.qualtrics.com/WRSiteInterceptEngine/?Q_ZID=ZN_6rN0KWJrQPfaKC9&Q_LOC="+encodeURIComponent(window.location.href))).start()}catch(i){}})();
-  </script><div id='ZN_6rN0KWJrQPfaKC9'><!--DO NOT REMOVE-CONTENTS PLACED HERE--></div>
+  <!--BEGIN QUALTRICS WEBSITE FEEDBACK SNIPPET-->
+  <script type='text/javascript'>
+    (function () {
+      var g = function (e, h, f, g) {
+        this.get = function (a) { for (var a = a + "=", c = document.cookie.split(";"), b = 0, e = c.length; b < e; b++) { for (var d = c[b]; " " == d.charAt(0);)d = d.substring(1, d.length); if (0 == d.indexOf(a)) return d.substring(a.length, d.length) } return null };
+        this.set = function (a, c) { var b = "", b = new Date; b.setTime(b.getTime() + 6048E5); b = "; expires=" + b.toGMTString(); document.cookie = a + "=" + c + b + "; path=/; " };
+        this.check = function () { var a = this.get(f); if (a) a = a.split(":"); else if (100 != e) "v" == h && (e = Math.random() >= e / 100 ? 0 : 100), a = [h, e, 0], this.set(f, a.join(":")); else return !0; var c = a[1]; if (100 == c) return !0; switch (a[0]) { case "v": return !1; case "r": return c = a[2] % Math.floor(100 / c), a[2]++ , this.set(f, a.join(":")), !c }return !0 };
+        this.go = function () { if (this.check()) { var a = document.createElement("script"); a.type = "text/javascript"; a.src = g + "&t=" + (new Date()).getTime(); document.body && document.body.appendChild(a) } };
+        this.start = function () { var a = this; window.addEventListener ? window.addEventListener("load", function () { a.go() }, !1) : window.attachEvent && window.attachEvent("onload", function () { a.go() }) }
+      };
+      try { (new g(100, "r", "QSI_S_ZN_6rN0KWJrQPfaKC9", "https://zn6rn0kwjrqpfakc9-kaplan.siteintercept.qualtrics.com/WRSiteInterceptEngine/?Q_ZID=ZN_6rN0KWJrQPfaKC9&Q_LOC=" + encodeURIComponent(window.location.href))).start() } catch (i) { }
+    })();
+  </script>
+  <div id='ZN_6rN0KWJrQPfaKC9'>
+    <!--DO NOT REMOVE-CONTENTS PLACED HERE-->
+  </div>
   <!--END WEBSITE FEEDBACK SNIPPET-->
 </body>
 
