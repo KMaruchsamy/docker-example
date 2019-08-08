@@ -230,7 +230,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         //     .subscribe(e => {
         //         this.destinationRoute = e.url;
         //     });
-
+        console.log('ADD STUDENTS');
         let self = this;
         this.testsTable = null;
         this.SetPageToAddByCohort();
@@ -1578,7 +1578,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     }
 
     AddByCohort(e): void {
-        
+
         this.SetPageToAddByCohort();
         let _self = this;
         if (this.AddByCohortStudentlist.length > 0) {
