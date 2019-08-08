@@ -230,7 +230,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         //     .subscribe(e => {
         //         this.destinationRoute = e.url;
         //     });
-
+        console.log('ADD STUDENTS');
         let self = this;
         this.testsTable = null;
         this.SetPageToAddByCohort();
@@ -1608,6 +1608,10 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         else {
             this.cohortStudentlist = [];
             $('#cohortStudentList').addClass('hidden');
+            setTimeout(() => {
+                if (_self.testsTable)
+                    _self.testsTable.clear().draw();
+            });
             // this.studentTable = false;
         }
     }
