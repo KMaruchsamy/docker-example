@@ -1578,7 +1578,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     }
 
     AddByCohort(e): void {
-
+        
         this.SetPageToAddByCohort();
         let _self = this;
         if (this.AddByCohortStudentlist.length > 0) {
@@ -1608,6 +1608,10 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         else {
             this.cohortStudentlist = [];
             $('#cohortStudentList').addClass('hidden');
+            setTimeout(() => {
+                if (_self.testsTable)
+                    _self.testsTable.clear().draw();
+            });
             // this.studentTable = false;
         }
     }
