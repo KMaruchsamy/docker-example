@@ -230,7 +230,6 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         //     .subscribe(e => {
         //         this.destinationRoute = e.url;
         //     });
-        console.log('ADD STUDENTS');
         let self = this;
         this.testsTable = null;
         this.SetPageToAddByCohort();

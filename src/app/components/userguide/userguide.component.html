@@ -33,8 +33,6 @@
                             (click)="scroll('#successTutorials',$event)">Nursing School Success Tutorials</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#channel'" href="javascript:void(0)"
                             (click)="scroll('#channel',$event)">The Channel</a></li>
-                    <li><a [class.text-purple-bold]="activeId==='#reports'" href="javascript:void(0)"
-                            (click)="scroll('#reports',$event)">Creating and Viewing Reports</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#whitePapers'" href="javascript:void(0)"
                             (click)="scroll('#whitePapers',$event)">Research and White Papers</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#needHelp'" href="javascript:void(0)"
@@ -93,7 +91,8 @@
                         </p>
                     </div> -->
 
-                    <div class="text-section">
+                    <!--  FIXME: Removed  -->
+                    <!-- <div class="text-section">
                         <h3 class="h5 teal">Kaplan Nursing Prep Talks</h3>
                         <p>We are proud to introduce our first series of Kaplan Nursing Prep Talks featuring Kaplan
                             instructor <b>Rhonda Lawes, PhD (c), MS, RN, CNE</b>. These video segments, 11 to 18 minutes
@@ -103,7 +102,8 @@
                         </p>
                         <a href="https://www.youtube.com/playlist?list=PLiuAm8LB9P5s_Yb0rSIiothfzuVsO4SFp"
                             target="_blank" class="block">Prep Talks for Mental Strength Training</a>
-                    </div>
+                    </div> -->
+                    <!-- FIXME: Removed -->
 
                     <!-- <div class="text-section">
                         <h3 class="h5 teal">Our Upcoming Events</h3>                      
@@ -233,9 +233,11 @@
                             refer to our Technical Requirements
                             document:
                         </p>
+                        <!--  FIXME: Removed
                         <a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/technical_requirements.pdf"
                             target="_blank" class="icon pdf-download-icon block">Technical Requirements (as of March
                             2016)</a>
+                         FIXME: Removed -->
                         <button class="unstyled-button anchor-button margin-1em-top" (click)="showModal()">Faculty Terms
                             of Use</button>
                     </div>
@@ -2495,142 +2497,7 @@
                     </div>
                 </section>
 
-                <section id="reports">
-                    <h2>Creating and Viewing Reports</h2>
-                    <div class="text-section">
-                        <ul class="default-ul-indented list-extra-spacing text-larger">
-                            <li><a href="javascript:void(0)" (click)="scroll('#intergratedTestingFR',$event)">Integrated
-                                    Testing, Focused Review, and NCLEX<sup>®</sup> Reports</a></li>
-                            <li><a href="javascript:void(0)"
-                                    (click)="scroll('#clientSimulationReports',$event)">Mid-Fidelity Client Simulation
-                                    Reports</a></li>
-                        </ul>
-                    </div>
-                    <!-- 
-                    <div class="text-section">
-                        <h3 id="intergratedTestingFR" class="h5 teal">Integrated Testing, Focused Review, and NCLEX<sup>®</sup> Reports</h3>
-                        <p>As a faculty member, you have access to multiple reports through your Kaplan website that provide you with a wealth of information on your students’ performance.</p>
-
-                        <p>The <b>Student Report Card</b> contains most of the basic information regarding individual student performance and also provides you with a way to monitor use of online
-                        remediation resources.
-                        </p>
-                        <img class="img-responsive img-bordered-gray block margin-1em-bottom" src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/student-report-card.jpg" alt="student report card sample screenshot">
-
-                        <p>The <b>Remediation Time by Question</b> report, which you can access by clicking on a student’s remediation time within the student report card, will show you that student’s
-                        remediation time in seconds for each item. The screenshot below shows an Integrated Test Report.
-                        </p>
-                        <img class="img-responsive img-bordered-gray block margin-1em-bottom" src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/remediation-time-by-question.jpg" alt="remediation time by question report sample screenshot">
-
-                        <p>To see a specific student’s performance report, click on the test name. This link will take you to the student’s results by category <b>(Student Performance by Test)</b>. The percentile
-                        rank (on Integrated Tests) is positioned above the overall or raw percent correct on the screen. The number correct, the number incorrect, and the number not reached are noted. If there are
-                        questions the student didn’t reach, it is because the student ran out of time or quit the test before completing it.
-                        </p>
-                        <img class="img-responsive img-bordered-gray block margin-1em-bottom" src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/student-performance-by-test.jpg" alt="student performance by test report sample screenshot">
-
-                        <p>Answer-changing behavior is detailed on the right mid-screen.</p>
-                        <p>The student’s performance according to level of difficulty, nursing process, clinical concept, demographic, and client need category is provided in easy-to-understand bar graphs. The check mark
-                        indicates the number of questions that were answered correctly. The blue line indicates the number of questions that were omitted. “N” indicates the total number of questions
-                        for each category.
-                        </p>
-
-                        <p><strong>Please note:</strong> You can select each student individually or select all students to review an entire cohort or multiple cohorts.</p>
-                        <p>To view <b>Test Results by Question</b>, select the cohort and group (if applicable) from which you would like to view results, using
-                        the dropdown menus in the center of your screen.
-                        </p>
-                        <p>You will see one test at a time on this report. You will be able to compare the national results (on Integrated tests) by topic to your cohort’s results. Focused review tests will
-                        provide you with the cohort’s performance on the topic title. The percentage provided is the p-value for each question (the percentage of students who answered the question correctly).
-                        </p>
-                        <img class="img-responsive img-bordered-gray block margin-1em-bottom" src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/test-result-by-question.jpg" alt="test result by question report sample screenshot">
-
-                        <p>Please stay tuned for some exciting updates coming soon to your Kaplan reports!</p>
-                    </div> -->
-
-                    <div class="text-section">
-                        <h3 id="intergratedTestingFR" class="h5 teal">Integrated Testing, Focused Review, and
-                            NCLEX<sup>®</sup> Reports</h3>
-                        <p>As a faculty member, you have access to multiple reports through your Kaplan website that
-                            provide you with a wealth of information on your students’ performance.</p>
-
-                        <p>
-                            The <b>Student Report Card</b> contains most of the basic information regarding individual
-                            student performance and also provides you with a way to monitor use of online remediation
-                            resources.
-                        </p>
-                        <img class="img-responsive img-bordered-gray block margin-1em-bottom"
-                            src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Student_Report_Card.png"
-                            alt="student report card sample screenshot">
-
-                        <p>
-                            The <b>Remediation Time by Question</b> report, which you can access by clicking on a
-                            student's remediation time within the student report card, will show you student's
-                            remediation time in seconds for each item. Answer-changing behavior is detailed mid-screen
-                            in the screen shot below.
-                        </p>
-                        <img class="img-responsive img-bordered-gray block margin-1em-bottom"
-                            src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Remediation_Time_by_Question.png"
-                            alt="student report card sample screenshot">
-                        <p>
-                            To see a specific student's performance report, click on the student's name.
-                            This link will take you to the student's results by category (<b>see screen shot below</b>).
-                            The percentile rank (on Integrated Tests) percent correct and raw score display on the
-                            screen.
-                            Total time spent on the test is reflected.
-                            Red flags identify students who scored below the 50th percentile and/or did not remediate an
-                            average of one minute per question. The student's performance, shown in gray, according to
-                            level of difficulty, nursing process, client need category, and several other categories is
-                            provided in easy-to-understand bar graphs.
-                            The normed % correct is shown in blue. Categories that fall below the normed % correct for
-                            the student are highlighted in red.
-
-                        </p>
-
-                        <img class="img-responsive img-bordered-gray block margin-1em-bottom"
-                            src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Assignment_Details.png"
-                            alt="student report card sample screenshot">
-
-                        <p>
-                            To view <b>Test Results by Question</b>, select the cohort and group (if applicable) from
-                            which you would like to view results, using the dropdown menus in the center of your screen.
-                        </p>
-                        <p>
-                            You will see one test at a time on this report. You will be able to compare the national
-                            results (on integrated tests) by topic to your cohort's results. Focused review tests will
-                            provide you with the cohort's performance on the topic title. The percentage provided is the
-                            p-value for each question (the percentage of students who answered the question correctly).
-
-                        </p>
-                        <img class="img-responsive img-bordered-gray block margin-1em-bottom"
-                            src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/Student_Group_Comparison.png"
-                            alt="student report card sample screenshot">
-
-                        <div>
-                            <b>Category Comparisons Report</b>
-                            <div>
-                                A category comparisons report allows you to view data by cohort in over 80 different
-                                categories including, client need categories, body systems, Bloom's taxonomy, QSEN an
-                                accreditation categories, and many more. It can be accessed in your Kaplan Reporting
-                                Suite with all the other reports.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-section">
-                        <h3 id="clientSimulationReports" class="h5 teal">Mid-Fidelity Client Simulation Reports</h3>
-                        <p>Our Mid-Fidelity Client Simulation reports include the following:</p>
-                        <ul class="bullet paragraph-spacing-bottom-list">
-                            <li><b>Student Report Card by Module:</b> This provides an individual student’s results by
-                                module</li>
-                            <li><b>Case Results by Cohort:</b> This provides a cohort’s overall results per simulation
-                            </li>
-                            <li><b>Cohort Results by Module:</b> This provides a cohort’s overall results per module
-                            </li>
-                            <li><b>Case Comparison by Module:</b> Comparative reports allow you to customize aggregate
-                                reports. You can compare the performance of several cohorts in various cases, modules,
-                                categories, and subcategories.</li>
-                        </ul>
-                        <p>Please stay tuned for some exciting updates coming soon to your Kaplan reports!</p>
-                    </div>
-                </section>
+              
 
                 <section id="whitePapers">
                     <h2>Research and White Papers</h2>
@@ -2667,14 +2534,17 @@
                     <p><b>Faculty only:</b> For immediate requests and/or technical issues, please call <a
                             href="tel:+1-866-920-6311">1-866-920-6311</a>. If you’re outside the United States or
                         Canada, dial <a href="tel:+1-407-423-6620">+1-407-423-6620</a>. Help
-                        is available from 8:00am to 8:00pm Monday through Friday and from 9:00am to 5:45pm on Saturdays.
+                        is available from 8:00 AM to 8:00 PM ET Monday through Thursday, 8:00 AM to 5:45 PM ET Friday
+                       , 9:00 AM to 5:45 PM ET on Saturday and Sunday closed.
                         All times are Eastern.
                     </p>
                     <p><b>Students:</b> If your students need help with their resources, please have them call our
                         Customer Care center at <a href="tel:+1-877-572-8457">1-877-572-8457</a> (outside the United
                         States and Canada,
                         dial <a href="tel:+1-407-423-6621">+1-407-423-6621</a>). Our Customer Care center hours are
-                        9:00am to 9:00pm Monday through Friday and 8:30am to 5:30pm Saturdays and Sundays. All times are
+                        9:00 AM to 8:00 PM ET Monday through Thursday, 9:00 AM to 5:45 PM ET Friday and Saturday and
+                        9:00 AM to 5:45 PM ET Sunday <b>(chat, email, social media only)</b>. All
+                        times are
                         Eastern.</p>
                     <p>Students can also send an email to <a
                             href="mailto:integrated.support@kaplan.com">integrated.support@kaplan.com</a>.</p>
