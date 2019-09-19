@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "zip": "bestzip bundle.zip build/*"
+    "zip": "mkdir -p zip && bestzip zip/bundle.zip build/*"
   },
   "private": true,
   "dependencies": {
