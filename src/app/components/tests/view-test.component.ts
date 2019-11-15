@@ -135,7 +135,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
 
                         }
                         __this.schedule = _schedule;
-                        __this.ItSecurityEnabled = __this.schedule.itSecurityEnabledInstitution;
+                        __this.ItSecurityEnabled = __this.schedule.itSecurityEnabledInstitution == true;
                         __this.chkExamityView = __this.schedule.isExamity;
                         __this.hasADA = _.some(__this.schedule.selectedStudents, { 'Ada': true });
                         __this.testStatus = __this.testService.getTestStatusFromTimezone(_schedule.institutionId, _schedule.scheduleStartTime, _schedule.scheduleEndTime);
