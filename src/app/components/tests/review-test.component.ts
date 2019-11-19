@@ -167,8 +167,8 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else {
-            
-            
+
+
             this.initialize();
         }
         window.scroll(0, 0);
@@ -209,11 +209,11 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                     this.chkExamity = false;
                 }
                 this.bindFaculty();
-              
+
                 if (this.testScheduleModel.scheduleName)
                     this.$txtScheduleName.val(this.testScheduleModel.scheduleName);
                 if (this.modify) {
-                    this.ItSecurityEnabled = this.testScheduleModel.itSecurityEnabledInstitution;
+                    this.ItSecurityEnabled = +this.testScheduleModel.itSecurityEnabledInstitution === 1;
                     this.chkExamity = this.testScheduleModel.isExamity;
                     if (this.testScheduleModel.facultyMemberId !== this.testScheduleModel.adminId && this.auth.userid !== this.testScheduleModel.adminId) {
                         this.facultyAssignable = false;
@@ -398,10 +398,10 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                 };
             })
         };
-               
+
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
 
-        
+
         let scheduleTestObservable: Observable<Response>;
         let scheduleTestURL = '';
         var myNewStartDateTime2 = moment(new Date(
@@ -426,8 +426,8 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         input.TestingWindowEnd = myNewEndDateTime2;
         let isMoreThan8: boolean = false;
         let duration = moment.duration(moment(myNewEndDateTime2).diff(moment(myNewStartDateTime2)));
-        if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8) 
-            isMoreThan8 = true; 
+        if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8)
+            isMoreThan8 = true;
         if (input.IsExamityEnabled == false && isMoreThan8 && this.auth.openIntegratedTests == false && this.auth.isInstitutionIp == false && +this.testScheduleModel.testType!==7)
         {
             if (loaderTimer)
@@ -1015,14 +1015,14 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
     //     validateDates(): boolean {
     //         if (this.testScheduleModel) {
-    // 
+    //
     //             if (this.testScheduleModel.scheduleStartTime && this.testScheduleModel.scheduleEndTime) {
-    // 
+    //
     //                 let institutionOffset = 0;
     //                 if (this.testScheduleModel.institutionId && this.testScheduleModel.institutionId > 0) {
     //                     institutionOffset = this.common.getOffsetInstitutionTimeZone(this.testScheduleModel.institutionId);
     //                 }
-    // 
+    //
     //                 let scheduleStartTime = moment(new Date(
     //                     moment(this.testScheduleModel.scheduleStartTime).year(),
     //                     moment(this.testScheduleModel.scheduleStartTime).month(),
@@ -1031,8 +1031,8 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
     //                     moment(this.testScheduleModel.scheduleStartTime).minute(),
     //                     moment(this.testScheduleModel.scheduleStartTime).second()
     //                 )).format('YYYY-MM-DD HH:mm:ss');
-    // 
-    // 
+    //
+    //
     //                 let scheduleEndTime = moment(new Date(
     //                     moment(this.testScheduleModel.scheduleEndTime).year(),
     //                     moment(this.testScheduleModel.scheduleEndTime).month(),
@@ -1041,13 +1041,13 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
     //                     moment(this.testScheduleModel.scheduleEndTime).minute(),
     //                     moment(this.testScheduleModel.scheduleEndTime).second()
     //                 )).format('YYYY-MM-DD HH:mm:ss');
-    // 
-    // 
+    //
+    //
     //                 if (institutionOffset !== 0) {
     //                     scheduleStartTime = moment(scheduleStartTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
     //                     scheduleEndTime = moment(scheduleEndTime).add((-1) * institutionOffset, 'hour').format('YYYY-MM-DD HH:mm:ss');
-    //                 }                
-    //                 
+    //                 }
+    //
     //                 if (this.modify) {
     //                     if (moment(scheduleStartTime).isBefore(new Date())) {
     //                         $('#alertPopup').modal('show');
