@@ -52,4 +52,4 @@ qa:
         cpu: 256
         mem: 2048
       health_check: tcp
-      task_role: RoleNitecstask
+      task_role: RoleCloudopsecstask
