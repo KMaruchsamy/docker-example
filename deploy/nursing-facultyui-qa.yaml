@@ -29,4 +29,4 @@ qa:
         cpu: 256
         mem: 2048
       health_check: tcp
-      task_role: RoleCloudopsecstask
+      task_role: RoleLicensureecstask
