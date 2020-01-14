@@ -14,7 +14,7 @@ qa:
       access: internal
       docker_image: nursing-facultyui
       internal_port:
-       - 80
+        - 80
       docker_registry: 526930246559.dkr.ecr.us-east-1.amazonaws.com
       image_tag:
         rolling: qa
@@ -29,4 +29,4 @@ qa:
         cpu: 256
         mem: 2048
       health_check: tcp
-      task_role: RoleLicensureecstask
+      task_role: RoleNitecstask
