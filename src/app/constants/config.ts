@@ -1,16 +1,16 @@
 export const links = {
     api: {
         local: {
-            server: "https://qa-nursing.kaptest.com/"
+            server: "https://nursing.qa.kaptest.com/"
         },
         dev: {
             server: "https://dev01-nursing.kaptest.com/"
         },
         qa: {
-            server: "https://qa-nursing.kaptest.com/"
+            server: "https://nursing.qa.kaptest.com/"
         },
         stg: {
-            server: "https://stg-nursing.kaptest.com/"
+            server: "https://nursing.stg.kaptest.com/"
         },
         prod: {
             server: "https://nursing.kaplan.com/"
@@ -88,10 +88,10 @@ export const links = {
             server: "https://dev01-nursing.kaptest.com/"
         },
         qa: {
-            server: "https://qa-nursing.kaptest.com/"
+            server: "https://nursing.qa.kaptest.com/"
         },
         stg: {
-            server: "https://stg-nursing.kaptest.com/"
+            server: "https://nursing.stg.kaptest.com/"
         },
         prod: {
             server: "https://nursing.kaplan.com/"
