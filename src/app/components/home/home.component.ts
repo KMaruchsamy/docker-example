@@ -34,6 +34,14 @@ import { ProfileModel } from './../../models/profile.model';
         background-color:#BD2828;
         color:#FFF;
     }
+
+    .covid-yellow {
+        background-color: #feee67;
+      }
+
+      .covid-font {
+        font-size: 22px;
+      }
     `]
 })
 export class HomeComponent implements OnInit, OnDestroy {
