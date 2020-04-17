@@ -447,7 +447,7 @@
       <div class="modal-content ">
         <div class="modal-header">
           <button type="button" class="close close-medium-icon-grey" aria-label="Close" data-dismiss="modal"></button>
-          <div class="margin-2em-top-bottom" >
+          <div class="margin-2em-top-bottom" *ngIf="hasIhpEnableInstitution">
             <select class="selectpicker" #chooseCampus id="choose-campus" (change)="setInstitution(chooseCampus.value)" data-width="400" data-size="6" title='Choose an institution'>
                 <option *ngFor="let campus of ihpEnableInstitutions; let i = index" [selected]="campus.InstitutionId==institutionID"  [value]='campus.InstitutionId'>{{campus.InstitutionNameWithProgOfStudy}}</option>
             </select>
