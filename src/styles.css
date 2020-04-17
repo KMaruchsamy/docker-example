@@ -2582,7 +2582,7 @@ a.large-expander-trigger, a.large-expander-trigger-purple {
     display: block;
     float: none;
     margin: 0 auto;
-    width: 65px; }
+    min-width: 65px; }
 
 .modal-dialog {
   position: relative;

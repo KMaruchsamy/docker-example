@@ -42,6 +42,18 @@ export class ProfileService {
 		return this.http.get(url, requestOptions);
 	}
 
+	getIhpSsoLogin(url:string, input:any){
+		let self = this;
+		let headers: Headers = new Headers({
+			'Accept': 'application/json',
+            'Content-Type': 'application/json',
+			'Authorization': self.auth.authheader
+		});
+		let requestOptions: RequestOptions = new RequestOptions({
+			headers: headers
+		});
+		return this.http.post(url, input, requestOptions);
+	}
 
 	bindToModel(profile): ProfileModel {
 		return new ProfileModel(

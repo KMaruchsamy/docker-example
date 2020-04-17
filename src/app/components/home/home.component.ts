@@ -1,4 +1,4 @@
-import {Component, Injector, Inject, OnInit, OnDestroy} from '@angular/core';
+import {Component, Injector, Inject, OnInit, OnDestroy, ElementRef, ViewChild} from '@angular/core';
 import {NgIf, Location} from '@angular/common';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {Response, RequestOptions} from '@angular/http';
@@ -45,6 +45,8 @@ import { ProfileModel } from './../../models/profile.model';
     `]
 })
 export class HomeComponent implements OnInit, OnDestroy {
+    @ViewChild('element') public viewElement: ElementRef;
+
     // profiles: Array<ProfileModel>;
     programId: number;
     institutionRN: number;
@@ -76,6 +78,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     ItSecurityEnabled: boolean = false;
     examityServer:string;
     examityLoginURL:string;
+    iHPServerURL: string;
+    element: any;
+    htmlSnippet:string;
+    ihpEnableInstitutions: Object[] = [];
+    ihpSSOLoginSubscription: Subscription;
+    isMultiCampus_IHP: boolean = false;
+    hasIhpEnableInstitution: boolean = false;
+    
     constructor(public router: Router, public auth: AuthService, public location: Location, public common: CommonService, public profileService: ProfileService, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
     }
 
@@ -100,6 +110,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.nurseConsultantProfile = new ProfileModel(null, null, 'NURSECONSULTANT', null, null, null, null, null, null, null, null, null, null, null);
         this.loadProfiles(self);
         this.checkInstitutions();
+        this.filterIHPEnableInstitutions();
+
         window.scroll(0,0);
         this.titleService.setTitle('Faculty Home – Kaplan Nursing');
         this.setAtomStudyPlanLink();
@@ -378,4 +390,56 @@ export class HomeComponent implements OnInit, OnDestroy {
         return url.replace('§adminId', this.auth.userid.toString());
     }
 
+    filterIHPEnableInstitutions(): void {
+        let institutions = _.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
+        this.ihpEnableInstitutions = _.filter(institutions, { 'IsIHPEnabledForAnyCohorts': true });
+        this.ihpEnableInstitutions = _.orderBy(this.ihpEnableInstitutions, 'InstitutionName','asc');
+        this.hasIhpEnableInstitution = this.ihpEnableInstitutions.length > 0 ? true : false;
+        this.isMultiCampus_IHP = this.ihpEnableInstitutions.length>1 ? true : false;
+        setTimeout(() =>{
+            $('.selectpicker').selectpicker('refresh');
+        });
+    }
+
+    setInstitution(institutionId: number): void {
+        this.institutionID = institutionId;
+    }
+
+    onClickIhpReport(): void {
+        if(this.isMultiCampus_IHP) {
+            $('#ihpmulticampus').modal('show');
+        } else {
+            this.getIHPHtmlFormString();
+        }
+
+    }
+    goToIhpSSOLogin() {
+        this.getIHPHtmlFormString();
+    }
+    getIHPHtmlFormString() {        
+       let ihpSSOLoginURL = `${this.apiServer}${links.api.baseurl}${links.api.admin.ihpSSoLoginApi}`;
+       let input = {
+           "UserId": this.userId,
+           "FirstName": this.firstName,
+           "LastName": this.lastName,
+           "EmailAddress": this.userEmail,
+           "InstitutionId": this.institutionID,
+       }
+       let ihpSSOLoginObservable: Observable<Response> = this.profileService.getIhpSsoLogin(ihpSSOLoginURL, JSON.stringify(input));
+       this.ihpSSOLoginSubscription = ihpSSOLoginObservable
+           .map(response => response.json())
+           .subscribe(data => {
+           this.htmlSnippet = data;
+           this.appendHTMLSnippetToDOM();
+           $('#ihpmulticampus').modal('hide');
+            
+        }, error => console.log(error));
+    }
+
+    appendHTMLSnippetToDOM()
+    {
+        this.element = this.viewElement.nativeElement;
+        const fragment = document.createRange().createContextualFragment(this.htmlSnippet);
+        this.element.appendChild(fragment);
+    }
 }

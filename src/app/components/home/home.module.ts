@@ -10,6 +10,7 @@ import { Ng2PageScrollModule } from 'ng2-page-scroll/ng2-page-scroll';
 import { HttpModule } from '@angular/http';
 import { HomeRoutingModule } from './home.routing.module';
 import { ProfileService } from './profile.service';
+import { PipesModule } from '../../pipes/pipes.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { ProfileService } from './profile.service';
         PageModule,
         Ng2PageScrollModule.forRoot(),
         HttpModule,
-        HomeRoutingModule
+        HomeRoutingModule,
+        PipesModule
     ],
     declarations: [
         HomeComponent,
