@@ -81,7 +81,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     iHPServerURL: string;
     element: any;
     htmlSnippet:string;
-    ihpEnableInstitutions: Object[] = [];
+    ihpEnableInstitutions: any[] = [];
     ihpSSOLoginSubscription: Subscription;
     isMultiCampus_IHP: boolean = false;
     hasIhpEnableInstitution: boolean = false;
