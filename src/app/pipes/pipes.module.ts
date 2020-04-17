@@ -3,6 +3,7 @@ import { ParseDatePipe } from './parsedate.pipe';
 import { RemoveWhitespacePipe } from './removewhitespace.pipe';
 import { RoundPipe } from './round.pipe';
 import { SortPipe } from './sort.pipe';
+import { SafePipe } from './safe.pipe';
 
 
 @NgModule({
@@ -10,13 +11,15 @@ import { SortPipe } from './sort.pipe';
         ParseDatePipe,
         RemoveWhitespacePipe,
         RoundPipe,
-        SortPipe
+        SortPipe,
+        SafePipe
     ],
     declarations: [
         ParseDatePipe,
         RemoveWhitespacePipe,
         RoundPipe,
-        SortPipe
+        SortPipe,
+        SafePipe
     ]
 })
 export class PipesModule { }
