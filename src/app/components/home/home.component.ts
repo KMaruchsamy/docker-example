@@ -409,6 +409,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         if(this.isMultiCampus_IHP) {
             $('#ihpmulticampus').modal('show');
         } else {
+           this.institutionID = this.getLatestInstitution();
             this.getIHPHtmlFormString();
         }
 
