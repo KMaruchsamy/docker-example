@@ -22,27 +22,7 @@ import { ProfileModel } from './../../models/profile.model';
 
 @Component({
     selector: 'home',
-    templateUrl: './home.component.html',
-    styles:[`
-    .ad{
-        padding:2px 10px;
-        font-size:8pt;
-        border-radius:2px;
-    }
-
-    .red{
-        background-color:#BD2828;
-        color:#FFF;
-    }
-
-    .covid-yellow {
-        background-color: #feee67;
-      }
-
-      .covid-font {
-        font-size: 22px;
-      }
-    `]
+    templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit, OnDestroy {
     @ViewChild('element') public viewElement: ElementRef;

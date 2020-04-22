@@ -4453,7 +4453,11 @@ select.mobile-device {
 @media (min-width: 48em) {
   .js-top-100 {
     top: 100px; } }
-
+.need-help {
+  justify-content: center;
+  display: flex;
+  margin: 2rem;
+}
 .hidden {
   display: none; }
 
