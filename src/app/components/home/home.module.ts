@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-
 import { HomeComponent }   from './home.component';
 import { PageModule } from './../shared/page.module';
 import { CommonModule } from '@angular/common';
