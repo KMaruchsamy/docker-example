@@ -13,5 +13,6 @@ export class HelpComponent implements OnInit {
 
     ngOnInit(): void {
         this.titleService.setTitle('Help – Kaplan Nursing');
+        window.scroll(0,0);
     }    
 }
