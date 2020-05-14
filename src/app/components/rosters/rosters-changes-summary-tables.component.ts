@@ -1,12 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, RoutesRecognized, NavigationStart } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonService } from './../../services/common.service';
 
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { RosterChangesService } from './roster-changes.service';
-import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
-import * as _ from 'lodash';
 import { RosterUpdateTypes } from '../../constants/config';
 
 @Component({

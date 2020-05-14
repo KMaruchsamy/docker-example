@@ -1,12 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
-import * as _ from 'lodash';
 import { CommonService } from './../../services/common.service';
 import { AuthService } from './../../services/auth.service';
 import { RosterChangesPages } from './../../constants/config';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { Injectable } from '@angular/core';
-import {Http, Response, RequestOptions, Headers} from "@angular/http";
-import {Observable} from 'rxjs/Rx';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Injectable()
 export class RosterChangesService {
@@ -17,7 +14,7 @@ export class RosterChangesService {
     cohortName: string;
     institutions: Array<any> = [];
 
-    constructor(public auth: AuthService, private common: CommonService, private rosterChangesModel: RosterChangesModel, private http: Http) {
+    constructor(public auth: AuthService, private common: CommonService, private http: HttpClient) {
         this.http = http;
     }
 
@@ -62,19 +59,20 @@ export class RosterChangesService {
         this.sStorage.removeItem('rosterChanges');
     }
 
-    updateRosterChanges(url: string, input: string): Observable<Response> {
-        return this.http.post(url, input, this.getRequestOptions())
+    updateRosterChanges(url: string, input: string) {
+        return this.http.post(url, input, this.getRequestOptions());
     }
-    private getRequestOptions(): RequestOptions {
+    private getRequestOptions(): any {
         let self = this;
-        let headers: Headers = new Headers({
+        let headers = new HttpHeaders({
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': self.auth.authheader
         });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
-        });
+        let requestOptions = {
+            headers: headers,
+            observe: 'response' as const
+        };
         return requestOptions;
     }
 }

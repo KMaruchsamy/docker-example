@@ -1,10 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-// import * as _ from 'lodash';
 import { AuthService } from './../../services/auth.service';
-import { PageHeaderComponent } from './../shared/page-header.component';
-import { PageFooterComponent } from './../shared/page-footer.component';
 
 @Component({
     selector: 'groups',

@@ -1,18 +1,15 @@
-import { Component, Input, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, RoutesRecognized, NavigationStart } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { NgIf } from '@angular/common';
 import { CommonService } from './../../services/common.service';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Observable, Subscription } from 'rxjs';
 import { links, RosterUpdateTypes } from '../../constants/config';
-import { Response } from '@angular/http';
 import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { RosterCohortsModel } from '../../models/roster-cohorts.model';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import { RosterService } from './roster.service';
 import { RosterChangesService } from './roster-changes.service';
-import * as _ from 'lodash';
 
 @Component({
     selector: 'rosters-extend-access',
@@ -34,7 +31,7 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
     extendAccessStudents: Array<any>;
     rosterChangeUpdateStudents: ChangeUpdateRosterStudentsModel[];
 
-    constructor(private changeDetectorRef: ChangeDetectorRef, public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, public rosterChangesModel: RosterChangesModel, 
+    constructor(public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, public rosterChangesModel: RosterChangesModel, 
     public rosterCohortsModel: RosterCohortsModel, private rosterChangesService: RosterChangesService, private rosterService: RosterService) {
     }
 
@@ -71,9 +68,9 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
         let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.cohortStudents}`;
         if (cohortId) {
             url = url.replace('§cohortId', cohortId.toString());
-            let rosterCohortsObservable: Observable<Response> = this.rosterService.getRosterStudentCohorts(url);
+            let rosterCohortsObservable  = this.rosterService.getRosterStudentCohorts(url);
             this.cohortStudentsSubscription = rosterCohortsObservable
-                .map(response => response.json())
+                .map(response => response.body)
                 .subscribe(json => {
                     __this.loadRosterCohortStudents(__this.rosterCohortsModel, json);
                 }, error => {
@@ -100,7 +97,7 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
 
     loadUpdatedCohortStudents() {
         // in case user is going back to modify changes, get updated model
-        let rosterChangesUpdatedModel = this.rosterChangesService.getUpdatedRosterChangesModel();
+        let rosterChangesUpdatedModel: any = this.rosterChangesService.getUpdatedRosterChangesModel();
         // check if any students have already been updated and return an array of students
         let extendAccessStudents =  _.filter(rosterChangesUpdatedModel.students, ['updateType', RosterUpdateTypes.ExtendAccess ]);
         if (extendAccessStudents.length > 0) {
@@ -138,7 +135,7 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
         return true;
     }
 
-    onOKConfirmation(e: any): void {
+    onOKConfirmation(e): void {
         $('#confirmationPopup').modal('hide');
         this.overrideRouteCheck = true;
         this.router.navigateByUrl(this.attemptedRoute);
@@ -154,7 +151,7 @@ export class RostersExtendAccessComponent implements OnInit, OnDestroy {
         $('#confirmationPopup').modal('show');
     }
 
-    selectAllStudents(e:any): void {
+    selectAllStudents(e): void {
         // update isExtendedAccess and Update Type for all students in model 
         let allStudents = this.rosterChangeUpdateStudents;
         if(this.selectAll) {

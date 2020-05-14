@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { RostersComponent } from './rosters.component';
@@ -14,7 +13,7 @@ import { PageModule } from './../shared/page.module';
 import { RostersModal } from './../../models/rosters.model';
 import { RosterCohortsModel } from './../../models/roster-cohorts.model';
 import { RosterCohortStudentsModel } from './../../models/roster-cohort-students.model';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { PipesModule } from './../../pipes/pipes.module';
 import { RostersRoutingModule } from './rosters.routing.module';
 import { RosterChangesModel } from '../../models/roster-changes.model';
@@ -41,7 +40,7 @@ import { RosterRequestsConfirmation } from './roster-changes-confirmation.compon
     imports: [
         CommonModule,
         FormsModule,
-        HttpModule,
+        HttpClientModule,
         PageModule,
         PipesModule,
         SharedModule,

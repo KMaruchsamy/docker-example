@@ -1,16 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, RoutesRecognized, NavigationStart } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { NgIf } from '@angular/common';
 import { CommonService } from './../../services/common.service';
-import { Observable, Subscription } from 'rxjs/Rx';
-import { Response } from '@angular/http';
+import { Observable } from 'rxjs';
 import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { RosterChangesService } from './roster-changes.service';
-import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
-import { RosterChangesSummaryTablesComponent } from './rosters-changes-summary-tables.component';
-import * as _ from 'lodash';
 import {links, errorcodes} from '../../constants/config';
 import { general } from '../../constants/error-messages';
 
@@ -68,7 +63,7 @@ export class RosterChangesSummaryComponent implements OnInit {
         return true;
     }
 
-    onOKConfirmation(e: any): void {
+    onOKConfirmation(e): void {
         $('#confirmationPopup').modal('hide');
         this.overrideRouteCheck = true;
         this.router.navigateByUrl(this.attemptedRoute);
@@ -111,12 +106,11 @@ export class RosterChangesSummaryComponent implements OnInit {
             })
         };
         // console.log('final request=' + JSON.stringify(input));
-        let rosterChangeUpdateObservable: Observable<Response>;
+        let rosterChangeUpdateObservable: Observable<any>;
         let rosterChangeUpdateURL = '';
         rosterChangeUpdateURL = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.rosters.saveRosterCohortChanges}`;
         rosterChangeUpdateObservable = this.rosterChangesService.updateRosterChanges(rosterChangeUpdateURL, JSON.stringify(input));
 
-        let __this = this;
         rosterChangeUpdateObservable
             .map(response => response.status)
             .subscribe(status => {

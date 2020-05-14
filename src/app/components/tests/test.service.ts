@@ -1,56 +1,48 @@
-import {Injectable, Inject} from '@angular/core';
-import {Http, Response, RequestOptions, Headers} from "@angular/http";
-import {Observable} from 'rxjs/Rx';
-// import {AuthService} from './auth';
-// import * as _ from 'lodash';
-// import {TestScheduleModel} from '../models/test-schedule.model';
-// import {SelectedStudentModel} from '../models/selected-student.model';
-// import {TestShedulingPages} from '../constants/config';
-// import {CommonService} from './common';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { TestScheduleModel } from './../../models/test-schedule.model';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { TestShedulingPages } from './../../constants/config';
 import { SelectedStudentModel } from './../../models/selected-student.model';
 
-
 @Injectable()
 export class TestService {
-    // auth: AuthService;
     sStorage: any;
     clearTimeout10min;
     clearTimeout5minAfter10;
     clearTimeout5min;
-    constructor(public http: Http, public testSchedule: TestScheduleModel, public auth: AuthService, public common: CommonService) {
+    constructor(public http: HttpClient, public testSchedule: TestScheduleModel, public auth: AuthService, public common: CommonService) {
         this.http = http;
         this.sStorage = this.auth.sStorage;
         this.auth.refresh();
     }
 
-    private getRequestOptionsWithEmptyBody(): RequestOptions {
+    private getRequestOptionsWithEmptyBody() {
         let self = this;
-        let headers: Headers = new Headers({
+        const headers = new HttpHeaders({
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': self.auth.authheader
         });
-        let requestOptions: RequestOptions = new RequestOptions({
+        let requestOptions = {
             headers: headers,
-            body: ''
-        });
+            observe: 'response' as const
+        };
         return requestOptions;
     }
 
-    private getRequestOptions(): RequestOptions {
+    private getRequestOptions() {
         let self = this;
-        let headers: Headers = new Headers({
+        const headers = new HttpHeaders({
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': self.auth.authheader
         });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
-        });
+        let requestOptions = {
+            headers: headers,
+            observe: 'response' as const
+        };
         return requestOptions;
     }
 
@@ -87,28 +79,28 @@ export class TestService {
         else null;
     }
 
-    getSubjects(url): Observable<Response> {
+    getSubjects(url) {
         return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
 
-    getTests(url): Observable<Response> {
+    getTests(url) {
         return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
-    getOpenIntegratedTests(url): Observable<Response> {
-        let self = this;
-       	let headers: Headers = new Headers({
+    getOpenIntegratedTests(url) {
+       	const headers = new HttpHeaders({
             'Accept': 'application/json',
         });
-        let requestOptions: RequestOptions = new RequestOptions({
+        let requestOptions = {
             headers: headers,
-            body: ''
-        });
+            // body:'',
+            observe: 'response' as const
+        };
         return this.http.get(url, requestOptions);
     }
 
-    getActiveCohorts(url): Observable<Response> {
+    getActiveCohorts(url) {
         return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
@@ -132,7 +124,7 @@ export class TestService {
                 }
 
             },
-            error: function (xhr, ajaxOptions, thrownError) {
+            error: () => {
             },
             async: false
         });
@@ -142,35 +134,36 @@ export class TestService {
 
 
 
-    getRetesters(url: string, input: string): Observable<Response> {
+    getRetesters(url: string, input: string) {
         return this.http.post(url, input, this.getRequestOptions())
     }
 
 
-    scheduleTests(url: string, input: string): Observable<Response> {
+    scheduleTests(url: string, input: string) {
         let self = this;
-        let headers: Headers = new Headers({
+        const headers = new HttpHeaders({
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': self.auth.authheader
         });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
-        });
+        let requestOptions = {
+            headers: headers,
+            observe: 'response' as const
+        };
         return this.http.post(url, input, requestOptions);
     }
 
-    modifyScheduleTests(url: string, input: string): Observable<Response> {
+    modifyScheduleTests(url: string, input: string) {
         return this.http.put(url, input, this.getRequestOptions())
     }
 
 
 
-    getScheduleById(url: string): Observable<Response> {
+    getScheduleById(url: string) {
         return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
-    getSearchStudent(url: string): Observable<Response> {
+    getSearchStudent(url: string) {
         return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
@@ -205,7 +198,7 @@ export class TestService {
             _testScheduleModel.itSecurityEnabledInstitution = objTestScheduleModel.ItSecurityEnabledInstitution;
             _testScheduleModel.testType = objTestScheduleModel.TestType || 1;
             if (objTestScheduleModel.Students && objTestScheduleModel.Students.length > 0) {
-                _.forEach(objTestScheduleModel.Students, function (student, key) {
+                _.forEach(objTestScheduleModel.Students, (student) => {
                     let _student = new SelectedStudentModel();
                     _student.StudentId = student.StudentId;
                     _student.LastName = student.LastName;
@@ -230,25 +223,28 @@ export class TestService {
         return _testScheduleModel;
     }
 
-    deleteSchedule(url: string): Observable<Response> {
+    deleteSchedule(url: string) {
         let self = this;
-        let headers: Headers = new Headers();
-        headers.append('Authorization', self.auth.authheader);
-        headers.append('Accept', 'application/json');
-        headers.append('Content-Type', 'application/json');
-        let options: RequestOptions = new RequestOptions();
-        options.headers = headers;
-        options.body = '';
+        const headers = new HttpHeaders({
+            'Authorization': self.auth.authheader,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        });
+        let options = {
+            headers : headers,
+            // body : ''
+            observe: 'response' as const
+        }
         return this.http.delete(url, options);
     }
 
 
-    getAllScheduleTests(url: string): Observable<Response> {
+    getAllScheduleTests(url: string) {
         return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
 
-    renameSession(url: string, input: string): Observable<Response> {
+    renameSession(url: string, input: string) {
         return this.http.put(url, input, this.getRequestOptions());
     }
 
@@ -373,7 +369,7 @@ export class TestService {
                 }
 
             },
-            error: function (xhr, ajaxOptions, thrownError) {
+            error: function () {
             },
             async: false
         });
@@ -383,7 +379,7 @@ export class TestService {
 
     checkIfTestStartingSoon(institutionId: number, savedStartTime: any): number {
         let institutionTimezone: string = this.common.getTimezone(institutionId);
-        let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
+        let institutionCurrentTime: any = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm:ss');
         let mStartTime = moment(savedStartTime);
         let timeDifference = (mStartTime.diff(institutionCurrentTime, 'seconds'));
         return timeDifference;
@@ -481,11 +477,11 @@ export class TestService {
             return _.some(testScheduleModel.selectedStudents, { 'StudentPay': true });
     }
 
-    updateScheduleDates(url: string, input: string): Observable<Response> {
+    updateScheduleDates(url: string, input: string) {
         return this.http.put(url, input, this.getRequestOptions());
     }
 
-    modifyInProgressScheduleTests(url: string, input: string): Observable<Response> {
+    modifyInProgressScheduleTests(url: string, input: string) {
         return this.http.put(url, input, this.getRequestOptions())
     }
 
@@ -539,7 +535,7 @@ export class TestService {
         }
     }
 
-    enableExamity(url: string, input: number): Observable<Response> {
+    enableExamity(url: string, input: number) {
         return this.http.put(url,input, this.getRequestOptions());
     }
 }

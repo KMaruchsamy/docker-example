@@ -1,72 +1,74 @@
-import { Observable } from 'rxjs/Rx';
-import { RequestOptions, Headers, Http, Response } from '@angular/http';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './../../services/auth.service';
 
 @Injectable()
 export class RosterService {
 
-    constructor(private auth: AuthService, private http: Http) {
+    constructor(private auth: AuthService, private http: HttpClient) {
 
     }
 
-    private getRequestOptions(): RequestOptions {
+    private getRequestOptions() {
         let self = this;
-        let headers: Headers = new Headers({
+        const headers = new HttpHeaders({
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': self.auth.authheader
         });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
-        });
-        return requestOptions;
-    }
-
-    private getRequestOptionsWithEmptyBody(): RequestOptions {
-        let self = this;
-        let headers: Headers = new Headers({
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': self.auth.authheader
-        });
-        let requestOptions: RequestOptions = new RequestOptions({
+        let requestOptions = {
             headers: headers,
-            body: ''
-        });
+            observe: 'response' as const
+        };
         return requestOptions;
     }
 
-    getRosterCohorts(url): Observable<Response> {
-        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
-    }
-
-    getRosterStudentCohorts(url): Observable<Response> {
-        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
-    }
-
-    searchStudents(url): Observable<Response> {
-        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
-    }
-
-    setUserPreference(url: string, input: string): Observable<Response> {
+    private getRequestOptionsWithEmptyBody() {
         let self = this;
-        let headers: Headers = new Headers({
+        const headers =  new HttpHeaders({
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': self.auth.authheader
         });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
+        let requestOptions = {
+            headers: headers,
+            // body: ''
+            observe: 'response' as const
+        };
+        return requestOptions;
+    }
+
+    getRosterCohorts(url)  {
+        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
+    }
+
+    getRosterStudentCohorts(url)  {
+        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
+    }
+
+    searchStudents(url)  {
+        return this.http.get(url, this.getRequestOptionsWithEmptyBody());
+    }
+
+    setUserPreference(url: string, input: string)  {
+        let self = this;
+        const headers = new HttpHeaders({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': self.auth.authheader
         });
+        let requestOptions = {
+            headers: headers,
+            observe: 'response' as const
+        };
         return this.http.post(url, input, requestOptions);
     }
 
-    getRosterCohortUserPreference(url): Observable<Response> {
+    getRosterCohortUserPreference(url)  {
         return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 
-    addEmailValidation(url): Observable<Response> {
+    addEmailValidation(url)  {
         return this.http.get(url, this.getRequestOptionsWithEmptyBody());
     }
 

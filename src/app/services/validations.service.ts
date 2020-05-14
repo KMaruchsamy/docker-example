@@ -1,4 +1,6 @@
-﻿export class ValidationsService
+﻿import { Injectable } from "@angular/core";
+@Injectable()
+export class ValidationsService
 {
     constructor(){
     }

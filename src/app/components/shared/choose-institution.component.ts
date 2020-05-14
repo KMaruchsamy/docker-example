@@ -1,27 +1,16 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {NgIf, Location} from '@angular/common';
+import {Location} from '@angular/common';
 import {Title} from '@angular/platform-browser';
-// import {PageHeader} from './page-header';
-// import {AuthService} from '../../services/auth';
-// import {CommonService} from '../../services/common';
-// import * as _ from 'lodash';
 import {links} from '../../constants/config';
-// import {TestService} from '../../services/test.service';
 import {TestScheduleModel} from '../../models/test-schedule.model';
-import {Subscription, Observable} from 'rxjs/Rx';
-import {Response} from '@angular/http';
-// import {LogService} from '../../services/log.service.service';
+import {Subscription} from 'rxjs';
 import { CommonService } from './../../services/common.service';
 import { AuthService } from './../../services/auth.service';
 import { TestService } from './../tests/test.service';
-import { LogService } from './../../services/log.service';
-// import { PageHeaderComponent } from './page-header.component';
 @Component({
     selector: 'choose-institution',
-    // providers: [CommonService, AuthService, TestService, TestScheduleModel,LogService],
-    templateUrl: './choose-institution.component.html',
-    // directives: [PageHeaderComponent, NgIf]
+    templateUrl: './choose-institution.component.html'
 })
 
 export class ChooseInstitutionComponent implements OnInit, OnDestroy {
@@ -42,7 +31,7 @@ export class ChooseInstitutionComponent implements OnInit, OnDestroy {
     isMultiCampus: boolean = false;
     Campus: Object[] = [];
     institutionId: number;
-    constructor(public router: Router, private activatedRoute: ActivatedRoute, public common: CommonService, public auth: AuthService, public aLocation: Location, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title, private log: LogService) {
+    constructor(public router: Router, private activatedRoute: ActivatedRoute, public common: CommonService, public auth: AuthService, public aLocation: Location, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
 
     }
 
@@ -98,15 +87,15 @@ export class ChooseInstitutionComponent implements OnInit, OnDestroy {
         if (ProgramId > 0) {
             this.apiServer = this.common.getApiServer();
             let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
-            let subjectsObservable: Observable<Response> = this.testService.getSubjects(subjectsURL);
+            let subjectsObservable = this.testService.getSubjects(subjectsURL);
             this.subjectsSubscription = subjectsObservable
                 .map(response => {
                     if (response.status !== 400) {
-                        return response.json();
+                        return response.body;
                     }
                     return [];
                 })
-                .subscribe(json => {
+                .subscribe((json: any) => {
                     if (json.length === 0) {
                         window.open('/accounterror');
                     }
@@ -134,10 +123,10 @@ export class ChooseInstitutionComponent implements OnInit, OnDestroy {
     chooseCampus(): void {
         this.apiServer = this.common.getApiServer();
         let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
-        let subjectsObservable: Observable<Response> = this.testService.getSubjects(subjectsURL);
+        let subjectsObservable = this.testService.getSubjects(subjectsURL);
         this.subjectsSubscription = subjectsObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 if (json.length > 0) {
                     this.router.navigateByUrl(`/tests/${this.page}/${this.institutionID}`);
                 }

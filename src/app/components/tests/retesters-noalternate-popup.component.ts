@@ -1,11 +1,6 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {NgIf, NgFor} from '@angular/common';
-// import {} from '@angular/router';
-// import {CommonService} from '../../services/common';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import {SelectedStudentModel} from '../../models/selected-student.model';
-// import * as _ from 'lodash';
-import {SortPipe} from '../../pipes/sort.pipe';
 import { CommonService } from './../../services/common.service';
 
 @Component({

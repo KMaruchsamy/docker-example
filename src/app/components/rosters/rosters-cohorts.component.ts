@@ -1,15 +1,7 @@
-// import {ParseDatePipe} from '../../pipes/parsedate.pipe';
-// import {CommonService} from '../../services/common';
-// import { RosterService } from './../../services/roster.service';
-// import { NgFor, NgIf } from '@angular/common';
-// import { RosterCohortsModal } from './../../models/roster-cohorts.modal';
-// import { RosterCohortStudentsModal } from './../../models/roster-cohort-students.modal';
-// import { RostersModal } from './../../models/rosters.modal';
 import { Component, Input, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
-// import * as _ from 'lodash';
 import { links, Timezones, cohortRosterChangeUserPreference } from '../../constants/config';
-import { Observable, Subscription } from 'rxjs/Rx';
-import { Response } from '@angular/http';
+import { Subscription } from 'rxjs';
+
 import { RostersModal } from './../../models/rosters.model';
 import { RosterCohortsModel } from './../../models/roster-cohorts.model';
 import { RosterCohortStudentsModel } from './../../models/roster-cohort-students.model';
@@ -93,9 +85,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
     }
 
     loadCohorts(roster: any) {
-        let rosterCohorts: Array<RosterCohortsModel>;
         if (roster) {
-            let extensionCohort: RosterCohortsModel;
             this.rosters.institutionId = roster.InstitutionId;
             this.rosters.institutionName = roster.InstitutionName;
             this.rosters.programOfStudy = roster.ProgramOfStudyName;
@@ -130,10 +120,10 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.cohorts}`;
         if (institutionId) {
             url = url.replace('§institutionId', institutionId.toString());
-            let rosterCohortsObservable: Observable<Response> = this.rosterService.getRosterCohorts(url);
+            let rosterCohortsObservable  = this.rosterService.getRosterCohorts(url);
             this.cohortSubscription = rosterCohortsObservable
-                .map(response => response.json())
-                .subscribe(json => {
+                .map(response => response.body)
+                .subscribe((json: any) => {
                     __this.noCohorts = false;
                     __this.loadCohorts(json);
                 }, error => {
@@ -209,10 +199,10 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
             let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.cohortStudents}`;
             if (cohortId) {
                 url = url.replace('§cohortId', cohortId.toString());
-                let rosterCohortsObservable: Observable<Response> = this.rosterService.getRosterStudentCohorts(url);
+                let rosterCohortsObservable  = this.rosterService.getRosterStudentCohorts(url);
                 this.cohortStudentsSubscription = rosterCohortsObservable
-                    .map(response => response.json())
-                    .subscribe(json => {
+                    .map(response => response.body)
+                    .subscribe((json: any) => {
                         __this.loadRosterCohortStudents(rosterCohort, json);
                     }, error => {
                         __this.loadRosterCohortStudents(rosterCohort, null);
@@ -248,8 +238,8 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         userPreferenceURL = userPreferenceURL.replace('§userId', this.auth.userid.toString()).replace('§preferenceTypeName', cohortRosterChangeUserPreference.PreferenceTypeName).replace('§userType', cohortRosterChangeUserPreference.UserType);
         let UserPreferenceObservable = this.rosterService.getRosterCohortUserPreference(userPreferenceURL);
         this.getUserPreferenceSubscription = UserPreferenceObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 __this.rosterCohortUserPreferenceModel = json;
                 if (__this.rosterCohortUserPreferenceModel.PreferenceValue === cohortRosterChangeUserPreference.PreferenceTypeHideValueName) {
                     __this.router.navigate(['/rosters/change-update']);
