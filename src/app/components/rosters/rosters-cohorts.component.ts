@@ -279,10 +279,11 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         if (this.rosters.accountManagerId) {
             if(targetRoute === 'change-form') {
                 this.getUserPreference();
-            } else {
-            // redirect to extend access page
-            this.router.navigate(['/rosters/extend-access']);
-            }
+            } 
+            // else {
+            // // redirect to extend access page
+            // this.router.navigate(['/rosters/extend-access']);
+            // }
         } else {
             this.router.navigate(['/rosters/no-account-manager']);
         }
