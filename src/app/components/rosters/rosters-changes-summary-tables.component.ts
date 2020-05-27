@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, RoutesRecognized, NavigationStart } from '@angular/router';
-import { NgIf } from '@angular/common';
+// import { NgIf } from '@angular/common';
 import { CommonService } from './../../services/common.service';
 
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { RosterChangesService } from './roster-changes.service';
-import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
+// import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
 import * as _ from 'lodash';
 import { RosterUpdateTypes } from '../../constants/config';
 
@@ -35,7 +35,7 @@ export class RosterChangesSummaryTablesComponent implements OnInit {
         this.findMovedToThisCohortStudents();
         this.findAddedStudents();
         this.findActions();
-        this.findExtendAccessStudents();
+        // this.findExtendAccessStudents();
     }
 
     findMovedFromThisCohortStudents(): void {
@@ -56,7 +56,7 @@ export class RosterChangesSummaryTablesComponent implements OnInit {
 
     checkPrevRoute(): void {
         if(this.extendAccessStudents.length > 0) {
-            this.router.navigate(['/rosters/extend-access']);
+            // this.router.navigate(['/rosters/extend-access']);
         } else {
             this.router.navigate(['/rosters/change-update']);
         }

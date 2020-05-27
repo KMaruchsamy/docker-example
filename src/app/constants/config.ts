@@ -283,7 +283,7 @@ export const cohortRosterChangeUserPreference = {
 }
 
 export const roster = {
-    classRosterForm: 'https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/kaplan-new-class-roster-sheet.xlsx'
+    classRosterForm: 'https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/kaplan-new-class-roster-sheet+v2.20.xlsx'
 }
 
 export const telNumbers = {
