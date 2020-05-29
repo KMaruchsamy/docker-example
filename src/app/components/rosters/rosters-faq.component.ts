@@ -37,6 +37,8 @@ export class RostersFaqComponent implements OnDestroy {
     accountManagerEmail: string;
     customChangeForm: string;
     classRosterFormUrl: string = roster.classRosterForm;
+    classRosterFormstackUrl: string = roster.formstack;
+
     constructor(private homeService: ProfileService, private auth: AuthService) {
         this.classRosterFormUrl = roster.classRosterForm;
     }
