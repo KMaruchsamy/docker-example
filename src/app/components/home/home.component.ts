@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.nurseConsultantProfile = new ProfileModel(null, null, 'NURSECONSULTANT', null, null, null, null, null, null, null, null, null, null, null);
         this.loadProfiles(self);
         this.checkInstitutions();
-    //    this.filterIHPEnableInstitutions();
+       this.filterIHPEnableInstitutions();
 
         window.scroll(0,0);
         this.titleService.setTitle('Faculty Home – Kaplan Nursing');
