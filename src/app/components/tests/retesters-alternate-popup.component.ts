@@ -1,30 +1,25 @@
 ﻿import {Component, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
-import {NgIf, NgFor} from '@angular/common';
-// import {CommonService} from '../../services/common';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import {SelectedStudentModel} from '../../models/selected-student.model';
-// import * as _ from 'lodash';
-import {SortPipe} from '../../pipes/sort.pipe';
 import { CommonService } from './../../services/common.service';
-
 @Component({
     selector: 'retesters-alternate',
     templateUrl: './retesters-alternate-popup.component.html'
 })
 
 export class RetesterAlternatePopupComponent implements OnDestroy {
-    @Input() retesterExceptions: Object[];
-    @Input() testScheduledSudents: Object[];
-    @Input() testTakenStudents: Object[];
+    @Input() retesterExceptions: any[];
+    @Input() testScheduledSudents: any[];
+    @Input() testTakenStudents: any[];
     @Input() testSchedule: TestScheduleModel;
     @Input() modifyInProgress: boolean = false;
     @Output() retesterAlternatePopupOK = new EventEmitter();
     @Output() retesterAlternatePopupCancel = new EventEmitter();
-    changes: Object[] = [];
+    changes: any[] = [];
     valid: boolean = false;
     sStorage: any;
-    testTakenStudentsChanges: Object[] = [];
-    testScheduledStudentsChanges: Object[] = [];
+    testTakenStudentsChanges: any[] = [];
+    testScheduledStudentsChanges: any[] = [];
     TestScheduled: boolean = true;
     TestTaken: boolean = true;
     chkTestTaken: boolean = false;
@@ -45,7 +40,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
         this.sStorage = this.common.getStorage();
         let self = this;
         if (this.retesterExceptions) {
-            _.forEach(self.retesterExceptions, function (student: any, key) {
+            _.forEach(self.retesterExceptions, function (student: any) {
                 let studentTest: any = _.find(self.testTakenStudents, { 'StudentId': student.StudentId });
                 if (studentTest) {
                     student.type = 'testTaken';
@@ -65,7 +60,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
             });
         }
         if (this.testTakenStudents) {
-            _.forEach(self.testTakenStudents, function (student: any, key) {
+            _.forEach(self.testTakenStudents, function (student: any) {
                 if (!student.Enabled) {
                     self.testTakenStudentsChanges.push({
                         studentId: student.StudentId,
@@ -86,7 +81,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
             }
         }
         if (this.testScheduledSudents) {
-            _.forEach(self.testScheduledSudents, function (student: any, key) {
+            _.forEach(self.testScheduledSudents, function (student: any) {
                 if (!student.Enabled) {
                     self.testScheduledStudentsChanges.push({
                         studentId: student.StudentId,
@@ -113,7 +108,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
         e.preventDefault();
         let self = this;
         if (this.changes && this.changes.length > 0) {
-            _.forEach(this.changes, function (change: any, key) {
+            _.forEach(this.changes, (change: any) => {
                 self.markForRemoval(change.studentId, change.mark, change.testId, change.testName)
             });
         }
@@ -220,7 +215,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
         if (check === true) {
             this.chkTestSchedule = false;
             if (this.testScheduledSudents) {
-                _.forEach(self.testScheduledSudents, function (student: any, key) {
+                _.forEach(self.testScheduledSudents, (student: any) => {
                     let enabled = _.find(self.testScheduledStudentsChanges, { 'studentId': student.StudentId });
                     if (enabled) {
                         self.addChanges(student.StudentId, true, 0, "", 'testScheduled');
@@ -240,7 +235,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
         else {
             this.chkTestSchedule = true;
             if (this.testScheduledSudents) {
-                _.forEach(self.testScheduledSudents, function (student: any, key) {
+                _.forEach(self.testScheduledSudents, (student: any) => {
                     let chkStudent: any = _.find(self.testScheduledSudents, { 'StudentId': student.StudentId });
                     if (chkStudent)
                         student.Checked = true;
@@ -252,12 +247,12 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
         this.validate();
     }
 
-    selectAllTestTaken(check: boolean, e): void {
+    selectAllTestTaken(check: boolean): void {
         let self = this;
         if (check === true) {
             this.chkTestTaken = false;
             if (this.testTakenStudents) {
-                _.forEach(self.testTakenStudents, function (student: any, key) {
+                _.forEach(self.testTakenStudents, (student: any) => {
                     let enabled = _.find(self.testTakenStudentsChanges, { 'studentId': student.StudentId });
                     if (enabled) {
                         self.addChanges(student.StudentId, true, 0, "", 'testTaken');
@@ -277,7 +272,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
         else {
             this.chkTestTaken = true;
             if (this.testTakenStudents) {
-                _.forEach(self.testTakenStudents, function (student: any, key) {
+                _.forEach(self.testTakenStudents, (student: any) => {
                     let chkStudent: any = _.find(self.testTakenStudents, { 'StudentId': student.StudentId });
                     if (chkStudent)
                         student.Checked = true;

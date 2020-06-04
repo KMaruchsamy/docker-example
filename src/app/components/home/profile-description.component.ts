@@ -1,22 +1,16 @@
 import { Component, OnDestroy } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { Response } from '@angular/http';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { links } from '../../constants/config';
 import { CommonService } from './../../services/common.service';
 import { LogService } from './../../services/log.service';
-// import { PageHeaderComponent } from './../shared/page-header.component';
-// import { PageFooterComponent } from './../shared/page-footer.component';
 import { ProfileModel } from './../../models/profile.model';
 import { ProfileService } from './profile.service';
 
 @Component({
     selector: 'profile-description',
-    // providers: [HomeService, CommonService, LogService],
-    templateUrl: './profile-description.component.html'//,
-    // directives: [, PageHeaderComponent, PageFooterComponent, NgFor, NgIf]
+  templateUrl: './profile-description.component.html'
 })
 
 export class ProfileDescriptionComponent implements OnDestroy {
@@ -46,12 +40,12 @@ export class ProfileDescriptionComponent implements OnDestroy {
     loadProfileDescription(): void {
         if (this.kaplanAdminId != null && this.kaplanAdminId > 0) {
             let url = this.apiServer + links.api.baseurl + links.api.admin.profilesapi + '/' + this.kaplanAdminId;
-            let profileObservable: Observable<Response> = this.profileService.getProfile(url);
+            let profileObservable  = this.profileService.getProfile(url);
             let self: ProfileDescriptionComponent = this;
             this.getProfileSubscription = profileObservable
-                .map(response => response.json())
+                .map(response => response.body)
                 .subscribe(
-                json => {
+                (json: any) => {
                     self.profile = self.profileService.bindToModel(json);
                     if (self.profile) {
                         if (self.profile.kaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER')

@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
+import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { links } from '../../constants/config';
-import { UtilityService } from '../../services/utility.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
-import * as $ from 'jquery';
-//declare var Appcues: any;
 
 @Component({
     selector: 'userguide',

@@ -1,18 +1,14 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, Observable } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
-// import * as _ from 'lodash';
 import { links, errorcodes } from '../../constants/config';
 import { manage_account, general, reset_password_after_login, reset_student_password } from '../../constants/error-messages';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { ValidationsService } from './../../services/validations.service';
 import { LogService } from './../../services/log.service';
-import { PageFooterComponent } from './../shared/page-footer.component';
-import { PageHeaderComponent } from './../shared/page-header.component';
-
 @Component({
     selector: 'account',
     templateUrl: './account.component.html',
@@ -59,7 +55,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     ItSecurityEnabled: boolean = false;
     examityServer:string;
     examityLoginURL:string;
-    constructor(private http: Http, public router: Router, private activatedRoute: ActivatedRoute, public auth: AuthService, public common: CommonService, public validations: ValidationsService, public titleService: Title, private log: LogService) {
+    constructor(private http: HttpClient, public router: Router, private activatedRoute: ActivatedRoute, public auth: AuthService, public common: CommonService, public validations: ValidationsService, public titleService: Title, private log: LogService) {
     }
 
     ngOnDestroy(): void {
@@ -131,7 +127,7 @@ export class AccountComponent implements OnInit, OnDestroy {
         let email = self.auth.useremail;
         let authheader = self.auth.authheader;
         let apiURL = this.apiServer + links.api.baseurl + links.api.admin.resetprofileapi;
-        let saveProfileObservable: Observable<Response> = self.saveProfile(apiURL, authheader, userid, fname, lname, title, email);
+        let saveProfileObservable  = self.saveProfile(apiURL, authheader, userid, fname, lname, title, email);
         this.saveProfileSubscription = saveProfileObservable
             .map(response => response.status)
             .subscribe(status => {
@@ -176,13 +172,13 @@ export class AccountComponent implements OnInit, OnDestroy {
             let authheader = 'Bearer ' + this.sStorage.getItem('jwt');
             let security = this.auth.securitylevel;
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.resetemailapi;
-            let resetEmailObservable: Observable<Response> = this.resetEmail(apiURL, authheader, userid, newemailid, security, password);
+            let resetEmailObservable  = this.resetEmail(apiURL, authheader, userid, newemailid, security, password);
             this.resetEmailSubscription = resetEmailObservable
                 .map(response => {
                     status = response.status;
-                    return response.json();
+                    return response.body;
                 })
-                .subscribe(json => {
+                .subscribe((json: any) => {
                     if (status.toString() === this.errorCodes.SUCCESS) {
                         self.sStorage.setItem('jwt', json.AccessToken);
                         self.sStorage.setItem('useremail', newemailid);
@@ -259,13 +255,13 @@ export class AccountComponent implements OnInit, OnDestroy {
             let userId = this.auth.userid;
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.resetfacultypasswordafterloginapi;
             let self = this;
-            let resetPasswordObservable: Observable<Response> = this.resetPassword(apiURL, authheader, userId, currentpassword, newpassword);
+            let resetPasswordObservable  = this.resetPassword(apiURL, authheader, userId, currentpassword, newpassword);
             this.resetPasswordSubscription = resetPasswordObservable
                 .map(response => {
                     status = response.status;
-                    return response.json();
+                    return response.body;
                 })
-                .subscribe(json => {
+                .subscribe((json: any) => {
                     if (status.toString() === this.errorCodes.SUCCESS) {
                         this.passwordReset = true;
                         this.showHintMessage = false;
@@ -336,13 +332,13 @@ export class AccountComponent implements OnInit, OnDestroy {
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.resetstudentpassword;
             let self = this;
             let status = 0;
-            let resetStudentPasswordObservable: Observable<Response> = this.resetStudentPassword(apiURL, authheader, userId, studentEmailID);
+            let resetStudentPasswordObservable  = this.resetStudentPassword(apiURL, authheader, userId, studentEmailID);
             this.resetStudentPasswordSubscription = resetStudentPasswordObservable
                 .map(response => {
                     status = response.status;
-                    return response.json();
+                    return response.body;
                 })
-                .subscribe(json => {
+                .subscribe((json: any) => {
                     if (status.toString() === this.errorCodes.SUCCESS) {
                         this.studentPasswordResetSuccessMessage = reset_student_password.success_message;
                         this.studentPasswordReset = true;
@@ -432,16 +428,16 @@ export class AccountComponent implements OnInit, OnDestroy {
         return true;
     }
 
-    saveProfile(url, authheader, userid, fname, lname, title, email): Observable<Response> {
-        let self = this;
-        let headers: Headers = new Headers({
+    saveProfile(url, authheader, userid, fname, lname, title, email) {
+        const headers = new HttpHeaders({
             'Accept': 'application/json',
             'Authorization': authheader,
             'Content-Type': 'application/json'
         });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
-        });
+        let requestOptions = {
+            headers: headers,
+            observe: 'response' as const
+        };
         let body: any = JSON.stringify({
             userid: userid,
             Firstname: fname,
@@ -452,16 +448,16 @@ export class AccountComponent implements OnInit, OnDestroy {
         return this.http.post(url, body, requestOptions);
     }
 
-    resetEmail(url, authheader, userid, email, security, password): Observable<Response> {
-        let self = this;
-        let headers: Headers = new Headers({
+    resetEmail(url, authheader, userid, email, security, password)  {
+        const headers= new HttpHeaders({
             'Accept': 'application/json',
             'Authorization': authheader,
             'Content-Type': 'application/json'
         });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
-        });
+        let requestOptions = {
+            headers: headers,
+            observe: 'response' as const
+        };
         let body: any = JSON.stringify({
             userid: userid,
             Email: email,
@@ -472,16 +468,16 @@ export class AccountComponent implements OnInit, OnDestroy {
     }
 
 
-    resetPassword(url, authheader, userid, currentPassword, newPassword): Observable<Response> {
-        let self = this;
-        let headers: Headers = new Headers({
+    resetPassword(url, authheader, userid, currentPassword, newPassword)  {
+        const headers = new HttpHeaders({
             'Accept': 'application/json',
             'Authorization': authheader,
             'Content-Type': 'application/json'
         });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
-        });
+        let requestOptions = {
+            headers: headers,
+            observe: 'response' as const
+        };
         let body: any = JSON.stringify({
             userid: userid,
             Password: currentPassword,
@@ -491,16 +487,16 @@ export class AccountComponent implements OnInit, OnDestroy {
     }
 
 
-    resetStudentPassword(url, authheader, userid, studentEmail): Observable<Response> {
-        let self = this;
-        let headers: Headers = new Headers({
+    resetStudentPassword(url, authheader, userid, studentEmail)  {
+        const headers = new HttpHeaders({
             'Accept': 'application/json',
             'Authorization': authheader,
             'Content-Type': 'application/json'
         });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
-        });
+        let requestOptions = {
+            headers: headers,
+            observe: 'response' as const
+        };
         let body: any = JSON.stringify({
             userid: userid,
             StudentEmail: studentEmail
@@ -510,24 +506,25 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     onClickExamityProfile(ssologin, encryptedUsername_val): void {
         let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
-        let examityObservable: Observable<Response> = this.setFacultyProfileInExamity(facultyAPIUrl);
+        let examityObservable  = this.setFacultyProfileInExamity(facultyAPIUrl);
         examityObservable.subscribe(response => {
-            this.examityEncryptedUserId = response.json();
+            this.examityEncryptedUserId = response.toString();
             encryptedUsername_val.value = this.examityEncryptedUserId
                     ssologin.submit();
         }, error => console.log(error));
     }
 
-    setFacultyProfileInExamity(url: string): Observable<Response> {
+    setFacultyProfileInExamity(url: string)  {
         let self = this;
-        let options: RequestOptions = new RequestOptions();
-        let headers: Headers = new Headers({
+         const headers = new HttpHeaders({
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': self.auth.authheader
         });
-        options.headers = headers;
-        options.body = '';
+        let options = {
+            headers: headers,
+            observe: 'response' as const
+        }
         return this.http.get(url, options);
     }
 

@@ -1,27 +1,17 @@
 ﻿import {Component, OnInit, OnDestroy} from '@angular/core';
-import { Router, ActivatedRoute, RoutesRecognized, NavigationStart, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import {NgFor, NgIf} from '@angular/common';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import {Title} from '@angular/platform-browser';
-import { Subscription, Observable } from 'rxjs/Rx';
-// import {CommonService} from '../../services/common';
-// import {AuthService} from '../../services/auth';
-// import {PageHeader} from '../shared/page-header';
+import { Subscription, Observable } from 'rxjs';
 import {TestScheduleModel} from '../../models/test-schedule.model';
-// import {TestService} from '../../services/test.service';
 import {SelectedStudentModel} from '../../models/selected-student.model';
-// import * as _ from 'lodash';
-import {SortPipe} from '../../pipes/sort.pipe';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
-import { PageHeaderComponent } from './../shared/page-header.component';
 import { TestService } from './test.service';
 
 @Component({
     selector: 'confirmation-modify-in-progress',
     templateUrl: './confirmation-modify-in-progress.component.html',
-    providers: [TestScheduleModel, SelectedStudentModel]//,
-    // directives: [,PageHeaderComponent, NgFor, NgIf],
-    // pipes: [SortPipe]
+    providers: [TestScheduleModel, SelectedStudentModel]
 })
 export class ConfirmationModifyInProgressComponent implements OnInit, OnDestroy {
     sStorage: any;
@@ -32,7 +22,7 @@ export class ConfirmationModifyInProgressComponent implements OnInit, OnDestroy 
     destinationRoute: string;
     isAnyChange: boolean = false;
 
-    constructor(private activatedRoute: ActivatedRoute, public auth: AuthService, public common: CommonService, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public titleService: Title) {
+    constructor(public auth: AuthService, public common: CommonService, public testService: TestService, public schedule: TestScheduleModel, public router: Router, public titleService: Title) {
 
     }
    

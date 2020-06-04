@@ -1,13 +1,6 @@
 import {Component, Input, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
-import {NgIf} from '@angular/common';
 import {Router, ActivatedRoute} from '@angular/router';
-import {ParseDatePipe} from '../../pipes/parsedate.pipe';
-// import {ConfirmationPopup} from '../shared/confirmation.popup';
-// import {CommonService} from '../../services/common';
-import {Observable, Subscription} from 'rxjs/Rx';
-import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
 import { CommonService } from './../../services/common.service';
-
 
 @Component({
     selector: 'test-header',

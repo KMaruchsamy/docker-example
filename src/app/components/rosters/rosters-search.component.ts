@@ -1,9 +1,7 @@
-import { Subscription, Observable } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { Input, ViewEncapsulation } from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { links } from '../../constants/config';
-import { Response } from '@angular/http';
-// import * as _ from 'lodash';
 import { CommonService } from './../../services/common.service';
 import { RosterService } from './roster.service';
 import { RosterCohortStudentsModel } from './../../models/roster-cohort-students.model';
@@ -11,7 +9,6 @@ import { RosterCohortStudentsModel } from './../../models/roster-cohort-students
 
 @Component({
     selector: 'rosters-search',
-    // providers: [RosterService],
     templateUrl: './rosters-search.component.html',
     encapsulation: ViewEncapsulation.Emulated,
     styleUrls: ['./rosters-search.component.css']
@@ -191,9 +188,9 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
             this.prevSearchText = this.searchString;
             let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.search}`;
             url = url.replace("§institutionId", this.institutionId.toString()).replace('§searchString', this.searchString);
-            let searchStudentsObservable: Observable<Response> = this.rosterService.searchStudents(url);
+            let searchStudentsObservable  = this.rosterService.searchStudents(url);
             this.searchStudentsSubscription = searchStudentsObservable
-                .map(response => response.json())
+                .map(response => response.body)
                 .subscribe((json: any) => {
                     if (json) {
                         this.typeaheadStudentlist = json;

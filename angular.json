@@ -1,0 +1,244 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "clilatest": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "build",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "polyfills": "src/polyfills.ts",
+            "assets": [
+              "src/assets",
+              "src/favicon.ico",
+              "src/android-chrome-36x36.png",
+              "src/android-chrome-48x48.png",
+              "src/android-chrome-72x72.png",
+              "src/android-chrome-144x144.png",
+              "src/android-chrome-192x192.png",
+              "src/apple-touch-icon.png",
+              "src/apple-touch-icon-57x57.png",
+              "src/apple-touch-icon-60x60.png",
+              "src/apple-touch-icon-72x72.png",
+              "src/apple-touch-icon-76x76.png",
+              "src/apple-touch-icon-114x114.png",
+              "src/apple-touch-icon-120x120.png",
+              "src/apple-touch-icon-144x144.png",
+              "src/apple-touch-icon-152x152.png",
+              "src/apple-touch-icon-180x180.png",
+              "src/apple-touch-icon-precomposed.png",
+              "src/favicon-16x16.png",
+              "src/favicon-32x32.png",
+              "src/favicon-96x96.png",
+              "src/favicon-194x194.png",
+              "src/mstile-70x70.png",
+              "src/mstile-144x144.png",
+              "src/mstile-150x150.png",
+              "src/mstile-310x150.png",
+              "src/mstile-310x310.png",
+              "src/browserconfig.xml",
+              "src/manifest.json"
+            ],
+            "styles": [
+              "node_modules/X-editable/dist/bootstrap-editable/css/bootstrap-editable.css",
+              "src/assets/css/bootstrap-editable-overrides.css",
+              "src/assets/css/tablesaw.bare.css",
+              "src/assets/css/tablesaw.overrides.css",
+              "src/assets/css/bootstrap-datepicker-overrides.css",
+              "src/assets/css/jquery.timepicker.css",
+              "node_modules/datatables/media/css/jquery.dataTables.min.css",
+              "src/assets/css/responsive.dataTablescustom.css",
+              "src/styles.css"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "src/assets/js/sessionstorage.js",
+              "node_modules/crypto-js/crypto-js.js",
+              "node_modules/lodash/lodash.min.js",
+              "node_modules/moment/moment.js",
+              "node_modules/moment-timezone/builds/moment-timezone-with-data.js",
+              "node_modules/bootstrap/js/dropdown.js",
+              "node_modules/bootstrap/js/tooltip.js",
+              "node_modules/bootstrap/js/popover.js",
+              "node_modules/bootstrap/js/modal.js",
+              "node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
+              "node_modules/bootstrap-select/dist/js/bootstrap-select.js",
+              "node_modules/datatables/media/js/jquery.dataTables.js",
+              "node_modules/datatables-responsive/js/dataTables.responsive.js",
+              "node_modules/timepicker/jquery.timepicker.min.js",
+              "node_modules/tablesaw/dist/tablesaw.js",
+              "node_modules/typeahead.js/dist/typeahead.bundle.js",
+              "node_modules/X-editable/dist/bootstrap3-editable/js/bootstrap-editable.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "clilatest:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "clilatest:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "clilatest:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "karmaConfig": "./karma.conf.js",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.spec.json",
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "src/assets/js/sessionstorage.js",
+              "node_modules/crypto-js/crypto-js.js",
+              "node_modules/lodash/lodash.min.js",
+              "node_modules/moment/moment.js",
+              "node_modules/moment-timezone/builds/moment-timezone-with-data.js",
+              "node_modules/bootstrap/js/dropdown.js",
+              "node_modules/bootstrap/js/tooltip.js",
+              "node_modules/bootstrap/js/popover.js",
+              "node_modules/bootstrap/js/modal.js",
+              "node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
+              "node_modules/bootstrap-select/dist/js/bootstrap-select.js",
+              "node_modules/datatables/media/js/jquery.dataTables.js",
+              "node_modules/datatables-responsive/js/dataTables.responsive.js",
+              "node_modules/timepicker/jquery.timepicker.min.js",
+              "node_modules/tablesaw/dist/tablesaw.js",
+              "node_modules/typeahead.js/dist/typeahead.bundle.js",
+              "node_modules/X-editable/dist/bootstrap3-editable/js/bootstrap-editable.js"
+            ],
+            "styles": [
+              "node_modules/X-editable/dist/bootstrap-editable/css/bootstrap-editable.css",
+              "src/assets/css/bootstrap-editable-overrides.css",
+              "src/assets/css/tablesaw.bare.css",
+              "src/assets/css/tablesaw.overrides.css",
+              "src/assets/css/bootstrap-datepicker-overrides.css",
+              "src/assets/css/jquery.timepicker.css",
+              "node_modules/datatables/media/css/jquery.dataTables.min.css",
+              "src/assets/css/responsive.dataTablescustom.css",
+              "src/styles.css"
+            ],
+            "assets": [
+              "src/assets",
+              "src/favicon.ico",
+              "src/android-chrome-36x36.png",
+              "src/android-chrome-48x48.png",
+              "src/android-chrome-72x72.png",
+              "src/android-chrome-144x144.png",
+              "src/android-chrome-192x192.png",
+              "src/apple-touch-icon.png",
+              "src/apple-touch-icon-57x57.png",
+              "src/apple-touch-icon-60x60.png",
+              "src/apple-touch-icon-72x72.png",
+              "src/apple-touch-icon-76x76.png",
+              "src/apple-touch-icon-114x114.png",
+              "src/apple-touch-icon-120x120.png",
+              "src/apple-touch-icon-144x144.png",
+              "src/apple-touch-icon-152x152.png",
+              "src/apple-touch-icon-180x180.png",
+              "src/apple-touch-icon-precomposed.png",
+              "src/favicon-16x16.png",
+              "src/favicon-32x32.png",
+              "src/favicon-96x96.png",
+              "src/favicon-194x194.png",
+              "src/mstile-70x70.png",
+              "src/mstile-144x144.png",
+              "src/mstile-150x150.png",
+              "src/mstile-310x150.png",
+              "src/mstile-310x310.png",
+              "src/browserconfig.xml",
+              "src/manifest.json"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": []
+          }
+        }
+      }
+    },
+    "clilatest-e2e": {
+      "root": "e2e",
+      "sourceRoot": "e2e",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "./protractor.conf.js",
+            "devServerTarget": "clilatest:serve"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "e2e/tsconfig.e2e.json"
+            ],
+            "exclude": []
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "clilatest",
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "app",
+      "style": "css"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "app"
+    }
+  },
+  "cli": {
+    "analytics": "5c62a19b-1543-4217-8d75-c0a76e1c3225"
+  }
+}

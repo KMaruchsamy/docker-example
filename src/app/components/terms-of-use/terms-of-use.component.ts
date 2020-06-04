@@ -1,15 +1,5 @@
-import { Component, OnInit, Input, Output, ViewEncapsulation, EventEmitter } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
-// import { Http, Response, Headers, RequestOptions } from '@angular/http';
-// import { NgIf } from '@angular/common';
-// import {AuthService} from '../../services/auth';
-// import {CommonService} from '../../services/common';
-import { links } from '../../constants/config';
-import { UtilityService } from '../../services/utility.service';
-import { Observable, Subscription } from 'rxjs/Rx';
-import { Angulartics2On } from 'angulartics2';
-import { AuthService } from './../../services/auth.service';
-import { CommonService } from './../../services/common.service';
+import { Component, Input, Output, ViewEncapsulation, EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'terms-of-use',

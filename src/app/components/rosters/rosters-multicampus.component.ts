@@ -1,6 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { NgIf } from '@angular/common';
-// import * as _ from 'lodash';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from './../../services/auth.service';
 
 @Component({
@@ -91,7 +89,7 @@ export class RostersMultiCampusComponent implements OnInit {
     }
 
     refreshSelectpicker(): void {
-        setTimeout(json => {
+        setTimeout(() => {
             if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
                 $('.selectpicker').selectpicker('mobile');
             else

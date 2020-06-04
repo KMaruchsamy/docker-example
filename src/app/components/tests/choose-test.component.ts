@@ -1,55 +1,22 @@
-import { Component, OnInit, OnChanges, AfterViewChecked, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnChanges, ElementRef, OnDestroy } from '@angular/core';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
-import { Event, Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, RoutesRecognized, NavigationStart } from '@angular/router';
-import { Subscription, Observable } from 'rxjs/Rx';
+import { Router, ActivatedRoute, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Subscription, Observable } from 'rxjs';
 import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-import { NgIf, NgFor } from '@angular/common';
-import { ParseDatePipe } from '../../pipes/parsedate.pipe';
-// import {TestService} from '../../services/test.service';
-// import {AuthService} from '../../services/auth';
-// import {CommonService} from '../../services/common';
 import { links } from '../../constants/config';
-// import {PageHeader} from '../shared/page-header';
-// import {PageFooter} from '../shared/page-footer';
-// import {TestHeader} from './test-header';
 import { TestScheduleModel } from '../../models/test-schedule.model';
-// import {ConfirmationPopup} from '../shared/confirmation.popup';
-// import {AlertPopup} from '../shared/alert.popup';
-// import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
-import { RemoveWhitespacePipe } from '../../pipes/removewhitespace.pipe';
-import { RoundPipe } from '../../pipes/round.pipe';
 import { UtilityService } from '../../services/utility.service';
-// import * as _ from 'lodash';
-import { Response } from '@angular/http';
-// import {LogService} from '../../services/log.service.service';
-
-// import {SharedDeactivateGuard} from '../shared/shared.deactivate.guard';
-// import '../../plugins/dropdown.js';
-// import '../../plugins/bootstrap-select.min.js';
-// import '../../plugins/jquery.dataTables.min.js';
-// import '../../plugins/dataTables.responsive.js';
-// import '../../plugins/typeahead.bundle.js';
-// import '../../lib/modal.js';
 import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { LogService } from './../../services/log.service';
-import { PageHeaderComponent } from './../shared/page-header.component';
-import { TestHeaderComponent } from './test-header.component';
-import { PageFooterComponent } from './../shared/page-footer.component';
-import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
-import { AlertPopupComponent } from './../shared/alert.popup.component';
-import { TestingSessionStartingPopupComponent } from './test-starting-popup.component';
 
 
 @Component({
     selector: 'choose-test',
     templateUrl: './choose-test.component.html',
     providers:[TestScheduleModel]
-    // providers: [TestService, AuthService, TestScheduleModel, UtilityService, CommonService, LogService]//,
-    // directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, ConfirmationPopupComponent, AlertPopupComponent, TestingSessionStartingPopupComponent, NgIf, NgFor],
-    // pipes: [RemoveWhitespacePipe, RoundPipe, ParseDatePipe]
 })
 
 export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
@@ -251,16 +218,16 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
 
     loadSubjects(): void {
         let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
-        let subjectsObservable: Observable<Response> = this.testService.getSubjects(subjectsURL);;
+        let subjectsObservable  = this.testService.getSubjects(subjectsURL);;
 
         this.subjectsSubscription = subjectsObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 this.subjects = json;
                 this.loadSchedule();
                 this.checkIfTestHasStarted();
                 this.testService.showTestStartingWarningModals(this.modify, this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
-                setTimeout(json => {
+                setTimeout(() => {
                     $('.selectpicker').selectpicker('refresh');
                     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
                         $('.selectpicker').selectpicker('mobile');
@@ -281,11 +248,11 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         this.subjectId = subjectID;
         this.searchString = '';
         let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}`);
-        let testsObservable: Observable<Response> = this.testService.getTests(testsURL);
+        let testsObservable  = this.testService.getTests(testsURL);
 
         this.testsSubscription = testsObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 self.tests = json;
                 self.checkForAllBlueprints();
                 self.checkMissingBlueprints();
@@ -443,15 +410,15 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         this.searchString = testName;
         let self = this;
         let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}`);
-        let testsObservable: Observable<Response> = this.testService.getTests(testsURL);
+        let testsObservable  = this.testService.getTests(testsURL);
         this.typeaheadTestsSubscription = testsObservable
             .map(response => {
                 if (response.status !== 400) {
-                    return response.json();
+                    return response.body;
                 }
                 return [];
             })
-            .subscribe(json => {
+            .subscribe((json: any) => {
                 self.searchResult = json;
                 if (self.testScheduleModel.testId != 0 && self.testScheduleModel.subjectId == 0) {
                     this.displayTest(this.testScheduleModel.testId);
@@ -486,7 +453,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
                     var states = [];
                     var data = testNamesList
                     if (search.length >= 2) {
-                        _.forEach(data, function (state, i) {
+                        _.forEach(data, function (state) {
                             let name: any = state;
                             if (_.startsWith(name.toLowerCase(), search.toLowerCase())) {
                                 states.push(state);
@@ -499,7 +466,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     bindTestSearchResults(search: string, setValue: boolean): void {
-        let self = this;
+        let self: any = this;
         if (setValue) {
             self.tests = _.filter(self.searchResult, { TestName: search });
             self.bindDatatable(self);
@@ -584,7 +551,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     displayTest(testId: number): void {
-        let self = this;
+        let self: any = this;
         self.tests = _.filter(self.searchResult, { TestId: testId });
         self.bindDatatable(self);
     }

@@ -1,30 +1,17 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgIf } from '@angular/common';
-import { Response, RequestOptions } from '@angular/http';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { Location } from '@angular/common';
-// import {TermsOfUse} from '../terms-of-use/terms-of-use';
-// import {AuthService} from '../../services/auth';
-// import {CommonService} from '../../services/common';
-// import {PasswordHeader} from '../password/password-header';
-// import {ValidationsService} from '../../services/validations';
 import { links, errorcodes } from '../../constants/config';
-import { general, reset_password, temp_password, login } from '../../constants/error-messages';
-// import {LogService} from '../../services/log.service.service';
+import { general, reset_password, login } from '../../constants/error-messages';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { ValidationsService } from './../../services/validations.service';
-import { LogService } from './../../services/log.service';
-import { TermsOfUseComponent } from './../terms-of-use/terms-of-use.component';
-// import * as CryptoJS from 'crypto-js';
 
 @Component({
     selector: 'reset-password',
-    // providers: [AuthService, CommonService, ValidationsService, LogService],
-    templateUrl: './reset-password.component.html',
-    // directives: [PasswordHeaderComponent, TermsOfUseComponent]
+    templateUrl: './reset-password.component.html'
 })
 
 export class ResetPasswordComponent implements OnInit, OnDestroy {
@@ -38,7 +25,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     errorMessage: string;
     resetSuccess: boolean = false;
     invalidLength: boolean = true;
-    constructor(public router: Router, public auth: AuthService, public common: CommonService, public location: Location, public validations: ValidationsService, public titleService: Title, private log: LogService) {
+    constructor(public router: Router, public auth: AuthService, public common: CommonService, public location: Location, public validations: ValidationsService, public titleService: Title) {
 
     }
 
@@ -63,12 +50,12 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         window.scroll(0, 0);
     }
 
-    onResetPassword(txtnPassword, txtcPassword, btnResetPassword, lnkhomeredirect, errorContainer, successcontainer, event) {
+    onResetPassword(txtnPassword, txtcPassword, errorContainer, event) {
         event.preventDefault();
         let self = this;
         let newpassword = txtnPassword.value;
         let confirmpassword = txtcPassword.value;
-        if (this.validate(newpassword, confirmpassword, btnResetPassword, lnkhomeredirect, errorContainer, successcontainer)) {
+        if (this.validate(newpassword, confirmpassword)) {
             let url = this.location.path();
             let encryptedExpiry = url.substr(url.lastIndexOf('/') + 1);
             let urlOnlyId = url.substr(0, url.lastIndexOf('/'));
@@ -90,13 +77,13 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
             else {
 
                 let apiURL = this.apiServer + links.api.baseurl + links.api.admin.settemporarypasswordapi;
-                let temporaryPasswordObservable: Observable<Response> = this.auth.settemporarypassword(apiURL, decryptedId, newpassword);
+                let temporaryPasswordObservable  = this.auth.settemporarypassword(apiURL, decryptedId, newpassword);
                 this.temporaryPasswordSubscription = temporaryPasswordObservable
                     .map(response => {
                         status = response.status;
-                        return response.json();
+                        return response.body;
                     })
-                    .subscribe(json => {
+                    .subscribe((json: any) => {
                         if (status.toString() === self.errorCodes.SUCCESS) {
                             txtnPassword.value = "";
                             txtcPassword.value = "";
@@ -153,7 +140,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 
     saveAcceptedTerms() {
         let apiURL = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.terms}?email=${this.auth.useremail}&isChecked=true`;
-        let termsObservable: Observable<Response> = this.auth.saveAcceptedTerms(apiURL);
+        let termsObservable  = this.auth.saveAcceptedTerms(apiURL);
 
         this.termSubscription = termsObservable.subscribe(
             respose => {
@@ -179,7 +166,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     // route(path, e) {
     //     this.utility.route(path, this.router, e);
     // }
-    validate(newpassword, confirmpassword, btnResetPassword, lnkhomeredirect, errorContainer, successContainer) {
+    validate(newpassword, confirmpassword) {
         this.clearError();
         if (!this.validations.comparePasswords(newpassword, confirmpassword)) {
             this.errorMessage = reset_password.newpass_match;
@@ -227,10 +214,10 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     AuthanticateUser(useremail, password, userType, errorContainer) {
         let self = this;
         let apiURL = this.apiServer + links.api.baseurl + links.api.admin.authenticationapi;
-        let authenticateObservable: Observable<Response> = this.auth.login(apiURL, useremail, password, userType);
+        let authenticateObservable  = this.auth.login(apiURL, useremail, password, userType);
         this.authenticateSubscription = authenticateObservable
-            .map(response => response.json())
-            .subscribe(function (json) {
+            .map(response => response.body)
+            .subscribe(function (json: any) {
                 if (json.AccessToken != null && json.AccessToken != '') {
                     self.sStorage.setItem('jwt', json.AccessToken);
                     self.sStorage.setItem('useremail', json.Email);

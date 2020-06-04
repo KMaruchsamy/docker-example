@@ -1,17 +1,12 @@
-// import { HomeService } from './../../services/home-service';
-import { Observable, Subscription } from 'rxjs/Rx';
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { links, roster } from '../../constants/config';
-import { Response } from '@angular/http';
-// import { AuthService } from './../../services/auth';
-// import * as _ from 'lodash';
 import { AuthService } from './../../services/auth.service';
 import { ProfileService } from '../home/profile.service';
 
 
 @Component({
     selector: 'rosters-faq',
-    // providers: [HomeService],
     templateUrl: './rosters-faq.component.html'
 })
 export class RostersFaqComponent implements OnDestroy {
@@ -53,11 +48,11 @@ export class RostersFaqComponent implements OnDestroy {
 
     loadProfileDescription(): void {
         let url = `${this.auth.common.getApiServer()}${links.api.baseurl}${links.api.admin.profilesapi}/${this.accountManagerId}`;
-        let profileObservable: Observable<Response> = this.homeService.getProfile(url);
+        let profileObservable = this.homeService.getProfile(url);
         let self: RostersFaqComponent = this;
         this.profileSubscription = profileObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 if (json) {
                     self.accountManagerEmail = json.Email;
                     self.accountManagerFirstName = json.FirstName;

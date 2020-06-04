@@ -1,11 +1,9 @@
-import { Component, OnInit, AfterViewInit, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, CanDeactivate, RoutesRecognized, NavigationStart, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { links } from '../../constants/config';
-// import * as _ from 'lodash';
 import { TestScheduleModel } from '../../models/test-schedule.model';
-import { Observable, Subscription } from 'rxjs/Rx';
-import { Response } from '@angular/http';
+import { Observable, Subscription } from 'rxjs';
 import { UtilityService } from '../../services/utility.service';
 import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
@@ -722,10 +720,10 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
 
         let __this = this;
         let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
-        let openIntegratedTestsObservable: Observable<Response> = this.testService.getOpenIntegratedTests(url);
+        let openIntegratedTestsObservable  = this.testService.getOpenIntegratedTests(url);
         this.eightHourSubscription = openIntegratedTestsObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 __this.ignore8HourRule = _.includes(json, __this.testScheduleModel.testId) || __this.testScheduleModel.testType != 1;
                 __this.auth.openIntegratedTests = __this.ignore8HourRule;
                 __this.validate(__this);
@@ -827,7 +825,6 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
             this.testScheduleModel.scheduleStartTime = moment(this.startTime).toDate();
             this.testScheduleModel.scheduleEndTime = moment(this.endTime).toDate();
             if (this.modifyInProgress) {
-                let closeSession: boolean = false;
                 let institutionTimezone: string = this.common.getTimezone(this.testScheduleModel.institutionId);
                 let institutionCurrentTime = moment.tz(new Date(), institutionTimezone).format('YYYY-MM-DD HH:mm');
                 if (moment(this.testScheduleModel.scheduleEndTime).isSame(institutionCurrentTime, 'minutes')) {
@@ -883,19 +880,19 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
 
 
 
-        let scheduleTestObservable: Observable<Response>;
+        // let scheduleTestObservable: Observable<Response>;
         let scheduleTestURL = '';
         scheduleTestURL = this.resolveModifyTestingSessionURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateScheduleDatesModifyInProgress}`);
-        scheduleTestObservable = this.testService.updateScheduleDates(scheduleTestURL, JSON.stringify(input));
+        let scheduleTestObservable = this.testService.updateScheduleDates(scheduleTestURL, JSON.stringify(input));
 
         let __this = this;
         scheduleTestObservable
-            .map(response => response.json())
+            .map(response => response.body)
             .subscribe(json => {
                 __this.valid = true;
                 // clearTimeout(loaderTimer);
                 // $('#loader').modal('hide');
-                let result = json;
+                let result: any = json;
                 if (result.TestingSessionId && result.TestingSessionId > 0
                     && result.ErrorCode === 0
                     && (!result.TimingExceptions || result.TimingExceptions.length === 0)

@@ -1,16 +1,13 @@
-import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 import { links, RosterUpdateTypes } from '../../constants/config';
 import { RosterService } from './roster.service';
-import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs';
 import 'rxjs/add/operator/map';
-import { Response } from '@angular/http';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
-import * as _ from 'lodash';
-import { reset_student_password, rosters } from '../../constants/error-messages';
 
+import { rosters } from '../../constants/error-messages';
 
 @Component({
     selector: 'rosters-move',
@@ -40,9 +37,7 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     showDuplicateStudentMessage: boolean = false;
     constructor(
         private common: CommonService,
-        private rosterService: RosterService,
-        private changeDetectorRef: ChangeDetectorRef
-    ) { }
+        private rosterService: RosterService    ) { }
 
     ngOnInit() {
         // $(document).trigger("enhance.tablesaw");
@@ -90,9 +85,9 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
             let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.moveToCohortStudents}`;
             url = url.replace("§institutionId", this.rosterChangesModel.institutionId.toString()).replace("§cohortId", this.rosterChangesModel.cohortId.toString()).replace('§searchString', this.searchString);
 
-            let searchStudentsObservable: Observable<Response> = this.rosterService.searchStudents(url);
+            let searchStudentsObservable  = this.rosterService.searchStudents(url);
             this.searchStudentsSubscription = searchStudentsObservable
-                .map(response => response.json())
+                .map(response => response.body)
                 .finally(() => {
                     if (buttonTriggered) {
                         $('.typeahead').typeahead('close');
@@ -274,7 +269,6 @@ export class RosterChangeMoveToCohortComponent implements OnInit {
     toggleTd() {
         $('#moveExisting tr td:first-child, #searchResultsTable tr td:first-child').unbind('click');
         $('#moveExisting tr td:first-child, #searchResultsTable tr td:first-child').on('click', function () {
-            var $firstTd = $(this);
             var $tr = $(this).parent('tr');
             var $hiddenTd = $tr.find('td').not($(this));
             $tr.toggleClass('tablesaw-stacked-hidden-border');

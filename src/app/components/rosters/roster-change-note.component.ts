@@ -1,11 +1,10 @@
 ﻿import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Router,  RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
-import { PageHeaderComponent } from './../shared/page-header.component';
 import { RosterService } from './roster.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
-import {Subscription, Observable} from 'rxjs/Rx';
+import {Subscription} from 'rxjs';
 import {links, cohortRosterChangeUserPreference} from '../../constants/config';
 import {RosterCohortUserPreferenceModel} from './../../models/roster-cohort-user-preference.model';
 
@@ -85,8 +84,8 @@ export class RosterChangeNoteComponent implements OnInit, OnDestroy {
         }
         let UserPreferenceObservable = this.rosterService.setUserPreference(setUserPreferenceURL, JSON.stringify(input));
         this.setUserPreferenceSubscription = UserPreferenceObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe(() => {
                 __this.router.navigate(['/rosters/change-update']);
 
             }, error => console.log(error));

@@ -1,29 +1,14 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewContainerRef } from '@angular/core';
-import { Router, ActivatedRoute, CanDeactivate, RoutesRecognized, NavigationStart, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { NgIf, NgFor, Location } from '@angular/common';
-import { Response } from '@angular/http';
+import { Router, ActivatedRoute, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { links } from '../../constants/config';
-// import * as _ from 'lodash';
-// import { ParseDatePipe } from '../../pipes/parsedate.pipe';
 import { TestScheduleModel } from '../../models/test-schedule.model';
 import { SelectedStudentModel } from '../../models/selected-student.model';
-import { Subscription, Observable } from 'rxjs/Rx';
+import { Subscription, Observable } from 'rxjs';
 import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
-import { LogService } from './../../services/log.service';
-// import { PageHeaderComponent } from './../shared/page-header.component';
-// import { TestHeaderComponent } from './test-header.component';
-// import { PageFooterComponent } from './../shared/page-footer.component';
-// import { RetesterAlternatePopupComponent } from './retesters-alternate-popup.component';
-// import { RetesterNoAlternatePopupComponent } from './retesters-noalternate-popup.component';
-// import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
-// import { TimeExceptionPopupComponent } from './time-exception-popup.component';
-// import { LoaderComponent } from './../shared/loader.component';
-// import { AlertPopupComponent } from './../shared/alert.popup.component';
-// import { TestingSessionStartingPopupComponent } from './test-starting-popup.component';
-
 
 @Component({
     selector: "review-test",
@@ -79,8 +64,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         public testService: TestService, public auth: AuthService, public common: CommonService,
         public router: Router,
         public elementRef: ElementRef, public aLocation: Location,
-        public viewContainerRef: ViewContainerRef, public titleService: Title, private activatedRoute: ActivatedRoute,
-        private log: LogService) {
+        public viewContainerRef: ViewContainerRef, public titleService: Title, private activatedRoute: ActivatedRoute) {
 
     }
 
@@ -324,10 +308,10 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
     bindFaculty(): void {
         let facultyURL = this.resolveFacultyURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.faculty}`);
-        let facultyObservable: Observable<Response> = this.testService.getFaculty(facultyURL);
+        let facultyObservable  = this.testService.getFaculty(facultyURL);
         this.facultySubscription = facultyObservable
-            .map(response => response.json())
-            .subscribe(facultyJSON => {
+            .map(response => response.body)
+            .subscribe((facultyJSON: any) => {
                 this.faculty = facultyJSON;
                 setTimeout(() => {
                     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
@@ -402,7 +386,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
 
 
-        let scheduleTestObservable: Observable<Response>;
+        let scheduleTestObservable;
         let scheduleTestURL = '';
         var myNewStartDateTime2 = moment(new Date(
             moment(input.TestingWindowStart).year(),
@@ -442,14 +426,14 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             scheduleTestURL = this.resolveModifyTestingSessionURL(`${this.auth.common.apiServer}${links.api.v2baseurl}${links.api.admin.test.modifyscheduletest}`);
             scheduleTestObservable = this.testService.modifyScheduleTests(scheduleTestURL, JSON.stringify(input));
         }
-        else {
+        else {debugger
             scheduleTestURL = `${this.auth.common.apiServer}${links.api.v2baseurl}${links.api.admin.test.scheduletest}`;
             scheduleTestObservable = this.testService.scheduleTests(scheduleTestURL, JSON.stringify(input));
         }
 
         this.scheduleTestSubscription = scheduleTestObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 __this.valid = true;
                 if (loaderTimer)
                 clearTimeout(loaderTimer);
@@ -496,9 +480,9 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
         if (objException) {
 
-            let studentRepeaterExceptions: Object[] = [];
-            let alternateTests: Object[] = [];
-            let studentAlternateTests: Object[] = [];
+            let studentRepeaterExceptions: any[] = [];
+            let alternateTests: any[] = [];
+            let studentAlternateTests: any[] = [];
 
 
             if (repeaterExceptions.StudentRepeaterExceptions && repeaterExceptions.StudentRepeaterExceptions.length > 0) {
@@ -522,8 +506,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             if (this.windowExceptions != undefined && this.windowExceptions.length > 0)
                 this.loadWindowExceptions(this.windowExceptions);
             else if (studentRepeaterExceptions.length > 0) {
-                _.forEach(studentRepeaterExceptions, function (student: any, key) {
-                    let studentId = student.StudentId;
+                _.forEach(studentRepeaterExceptions, (student: any) => {
                     student.TestName = __this.testScheduleModel.testName;
                     student.NormingStatus = __this.testScheduleModel.testNormingStatus;
                     if (__this.hasAlternateTests) {
@@ -532,7 +515,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                         student.Checked = !student.Enabled;
                         // if (!student.Enabled)
                         //     __this.markForRemoval(student.StudentId, true);
-                        _.forEach(student.AlternateTests, function (studentAlternate, key) {
+                        _.forEach(student.AlternateTests, (studentAlternate: any) => {
                             let _alternateTests: any = _.find(alternateTests, { 'TestId': studentAlternate.TestId });
                             studentAlternate.TestName = _alternateTests.TestName;
                             studentAlternate.NormingStatus = _alternateTests.NormingStatusName;
@@ -684,7 +667,6 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
     }
 
     removeWindowExceptionStudentsFromRetesters(_windowExceptions: any): void {
-        let self = this;
         if (this.sStorage) {
             if (this.retesterExceptions) {
                 var removedStudents = _.remove(this.retesterExceptions, function (student: any) {
@@ -867,7 +849,6 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
     }
 
     resolveAlternateExceptionsForModify(objException: any, __this: any): any {
-        let repeaterExceptions: any;
 
         if (!objException)
             return false;
@@ -876,9 +857,9 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
         if (objException) {
 
-            let studentRepeaterExceptions: Object[] = [];
-            let alternateTests: Object[] = [];
-            let studentAlternateTests: Object[] = [];
+            let studentRepeaterExceptions: any[] = [];
+            let alternateTests: any[] = [];
+            let studentAlternateTests: any[] = [];
 
 
             if (objException.StudentRepeaterExceptions && objException.StudentRepeaterExceptions.length > 0) {
@@ -902,8 +883,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
 
             if (studentRepeaterExceptions.length > 0) {
-                _.forEach(studentRepeaterExceptions, function (student: any, key) {
-                    let studentId = student.StudentId;
+                _.forEach(studentRepeaterExceptions, (student: any) => {
                     student.TestName = __this.testScheduleModel.testName;
                     student.NormingStatus = __this.testScheduleModel.testNormingStatus;
                     if (__this.hasAlternateTests) {
@@ -913,7 +893,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                         student.Modify = true;
                         // if (!student.Enabled)
                         //     __this.markForRemoval(student.StudentId, true);
-                        _.forEach(student.AlternateTests, function (studentAlternate, key) {
+                        _.forEach(student.AlternateTests, (studentAlternate) => {
                             let _alternateTests: any = _.find(alternateTests, { 'TestId': studentAlternate.TestId });
                             studentAlternate.TestName = _alternateTests.TestName;
                             studentAlternate.NormingStatus = _alternateTests.NormingStatusName;
@@ -940,15 +920,15 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
     updateStudentsToRetesters(__this: any): void {
         if (__this.retesterExceptions && __this.retesterExceptions.length > 0 && __this.retesterExceptionsModify && __this.retesterExceptionsModify.length > 0) {
-            _.forEach(__this.retesterExceptionsModify, function (student, key) {
+            _.forEach(__this.retesterExceptionsModify, (student) => {
                 let toUpdateRetester: any = _.find(__this.retesterExceptions, { 'StudentId': student.StudentId });
                 if (toUpdateRetester) {
                     if (!student.Enabled) {
-                        _.remove(__this.retesterExceptions, function (student: any) {
+                        _.remove(__this.retesterExceptions, (student: any) => {
                             return student.StudentId === toUpdateRetester.StudentId;
                         });
                     } else {
-                        _.forEach(student.AlternateTests, function (newAlternate, key) {
+                        _.forEach(student.AlternateTests, (newAlternate) => {
                             let toUpdateAlternateTest: any = _.find(toUpdateRetester.AlternateTests, { 'TestId': newAlternate.TestId });
                             if (toUpdateAlternateTest) {
                                 toUpdateAlternateTest.Checked = newAlternate.Checked;
@@ -975,12 +955,12 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
     checkAndResolveNewExceptionsOnModify(__this: any): void {
         if (__this.retesterExceptions && __this.retesterExceptions.length > 0) {
-            _.forEach(__this.retesterExceptions, function (student, key) {
+            _.forEach(__this.retesterExceptions, (student) => {
                 let retesterModifyStudent: any = _.find(__this.retesterExceptionsModify, { 'StudentId': student.StudentId });
                 if (retesterModifyStudent) {
                     retesterModifyStudent.Enabled = student.Enabled;
                     retesterModifyStudent.Checked = retesterModifyStudent.Enabled;
-                    _.forEach(student.AlternateTests, function (newAlternate, key) {
+                    _.forEach(student.AlternateTests, (newAlternate) => {
                         let modifyAlternateTest: any = _.find(retesterModifyStudent.AlternateTests, { 'TestId': newAlternate.TestId });
                         if (modifyAlternateTest) {
                             modifyAlternateTest.Checked = newAlternate.Checked;
@@ -1003,7 +983,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
     resolveRemovedStudentsFromRetestersModify(__this: any): void {
         if (__this.testScheduleModel && __this.testScheduleModel.selectedStudents && __this.testScheduleModel.selectedStudents.length > 0) {
-            _.forEach(__this.testScheduleModel.selectedStudents, function (student: any, key) {
+            _.forEach(__this.testScheduleModel.selectedStudents, (student) => {
                 _.remove(__this.retestersExceptionsModify, function (retesterStudent: any) {
                     return retesterStudent.StudentId === student.StudentId;
                 });
