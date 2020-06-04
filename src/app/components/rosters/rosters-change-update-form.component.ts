@@ -1,20 +1,15 @@
 ﻿/// <reference path="roster-changes.service.ts" />
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy} from '@angular/core';
-import {NgFor, NgIf} from '@angular/common';
 import {Router} from '@angular/router';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { links, RosterUpdateTypes } from '../../constants/config';
-import { Response } from '@angular/http';
 import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import {RosterCohortsModel} from '../../models/roster-cohorts.model';
-import {RosterCohortStudentsModel} from '../../models/roster-cohort-students.model';
 import {ChangeUpdateRosterStudentsModel} from '../../models/change-update-roster-students.model';
 import {RostersModal} from '../../models/rosters.model';
 import { CommonService } from './../../services/common.service';
 import {RosterService} from './roster.service';
-
-
 @Component({
     selector: 'rosters-form',
     providers: [RosterCohortsModel, RostersModal],
@@ -88,13 +83,13 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.cohortStudents}`;
         if (cohortId) {
             url = url.replace('§cohortId', cohortId.toString());
-            let rosterCohortsObservable: Observable<Response> = this.rosterService.getRosterStudentCohorts(url);
+            let rosterCohortsObservable  = this.rosterService.getRosterStudentCohorts(url);
             this.cohortStudentsSubscription = rosterCohortsObservable
-                .map(response => response.json())
-                .subscribe(json => {
+                .map(response => response.body)
+                .subscribe((json: any) => {
                     __this.loadRosterCohortStudents(__this.rosterCohortsModel, json);
                     __this.bindDatatable(__this);
-                }, error => {
+                }, () => {
                     __this.loadRosterCohortStudents(__this.rosterCohortsModel, null);
                 }, () => {
                     setTimeout(() => {
@@ -125,11 +120,9 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                         type: 'inline',
                         renderer: function (api, rowIdx) {
                             var theRow = api.row(rowIdx);
-                            let _selectedStudent: ChangeUpdateRosterStudentsModel;
                             let _studentid: number = parseInt($(theRow.data()[1]).attr('id').split('_')[1]);
-                            _.filter(self.rosterChangeUpdateStudents, (s) => {
+                            _.filter(self.rosterChangeUpdateStudents, (s: ChangeUpdateRosterStudentsModel) => {
                                 if (s.studentId == _studentid) {
-                                    _selectedStudent = s;
                                 }
                             });
                             // Select hidden columns for the given row
@@ -185,7 +178,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 var _id = $(e.target).attr('id').split('_')[1];
                 if (_id.indexOf('-') > 0) {
                     let _studentid = parseInt(_id.split('-')[0]);
-                    _.filter(self.rosterChangeUpdateStudents, (s) => {
+                    _.filter(self.rosterChangeUpdateStudents, (s: ChangeUpdateRosterStudentsModel) => {
                         if (s.studentId == _studentid) {
                             _selectedStudent = s;
                         }
@@ -369,7 +362,6 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     }
 
     onChangingUserSelection(e) {
-        let _selectedStudent: ChangeUpdateRosterStudentsModel;
         var _id = $(e.target).attr('id').split('_')[1];
        
         //On cohort change selection
@@ -409,7 +401,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         let target = e.target || e.srcElement || e.currentTarget;
         let isChecked: boolean = target.checked;
         let student: ChangeUpdateRosterStudentsModel;
-        _.filter(this.rosterChangeUpdateStudents, function (_student) {
+        _.filter(this.rosterChangeUpdateStudents, (_student) => {
             if (_student.studentId === _studentId) {
                 _student.updateType = RosterUpdateTypes.MoveToDifferentCohort; 
                 _student.isRepeater = isChecked;
@@ -423,7 +415,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         let target = e.target || e.srcElement || e.currentTarget;
         let isChecked: boolean = target.checked;
         let student: ChangeUpdateRosterStudentsModel;
-        _.filter(this.rosterChangeUpdateStudents, function (_student) {
+        _.filter(this.rosterChangeUpdateStudents, (_student) => {
             if (_student.studentId === _studentId) {
                 _student.updateType = RosterUpdateTypes.MoveToDifferentCohort; 
                 _student.isInactive= isChecked;
@@ -435,7 +427,6 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     }
     checkGrantUntimedTest(_studentId, e) {
         e.preventDefault();
-        let __this = this;
         let target = e.target || e.srcElement || e.currentTarget;
         let isChecked: boolean = target.checked;
         let student: ChangeUpdateRosterStudentsModel;

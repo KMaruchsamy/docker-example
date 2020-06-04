@@ -1,33 +1,11 @@
 import { Component, OnInit} from '@angular/core';
-import { Router,  } from '@angular/router';
+import { Router } from '@angular/router';
 import { Title} from '@angular/platform-browser';
-
-// import { AuthService } from '../../services/auth';
-// import * as _ from 'lodash';
-
-// import { PageHeader } from '../shared/page-header';
-// import { PageFooter } from '../shared/page-footer';
-
-// import { RostersCohorts } from './rosters-cohorts';
-// import { RostersMultiCampus } from './rosters-multicampus';
-// import { RostersHeader } from './rosters-header';
-// import { RostersFaq } from './rosters-faq';
-// import { RostersSearch } from './rosters-search';
-// import { NgIf } from '@angular/common';
-// import { PageHeaderComponent } from './../shared/page-header.component';
-// import { PageFooterComponent } from './../shared/page-footer.component';
-// import { RostersFaqComponent } from './rosters-faq.component';
-// import { RostersHeaderComponent } from './rosters-header.component';
-// import { RostersMultiCampusComponent } from './rosters-multicampus.component';
-// import { RostersCohortsComponent } from './rosters-cohorts.component';
-// import { RostersSearchComponent } from './rosters-search.component';
 import { AuthService } from './../../services/auth.service';
-//declare var Appcues: any;
 
 @Component({
     selector: 'rosters',
-    templateUrl: './rosters.component.html',
-    // directives: [, PageHeaderComponent, PageFooterComponent, RostersFaqComponent, RostersHeaderComponent, RostersMultiCampusComponent, RostersCohortsComponent, RostersSearchComponent, NgIf]
+    templateUrl: './rosters.component.html'
 })
 
 export class RostersComponent implements OnInit {

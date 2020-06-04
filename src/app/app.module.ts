@@ -1,7 +1,7 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing.module';
@@ -10,7 +10,7 @@ import { AuthService } from './services/auth.service';
 import { CommonService } from './services/common.service';
 import { LogService } from './services/log.service';
 import { Angulartics2Module } from 'angulartics2';
-import { Angulartics2GoogleAnalytics } from 'angulartics2/src/providers/angulartics2-ga';
+import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { LoginModule } from './components/login/login.module';
 import { ControlsModule } from './components/controls/controls.module';
 import { PipesModule } from './pipes/pipes.module';

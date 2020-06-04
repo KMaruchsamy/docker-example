@@ -5,10 +5,9 @@ import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-rost
 import { RosterService } from './roster.service';
 import { links } from '../../constants/config';
 import { CommonService } from '../../services/common.service';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { rosters, general } from '../../constants/error-messages';
 import { RosterChangesModel } from '../../models/roster-changes.model';
-
 @Component({
     selector: 'rosters-add-to-cohort',
     templateUrl: './rosters-change-add-to-cohort.component.html',
@@ -73,7 +72,7 @@ export class RosterChangeAddToCohortComponent implements OnInit, AfterViewInit {
         let __this = this;
         let emailValidateObservable = this.rosterSerivice.addEmailValidation(url);
         this.emailValidateSubscription = emailValidateObservable
-            .map(response => response.json())
+            .map(response => response.body)
             .subscribe((json: any) => {
                 if (json && json.length > 0) {
 

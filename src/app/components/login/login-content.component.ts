@@ -1,21 +1,14 @@
-import { Component, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
-// import * as _ from 'lodash';
 import { links } from '../../constants/config';
 import { general, login } from '../../constants/error-messages';
-// import { Angulartics2On } from 'angulartics2';
-import { Response } from '@angular/http';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
-import { LogService } from './../../services/log.service';
-// import { TermsOfUseComponent } from './../terms-of-use/terms-of-use.component';
 
 @Component({
     selector: 'login-content',
-    // providers: [AuthService, CommonService, LogService],
-    templateUrl: './login-content.component.html',
-    // directives: [, Angulartics2On, TermsOfUseComponent]
+    templateUrl: './login-content.component.html'
 })
 
 export class LoginContentComponent implements OnDestroy {
@@ -41,7 +34,7 @@ export class LoginContentComponent implements OnDestroy {
     site: string;
     atomStudyPlanLink: string;
     pingFederateServer:string;
-    constructor(private zone: NgZone, public router: Router, public auth: AuthService, public common: CommonService, private log: LogService) {
+    constructor(private zone: NgZone, public router: Router, public auth: AuthService, public common: CommonService) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
         this.kaptestServer = this.common.getKaptestServer();
@@ -75,10 +68,10 @@ export class LoginContentComponent implements OnDestroy {
 
 
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.authenticationapi;
-            let loginObservable: Observable<Response> = this.auth.login(apiURL, useremail, password, this.userType);
+            let loginObservable  = this.auth.login(apiURL, useremail, password, this.userType);
             this.loginSubscription = loginObservable.subscribe(
                 respose => {
-                    let json = respose.json();
+                    let json: any = respose.body;
                     if (json.AccessToken != null && json.AccessToken != '') {
                         self.sStorage.setItem('jwt', json.AccessToken);
                         self.sStorage.setItem('useremail', json.Email);
@@ -155,7 +148,7 @@ export class LoginContentComponent implements OnDestroy {
         this.auth.getKaptestRedirectURL(facultyAMLoginUrl,userId, email)
             .subscribe(response => {
                 if (response.ok) {
-                    const redirectUrl = response.json();
+                    const redirectUrl = response.body.toString();
                     window.location.href = redirectUrl;
                 }
                 else{
@@ -274,7 +267,7 @@ export class LoginContentComponent implements OnDestroy {
 
     saveAcceptedTerms() {
         let apiURL = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.terms}?email=${this.auth.useremail}&isChecked=true`;
-        let termsObservable: Observable<Response> = this.auth.saveAcceptedTerms(apiURL);
+        let termsObservable  = this.auth.saveAcceptedTerms(apiURL);
 
         this.termSubscription = termsObservable.subscribe(
             respose => {

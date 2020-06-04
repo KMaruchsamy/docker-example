@@ -1,57 +1,54 @@
-import {Injectable, Inject} from '@angular/core';
-import {Http, Response, RequestOptions, Headers} from "@angular/http";
-// import {AuthService} from './auth';
-// import {ProfileModel} from '../models/profile-model';
-// import * as _ from 'lodash';
-import {Observable} from 'rxjs/Rx';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { AuthService } from './../../services/auth.service';
 import { ProfileModel } from './../../models/profile.model';
 
 @Injectable()
 export class ProfileService {
 	auth: AuthService;
-	constructor(public http: Http) {	
+	constructor(public http: HttpClient) {	
 		this.http = http;
 		this.auth = new AuthService(http);
 		this.auth.refresh();
 	}
 
-	getProfiles(url):Observable<Response> {
+	getProfiles(url) {
 		let self = this;
-		let headers: Headers = new Headers({
+		const headers = new HttpHeaders({
 			'Accept': 'application/json',
 			'Authorization': self.auth.authheader
 		});
-		let requestOptions: RequestOptions = new RequestOptions({
+		let requestOptions = {
 			headers: headers,
-			body:''
-		});
+            observe: 'response' as const
+		};
 		return this.http.get(url, requestOptions);
 	}
 
-	getProfile(url):Observable<Response> {
+	getProfile(url) {
 		let self = this;
-		let headers: Headers = new Headers({
+		const headers = new HttpHeaders({
 			'Accept': 'application/json',
 			'Authorization': self.auth.authheader
 		});
-		let requestOptions: RequestOptions = new RequestOptions({
+		let requestOptions = {
 			headers: headers,
-			body:''
-		});
+			// body:'',
+			observe: 'response' as const
+		};
 		return this.http.get(url, requestOptions);
 	}
 
 	getIhpSsoLogin(url:string, input:any){
 		let self = this;
-		let headers: Headers = new Headers({
+		const headers = new HttpHeaders({
 			'Accept': 'application/json',
             'Content-Type': 'application/json',
 			'Authorization': self.auth.authheader
 		});
-		let requestOptions: RequestOptions = new RequestOptions({
+		let requestOptions = {
 			headers: headers
-		});
+		};
 		return this.http.post(url, input, requestOptions);
 	}
 

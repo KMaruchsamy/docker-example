@@ -1,7 +1,5 @@
-﻿// import * as _ from 'lodash';
-import {links,Timezones} from '../constants/config';
+﻿import {links,Timezones} from '../constants/config';
 import { Injectable } from '@angular/core';
-// import * as CryptoJS from 'crypto-js';
 
 @Injectable()
 export class CommonService {

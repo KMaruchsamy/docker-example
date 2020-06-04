@@ -1,20 +1,14 @@
-import {Component, Injector, Inject, OnInit, OnDestroy, ElementRef, ViewChild} from '@angular/core';
-import {NgIf, Location} from '@angular/common';
-import {Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {Response, RequestOptions} from '@angular/http';
+import {Component, OnInit, OnDestroy, ElementRef, ViewChild} from '@angular/core';
+import {Location} from '@angular/common';
+import {Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {links} from '../../constants/config';
-// import {Angulartics2On} from 'angulartics2';
 import {TestScheduleModel} from '../../models/test-schedule.model';
-import {Observable, Subscription} from 'rxjs/Rx';
-// import * as _ from 'lodash';
+import {Subscription} from 'rxjs';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { ProfileService } from './profile.service';
 import { TestService } from './../tests/test.service';
-// import { PageHeaderComponent } from './../shared/page-header.component';
-// import { PageFooterComponent } from './../shared/page-footer.component';
-// import { ProfileComponent } from './profile.component';
 import { ProfileModel } from './../../models/profile.model';
 // import { PageScroll } from 'ng2-page-scroll/ng2-page-scroll';
 //declare var Appcues: any;
@@ -90,7 +84,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.nurseConsultantProfile = new ProfileModel(null, null, 'NURSECONSULTANT', null, null, null, null, null, null, null, null, null, null, null);
         this.loadProfiles(self);
         this.checkInstitutions();
-    //    this.filterIHPEnableInstitutions();
+       this.filterIHPEnableInstitutions();
 
         window.scroll(0,0);
         this.titleService.setTitle('Faculty Home – Kaplan Nursing');
@@ -124,9 +118,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         let institutionID = this.getLatestInstitution();
         if (institutionID > 0) {
             let url = this.apiServer + links.api.baseurl + links.api.admin.profilesapi + '?institutionId=' + institutionID;
-            let profilesObservable: Observable<Response> = this.profileService.getProfiles(url);
+            let profilesObservable  = this.profileService.getProfiles(url);
             this.profilesSubscription = profilesObservable
-                .map(response => response.json())
+                .map(response => response.body)
                 .subscribe(json => {
                     self.bindToModel(self, json);
                 },
@@ -218,15 +212,15 @@ export class HomeComponent implements OnInit, OnDestroy {
                 let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
 
 
-                let subjectsObservable: Observable<Response> = this.testService.getSubjects(subjectsURL);
+                let subjectsObservable  = this.testService.getSubjects(subjectsURL);
                 this.subjectsSubscription = subjectsObservable
                     .map(response => {
                         if (response.status !== 400) {
-                            return response.json();
+                            return response.body;
                         }
                         return [];
                     })
-                    .subscribe(json => {
+                    .subscribe((json: any) => {
                         if (json.length === 0) {
                             window.open('/accounterror');
                         }
@@ -341,7 +335,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.auth.getKaptestRedirectURL(facultyAMLoginUrl, this.userId, this.userEmail)
             .subscribe(response => {
                 if (response.ok) {
-                    const redirectUrl = response.json();
+                    const redirectUrl = response.body.toString();
                     window.open(redirectUrl, "_blank");
                 }
                 else {
@@ -359,9 +353,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     onClickExamityProfile(ssologin, encryptedUsername_val): void {
         let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
-        let examityObservable: Observable<Response> = this.auth.setFacultyProfileInExamity(facultyAPIUrl);
+        let examityObservable  = this.auth.setFacultyProfileInExamity(facultyAPIUrl);
         examityObservable.subscribe(response => {
-            encryptedUsername_val.value = response.json();
+            encryptedUsername_val.value = response.toString();
             ssologin.submit();
         }, error => console.log(error));
     }   
@@ -406,11 +400,11 @@ export class HomeComponent implements OnInit, OnDestroy {
            "EmailAddress": this.userEmail,
            "InstitutionId": this.institutionID,
        }
-       let ihpSSOLoginObservable: Observable<Response> = this.profileService.getIhpSsoLogin(ihpSSOLoginURL, JSON.stringify(input));
+       let ihpSSOLoginObservable  = this.profileService.getIhpSsoLogin(ihpSSOLoginURL, JSON.stringify(input));
        this.ihpSSOLoginSubscription = ihpSSOLoginObservable
-           .map(response => response.json())
+           .map(response => response)
            .subscribe(data => {
-           this.htmlSnippet = data;
+           this.htmlSnippet = data.toString();
            this.appendHTMLSnippetToDOM();
            $('#ihpmulticampus').modal('hide');
             

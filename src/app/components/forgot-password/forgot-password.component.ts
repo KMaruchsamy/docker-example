@@ -1,17 +1,12 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Observable, Subscription } from 'rxjs/Rx'
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Subscription } from 'rxjs'
 import { Title } from '@angular/platform-browser';
-// import {CommonService} from '../../services/common';
-// import {PasswordHeader} from '../password/password-header';
-// import {ValidationsService} from '../../services/validations';
 import { links, errorcodes } from '../../constants/config';
-import { general, forgot_password } from '../../constants/error-messages';
+import { forgot_password } from '../../constants/error-messages';
 import { CommonService } from './../../services/common.service';
 import { ValidationsService } from './../../services/validations.service';
-// import { PasswordHeaderComponent } from './password-header.component';
-// import * as CryptoJS from 'crypto-js';
 
 @Component({
     selector: 'forgot-password',
@@ -28,7 +23,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     forgotPasswordSubscription: Subscription;
     errorCodes: any;
     errorMessage: string;
-    constructor(private http: Http, public router: Router, public common: CommonService, public validations: ValidationsService, public titleService: Title) {
+    constructor(private http: HttpClient, public router: Router, public common: CommonService, public validations: ValidationsService, public titleService: Title) {
 
     }
 
@@ -64,7 +59,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
         if (this.validate(emailid, errorContainer)) {
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.forgotpasswordapi;
-            let forgotPasswordObservable: Observable<Response> = this.forgotpassword(apiURL, emailid, encryptedId, encryptedTime);
+            let forgotPasswordObservable  = this.forgotpassword(apiURL, emailid, encryptedId, encryptedTime);
             this.forgotPasswordSubscription = forgotPasswordObservable
                 .map(response => response.status)
                 .subscribe(status => {
@@ -113,15 +108,15 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     //     return encodeURIComponent(encryptedStr);
     // }
 
-    forgotpassword(url, useremail, encryptedUserEmail, expiryTime): Observable<Response> {
-        let self = this;
-        let headers: Headers = new Headers({
+    forgotpassword(url, useremail, encryptedUserEmail, expiryTime)  {
+        const headers = new HttpHeaders({
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         });
-        let requestOptions: RequestOptions = new RequestOptions({
-            headers: headers
-        });
+        let requestOptions = {
+            headers: headers,
+            observe: 'response' as const
+        };
         let body: any = JSON.stringify({
             useremail: useremail,
             encrypteduseremail: encryptedUserEmail,

@@ -1,8 +1,6 @@
 ﻿import { Component, Input, Output, OnInit, OnDestroy, EventEmitter} from '@angular/core';
-import {NgFor} from '@angular/common';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { links, RosterUpdateTypes } from '../../constants/config';
-import { Response } from '@angular/http';
 import { AuthService } from './../../services/auth.service';
 
 import { CommonService } from './../../services/common.service';
@@ -54,10 +52,10 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
         let url: string = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.rosters.cohorts}`;
         if (institutionId) {
             url = url.replace('§institutionId', institutionId.toString());
-            let rosterCohortsObservable: Observable<Response> = this.rosterService.getRosterCohorts(url);
+            let rosterCohortsObservable  = this.rosterService.getRosterCohorts(url);
             this.cohortSubscription = rosterCohortsObservable
-                .map(response => response.json())
-                .subscribe(json => {
+                .map(response => response.body)
+                .subscribe((json: any) => {
                     __this.noCohorts = false;
                     __this.loadCohorts(json);
                 }, error => {
@@ -94,7 +92,7 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
                     rosterCohort.studentCount = cohort.StudentCount;
                     return rosterCohort;
                 });
-                _.filter(this.rosters.cohorts, function (o) {
+                _.filter(this.rosters.cohorts, (o: any) => {
                     if (__this.rosterChangesModel.cohortId !== o.cohortId)
                         __this.rostersList.push(o);
                     else
@@ -115,7 +113,7 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
         e.preventDefault();
         let __this = this;
         let updatedStudent: ChangeUpdateRosterStudentsModel;
-        _.filter(this.rosterChangeUpdateStudents, function (_student) {
+        _.filter(this.rosterChangeUpdateStudents, (_student) => {
             if (_student.studentId === __this.toChangeRosterStudentId) {
                 if (__this.rosterChangesModel.cohortId !== _roster.cohortId) {
                     _student.moveToCohortId = _roster.cohortId;
@@ -138,7 +136,7 @@ export class RequestChangeRosterPopupComponent implements OnInit, OnDestroy {
 
     updateRosterList(rosterid) {
         let __this = this;
-        _.filter(this.rostersList, (o) => {
+        _.filter(this.rostersList, (o: any) => {
             if (o.cohortId == rosterid && __this.rosterChangesModel.cohortId !== rosterid)
                 o.isSelected = true;
             else

@@ -1,42 +1,19 @@
-import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { Router, RoutesRecognized, ActivatedRoute, NavigationStart, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Http, Response, RequestOptions, Headers } from "@angular/http";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { Observable, Subscription } from 'rxjs/Rx';
-import { NgIf, NgFor } from '@angular/common';
-// import {TestService} from '../../services/test.service';
-// import {AuthService} from '../../services/auth';
-// import {CommonService} from '../../services/common';
+import { Observable, Subscription } from 'rxjs';
 import { links } from '../../constants/config';
-// import {PageHeader} from '../shared/page-header';
-// import {PageFooter} from '../shared/page-footer';
-// import {TestHeader} from './test-header';
-// import * as _ from 'lodash';
-import { ParseDatePipe } from '../../pipes/parsedate.pipe';
 import { TestScheduleModel } from '../../models/test-schedule.model';
 import { SelectedStudentModel } from '../../models/selected-student.model';
-// import {ConfirmationPopup} from '../shared/confirmation.popup';
-// import {LogService} from '../../services/log.service.service';
-
-// import '../../plugins/jquery.dataTables.min.js';
-// import '../../plugins/dataTables.responsive.js';
-// import '../../lib/modal.js';
 import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
-import { LogService } from './../../services/log.service';
-import { PageHeaderComponent } from './../shared/page-header.component';
-import { TestHeaderComponent } from './test-header.component';
-import { PageFooterComponent } from './../shared/page-footer.component';
-import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
 
 
 @Component({
     selector: "view-test",
     templateUrl: "./view-test.component.html",
     providers: [ TestScheduleModel]
-    // directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, NgIf, NgFor, ConfirmationPopupComponent],
-    // pipes: [ParseDatePipe]
 })
 export class ViewTestComponent implements OnInit, OnDestroy {
     studentsTable: any;
@@ -55,8 +32,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     scheduleSubscription: Subscription;
     chkExamityView: boolean = false;
     ItSecurityEnabled: boolean = false;
-    constructor(public auth: AuthService, public common: CommonService, public testService: TestService, public schedule: TestScheduleModel, public router: Router, private activatedRoute: ActivatedRoute, public titleService: Title, private log: LogService
-    ) {
+    constructor(public auth: AuthService, public common: CommonService, public testService: TestService, public schedule: TestScheduleModel, public router: Router, private activatedRoute: ActivatedRoute, public titleService: Title    ) {
 
     }
 
@@ -114,9 +90,9 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     loadTestSchedule(): void {
         let __this = this;
         let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`);
-        let scheduleObservable: Observable<Response> = this.testService.getScheduleById(scheduleURL);
+        let scheduleObservable  = this.testService.getScheduleById(scheduleURL);
         this.scheduleSubscription = scheduleObservable
-            .map(response => response.json())
+            .map(response => response.body)
             .subscribe(json => {
                 if (json) {
                     let _schedule: TestScheduleModel = __this.testService.mapTestScheduleObjects(json);
@@ -207,8 +183,8 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     deleteSchedule(): void {
         let __this = this;
         let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.deleteSchedule}`);
-        let deleteObdervable: Observable<Response> = this.testService.deleteSchedule(scheduleURL);
-        deleteObdervable.subscribe((res: Response) => {
+        let deleteObdervable  = this.testService.deleteSchedule(scheduleURL);
+        deleteObdervable.subscribe(() => {
             __this.testService.clearTestScheduleObjects();
             __this.router.navigate(['/tests']);
         });

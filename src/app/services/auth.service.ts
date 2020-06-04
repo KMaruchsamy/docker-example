@@ -1,8 +1,5 @@
-// import {CommonService} from './common';
 import { Injectable } from '@angular/core';
-// import * as _ from 'lodash';
-import { Observable } from 'rxjs/Rx';
-import { Http, RequestOptions, Headers, Response, URLSearchParams } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonService } from './common.service';
 
 @Injectable()
@@ -115,7 +112,7 @@ export class AuthService {
     this.sStorage.setItem('testschedule', value);
   }
 
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
     // this.common = new CommonService();
     // this.sStorage = this.common.getStorage();
     // this.token = this.sStorage.getItem('jwt');
@@ -177,15 +174,16 @@ export class AuthService {
       this.sStorage.setItem('payLinkEnabled', "false");
   }
 
-  login(url, useremail, password, usertype): Observable<Response> {
-    let headers: Headers = new Headers({
+  login(url, useremail, password, usertype)  {
+    let headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     });
 
-    let options: RequestOptions = new RequestOptions({
-      headers: headers
-    })
+    let options = {
+      headers: headers,
+      observe: 'response' as const
+    };
 
     let body = JSON.stringify({
       useremail: useremail,
@@ -214,16 +212,16 @@ export class AuthService {
   }
 
 
-  settemporarypassword(url, useremail, password): Observable<Response> {
-    let self = this;
-    let headers: Headers = new Headers({
+  settemporarypassword(url, useremail, password)  {
+    const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': this.authheader
     });
-    let requestOptions: RequestOptions = new RequestOptions({
-      headers: headers
-    });
+    let requestOptions = {
+      headers: headers,
+      observe: 'response' as const
+    };
     let body: any = JSON.stringify({
       useremail: useremail,
       password: password
@@ -231,16 +229,16 @@ export class AuthService {
     return this.http.post(url, body, requestOptions);
   }
 
-  saveAcceptedTerms(url): Observable<Response> {
-    let self = this;
-    let headers: Headers = new Headers({
+  saveAcceptedTerms(url)  {
+    let headers = new HttpHeaders({
       'Accept': 'application/json',
       'Authorization': this.authheader,
       'Content-Type': 'application/json'
     });
-    let requestOptions: RequestOptions = new RequestOptions({
-      headers: headers
-    });
+    let requestOptions = {
+      headers: headers,
+      observe: 'response' as const
+    };
     return this.http.post(url, {}, requestOptions);
   }
 
@@ -287,35 +285,39 @@ export class AuthService {
   }
 
 
-  getKaptestRedirectURL(url, userId, email): Observable<Response> {
-    let self = this;
-    let headers: Headers = new Headers({
+  getKaptestRedirectURL(url, userId, email)  {
+    const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Authorization': this.authheader,
       'Content-Type': 'application/json'
     });
 
-    let urlParams: URLSearchParams = new URLSearchParams();
-    urlParams.set('userId', userId);
-    urlParams.set('email', email);
+    // let urlParams: URLSearchParams = new URLSearchParams();
+    // urlParams.set('userId', userId);
+    // urlParams.set('email', email);
 
-    let requestOptions: RequestOptions = new RequestOptions({
+    let requestOptions = {
       headers: headers,
-      params: urlParams
-    });
+      params: {
+        'userId': userId,
+        'email': email
+      },
+      observe: 'response' as const,
+      responseType: 'json' as const
+    };
     return this.http.post(url, {}, requestOptions);
   }
 
-  setFacultyProfileInExamity(url: string): Observable<Response> {
+  setFacultyProfileInExamity(url: string)  {
     let self = this;
-    let options: RequestOptions = new RequestOptions();
-    let headers: Headers = new Headers({
+    const headers = new HttpHeaders({
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': self.authheader
     });
-    options.headers = headers;
-    options.body = '';
+    let options = {
+      headers: headers
+    };
     return this.http.get(url, options);
 }
 }

@@ -1,28 +1,18 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Http, Response } from '@angular/http';
-import { Observable, Subscription } from 'rxjs/Rx';
-import { NgIf, Location } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-// import {AuthService} from '../../services/auth';
-// import {CommonService} from '../../services/common';
-// import {PasswordHeader} from '../password/password-header';
-// import {ValidationsService} from '../../services/validations';
 import { links, errorcodes } from '../../constants/config';
 import { temp_password, general, login } from '../../constants/error-messages';
-// import {TermsOfUse} from '../terms-of-use/terms-of-use';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { ValidationsService } from './../../services/validations.service';
-// import { PasswordHeaderComponent } from './password-header.component';
-// import { TermsOfUseComponent } from './../terms-of-use/terms-of-use.component';
 import { LogService } from '../../services/log.service';
 
 @Component({
     selector: 'set-password-first-time',
-    // providers: [AuthService, CommonService, ValidationsService],
-    templateUrl: './set-password-first-time.component.html',
-    // directives: [PasswordHeaderComponent, TermsOfUseComponent]   
+    templateUrl: './set-password-first-time.component.html'
 })
 
 export class SetPasswordFirstTimeComponent implements OnInit, OnDestroy {
@@ -43,7 +33,7 @@ export class SetPasswordFirstTimeComponent implements OnInit, OnDestroy {
         public common: CommonService,
         public validations: ValidationsService,
         public titleService: Title,
-        private log: LogService) {
+            private log: LogService) {
 
     }
 
@@ -81,13 +71,13 @@ export class SetPasswordFirstTimeComponent implements OnInit, OnDestroy {
             let email = this.common.decryption(encryptedId);
 
             let apiURL = this.apiServer + links.api.baseurl + links.api.admin.settemporarypasswordapi;
-            let temproaryPasswordSubscription: Observable<Response> = this.auth.settemporarypassword(apiURL, email, newpassword);
+            let temproaryPasswordSubscription  = this.auth.settemporarypassword(apiURL, email, newpassword);
             temproaryPasswordSubscription
                 .map(response => {
                     status = response.status;
-                    return response.json();
+                    return response.body;
                 })
-                .subscribe(function (json) {
+                .subscribe((json: any) => {
                     if (status.toString() === self.errorCodes.SUCCESS) {
                         txtnPassword.value = "";
                         txtcPassword.value = "";
@@ -172,10 +162,10 @@ export class SetPasswordFirstTimeComponent implements OnInit, OnDestroy {
     AuthanticateUser(useremail, password, userType, errorContainer) {
         let self = this;
         let apiURL = this.apiServer + links.api.baseurl + links.api.admin.authenticationapi;
-        let authenticateObservable: Observable<Response> = this.auth.login(apiURL, useremail, password, userType);
+        let authenticateObservable  = this.auth.login(apiURL, useremail, password, userType);
         this.authenticateSubscription = authenticateObservable
-            .map(response => response.json())
-            .subscribe(function (json) {
+            .map(response => response.body)
+            .subscribe((json:any) => {
                 if (json.AccessToken != null && json.AccessToken != '') {
                     self.sStorage.setItem('jwt', json.AccessToken);
                     self.sStorage.setItem('useremail', json.Email);
@@ -212,7 +202,7 @@ export class SetPasswordFirstTimeComponent implements OnInit, OnDestroy {
 
     saveAcceptedTerms() {
         let apiURL = `${this.common.getApiServer()}${links.api.baseurl}${links.api.admin.terms}?email=${this.auth.useremail}&isChecked=true`;
-        let termsObservable: Observable<Response> = this.auth.saveAcceptedTerms(apiURL);
+        let termsObservable  = this.auth.saveAcceptedTerms(apiURL);
 
         this.termSubscription = termsObservable.subscribe(
             respose => {

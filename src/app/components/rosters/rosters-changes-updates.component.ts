@@ -1,17 +1,14 @@
-import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Router, ActivatedRoute, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, RoutesRecognized, NavigationStart } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { NgIf } from '@angular/common';
 import { CommonService } from './../../services/common.service';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 
 import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { RosterChangesService } from './roster-changes.service';
 import { ChangeUpdateRosterStudentsModel } from '../../models/change-update-roster-students.model';
-import * as _ from 'lodash';
 import { RosterUpdateTypes, RosterChangesPages } from '../../constants/config';
-//declare var Appcues: any;
 
 @Component({
     selector: 'rosters-changes-updates',
@@ -26,7 +23,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
     attemptedRoute: string;
     destinationRoute: string;
 
-    constructor(private changeDetectorRef: ChangeDetectorRef, public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, public rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
+    constructor(public auth: AuthService, public router: Router, public titleService: Title, private common: CommonService, public rosterChangesModel: RosterChangesModel, private rosterChangesService: RosterChangesService) {
     }
 
     ngOnInit(): void {
@@ -109,7 +106,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
         return true;
     }
 
-    onOKConfirmation(e: any): void {
+    onOKConfirmation(e): void {
         $('#confirmationPopup').modal('hide');
         this.overrideRouteCheck = true;
         if (this.attemptedRoute === RosterChangesPages.CHANGESNOTE) {
@@ -167,11 +164,11 @@ export class RostersChangesUpdatesComponent implements OnInit {
                 }
                 else {
                     if (student.moveToCohortId == null && !student.isInactive && !student.isGrantUntimedTest)
-                        _.remove(this.rosterChangesModel.students, function (s) {
+                        _.remove(this.rosterChangesModel.students, (s) => {
                             return s.studentId == student.studentId;
                         });
                     else
-                        _.filter(this.rosterChangesModel.students, function (s) {
+                        _.filter(this.rosterChangesModel.students, (s) => {
                             if (s.studentId == student.studentId)
                                 s = student;
                         });

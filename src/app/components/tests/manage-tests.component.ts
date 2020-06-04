@@ -1,26 +1,14 @@
-import {Component, OnInit, AfterViewInit, OnChanges, AfterViewChecked, ElementRef, ViewEncapsulation, OnDestroy} from '@angular/core';
-import {Router, ActivatedRoute, CanDeactivate, } from '@angular/router';
-import {Subscription} from 'rxjs/Rx';
-import {Http, Response, RequestOptions, Headers} from "@angular/http";
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Router } from '@angular/router';
+import {Subscription} from 'rxjs';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Title} from '@angular/platform-browser';
-import {Observable} from 'rxjs/Rx';
 import {links, errorcodes, teststatus, Timezones} from '../../constants/config';
 import {TestScheduleModel} from '../../models/test-schedule.model';
-import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
-import {RoundPipe} from '../../pipes/round.pipe';
-import {ParseDatePipe} from '../../pipes/parsedate.pipe';
-import {UtilityService} from '../../services/utility.service';
 import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { TestsModal } from './../../models/tests.model';
-import { LogService } from './../../services/log.service';
-import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
-import { PageFooterComponent } from './../shared/page-footer.component';
-import { TestHeaderComponent } from './test-header.component';
-import { PageHeaderComponent } from './../shared/page-header.component';
-import { ManageTestsMultiCampusComponent } from './manage-tests-multicampus.component';
-//declare var Appcues: any;
 
 @Component({
     selector: 'manage-tests',
@@ -69,16 +57,13 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     examityServer:string;
     examityLoginURL:string;
     constructor(
-        private activatedRoute: ActivatedRoute,
         public testService: TestService,
         public router: Router,
         public auth: AuthService,
         public common: CommonService,
         public testSchedule: TestScheduleModel,
         public titleService: Title,
-        private testsModal: TestsModal,
-        private log: LogService,
-        private http: Http) {
+        private http: HttpClient) {
     }
 
     ngOnDestroy(): void {
@@ -172,10 +157,10 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         this.inProgressTests = [];
         let __this = this;
         let scheduleTestsURL = `${this.apiServer}${links.api.baseurl}${links.api.admin.test.scheduletests}?adminId=${this.auth.userid}&after=${this.testDate}&institutionId=${this.institutionId}`;
-        let scheduleTestsObservable: Observable<Response> = this.testService.getAllScheduleTests(scheduleTestsURL);
+        let scheduleTestsObservable = this.testService.getAllScheduleTests(scheduleTestsURL);
         this.scheduleTestsSubscription = scheduleTestsObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 __this.tests = _.map(json, (test) => {
                     return __this.testService.mapTestScheduleObjects(test);
                 });
@@ -217,7 +202,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
 
 
-                    setTimeout((json) => {
+                    setTimeout(() => {
                         $(document).trigger("enhance.tablesaw");
                         $('.js-rename-session').editable("destroy");
                         __this.configureEditor(__this);
@@ -239,20 +224,19 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             this.router.navigate(['/tests/view', scheduleId]);
     }
 
-    getTestSchedule(testScheduleId: number): Observable<Response> {
-        let __this = this;
+    getTestSchedule(testScheduleId: number) {
         let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.viewtest}`, testScheduleId);
-        let scheduleObservable: Observable<Response> = this.testService.getScheduleById(scheduleURL);
+        let scheduleObservable = this.testService.getScheduleById(scheduleURL);
         return scheduleObservable;
     }
 
     redirectModifyInProgress(route: string, testScheduleId: number, e: any): void {
         e.preventDefault();
-        let testScheduleObservable: Observable<Response> = this.getTestSchedule(testScheduleId);
+        let testScheduleObservable = this.getTestSchedule(testScheduleId);
         let __this = this;
         testScheduleObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 if (json) {
                     let testSchedule: TestScheduleModel = __this.testService.mapTestScheduleObjects(json);
                     if (testSchedule) {
@@ -346,7 +330,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         let __this = this;
         let renameSessionURL = __this.resolveScheduleURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.renamesession}`, sessionId);
 
-        let renameSessionObservable: Observable<Response> = this.testService.renameSession(renameSessionURL, JSON.stringify(newName));
+        let renameSessionObservable  = this.testService.renameSession(renameSessionURL, JSON.stringify(newName));
         return renameSessionObservable;
     }
 
@@ -374,8 +358,8 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     deleteSchedule(): void {
         let __this = this;
         let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.deleteSchedule}`, this.scheduleIdToDelete);
-        let deleteObdervable: Observable<Response> = this.testService.deleteSchedule(scheduleURL);
-        deleteObdervable.subscribe((res: Response) => {
+        let deleteObdervable  = this.testService.deleteSchedule(scheduleURL);
+        deleteObdervable.subscribe(() => {
             let institution: TestsModal = <TestsModal>_.find(__this.scheduleTests, { 'institutionId': +__this.institutionIdToDelete });
             _.remove(institution.tests, (test) => {
                 return test.scheduleId === +__this.scheduleIdToDelete;
@@ -386,7 +370,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                 });
             __this.scheduleIdToDelete = 0;
             __this.institutionIdToDelete = 0;
-        }, (error: Response) => {
+        }, error => {
             __this.scheduleIdToDelete = 0;
             __this.institutionIdToDelete = 0;
         });
@@ -439,16 +423,16 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                 }
                 this.apiServer = this.common.getApiServer();
                 let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
-                let subjectsObservable: Observable<Response> = this.testService.getSubjects(subjectsURL);
+                let subjectsObservable  = this.testService.getSubjects(subjectsURL);
 
                 this.subjectsSubscription = subjectsObservable
                     .map(response => {
                         if (response.status !== 400) {
-                            return response.json();
+                            return response.body;
                         }
                         return [];
                     })
-                    .subscribe(json => {
+                    .subscribe((json: any) => {
                         if (json.length === 0) {
                             window.open('/accounterror');
                         }
@@ -484,7 +468,6 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     toggleTd() {
         $('tr td:first-child').unbind('click');
         $('tr td:first-child').on('click', function () {
-            var $firstTd = $(this);
             var $tr = $(this).parent('tr');
             var $hiddenTd = $tr.find('td').not($(this));
             $tr.toggleClass('tablesaw-stacked-hidden-border');
@@ -514,7 +497,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
     onClickExamityProfile(ssologin, encryptedUsername_val): void {
         let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
-        let examityObservable: Observable<Response> = this.setFacultyProfileInExamity(facultyAPIUrl);
+        let examityObservable: any  = this.setFacultyProfileInExamity(facultyAPIUrl);
         examityObservable.subscribe(response => {
             this.examityEncryptedUserId = response.json();
             encryptedUsername_val.value = this.examityEncryptedUserId
@@ -522,17 +505,22 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         }, error => console.log(error));
     }
 
-    setFacultyProfileInExamity(url: string): Observable<Response> {
+    setFacultyProfileInExamity(url: string)  {
         let self = this;
-        let options: RequestOptions = new RequestOptions();
-        let headers: Headers = new Headers({
+        let headers = new HttpHeaders({
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': self.auth.authheader
         });
-        options.headers = headers;
-        options.body = '';
-        return this.http.get(url, options);
+        let options = {
+            headers: headers,
+            observe: 'response' as const
+        }
+
+        this.http.get(url, options).map((response: any) => {
+            // do something  with response here
+             return response;
+          });
     }
 
     resolveFacultyURL(url: string): string {
@@ -550,10 +538,10 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
             let __this = this;
             let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
-            let openIntegratedTestsObservable: Observable<Response> = this.testService.getOpenIntegratedTests(url);
+            let openIntegratedTestsObservable = this.testService.getOpenIntegratedTests(url);
             this.eightHourSubscription = openIntegratedTestsObservable
-                .map(response => response.json())
-                .subscribe(json => {
+                .map(response => response.body)
+                .subscribe((json: any) => {
                     __this.auth.openIntegratedTests = _.includes(json, testId);
                     if (isMoreThan8 && __this.auth.openIntegratedTests == false && __this.auth.isInstitutionIp == false) {
                         $('#unCheckExamityInProgressTest').modal('show');
@@ -585,10 +573,10 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
     enableOrCancelExamity(): any {
         let enableExamityURL = this.resolveExamityURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateIsExamityEnabled}`, this.scheduleIdToExamity);
-        let enableExamityObservable: Observable<Response> = this.testService.enableExamity(enableExamityURL, +this.isExamity);
+        let enableExamityObservable  = this.testService.enableExamity(enableExamityURL, +this.isExamity);
         this.enableExamitySubscription = enableExamityObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 if (json) {
                     this.bindTests();
                     console.log("complete");
@@ -600,7 +588,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         return url.replace('§scheduleId', scheduleId.toString());
     }
 
-    redirectToStep($event): void {
+    redirectToStep(event): void {
         $('#unCheckExamityInProgressTest').modal('hide');
         $('#unCheckExamityInCompletedTest').modal('hide');
         return;
@@ -617,10 +605,10 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
             let __this = this;
             let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
-            let openIntegratedTestsObservable: Observable<Response> = this.testService.getOpenIntegratedTests(url);
+            let openIntegratedTestsObservable  = this.testService.getOpenIntegratedTests(url);
             this.eightHourSubscription = openIntegratedTestsObservable
-                .map(response => response.json())
-                .subscribe(json => {
+                .map(response => response.body)
+                .subscribe((json: any) => {
                     __this.auth.openIntegratedTests = _.includes(json, testId);
                     if (isMoreThan8 && __this.auth.openIntegratedTests == false && __this.auth.isInstitutionIp == false) {
                         $('#unCheckExamityInCompletedTest').modal('show');

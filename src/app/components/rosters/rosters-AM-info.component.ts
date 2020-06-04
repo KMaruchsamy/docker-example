@@ -1,7 +1,6 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { links } from '../../constants/config';
-import { Response } from '@angular/http';
 import { AuthService } from './../../services/auth.service';
 import { RosterChangesModel } from '../../models/roster-changes.model';
 import { ProfileService } from '../home/profile.service';
@@ -40,11 +39,11 @@ export class RostersAMInfoComponent implements OnDestroy {
 
     loadProfileDescription(): void {
         let url = `${this.auth.common.getApiServer()}${links.api.baseurl}${links.api.admin.profilesapi}/${this.accountManagerId}`;
-        let profileObservable: Observable<Response> = this.profileService.getProfile(url);
+        let profileObservable  = this.profileService.getProfile(url);
         let self: RostersAMInfoComponent = this;
         this.profileSubscription = profileObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 if (json) {
                     self.rosterChangesModel.accountManagerFirstName = json.FirstName;
                     self.rosterChangesModel.accountManagerLastName = json.LastName;

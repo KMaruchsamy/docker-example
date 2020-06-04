@@ -1,48 +1,16 @@
-import {Component, OnInit, OnDestroy, AfterViewInit,  ElementRef,
+import {Component, OnInit, OnDestroy, ElementRef,
     ViewEncapsulation, ViewContainerRef} from '@angular/core';
-import { Router, ActivatedRoute, CanDeactivate, RoutesRecognized, NavigationStart, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import {Response} from '@angular/http';
-import {Subscription, Observable} from 'rxjs/Rx';
-import {NgFor, Location} from '@angular/common';
+import { Router, ActivatedRoute, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {Subscription, Observable} from 'rxjs';
+import { Location} from '@angular/common';  //NgFor,
 import {Title} from '@angular/platform-browser';
-// import {TestService} from '../../services/test.service';
-// import {AuthService} from '../../services/auth';
-import {links, errorcodes} from '../../constants/config';
-// import {CommonService} from '../../services/common';
-// import {PageHeader} from '../shared/page-header';
-// import {PageFooter} from '../shared/page-footer';
-// import {TestHeader} from './test-header';
+import {links} from '../../constants/config';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import {SelectedStudentModel} from '../../models/selected-student.model';
-import {RemoveWhitespacePipe} from '../../pipes/removewhitespace.pipe';
-import {ParseDatePipe} from '../../pipes/parsedate.pipe';
-// import {ConfirmationPopup} from '../shared/confirmation.popup';
-// import {AlertPopup} from '../shared/alert.popup';
-// import {TestingSessionStartingPopup} from '../tests/test-starting-popup';
-// import {RetesterAlternatePopup} from './retesters-alternate-popup';
-// import {RetesterNoAlternatePopup} from './retesters-noalternate-popup';
-// import {TimeExceptionPopup} from './time-exception-popup';
-// import {SelfPayStudentPopup} from './self-pay-student-popup';
-// import {StudentsStartedTest} from './students-started-test.popup';
-import {SortPipe} from '../../pipes/sort.pipe';
-import {UtilityService} from '../../services/utility.service';
-// import {LogService} from '../../services/log.service.service';
-// import * as _ from 'lodash';
 import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { LogService } from './../../services/log.service';
-import { StudentsStartedTestComponent } from './students-started-test.popup.component';
-import { SelfPayStudentPopupComponent } from './self-pay-student-popup.component';
-import { AlertPopupComponent } from './../shared/alert.popup.component';
-import { TimeExceptionPopupComponent } from './time-exception-popup.component';
-import { RetesterNoAlternatePopupComponent } from './retesters-noalternate-popup.component';
-import { RetesterAlternatePopupComponent } from './retesters-alternate-popup.component';
-import { TestingSessionStartingPopupComponent } from './test-starting-popup.component';
-import { ConfirmationPopupComponent } from './../shared/confirmation.popup.component';
-import { PageFooterComponent } from './../shared/page-footer.component';
-import { TestHeaderComponent } from './test-header.component';
-import { PageHeaderComponent } from './../shared/page-header.component';
 
 
 @Component({
@@ -52,9 +20,7 @@ import { PageHeaderComponent } from './../shared/page-header.component';
     styles: [`#addByName.active + #cohortStudentList .add-students-table-search {display: table; width: 100%;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group {display: table-cell; text-align: center;}
     #addByName.active + #cohortStudentList .add-students-table-search .form-group label.smaller {margin-left: 2em; margin-right: 2em;}`],
-    providers: [TestScheduleModel, SelectedStudentModel],
-    // directives: [PageHeaderComponent, TestHeaderComponent, PageFooterComponent, NgFor, ConfirmationPopupComponent, AlertPopupComponent, TestingSessionStartingPopupComponent],
-    // pipes: [RemoveWhitespacePipe, SortPipe, ParseDatePipe]
+    providers: [TestScheduleModel, SelectedStudentModel]
 })
 
 export class AddStudentsComponent implements OnInit, OnDestroy {
@@ -353,10 +319,10 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             "TestingSessionWindowStart": moment(this.testScheduleModel.scheduleStartTime).format(),
             "TestingSessionWindowEnd": moment(this.testScheduleModel.scheduleEndTime).format()
         }
-        let refreshTestingStatusObservable: Observable<Response> = this.testService.scheduleTests(refreshTestingStatusURL, JSON.stringify(input));
+        let refreshTestingStatusObservable = this.testService.scheduleTests(refreshTestingStatusURL, JSON.stringify(input));
         this.refreshingTestingStatusSubscription = refreshTestingStatusObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
 
                 if (json != null) {
                     let prevSessionStudentList = __this.testScheduleModel.selectedStudents;
@@ -453,10 +419,10 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         let subjectsObservable = this.testService.getActiveCohorts(cohortURL);
         let __this = this;
         this.subjectsSubscription = subjectsObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 __this.cohorts = json;
-                setTimeout(json => {
+                setTimeout(() => {
                     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
                         $('.selectpicker').selectpicker('mobile');
                     else
@@ -492,8 +458,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         if (objArray.length === 1)
             return objArray;
 
-        let duplicate = false;
-        _.forEach(objArray, (obj:any, key) => {
+        _.forEach(objArray, (obj:any) => {
 
             let duplicateArray = _.filter(objArray, function (o:any) { return o.StudentId !== obj.StudentId && obj.FirstName.toUpperCase() === o.FirstName.toUpperCase() && obj.LastName.toUpperCase() === o.LastName.toUpperCase() });
             if (duplicateArray.length > 0)
@@ -517,11 +482,11 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 CohortStudentsURL = this.resolveCohortStudentsInProgressURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.modifyInProgressCohortStudent}`);
             else
                 CohortStudentsURL = this.resolveCohortStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.cohortstudents}`);
-            let testsObservable: Observable<Response> = this.testService.getTests(CohortStudentsURL);
+            let testsObservable = this.testService.getTests(CohortStudentsURL);
             let _self = this;
             this.testsSubscription = testsObservable
-                .map(response => response.json())
-                .subscribe(json => {
+                .map(response => response.body)
+                .subscribe((json: any) => {
                     if (_self.testsTable)
                         _self.testsTable.destroy();
 
@@ -532,7 +497,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                     else
                         this.cohortStudentlist = [];
 
-                    setTimeout(json => {
+                    setTimeout(() => {
                         $('#cohortStudentList').removeClass('hidden');
                         _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig(551));
                         this.RefreshAllSelectionOnCohortChange();
@@ -887,7 +852,6 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             else {
                 if (_lname !== __this.noStudentInCohort.toUpperCase()) {
                     $('#cohortStudents tbody').append('<tr class="odd" id="noMatchingStudents"><td class="not-collapsed" style="text-align:center" colspan="5" >' + __this.noStudentInCohort + '</td></tr>');
-                    var $table = $('#cohortStudents tbody').parent('table')
                 }
                 $('#addAllStudents').attr('disabled', 'disabled');
             }
@@ -983,7 +947,6 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     DetailReviewTestClick(): void {
         if (!this.validateDates())
             return;
-        let studentId = [];
         let selectedStudentModelList = this.selectedStudents;
         if (this.prevStudentList.length === 0)
             this.prevStudentList = this.testScheduleModel.selectedStudents;
@@ -1070,10 +1033,10 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 "TestingSessionWindowEnd": moment(this.testScheduleModel.scheduleEndTime).format()
             }
         }
-        let exceptionObservable: Observable<Response> = this.testService.scheduleTests(repeaterExceptionURL, JSON.stringify(input));
+        let exceptionObservable = this.testService.scheduleTests(repeaterExceptionURL, JSON.stringify(input));
         this.exceptionSubscription = exceptionObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 if (json != null) {
                     __this.resolveExceptions(json, __this);
                 }
@@ -1097,8 +1060,8 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         }
         let exceptionObservable = this.testService.scheduleTests(windowExceptionURL, JSON.stringify(input));
         this.exceptionSubscriptionOne = exceptionObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 __this.SeperateOutSelfPayStudents(json);
 
             }, error => console.log(error));
@@ -1143,7 +1106,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     markSelfPayStudents() {
         if (this._selfPayStudent && this._selfPayStudent.length > 0) {
             if (this.testScheduleModel && this.testScheduleModel.selectedStudents && this.testScheduleModel.selectedStudents.length > 0) {
-                _.forEach(this._selfPayStudent, (student:any, key) => {
+                _.forEach(this._selfPayStudent, (student:any) => {
                     let selectedStudent: SelectedStudentModel = _.find(this.testScheduleModel.selectedStudents, { 'StudentId': student.StudentId });
                     if (selectedStudent) {
                         selectedStudent.MarkedToRemove = false;
@@ -1255,9 +1218,9 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         repeaterExceptions = objException;
         if (objException) {
 
-            let studentRepeaterExceptions: Object[] = [];
-            let alternateTests: Object[] = [];
-            let studentAlternateTests: Object[] = [];
+            let studentRepeaterExceptions: any[] = [];
+            let alternateTests: any[] = [];
+            let studentAlternateTests: any[] = [];
 
             if (repeaterExceptions.StudentRepeaterExceptions && repeaterExceptions.StudentRepeaterExceptions.length > 0) {
                 studentRepeaterExceptions = repeaterExceptions.StudentRepeaterExceptions;
@@ -1277,8 +1240,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 __this.hasAlternateTests = true;
 
             if (studentRepeaterExceptions.length > 0) {
-                _.forEach(studentRepeaterExceptions, function (student:any, key) {
-                    let studentId = student.StudentId;
+                _.forEach(studentRepeaterExceptions, function (student:any) {
                     student.TestName = __this.testScheduleModel.testName;
                     student.NormingStatus = __this.testScheduleModel.testNormingStatus;
                     if (__this.hasAlternateTests) {
@@ -1287,7 +1249,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                         student.Checked = !student.Enabled;
                         // if (!student.Enabled)
                         //     __this.markForRemoval(student.StudentId, true);
-                        _.forEach(student.AlternateTests, function (studentAlternate, key) {
+                        _.forEach(student.AlternateTests, function (studentAlternate) {
                             let _alternateTests:any = _.find(alternateTests, { 'TestId': studentAlternate.TestId });
                             studentAlternate.TestName = _alternateTests.TestName;
                             studentAlternate.NormingStatus = _alternateTests.NormingStatusName;
@@ -1681,11 +1643,11 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         this.searchStudentSubscription = searchStudentObservable
             .map(response => {
                 if (response.status !== 400) {
-                    return response.json();
+                    return response.body;
                 }
                 return [];
             })
-            .subscribe(json => {
+            .subscribe((json: any) => {
                 __this.AddByNameStudentlist = json;
 
                 if (__this.AddByNameStudentlist.length > 0) {
@@ -1868,7 +1830,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                         if (_self.testsTable)
                             _self.testsTable.destroy();
                         _self.cohortStudentlist = _self.markDuplicate(data);
-                        setTimeout(data => {
+                        setTimeout(() => {
                             _self.testsTable = $('#cohortStudents').DataTable(_self.GetConfig(493));
                             $('#cohortStudentList').removeClass('hidden');
                             // this.studentTable = true;
@@ -1999,7 +1961,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     updateModifyInProgress(closeSession: boolean = false): void {
 
         if (this.doesWentThroughTestException) {
-            _.forEach(this.testScheduleModel.selectedStudents, function (student, key) {
+            _.forEach(this.testScheduleModel.selectedStudents, function (student) {
                 if (typeof student.MarkedToRemove === 'undefined') // Mark to removal to false for undefied...
                     student.MarkedToRemove = false;
             });
@@ -2032,10 +1994,10 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
         let __this = this;
         let updateModifyInProgressTestURL = this.resolveUpdateModifyInProgressTestURL(`${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateModifyInProgressStudents}`);
-        let updateModifyInProgressTestObservable: Observable<Response> = this.testService.modifyInProgressScheduleTests(updateModifyInProgressTestURL, JSON.stringify(input));
+        let updateModifyInProgressTestObservable = this.testService.modifyInProgressScheduleTests(updateModifyInProgressTestURL, JSON.stringify(input));
         this.updateModifyInProgressTestSubscription = updateModifyInProgressTestObservable
-            .map(response => response.json())
-            .subscribe(json => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 if (!closeSession) {
                     if (json.ErrorCode === 0 && json.TestingSessionId > 0) {
                         if ((json.alreadyStartedExceptions === null && json.windowExceptions === null) || (json.alreadyStartedExceptions.length === 0 && json.windowExceptions.length === 0)) {
@@ -2132,11 +2094,11 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
     RefreshStudentsWhoHaveStarted(): void {
         let refreshStudentsURL = this.resolveRefreshStudentsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.refreshStudentsWhoStarted}`);
-        let refreshStudentsObservable: Observable<Response> = this.testService.getActiveCohorts(refreshStudentsURL);
+        let refreshStudentsObservable = this.testService.getActiveCohorts(refreshStudentsURL);
         let _this = this;
         this.refreshStudentsSubscription = refreshStudentsObservable
-            .map(response => response.json())
-            .subscribe((json) => {
+            .map(response => response.body)
+            .subscribe((json: any) => {
                 _this.refreshStudentsWhoStarted = json;
                 if (_this.refreshStudentsWhoStarted.length > 0) {
                     let studentsInSession = _.map(_this.selectedStudents, 'StudentId');
@@ -2185,7 +2147,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
     save_ContinueButtonClick(e) {
         e.preventDefault();
-        this.checkIfTestHasStarted();
+        this.checkIfTestHasStarted();debugger
         if (!this.checkIfTestHasStarted()) {
             return false;
         }
@@ -2205,7 +2167,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     onStudentsStartedTestOK(e: any) {
         $('#studentsStartedTest').modal('hide');
         // this.showStudentsStartedTestPopup = false;
-        _.forEach(this.popupStudentsStartedTest, (student, key) => {
+        _.forEach(this.popupStudentsStartedTest, (student) => {
             this.selectedStudents.push(_.find(this.previousSelectedStudentList, { 'StudentId': student.StudentId }));
         });
         this.checkWindowExceptions(this.popupStudentExceptions);
@@ -2217,11 +2179,10 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     }
 
     HasStudentStartedTestException(studentExceptions: any): void {
-        let __this = this;
         let studentRemovedFromSession: any[] = [];
         let TestAlreadyStartedExceptions: any = studentExceptions.alreadyStartedExceptions;
         this.popupStudentExceptions = studentExceptions;
-        _.forEach(TestAlreadyStartedExceptions, (student, key) => {
+        _.forEach(TestAlreadyStartedExceptions, (student) => {
             let isExist = _.some(this.selectedStudents, { 'StudentId': student.StudentId });
             if (!isExist)
                 studentRemovedFromSession.push(student);
