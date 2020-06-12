@@ -1,0 +1,97 @@
+<!-- <page-header></page-header> -->
+<section class="dashboardSection">
+    <main class="dashboardSection-main">
+        <section class="header">
+            <div class="header-section">
+                <div class="header-section-logo">
+                    <img style="margin: 0 24px 0;" [src]="templateJson.header.logo_url" alt="Kaplan" />
+                </div>
+            </div>
+            <div class="header-section1">
+                <div class="header-section-manual">
+                    <img style="height: 24px;width: 24px;margin-right: 8px;"
+                        src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/courses.svg"
+                        alt="Manual" />
+                    <!-- Faculty Manual -->
+                    {{templateJson.header.userguide_LinkText}}
+                </div>
+                <div class="header-section-username">
+                    <img style="height: 24px;width: 24px;margin-right: 8px;"
+                        src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/profile.svg"
+                        alt="Profile" />
+                    Linda Hamilton
+                    <img style="height: 8px;width: 14px;margin-left: 8px;"
+                        src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/down.svg"
+                        alt="down arrow" />
+                </div>
+                <div class="line-4"></div>
+                <div class="header-section-student-site">
+                    <img style="height: 24px;width: 24px;margin-right: 8px;"
+                        src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/student-site.svg"
+                        alt="student site" />
+                    Switch to Student Site
+                </div>
+            </div>
+        </section>
+        <section class="need-urgent-help-section" *ngIf="templateJson.subheader.show">
+            <div class="need-urgent-help">
+                <div [innerHTML]="templateJson.subheader.help_html | safe: 'html'"></div>
+            </div>
+        </section>
+
+        <div class="welcome-section">
+            <div class="welcome">
+                <span class="welcome-text">HI LINDA, WELCOME TO YOUR FACULTY PORTAL</span>
+            </div>
+            <div class="my-institution">
+                <span class="institution-text">My Institution:&nbsp;</span>
+                <span class="institution-name">
+                    Nursing School ABC Name
+                </span>
+            </div>
+
+        </div>
+
+        <section class="content-section" *ngFor="let section of templateJson.content.sections">
+            <div [style.flex]="(panel.size) ? panel.size : '1'" *ngFor="let panel of section.panels">
+                <div class="heading">
+                    <img style="height: 21px;width:20px;margin-right: 5px;" [src]="panel.src" alt="alert" />
+                    {{panel.header}}</div>
+                <div [style.display]="(panel.size > 1)? 'flex' : ''" >
+                    <div class="messages" *ngFor="let card of panel.cards">
+                        <div class="rectangle" [style.background-color]="card.color"></div>
+                        <div class="messages-announcements">
+                            {{card.title}}
+                            <div *ngIf="card.type === 'html'"
+                                [innerHTML]="card.content | safe: 'html'"></div>
+                            <div *ngIf="!(card.type === 'html')"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="faculty-lifeline">
+            <div class="heading">[style.flex]="panel.size"
+                <img style="height: 24px;width:24px;margin-right: 5px;"
+                    src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/faculty.svg"
+                    alt="faculty" />
+                FACULTY LIFELINE</div>
+
+            <div class="AM-NC">
+                <div class="messages">
+
+                    <div class="rectangle faculty"></div>
+                    <div class="messages-announcements">YOUR ACCOUNT MANAGER</div>
+                </div>
+
+                <div class="messages">
+
+                    <div class="rectangle faculty"></div>
+                    <div class="messages-announcements">YOUR NURSE CONSULTATNT</div>
+                </div>
+            </div>
+
+        </div> -->
+        </section>
+    </main>
+</section>

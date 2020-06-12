@@ -34,6 +34,7 @@ import { ForgotPasswordModule } from './components/forgot-password/forgot-passwo
 import { ResetPasswordModule } from './components/reset-password/reset-password.module';
 import { TestsModule } from './components/tests/tests.module';
 import { UserGuideModule } from './components/userguide/userguide.module';
+import { DashboardModule } from './components/dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { UserGuideModule } from './components/userguide/userguide.module';
     BrowserModule,
     LoginModule,
     HomeModule,
+    DashboardModule,
     HelpModule,
     AccountModule,
     RostersModule,

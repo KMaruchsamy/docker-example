@@ -1,0 +1,274 @@
+{
+  "header": {
+    "logo_url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/kaplan_logo.svg",
+    "userguide_LinkText": "Faculty Manual",
+    "account_links": [
+      {
+        "text": "Manage Account",
+        "name": "manageaccount",
+        "url": "/account"
+      },
+      {
+        "text": "Sign Out",
+        "name": "signout"
+      }
+    ]
+  },
+  "subheader": {
+    "show": true,
+    "help_html": "<a href='javascript:void(0);'>Need Urgent Help</a>? Call the Faculty Hotline: 1-866-920-6311"
+  },
+  "content": {
+    "welcome_text": "",
+    "sections": [
+      {
+        "panels": [
+          {
+            "header": "UPDATES & ANNOUNCEMENTS",
+            "size": "1",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/alarm.svg",
+            "cards": [
+              {
+                "title": "COVID-19 UPDATES",
+                "color": "#7825FF",
+                "type": "html",
+                "data_key": "announcements",
+                "content": ""
+              }
+            ]
+          },
+          {
+            "header": "FACULTY LIFELINE",
+            "size": "2",
+            "data_key": "PROFILE",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/faculty.svg",
+            "cards": [
+              {
+                "title": "YOUR ACCOUNT MANAGER",
+                "type": "profile",
+                "color": "#CDB4FF"
+              },
+              {
+                "title": "YOUR NURSE CONSULTANT",
+                "type": "profile",
+                "color": "#CDB4FF"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "panels": [
+          {
+            "header": "REPORTING TOOLS",
+            "size": "4",
+            "src": "",
+            "data_key": "reports",
+            "cards": [
+              {
+                "type": "links",
+                "title": "PERFORMANCE",
+                "color": "#00CDFF",
+                "links": [
+                  {
+                    "text": "Student Report Card",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Test Results By Question",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Cohort By Test",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Category Comparisons",
+                    "url": "<url>"
+                  }
+                ]
+              },
+              {
+                "type": "links",
+                "title": "UTILIZATION",
+                "color": "#FF801E",
+                "links": [
+                  {
+                    "text": "Utilization",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Non Utilization",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Qbank Usage",
+                    "url": "<url>"
+                  }
+                ]
+              },
+              {
+                "type": "links",
+                "title": "SIMULATION",
+                "color": "#6BB34A",
+                "links": [
+                  {
+                    "text": "IHuman Patients",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Mid-fidelity Simulation",
+                    "url": "<url>"
+                  }
+                ]
+              },
+              {
+                "type": "links",
+                "title": "OTHER",
+                "color": "#FF5ADC",
+                "links": [
+                  {
+                    "text": "Student Report Card",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Test Results By Question",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Cohort By Test",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Category Comparisons",
+                    "url": "<url>"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "panels": [
+          {
+            "header": "TEST & QUIZ SCHEDULING",
+            "src": "",
+            "data_key": "reports",
+            "cards": [
+              {
+                "type": "links",
+                "color": "#82E1B9",
+                "links": [
+                  {
+                    "text": "Schedule an Integrated Test",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Manage scheduled test",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Blueprints & Statistical Info",
+                    "url": "<url>"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "header": "MANAGE COHORTS & GROUPS",
+            "src": "",
+            "data_key": "reports",
+            "cards": [
+              {
+                "type": "links",
+                "color": "#B4D2E6",
+                "links": [
+                  {
+                    "text": "Submit New Cohort",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Manage Existing Cohort",
+                    "url": "<url>"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "header": "KAPLAN BEST PRACTICES",
+            "src": "",
+            "data_key": "reports",
+            "cards": [
+              {
+                "type": "links",
+                "color": "#F9CEBB",
+                "links": [
+                  {
+                    "text": "What resources are available?",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "How do i implement the kaplan resources",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "How do i review & access reports",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "How do i implement & measure remediation?",
+                    "url": "<url>"
+                  },
+                  {
+                    "text": "Do i assign grades for kaplan and if so, how?",
+                    "url": "<url>"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "panels": [
+          {
+            "header": "NEED URGENT HELP?",
+            "size": "2",
+            "src": "",
+            "data_key": "reports",
+            "cards": [
+              {
+                "type": "html",
+                "color": "#ED9AB2",
+                "title": "YOUR KAPLAN HOTLINE TEAM IS ALSO STANDING BY.",
+                "content": "<p>Our Faculty Hotline representatives are available for urgent assistance. <b>Call 1-866-920-6311</b>. If you are outside US or canada, dial +1-407-423-6620.</p><p>We are available from 8:00am to 8:00pm Monday through Friday and from 9:00am to 5:45pm on saturdays. <b>All times are Eastern.</b> We are closed on Sundays. </p>"
+              },{
+                "type": "links",
+                "color": "#3C5A64",
+                "title": "HELPFUL LINKS",
+                "links": [
+                  {
+                    "text": "FAQ/QUICK GUIDES",
+                    "url": ""
+                  },
+                  {
+                    "text": "Get help for your students?",
+                    "url": ""
+                  },
+                  {
+                    "text": "Kaplan technical requirements",
+                    "url": ""
+                  }
+                ]
+              }
+            ]
+          }
+          
+        ]
+      }
+    ]
+  }
+}
