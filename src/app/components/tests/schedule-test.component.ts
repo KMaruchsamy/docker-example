@@ -912,7 +912,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
                     __this.handleExceptions(result, __this);
 
             }, error => {
-                let json = error.json();
+                let json = error.error;
                 if (!closeSession
                     && ((json.TimingExceptions && json.TimingExceptions.length > 0)
                         || (json.TestAlreadyStartedExceptions && json.TestAlreadyStartedExceptions.length > 0)
