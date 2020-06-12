@@ -209,9 +209,9 @@ export class AccountComponent implements OnInit, OnDestroy {
                 },
                 error => {
                     if (error.status.toString() === this.errorCodes.API) {
-                        if (error.json().Payload.length > 0) {
-                            if (error.json().Payload[0].Messages.length > 0) {
-                                this.changeEmailPasswordErrorMessage = error.json().Payload[0].Messages[0].toString();
+                        if (error.error.Payload.length > 0) {
+                            if (error.error.Payload[0].Messages.length > 0) {
+                                this.changeEmailPasswordErrorMessage = error.error.Payload[0].Messages[0].toString();
                             }
                         }
                     }
@@ -287,11 +287,11 @@ export class AccountComponent implements OnInit, OnDestroy {
                 }, error => {
                     console.log(error);
                     if (error.status.toString() === this.errorCodes.API) {
-                        if (error.json().Payload.length > 0) {
-                            if (error.json().Payload[0].Messages.length > 0) {
+                        if (error.error.Payload.length > 0) {
+                            if (error.error.Payload[0].Messages.length > 0) {
                                 // Update API to return different error codes for current and new password errors so they can show below appropriate inputs
                                 // this.currentPasswordErrorMessage = '';
-                                this.resetNewPasswordErrorMessage = error.json().Payload[0].Messages[0].toString();
+                                this.resetNewPasswordErrorMessage = error.error.Payload[0].Messages[0].toString();
                                 this.clearResetPasswordInputs(txtCurrentPassword, txtNewPassword, txtConfirmPassword);
                             }
                         }
@@ -357,9 +357,9 @@ export class AccountComponent implements OnInit, OnDestroy {
                     }
                 }, error => {
                     if (error.status.toString() === this.errorCodes.API) {
-                        if (error.json().Payload.length > 0) {
-                            if (error.json().Payload[0].Messages.length > 0) {
-                                this.sendStudentPasswordErrorMessage = error.json().Payload[0].Messages[0].toString();
+                        if (error.error.Payload.length > 0) {
+                            if (error.error.Payload[0].Messages.length > 0) {
+                                this.sendStudentPasswordErrorMessage = error.error.Payload[0].Messages[0].toString();
                             }
                         }
                     }

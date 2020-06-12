@@ -104,9 +104,9 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
                         }
                     }, error => {
                         if (error.status.toString() === this.errorCodes.API) {
-                            if (error.json().Payload && error.json().Payload.length > 0) {
-                                if (error.json().Payload[0].Messages.length > 0) {
-                                    this.errorMessage = error.json().Payload[0].Messages[0].toString();
+                            if (error.error.Payload && error.error.Payload.length > 0) {
+                                if (error.error.Payload[0].Messages.length > 0) {
+                                    this.errorMessage = error.error.Payload[0].Messages[0].toString();
                                     self.clearPasswords(txtnPassword, txtcPassword);
                                 }
                             }
