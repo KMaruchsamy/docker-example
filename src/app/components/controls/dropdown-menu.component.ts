@@ -128,7 +128,6 @@ export class DropdownMenuComponent implements OnInit {
     }
 
     prepareRedirectToReports(page, form, hdToken, hdpage, hdExceptionURL): boolean {
-        debugger;
         this.page = page;
         this.form = form;
         this.hdToken = hdToken;
@@ -139,13 +138,11 @@ export class DropdownMenuComponent implements OnInit {
     }
 
     resolveExceptionPage(url): string {
-        debugger;
         let resolvedURL = url.replace('§environment', this.common.getOrigin());
         return resolvedURL;
     }
 
     redirectToReports(): void {
-        debugger
         var serverURL;
         if(this.page==='ApolloStudentReportCard'){
             serverURL = this.nursingITServer + links.nursingit.apolloLaunchPage + "&adminId=" + this.auth.userid;

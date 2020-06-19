@@ -94,7 +94,6 @@ export class TestService {
         });
         let requestOptions = {
             headers: headers,
-            // body:'',
             observe: 'response' as const
         };
         return this.http.get(url, requestOptions);
@@ -232,7 +231,6 @@ export class TestService {
         });
         let options = {
             headers : headers,
-            // body : ''
             observe: 'response' as const
         }
         return this.http.delete(url, options);
