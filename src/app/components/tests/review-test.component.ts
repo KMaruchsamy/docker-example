@@ -426,7 +426,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             scheduleTestURL = this.resolveModifyTestingSessionURL(`${this.auth.common.apiServer}${links.api.v2baseurl}${links.api.admin.test.modifyscheduletest}`);
             scheduleTestObservable = this.testService.modifyScheduleTests(scheduleTestURL, JSON.stringify(input));
         }
-        else {debugger
+        else {
             scheduleTestURL = `${this.auth.common.apiServer}${links.api.v2baseurl}${links.api.admin.test.scheduletest}`;
             scheduleTestObservable = this.testService.scheduleTests(scheduleTestURL, JSON.stringify(input));
         }
@@ -840,7 +840,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         let retesterExceptionsObservable: any = this.testService.getRetesters(retesterExceptionsURL, JSON.stringify(input));
 
         this.retesterExceptionsSubscripton = retesterExceptionsObservable
-            .map(response => response.json())
+            .map(response => response.body)
             .subscribe((json) => {
                 __this.resolveAlternateExceptionsForModify(json, __this);
                 __this.checkAndResolveNewExceptionsOnModify(__this);

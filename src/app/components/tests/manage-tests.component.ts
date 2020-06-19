@@ -499,7 +499,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
         let examityObservable: any  = this.setFacultyProfileInExamity(facultyAPIUrl);
         examityObservable.subscribe(response => {
-            this.examityEncryptedUserId = response.json();
+            this.examityEncryptedUserId = response.body;
             encryptedUsername_val.value = this.examityEncryptedUserId
             ssologin.submit();
         }, error => console.log(error));
@@ -517,10 +517,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             observe: 'response' as const
         }
 
-        this.http.get(url, options).map((response: any) => {
-            // do something  with response here
-             return response;
-          });
+       return this.http.get(url, options);
     }
 
     resolveFacultyURL(url: string): string {

@@ -508,7 +508,7 @@ export class AccountComponent implements OnInit, OnDestroy {
         let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
         let examityObservable  = this.setFacultyProfileInExamity(facultyAPIUrl);
         examityObservable.subscribe(response => {
-            this.examityEncryptedUserId = response.toString();
+            this.examityEncryptedUserId = response.body.toString();
             encryptedUsername_val.value = this.examityEncryptedUserId
                     ssologin.submit();
         }, error => console.log(error));

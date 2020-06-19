@@ -431,7 +431,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 
             },
             error => {
-                __this.log.error(JSON.parse(error._body).msg, error._body);
+                __this.log.error(error.error.msg, JSON.stringify(error.error));
                 if (error.status === 400)
                     this.noCohort = true;
             });

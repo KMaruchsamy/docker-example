@@ -32,7 +32,6 @@ export class RosterService {
         });
         let requestOptions = {
             headers: headers,
-            // body: ''
             observe: 'response' as const
         };
         return requestOptions;

@@ -261,7 +261,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
                 this.noTest = true;
             },
             error => {
-                self.log.error(error.error.Message, JSON.stringify(error))
+                self.log.error(error.error.Message, JSON.stringify(error.error))
             });
     }
 
