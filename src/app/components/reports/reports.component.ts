@@ -80,7 +80,7 @@ export class ReportsComponent implements OnInit {
         let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
         let examityObservable  = this.setFacultyProfileInExamity(facultyAPIUrl);
         examityObservable.subscribe(response => {
-            this.examityEncryptedUserId = response.toString();
+            this.examityEncryptedUserId = response.body.toString();
             encryptedUsername_val.value = this.examityEncryptedUserId
             ssologin.submit();
         }, error => console.log(error));
@@ -95,7 +95,6 @@ export class ReportsComponent implements OnInit {
         });
         let options = {
             headers : headers,
-            // body : ''
             observe: 'response' as const
         };
         return this.http.get(url, options);
