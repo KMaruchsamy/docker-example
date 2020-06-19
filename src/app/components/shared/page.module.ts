@@ -7,12 +7,14 @@ import { ControlsModule } from './../controls/controls.module';
 import { RouterModule } from '@angular/router';
 import { NeedHelpComponent } from "./need-help.component";
 import { PageSubheaderComponent } from "./page-subheader.component";
+import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
     imports: [
         CommonModule,
         RouterModule,
-        ControlsModule
+        ControlsModule,
+        PipesModule
     ],
     exports: [
         PageHeaderComponent,
