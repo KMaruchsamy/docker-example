@@ -31,6 +31,7 @@ export const links = {
             accessPingToken :"admin/accessPingToken",
             facultyAMLoginUrl : "admin/facultyAMLoginUrl",
             ihpSSoLoginApi: "ihp/ltiRequestFormForIHP",
+            announcements: "admin/faculty/Messages",
             test: {
                 subjects: "scheduling/institutions/§institutionid/subjects?testType=§testtype",
                 tests: "scheduling/institutions/§institutionid/tests?subject=§subject&testType=§testtype&searchString=§searchString", //Added Searchstring parameter.

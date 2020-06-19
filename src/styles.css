@@ -267,6 +267,10 @@ The `retina-sprites` mixin generates a CSS rule and media query for retina group
 
 @include retina-sprites($retina-groups);
 */
+.covid-font * :not(h2) {
+  font-size: 22px;
+}
+
 .button {
   -webkit-appearance: none;
   -moz-appearance: none;

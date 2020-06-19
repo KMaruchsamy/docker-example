@@ -320,4 +320,17 @@ export class AuthService {
     };
     return this.http.get(url, options);
 }
+
+getAPIResponse(url: string)  {
+  let self = this;
+  const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': self.authheader
+  });
+  let options = {
+    headers: headers
+  };
+  return this.http.get(url, options);
+}
 }

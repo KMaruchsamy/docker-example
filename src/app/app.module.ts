@@ -13,7 +13,6 @@ import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { LoginModule } from './components/login/login.module';
 import { ControlsModule } from './components/controls/controls.module';
-import { PipesModule } from './pipes/pipes.module';
 import { ErrorModule } from './components/errors/errors.module';
 import { UtilityService } from './services/utility.service';
 import { ValidationsService } from './services/validations.service';
@@ -56,8 +55,7 @@ import { UserGuideModule } from './components/userguide/userguide.module';
     AppRoutingModule,
     Angulartics2Module.forRoot(),
     ErrorModule,
-    ControlsModule,
-    PipesModule
+    ControlsModule
   ],
   providers: [
     Angulartics2GoogleAnalytics,

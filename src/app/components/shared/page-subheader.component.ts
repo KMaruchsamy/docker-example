@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { CommonService } from '../../services/common.service';
+import { AuthService } from '../../services/auth.service';
+import {links} from '../../constants/config';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector:'page-subheader',
@@ -19,10 +23,34 @@ import { Component } from '@angular/core';
         background-color: #feee67;
       }
 
-      .covid-font {
-        font-size: 22px;
-      }
     `]
 })
 export class PageSubheaderComponent {
+  apiServer: string;
+  announcementText: string;
+  announcementSubscription: Subscription;
+
+  constructor(public common: CommonService, public auth: AuthService) {
+    this.apiServer = this.common.getApiServer();
+  }
+  
+  ngOnInit() {
+    this.getAnnouncementContent();
+  }
+  getAnnouncementContent() {        
+    let announcementURL = `${this.apiServer}${links.api.baseurl}${links.api.admin.announcements}`;
+    let announcementObservable  = this.auth.getAPIResponse(announcementURL);
+    this.announcementSubscription = announcementObservable
+        .map(response => response)
+        .subscribe(data => {
+        this.announcementText = data.toString();
+         
+     }, error => console.log(error));
+ }
+
+ ngOnDestroy() {
+   if(this.announcementSubscription) {
+     this.announcementSubscription.unsubscribe();
+   }
+ }
 }
