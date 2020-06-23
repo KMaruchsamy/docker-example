@@ -8,7 +8,7 @@ meta:
     type: rolling
     primary: green
 
-sandbox:
+feature:
   containers:
     nursingfacultyui:
       access: internal
@@ -23,7 +23,7 @@ sandbox:
       platform: linux
       routing:
         domain_urls:
-          - nit.kaptest.com
+          - nit.feature.kaptest.com
         update_r53: true
       resources:
         cpu: 256
