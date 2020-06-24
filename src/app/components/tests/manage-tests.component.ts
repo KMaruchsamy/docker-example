@@ -1,10 +1,10 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Router } from '@angular/router';
-import {Subscription} from 'rxjs';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Title} from '@angular/platform-browser';
-import {links, errorcodes, teststatus, Timezones} from '../../constants/config';
-import {TestScheduleModel} from '../../models/test-schedule.model';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Title } from '@angular/platform-browser';
+import { links, errorcodes, teststatus, Timezones, ItSecirity } from '../../constants/config';
+import { TestScheduleModel } from '../../models/test-schedule.model';
 import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
@@ -34,13 +34,14 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     institutionName: string = '';
     adminId: number = 0;
     sStorage: any;
-    testTypeIds: number[] = [1,7];
+    testTypeIds: number[] = [1, 7];
     institutionID: number = 0;
     actionSubscription: Subscription;
     subjectsSubscription: Subscription;
     scheduleTestsSubscription: Subscription;
     renameSessionSubscription: Subscription;
     enableExamitySubscription: Subscription;
+    enableSecuritySubscription: Subscription;
     errorCodes: any;
     testStatus: any;
     isMultiCampus: boolean = false;
@@ -54,8 +55,8 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     openIntigratedTests: boolean;
     institutionIPBlank: boolean;
     eightHourSubscription: Subscription;
-    examityServer:string;
-    examityLoginURL:string;
+    examityServer: string;
+    examityLoginURL: string;
     constructor(
         public testService: TestService,
         public router: Router,
@@ -79,7 +80,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
 
     ngOnInit(): void {
-              if (!this.auth.isAuth())
+        if (!this.auth.isAuth())
             this.router.navigate(['/']);
         else {
             if (this.auth.institutions) {
@@ -101,7 +102,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                 }
             }
             this.titleService.setTitle('Manage Tests – Kaplan Nursing');
-            window.scroll(0,0);
+            window.scroll(0, 0);
             //Appcues.start();
         }
     }
@@ -174,7 +175,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                         _test.spanMultipleDays = moment(_test.scheduleStartTime).isBefore(_test.scheduleEndTime, 'day');
                         return moment(_test.scheduleStartTime).toDate()
                     });
-                    
+
                     __this.inProgressTests = __this.groupTests(sortedInProgressTests);
 
 
@@ -197,7 +198,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                         return moment(_test.scheduleStartTime).toDate()
                     }, ['desc']);
 
-                                        __this.completedTests = __this.groupTests(sortedCompletedTests);
+                    __this.completedTests = __this.groupTests(sortedCompletedTests);
 
 
 
@@ -211,7 +212,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
                 }
             },
-            error => console.log(error));
+                error => console.log(error));
 
     }
 
@@ -257,7 +258,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                 }
 
             },
-            error => console.log(error));
+                error => console.log(error));
     }
 
     configureEditor(__this: any) {
@@ -330,7 +331,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         let __this = this;
         let renameSessionURL = __this.resolveScheduleURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.renamesession}`, sessionId);
 
-        let renameSessionObservable  = this.testService.renameSession(renameSessionURL, JSON.stringify(newName));
+        let renameSessionObservable = this.testService.renameSession(renameSessionURL, JSON.stringify(newName));
         return renameSessionObservable;
     }
 
@@ -358,7 +359,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     deleteSchedule(): void {
         let __this = this;
         let scheduleURL = this.resolveScheduleURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.deleteSchedule}`, this.scheduleIdToDelete);
-        let deleteObdervable  = this.testService.deleteSchedule(scheduleURL);
+        let deleteObdervable = this.testService.deleteSchedule(scheduleURL);
         deleteObdervable.subscribe(() => {
             let institution: TestsModal = <TestsModal>_.find(__this.scheduleTests, { 'institutionId': +__this.institutionIdToDelete });
             _.remove(institution.tests, (test) => {
@@ -378,7 +379,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
     setLatestInstitution(): void {
         if (this.auth.institutions != null && this.auth.institutions != 'undefined') {
-            let latestInstitution:any = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
+            let latestInstitution: any = _.first(_.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc'))
             if (latestInstitution) {
                 this.institutionName = latestInstitution.InstitutionName;
             }
@@ -423,7 +424,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                 }
                 this.apiServer = this.common.getApiServer();
                 let subjectsURL = this.resolveSubjectsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.subjects}`);
-                let subjectsObservable  = this.testService.getSubjects(subjectsURL);
+                let subjectsObservable = this.testService.getSubjects(subjectsURL);
 
                 this.subjectsSubscription = subjectsObservable
                     .map(response => {
@@ -437,7 +438,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                             window.open('/accounterror');
                         }
                         else {
-                            this.router.navigateByUrl(`/tests/choose-test/${(!this.institutionPN || this.institutionPN === 0 )? this.institutionRN : this.institutionPN}`);
+                            this.router.navigateByUrl(`/tests/choose-test/${(!this.institutionPN || this.institutionPN === 0) ? this.institutionRN : this.institutionPN}`);
                         }
                     });
             }
@@ -497,7 +498,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
     onClickExamityProfile(ssologin, encryptedUsername_val): void {
         let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
-        let examityObservable: any  = this.setFacultyProfileInExamity(facultyAPIUrl);
+        let examityObservable: any = this.setFacultyProfileInExamity(facultyAPIUrl);
         examityObservable.subscribe(response => {
             this.examityEncryptedUserId = response.body;
             encryptedUsername_val.value = this.examityEncryptedUserId
@@ -505,7 +506,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         }, error => console.log(error));
     }
 
-    setFacultyProfileInExamity(url: string)  {
+    setFacultyProfileInExamity(url: string) {
         let self = this;
         let headers = new HttpHeaders({
             'Accept': 'application/json',
@@ -517,43 +518,55 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             observe: 'response' as const
         }
 
-       return this.http.get(url, options);
+        return this.http.get(url, options);
     }
 
     resolveFacultyURL(url: string): string {
         return url.replace('§adminId', this.auth.userid.toString());
     }
 
-    showPopup(scheduleId: number, isExamityEnabled: boolean, startDate: any, endDate: any, testId: number): void {
+    showPopup(scheduleId: number, isExamityEnabled: boolean, startDate: any, endDate: any, testId: number, itSecurityEnabledInstitution: number): void {
         this.scheduleIdToExamity = scheduleId;
         this.isExamity = isExamityEnabled;
-        if (this.isExamity) {
-            let isMoreThan8: boolean = false;
-            let duration = moment.duration(moment(endDate).diff(moment(startDate)));
-            if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8)
-                isMoreThan8 = true;
+        if (itSecurityEnabledInstitution == ItSecirity.Examity) {
+            if (this.isExamity) {
+                let isMoreThan8: boolean = false;
+                let duration = moment.duration(moment(endDate).diff(moment(startDate)));
+                if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8)
+                    isMoreThan8 = true;
 
-            let __this = this;
-            let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
-            let openIntegratedTestsObservable = this.testService.getOpenIntegratedTests(url);
-            this.eightHourSubscription = openIntegratedTestsObservable
-                .map(response => response.body)
-                .subscribe((json: any) => {
-                    __this.auth.openIntegratedTests = _.includes(json, testId);
-                    if (isMoreThan8 && __this.auth.openIntegratedTests == false && __this.auth.isInstitutionIp == false) {
-                        $('#unCheckExamityInProgressTest').modal('show');
-                        return;
-                    }
-                    this.isExamity = false;
-                    $('#examityDisablePopup').modal("show")
-                },
-                error => {
-                    
-                });
+                let __this = this;
+                let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
+                let openIntegratedTestsObservable = this.testService.getOpenIntegratedTests(url);
+                this.eightHourSubscription = openIntegratedTestsObservable
+                    .map(response => response.body)
+                    .subscribe((json: any) => {
+                        __this.auth.openIntegratedTests = _.includes(json, testId);
+                        if (isMoreThan8 && __this.auth.openIntegratedTests == false && __this.auth.isInstitutionIp == false) {
+                            $('#unCheckExamityInProgressTest').modal('show');
+                            return;
+                        }
+                        this.isExamity = false;
+                        $('#examityDisablePopup').modal("show");
+                    },
+                        error => {
+
+                        });
+            }
+            else {
+                this.isExamity = true;
+                $('#examityEnablePopup').modal("show");
+            }
         }
         else {
-            this.isExamity = true;
-            $('#examityEnablePopup').modal("show")
+            if (this.isExamity) {
+                this.isExamity = false;
+                $('#securityDisablePopup').modal("show");
+            }
+            else {
+                this.isExamity = true;
+                $('#securityEnablePopup').modal("show");
+            }
         }
     }
     onExamityEnableConfirmation(e): void {
@@ -570,7 +583,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
 
     enableOrCancelExamity(): any {
         let enableExamityURL = this.resolveExamityURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateIsExamityEnabled}`, this.scheduleIdToExamity);
-        let enableExamityObservable  = this.testService.enableExamity(enableExamityURL, +this.isExamity);
+        let enableExamityObservable = this.testService.enableSecurity(enableExamityURL, +this.isExamity);
         this.enableExamitySubscription = enableExamityObservable
             .map(response => response.body)
             .subscribe((json: any) => {
@@ -578,7 +591,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                     this.bindTests();
                     console.log("complete");
                 }
-        }, error => console.log(error));
+            }, error => console.log(error));
     }
 
     resolveExamityURL(url: string, scheduleId: number): string {
@@ -591,36 +604,91 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         return;
     }
 
-    showPopupCompletedTest(scheduleId: number, isExamityEnabled: boolean, startDate: any, endDate: any, testId: number): void {
+    showPopupCompletedTest(scheduleId: number, isExamityEnabled: boolean, startDate: any, endDate: any, testId: number, itSecurityEnabledInstitution: number): void {
         this.scheduleIdToExamity = scheduleId;
         this.isExamity = isExamityEnabled;
-        if (this.isExamity) {
-            let isMoreThan8: boolean = false;
-            let duration = moment.duration(moment(endDate).diff(moment(startDate)));
-            if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8)
-                isMoreThan8 = true;
+        if (itSecurityEnabledInstitution == ItSecirity.Examity) {
+            if (this.isExamity) {
+                let isMoreThan8: boolean = false;
+                let duration = moment.duration(moment(endDate).diff(moment(startDate)));
+                if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8)
+                    isMoreThan8 = true;
 
-            let __this = this;
-            let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
-            let openIntegratedTestsObservable  = this.testService.getOpenIntegratedTests(url);
-            this.eightHourSubscription = openIntegratedTestsObservable
-                .map(response => response.body)
-                .subscribe((json: any) => {
-                    __this.auth.openIntegratedTests = _.includes(json, testId);
-                    if (isMoreThan8 && __this.auth.openIntegratedTests == false && __this.auth.isInstitutionIp == false) {
-                        $('#unCheckExamityInCompletedTest').modal('show');
-                        return;
-                    }
-                    this.isExamity = false;
-                    $('#examityDisablePopup').modal("show")
-                },
-                error => {
+                let __this = this;
+                let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
+                let openIntegratedTestsObservable = this.testService.getOpenIntegratedTests(url);
+                this.eightHourSubscription = openIntegratedTestsObservable
+                    .map(response => response.body)
+                    .subscribe((json: any) => {
+                        __this.auth.openIntegratedTests = _.includes(json, testId);
+                        if (isMoreThan8 && __this.auth.openIntegratedTests == false && __this.auth.isInstitutionIp == false) {
+                            $('#unCheckExamityInCompletedTest').modal('show');
+                            return;
+                        }
+                        this.isExamity = false;
+                        $('#examityDisablePopup').modal("show")
+                    },
+                        error => {
 
-                });
+                        });
+            }
+            else {
+                this.isExamity = true;
+                $('#examityEnablePopup').modal("show");
+            }
         }
         else {
-            this.isExamity = true;
-            $('#examityEnablePopup').modal("show")
+            {
+                if (this.isExamity) {
+                    this.isExamity = false;
+                    $('#securityDisablePopup').modal("show");
+                }
+                else {
+                    this.isExamity = true;
+                    $('#securityEnablePopup').modal("show");
+                }
+            }
         }
+    }
+
+    onSecurityEnableConfirmation(e): void {
+        $('#securityDisablePopup').modal('hide');
+        $('#securityEnablePopup').modal('hide');
+        this.enableOrCancelProctorTrack();
+    }
+
+    onCancelSecurityEnable(e) {
+        $('#securityDisablePopup').modal('hide');
+        $('#securityEnablePopup').modal('hide');
+        this.scheduleIdToExamity = 0;
+    }
+    enableOrCancelProctorTrack(): any {
+        let enableExamityURL = this.resolveExamityURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateIsProctorTrackEnabled}`, this.scheduleIdToExamity);
+        let enableSecurityObservable = this.testService.enableSecurity(enableExamityURL, +this.isExamity);
+        this.enableSecuritySubscription = enableSecurityObservable
+            .map(response => response.body)
+            .subscribe((json: any) => {
+                if (json) {
+                    this.bindTests();
+                    console.log("complete");
+                }
+            }, error => console.log(error));
+    }
+
+    onClickProctortrackReport(id): void {
+        let input = JSON.stringify({
+            first_name: this.auth.firstname,
+            last_name: this.auth.lastname,
+            user_id: this.auth.userid,
+            email: this.auth.useremail,
+            role: "Instructor",
+            institution_id: id,
+            group_id: []
+        });
+        let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.proctortrackReportapi}`);
+        let examityObservable: any = this.auth.postApiCall(facultyAPIUrl, input);
+        examityObservable.subscribe(response => {
+            window.open(response.body.toString(), 'blank');
+        }, error => console.log(error));
     }
 }

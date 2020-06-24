@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
-import { links } from '../../constants/config';
+import { links, ItSecirity } from '../../constants/config';
 import { TestScheduleModel } from '../../models/test-schedule.model';
 import { SelectedStudentModel } from '../../models/selected-student.model';
 import { TestService } from './test.service';
@@ -30,7 +30,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     destinationRoute: string;
     paramsSubscription: Subscription;
     scheduleSubscription: Subscription;
-    chkExamityView: boolean = false;
+    chkSecurityView: boolean = false;
     ItSecurityEnabled: boolean = false;
     constructor(public auth: AuthService, public common: CommonService, public testService: TestService, public schedule: TestScheduleModel, public router: Router, private activatedRoute: ActivatedRoute, public titleService: Title    ) {
 
@@ -111,8 +111,8 @@ export class ViewTestComponent implements OnInit, OnDestroy {
 
                         }
                         __this.schedule = _schedule;
-                        __this.ItSecurityEnabled = __this.schedule.itSecurityEnabledInstitution == true;
-                        __this.chkExamityView = __this.schedule.isExamity;
+                        __this.ItSecurityEnabled = __this.schedule.itSecurityEnabledInstitution > 0;
+                        __this.chkSecurityView = this.GetItSecurityCheckkboxView(__this.schedule);
                         __this.hasADA = _.some(__this.schedule.selectedStudents, { 'Ada': true });
                         __this.testStatus = __this.testService.getTestStatusFromTimezone(_schedule.institutionId, _schedule.scheduleStartTime, _schedule.scheduleEndTime);
                         __this.anyStudentPayStudents = __this.testService.anyStudentPayStudents(_schedule);
@@ -188,5 +188,14 @@ export class ViewTestComponent implements OnInit, OnDestroy {
             __this.testService.clearTestScheduleObjects();
             __this.router.navigate(['/tests']);
         });
+    }
+
+    GetItSecurityCheckkboxView(testSchedule: TestScheduleModel) {
+        if (testSchedule.itSecurityEnabledInstitution == ItSecirity.Examity) {
+            return testSchedule.isExamity;
+        }
+        if (testSchedule.itSecurityEnabledInstitution == ItSecirity.ProctorTrack) {
+            return testSchedule.isProctorTrack;
+        }
     }
 }

@@ -71,8 +71,9 @@
 
                 <h4 class="teal inline">Students in Testing Session ({{schedule?.selectedStudents?.length}})</h4>
                 <div class="margin-1em-bottom" *ngIf="ItSecurityEnabled && +(schedule.testType)!==7" >
-                    <input type="checkbox" class="checkbox-image" [attr.id]="chkExamityView" name="chkExamityView" [checked]="chkExamityView" disabled="disabled" />
-                    <label [attr.for]="chkExamityView"><b>Enable Examity</b></label>
+                    <input type="checkbox" class="checkbox-image" [attr.id]="chkSecurityView" name="chkSecurityView" [checked]="chkSecurityView" disabled="disabled" />
+                    <label *ngIf="schedule.itSecurityEnabledInstitution == 1" [attr.for]="chkSecurityView"><b>Enable Examity</b></label>
+                    <label *ngIf="schedule.itSecurityEnabledInstitution == 3" [attr.for]="chkSecurityView"><b>Enable Proctortrack</b></label>
                 </div>
                 <table id="studentsInTestingSessionTable" class="table-with-cell-padding table-striped last-row-no-border">
                     <thead>
