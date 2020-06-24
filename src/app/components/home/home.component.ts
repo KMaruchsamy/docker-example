@@ -2,7 +2,7 @@ import {Component, OnInit, OnDestroy, ElementRef, ViewChild} from '@angular/core
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
-import {links} from '../../constants/config';
+import {links, ItSecirity} from '../../constants/config';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import {Subscription} from 'rxjs';
 import { AuthService } from './../../services/auth.service';
@@ -59,6 +59,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     ihpSSOLoginSubscription: Subscription;
     isMultiCampus_IHP: boolean = false;
     hasIhpEnableInstitution: boolean = false;
+    proctortrackITSecurityEnabled: boolean = false;
+    ItSecurityEnabledInstitutions: any[] = [];
+    ITSecurityInstitutionID: number = 0;
     
     constructor(public router: Router, public auth: AuthService, public location: Location, public common: CommonService, public profileService: ProfileService, public testService: TestService, public testScheduleModel: TestScheduleModel, public titleService: Title) {
     }
@@ -93,6 +96,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.ItSecurityEnabled = this.auth.isExamityEnabled();
         this.examityServer = this.common.getExamityServer();
         this.examityLoginURL = this.examityServer + links.examity.login;
+        this.proctortrackITSecurityEnabled = this.auth.isProctortrackEnabled();
+        this.getProctorTrackInstitutions();
     }
 
     setAtomStudyPlanLink(){
@@ -416,5 +421,48 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.element = this.viewElement.nativeElement;
         const fragment = document.createRange().createContextualFragment(this.htmlSnippet);
         this.element.appendChild(fragment);
+    }
+
+    onClickProctortrackReport(): void {
+        if (this.ItSecurityEnabledInstitutions.length > 1)
+        {
+            $('#itSecurity').modal('show');
+            return;
+        }
+       this.callToProctortrackReportByInstitutionId();
+    }
+    setInstitutionforItSecurity(id) {
+        this.ITSecurityInstitutionID = id;
+    }
+    takeToProctorTrackDashboard() {
+        this.callToProctortrackReportByInstitutionId();
+    }
+    callToProctortrackReportByInstitutionId() {
+        let input = JSON.stringify({
+            first_name: this.auth.firstname,
+            last_name: this.auth.lastname,
+            user_id: this.auth.userid,
+            email: this.auth.useremail,
+            role: "Instructor",
+            institution_id: this.ITSecurityInstitutionID,
+            group_id: []
+          });
+        let facultyAPIUrl = this.resolveFacultyURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.proctortrackReportapi}`);
+        let proctortrackObservable  = this.auth.postApiCall(facultyAPIUrl, input);
+        proctortrackObservable.subscribe(response => {
+            window.open(response.body.toString(),'blank');
+            $('#itSecurity').modal('hide');
+        }, error => console.log(error));
+    }
+
+    getProctorTrackInstitutions() {
+        let institutions = JSON.parse(this.auth.institutions);
+        this.ItSecurityEnabledInstitutions = institutions.filter(x=> x.ITSecurityEnabled == ItSecirity.ProctorTrack);
+        this.ItSecurityEnabledInstitutions =   _.orderBy(this.ItSecurityEnabledInstitutions, 'InstitutionName','asc');
+        if(this.ItSecurityEnabledInstitutions && this.ItSecurityEnabledInstitutions.length > 0) {
+            if(this.ItSecurityEnabledInstitutions.length == 1){
+                this.ITSecurityInstitutionID = this.ItSecurityEnabledInstitutions[0].InstitutionId;
+            }
+        }
     }
 }

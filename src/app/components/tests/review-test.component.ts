@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ElementRef, ViewContainerRef } from '@ang
 import { Router, ActivatedRoute, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-import { links } from '../../constants/config';
+import { links, ItSecirity } from '../../constants/config';
 import { TestScheduleModel } from '../../models/test-schedule.model';
 import { SelectedStudentModel } from '../../models/selected-student.model';
 import { Subscription, Observable } from 'rxjs';
@@ -57,7 +57,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
     showRetestersAlternatePopup: boolean = false;
     showRetestersNoAlternatePopup: boolean = false;
     showTimingExceptionPopup: boolean = false;
-    chkExamity: boolean = false;
+    chkSecurity: boolean = false;
     ItSecurityEnabled: boolean = false;
 
     constructor(public testScheduleModel: TestScheduleModel,
@@ -186,19 +186,20 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
                 this.testScheduleModel = this.testService.sortSchedule(savedSchedule);
                 this.ItSecurityEnabled = this.auth.isITSecurityEnabled();
-                if (this.ItSecurityEnabled == true && (this.testScheduleModel.isExamity == undefined || !!this.testScheduleModel.isExamity) && +this.testScheduleModel.testType!==7) {
-                    this.chkExamity = true;
-                }
-                else {
-                    this.chkExamity = false;
-                }
+                this.chkSecurity = this.validateITSecuritiesCheckbox();
                 this.bindFaculty();
 
                 if (this.testScheduleModel.scheduleName)
                     this.$txtScheduleName.val(this.testScheduleModel.scheduleName);
                 if (this.modify) {
-                    this.ItSecurityEnabled = +this.testScheduleModel.itSecurityEnabledInstitution === 1;
-                    this.chkExamity = this.testScheduleModel.isExamity;
+                     if (this.ItSecurityEnabled) {
+                        if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.Examity) {
+                            this.chkSecurity = this.testScheduleModel.isExamity;
+                        }
+                        if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.ProctorTrack) {
+                            this.chkSecurity = this.testScheduleModel.isProctorTrack;
+                        }
+                   }
                     if (this.testScheduleModel.facultyMemberId !== this.testScheduleModel.adminId && this.auth.userid !== this.testScheduleModel.adminId) {
                         this.facultyAssignable = false;
                     }
@@ -250,6 +251,23 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                 this.testScheduleModel.facultyLastName = this.auth.lastname;
             }
         });
+    }
+
+    validateITSecuritiesCheckbox() {
+        if (this.ItSecurityEnabled == true && +this.testScheduleModel.testType!==7) {
+            if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.Examity && (this.testScheduleModel.isExamity == undefined || !!this.testScheduleModel.isExamity)) {
+                return true;
+            }
+            else if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.ProctorTrack && (this.testScheduleModel.isProctorTrack == undefined || !!this.testScheduleModel.isProctorTrack)) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
     }
 
     anyStudentPayStudents(): void {
@@ -374,7 +392,8 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             TestingWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
             TestingWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format(),
             FacultyMemberId: this.testScheduleModel.facultyMemberId,
-            IsExamityEnabled: this.chkExamity,
+            IsExamityEnabled: this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.Examity ? this.chkSecurity : false,
+            IsProctorTrackEnabled: this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.ProctorTrack ? this.chkSecurity : false,
             Students: _.map(this.testScheduleModel.selectedStudents, (student: SelectedStudentModel) => {
                 return {
                     StudentId: student.StudentId,
@@ -1102,9 +1121,14 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
         return;
     }
 
-    OnChangeChkExamity($event): void {
-        this.chkExamity = $($event.target).is(':checked');
-        this.testScheduleModel.isExamity = this.chkExamity;
+    OnChangeChkSecurity($event): void {
+        this.chkSecurity = $($event.target).is(':checked');
+        if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.Examity) {
+            this.testScheduleModel.isExamity = this.chkSecurity;
+        }
+        if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.ProctorTrack) {
+            this.testScheduleModel.isProctorTrack = this.chkSecurity;
+        }
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
     }
 }

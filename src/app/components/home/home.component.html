@@ -286,6 +286,23 @@
                 Review your students' performance on the i-Human Patients assignments or cases.
               </p>
             </div>
+            <div
+              class="faculty-link-list"
+              *ngIf="proctortrackITSecurityEnabled"
+            >
+              <h3 class="h4 text-smaller-margin">
+                <a
+                  class="mobile-button"
+                  #linkIhpReport
+                  target="_blank"
+                 (click)="onClickProctortrackReport()"
+                  >Proctortrack Proctoring Reports</a
+                >
+              </h3>
+              <p>
+                Review your students proctored exam reports in Proctortrack.
+              </p>
+            </div>
             <div class="faculty-link-list">
               <h3 class="h4 text-smaller-margin">
                 <a
@@ -423,6 +440,25 @@
         </div>
         <div class="modal-footer">
           <button class="button OK-button-centered center" [disabled]="institutionID==0" (click)="goToIhpSSOLogin()">Continue</button>
+        </div>
+      </div>
+     </div>
+   </div>
+
+  <!--Modal for proctortrack enable Institutions-->
+   <div id="itSecurity" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content ">
+        <div class="modal-header">
+          <button type="button" class="close close-medium-icon-grey" aria-label="Close" data-dismiss="modal"></button>
+          <div class="margin-2em-top-bottom" *ngIf="proctortrackITSecurityEnabled && ItSecurityEnabledInstitutions?.length > 1">
+            <select class="selectpicker" #chooseITSecurityCampus id="chooseITSecurityCampus" (change)="setInstitutionforItSecurity(chooseITSecurityCampus.value)" data-width="400" data-size="6" title='Choose an institution'>
+                <option *ngFor="let ITcampus of ItSecurityEnabledInstitutions; let i = index" [selected]="ITcampus.InstitutionId==institutionID" [value]='ITcampus.InstitutionId'>{{ITcampus.InstitutionNameWithProgOfStudy}}</option>
+            </select>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button class="button OK-button-centered center" [disabled]="ITSecurityInstitutionID==0" (click)="takeToProctorTrackDashboard()">Continue</button>
         </div>
       </div>
      </div>

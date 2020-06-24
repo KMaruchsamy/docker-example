@@ -242,13 +242,27 @@ export class AuthService {
     return this.http.post(url, {}, requestOptions);
   }
 
+  postApiCall(url,body)  {
+    let headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': this.authheader,
+      'Content-Type': 'application/json'
+    });
+    let requestOptions = {
+      headers: headers,
+      observe: 'response' as const
+    };
+  
+    return this.http.post(url, body, requestOptions);
+  }
+
   isITSecurityEnabled(): boolean {
     let testInstitutionId = JSON.parse(this.testSchedule);
     let testScheduledInstitutionId = testInstitutionId.institutionId;
     let institutions = JSON.parse(this.institutions);
     if (institutions.length > 0) {
       for (var i = 0; i < institutions.length; i++) {
-        if (institutions[i].InstitutionId == testScheduledInstitutionId && institutions[i].ITSecurityEnabled == true) {
+        if (institutions[i].InstitutionId == testScheduledInstitutionId && institutions[i].ITSecurityEnabled > 0) {
           return true;
         }
       }
@@ -261,7 +275,20 @@ export class AuthService {
     let institutions = JSON.parse(this.institutions);
     if (institutions.length > 0) {
       for (var i = 0; i < institutions.length; i++) {
-        if (institutions[i].ITSecurityEnabled == true) {
+        if (institutions[i].ITSecurityEnabled == 1) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return false;
+  }
+
+  isProctortrackEnabled(): boolean {
+    let institutions = JSON.parse(this.institutions);
+    if (institutions.length > 0) {
+      for (var i = 0; i < institutions.length; i++) {
+        if (institutions[i].ITSecurityEnabled == 3) {
           return true;
         }
       }

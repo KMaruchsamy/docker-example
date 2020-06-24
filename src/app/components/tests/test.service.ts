@@ -194,6 +194,7 @@ export class TestService {
             _testScheduleModel.dateCreated = objTestScheduleModel.DateCreated;
             _testScheduleModel.lastUpdated = objTestScheduleModel.DateModified;
             _testScheduleModel.isExamity = objTestScheduleModel.IsExamityEnabled;
+            _testScheduleModel.isProctorTrack = objTestScheduleModel.IsProctorTrackEnabled;
             _testScheduleModel.itSecurityEnabledInstitution = objTestScheduleModel.ItSecurityEnabledInstitution;
             _testScheduleModel.testType = objTestScheduleModel.TestType || 1;
             if (objTestScheduleModel.Students && objTestScheduleModel.Students.length > 0) {
@@ -533,7 +534,7 @@ export class TestService {
         }
     }
 
-    enableExamity(url: string, input: number) {
+    enableSecurity(url: string, input: number) {
         return this.http.put(url,input, this.getRequestOptions());
     }
 }

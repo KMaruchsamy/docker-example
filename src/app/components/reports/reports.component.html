@@ -79,9 +79,9 @@
                             href="javascript:void(0)" class="margin-1em-bottom mobile-button">Module Result Comparisons by Cohort</a></li>
                     </ul>
                 </div>
-                <div class="margin-2em-bottom">
-                    <h3 class="h4 text-smaller-margin" ><a class="mobile-button" #linkReportExamityExamStaus *ngIf="ItSecurityEnabled" (click)="onClickExamityProfile(ssologin,encryptedUsername_val)">Examity Proctoring Reports</a></h3>
-                    <p *ngIf="ItSecurityEnabled">Review your students proctored exam reports in examity</p>
+                <div class="margin-2em-bottom" *ngIf="ItSecurityEnabled">
+                    <h3 class="h4 text-smaller-margin" ><a class="mobile-button" #linkReportExamityExamStaus (click)="onClickExamityProfile(ssologin,encryptedUsername_val)">Examity Proctoring Reports</a></h3>
+                    <p>Review your students proctored exam reports in examity</p>
                 </div>
                 <div class="margin-2em-bottom">
                     <h3 class="h4 text-smaller-margin"><a class="mobile-button" #linkCohortComparision (click)="prepareRedirectToReports('ReportStudentAdmissionTestReportCard',myform,hdtoken,hdpage,hdexceptionurl);" href="javascript:void(0)">Admissions Test Report</a></h3>

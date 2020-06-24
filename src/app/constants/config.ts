@@ -28,6 +28,7 @@ export const links = {
             profilesapi: "profile",
             terms: "admin/enrollmentAgreement",
             examityProfileapi: "examity/adminsso/§adminId",
+            proctortrackReportapi: "proctortrack/facultylogin",
             accessPingToken :"admin/accessPingToken",
             facultyAMLoginUrl : "admin/facultyAMLoginUrl",
             ihpSSoLoginApi: "ihp/ltiRequestFormForIHP",
@@ -55,7 +56,9 @@ export const links = {
                 refreshStudentsWhoStarted: "scheduling/testingSessions/§testingSessionId/students?filter=§filter",
                 updateModifyInProgressStudents: "scheduling/modifyInProgress/testingSessions/§testSessionId",
                 updateScheduleDatesModifyInProgress: "scheduling/modifyInProgress/testingSessions/§scheduleId/windowDates",
-                updateIsExamityEnabled: "scheduling/testingSessions/§scheduleId/examityEnable"
+                updateIsExamityEnabled: "scheduling/testingSessions/§scheduleId/examityEnable",
+                updateIsProctorTrackEnabled: "scheduling/testingSessions/§scheduleId/proctorTrackEnable"
+
             },
             logging: {
                 error: 'error/LogService'
@@ -304,6 +307,13 @@ export enum RosterUpdateTypes {
     AddToThisCohort = 3,
     ExtendAccess = 4
 }
+
+export enum ItSecirity {
+    Examity = 1,
+    Respondus,
+    ProctorTrack
+}
+
 
 // export const RosterUpdateTypes = {
 //     MoveToDifferentCohort : 1,

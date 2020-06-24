@@ -69,8 +69,9 @@
         <button class="right anchor-button" *ngIf="(retesterExceptions?.length>0 && hasAlternateTests) || (retesterExceptions?.length>0 && hasSavedRetesterExceptions) || (modify && retesterExceptionsModify?.length>0)" (click)="changeAlternateAssignments($event)">Change alternate test assignments</button>
         
         <div class="margin-1em-bottom" *ngIf="ItSecurityEnabled && +(testScheduleModel.testType) !== 7">
-            <input type="checkbox" class="checkbox-image" [attr.id]="chkExamity" name="chkExamity" [checked]="chkExamity" (change)="OnChangeChkExamity($event)" />
-            <label [attr.for]="chkExamity"><b>Enable Examity</b></label>
+            <input type="checkbox" class="checkbox-image" [attr.id]="chkSecurity" name="chkSecurity" [checked]="chkSecurity" (change)="OnChangeChkSecurity($event)" />
+            <label *ngIf="this.testScheduleModel.itSecurityEnabledInstitution == 1" [attr.for]="chkSecurity"><b>Enable Examity {{ (testScheduleModel.isExamity) }}</b></label>
+            <label *ngIf="this.testScheduleModel.itSecurityEnabledInstitution == 3" [attr.for]="chkSecurity"><b>Enable Proctortrack {{ (testScheduleModel.IsProctorTrack) }}</b></label>
         </div>
         <table id="studentsInTestingSessionTable" class="dataTable-bordered table-with-cell-padding table-striped last-row-no-border">
             <thead>

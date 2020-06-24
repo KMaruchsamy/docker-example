@@ -1980,6 +1980,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             TestingWindowEnd: this.testScheduleModel.scheduleEndTime,
             FacultyMemberId: this.testScheduleModel.facultyMemberId,
             IsExamityEnabled: this.testScheduleModel.isExamity,
+            IsProctorTrackEnabled: this.testScheduleModel.isProctorTrack,
             TestType: this.testScheduleModel.testType,
             Students: _.map((closeSession ? this.testScheduleModel.selectedStudents : this.selectedStudents), (student) => {
                 return {
@@ -2147,7 +2148,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
     save_ContinueButtonClick(e) {
         e.preventDefault();
-        this.checkIfTestHasStarted();debugger
+        this.checkIfTestHasStarted();
         if (!this.checkIfTestHasStarted()) {
             return false;
         }

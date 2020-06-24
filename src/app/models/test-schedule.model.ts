@@ -31,7 +31,8 @@ export class TestScheduleModel{
     dateCreated: any;
     lastUpdated: any;
     isExamity: boolean;
-    itSecurityEnabledInstitution: boolean = false;
+    isProctorTrack: boolean;
+    itSecurityEnabledInstitution: number = 0;
     testType: number;
     constructor() { }
 }

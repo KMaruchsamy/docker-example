@@ -204,12 +204,24 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         else {
             this.testScheduleModel.currentStep = 1;
             this.testScheduleModel.institutionId = this.institutionID;
+            this.testScheduleModel.itSecurityEnabledInstitution = this.getITSecurityByInstitutionId(this.institutionID);
             this.testScheduleModel.adminId = this.auth.userid;
             this.testScheduleModel.adminFirstName = this.auth.firstname;
             this.testScheduleModel.adminLastName = this.auth.lastname;
         }
         this.testScheduleModel.activeStep = 1;
 
+    }
+
+    getITSecurityByInstitutionId(id: number) {
+    let itSecurity = 0 ;
+    let institutions = JSON.parse(this.sStorage.getItem('institutions'));
+    if (institutions.length > 0) {
+        institutions.filter(x=> x.InstitutionId == id).map(y=> {
+            itSecurity = y.ITSecurityEnabled
+        });
+    }
+    return itSecurity; 
     }
 
     sanitizeURL(url: string): SafeUrl {
