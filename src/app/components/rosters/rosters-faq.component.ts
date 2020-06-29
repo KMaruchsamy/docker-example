@@ -61,7 +61,7 @@ export class RostersFaqComponent implements OnDestroy {
                     self.customChangeForm = (json.LinksForFrontEnd && json.LinksForFrontEnd.length > 0) ? json.LinksForFrontEnd[0].LinkUrl : '';
                 } 
             },
-            error => console.log(error.message),
+            error => console.log(error.error.message),
             () => {
                 //done callback
             });

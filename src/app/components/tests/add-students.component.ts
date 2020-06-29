@@ -2017,7 +2017,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 }
             },
             error => {
-                    __this.checkForStartedTestException(JSON.parse(error._body));
+                    __this.checkForStartedTestException(error.error);
             });
     }
     resolveUpdateModifyInProgressTestURL(url: string): string {
