@@ -70,8 +70,8 @@
         
         <div class="margin-1em-bottom" *ngIf="ItSecurityEnabled && +(testScheduleModel.testType) !== 7">
             <input type="checkbox" class="checkbox-image" [attr.id]="chkSecurity" name="chkSecurity" [checked]="chkSecurity" (change)="OnChangeChkSecurity($event)" />
-            <label *ngIf="this.testScheduleModel.itSecurityEnabledInstitution == 1" [attr.for]="chkSecurity"><b>Enable Examity {{ (testScheduleModel.isExamity) }}</b></label>
-            <label *ngIf="this.testScheduleModel.itSecurityEnabledInstitution == 3" [attr.for]="chkSecurity"><b>Enable Proctortrack {{ (testScheduleModel.IsProctorTrack) }}</b></label>
+            <label *ngIf="this.testScheduleModel.itSecurityEnabledInstitution == 1" [attr.for]="chkSecurity"><b>Enable Examity</b></label>
+            <label *ngIf="this.testScheduleModel.itSecurityEnabledInstitution == 3" [attr.for]="chkSecurity"><b>Enable Proctortrack</b></label>
         </div>
         <table id="studentsInTestingSessionTable" class="dataTable-bordered table-with-cell-padding table-striped last-row-no-border">
             <thead>
