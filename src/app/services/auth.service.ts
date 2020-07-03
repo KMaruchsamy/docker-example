@@ -112,6 +112,13 @@ export class AuthService {
     this.sStorage.setItem('testschedule', value);
   }
 
+  get dashboardTemplate(): any {
+    return this.sStorage.getItem('dashboardtemplate');
+  }
+  set dashboardTemplate(value: any) {
+    this.sStorage.setItem('dashboardtemplate', value);
+  }
+
   constructor(private http: HttpClient) {
     // this.common = new CommonService();
     // this.sStorage = this.common.getStorage();

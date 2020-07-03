@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.templateJson = betaTemplate;
     console.log(this.templateJson);
+    this.auth.dashboardTemplate = JSON.stringify(this.templateJson);
     this.loadInstitutions();
   }
 
@@ -36,6 +37,7 @@ export class DashboardComponent implements OnInit {
 
   loadTemplate() {
     this.templateJson = this.isBetaInstitution ? betaTemplate : nonBetaTemplate;
+    this.auth.dashboardTemplate = JSON.stringify(this.templateJson);
   }
 
   onInstitutionSelected(e) {

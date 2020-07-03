@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 import { AuthService } from '../../services/auth.service';
 import {links} from '../../constants/config';
@@ -7,35 +7,25 @@ import { Subscription } from 'rxjs';
 @Component({
     selector:'page-subheader',
     templateUrl:'./page-subheader.component.html',
-    styles:[`
-    .ad{
-        padding:2px 10px;
-        font-size:8pt;
-        border-radius:2px;
-    }
-
-    .red{
-        background-color:#BD2828;
-        color:#FFF;
-    }
-
-    .covid-yellow {
-        background-color: #feee67;
-      }
-
-    `]
+    styleUrls: ['./page-subheader.component.scss']
 })
 export class PageSubheaderComponent {
   apiServer: string;
   announcementText: string;
   announcementSubscription: Subscription;
+  @Input() showCover: boolean;
+  subheader: any;
 
   constructor(public common: CommonService, public auth: AuthService) {
     this.apiServer = this.common.getApiServer();
   }
   
   ngOnInit() {
-    this.getAnnouncementContent();
+    // this.getAnnouncementContent();
+    this.updateUIBasedOnTemplate();
+  }
+  updateUIBasedOnTemplate() {
+    this.subheader = (this.auth.dashboardTemplate) ? JSON.parse(this.auth.dashboardTemplate).subheader : "";
   }
   getAnnouncementContent() {        
     let announcementURL = `${this.apiServer}${links.api.baseurl}${links.api.admin.announcements}`;
