@@ -1,0 +1,52 @@
+<section class="section" *ngFor="let section of content.sections">
+  <div
+    [style.flex]="panel.size ? panel.size : '1'"
+    *ngFor="let panel of section.panels"
+    class="panel"
+  >
+    <header class="panel__header" *ngIf="panel && panel.src && panel.header">
+      <img [src]="panel.src" alt="alert" />
+      <h1 class="header">{{ panel.header }}</h1>
+    </header>
+    <div class="panel__content">
+      <ng-container *ngFor="let card of panel.cards">
+        <app-profile-card
+          *ngIf="card.type === 'profile'"
+          [card]="card"
+          prettyCard
+          [headerColor]="card.color"
+          [flexSize]="card.size ? card.size : 1"
+        ></app-profile-card>
+        <app-html-card
+          *ngIf="card.type === 'html'"
+          [card]="card"
+          prettyCard
+          [headerColor]="card.color"
+          [flexSize]="card.size ? card.size : 1"
+        ></app-html-card>
+        <app-links-card
+          *ngIf="card.type === 'links'"
+          [card]="card"
+          prettyCard
+          [headerColor]="card.color"
+          [flexSize]="card.size ? card.size : 1"
+        ></app-links-card>
+      </ng-container>
+
+      <!-- <div
+        class="card"
+        
+        [style.flex]="card.size ? card.size : 1"
+        [style.borderTopColor]="card.color"
+      >
+        <header>
+          <h1 class="header">{{ card.title }}</h1>
+        </header>
+        <div
+          *ngIf="card.type === 'html'"
+          [innerHTML]="card.content | safe: 'html'"
+        ></div>
+      </div> -->
+    </div>
+  </div>
+</section>

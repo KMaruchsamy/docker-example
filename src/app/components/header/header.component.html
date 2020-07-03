@@ -1,0 +1,43 @@
+<header class="header">
+  <aside>
+    <img [src]="header.logo_url" alt="Kaplan" />
+  </aside>
+  <div class="spacer"></div>
+  <a mat-button href="https://www.google.com/" target="_blank" class="link"
+    ><img
+      style="height: 24px; width: 24px; margin-right: 8px;"
+      src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/courses.svg"
+      alt="Manual"
+    />
+    <!-- Faculty Manual -->
+    {{ header.userguide_LinkText }}</a
+  >
+  <img
+    style="height: 24px; width: 24px; margin-right: 8px;"
+    src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/profile.svg"
+    alt="Profile"
+  />
+  <mat-form-field>
+    <mat-label class="select__label">Linda Hamilton</mat-label>
+    <mat-select>
+      <mat-option value="manageaccount"> Manage Account </mat-option>
+      <mat-option value="signout"> Signout </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <!-- <a mat-button href="https://www.google.com/" target="_blank" class="link"
+    >
+    Linda Hamilton
+    <img
+      style="height: 8px; width: 14px; margin-left: 8px;"
+      src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/down.svg"
+      alt="down arrow"
+  /></a> -->
+  <a mat-button href="https://www.google.com/" target="_blank" class="link">
+    <img
+      style="height: 24px; width: 24px; margin-right: 8px;"
+      src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/student-site.svg"
+      alt="student site"
+    />
+    Switch to Student Site</a
+  >
+</header>

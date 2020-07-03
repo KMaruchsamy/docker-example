@@ -1,0 +1,9 @@
+
+<header>
+    <h1 class="header">{{ card.title }}</h1>
+  </header>
+  <div
+    *ngIf="card.type === 'html'"
+    [innerHTML]="card.content | safe: 'html'"
+  ></div>
+  

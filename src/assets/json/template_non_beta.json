@@ -62,7 +62,7 @@
           {
             "header": "REPORTING TOOLS",
             "size": "4",
-            "src": "",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/reporting.svg",
             "data_key": "reports",
             "cards": [
               {
@@ -153,7 +153,7 @@
         "panels": [
           {
             "header": "TEST & QUIZ SCHEDULING",
-            "src": "",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/calendar.svg",
             "data_key": "reports",
             "cards": [
               {
@@ -178,7 +178,7 @@
           },
           {
             "header": "MANAGE COHORTS & GROUPS",
-            "src": "",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/items.svg",
             "data_key": "reports",
             "cards": [
               {
@@ -199,7 +199,7 @@
           },
           {
             "header": "KAPLAN BEST PRACTICES",
-            "src": "",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/teachingtools.svg",
             "data_key": "reports",
             "cards": [
               {
@@ -236,16 +236,17 @@
         "panels": [
           {
             "header": "NEED URGENT HELP?",
-            "size": "2",
-            "src": "",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/alert.svg",
             "data_key": "reports",
             "cards": [
               {
+                "size": 2,
                 "type": "html",
                 "color": "#ED9AB2",
                 "title": "YOUR KAPLAN HOTLINE TEAM IS ALSO STANDING BY.",
                 "content": "<p>Our Faculty Hotline representatives are available for urgent assistance. <b>Call 1-866-920-6311</b>. If you are outside US or canada, dial +1-407-423-6620.</p><p>We are available from 8:00am to 8:00pm Monday through Friday and from 9:00am to 5:45pm on saturdays. <b>All times are Eastern.</b> We are closed on Sundays. </p>"
-              },{
+              },
+              {
                 "type": "links",
                 "color": "#3C5A64",
                 "title": "HELPFUL LINKS",
@@ -266,7 +267,6 @@
               }
             ]
           }
-          
         ]
       }
     ]
