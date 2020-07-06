@@ -5,7 +5,7 @@ import { HomeComponent } from './home.component';
 import { ProfileDescriptionComponent } from './profile-description.component';
 
 const homeRoutes: Routes = [
-  { path: 'home', component: HomeComponent },
+  { path: 'home1', component: HomeComponent },
   { path: 'home/profiles/:id', component: ProfileDescriptionComponent },
 ];
 

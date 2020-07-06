@@ -1,9 +1,7 @@
-<main class="dashboard">
-  <app-header [header]="templateJson.header"> </app-header>
-  <app-subheader
-    *ngIf="templateJson.subheader.show"
-    [subheader]="templateJson.subheader"
-  ></app-subheader>
+<page-header> </page-header>
+<section class="dashboard">
+  <div class="dashboardSection-main">
+    
 
   <div class="welcome-section">
     <div class="welcome">
@@ -11,9 +9,6 @@
     </div>
     <div class="my-institution">
       <span class="institution-text">My Institution:&nbsp;</span>
-      <!-- <span class="institution-name">
-        Nursing School ABC Name
-      </span> -->
       <mat-form-field style="min-width: 300px;">
         <mat-select (selectionChange)="onInstitutionSelected($event)" #institutionList>
           <mat-option
@@ -27,4 +22,6 @@
     </div>
   </div>
   <app-content [content]="templateJson.content"></app-content>
-</main>
+</div>
+</section>
+<page-footer></page-footer>

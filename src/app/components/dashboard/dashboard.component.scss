@@ -3,6 +3,23 @@
   flex-direction: column;
   justify-content: stretch;
   align-items: stretch;
+  & .dashboardSection {
+    flex: 1
+  }
+}
+
+.welcome-section {
+  margin: 27px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  border-bottom: 2px solid #d0d1d4;
+}
+
+.welcome {
+  display: flex;
+  flex: 1;
+  color: #101b2b;
 }
 
 .welcome-text {
@@ -15,168 +32,19 @@
 }
 
 .my-institution {
-  /* color: #101B2B; */
-  font-family: "Open Sans", sans-serif, Roboto, "Helvetica Neue";
-  font-size: 16px;
-  letter-spacing: 0;
-  line-height: 24px;
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-
-  .institution-text {
-    font-weight: bold;
-  }
-
-  .institution-name {
-    min-width: 100px;
-  }
-}
-
-.header {
-  height: 80px;
-  background-color: #1d093e;
-  color: #ffffff;
-  display: flex;
-}
-
-.header-section {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  justify-content: space-around;
-}
-
-.header-section1 {
-  display: flex;
-  flex: 1;
-  flex-flow: column wrap;
-  justify-content: space-around;
-  align-content: flex-end;
-  margin-right: 21px;
-}
-
-.header-section-logo {
-  height: 44.11px;
-  width: 200px;
-}
-
-.header-section-student-site {
-  height: 44.11px;
-  width: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.header-section-manual {
-  height: 44.11px;
-  width: 150px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.header-section-username {
-  height: 44.11px;
-  width: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.need-urgent-help {
-  color: #ffffff;
-  font-family: "Open Sans";
-  font-size: 16px;
-  font-weight: bold;
-  letter-spacing: 0;
-  line-height: 24px;
-}
-
-.need-urgent-help-section {
-  background-color: #7825ff;
-  height: 40px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.welcome-section {
-  margin: 27px;
-  display: flex;
-  align-items: baseline;
-  border-bottom: 2px solid #d0d1d4;
-}
-
-.welcome {
-  display: flex;
-  color: #101b2b;
-}
-
-.line-4 {
-  box-sizing: border-box;
-  height: 46px;
-  width: 1px;
-  border: 1px solid #7825ff;
-}
-
-.content-section {
-  height: 428px;
-  display: flex;
-  margin: 27px;
-}
-
-.announcements {
-  flex: 1;
-}
-
-.faculty-lifeline {
-  flex: 2;
-}
-
-.heading {
-  flex: 1;
-  height: 48px;
-  color: #101b2b;
-  font-family: "ITC Franklin Gothic LT Pro";
-  font-weight: bold;
-  font-size: 18px;
-  letter-spacing: 0;
-  line-height: 48px;
-}
-
-.messages {
-  flex: 1;
-  box-sizing: border-box;
-  height: 364px;
-  justify-content: space-around;
-  border-radius: 4px;
-  background-color: #ffffff;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
-  margin: 5px;
-}
-
-.AM-NC {
-  display: flex;
-}
-
-.rectangle {
-  height: 12px;
-  border-radius: 4px 4px 0 0;
-  /* background-color: #7825FF; */
-}
-
-/* .faculty {
-    background-color: #CDB4FF; */
-/* } */
-
-.messages-announcements {
-  padding: 1.5rem;
   font-family: "Open Sans";
   font-size: 16px;
   letter-spacing: 0;
   line-height: 24px;
+  // flex: 1;
+  // display: flex;
+  // justify-content: flex-end;
+}
+
+.institution-text {
+  font-weight: bold;
+}
+
+.institution-name {
+  min-width: 100px;
 }
