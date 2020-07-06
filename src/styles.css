@@ -59,6 +59,8 @@ template {
 
 a {
   background-color: transparent;
+  color: #7825ff;
+  text-decoration: underline;
 }
 
 a:active,
@@ -991,11 +993,11 @@ h6 {
 }
 
 a {
-  color: #0f287d;
+  color: #7825ff;
   cursor: pointer;
-  text-decoration: none;
   -webkit-transition: color 0.1s linear;
   transition: color 0.1s linear;
+  text-decoration: underline;
 }
 a:active,
 a:focus,
@@ -4766,7 +4768,7 @@ select.mobile-device {
   .consultant-heading {
     font-size: 1.4em;
     line-height: 1.5;
-  } 
+  }
 }
 
 .sign-in {
