@@ -5,7 +5,7 @@
 
   <div class="welcome-section">
     <div class="welcome">
-      <span class="welcome-text">HI LINDA, WELCOME TO YOUR FACULTY PORTAL</span>
+      <span class="welcome-text">HI {{username|uppercase}}, WELCOME TO YOUR FACULTY PORTAL</span>
     </div>
     <div class="my-institution">
       <span class="institution-text">My Institution:&nbsp;</span>
@@ -24,4 +24,4 @@
   <app-content [content]="templateJson.content"></app-content>
 </div>
 </section>
-<page-footer></page-footer>
+<page-footer [footerLinks]="false"></page-footer>

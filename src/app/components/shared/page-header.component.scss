@@ -2,12 +2,10 @@
   min-height: 80px;
   flex: 1;
   color: #FFFFFF;
+  background-color: #1D093E;
   display: flex;
-  &.disable-header {
-    background-color: rgba(200, 200, 200, 0.7);
-  }
-  &.enable-header {
-    background-color: #1D093E;
+  & .remove-text-decoration {
+    text-decoration: none;
   }
   & .header-section {
     flex: 1;
@@ -28,6 +26,10 @@
     height: 8px;
     width: 14px;
     margin-left: 8px;
+    content: url(assets/images/down.svg);
+  }
+  & .open img.down-icon {
+    content: url(assets/images/up.svg);
   }
   & .header-menu-section {
     flex: 1;

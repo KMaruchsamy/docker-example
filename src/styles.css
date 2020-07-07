@@ -6359,3 +6359,9 @@ input.small-checkbox-image {
 }
 
 /*# sourceMappingURL=styles.css.map */
+
+a.subheader-link {
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+}

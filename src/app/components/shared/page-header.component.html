@@ -1,5 +1,5 @@
 
-<header class="header" [ngClass]=" showCover ? 'disable-header': 'enable-header' ">
+<header class="header">
     <div class="header-section">
         <div>
             <a [routerLink]="['/home']"  [tabindex]="ariaDisabled ? -1 : null"  aria-disabled="ariaDisabled" >
@@ -9,12 +9,12 @@
             </a>
         </div>
     </div>
-    <div class="header-menu-section" *ngIf="!hideDropdown">
+    <div class="header-menu-section" *ngIf="!hideDropdown ">
         <div class="menu-content">
             <img class="header-section-icon"
-                [src]="header?.userguide.icon"
+                [src]="header?.userguide?.icon"
                 alt="Manual" />
-            Faculty Manual
+            {{header.userguide.title}}
         </div>
         <div class="menu-content align-content-items">
             <img class="header-section-icon"
@@ -23,14 +23,13 @@
                 
             <nav class="dropdown" [class.hidden]="" role="navigation" aria-label="primary">
               <div class="dropdown-container">
-                <a href="javascript:void(0)"  id="lnkMenu"  role="button" class="dropdown-button" data-toggle="dropdown">{{username}}
-                  <img style="down-icon"
-                  src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/down.svg"
+                <a href="javascript:void(0)"  id="lnkMenu"  role="button" class="dropdown-button remove-text-decoration" data-toggle="dropdown">{{username}}
+                  <img class="down-icon"
                   alt="down arrow" />
                 </a>
                 <ul class="dropdown-menu dropdown-select">
-                 <li><a [routerLink]="['/account']" class="menu-icon">{{header.account.menu[0].text}}</a></li>
-                 <li><a href="javascript:void(0)" class="menu-icon" (click)="logout($event);">{{header.account.menu[1].text}}</a></li>
+                 <li><a [routerLink]="['/account']" class="menu-icon remove-text-decoration">{{header.account.menu[0].text}}</a></li>
+                 <li><a href="javascript:void(0)" class="menu-icon remove-text-decoration" (click)="logout($event);">{{header.account.menu[1].text}}</a></li>
                 </ul>
               </div>
             </nav>
@@ -39,9 +38,9 @@
         <div class="line-4"></div>
         <div class="menu-content">
             <img class="header-section-icon"
-                src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/student-site.svg"
+                [src]="header?.studentsite?.icon"
                 alt="student site" />
-            Switch to Student Site
+            {{header.studentsite.title}}
         </div>
     </div>
 </header>

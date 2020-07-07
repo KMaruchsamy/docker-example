@@ -18,11 +18,15 @@
         "name": "signout"
       }
     ]
+    },
+    "studentsite" :{
+      "title": "Switch to Student Site",
+      "icon": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/student-site.svg"
     }
   },
   "subheader": {
     "show": true,
-    "help_html": "<a href='javascript:void(0);'>Need Urgent Help</a>? Call the Faculty Hotline: 1-866-920-6311"
+    "help_html": "<a class='subheader-link' href='javascript:void(0);'>Need Urgent Help</a>? Call the Faculty Hotline: 1-866-920-6311"
   },
   "content": {
     "welcome_text": "",
