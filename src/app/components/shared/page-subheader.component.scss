@@ -2,13 +2,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #7825ff;
   height: 40px;
   color: #fff;
-
-  &.disable-subheader {
-    background-color: rgba(200, 200, 200, 0.7);
-  }
-  &.enable-subheader {
-    background-color: #7825ff;
-  }
+  font-size: 16px;
+  font-weight: bold;
 }

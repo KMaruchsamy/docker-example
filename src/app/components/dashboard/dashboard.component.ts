@@ -15,13 +15,14 @@ export class DashboardComponent implements OnInit {
   institutions: any[];
   isBetaInstitution = false;
   selectedInstitution;
+  username: string;
   @ViewChild(MatSelect, { static: true }) institutionList: MatSelect;
   constructor(private httpClient: HttpClient, public auth: AuthService) {}
 
   ngOnInit(): void {
     this.templateJson = betaTemplate;
-    console.log(this.templateJson);
     this.auth.dashboardTemplate = JSON.stringify(this.templateJson);
+    this.username = this.auth.firstname + ' ' + this.auth.lastname;
     this.loadInstitutions();
   }
 

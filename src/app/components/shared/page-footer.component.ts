@@ -1,4 +1,4 @@
-﻿import {Component} from '@angular/core';
+﻿import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
 import { AuthService } from './../../services/auth.service';
 @Component({
@@ -8,6 +8,7 @@ import { AuthService } from './../../services/auth.service';
 })
 
 export class PageFooterComponent {
+    @Input() footerLinks:boolean = true;
     constructor(public auth: AuthService, public router:Router) {
         
     }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="8px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 59.1 (101010) - https://sketch.com -->
+    <title>B38C8E22-E51E-4821-8826-78ECF55A508D</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <path d="M7,2.41421356 L1.70710678,7.70710678 C1.31658249,8.09763107 0.683417511,8.09763107 0.292893219,7.70710678 C-0.0976310729,7.31658249 -0.0976310729,6.68341751 0.292893219,6.29289322 L6.29289322,0.292893219 C6.68341751,-0.0976310729 7.31658249,-0.0976310729 7.70710678,0.292893219 L13.7071068,6.29289322 C14.0976311,6.68341751 14.0976311,7.31658249 13.7071068,7.70710678 C13.3165825,8.09763107 12.6834175,8.09763107 12.2928932,7.70710678 L7,2.41421356 Z" id="path-1"></path>
+    </defs>
+    <g id="For-Testing-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="FS---V2-Menu-" transform="translate(-1133.000000, -35.000000)">
+            <g id="Navigation/Top">
+                <g id="user" transform="translate(977.000000, 17.000000)">
+                    <g id="arrows/chevron/down" transform="translate(156.000000, 18.000000)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use id="🔳Icon" fill="#000000" fill-rule="nonzero" xlink:href="#path-1"></use>
+                        <g id="↳🎨Color" mask="url(#mask-2)" fill="#FFFFFF">
+                            <g transform="translate(-5.000000, -8.000000)" id="Rectangle">
+                                <rect x="0" y="0" width="24" height="24"></rect>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
