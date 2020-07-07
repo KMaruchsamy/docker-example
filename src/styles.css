@@ -1002,7 +1002,7 @@ a {
 a:active,
 a:focus,
 a:hover {
-  color: #0f287d;
+  color: #7825ff;
 }
 
 .link-base-color {
@@ -3100,7 +3100,7 @@ input.checkbox-small-image:focus + label::before {
   -ms-user-select: none;
   user-select: none;
   border-bottom: 1px solid #e3e3e3;
-  color: #0f287d;
+  color: #7825ff;
   cursor: pointer;
   display: block;
   font-size: 1em;
@@ -3209,15 +3209,15 @@ input.checkbox-small-image:focus + label::before {
   display: table;
 }
 .large-expander-trigger {
-  color: #0f287d;
-  background-color: #fdf8f5;
-  border: 1px solid #f1d0b9;
+  color: #7825ff;
+  background-color: rgba(205, 180, 255, 0.15);
+  border: 1px solid #7825ff;
 }
 .large-expander-trigger:before {
   height: 0;
   width: 0;
   border-bottom: 8px solid transparent;
-  border-left: 8px solid #0f287d;
+  border-left: 8px solid #7825ff;
   border-top: 8px solid transparent;
 }
 .large-expander-trigger.collapsed:before {
@@ -3721,6 +3721,7 @@ form.search-bar button[type="submit"] {
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
   padding: 5px 10px;
+  background-color: #ff5adc;
 }
 form.search-bar button[type="submit"] img {
   height: 19px;
@@ -3829,8 +3830,8 @@ input[type="search"].small-search-box::placeholder {
 }
 
 .search-container {
-  background-color: rgba(255, 248, 237, 0.4);
-  border: 1px solid rgba(233, 206, 151, 0.79);
+  background-color: rgba(255, 175, 160, 0.15);
+  border: 1px solid #ff5adc;
   border-radius: 4px;
 }
 
@@ -6351,6 +6352,10 @@ input.small-checkbox-image {
 
 .card__header {
   font-size: 22px;
+}
+
+.no-bottom-margin {
+  margin-bottom: 0;
 }
 
 /*# sourceMappingURL=styles.css.map */
