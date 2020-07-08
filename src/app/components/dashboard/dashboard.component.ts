@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import betaTemplate from '../../../assets/json/template_beta.json';
 import nonBetaTemplate from '../../../assets/json/template_non_beta.json';
 import { MatSelect } from '@angular/material/select';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,15 +19,28 @@ export class DashboardComponent implements OnInit {
   selectedInstitution;
   username: string;
   @ViewChild(MatSelect, { static: true }) institutionList: MatSelect;
-  constructor(private httpClient: HttpClient, public auth: AuthService) {}
+
+  constructor(public location: Location, public auth: AuthService, public router: Router) {
+  }
 
   ngOnInit(): void {
     this.templateJson = betaTemplate;
     this.auth.dashboardTemplate = JSON.stringify(this.templateJson);
     this.username = this.auth.firstname + ' ' + this.auth.lastname;
-    this.loadInstitutions();
+    this.redirectToPage();
+    if(this.auth.isAuth()){
+      this.loadInstitutions();
+    }
   }
 
+  redirectToPage(): void {
+    if (this.location.path().search("first") > 0) {
+        if (this.auth.istemppassword && this.auth.isAuth())
+            this.router.navigate(['/']);
+    }
+    else if (!this.auth.isAuth())
+        this.router.navigate(['/']);
+}
   loadInstitutions() {
     this.institutions = (JSON.parse(this.auth.institutions) as any[]).sort(
       (a, b) => b.InstitutionId - a.InstitutionId

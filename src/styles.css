@@ -3972,7 +3972,7 @@ input[type="search"].small-search-box::placeholder {
 }
 
 .footer-logged-in {
-  background-color: #acb5c0;
+  background-color: #ffffff;
   color: #282828;
 }
 
@@ -3981,12 +3981,12 @@ input[type="search"].small-search-box::placeholder {
   padding-top: 25px;
 }
 .footer-grid a {
-  color: #282828;
   display: inline-block;
-  font-size: 0.875em;
-  margin-left: 3em;
+  margin-left: 7em;
   margin-bottom: 10px;
   position: relative;
+  color: #7324F6;
+  font-size: 16px;
 }
 @media (max-width: 61.9375em) {
   .footer-grid a {
@@ -4038,9 +4038,8 @@ input[type="search"].small-search-box::placeholder {
 }
 
 .footer-copyright {
-  /* border-top: 1px solid #fff;
-  font-size: 0.875em; */
-  min-height: 80px;
+    border-top: 1px solid #CDB4FF;
+    min-height: 80px;
     background-color: #FFFFFF;
     display: flex;
     justify-content: flex-start;
