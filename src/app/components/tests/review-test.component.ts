@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ElementRef, ViewContainerRef } from '@ang
 import { Router, ActivatedRoute, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-import { links, ItSecirity } from '../../constants/config';
+import { links, ItSecurity } from '../../constants/config';
 import { TestScheduleModel } from '../../models/test-schedule.model';
 import { SelectedStudentModel } from '../../models/selected-student.model';
 import { Subscription, Observable } from 'rxjs';
@@ -193,10 +193,10 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                     this.$txtScheduleName.val(this.testScheduleModel.scheduleName);
                 if (this.modify) {
                      if (this.ItSecurityEnabled) {
-                        if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.Examity) {
+                        if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecurity.Examity) {
                             this.chkSecurity = this.testScheduleModel.isExamity;
                         }
-                        if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.ProctorTrack) {
+                        if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecurity.ProctorTrack) {
                             this.chkSecurity = this.testScheduleModel.isProctorTrack;
                         }
                    }
@@ -255,10 +255,10 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
     validateITSecuritiesCheckbox() {
         if (this.ItSecurityEnabled == true && +this.testScheduleModel.testType!==7) {
-            if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.Examity && (this.testScheduleModel.isExamity == undefined || !!this.testScheduleModel.isExamity)) {
+            if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecurity.Examity && (this.testScheduleModel.isExamity == undefined || !!this.testScheduleModel.isExamity)) {
                 return true;
             }
-            else if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.ProctorTrack && (this.testScheduleModel.isProctorTrack == undefined || !!this.testScheduleModel.isProctorTrack)) {
+            else if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecurity.ProctorTrack && (this.testScheduleModel.isProctorTrack == undefined || !!this.testScheduleModel.isProctorTrack)) {
                 return true;
             }
             else {
@@ -392,8 +392,8 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
             TestingWindowStart: moment(this.testScheduleModel.scheduleStartTime).format(),
             TestingWindowEnd: moment(this.testScheduleModel.scheduleEndTime).format(),
             FacultyMemberId: this.testScheduleModel.facultyMemberId,
-            IsExamityEnabled: this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.Examity ? this.chkSecurity : false,
-            IsProctorTrackEnabled: this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.ProctorTrack ? this.chkSecurity : false,
+            IsExamityEnabled: this.testScheduleModel.itSecurityEnabledInstitution == ItSecurity.Examity ? this.chkSecurity : false,
+            IsProctorTrackEnabled: this.testScheduleModel.itSecurityEnabledInstitution == ItSecurity.ProctorTrack ? this.chkSecurity : false,
             Students: _.map(this.testScheduleModel.selectedStudents, (student: SelectedStudentModel) => {
                 return {
                     StudentId: student.StudentId,
@@ -1123,10 +1123,10 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
 
     OnChangeChkSecurity($event): void {
         this.chkSecurity = $($event.target).is(':checked');
-        if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.Examity) {
+        if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecurity.Examity) {
             this.testScheduleModel.isExamity = this.chkSecurity;
         }
-        if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecirity.ProctorTrack) {
+        if (this.testScheduleModel.itSecurityEnabledInstitution == ItSecurity.ProctorTrack) {
             this.testScheduleModel.isProctorTrack = this.chkSecurity;
         }
         this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));

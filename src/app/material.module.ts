@@ -20,6 +20,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatTreeModule } from '@angular/material/tree';
 
 @NgModule({
   exports: [
@@ -43,6 +44,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatPaginatorModule,
     MatSelectModule,
     DragDropModule,
+    MatTreeModule
   ],
 })
 export class MaterialModule {}

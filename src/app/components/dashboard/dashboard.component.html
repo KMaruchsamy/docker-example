@@ -10,19 +10,22 @@
       </div>
       <div class="my-institution">
         <span class="institution-text">My Institution:</span>
-        <mat-form-field style="min-width: 300px;">
-          <mat-select
-            (selectionChange)="onInstitutionSelected($event)"
-            #institutionList
-          >
-            <mat-option
-              *ngFor="let institution of institutions"
-              [value]="institution.InstitutionId"
+        <label *ngIf="institutions.length==1">{{ selectedInstitution.InstitutionNameWithProgOfStudy }}</label>
+        <span [class.hidden]="!(institutions.length>1)">
+          <mat-form-field class="institution-select">
+            <mat-select [disableOptionCentering]="true"
+              (selectionChange)="onInstitutionSelected($event)"
+              #institutionList
             >
-              {{ institution.InstitutionNameWithProgOfStudy }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+              <mat-option
+                *ngFor="let institution of institutions"
+                [value]="institution.InstitutionId"
+              >
+                {{ institution.InstitutionNameWithProgOfStudy }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </span>
       </div>
     </div>
     <app-content [content]="templateJson?.content"></app-content>

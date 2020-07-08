@@ -1,6 +1,6 @@
 :host {
   margin: 0.75rem;
-  padding: 0.75rem;
+  padding: 0.75rem 1.5rem;
   min-width: 320px;
   max-height: 420px;
   min-height: 364px;
@@ -17,8 +17,60 @@
     display: flex;
     align-items: baseline;
     color: #101b2b;
-    margin: 0;
-    padding: 0 0.5rem;
-    font: 500 1.75rem "franklin-compressed";
+    margin: 0.5rem 0;
+    font: 22px 1.75rem 'franklin-compressed';
+  }
+
+  & .card__content {
+    & .link__node {
+      font-family: 'Open Sans';
+      font-weight: 800;
+      font-size: 1rem;
+      border-top: 1px solid #d0d1d4;
+      & .link__button {
+        font-family: 'Open Sans';
+        font-size: 1rem;
+        font-weight: 800;
+        flex: 1;
+        padding: 0;
+        &::ng-deep .mat-button-wrapper {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+      }
+    }
+
+    &.no-header {
+      & .link__node:first-child {
+        border-top: none;
+      }
+    }
+
+    & .link__nested-node {
+      font-family: 'Open Sans';
+      font-weight: 800;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+      border-top: 1px solid #d0d1d4;
+    }
+
+    & .nested-node__children {
+      & .link__node,
+      & .link__nested-node {
+        font-family: 'Open Sans';
+        font-weight: 400;
+        font-size: 0.875rem;
+        border: none;
+
+        & .link__button {
+          font-size: 0.875rem;
+          font-weight: 400;
+        }
+      }
+    }
   }
 }

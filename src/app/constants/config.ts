@@ -87,7 +87,7 @@ export const links = {
 
     nursingit: {
         local: {
-            server: "http://localhost:55611/"
+            server: "http://localhost:50019/"
         },
         dev: {
             server: "https://dev01-nursing.kaptest.com/"
@@ -308,15 +308,17 @@ export enum RosterUpdateTypes {
     ExtendAccess = 4
 }
 
-export enum ItSecirity {
+export enum ItSecurity {
     Examity = 1,
     Respondus,
     ProctorTrack
 }
 
 export const dataKey = {
-    profile: "profile",
-    announcement: "announcements"
+    Profile: "profile",
+    Announcement: "announcements",
+    IHP: "ihp",
+    ITSecurity: "itsecurity"
 }
 
 // export const RosterUpdateTypes = {
