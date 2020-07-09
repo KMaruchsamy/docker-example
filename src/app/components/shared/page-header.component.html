@@ -1,48 +1,86 @@
-
-<header class="header">
+  <header class="header">
     <div class="header-section">
-        <div>
-            <a [routerLink]="['/home']"  [tabindex]="ariaDisabled ? -1 : null"  aria-disabled="ariaDisabled" >
-            <img class="header-section-logo"
-                src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/kaplan_logo.svg"
-                alt="Kaplan" />
-            </a>
-        </div>
+      <div>
+        <a
+          [routerLink]="['/home']"
+          [tabindex]="ariaDisabled ? -1 : null"
+          aria-disabled="ariaDisabled"
+        >
+          <img
+            class="header-section-logo"
+            src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/kaplan_logo.svg"
+            alt="Kaplan"
+          />
+        </a>
+      </div>
     </div>
-    <div class="header-menu-section" *ngIf="!hideDropdown ">
-        <div class="menu-content">
-            <img class="header-section-icon"
-                [src]="header?.userguide?.icon"
-                alt="Manual" />
-            {{header.userguide.title}}
-        </div>
-        <div class="menu-content align-content-items">
-            <img class="header-section-icon"
-                [src]="header?.account.icon"
-                alt="Profile" />
-                
-            <nav class="dropdown" [class.hidden]="" role="navigation" aria-label="primary">
-              <div class="dropdown-container">
-                <a href="javascript:void(0)"  id="lnkMenu"  role="button" class="dropdown-button remove-text-decoration" data-toggle="dropdown">{{username}}
-                  <img class="down-icon"
-                  alt="down arrow" />
-                </a>
-                <ul class="dropdown-menu dropdown-select">
-                 <li><a [routerLink]="['/account']" class="menu-icon remove-text-decoration">{{header.account.menu[0].text}}</a></li>
-                 <li><a href="javascript:void(0)" class="menu-icon remove-text-decoration" (click)="logout($event);">{{header.account.menu[1].text}}</a></li>
-                </ul>
-              </div>
-            </nav>
-            
-        </div>
-        <div class="line-4"></div>
-        <div class="menu-content">
-            <img class="header-section-icon"
-                [src]="header?.studentsite?.icon"
-                alt="student site" />
-            {{header.studentsite.title}}
-        </div>
-    </div>
-</header>
+    <div class="header-menu-section" *ngIf="!hideDropdown">
+      <div class="menu-content" [routerLink]="['/userguide']" role="button">
+        <img
+          class="header-section-icon"
+          [src]="header?.userguide?.icon"
+          alt="Manual"
+        />
+        {{ header.userguide.title }}
+      </div>
+      <div class="menu-content align-content-items">
+        <img
+          class="header-section-icon"
+          [src]="header?.account.icon"
+          alt="Profile"
+        />
 
-<page-subheader [showCover]="showCover"></page-subheader>
+        <nav
+          class="dropdown"
+          [class.hidden]=""
+          role="navigation"
+          aria-label="primary"
+        >
+          <div class="dropdown-container">
+            <a
+              href="javascript:void(0)"
+              id="lnkMenu"
+              role="button"
+              class="dropdown-button remove-text-decoration"
+              data-toggle="dropdown"
+              >{{ username }}
+              <img class="down-icon" alt="down arrow" />
+            </a>
+            <ul class="dropdown-menu dropdown-select">
+              <li>
+                <a
+                  [routerLink]="['/account']"
+                  class="menu-icon remove-text-decoration"
+                  >{{ header.account.menu[0].text }}</a
+                >
+              </li>
+              <li>
+                <a
+                  href="javascript:void(0)"
+                  class="menu-icon remove-text-decoration"
+                  (click)="logout($event)"
+                  >{{ header.account.menu[1].text }}</a
+                >
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="line-4"></div>
+      <div class="menu-content" (click)="redirectToKaptest()" role="button">
+        <img
+          class="header-section-icon"
+          [src]="header?.studentsite?.icon"
+          alt="student site"
+        />
+        {{ header.studentsite.title }}
+      </div>
+    </div>
+  </header>
+  <page-subheader [showCover]="showCover"></page-subheader>
+  <form id="myForm" method="POST" target="_blank">
+    <input type="hidden" id="institutionID" name="institutionID" />
+    <input type="hidden" id="jwtToken" name="jwtToken" />
+    <input type="hidden" id="redirectPage" name="redirectPage" />
+    <input type="hidden" id="exceptionURL" name="exceptionURL" />
+  </form>
