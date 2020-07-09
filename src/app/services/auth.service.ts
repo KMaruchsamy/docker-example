@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonService } from './common.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class AuthService {
   common: CommonService = new CommonService();
   sStorage: any = this.common.getStorage();
+
+ userNameSubject = new BehaviorSubject<string>("");
+ userName$ = this.userNameSubject.asObservable();
 
   // token: string;
   get token(): any {
@@ -162,6 +166,11 @@ export class AuthService {
 
   isAuth() {
     return (!!this.token && !!this.isEnrollmentAgreementSigned);
+  }
+  updateUsername(firstname,lastname) {
+    this.sStorage.setItem('firstname', firstname);
+    this.sStorage.setItem('lastname', lastname);
+    this.userNameSubject.next(firstname + ' ' + lastname);
   }
 
   isStudentPayEnabledInstitution(institutionId: number): boolean {

@@ -19,6 +19,7 @@ export class PageHeaderComponent implements OnInit{
   constructor(public router: Router, public auth: AuthService) {
  }
   ngOnInit() {
+    this.auth.userName$.subscribe(user => this.username = user);
      this.updateHeaderBasedOnTemplate();
   }
   updateHeaderBasedOnTemplate() {

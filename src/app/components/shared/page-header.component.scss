@@ -39,6 +39,7 @@
 
     & .menu-content {
       display: flex;
+      flex-wrap: wrap;
       margin-right: 25px;
       align-items: center;  // to keep icons center align in mobile view
     }
