@@ -12,13 +12,14 @@ html {
   -webkit-text-size-adjust: 100%;
   /* 2 */
   color: #101b2b;
-  font-family: "Open Sans", sans-serif, Roboto, "Helvetica Neue";
+  /* font-family: "Open Sans", sans-serif, Roboto, "Helvetica Neue"; */
 }
 
 body {
   margin: 0;
   color: #101b2b;
-  font-family: "Open Sans", sans-serif, Roboto, "Helvetica Neue";
+  font-family: "Open Sans";
+  background-color: #F6F6F6;
 }
 
 article,
@@ -892,7 +893,7 @@ body,
   font-feature-settings: "kern", "liga", "pnum";
   -webkit-font-smoothing: antialiased;
   color: #6c6c6c;
-  font-family: Arial, Helvetica, "Lucida Grande", Tahoma, Verdana, sans-serif;
+  /* font-family: Arial, Helvetica, "Lucida Grande", Tahoma, Verdana, sans-serif; */
   line-height: 1.5;
 }
 
@@ -2335,7 +2336,8 @@ main .right-grid ::-webkit-scrollbar {
   background: #e9f0ef;
 }
 .section-teal {
-  background: #1d093e;
+  /* background: #1d093e; */
+  background: #FF5ADC;
 }
 .section-gray {
   background: whitesmoke;
