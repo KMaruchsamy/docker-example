@@ -4,6 +4,9 @@
   color: #FFFFFF;
   background-color: #1D093E;
   display: flex;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
   & .remove-text-decoration {
     text-decoration: none;
   }

@@ -1,27 +1,31 @@
 <page-header> </page-header>
 <section class="dashboard">
   <div class="dashboardSection-main">
-    
-
-  <div class="welcome-section">
-    <div class="welcome">
-      <span class="welcome-text">HI {{username|uppercase}}, WELCOME TO YOUR FACULTY PORTAL</span>
-    </div>
-    <div class="my-institution">
-      <span class="institution-text">My Institution:&nbsp;</span>
-      <mat-form-field style="min-width: 300px;">
-        <mat-select (selectionChange)="onInstitutionSelected($event)" #institutionList>
-          <mat-option
-            *ngFor="let institution of institutions"
-            [value]="institution.InstitutionId"
+    <div class="welcome-section">
+      <div class="welcome">
+        <span class="welcome-text"
+          >HI {{ firstname | uppercase
+          }}{{ templateJson.content.welcome_text | uppercase }}</span
+        >
+      </div>
+      <div class="my-institution">
+        <span class="institution-text">My Institution:&nbsp;</span>
+        <mat-form-field style="min-width: 300px;">
+          <mat-select
+            (selectionChange)="onInstitutionSelected($event)"
+            #institutionList
           >
-            {{ institution.InstitutionNameWithProgOfStudy }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+            <mat-option
+              *ngFor="let institution of institutions"
+              [value]="institution.InstitutionId"
+            >
+              {{ institution.InstitutionNameWithProgOfStudy }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
+    <app-content [content]="templateJson?.content"></app-content>
   </div>
-  <app-content [content]="templateJson.content"></app-content>
-</div>
 </section>
 <page-footer [footerLinks]="false"></page-footer>

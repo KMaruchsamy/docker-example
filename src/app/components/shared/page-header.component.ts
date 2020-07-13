@@ -4,6 +4,7 @@ import { AuthService } from "./../../services/auth.service";
 import { links } from "../../constants/config";
 import { CommonService } from "./../../services/common.service";
 import { Location } from "@angular/common";
+import betaTemplate from '../../../assets/json/template_beta.json';
 
 @Component({
   selector: "page-header",
@@ -25,6 +26,7 @@ export class PageHeaderComponent implements OnInit {
   userId: number;
   firstName: string;
   lastName: string;
+  templateJson: any;
 
   constructor(
     public router: Router,
@@ -41,11 +43,21 @@ export class PageHeaderComponent implements OnInit {
   }
 
   updateHeaderBasedOnTemplate() {
-    this.username = this.auth.firstname + " " + this.auth.lastname;
+    this.auth.userName$.subscribe(user => this.username = user);
     this.header = this.auth.dashboardTemplate
       ? JSON.parse(this.auth.dashboardTemplate).header
-      : "";
+      : this.getHeaderFromTemplate();
+
+      if(this.username === ""){
+        this.username = this.auth.firstname + ' ' + this.auth.lastname;
+      }
+
   }
+  getHeaderFromTemplate():any {
+    this.templateJson = betaTemplate;
+    return this.templateJson.header;
+  }
+
   setAtomStudyPlanLink() {
     this.atomStudyPlanLink =
       this.kaptestServer +
