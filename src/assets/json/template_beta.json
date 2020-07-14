@@ -39,7 +39,6 @@
             "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/alarm.svg",
             "cards": [
               {
-                "title": "COVID-19 UPDATES",
                 "color": "#7825FF",
                 "type": "html",
                 "data_key": "announcements",
@@ -56,12 +55,14 @@
               {
                 "title": "YOUR ACCOUNT MANAGER",
                 "type": "profile",
-                "color": "#CDB4FF"
+                "color": "#CDB4FF",
+                "content":[]
               },
               {
                 "title": "YOUR NURSE CONSULTANT",
                 "type": "profile",
-                "color": "#CDB4FF"
+                "color": "#CDB4FF",
+                "content":[]
               }
             ]
           }

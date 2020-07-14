@@ -314,6 +314,10 @@ export enum ItSecirity {
     ProctorTrack
 }
 
+export const dataKey = {
+    profile: "profile",
+    announcement: "announcements"
+}
 
 // export const RosterUpdateTypes = {
 //     MoveToDifferentCohort : 1,
