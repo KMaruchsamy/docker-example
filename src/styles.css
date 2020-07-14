@@ -2372,16 +2372,16 @@ main .right-grid ::-webkit-scrollbar {
 
 .app-main {
   width: 100%;
-  /* padding-top: 4.5625em; */
+  padding-top: 120px;
 }
-/* @media (max-width: 47.9375em) {
+@media (max-width: 47.9375em) {
   .app-main {
-    padding-top: 90px;
+    padding-top: 120px;
   }
   .app-main-no-nav {
     padding-top: 45px;
   }
-} */
+}
 @media (min-width: 25.9375em) {
   .app-main {
     min-height: calc(100vh - 214.5px);
@@ -2394,14 +2394,17 @@ main .right-grid ::-webkit-scrollbar {
 }
 
 .app-logged-out {
-  padding-top: 3.5em;
+  padding-top: 6em;
 }
 @media (max-width: 61.9375em) {
   .app-logged-out {
-    padding-top: 2.5em;
+    padding-top: 5em;
   }
 }
-
+.cx-side-button-group {
+  /*  To override css written in widgets.min.css  */
+  z-index: 2000 !important;
+}
 .dropdown {
   /* float: right;
   font-size: 1.125em;

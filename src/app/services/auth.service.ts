@@ -8,8 +8,8 @@ export class AuthService {
   common: CommonService = new CommonService();
   sStorage: any = this.common.getStorage();
 
- userNameSubject = new BehaviorSubject<string>("");
- userName$ = this.userNameSubject.asObservable();
+  userNameSubject = new BehaviorSubject<string>("");
+  userName$ = this.userNameSubject.asObservable();
 
   // token: string;
   get token(): any {
@@ -18,7 +18,7 @@ export class AuthService {
   set token(value: any) {
     this.sStorage.setItem('jwt', value);
   }
-  // user: any;
+
   // authheader: string;
   get authheader(): any {
     return 'Bearer ' + this.token;
