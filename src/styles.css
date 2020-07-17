@@ -335,6 +335,13 @@ The `retina-sprites` mixin generates a CSS rule and media query for retina group
   font-size: 22px;
 }
 
+button#faculty-signin {
+  background-color: #ffffff;
+  color: #7825ff;
+}
+button#faculty-signin:hover {
+  opacity: 90%;
+}
 .button {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -4792,7 +4799,7 @@ select.mobile-device {
 }
 
 .sign-in {
-  background: #7825ff;
+  background: #1d093e;
   color: white;
   padding: 1.5em 0 1.5em;
 }
@@ -4826,7 +4833,7 @@ select.mobile-device {
   }
 }
 .radio-sign-in-faculty {
-  background: #1d093e;
+  background: #7825ff;
 }
 .radio-sign-in-student {
   background: #ff5adc;
@@ -4898,7 +4905,7 @@ select.mobile-device {
 }
 .forgot-password:hover,
 .forgot-password:focus {
-  color: #de9866;
+  color: #7825ff;
 }
 
 .dashboard-grid-container {
@@ -6372,11 +6379,9 @@ a.subheader-link {
 
 .html-card .header {
   color: #101b2b;
-  font-family: "franklin-compressed";
-  line-height: 1.3;
-  margin: 0 0 0.66667em;
-  font-size: 28px;
-  padding: 0.5rem 0;
+  line-height: 1.3;   
+  padding: 0.3em 0 0.3em;
+  font-size: 22px;
   text-transform: uppercase;
   border-bottom: 1px solid #d0d1d4;
 }
