@@ -10,13 +10,15 @@
   border-radius: 4px;
   background-color: #FFFFFF;
   box-shadow: 0 0 8px 0 rgba(0,0,0,0.2);
+  max-height: 364px;
+  overflow: auto;
 
   & .header {
     display: flex;
     align-items: baseline;
     color: #101b2b;
-    margin: 0;
-    padding: 0 0.5rem;
-    font: 500 1.75rem "franklin-compressed";
+      padding: 0.3em 0 0.3em;
+    font: 22px "franklin-compressed";
+    border-bottom: 1px solid #d0d1d4;
   }
 }
