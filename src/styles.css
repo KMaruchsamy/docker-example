@@ -340,7 +340,7 @@ button#faculty-signin {
   color: #7825ff;
 }
 button#faculty-signin:hover {
-  opacity: 90%;
+opacity: 0.8;
 }
 .button {
   -webkit-appearance: none;
@@ -2938,7 +2938,7 @@ main::before {
   margin-right: 10px;
   position: absolute;
   left: 0;
-  bottom: 5px;
+  bottom: -3px;
   background-color: #fff;
 }
 @media (max-width: 61.9375em) {
