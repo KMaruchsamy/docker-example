@@ -32,21 +32,6 @@
           [flexSize]="card.size ? card.size : 1"
         ></app-links-card>
       </ng-container>
-
-      <!-- <div
-        class="card"
-        
-        [style.flex]="card.size ? card.size : 1"
-        [style.borderTopColor]="card.color"
-      >
-        <header>
-          <h1 class="header">{{ card.title }}</h1>
-        </header>
-        <div
-          *ngIf="card.type === 'html'"
-          [innerHTML]="card.content | safe: 'html'"
-        ></div>
-      </div> -->
     </div>
   </div>
 </section>

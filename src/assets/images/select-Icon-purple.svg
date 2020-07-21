@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="8px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M17.2928932,8.29289322 C17.6834175,7.90236893 18.3165825,7.90236893 18.7071068,8.29289322 C19.0976311,8.68341751 19.0976311,9.31658249 18.7071068,9.70710678 L12.7071068,15.7071068 C12.3165825,16.0976311 11.6834175,16.0976311 11.2928932,15.7071068 L5.29289322,9.70710678 C4.90236893,9.31658249 4.90236893,8.68341751 5.29289322,8.29289322 C5.68341751,7.90236893 6.31658249,7.90236893 6.70710678,8.29289322 L12,13.5857864 L17.2928932,8.29289322 Z" id="path-1"></path>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Cards/FacultyLifeline-AC-v3" transform="translate(-406.000000, -309.000000)">
+            <g id="Label/Unselsected" transform="translate(26.000000, 264.000000)">
+                <g id="arrows/chevron/down" transform="translate(375.000000, 37.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="🔳Icon" fill="#000000" fill-rule="nonzero" xlink:href="#path-1"></use>
+                    <g id="colors/black" mask="url(#mask-2)" fill="#121A26" fill-rule="evenodd" stroke-width="1">
+                        <g id="Rectangle">
+                            <rect x="0" y="0" width="24" height="24"></rect>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

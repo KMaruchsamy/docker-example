@@ -118,10 +118,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
     this.isBetaInstitution = this.selectedInstitution.IsBetaInstitution;
     this.loadTemplate();
+    this.getDataKeys();
   }
 
   loadProfiles(self, key): void {
-    let institutionID = this.getLatestInstitution();
+    let institutionID = this.selectedInstitution.InstitutionId;
     if (institutionID > 0) {
       let url =
         this.apiServer +
@@ -173,18 +174,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         null
       );
     }
-  }
-  getLatestInstitution(): number {
-    if (
-      this.auth.institutions != null &&
-      this.auth.institutions != "undefined"
-    ) {
-      let latestInstitution: any = JSON.parse(this.auth.institutions)
-        .sort((a, b) => b.InstitutionId - a.InstitutionId)
-        .shift();
-      if (latestInstitution) return latestInstitution.InstitutionId;
-    }
-    return 0;
   }
   bindToModel(self, json, key): void {
     if (json) {

@@ -4,7 +4,7 @@ import { AuthService } from "./../../services/auth.service";
 import { links } from "../../constants/config";
 import { CommonService } from "./../../services/common.service";
 import { Location } from "@angular/common";
-import betaTemplate from '../../../assets/json/template_beta.json';
+import betaTemplate from "../../../assets/json/template_beta.json";
 
 @Component({
   selector: "page-header",
@@ -37,23 +37,23 @@ export class PageHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.apiServer = this.common.getApiServer();
     this.kaptestServer = this.common.getKaptestServer();
+    this.auth.userName$.subscribe(user => (this.username = user));
     this.updateHeaderBasedOnTemplate();
     this.getUserInfo();
     this.setAtomStudyPlanLink();
   }
 
   updateHeaderBasedOnTemplate() {
-    this.auth.userName$.subscribe(user => this.username = user);
+    this.auth.userName$.subscribe(user => (this.username = user));
     this.header = this.auth.dashboardTemplate
       ? JSON.parse(this.auth.dashboardTemplate).header
       : this.getHeaderFromTemplate();
 
-      if(this.username === ""){
-        this.username = this.auth.firstname + ' ' + this.auth.lastname;
-      }
-
+    if (this.username === "") {
+      this.username = this.auth.firstname + " " + this.auth.lastname;
+    }
   }
-  getHeaderFromTemplate():any {
+  getHeaderFromTemplate(): any {
     this.templateJson = betaTemplate;
     return this.templateJson.header;
   }
