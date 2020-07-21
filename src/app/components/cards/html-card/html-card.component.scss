@@ -5,12 +5,13 @@
   flex-direction: column;
   flex: 1;
   flex-wrap: wrap;
-  min-width: 300px;
+  min-width: 320px;
   border-top: 12px solid;
   border-radius: 4px;
   background-color: #FFFFFF;
   box-shadow: 0 0 8px 0 rgba(0,0,0,0.2);
-  max-height: 364px;
+  max-height: 420px;
+  min-height: 364px;
   overflow: auto;
 
   & .header {

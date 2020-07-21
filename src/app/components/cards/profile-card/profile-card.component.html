@@ -24,7 +24,7 @@
 >
   <div class="profile-card-align" *ngIf="card.content.telephone">
     <div>
-      <img src="/assets/images/call-24px.svg" class="profile-telephone-icon" />
+      <img src="assets/images/call-24px.svg" class="profile-telephone-icon" />
     </div>
     <div class="profile-telephone">
       {{ card.content.telephone }}
@@ -32,7 +32,7 @@
   </div>
   <div class="profile-card-align" *ngIf="card.content.email">
     <div>
-      <img src="/assets/images/email-24px.svg" class="profile-email-icon" />
+      <img src="assets/images/email-24px.svg" class="profile-email-icon" />
     </div>
     <div class="profile-telephone">
       {{ card.content.email }}
@@ -63,14 +63,13 @@
   <div>
     <mat-form-field class="profile-select-direct-request">
       <mat-label *ngIf="flag">Select One</mat-label>
-      <mat-select (selectionChange)="onLinkChange()">
-        <mat-option 
+      <mat-select [disableOptionCentering]="true">
+        <mat-option
           *ngFor="let link of card.content.linksForFrontEnd"
           [value]="link.LinkTextToDisplay"
+          (click)="routeTo(link.LinkUrl)"
         >
-          <a href="{{ link.LinkUrl }}" target="_blank">
-            {{ link.LinkTextToDisplay }}</a
-          >
+          {{ link.LinkTextToDisplay }}
         </mat-option>
       </mat-select>
     </mat-form-field>

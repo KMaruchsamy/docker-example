@@ -14,7 +14,8 @@ export class ProfileCardComponent implements OnInit {
   ngOnInit() {
     this.flag = true;
   }
-  onLinkChange(event) {
+  routeTo(event){
     this.flag = false;
+    window.open(event,'_blank');
   }
 }
