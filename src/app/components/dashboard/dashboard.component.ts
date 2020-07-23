@@ -11,6 +11,7 @@ import { ProfileService } from "../home/profile.service";
 import { Subscription } from "rxjs";
 import { CommonService } from "./../../services/common.service";
 import { dataKey } from "./../../constants/config";
+import { SelfPayStudentPopupComponent } from '../tests/self-pay-student-popup.component';
 
 @Component({
   selector: "app-dashboard",
@@ -110,6 +111,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   loadTemplate() {
     this.templateJson = this.isBetaInstitution ? betaTemplate : nonBetaTemplate;
+    this.updateTemplateToSession();
   }
 
   onInstitutionSelected(e) {
@@ -137,45 +139,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
           (json) => {
             self.bindToModel(self, json, key);
           },
-          (error) => console.log(error.message),
+          (error) => self.bindToModel(self, null, key),
           () => console.log("complete")
         );
     } else {
-      this.accountManagerProfile = new ProfileModel(
-        null,
-        null,
-        "ACCOUNTMANAGER",
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      );
-      this.nurseConsultantProfile = new ProfileModel(
-        null,
-        null,
-        "NURSECONSULTANT",
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      );
+      self.bindToModel(self, null, key)
     }
   }
   bindToModel(self, json, key): void {
+    self.accountManagerProfile = null;
+    self.nurseConsultantProfile = null;
     if (json) {
       json.forEach((profile, key) => {
         if (profile && profile.KaplanAdminTypeName !== undefined) {
@@ -191,7 +164,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       });
     }
-    if (!self.accountManagerProfile.kaplanAdminTypeId)
+    if (self.accountManagerProfile && !self.accountManagerProfile.kaplanAdminTypeId)
       self.accountManagerProfile = new ProfileModel(
         null,
         null,
@@ -208,7 +181,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         null,
         null
       );
-    if (!self.nurseConsultantProfile.kaplanAdminTypeId)
+    if (self.nurseConsultantProfile && !self.nurseConsultantProfile.kaplanAdminTypeId)
       self.nurseConsultantProfile = new ProfileModel(
         null,
         null,
@@ -244,6 +217,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       );
   }
   getDataKeys() {
+    this.dataKeys = [];
     this.templateJson.content.sections.forEach((section) => {
       section.panels.forEach((panel) => {
         panel.data_key ? this.dataKeys.push(panel.data_key) : this.dataKeys;
