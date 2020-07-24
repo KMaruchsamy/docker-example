@@ -37,9 +37,27 @@
   font-size: 16px;
   letter-spacing: 0;
   line-height: 24px;
-  // flex: 1;
-  // display: flex;
-  // justify-content: flex-end;
+  color: #101B2B;
+  & label{
+    font-family: "Open Sans";
+    color: #101B2B;
+  }
+  & .institution-select {
+    min-width: 300px;
+
+    & ::ng-deep .mat-select-arrow {
+      background-image: url(assets/images/select-Icon.svg);
+      background-repeat: no-repeat;
+      width: 14px;
+      height: 14px;
+      border-left: none;
+      border-right: none;
+      border-top: none;
+    }
+  }
+  & ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+    background-color: #7825ff;
+  }
 }
 
 .institution-text {

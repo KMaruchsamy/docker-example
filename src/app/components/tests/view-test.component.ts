@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
-import { links, ItSecirity } from '../../constants/config';
+import { links, ItSecurity } from '../../constants/config';
 import { TestScheduleModel } from '../../models/test-schedule.model';
 import { SelectedStudentModel } from '../../models/selected-student.model';
 import { TestService } from './test.service';
@@ -191,10 +191,10 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     }
 
     GetItSecurityCheckkboxView(testSchedule: TestScheduleModel) {
-        if (testSchedule.itSecurityEnabledInstitution == ItSecirity.Examity) {
+        if (testSchedule.itSecurityEnabledInstitution == ItSecurity.Examity) {
             return testSchedule.isExamity;
         }
-        if (testSchedule.itSecurityEnabledInstitution == ItSecirity.ProctorTrack) {
+        if (testSchedule.itSecurityEnabledInstitution == ItSecurity.ProctorTrack) {
             return testSchedule.isProctorTrack;
         }
     }

@@ -75,6 +75,13 @@ export class AuthService {
     this.sStorage.setItem('title', value);
   }
 
+  // selectedinstitution: any;
+  get selectedInstitution(): any {
+    return this.sStorage.getItem('selectedinstitution');
+  }
+  set selectedInstitution(value: any) {
+    this.sStorage.setItem('selectedinstitution', value);
+  }
 
   // institutions: any;
   get institutions(): any {
