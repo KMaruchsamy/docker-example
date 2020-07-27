@@ -212,7 +212,7 @@
             ]
           },
           {
-            "header": "MANAGE COHORTS & GROUPS",
+            "header": "MANAGE COHORTS",
             "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/items.svg",
             "data_key": "reports",
             "cards": [

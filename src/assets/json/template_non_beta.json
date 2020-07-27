@@ -134,7 +134,7 @@
                     "text": "IHuman Patients",
                     "is_internal_link": false,
                     "name": "IHP",
-                    "target":"_blank",
+                    "target": "_blank",
                     "data_key": "iHP"
                   },
                   {
@@ -183,13 +183,13 @@
                   {
                     "text": "Test Schedule by Date",
                     "name": "ReportTestsScheduledbyDate",
-                    "target":"_blank"
+                    "target": "_blank"
                   },
                   {
                     "text": "Examity Proctoring Reports",
                     "is_internal_link": false,
                     "name": "EXAMITY",
-                    "target":"_blank",
+                    "target": "_blank",
                     "data_key": "ITSecurity",
                     "itsecurity_key": 1
                   },
@@ -197,7 +197,7 @@
                     "text": "Proctortrack Proctoring Reports",
                     "is_internal_link": false,
                     "name": "PROCTORTRACK",
-                    "target":"_blank",
+                    "target": "_blank",
                     "data_key": "ITSecurity",
                     "itsecurity_key": 3
                   }
@@ -239,7 +239,7 @@
             ]
           },
           {
-            "header": "MANAGE COHORTS & GROUPS",
+            "header": "MANAGE COHORTS",
             "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/items.svg",
             "data_key": "reports",
             "cards": [
