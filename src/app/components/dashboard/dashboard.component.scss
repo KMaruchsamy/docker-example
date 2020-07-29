@@ -55,6 +55,16 @@
       border-top: none;
     }
   }
+  /* To Fix Edge browser Issue ... start */
+  & ::ng-deep .mat-form-field-infix {
+    display: flex;
+    flex: none;
+  }
+  & ::ng-deep .mat-select{
+    min-width: 300px;
+  }
+  /* To Fix Edge browser Issue ... end */
+
   & ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
     background-color: #7825ff;
   }

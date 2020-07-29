@@ -158,7 +158,7 @@
                       },
                       {
                         "text": "Simulation Results by Cohort",
-                        "name": "ReportCaseByCohortByModule",
+                        "name": "ReportCaseByCohort",
                         "target": "_blank"
                       }
                     ]
@@ -176,8 +176,8 @@
                     "target": "_blank"
                   },
                   {
-                    "text": "Live Online NCLEX Course Attendance",
-                    "name": "LolAttendanceReport",
+                    "text": "Live Online NCLEX Course Attendance<br>- Coming Soon",
+                    "name": "",
                     "target": "_blank"
                   },
                   {
@@ -277,23 +277,23 @@
                   },
                   {
                     "text": "How do i implement the kaplan resources",
-                    "is_internal_link": true,
-                    "url": "/userguide"
+                    "is_internal_link": false,
+                    "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices+for+Implementation.pdf"
                   },
                   {
                     "text": "How do i review & access reports",
-                    "is_internal_link": true,
-                    "url": "/userguide"
+                    "is_internal_link": false,
+                    "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices+-+Reporting.pdf"
                   },
                   {
                     "text": "How do i implement & measure remediation?",
-                    "is_internal_link": true,
-                    "url": "/userguide"
+                    "is_internal_link": false,
+                    "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices+-+Remediation.pdf"
                   },
                   {
                     "text": "Do i assign grades for kaplan and if so, how?",
-                    "is_internal_link": true,
-                    "url": "/userguide"
+                    "is_internal_link": false,
+                    "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices_Grading.pdf"
                   }
                 ]
               }

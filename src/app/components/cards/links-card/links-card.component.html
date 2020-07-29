@@ -9,7 +9,7 @@
   >
     <mat-tree-node class="link__node" *matTreeNodeDef="let node">
       <button mat-button class="link__button" (click)="onClickLink(node)">
-        {{ node.text }}
+        <span [innerHTML]="node.text"></span>
         <mat-icon class="rotate-180">keyboard_backspace</mat-icon>
       </button>
     </mat-tree-node>
