@@ -45,12 +45,15 @@ export class UserGuideComponent implements OnInit {
     e && e.preventDefault();
     const __this = this;
     let offset = 0;
-    offset = $('header').outerHeight(true);
+    if(e === null)
+      offset = $('header').outerHeight(true) + $('.sub-header').outerHeight(true) + $('.faculty-user-guide-header').outerHeight(true);
+    else
+      offset = $('header').outerHeight(true)+ $('.sub-header').outerHeight(true);
     if (element === '#whatsNew') {
       // Includes whats New link and Back to Top link
       offset =
-        $('header').outerHeight(true) +
-        $('.faculty-user-guide-header').outerHeight(true);
+        $('header').outerHeight(true) + $('.sub-header').outerHeight(true) +
+         $('.faculty-user-guide-header').outerHeight(true);
       if (
         $(window).width() < 768 &&
         e &&

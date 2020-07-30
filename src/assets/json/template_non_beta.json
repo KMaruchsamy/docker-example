@@ -176,7 +176,7 @@
                     "target": "_blank"
                   },
                   {
-                    "text": "Live Online NCLEX Course Attendance<br>- Coming Soon",
+                    "text": "Live Online NCLEX Course Attendance - Coming Soon",
                     "name": "",
                     "target": "_blank"
                   },
@@ -273,7 +273,7 @@
                   {
                     "text": "What resources are available?",
                     "is_internal_link": true,
-                    "url": "/userguide"
+                    "url": "/userguide#bestpractices"
                   },
                   {
                     "text": "How do i implement the kaplan resources",

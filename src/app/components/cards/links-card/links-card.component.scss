@@ -33,6 +33,10 @@
         font-weight: 800;
         flex: 1;
         padding: 0;
+        padding-right: .5rem;
+        white-space: pre-wrap;
+        text-align: left;
+
         &::ng-deep .mat-button-wrapper {
           flex: 1;
           display: flex;
