@@ -131,7 +131,7 @@
                 "color": "#6BB34A",
                 "links": [
                   {
-                    "text": "IHuman Patients",
+                    "text": "i-Human Patients",
                     "is_internal_link": false,
                     "name": "IHP",
                     "target": "_blank",
@@ -276,12 +276,12 @@
                     "url": "/userguide#bestpractices"
                   },
                   {
-                    "text": "How do i implement the kaplan resources",
+                    "text": "How do i implement the kaplan resources?",
                     "is_internal_link": false,
                     "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices+for+Implementation.pdf"
                   },
                   {
-                    "text": "How do i review & access reports",
+                    "text": "How do i review & access reports?",
                     "is_internal_link": false,
                     "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices+-+Reporting.pdf"
                   },
@@ -326,7 +326,7 @@
                     "url": "/userguide"
                   },
                   {
-                    "text": "Get help for your students?",
+                    "text": "Get help for your students",
                     "is_internal_link": true,
                     "url": "/help"
                   },
