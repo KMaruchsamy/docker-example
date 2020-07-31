@@ -66,10 +66,21 @@
   /* To Fix Edge browser Issue ... end */
 
   & ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
-    background-color: #7825ff;
+    background-color: #7825FF;
   }
 }
-
+::ng-deep .mat-select-panel .mat-option{
+  font-family: "Open Sans";
+  
+  &.mat-selected:not(.mat-option-multiple) {
+    background-color: #CDB4FF;
+    color: #101B2B;
+  } 
+  &:hover:not(.mat-selected) {
+    background: inherit;
+    font-weight: bold;
+  }
+}
 .institution-text {
   font-weight: bold;
   padding-right: .5rem;

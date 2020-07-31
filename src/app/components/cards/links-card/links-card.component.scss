@@ -2,8 +2,6 @@
   margin: 0.75rem;
   padding: 0.75rem 1.5rem;
   min-width: 320px;
-  max-height: 420px;
-  min-height: 364px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -27,6 +25,7 @@
       font-weight: 800;
       font-size: 1rem;
       border-top: 1px solid #d0d1d4;
+      min-height: 60px;
       & .link__button {
         font-family: 'Open Sans';
         font-size: 1rem;
