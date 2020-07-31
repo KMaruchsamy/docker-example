@@ -4,4 +4,6 @@ export interface ILink {
   is_internal_link?: boolean;
   url?: string;
   links?: ILink[];
+  target?: boolean;
+  itsecurity_key?: number;
 }
