@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Title } from '@angular/platform-browser';
-import { links, errorcodes, teststatus, Timezones, ItSecirity } from '../../constants/config';
+import { links, errorcodes, teststatus, Timezones, ItSecurity } from '../../constants/config';
 import { TestScheduleModel } from '../../models/test-schedule.model';
 import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
@@ -443,8 +443,8 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                     });
             }
             else {
-                window.open('/accounterror');
-            }
+                 window.open('/accounterror');
+             }
         }
         return false;
     }
@@ -528,7 +528,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     showPopup(scheduleId: number, isExamityEnabled: boolean, startDate: any, endDate: any, testId: number, itSecurityEnabledInstitution: number): void {
         this.scheduleIdToExamity = scheduleId;
         this.isExamity = isExamityEnabled;
-        if (itSecurityEnabledInstitution == ItSecirity.Examity) {
+        if (itSecurityEnabledInstitution == ItSecurity.Examity) {
             if (this.isExamity) {
                 let isMoreThan8: boolean = false;
                 let duration = moment.duration(moment(endDate).diff(moment(startDate)));
@@ -607,7 +607,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     showPopupCompletedTest(scheduleId: number, isExamityEnabled: boolean, startDate: any, endDate: any, testId: number, itSecurityEnabledInstitution: number): void {
         this.scheduleIdToExamity = scheduleId;
         this.isExamity = isExamityEnabled;
-        if (itSecurityEnabledInstitution == ItSecirity.Examity) {
+        if (itSecurityEnabledInstitution == ItSecurity.Examity) {
             if (this.isExamity) {
                 let isMoreThan8: boolean = false;
                 let duration = moment.duration(moment(endDate).diff(moment(startDate)));

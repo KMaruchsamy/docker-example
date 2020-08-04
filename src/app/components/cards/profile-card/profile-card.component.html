@@ -1,0 +1,85 @@
+<header>
+  <img
+    *ngIf="card.content?.photoUrl"
+    [src]="card.content?.photoUrl"
+    class="profile-icon"
+  />
+  <img
+    *ngIf="!card.content?.photoUrl"
+    [src]="defaultProfileImage"
+    class="profile-icon"
+  />
+  <div class="profile-header-content">
+    <h1 class="profile-header-title" *ngIf="card.title">{{ card.title }}</h1>
+    <div class="profile-basic-details">
+      <div *ngIf="card.content?.firstName">
+        {{ card.content?.firstName }} {{ card.content?.lastName }}
+      </div>
+      <div *ngIf="!card.content?.firstName">
+        Coming Soon!
+      </div>
+      <div *ngIf="card.content?.kaplanAdminId">
+        <a [routerLink]="['profiles', card.content?.kaplanAdminId]">
+          Read Profile
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+<div
+  class="profile-card-details"
+  *ngIf="card.content?.telephone || card.content?.email"
+>
+  <div class="profile-card-align" *ngIf="card.content?.telephone">
+    <div>
+      <img src="assets/images/call-24px.svg" class="profile-telephone-icon" />
+    </div>
+    <div class="profile-telephone">
+      {{ card.content?.telephone }}
+    </div>
+  </div>
+  <div class="profile-card-align" *ngIf="card.content?.email">
+    <div>
+      <img src="assets/images/email-24px.svg" class="profile-email-icon" />
+    </div>
+    <div class="profile-telephone">
+      {{ card.content?.email }}
+    </div>
+  </div>
+</div>
+<div
+  class="profile-card-content"
+  *ngIf="
+    card.content?.bulletsForFrontEnd &&
+    card.content?.bulletsForFrontEnd.length > 0
+  "
+>
+  <p>
+    <span class="profile-test-header">
+      For Help With:
+    </span>
+    {{ card.content?.bulletsForFrontEnd }}
+  </p>
+</div>
+<div
+  class="profile-select"
+  *ngIf="
+    card.content?.linksForFrontEnd && card.content?.linksForFrontEnd.length > 0
+  "
+>
+  <div class="profile-select-level">Submit a direct request:</div>
+  <div>
+    <mat-form-field class="profile-select-direct-request">
+      <mat-label *ngIf="flag">Select One</mat-label>
+      <mat-select [disableOptionCentering]="true">
+        <mat-option
+          *ngFor="let link of card.content?.linksForFrontEnd"
+          [value]="link.LinkTextToDisplay"
+          (click)="routeTo(link.LinkUrl)"
+        >
+          {{ link.LinkTextToDisplay }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

@@ -1,26 +1,9 @@
 ﻿import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
-import { PageHeaderComponent } from './../shared/page-header.component';
-
 @Component({
     selector: 'accounterror',
-    // directives: [, PageHeaderComponent],
     template: `<page-header [hideDropdown]=true></page-header>   
-    <header class="inner-banner" role="banner">
-      <div class="container">
-        <div class="branding-center">
-          <h1 class="center">
-            <!--Link should be removed or disabled-->
-            <a href="javascript:void(0)" tabindex="-1">
-              <img class="branding-logo-white" src="assets/images/logo-white_2x.png" alt="Kalplan Nursing">
-              <span class="screen-reader-only">Kaplan Nursing Faculty Home Page</span>
-            </a>
-          </h1>
-        </div>
-      </div>
-    </header>
-
+    
     <main role="main" class="app-main">
       <div class="section">
         <div class="container-narrow center">

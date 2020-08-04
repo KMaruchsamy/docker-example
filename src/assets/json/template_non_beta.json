@@ -1,0 +1,346 @@
+{
+  "header": {
+    "logo_url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/kaplan_logo.svg",
+    "userguide": {
+      "title": "Faculty Manual",
+      "icon": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/courses.svg"
+    },
+    "account": {
+      "icon": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/profile.svg",
+      "menu": [
+        {
+          "text": "Manage Account",
+          "name": "manageaccount",
+          "url": "/account"
+        },
+        {
+          "text": "Sign Out",
+          "name": "signout"
+        }
+      ]
+    },
+    "studentsite": {
+      "title": "Switch to Student Site",
+      "icon": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/student-site.svg"
+    }
+  },
+  "subheader": {
+    "show": true,
+    "help_html": "<a class='subheader-link' href='/help'>Need Urgent Help</a>? Call the Faculty Hotline: 1-866-920-6311"
+  },
+  "content": {
+    "welcome_text": ", Welcome to your Faculty Site",
+    "sections": [
+      {
+        "panels": [
+          {
+            "header": "UPDATES & ANNOUNCEMENTS",
+            "size": "1",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/alarm.svg",
+            "cards": [
+              {
+                "color": "#7825FF",
+                "type": "html",
+                "data_key": "announcements",
+                "content": ""
+              }
+            ]
+          },
+          {
+            "header": "FACULTY LIFELINE",
+            "size": "2",
+            "data_key": "PROFILE",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/faculty.svg",
+            "cards": [
+              {
+                "title": "YOUR ACCOUNT MANAGER",
+                "type": "profile",
+                "color": "#CDB4FF",
+                "content": []
+              },
+              {
+                "title": "YOUR NURSE CONSULTANT",
+                "type": "profile",
+                "color": "#CDB4FF",
+                "content": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "panels": [
+          {
+            "header": "REPORTING TOOLS",
+            "size": "4",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/reporting.svg",
+            "data_key": "reports",
+            "cards": [
+              {
+                "type": "links",
+                "title": "PERFORMANCE",
+                "color": "#00CDFF",
+                "links": [
+                  {
+                    "text": "Student Report Card",
+                    "name": "StudentReportCard",
+                    "target": "_blank"
+                  },
+                  {
+                    "text": "Test Results By Question",
+                    "name": "ReportCohortByQuestion",
+                    "target": "_blank"
+                  },
+                  {
+                    "text": "Cohort By Test",
+                    "name": "ReportCohortByTest",
+                    "target": "_blank"
+                  },
+                  {
+                    "text": "Category Comparisons",
+                    "name": "CohortComparisonsReport",
+                    "target": "_blank"
+                  }
+                ]
+              },
+              {
+                "type": "links",
+                "title": "UTILIZATION",
+                "color": "#FF801E",
+                "links": [
+                  {
+                    "text": "Utilization",
+                    "name": "UtilizationReport",
+                    "target": "_blank"
+                  },
+                  {
+                    "text": "Non Utilization",
+                    "name": "UtilizationReport",
+                    "target": "_blank"
+                  },
+                  {
+                    "text": "Skills Demo Video Utilization",
+                    "name": "CaseWesternReport",
+                    "target": "_blank"
+                  }
+                ]
+              },
+              {
+                "type": "links",
+                "title": "SIMULATION",
+                "color": "#6BB34A",
+                "links": [
+                  {
+                    "text": "i-Human Patients",
+                    "is_internal_link": false,
+                    "name": "IHP",
+                    "target": "_blank",
+                    "data_key": "iHP"
+                  },
+                  {
+                    "text": "Mid-fidelity Simulation",
+                    "parent": true,
+                    "links": [
+                      {
+                        "text": "Student Report Card by Module",
+                        "name": "ReportStudentReportCardByModule",
+                        "target": "_blank"
+                      },
+                      {
+                        "text": "Simulation Comparison by Module",
+                        "name": "ReportCaseComparisonByModule",
+                        "target": "_blank"
+                      },
+                      {
+                        "text": "Cohort Results by Module",
+                        "name": "ReportCohortResultByModule",
+                        "target": "_blank"
+                      },
+                      {
+                        "text": "Simulation Results by Cohort",
+                        "name": "ReportCaseByCohort",
+                        "target": "_blank"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "links",
+                "title": "OTHER",
+                "color": "#FF5ADC",
+                "links": [
+                  {
+                    "text": "Admission Test Results",
+                    "name": "ReportStudentAdmissionTestReportCard",
+                    "target": "_blank"
+                  },
+                  {
+                    "text": "Live Online NCLEX Course Attendance - Coming Soon",
+                    "name": "",
+                    "target": "_blank"
+                  },
+                  {
+                    "text": "Test Schedule by Date",
+                    "name": "ReportTestsScheduledbyDate",
+                    "target": "_blank"
+                  },
+                  {
+                    "text": "Examity Proctoring Reports",
+                    "is_internal_link": false,
+                    "name": "EXAMITY",
+                    "target": "_blank",
+                    "data_key": "ITSecurity",
+                    "itsecurity_key": 1
+                  },
+                  {
+                    "text": "Proctortrack Proctoring Reports",
+                    "is_internal_link": false,
+                    "name": "PROCTORTRACK",
+                    "target": "_blank",
+                    "data_key": "ITSecurity",
+                    "itsecurity_key": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "panels": [
+          {
+            "header": "TEST SCHEDULING",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/calendar.svg",
+            "data_key": "reports",
+            "cards": [
+              {
+                "type": "links",
+                "color": "#82E1B9",
+                "links": [
+                  {
+                    "text": "Schedule an Integrated Test",
+                    "is_internal_link": true,
+                    "name": "SCHEDULE_TEST",
+                    "url": "/tests/choose-test"
+                  },
+                  {
+                    "text": "Manage scheduled test",
+                    "is_internal_link": true,
+                    "url": "/tests"
+                  },
+                  {
+                    "text": "Blueprints & Statistical Info",
+                    "is_internal_link": true,
+                    "url": "/userguide"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "header": "MANAGE COHORTS",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/items.svg",
+            "data_key": "reports",
+            "cards": [
+              {
+                "type": "links",
+                "color": "#B4D2E6",
+                "links": [
+                  {
+                    "text": "Submit New Cohort",
+                    "is_internal_link": false,
+                    "url": "https://kaptest.formstack.com/forms/kaplan_nursing_new_roster_submission_form"
+                  },
+                  {
+                    "text": "Manage Existing Cohort",
+                    "is_internal_link": true,
+                    "url": "/rosters"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "header": "KAPLAN BEST PRACTICES",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/teachingtools.svg",
+            "data_key": "reports",
+            "cards": [
+              {
+                "type": "links",
+                "color": "#F9CEBB",
+                "links": [
+                  {
+                    "text": "What resources are available?",
+                    "is_internal_link": true,
+                    "url": "/userguide#bestpractices"
+                  },
+                  {
+                    "text": "How do i implement the kaplan resources?",
+                    "is_internal_link": false,
+                    "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices+for+Implementation.pdf"
+                  },
+                  {
+                    "text": "How do i review & access reports?",
+                    "is_internal_link": false,
+                    "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices+-+Reporting.pdf"
+                  },
+                  {
+                    "text": "How do i implement & measure remediation?",
+                    "is_internal_link": false,
+                    "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices+-+Remediation.pdf"
+                  },
+                  {
+                    "text": "Do i assign grades for kaplan and if so, how?",
+                    "is_internal_link": false,
+                    "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices_Grading.pdf"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "panels": [
+          {
+            "header": "NEED URGENT HELP?",
+            "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/alert.svg",
+            "data_key": "reports",
+            "cards": [
+              {
+                "size": 2,
+                "type": "html",
+                "color": "#ED9AB2",
+                "title": "YOUR KAPLAN HOTLINE TEAM IS ALSO STANDING BY.",
+                "content": "<p>Our Faculty Hotline representatives are available for urgent assistance. <b>Call 1-866-920-6311</b>. If you are outside US or canada, dial +1-407-423-6620.</p><p>We are available from 8:00am to 8:00pm Monday through Friday and from 9:00am to 5:45pm on saturdays. <b>All times are Eastern.</b> We are closed on Sundays. </p>"
+              },
+              {
+                "type": "links",
+                "color": "#3C5A64",
+                "title": "HELPFUL LINKS",
+                "links": [
+                  {
+                    "text": "FAQ/QUICK GUIDES",
+                    "is_internal_link": true,
+                    "url": "/userguide"
+                  },
+                  {
+                    "text": "Get help for your students",
+                    "is_internal_link": true,
+                    "url": "/help"
+                  },
+                  {
+                    "text": "Kaplan technical requirements",
+                    "is_internal_link": true,
+                    "url": "/help"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

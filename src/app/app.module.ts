@@ -13,6 +13,7 @@ import { Angulartics2Module } from 'angulartics2';
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { LoginModule } from './components/login/login.module';
 import { ControlsModule } from './components/controls/controls.module';
+import { PipesModule } from './pipes/pipes.module';
 import { ErrorModule } from './components/errors/errors.module';
 import { UtilityService } from './services/utility.service';
 import { ValidationsService } from './services/validations.service';
@@ -34,15 +35,16 @@ import { ForgotPasswordModule } from './components/forgot-password/forgot-passwo
 import { ResetPasswordModule } from './components/reset-password/reset-password.module';
 import { TestsModule } from './components/tests/tests.module';
 import { UserGuideModule } from './components/userguide/userguide.module';
+import { DashboardModule } from './components/dashboard/dashboard.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     LoginModule,
     HomeModule,
+    DashboardModule,
     HelpModule,
     AccountModule,
     RostersModule,
@@ -55,7 +57,9 @@ import { UserGuideModule } from './components/userguide/userguide.module';
     AppRoutingModule,
     Angulartics2Module.forRoot(),
     ErrorModule,
-    ControlsModule
+    ControlsModule,
+    PipesModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     Angulartics2GoogleAnalytics,
@@ -73,8 +77,8 @@ import { UserGuideModule } from './components/userguide/userguide.module';
     TestScheduleModel,
     TestStartedExceptionModal,
     TestsModal,
-    TimingExceptionsModal
+    TimingExceptionsModal,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

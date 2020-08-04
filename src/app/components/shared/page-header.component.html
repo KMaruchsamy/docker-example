@@ -1,13 +1,86 @@
-<header class="inner-banner" role="banner" [class.cover-header]="showCover">
-    <div class="container">
-        <div class="branding-center">
-            <h1 class="center">
-                <a [routerLink]="['/home']" routerLinkActive ="active-route" [attr.tabindex]="ariaDisabled ? -1 : null"  [attr.aria-disabled]="ariaDisabled" >
-                    <img class="branding-logo-white" src="assets/images/logo-white_2x.png" alt="Kaplan Nursing">
-                    <span class="screen-reader-only">Kaplan Nursing Faculty Home Page</span>
-                </a>
-            </h1>
-        </div>
-        <dropdown-menu [hideDropdown]="hideDropdown" [ariaDisabled]="ariaDisabled"></dropdown-menu>       
+  <header class="header">
+    <div class="header-section">
+      <div>
+        <a
+          [routerLink]="['/home']"
+          [tabindex]="ariaDisabled ? -1 : null"
+          aria-disabled="ariaDisabled"
+        >
+          <img
+            class="header-section-logo"
+            [src]="header?.logo_url"
+            alt="Kaplan"
+          />
+        </a>
+      </div>
     </div>
-</header>
+    <div class="header-menu-section" *ngIf="!hideDropdown">
+      <div class="menu-content" [routerLink]="['/userguide']" role="button">
+        <img
+          class="header-section-icon"
+          [src]="header?.userguide?.icon"
+          alt="Manual"
+        />
+        {{ header.userguide.title }}
+      </div>
+      <div class="menu-content align-content-items">
+        <img
+          class="header-section-icon"
+          [src]="header?.account.icon"
+          alt="Profile"
+        />
+
+        <nav
+          class="dropdown"
+          [class.hidden]=""
+          role="navigation"
+          aria-label="primary"
+        >
+          <div class="dropdown-container">
+            <a
+              href="javascript:void(0)"
+              id="lnkMenu"
+              role="button"
+              class="dropdown-button remove-text-decoration"
+              data-toggle="dropdown"
+              >{{ username }}
+              <img class="down-icon" alt="down arrow" />
+            </a>
+            <ul class="dropdown-menu dropdown-select">
+              <li>
+                <a
+                  [routerLink]="['/account']"
+                  class="menu-icon remove-text-decoration"
+                  >{{ header.account.menu[0].text }}</a
+                >
+              </li>
+              <li>
+                <a
+                  href="javascript:void(0)"
+                  class="menu-icon remove-text-decoration"
+                  (click)="logout($event)"
+                  >{{ header.account.menu[1].text }}</a
+                >
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="line-4"></div>
+      <div class="menu-content" (click)="redirectToKaptest()" role="button">
+        <img
+          class="header-section-icon"
+          [src]="header?.studentsite?.icon"
+          alt="student site"
+        />
+        {{ header.studentsite.title }}
+      </div>
+    </div>
+  </header>
+  <page-subheader [showCover]="showCover"></page-subheader>
+  <form id="myForm" method="POST" target="_blank">
+    <input type="hidden" id="institutionID" name="institutionID" />
+    <input type="hidden" id="jwtToken" name="jwtToken" />
+    <input type="hidden" id="redirectPage" name="redirectPage" />
+    <input type="hidden" id="exceptionURL" name="exceptionURL" />
+  </form>

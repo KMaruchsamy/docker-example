@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonService } from './common.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class AuthService {
   common: CommonService = new CommonService();
   sStorage: any = this.common.getStorage();
+
+  userNameSubject = new BehaviorSubject<string>("");
+  userName$ = this.userNameSubject.asObservable();
 
   // token: string;
   get token(): any {
@@ -14,7 +18,7 @@ export class AuthService {
   set token(value: any) {
     this.sStorage.setItem('jwt', value);
   }
-  // user: any;
+
   // authheader: string;
   get authheader(): any {
     return 'Bearer ' + this.token;
@@ -71,6 +75,13 @@ export class AuthService {
     this.sStorage.setItem('title', value);
   }
 
+  // selectedinstitution: any;
+  get selectedInstitution(): any {
+    return this.sStorage.getItem('selectedinstitution');
+  }
+  set selectedInstitution(value: any) {
+    this.sStorage.setItem('selectedinstitution', value);
+  }
 
   // institutions: any;
   get institutions(): any {
@@ -110,6 +121,13 @@ export class AuthService {
   }
   set testSchedule(value: any) {
     this.sStorage.setItem('testschedule', value);
+  }
+
+  get dashboardTemplate(): any {
+    return this.sStorage.getItem('dashboardtemplate');
+  }
+  set dashboardTemplate(value: any) {
+    this.sStorage.setItem('dashboardtemplate', value);
   }
 
   constructor(private http: HttpClient) {
@@ -155,6 +173,11 @@ export class AuthService {
 
   isAuth() {
     return (!!this.token && !!this.isEnrollmentAgreementSigned);
+  }
+  updateUsername(firstname,lastname) {
+    this.sStorage.setItem('firstname', firstname);
+    this.sStorage.setItem('lastname', lastname);
+    this.userNameSubject.next(firstname + ' ' + lastname);
   }
 
   isStudentPayEnabledInstitution(institutionId: number): boolean {

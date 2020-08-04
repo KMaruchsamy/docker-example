@@ -2,7 +2,7 @@ import {Component, OnInit, OnDestroy, ElementRef, ViewChild} from '@angular/core
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
-import {links, ItSecirity} from '../../constants/config';
+import {links, ItSecurity} from '../../constants/config';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import {Subscription} from 'rxjs';
 import { AuthService } from './../../services/auth.service';
@@ -370,6 +370,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     filterIHPEnableInstitutions(): void {
+        
         let institutions = _.orderBy(JSON.parse(this.auth.institutions), 'InstitutionId', 'desc');
         this.ihpEnableInstitutions = _.filter(institutions, { 'IsIHPEnabledForAnyCohorts': true });
         this.ihpEnableInstitutions = _.orderBy(this.ihpEnableInstitutions, 'InstitutionName','asc');
@@ -457,7 +458,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     getProctorTrackInstitutions() {
         let institutions = JSON.parse(this.auth.institutions);
-        this.ItSecurityEnabledInstitutions = institutions.filter(x=> x.ITSecurityEnabled == ItSecirity.ProctorTrack);
+        this.ItSecurityEnabledInstitutions = institutions.filter(x=> x.ITSecurityEnabled == ItSecurity.ProctorTrack);
         this.ItSecurityEnabledInstitutions =   _.orderBy(this.ItSecurityEnabledInstitutions, 'InstitutionName','asc');
         if(this.ItSecurityEnabledInstitutions && this.ItSecurityEnabledInstitutions.length > 0) {
             if(this.ItSecurityEnabledInstitutions.length == 1){
