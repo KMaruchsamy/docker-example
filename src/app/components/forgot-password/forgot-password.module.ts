@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
 import { ForgotPasswordRoutingModule } from './forgot-password.routing.module';
+import { PageModule } from '../shared/page.module';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { ForgotPasswordRoutingModule } from './forgot-password.routing.module';
         FormsModule,
         HttpClientModule,
         SharedModule,
-        ForgotPasswordRoutingModule
+        ForgotPasswordRoutingModule,
+        PageModule
     ],
     declarations: [
         ForgotPasswordComponent,

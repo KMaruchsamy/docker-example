@@ -1,9 +1,10 @@
 <div class="container-medium-width">
-    <h2 class="page-sm-heading-teal">View Rosters</h2>
-    <h3 *ngIf="institutionName" class="page-lg-heading">
-        <span class="hidden-for-print">Active Cohort Rosters for </span>{{institutionName}}
-    </h3>
-    <h3 *ngIf="!institutionName" class="page-lg-heading">
-        Active Cohort Rosters
-    </h3>
+  <h2>VIEW ROSTERS</h2>
+  <h1 *ngIf="institutionName" class="no-bottom-margin">
+    <span class="hidden-for-print">ACTIVE COHORT ROSTERS FOR </span
+    >{{ institutionName.toUpperCase() }}
+  </h1>
+  <h1 *ngIf="!institutionName">
+    ACTIVE COHORT ROSTERS
+  </h1>
 </div>

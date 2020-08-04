@@ -136,6 +136,7 @@ export class AccountComponent implements OnInit, OnDestroy {
                     self.sStorage.setItem('firstname', fname);
                     self.sStorage.setItem('lastname', lname);
                     self.sStorage.setItem('title', title);
+                    self.auth.updateUsername(fname,lname);
                     self.getInitialize();
                 }
                 else if (status.toString() === this.errorCodes.UNAUTHORIZED) {

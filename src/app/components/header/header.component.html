@@ -1,0 +1,86 @@
+<header class="header">
+  <!-- <aside>
+    <img [src]="header.logo_url" alt="Kaplan" />
+  </aside>
+  <div class="spacer"></div>
+  <a mat-button href="https://www.google.com/" target="_blank" class="link"
+    ><img
+      style="height: 24px; width: 24px; margin-right: 8px;"
+      src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/courses.svg"
+      alt="Manual"
+    /> -->
+    <!-- Faculty Manual -->
+    <!-- {{ header.userguide_LinkText }}</a
+  >
+  <img
+    style="height: 24px; width: 24px; margin-right: 8px;"
+    src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/profile.svg"
+    alt="Profile"
+  />
+  <mat-form-field>
+    <mat-label class="select__label">Linda Hamilton</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let link of header.account_links" [value]="link.text"> {{link.text}} </mat-option>
+   </mat-select>
+  </mat-form-field> -->
+  <!-- <a mat-button href="https://www.google.com/" target="_blank" class="link"
+    >
+    Linda Hamilton
+    <img
+      style="height: 8px; width: 14px; margin-left: 8px;"
+      src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/down.svg"
+      alt="down arrow"
+  /></a> -->
+  <!-- <a mat-button href="https://www.google.com/" target="_blank" class="link">
+    <img
+      style="height: 24px; width: 24px; margin-right: 8px;"
+      src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/student-site.svg"
+      alt="student site"
+    />
+    Switch to Student Site</a
+  > -->
+  <!-- <section class="header"> -->
+    <div class="header-section">
+        <div>
+            <img class="header-section-logo"
+                src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/kaplan_logo.svg"
+                alt="Kaplan" />
+        </div>
+    </div>
+    <div class="header-menu-section">
+        <div class="menu-content">
+            <img class="header-section-icon"
+                src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/courses.svg"
+                alt="Manual" />
+            Faculty Manual
+        </div>
+        <div class="menu-content align-content-items">
+            <img class="header-section-icon"
+                src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/profile.svg"
+                alt="Profile" />
+                
+            <nav class="dropdown" [class.hidden]="" role="navigation" aria-label="primary">
+              <div class="dropdown-container">
+                <a href="javascript:void(0)"  id="lnkMenu"  role="button" class="dropdown-button" data-toggle="dropdown">{{username}}
+                  <img style="height: 8px;width: 14px;margin-left: 8px;"
+                  src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/down.svg"
+                  alt="down arrow" />
+                </a>
+                <ul class="dropdown-menu dropdown-select">
+                 <li><a routerLink="/account" class="menu-icon">Manage Account</a></li>
+                 <li><a href="javascript:void(0)" class="menu-icon" (click)="logout($event);">Sign Out</a></li>
+                </ul>
+              </div>
+            </nav>
+            
+        </div>
+        <div class="line-4"></div>
+        <div class="menu-content">
+            <img class="header-section-icon"
+                src="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/student-site.svg"
+                alt="student site" />
+            Switch to Student Site
+        </div>
+    </div>
+<!-- </section> -->
+</header>

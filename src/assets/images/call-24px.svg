@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 59.1 (101010) - https://sketch.com -->
+    <title>2E076CEE-DBAE-4690-A182-CFB1B49CE9C5</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <path d="M3.54,2 C3.6,2.89 3.75,3.76 3.99,4.59 L2.79,5.79 C2.38,4.59 2.12,3.32 2.03,2 L3.54,2 M13.4,14.02 C14.25,14.26 15.12,14.41 16,14.47 L16,15.96 C14.68,15.87 13.41,15.61 12.2,15.21 L13.4,14.02 M4.5,0 L1,0 C0.45,0 0,0.45 0,1 C0,10.39 7.61,18 17,18 C17.55,18 18,17.55 18,17 L18,13.51 C18,12.96 17.55,12.51 17,12.51 C15.76,12.51 14.55,12.31 13.43,11.94 C13.33,11.9 13.22,11.89 13.12,11.89 C12.86,11.89 12.61,11.99 12.41,12.18 L10.21,14.38 C7.38,12.93 5.06,10.62 3.62,7.79 L5.82,5.59 C6.1,5.31 6.18,4.92 6.07,4.57 C5.7,3.45 5.5,2.25 5.5,1 C5.5,0.45 5.05,0 4.5,0 Z" id="path-1"></path>
+    </defs>
+    <g id="Main" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="FS---V3" transform="translate(-528.000000, -477.000000)">
+            <g id="1st-row" transform="translate(27.000000, 303.000000)">
+                <g id="Faculty-Lifeline" transform="translate(471.000000, 0.000000)">
+                    <g id="Cards/FacultyLifeline-AC" transform="translate(0.000000, 60.000000)">
+                        <g id="phone" transform="translate(27.000000, 111.000000)">
+                            <g id="icons/call-24px">
+                                <polygon id="Path" points="0 0 24 0 24 24 0 24"></polygon>
+                                <g id="Atom/Color/Grayscale/10" transform="translate(3.000000, 3.000000)">
+                                    <mask id="mask-2" fill="white">
+                                        <use xlink:href="#path-1"></use>
+                                    </mask>
+                                    <use id="Mask" fill="#000000" fill-rule="nonzero" xlink:href="#path-1"></use>
+                                    <g mask="url(#mask-2)" fill="#121A26" id="Swatch">
+                                        <g transform="translate(-39.000000, -39.000000)">
+                                            <rect x="0" y="0" width="96" height="96"></rect>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

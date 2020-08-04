@@ -49,6 +49,7 @@
               "src/manifest.json"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/X-editable/dist/bootstrap-editable/css/bootstrap-editable.css",
               "src/assets/css/bootstrap-editable-overrides.css",
               "src/assets/css/tablesaw.bare.css",
@@ -150,6 +151,7 @@
               "node_modules/X-editable/dist/bootstrap3-editable/js/bootstrap-editable.js"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/X-editable/dist/bootstrap-editable/css/bootstrap-editable.css",
               "src/assets/css/bootstrap-editable-overrides.css",
               "src/assets/css/tablesaw.bare.css",

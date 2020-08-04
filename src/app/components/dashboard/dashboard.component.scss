@@ -1,0 +1,91 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;
+  padding-top: 120px;
+  & .dashboardSection {
+    flex: 1
+  }
+}
+
+.welcome-section {
+  margin: 27px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  border-bottom: 2px solid #d0d1d4;
+}
+
+.welcome {
+  display: flex;
+  flex: 1;
+  color: #101b2b;
+}
+
+.welcome-text {
+  margin-top: 30px;
+  font-family: "franklin-compressed";
+  font-size: 32px;
+  letter-spacing: 0;
+  font-weight: bold;
+  line-height: 54px;
+}
+
+.my-institution {
+  font-family: "Open Sans";
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: 24px;
+  color: #101B2B;
+  & label{
+    font-family: "Open Sans";
+    color: #101B2B;
+  }
+  & .institution-select {
+    min-width: 300px;
+
+    & ::ng-deep .mat-select-arrow {
+      background-image: url(assets/images/select-Icon.svg);
+      background-repeat: no-repeat;
+      width: 14px;
+      height: 14px;
+      border-left: none;
+      border-right: none;
+      border-top: none;
+    }
+  }
+  /* To Fix Edge browser Issue ... start */
+  & ::ng-deep .mat-form-field-infix {
+    display: flex;
+    flex: none;
+  }
+  & ::ng-deep .mat-select{
+    min-width: 300px;
+  }
+  /* To Fix Edge browser Issue ... end */
+
+  & ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+    background-color: #7825FF;
+  }
+}
+::ng-deep .mat-select-panel .mat-option{
+  font-family: "Open Sans";
+  
+  &.mat-selected:not(.mat-option-multiple) {
+    background-color: #CDB4FF;
+    color: #101B2B;
+  } 
+  &:hover:not(.mat-selected) {
+    background: inherit;
+    font-weight: bold;
+  }
+}
+.institution-text {
+  font-weight: bold;
+  padding-right: .5rem;
+}
+
+.institution-name {
+  min-width: 100px;
+}
