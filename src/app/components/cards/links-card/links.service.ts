@@ -64,7 +64,7 @@ export class LinksService implements OnDestroy {
 
     let url: string;
     if(s.value ==='ApolloStudentReportCard')
-      url = `${this.nitServer}${links.nursingit.apolloLaunchPage}${"adminId="}${this.auth.userid}`;
+      url = `${this.nitServer}${links.nursingit.apolloLaunchPage}${"&adminId="}${this.auth.userid}`;
     else
       url = `${this.nitServer}${links.nursingit.ReportingLandingPage}`;
 
