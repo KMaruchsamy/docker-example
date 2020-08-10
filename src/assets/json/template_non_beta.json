@@ -228,11 +228,6 @@
                     "text": "Manage scheduled test",
                     "is_internal_link": true,
                     "url": "/tests"
-                  },
-                  {
-                    "text": "Blueprints & Statistical Info",
-                    "is_internal_link": true,
-                    "url": "/userguide"
                   }
                 ]
               }
@@ -323,7 +318,7 @@
                   {
                     "text": "FAQ/QUICK GUIDES",
                     "is_internal_link": true,
-                    "url": "/userguide"
+                    "url": "/userguide#faqquicklinks"
                   },
                   {
                     "text": "Get help for your students",
