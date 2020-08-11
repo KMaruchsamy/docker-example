@@ -3986,6 +3986,8 @@ input[type='search'].small-search-box::placeholder {
 .footer-logged-in {
   background-color: #ffffff;
   color: #282828;
+  z-index: 1000;
+  position: relative;
 }
 
 .footer-grid {
@@ -6070,6 +6072,7 @@ select.mobile-device {
 @media (min-width: 75em) {
   .back-to-top-arrow {
     right: 15px;
+    z-index: 9999;
   }
 }
 
