@@ -107,7 +107,7 @@
                     "text": "i-Human Patients",
                     "is_internal_link": false,
                     "name": "IHP",
-                    "target": "_blank",
+                    "target":"_blank",
                     "data_key": "iHP"
                   },
                   {
@@ -116,23 +116,23 @@
                     "links": [
                       {
                         "text": "Student Report Card by Module",
-                        "name": "ReportStudentReportCardByModule",
-                        "target": "_blank"
+                        "name":"ReportStudentReportCardByModule",
+                        "target":"_blank"
                       },
                       {
                         "text": "Simulation Comparison by Module",
-                        "name": "ReportCaseComparisonByModule",
-                        "target": "_blank"
+                        "name":"ReportCaseComparisonByModule",
+                        "target":"_blank"
                       },
                       {
                         "text": "Cohort Results by Module",
-                        "name": "ReportCohortResultByModule",
-                        "target": "_blank"
+                        "name":"ReportCohortResultByModule",
+                        "target":"_blank"
                       },
                       {
                         "text": "Simulation Results by Cohort",
                         "name": "ReportCaseByCohort",
-                        "target": "_blank"
+                        "target":"_blank"
                       }
                     ]
                   }
@@ -146,23 +146,23 @@
                   {
                     "text": "Admission Test Results",
                     "name": "ReportStudentAdmissionTestReportCard",
-                    "target": "_blank"
+                    "target":"_blank"
                   },
                   {
                     "text": "Live Online NCLEX Course Attendance - Coming Soon",
-                    "name": "",
-                    "target": "_blank"
+                    "name":"",
+                    "target":"_blank"
                   },
                   {
                     "text": "Test Schedule by Date",
                     "name": "ReportTestsScheduledbyDate",
-                    "target": "_blank"
+                    "target":"_blank"
                   },
                   {
                     "text": "Examity Proctoring Reports",
                     "is_internal_link": false,
                     "name": "EXAMITY",
-                    "target": "_blank",
+                    "target":"_blank",
                     "data_key": "ITSecurity",
                     "itsecurity_key": 1
                   },
@@ -170,7 +170,7 @@
                     "text": "Proctortrack Proctoring Reports",
                     "is_internal_link": false,
                     "name": "PROCTORTRACK",
-                    "target": "_blank",
+                    "target":"_blank",
                     "data_key": "ITSecurity",
                     "itsecurity_key": 3
                   }
@@ -201,6 +201,11 @@
                     "text": "Manage scheduled test",
                     "is_internal_link": true,
                     "url": "/tests"
+                  },
+                  {
+                    "text": "Blueprints & Statistical Info",
+                    "is_internal_link": true,
+                    "url": "/userguide"
                   }
                 ]
               }
