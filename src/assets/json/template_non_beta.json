@@ -228,6 +228,11 @@
                     "text": "Manage scheduled test",
                     "is_internal_link": true,
                     "url": "/tests"
+                  },
+                  {
+                    "text": "Blueprints & Statistical Info",
+                    "is_internal_link": true,
+                    "url": "/userguide"
                   }
                 ]
               }
