@@ -26,7 +26,7 @@ export class UserGuideComponent implements OnInit {
   ngOnInit(): void {
     if (this.auth.isAuth()) {
       this.titleService.setTitle('Faculty User Guide – Kaplan Nursing');
-      window.scroll(0, 0);
+      this.scroll("#whatsNew",null);
       this.activeId = '#whatsNew';
       this.termsAccepted = true;
       const idHash = window.location.hash;
@@ -45,15 +45,19 @@ export class UserGuideComponent implements OnInit {
     e && e.preventDefault();
     const __this = this;
     let offset = 0;
-    if(e === null)
-      offset = $('header').outerHeight(true) + $('.sub-header').outerHeight(true) + $('.faculty-user-guide-header').outerHeight(true);
+    if(e === null){
+      offset=NaN;
+      if(element === '#bestpractices'){
+        offset = $('header').outerHeight(true) + $('.sub-header').outerHeight(true) + $('.faculty-user-guide-header').outerHeight(true);
+      }
+     }
     else
       offset = $('header').outerHeight(true)+ $('.sub-header').outerHeight(true);
-    if (element === '#whatsNew') {
+    if (element === '#whatsNew' && e != null) {
       // Includes whats New link and Back to Top link
       offset =
         $('header').outerHeight(true) + $('.sub-header').outerHeight(true) +
-         $('.faculty-user-guide-header').outerHeight(true);
+         $('.faculty-user-guide-header').outerHeight(true)+20;
       if (
         $(window).width() < 768 &&
         e &&
