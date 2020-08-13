@@ -1,7 +1,7 @@
 var _gaq = _gaq || [];
-if (window.location.hostname === 'nit.kaplan.com')
+if (window.location.hostname === 'nit.kaptest.com')
   _gaq.push(['_setAccount', 'UA-72468900-1']);
-else if (window.location.hostname === 'qa-nit.kaplan.com')
+else if (window.location.hostname === 'nit.qa.kaptest.com')
   _gaq.push(['_setAccount', 'UA-72468900-2']);
 _gaq.push(['_trackPageview']);
 (function (i, s, o, g, r, a, m) {
@@ -23,8 +23,8 @@ _gaq.push(['_trackPageview']);
   'https://www.google-analytics.com/analytics.js',
   'ga'
 );
-if (window.location.hostname === 'nit.kaplan.com') {
+if (window.location.hostname === 'nit.kaptest.com') {
   ga('create', 'UA-72468900-1', 'auto');
-} else if (window.location.hostname === 'qa-nit.kaplan.com') {
+} else if (window.location.hostname === 'nit.qa.kaptest.com') {
   ga('create', 'UA-72468900-2', 'auto');
 }
