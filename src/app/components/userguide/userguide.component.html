@@ -24,6 +24,8 @@
                             (click)="scroll('#programOverview',$event)">Program Overview</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#testingResources'" href="javascript:void(0)"
                             (click)="scroll('#testingResources',$event)">Testing and Remediation Resources</a></li>
+                    <li><a [class.text-purple-bold]="activeId==='#blueprints'" href="javascript:void(0)"
+                            (click)="scroll('#blueprints',$event)">Test Blueprints And Statistic</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#clinicalResources'" href="javascript:void(0)"
                             (click)="scroll('#clinicalResources',$event)">Clinical Resources</a></li>
                     <li><a [class.text-purple-bold]="activeId==='#NCLEX'" href="javascript:void(0)"
@@ -486,6 +488,590 @@
                     </div>
                 </section>
 
+                <section id="blueprints">
+                    <h2>TEST BLUEPRINTS AND STATISTICS</h2>
+                    <div class="text-section">
+                        <!-- <h3 id="skillsVideos" class="h5 teal">INTEGRATED TESTS</h3> -->
+                    </div>
+                    <div class="expander">
+                        <a href="javascript:void(0)" (click)="expand('#RNTests')"
+                            class="expander-trigger collapsed" role="button" data-toggle="collapse"
+                            aria-expanded="false" aria-controls="RNTests">
+                            <span class="teal h6"><b>INTEGRATED TESTS</b></span>
+                        </a>
+                        <div class="collapse" id="RNTests">
+
+                            <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#fundamentals')"
+                                    class="expander-trigger collapsed link-darker" role="button"
+                                    data-toggle="collapse" aria-expanded="false" aria-controls="fundamentals">
+                                    <b>RN</b>
+                                </a>
+                                <div class="collapse" id="fundamentals">
+                                    <ul class="list-pdf-download-icon list-extra-spacing">
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Community+Care+Math+A+B+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Community Math A, B, and C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Diagnostic+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Diagnostic A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Dosage+_+Calculation+50.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Dosage & Calculation 50</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Dosage+Calculations+A+B+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Dosage Calculation A, B and C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Fundamentals+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Fundamentals A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Fundamentals+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Fundamentals B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Fundamentals+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Fundamentals C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Gerontology+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Gerontology A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Growth+and+Development+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Growth & Development A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/High+Acuity+Nursing+Math+A+B+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >High Acuity Math A, B, and C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Kaplan+Secure+Predictor+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Kaplan Secure Predictor A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Kaplan+Secure+Predictor+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Kaplan Secure Predictor B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Kaplan+Secure+Predictor+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Kaplan Secure Predictor C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Leadership+Math+A+B+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Leadership Math A, B, and C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Management+Prof+Issues+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Management Prof Issues A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Management+Professional+Issues_P.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Management Prof Issues_P</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Medical+Surgical+1+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Medical Surgical 1 A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Medical+Surgical+1+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Medical Surgical 1 B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Medical+Surgical+1+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Medical Surgical 1 C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Medical+Surgical+2+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Medical Surgical 2 A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Medical+Surgical+2+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Medical Surgical 2 B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Medical+Surgical+2+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Medical Surgical 2 C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Medical+Surgical+Comprehensive+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Medical Surgical Comprehensive B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Medical+Surgical+Comprehensive+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Medical Surgical Comprehensive C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Nursing+Assessment+Test+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Nursing Assessment Test A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Nursing+Care+of+Adults+Math++A+B+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Nursing Care of Adults Math A, B, and C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Nursing+Care+of+Children+Math+A+B+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Nursing Care of Children Math A, B, and C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Nursing+Care+of+Older+Adults+Math+A+B+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Nursing Care of Older Adults Math A, B, and C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Nutrition+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Nutrition A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/OB+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >OB A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/OB+Growth+and+Development+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >OB Growth and Development A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/OB+Math+A+B+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >OB Math A, B, and C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/OB_P.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >OB_P</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Pathophysiology+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Pathophysiology A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Pediatric+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Pediatric A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Pediatric_P.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Pediatric _P</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Pharmacology+Parenteral+Therapy+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Pharmacology Parenteral Therapy A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Pharmacology+Parenteral+Therapy+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Pharmacology Parenteral Therapy B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Physical+Health+Assessment+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Physical Health Assessment A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Psychosocial+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Psychosocial A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Psychosocial+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Psychosocial B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Psychosocial+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Psychosocial C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Psychosocial+Math+A+B+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Psychosocial Math A, B, and C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Readiness+A+(1).pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Readiness A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Research+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Research A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Transition+Test+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Transition Test A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+integrated/Wellness+Physical+Assessment+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon" >Wellness Physical Assessment A</a></li>
+                                    </ul>       
+                                </div>
+                            </div>
+                            <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#rununsecured')"
+                                    class="expander-trigger collapsed link-darker" role="button"
+                                    data-toggle="collapse" aria-expanded="false"
+                                    aria-controls="rununsecured">
+                                    <b>RN Unsecured</b>
+                                </a>
+                                <div class="collapse" id="rununsecured">
+                                    <ul class="list-pdf-download-icon list-extra-spacing">
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Community+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon"  > Community A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Exit+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Exit A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Exit+B_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Exit B_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Fundamentals+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Fundamentals A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Fundamentals+B_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Fundamentals B_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Medical-Surgical+1+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Medical Surgical 1 A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Medical-Surgical+1+B_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Medical Surgical 1 B_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Medical-Surgical+2+B_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Medical Surgical 2 A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Medical-Surgical+2+B_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Medical Surgical 2 B_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Medical-Surgical+Comp+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Medical Surgical Comp A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Medical-Surgical+Comp+B_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Medical Surgical Comp B_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Mgt+Prof+Issues+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Mgt Prof Issues A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/OB+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > OB A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/OB+B_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > OB B_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Pediatric+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Pediatric A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Pediatric+B_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Pediatric B_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Pharmacology+Parenteral+Therapy+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Pharmacology Parenteral Therapy A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Pharmacology+Parenteral+Therapy+B_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Pharmacology Parenteral Therapy B_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Psychosocial+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Psychosocial A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/Psychosocial+B_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon" > Psychosocial B_ALT</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#pnAssessment')"
+                                    class="expander-trigger collapsed link-darker" role="button"
+                                    data-toggle="collapse" aria-expanded="false"
+                                    aria-controls="pnAssessment">
+                                    <b>PN</b>
+                                </a>
+                                <div class="collapse" id="pnAssessment">
+                                    <ul class="list-pdf-download-icon list-extra-spacing">
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Adult+Health+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Adult Health A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Adult+Health+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Adult Health B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Adult+Health+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Adult Health C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Developing+Family+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Developing Family A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Developing+Family+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Developing Family B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Developing+Family+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Developing Family C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Foundations+of+Nursing+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Foundations of Nursing A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Foundations+of+Nursing+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Foundations of Nursing B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Foundations+of+Nursing+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Foundations of Nursing C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Gerontology+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Gerontology A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Gerontology+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Gerontology B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Gerontology+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Gerontology C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Injectable+Dosage+Calculation+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Injectable Dosage Calculation A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Injectable+Dosage+Calculation+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Injectable Dosage Calculation B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Injectable+Dosage+Calculation+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Injectable Dosage Calculation C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+IV+Therapy+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN IV Therapy A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+IV+Therapy+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN IV Therapy B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+IV+Therapy+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN IV Therapy C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+IV+Therapy+Dosage+Calculation+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN IV Therapy Dosage Calculation A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+IV+Therapy+Dosage+Calculation+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN IV Therapy Dosage Calculation B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+IV+Therapy+Dosage+Calculation+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN IV Therapy Dosage Calculation C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Nutrition+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Nutrition A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Nutrition+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Nutrition B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Nutrition+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Nutrition C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Oral+Dosage+Calculation+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Oral Dosage Calculation A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Oral+Dosage+Calculation+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Oral Dosage Calculation B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Oral+Dosage+Calculation+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Oral Dosage Calculation C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Pediatric+Dosage+Calculation+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Pediatric Dosage Calculation A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Pediatric+Dosage+Calculation+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Pediatric Dosage Calculation B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Pediatric+Dosage+Calculation+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Pediatric Dosage Calculation C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Pharmacology+I+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Pharmacology I A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Pharmacology+I+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Pharmacology I B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Pharmacology+I+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Pharmacology I C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Pharmacology+II+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Pharmacology II A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Pharmacology+II+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Pharmacology II B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Pharmacology+II+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Pharmacology II C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Pharmacology+III+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Pharmacology III A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Pharmacology+III+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Pharmacology III B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Pharmacology+III+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Pharmacology III C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Psychosocial+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Psychosocial A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Psychosocial+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Psychosocial B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Psychosocial+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Psychosocial C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Readiness+Test+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Readiness A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+integrated/PN+Secure+Predictor+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Secure Predictor B</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#pnunsecured')"
+                                    class="expander-trigger collapsed link-darker" role="button"
+                                    data-toggle="collapse" aria-expanded="false"
+                                    aria-controls="pnunsecured">
+                                    <b>PN Unsecured</b>
+                                </a>
+                                <div class="collapse" id="pnunsecured">
+                                    <ul class="list-pdf-download-icon list-extra-spacing">
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/PN+Adult+Health+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Adult Health A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/PN+Developing+Family+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Developing Family A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/PN+Foundations+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Foundations A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/PN+Pharmacology+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Pharmacology A_ALT</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/ALT+(formerly+IEN)+RN+and+PN+Un-secure+Tests/PN+Psychosocial+A_Alt.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Psychosocial A_ALT</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="expander">
+                        <a href="javascript:void(0)" (click)="expand('#focusedreviews')"
+                            class="expander-trigger collapsed" role="button" data-toggle="collapse"
+                            aria-expanded="false" aria-controls="focusedreviews">
+                            <span class="teal h6"><b>FOCUSED REVIEWS</b></span>
+                        </a>
+                        <div class="collapse" id="focusedreviews">
+                            <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNreviews')"
+                                    class="expander-trigger collapsed link-darker" role="button"
+                                    data-toggle="collapse" aria-expanded="false"
+                                    aria-controls="RNreviews">
+                                    <b>RN</b>
+                                </a>
+                                <div class="collapse" id="RNreviews">
+                                    <ul class="list-pdf-download-icon list-extra-spacing">
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Basic+Math+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon">Basic Math A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Cardiovascular+System+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Cardiovascular System A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Cardiovascular+System+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Cardiovascular System B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Community+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Community A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Endocrine+System+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Endocrine System A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Fluid+and+Electrolyte+Balance+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Fluid and Electrolyte Balance A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Fundamentals+of+Nursing+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Fundamentals of Nursing A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Fundamentals+of+Nursing+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Fundamentals of Nursing B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Gastrointestinal+System+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Gastrointestinal System A </a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Gastrointestinal+System+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Gastrointestinal System B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Gerontology+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Gerontology A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Gerontology+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Gerontology B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Health+Assessment+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Health Assessment A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Hematology-Immune+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Hematology-Immune A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Level+II+Math.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Level II Math</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Management+of+Care+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Management of Care A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Management+of+Care+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Management of Care B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Management+of+Care+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Management of Care C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Maternity+Gynecological+Nursing+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Maternity Gynecological Nursing A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Maternity+Gynecological+Nursing+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Maternity Gynecological Nursing B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Maternity+Gynecological+Nursing+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Maternity Gynecological Nursing c</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Math+for+Critical+Care+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Math for Critical Care</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Musculoskeletal+System+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Musculoskeletal System A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Neurology+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Neurology A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Oncology+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Oncology A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Pathophysiology+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Pathophysiology A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Pediatric+Math+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Pediatric Math A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Pediatrics+Test+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Pediatrics A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Pediatrics+Test+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Pediatrics B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Pediatrics+Test+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Pediatrics C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Pharmacological-Parenteral+Therapy+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Pharmacological Parenteral Therapy A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Pharmacological-Parenteral+Therapy+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Pharmacological Parenteral Therapy B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Pharmacological-Parenteral+Therapy+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Pharmacological Parenteral Therapy c</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Psychiatric+Nursing+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Psychiatric Nursing A </a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Psychiatric+Nursing+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Psychiatric Nursing B </a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Psychiatric+Nursing+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Psychiatric Nursing C </a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Renal-Urological+System+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Renal Urological System </a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Respiratory+Test+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Respiratory A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Respiratory+Test+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Respiratory B </a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+focused+review/Kaplan+Sensory+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Sensory A </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#RNnewreviews')"
+                                    class="expander-trigger collapsed link-darker" role="button"
+                                    data-toggle="collapse" aria-expanded="false"
+                                    aria-controls="RNnewreviews">
+                                    <b>RN New Focused Reviews</b>
+                                </a>
+                                <div class="collapse" id="RNnewreviews">
+                                    <ul class="list-pdf-download-icon list-extra-spacing">
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Advanced+Math+CC+A+(1).pdf"
+                                            target="_blank" class="icon pdf-download-icon">Advanced Math CC A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Advanced+Math+Peds+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Advanced Math Peds A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Basic+Math+A+.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Basic Math A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Cardiovascular+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Cardiovascular A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Community+A+(1).pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Community A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Endocrine+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Endocrine A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Fluid+and+Electrolyte+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Fluid and Electrolyte A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Fundamentals+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Fundamentals A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Fundamentals+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Fundamentals B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Gastrointestinal+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Gastrointestinal A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Gastrointestinal+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Gastrointestinal B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Gerontology+A+(1).pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Gerontology A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Gerontology+B+(1).pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Gerontology B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Health+Assessment+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Health Assessment A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Hematology-Immune+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Hematology-Immune A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Intermediate+Math+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Intermediate Math A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Management+of+Care+A+(1).pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Management of Care A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Management+of+Care+B+(1).pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Management of Care B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Management+of+Care+C+(1).pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Management of Care C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Maternity+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Maternity A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Maternity+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Maternity B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Maternity+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Maternity C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Mental+Health+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Mental Health A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Mental+Health+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Mental Health B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Mental+Health+C.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Mental Health C</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Musculoskeletal+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Musculoskeletal A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Neurology+A+(1).pdf"
+                                            target="_blank" class="icon pdf-download-icon ">Neurology A</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Nutrition+A.pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Nutrition A</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Oncology+A+(1).pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Oncology A</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Pathophysiology+A+(1).pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Pathophysiology A</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Pediatric+A.pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Pediatric A</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Pediatric+B.pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Pediatric B</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Pediatric+C.pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Pediatric C</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Pharmacology+A.pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Pharmacology A</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Pharmacology+B.pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Pharmacology B</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Pharmacology+C.pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Pharmacology C</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Renal+Urological+A.pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Renal Urological A</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Respiratory+A.pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Respiratory A</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Respiratory+B.pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Respiratory B</a></li>
+                                            <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/RN+new+focused+review/Kaplan+Sensory+A+(1).pdf"
+                                                target="_blank" class="icon pdf-download-icon ">Sensory A</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="expander">
+                                <a href="javascript:void(0)" (click)="expand('#PNreviews')"
+                                    class="expander-trigger collapsed link-darker" role="button"
+                                    data-toggle="collapse" aria-expanded="false"
+                                    aria-controls="PNreviews">
+                                    <b>PN</b>
+                                </a>
+                                <div class="collapse" id="PNreviews">
+                                    <ul class="list-pdf-download-icon list-extra-spacing">
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Basic+Med+Dosage+Calc.pdf"
+                                            target="_blank" class="icon pdf-download-icon">PN Basic Med Dosage Calc A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Cardiovascular+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Cardiovascular A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Cardiovascular+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Cardiovascular B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Endocrine+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Endocrine A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Endocrine+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Endocrine B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Fluid+and+Electrolytes+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Fluid and Electrolyte A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Fluid+and+Electrolytes+B+(1).pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Fluid and Electrolytes B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Fundamentals+of+Nursing+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Fundamentals of Nursing A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Fundamentals+of+Nursing+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Fundamentals of Nursing B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Gerontology+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Gerontology A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+GI+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN GI A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+GI+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN GI B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Immune-Hematology+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Immune Hematology A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Immune-Hematology+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Immune Hematology B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Maternity+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Maternity A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Maternity+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Maternity B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Musculoskeletal+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Musculoskeletal A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Musculoskeletal+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Musculoskeletal B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Neurological+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Neurological A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Neurological+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Neurological B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Nutrition+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Nutrition A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Nutrition+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Nutrition B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Oncology+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Oncology A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Oncology+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Oncology B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Pharmacology+1+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Pharmacology I A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Pharmacology+1+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Pharmacology I B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Pharmacology+2+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Pharmacology 2 A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Pharmacology+2+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Pharmacology 2 B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Pharmacology+3+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Pharmacology 3 A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Pharmacology+3+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Pharmacology 3 B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Psych+Mental+Health+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Psych Mental Health A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Psych+Mental+Health+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Psych Mental Health B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Renal+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Renal A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Renal+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Renal B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Reproductive+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Reproductive A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Reproductive+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Reproductive B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Respiratory+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Respiratory A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Respiratory+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Respiratory B</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Sensory+A.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Sensory A</a></li>
+                                        <li><a href="https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/blueprints/PN+focused+review/PN+Focused+Review+Sensory+B.pdf"
+                                            target="_blank" class="icon pdf-download-icon ">PN Sensory B</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                                    
+                        </div>
+                    </div>
+                  
+                </section>
+
                 <section id="clinicalResources">
                     <h2>CLINICAL RESOURCES</h2>
                     <div class="text-section">
@@ -640,7 +1226,7 @@
                                 </ul>
                             </div>
                             <div class="text-section">
-                                <h3 class="h5 teal">CRUCIAL CONTENT CHANNEL SESSIONS (RN and RN/VN)</h3>
+                                <h3 class="h5 teal">CRUCIAL CONTENT CHANNEL SESSIONS (RN AND PN/VN)</h3>
                                 <P>Eight new (2020) recorded sessions covering the crucial content that 
                                 students need to stay sharp between the end of class and taking the NCLEX<sup>®</sup>. 
                                 Sessions include crucial content and associated NCLEX-style questions, with guided critical 
@@ -672,7 +1258,7 @@
                 <section id="eBooks">
                     <h2>STUDENT eBOOKS</h2>
                     <div class="text-section">
-                            <h3 class="h5 teal">THE BASICS BOOK(ONE VERSION FOR RN AND RN)</h3>
+                            <h3 class="h5 teal">THE BASICS BOOK (ONE VERSION FOR RN AND PN)</h3>
                             <p>Students receive a <b>Kaplan Basics Book</b>when they start the Kaplan Integrated Testing Program. 
                             This 500+ page textbook reviews basic nursing content in an easy-to-understand outline format with 
                             tables and graphs. It helps students identify important concepts about specific nursing topics so 
@@ -682,7 +1268,7 @@
                             </p>
                     </div>
                     <div class="text-section">
-                            <h3 class="h5 teal">KAPLAN NCLEX<sup>®</sup> CONTENT REVIEW GUIDES (RN and RN versions)</h3>
+                            <h3 class="h5 teal">KAPLAN NCLEX<sup>®</sup> CONTENT REVIEW GUIDES (RN AND PN VERSIONS)</h3>
                             <p>These guides review frequently tested, minimum-competency content categorized by the
                                 NCLEX<sup>®</sup> Client Needs Categories. The
                                 guides also explain the proper utilization of the NCLEX<sup>®</sup> Prep Resources, offer
