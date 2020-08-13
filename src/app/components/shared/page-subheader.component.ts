@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import {links} from '../../constants/config';
 import { Subscription } from 'rxjs';
 import betaTemplate from '../../../assets/json/template_beta.json';
+import { Router } from '@angular/router';
 
 @Component({
     selector:'page-subheader',
@@ -18,12 +19,11 @@ export class PageSubheaderComponent {
   subheader: any;
   templateJson: any;
 
-  constructor(public common: CommonService, public auth: AuthService) {
+  constructor(public common: CommonService, public auth: AuthService, public router: Router) {
     this.apiServer = this.common.getApiServer();
   }
   
   ngOnInit() {
-    // this.getAnnouncementContent();
     this.updateUIBasedOnTemplate();
   }
   updateUIBasedOnTemplate() {
@@ -33,6 +33,13 @@ export class PageSubheaderComponent {
   getSubHeaderFromTemplate():any {
     this.templateJson = betaTemplate;
     return this.templateJson.subheader;
+  }
+
+  gotToHelp() {
+    let self= this;
+    document.getElementsByClassName('subheader-link')[0].addEventListener( 'click', function ( event ) {
+      self.router.navigate(['/help']);
+    } );
   }
 
   getAnnouncementContent() {        
@@ -45,6 +52,10 @@ export class PageSubheaderComponent {
          
       }, error => console.log(error));
  }
+
+  ngAfterViewInit() {
+    this.gotToHelp();
+  }
 
  ngOnDestroy() {
    if(this.announcementSubscription) {
