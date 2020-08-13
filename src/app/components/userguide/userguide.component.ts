@@ -47,7 +47,7 @@ export class UserGuideComponent implements OnInit {
     let offset = 0;
     if(e === null){
       offset=NaN;
-      if(element === '#bestpractices'){
+      if(element !== '#whatsNew'){
         offset = $('header').outerHeight(true) + $('.sub-header').outerHeight(true) + $('.faculty-user-guide-header').outerHeight(true);
       }
      }
