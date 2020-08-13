@@ -12,6 +12,6 @@ _gaq.push(['_trackPageview']);
 if (window.location.hostname === 'nit.kaptest.com') {
     ga('create', 'UA-72468900-1', 'auto');
 }    
-else if (window.location.hostname === 'qa.nit.kaptest.com') {
+else if (window.location.hostname === 'nit.qa.kaptest.com') {
      ga('create', 'UA-72468900-2', 'auto');
 }
