@@ -81,6 +81,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       null,
       null
     );
+
+    (window as any).Appcues.identify(this.auth.userid, {
+      firstname: this.auth.firstname,
+      lastname: this.auth.firstname,
+      email: this.auth.useremail,
+      beta: this.auth.selectedInstitution.IsBetaInstitution
+    });
   }
 
   redirectToPage(): void {

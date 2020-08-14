@@ -232,6 +232,12 @@
     <!--DO NOT REMOVE-CONTENTS PLACED HERE-->
   </div>
   <!--END WEBSITE FEEDBACK SNIPPET-->
+
+  <script>
+   Appcues.on("flow_started", function(event) {
+    console.log("Appcues started a flow with ID " + event.flowId);
+});
+  </script>
 </body>
 
 </html>

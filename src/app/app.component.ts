@@ -23,7 +23,7 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.setTitle('Kaplan Nursing');
-    (window as any).Appcues.anonymous();
+    
     this.reloadAppcues();
     (window as any).Appcues.track('Testing from faculty ui');
   }
