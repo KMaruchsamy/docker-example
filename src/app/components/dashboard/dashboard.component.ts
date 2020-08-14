@@ -86,7 +86,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       firstname: this.auth.firstname,
       lastname: this.auth.firstname,
       email: this.auth.useremail,
-      beta: this.auth.selectedInstitution.IsBetaInstitution
+      beta: JSON.parse(this.auth.selectedInstitution).IsBetaInstitution
     });
   }
 
