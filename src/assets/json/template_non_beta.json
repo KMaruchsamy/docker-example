@@ -138,7 +138,7 @@
                     "data_key": "iHP"
                   },
                   {
-                    "text": "Mid-fidelity Simulation",
+                    "text": "Mid-Fidelity Simulation",
                     "parent": true,
                     "links": [
                       {
@@ -276,22 +276,22 @@
                     "url": "/userguide#bestpractices"
                   },
                   {
-                    "text": "How do i implement the kaplan resources?",
+                    "text": "How do I implement Kaplan resources?",
                     "is_internal_link": false,
                     "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices+for+Implementation.pdf"
                   },
                   {
-                    "text": "How do i review & access reports?",
+                    "text": "How do I review & assess reports?",
                     "is_internal_link": false,
                     "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices+-+Reporting.pdf"
                   },
                   {
-                    "text": "How do i implement & measure remediation?",
+                    "text": "How do I implement & measure remediation?",
                     "is_internal_link": false,
                     "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices+-+Remediation.pdf"
                   },
                   {
-                    "text": "Do i assign grades for kaplan and if so, how?",
+                    "text": "Do I assign grades for Kaplan, and if so, how?",
                     "is_internal_link": false,
                     "url": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/userguide/pdf/Best+Practices_Grading.pdf"
                   }
@@ -312,8 +312,8 @@
                 "size": 2,
                 "type": "html",
                 "color": "#ED9AB2",
-                "title": "YOUR KAPLAN HOTLINE TEAM IS ALSO STANDING BY.",
-                "content": "<p>Our Faculty Hotline representatives are available for urgent assistance. <b>Call 1-866-920-6311</b>. If you are outside US or canada, dial +1-407-423-6620.</p><p>We are available from 8:00am to 8:00pm Monday through Friday and from 9:00am to 5:45pm on saturdays. <b>All times are Eastern.</b> We are closed on Sundays. </p>"
+                "title": "YOUR KAPLAN HOTLINE TEAM IS ALSO STANDING BY",
+                "content": "<p>Our Faculty Hotline representatives are available for urgent assistance:<br/>From the US or Canada: +1 866 920 6311<br/>From outside the US or Canada: +1 407 423 6620</p><p>Hours:<br/>Monday-Friday 8:00am to 8:00pm EST<br/>Saturday 9:00am to 5:45pm EST<br/>Closed Sunday</p>"
               },
               {
                 "type": "links",
@@ -321,17 +321,17 @@
                 "title": "HELPFUL LINKS",
                 "links": [
                   {
-                    "text": "FAQ/QUICK GUIDES",
+                    "text": "FAQ/Quick Guides",
                     "is_internal_link": true,
                     "url": "/userguide#faqquicklinks"
                   },
                   {
-                    "text": "Get help for your students",
+                    "text": "Get Help for Your Students",
                     "is_internal_link": true,
                     "url": "/help"
                   },
                   {
-                    "text": "Kaplan technical requirements",
+                    "text": "Kaplan Technical Requirements",
                     "is_internal_link": true,
                     "url": "/help"
                   }
