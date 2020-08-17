@@ -225,7 +225,7 @@
                     "url": "/tests/choose-test"
                   },
                   {
-                    "text": "Managed Scheduled Test",
+                    "text": "Manage Scheduled Test",
                     "is_internal_link": true,
                     "url": "/tests"
                   },
