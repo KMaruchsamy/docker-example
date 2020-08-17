@@ -1,5 +1,4 @@
 import {links} from '../constants/config';
-import {UtilityService} from '../services/utility.service';
 
 export class ProfileModel {
 	public header: string = '';
@@ -20,13 +19,12 @@ export class ProfileModel {
 		public photoUrl?: string,
 		public telephone?: any
     ) {
-        let utility = new UtilityService();        
-		this.kaplanAdminId = (kaplanAdminId === null || kaplanAdminId === undefined) ? null : kaplanAdminId;
+        this.kaplanAdminId = (kaplanAdminId === null || kaplanAdminId === undefined) ? null : kaplanAdminId;
 		if (kaplanAdminId) {
 			this.kaplanAdminTypeId = kaplanAdminTypeId;
 			this.kaplanAdminTypeName = kaplanAdminTypeName;
 			this.active = active;
-            this.bio = (bio !== null && bio !== undefined && bio !== '') ? utility.boldText(bio) : bio;
+            this.bio = bio;
 			this.email = email;
 			this.degrees = degrees;
 			this.firstName = firstName;
