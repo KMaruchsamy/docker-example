@@ -6,4 +6,5 @@ export interface ILink {
   links?: ILink[];
   target?: boolean;
   itsecurity_key?: number;
+  ga?: any;
 }

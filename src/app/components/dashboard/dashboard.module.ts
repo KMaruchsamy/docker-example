@@ -1,3 +1,5 @@
+import { DirectivesModule } from './../../directives/directives.module';
+import { GatrackDirective } from './../../directives/gatrack.directive';
 import { MaterialModule } from './../../material.module';
 import { ContentModule } from './../content/content.module';
 // import { SubheaderModule } from './../subheader/subheader.module';
@@ -19,7 +21,8 @@ import { PageModule } from './../shared/page.module';
     // SubheaderModule,
     ContentModule,
     MaterialModule,
-    PageModule
+    PageModule,
+    DirectivesModule
   ],
 })
 export class DashboardModule {}
