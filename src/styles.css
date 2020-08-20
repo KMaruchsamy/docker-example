@@ -2411,7 +2411,9 @@ main .right-grid ::-webkit-scrollbar {
 .cx-side-button-group {
   /*  To override css written in widgets.min.css  */
   z-index: 2000 !important;
+  top: 25% !important;
 }
+
 .dropdown {
   /* float: right;
   font-size: 1.125em;
