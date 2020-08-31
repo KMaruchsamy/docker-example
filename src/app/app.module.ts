@@ -1,3 +1,5 @@
+import { DirectivesModule } from './directives/directives.module';
+import { GatrackDirective } from './directives/gatrack.directive';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -60,6 +62,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ControlsModule,
     PipesModule,
     BrowserAnimationsModule,
+    DirectivesModule
   ],
   providers: [
     Angulartics2GoogleAnalytics,
@@ -79,6 +82,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TestsModal,
     TimingExceptionsModal,
   ],
+  exports: [DirectivesModule],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
