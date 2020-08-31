@@ -5,6 +5,7 @@ import { general, login } from '../../constants/error-messages';
 import { Subscription } from 'rxjs';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
+import { AnalyticsService } from './../../services/analytics.service';
 
 @Component({
     selector: 'login-content',
@@ -34,7 +35,7 @@ export class LoginContentComponent implements OnDestroy {
     site: string;
     atomStudyPlanLink: string;
     pingFederateServer:string;
-    constructor(private zone: NgZone, public router: Router, public auth: AuthService, public common: CommonService) {
+    constructor(private zone: NgZone, public router: Router, public auth: AuthService, public common: CommonService, private ga: AnalyticsService) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
         this.kaptestServer = this.common.getKaptestServer();
@@ -91,6 +92,7 @@ export class LoginContentComponent implements OnDestroy {
                         }
 
                         if (this.userType === 'student') {
+                            this.ga.track('click',{ category: 'Student Site', label: 'Login' });
                             this.setAtomStudyPlanLink();
                             this.redirectToKaptest(json.UserId, json.Email);
                         }

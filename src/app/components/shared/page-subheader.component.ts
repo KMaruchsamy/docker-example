@@ -1,3 +1,4 @@
+import { AnalyticsService } from './../../services/analytics.service';
 import { Component, Input } from '@angular/core';
 import { CommonService } from '../../services/common.service';
 import { AuthService } from '../../services/auth.service';
@@ -19,7 +20,7 @@ export class PageSubheaderComponent {
   subheader: any;
   templateJson: any;
 
-  constructor(public common: CommonService, public auth: AuthService, public router: Router) {
+  constructor(public common: CommonService, public auth: AuthService, public router: Router, private analyticsService: AnalyticsService) {
     this.apiServer = this.common.getApiServer();
   }
   
@@ -36,8 +37,9 @@ export class PageSubheaderComponent {
   }
 
   gotToHelp() {
-    let self= this;
-    document.getElementsByClassName('subheader-link')[0].addEventListener( 'click', function ( event ) {
+    const self = this;
+    document.getElementsByClassName('subheader-link')[0].addEventListener('click', function (event) {
+      self.analyticsService.track('click', { category: 'UrgentHelpBaner' });
       self.router.navigate(['/help']);
     } );
   }

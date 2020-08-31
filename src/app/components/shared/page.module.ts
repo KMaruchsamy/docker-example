@@ -1,3 +1,4 @@
+import { DirectivesModule } from './../../directives/directives.module';
 import { NgModule } from '@angular/core';
 
 import { PageHeaderComponent } from './page-header.component';
@@ -14,7 +15,8 @@ import { PipesModule } from '../../pipes/pipes.module';
         CommonModule,
         RouterModule,
         ControlsModule,
-        PipesModule
+        PipesModule,
+        DirectivesModule
     ],
     exports: [
         PageHeaderComponent,

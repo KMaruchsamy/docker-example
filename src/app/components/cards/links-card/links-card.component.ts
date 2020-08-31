@@ -5,6 +5,7 @@ import { ILink } from '../../../models/links.interface';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { of } from 'rxjs';
 import { LinksService } from './links.service';
+import { AnalyticsService } from './../../../services/analytics.service';
 
 @Component({
   selector: 'app-links-card',
@@ -17,7 +18,7 @@ export class LinksCardComponent implements OnInit {
   linksDataSource: MatTreeNestedDataSource<ILink>;
   nestedTreeControl: NestedTreeControl<ILink>;
 
-  constructor(private linkService: LinksService, public router: Router) {
+  constructor(private linkService: LinksService, public router: Router, private ga: AnalyticsService ) {
     this.linksDataSource = new MatTreeNestedDataSource();
   }
 
@@ -31,7 +32,7 @@ export class LinksCardComponent implements OnInit {
   hasNestedLink = (_: number, linkData: ILink) =>
     linkData.links && linkData.links.length > 0;
 
-  onClickLink(link: ILink) {
+  onClickLink(link: ILink,e) {
     if (link && link.name) {
       switch(link.name){
         case 'IHP':
@@ -59,5 +60,7 @@ export class LinksCardComponent implements OnInit {
           window.open(link.url);
       }
     }
+
+    this.ga.track(e.type,{category: link.ga.category, label: link.ga.label})
   }
 }

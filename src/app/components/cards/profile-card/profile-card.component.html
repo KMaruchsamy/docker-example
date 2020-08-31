@@ -18,7 +18,7 @@
       <div *ngIf="!card.content?.firstName">
         Coming Soon!
       </div>
-      <div *ngIf="card.content?.kaplanAdminId">
+      <div gatrack="click" [gaCategory]="card.ga?.category" [gaProperties]="{label: card.ga?.label}" *ngIf="card.content?.kaplanAdminId">
         <a [routerLink]="['profiles', card.content?.kaplanAdminId]">
           Read Profile
         </a>
@@ -38,7 +38,7 @@
       {{ card.content?.telephone }}
     </div>
   </div>
-  <div class="profile-card-align" *ngIf="card.content?.email">
+  <div gatrack="click" [gaCategory]="card.ga?.category" [gaProperties]="{label: card.ga?.label}" class="profile-card-align" *ngIf="card.content?.email">
     <div>
       <img src="assets/images/email-24px.svg" class="profile-email-icon" />
     </div>
@@ -73,9 +73,9 @@
       <mat-label *ngIf="flag">Select One</mat-label>
       <mat-select [disableOptionCentering]="true">
         <mat-option
-          *ngFor="let link of card.content?.linksForFrontEnd"
+          *ngFor="let link of card.content?.linksForFrontEnd;let i = index"
           [value]="link.LinkTextToDisplay"
-          (click)="routeTo(link.LinkUrl)"
+          (click)="routeTo(link.LinkUrl, card.ga)"
         >
           {{ link.LinkTextToDisplay }}
         </mat-option>
