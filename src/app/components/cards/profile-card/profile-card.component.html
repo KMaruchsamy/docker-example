@@ -18,8 +18,8 @@
       <div *ngIf="!card.content?.firstName">
         Coming Soon!
       </div>
-      <div gatrack="click" [gaCategory]="card.ga?.category" [gaProperties]="{label: card.ga?.label}" *ngIf="card.content?.kaplanAdminId">
-        <a [routerLink]="['profiles', card.content?.kaplanAdminId]">
+      <div *ngIf="card.content?.kaplanAdminId">
+        <a gatrack="click" [gaCategory]="card.ga?.category" [gaProperties]="{label: card.ga?.label}" [routerLink]="['profiles', card.content?.kaplanAdminId]">
           Read Profile
         </a>
       </div>
@@ -38,7 +38,7 @@
       {{ card.content?.telephone }}
     </div>
   </div>
-  <div gatrack="click" [gaCategory]="card.ga?.category" [gaProperties]="{label: card.ga?.label}" class="profile-card-align" *ngIf="card.content?.email">
+  <div class="profile-card-align" *ngIf="card.content?.email">
     <div>
       <img src="assets/images/email-24px.svg" class="profile-email-icon" />
     </div>
@@ -71,7 +71,7 @@
   <div>
     <mat-form-field class="profile-select-direct-request">
       <mat-label *ngIf="flag">Select One</mat-label>
-      <mat-select [disableOptionCentering]="true">
+      <mat-select [disableOptionCentering]="true" aria-label="Direct Request">
         <mat-option
           *ngFor="let link of card.content?.linksForFrontEnd;let i = index"
           [value]="link.LinkTextToDisplay"

@@ -16,7 +16,7 @@
                 </div>
                 <div *ngIf="profile?.email" class="contact-details-info">
                   <img src="assets/images/email-icon_2x.png" class="email-icon" alt="email icon">
-                  <a href="mailto:{{profile?.email}}" class="link-base-color">{{profile?.email}}</a>
+                  <a gatrack="click" gaCategory="Profile" gaProperties="{label: 'Email'}" href="mailto:{{profile?.email}}" class="link-base-color">{{profile?.email}}</a>
                 </div>
               </div>
             </div>
