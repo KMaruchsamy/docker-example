@@ -668,7 +668,7 @@ table td {
   padding: 0.66667em 0.5em;
 }
 .table-with-cell-padding th:first-child {
-  padding-left: 1em;
+  padding-left: 2em;
 }
 .table-with-cell-padding th:last-child {
   padding-right: 1em;
