@@ -71,7 +71,13 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let student of cohortStudentlist | sort:'asc':'LastName'" >
-                                        <td title="{{student.Email}}" [class.duplicate-student]="student.duplicate" [attr.lastname]="student.LastName">{{student.LastName}}
+                                        <td title="{{student.Email}}" [class.duplicate-student]="student.duplicate" [attr.lastname]="student.LastName">
+                                          <span *ngIf ="!student.IsInactiveForScheduling">
+                                            <img src="assets/images/person.svg" /></span>
+                                          <span *ngIf ="student.IsInactiveForScheduling">
+                                            <img src="assets/images/person_outline.svg" /></span>  
+                    
+                                          {{student.LastName}}
                                             <!--Last name must be on same line as opening tag or last name starts with new line and search filter fails to match-->
                                             <a *ngIf="student.duplicate"
                                                tabindex="0"
@@ -90,7 +96,7 @@
                                         <td>{{isAddByName?student.CohortName:lastSelectedCohortName}}</td>
                                         <td [class]="getRetesterClass(student)">{{getRetester(student)?"Yes":"No"}}</td>
                                         <td>
-                                            <button class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" [attr.ada]="student.Ada" [attr.email]="student.Email" (click)="AddStudent(student,$event)">Add</button>
+                                            <button *ngIf ="!student.IsInactiveForScheduling" class="button button-small button-light" [attr.id]="'cohort-'+student.StudentId" [attr.ada]="student.Ada" [attr.email]="student.Email" (click)="AddStudent(student,$event)">Add</button>
                                         </td>
                                     </tr>
                                 </tbody>

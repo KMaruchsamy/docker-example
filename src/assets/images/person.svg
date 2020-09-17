@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 59.1 (101010) - https://sketch.com -->
+    <title>87C2157D-C49C-4A97-8CC5-254FF6E833D1</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <path d="M8,8 C10.21,8 12,6.21 12,4 C12,1.79 10.21,0 8,0 C5.79,0 4,1.79 4,4 C4,6.21 5.79,8 8,8 Z M8,10 C5.33,10 0,11.34 0,14 L0,16 L16,16 L16,14 C16,11.34 10.67,10 8,10 Z" id="path-1"></path>
+    </defs>
+    <g id="Other-Pages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Inactive-Flag---Test-Scheduling" transform="translate(-172.000000, -657.000000)">
+            <g id="item" transform="translate(152.000000, 640.000000)">
+                <g id="icons/person-24px" transform="translate(16.000000, 13.000000)">
+                    <g>
+                        <polygon id="Path" points="0 0 24 0 24 24 0 24"></polygon>
+                        <g id="colors/black" transform="translate(4.000000, 4.000000)">
+                            <mask id="mask-2" fill="white">
+                                <use xlink:href="#path-1"></use>
+                            </mask>
+                            <use id="Mask" fill="#000000" fill-rule="nonzero" xlink:href="#path-1"></use>
+                            <g id="colors/blank" mask="url(#mask-2)">
+                                <g transform="translate(-4.000000, -5.000000)" id="colors/black">
+                                    <g>
+                                        <rect id="Rectangle" fill="#121A26" x="0" y="0" width="24" height="24"></rect>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
