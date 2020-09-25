@@ -213,8 +213,8 @@
                     }
                   },
                   {
-                    "text": "Live Online NCLEX Course Attendance - Coming Soon",
-                    "name":"",
+                    "text": "Live Online NCLEX Course Attendance",
+                    "name":"LolReporting",
                     "target":"_blank",
                     "ga": {
                       "category": "Reporting Tools",
