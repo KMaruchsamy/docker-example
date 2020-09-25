@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { links } from '../../constants/config';
+import { links, ItSecurity } from '../../constants/config';
 import { TestScheduleModel } from '../../models/test-schedule.model';
 import { Observable, Subscription } from 'rxjs';
 import { UtilityService } from '../../services/utility.service';
@@ -11,6 +11,7 @@ import { CommonService } from './../../services/common.service';
 import { TestStartedExceptionModal } from './../../models/test-started-exceptions.model';
 import { TimingExceptionsModal } from './../../models/timing-exceptions.model';
 import { LogService } from './../../services/log.service';
+
 
 @Component({
     selector: 'schedule-test',
@@ -711,7 +712,9 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
         this.sStorage.removeItem('isinstitutionip');
         let institution: any = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': +this.testScheduleModel.institutionId });
         if (institution)
-            this.ignore8HourRule = +this.testScheduleModel.testType===7 || !institution.IsIpBlank || (this.testScheduleModel.isExamity != undefined ? !!this.testScheduleModel.isExamity : (institution.ITSecurityEnabled == 1));
+            this.ignore8HourRule = +this.testScheduleModel.testType===7 || !institution.IsIpBlank 
+            || (this.testScheduleModel.isExamity != undefined ? !!this.testScheduleModel.isExamity : (institution.ITSecurityEnabled == ItSecurity.Examity))
+            || (this.testScheduleModel.isProctorTrack != undefined ? !!this.testScheduleModel.isProctorTrack : (institution.ITSecurityEnabled == ItSecurity.ProctorTrack));
         this.auth.isInstitutionIp = !institution.IsIpBlank;
         if (this.ignore8HourRule) {
             this.validate(this);
