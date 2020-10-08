@@ -710,17 +710,23 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
     set8HourRule(): void {
         this.sStorage.removeItem('openintegratedtests');
         this.sStorage.removeItem('isinstitutionip');
+        this.getAllOpenIntegratedTests();
         let institution: any = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': +this.testScheduleModel.institutionId });
-        if (institution)
-            this.ignore8HourRule = +this.testScheduleModel.testType===7 || !institution.IsIpBlank 
-            || (this.testScheduleModel.isExamity != undefined ? !!this.testScheduleModel.isExamity : (institution.ITSecurityEnabled == ItSecurity.Examity))
-            || (this.testScheduleModel.isProctorTrack != undefined ? !!this.testScheduleModel.isProctorTrack : (institution.ITSecurityEnabled == ItSecurity.ProctorTrack));
+        if (institution){
+            if (!this.ignore8HourRule) 
+                this.ignore8HourRule = +this.testScheduleModel.testType===7 || !institution.IsIpBlank 
+                || (this.testScheduleModel.isExamity != undefined ? !!this.testScheduleModel.isExamity : (institution.ITSecurityEnabled == ItSecurity.Examity))
+                || (this.testScheduleModel.isProctorTrack != undefined ? !!this.testScheduleModel.isProctorTrack : (institution.ITSecurityEnabled == ItSecurity.ProctorTrack));
+        }
         this.auth.isInstitutionIp = !institution.IsIpBlank;
         if (this.ignore8HourRule) {
             this.validate(this);
             return;
         }
 
+    }
+
+    getAllOpenIntegratedTests() {
         let __this = this;
         let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
         let openIntegratedTestsObservable  = this.testService.getOpenIntegratedTests(url);
