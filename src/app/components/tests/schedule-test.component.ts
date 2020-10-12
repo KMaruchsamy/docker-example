@@ -88,7 +88,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
                 this.bindEvents();
                 this.initialize();
                 this.initializeControls();
-                this.set8HourRule();
+                this.getAllOpenIntegratedTests();
                 this.testService.showTestStartingWarningModals(this.modify, this.testScheduleModel.institutionId, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime);
 
                 window.scroll(0, 0);
@@ -708,9 +708,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
 
 
     set8HourRule(): void {
-        this.sStorage.removeItem('openintegratedtests');
         this.sStorage.removeItem('isinstitutionip');
-        this.getAllOpenIntegratedTests();
         let institution: any = _.find(JSON.parse(this.auth.institutions), { 'InstitutionId': +this.testScheduleModel.institutionId });
         if (institution){
             if (!this.ignore8HourRule) 
@@ -727,6 +725,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
     }
 
     getAllOpenIntegratedTests() {
+        this.sStorage.removeItem('openintegratedtests');
         let __this = this;
         let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
         let openIntegratedTestsObservable  = this.testService.getOpenIntegratedTests(url);
@@ -735,7 +734,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
             .subscribe((json: any) => {
                 __this.ignore8HourRule = _.includes(json, __this.testScheduleModel.testId) || __this.testScheduleModel.testType != 1;
                 __this.auth.openIntegratedTests = __this.ignore8HourRule;
-                __this.validate(__this);
+                this.set8HourRule();
             },
             error => {
                 __this.validate(__this);
