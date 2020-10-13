@@ -242,34 +242,26 @@
                     [okButtonText]="'Yes, delete'" [cancelButtonText]="'No, do not delete'" (onOK)="onOKConfirmation($event)" (onCancel)="onCancelConfirmation($event)"
                     [hideClose]="false">
 </confirmation-popup>
-<confirmation-popup [popupId]="'examityEnablePopup'" [message]="'Are you sure you want to enable examity?'"
+<confirmation-popup [popupId]="'examityEnablePopup'" [message]="enableItSecurityMsg"
                     [okButtonText]="'Yes, Enable'" [cancelButtonText]="'No, do not Enable'" (onOK)="onExamityEnableConfirmation($event)" (onCancel)="onCancelExamityEnable($event)"
                     [hideClose]="false">
 </confirmation-popup>
-<confirmation-popup [popupId]="'examityDisablePopup'" [message]="'Are you sure you want to disable examity?'"
+<confirmation-popup [popupId]="'examityDisablePopup'" [message]="disableItSecurityMsg"
                     [okButtonText]="'Yes, Disable'" [cancelButtonText]="'No, do not Disable'" (onOK)="onExamityEnableConfirmation($event)" (onCancel)="onCancelExamityEnable($event)"
                     [hideClose]="false">
 </confirmation-popup>
 <alert-popup [popupId]="'unCheckExamityInCompletedTest'"
-             [message]="'For security reasons, your testing window cannot be longer than 8 hours if Examity Proctoring is disabled for this session.
-Please ​shorten your testing window to less than 8 hours by clicking View/Modify and then Disable Examity for this session.'"
+             [message]="'For security reasons, your testing window cannot be longer than 8 hours if Examity/Proctortrack Proctoring is disabled for this session.
+Please ​shorten your testing window to less than 8 hours by clicking View/Modify and then Disable Examity/Proctortrack for this session.'"
              [okButtonText]="'OK'"
              (onOK)="redirectToStep($event)"
              [hideClose]="false">
 </alert-popup>
 <alert-popup [popupId]="'unCheckExamityInProgressTest'"
-             [message]="'For security reasons, your testing window cannot be longer than 8 hours if Examity Proctoring is disabled for this session. 
-Please ​shorten your testing window to less than 8 hours by clicking Change Testing Window and then Disable Examity for this session.'"
+             [message]="'For security reasons, your testing window cannot be longer than 8 hours if Examity/Proctortrack Proctoring is disabled for this session. 
+Please ​shorten your testing window to less than 8 hours by clicking Change Testing Window and then Disable Examity/Proctortrack for this session.'"
              [okButtonText]="'OK'"
              (onOK)="redirectToStep($event)"
              [hideClose]="false">
 </alert-popup>
-<confirmation-popup [popupId]="'securityEnablePopup'" [message]="'Are you sure you want to enable proctortrack?'"
-                    [okButtonText]="'Yes, Enable'" [cancelButtonText]="'No, do not Enable'" (onOK)="onSecurityEnableConfirmation($event)" (onCancel)="onCancelSecurityEnable($event)"
-                    [hideClose]="false">
-</confirmation-popup>
-<confirmation-popup [popupId]="'securityDisablePopup'" [message]="'Are you sure you want to disable proctortrack?'"
-                    [okButtonText]="'Yes, Disable'" [cancelButtonText]="'No, do not Disable'" (onOK)="onSecurityEnableConfirmation($event)" (onCancel)="onCancelSecurityEnable($event)"
-                    [hideClose]="false">
-</confirmation-popup>
 
