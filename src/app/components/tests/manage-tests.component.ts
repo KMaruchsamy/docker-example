@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Title } from '@angular/platform-browser';
 import { links, errorcodes, teststatus, Timezones, ItSecurity } from '../../constants/config';
@@ -57,6 +57,11 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     eightHourSubscription: Subscription;
     examityServer: string;
     examityLoginURL: string;
+    enableItSecurityMsg: string;
+    disableItSecurityMsg: string;
+    itSecurityNameSubject = new BehaviorSubject<string>("");
+    itSecurityName$ = this.itSecurityNameSubject.asObservable();
+
     constructor(
         public testService: TestService,
         public router: Router,
@@ -103,6 +108,13 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             }
             this.titleService.setTitle('Manage Tests – Kaplan Nursing');
             window.scroll(0, 0);
+
+            this.itSecurityName$.subscribe(itSecurity => {
+                this.enableItSecurityMsg = 'Are you sure you want to enable '+ itSecurity +'?';
+                this.disableItSecurityMsg = 'Are you sure you want to disable ' + itSecurity + '?';
+                
+            })
+            
             //Appcues.start();
         }
     }
@@ -529,50 +541,51 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         this.scheduleIdToExamity = scheduleId;
         this.isExamity = isExamityEnabled;
         if (itSecurityEnabledInstitution == ItSecurity.Examity) {
-            if (this.isExamity) {
-                let isMoreThan8: boolean = false;
-                let duration = moment.duration(moment(endDate).diff(moment(startDate)));
-                if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8)
-                    isMoreThan8 = true;
+            this.itSecurityNameSubject.next( 'examity');
+        }
+        if (itSecurityEnabledInstitution == ItSecurity.ProctorTrack) {
+            this.itSecurityNameSubject.next('proctortrack');
+        }
+        if (this.isExamity) {
+            let isMoreThan8: boolean = false;
+            let duration = moment.duration(moment(endDate).diff(moment(startDate)));
+            if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8)
+                isMoreThan8 = true;
 
-                let __this = this;
-                let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
-                let openIntegratedTestsObservable = this.testService.getOpenIntegratedTests(url);
-                this.eightHourSubscription = openIntegratedTestsObservable
-                    .map(response => response.body)
-                    .subscribe((json: any) => {
-                        __this.auth.openIntegratedTests = _.includes(json, testId);
-                        if (isMoreThan8 && __this.auth.openIntegratedTests == false && __this.auth.isInstitutionIp == false) {
-                            $('#unCheckExamityInProgressTest').modal('show');
-                            return;
-                        }
-                        this.isExamity = false;
-                        $('#examityDisablePopup').modal("show");
-                    },
-                        error => {
+            let __this = this;
+            let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
+            let openIntegratedTestsObservable = this.testService.getOpenIntegratedTests(url);
+            this.eightHourSubscription = openIntegratedTestsObservable
+                .map(response => response.body)
+                .subscribe((json: any) => {
+                    __this.auth.openIntegratedTests = _.includes(json, testId);
+                    if (isMoreThan8 && __this.auth.openIntegratedTests == false && __this.auth.isInstitutionIp == false) {
+                        $('#unCheckExamityInProgressTest').modal('show');
+                        return;
+                    }
+                    this.isExamity = false;
+                    $('#examityDisablePopup').modal("show");
+                },
+                    error => {
 
-                        });
-            }
-            else {
-                this.isExamity = true;
-                $('#examityEnablePopup').modal("show");
-            }
+                    });
         }
         else {
-            if (this.isExamity) {
-                this.isExamity = false;
-                $('#securityDisablePopup').modal("show");
-            }
-            else {
-                this.isExamity = true;
-                $('#securityEnablePopup').modal("show");
-            }
+            this.isExamity = true;
+            $('#examityEnablePopup').modal("show");
         }
     }
     onExamityEnableConfirmation(e): void {
         $('#examityDisablePopup').modal('hide');
         $('#examityEnablePopup').modal('hide');
-        this.enableOrCancelExamity();
+        this.itSecurityName$.subscribe(itSecurity => {
+            if (itSecurity === 'examity')
+                this.enableOrCancelExamity();
+
+            if ( itSecurity === 'proctortrack')
+                this.enableOrCancelProctorTrack();
+
+        })
     }
 
     onCancelExamityEnable(e) {
@@ -608,60 +621,41 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         this.scheduleIdToExamity = scheduleId;
         this.isExamity = isExamityEnabled;
         if (itSecurityEnabledInstitution == ItSecurity.Examity) {
-            if (this.isExamity) {
-                let isMoreThan8: boolean = false;
-                let duration = moment.duration(moment(endDate).diff(moment(startDate)));
-                if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8)
-                    isMoreThan8 = true;
+            this.itSecurityNameSubject.next( 'examity');
+        }
+        if (itSecurityEnabledInstitution == ItSecurity.ProctorTrack) {
+            this.itSecurityNameSubject.next('proctortrack');
+        }
+        if (this.isExamity) {
+            let isMoreThan8: boolean = false;
+            let duration = moment.duration(moment(endDate).diff(moment(startDate)));
+            if (duration.years() > 0 || duration.months() > 0 || duration.days() > 0 || duration.hours() > 8)
+                isMoreThan8 = true;
 
-                let __this = this;
-                let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
-                let openIntegratedTestsObservable = this.testService.getOpenIntegratedTests(url);
-                this.eightHourSubscription = openIntegratedTestsObservable
-                    .map(response => response.body)
-                    .subscribe((json: any) => {
-                        __this.auth.openIntegratedTests = _.includes(json, testId);
-                        if (isMoreThan8 && __this.auth.openIntegratedTests == false && __this.auth.isInstitutionIp == false) {
-                            $('#unCheckExamityInCompletedTest').modal('show');
-                            return;
-                        }
-                        this.isExamity = false;
-                        $('#examityDisablePopup').modal("show")
-                    },
-                        error => {
+            let __this = this;
+            let url = `${this.auth.common.apiServer}${links.api.baseurl}${links.api.admin.test.openintegratedtests}`;
+            let openIntegratedTestsObservable = this.testService.getOpenIntegratedTests(url);
+            this.eightHourSubscription = openIntegratedTestsObservable
+                .map(response => response.body)
+                .subscribe((json: any) => {
+                    __this.auth.openIntegratedTests = _.includes(json, testId);
+                    if (isMoreThan8 && __this.auth.openIntegratedTests == false && __this.auth.isInstitutionIp == false) {
+                        $('#unCheckExamityInCompletedTest').modal('show');
+                        return;
+                    }
+                    this.isExamity = false;
+                    $('#examityDisablePopup').modal("show")
+                },
+                    error => {
 
-                        });
-            }
-            else {
-                this.isExamity = true;
-                $('#examityEnablePopup').modal("show");
-            }
+                    });
         }
         else {
-            {
-                if (this.isExamity) {
-                    this.isExamity = false;
-                    $('#securityDisablePopup').modal("show");
-                }
-                else {
-                    this.isExamity = true;
-                    $('#securityEnablePopup').modal("show");
-                }
-            }
+            this.isExamity = true;
+            $('#examityEnablePopup').modal("show");
         }
     }
 
-    onSecurityEnableConfirmation(e): void {
-        $('#securityDisablePopup').modal('hide');
-        $('#securityEnablePopup').modal('hide');
-        this.enableOrCancelProctorTrack();
-    }
-
-    onCancelSecurityEnable(e) {
-        $('#securityDisablePopup').modal('hide');
-        $('#securityEnablePopup').modal('hide');
-        this.scheduleIdToExamity = 0;
-    }
     enableOrCancelProctorTrack(): any {
         let enableExamityURL = this.resolveExamityURL(`${this.common.apiServer}${links.api.baseurl}${links.api.admin.test.updateIsProctorTrackEnabled}`, this.scheduleIdToExamity);
         let enableSecurityObservable = this.testService.enableSecurity(enableExamityURL, +this.isExamity);

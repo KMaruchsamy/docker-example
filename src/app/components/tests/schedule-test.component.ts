@@ -717,11 +717,7 @@ export class ScheduleTestComponent implements OnInit, OnDestroy {
                 || (this.testScheduleModel.isProctorTrack != undefined ? !!this.testScheduleModel.isProctorTrack : (institution.ITSecurityEnabled == ItSecurity.ProctorTrack));
         }
         this.auth.isInstitutionIp = !institution.IsIpBlank;
-        if (this.ignore8HourRule) {
-            this.validate(this);
-            return;
-        }
-
+        this.validate(this);
     }
 
     getAllOpenIntegratedTests() {
