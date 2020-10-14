@@ -5722,6 +5722,12 @@ select.mobile-device {
   background-color: #e1e2f0;
   padding: 1em;
 }
+.testing-add-students-container .right-grid .top-section .white-text{
+  color: #6c6c6c;
+}
+.testing-add-students-container .right-grid .top-section.active .white-text{
+  color: #fff;
+}
 .testing-add-students-container .right-grid .top-section.active {
   background-color: #ff5adc;
   border-top-right-radius: 4px;
