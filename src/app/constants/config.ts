@@ -58,7 +58,7 @@ export const links = {
                 updateScheduleDatesModifyInProgress: "scheduling/modifyInProgress/testingSessions/§scheduleId/windowDates",
                 updateIsExamityEnabled: "scheduling/testingSessions/§scheduleId/examityEnable",
                 updateIsProctorTrackEnabled: "scheduling/testingSessions/§scheduleId/proctorTrackEnable",
-                selectScheduleTest: "scheduling/tests/§institutionid/canTestBeTakenInAtom"
+                selectScheduleTest: "scheduling/tests/§testid/canTestBeTakenInAtom"
 
             },
             logging: {
