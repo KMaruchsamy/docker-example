@@ -1225,11 +1225,11 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
             if (repeaterExceptions.StudentRepeaterExceptions && repeaterExceptions.StudentRepeaterExceptions.length > 0) {
                 studentRepeaterExceptions = repeaterExceptions.StudentRepeaterExceptions;
             }
-            if (repeaterExceptions.StudentAlternateTestInfo && repeaterExceptions.StudentAlternateTestInfo.length > 0 ) {
+            if (repeaterExceptions.StudentAlternateTestInfo && repeaterExceptions.StudentAlternateTestInfo.length > 0) {
                 studentAlternateTests = repeaterExceptions.StudentAlternateTestInfo;
             }
             if (repeaterExceptions.AlternateTestInfo && repeaterExceptions.AlternateTestInfo.length > 0) {
-                alternateTests = repeaterExceptions.AlternateTestInfo.filter(_alternateTestInfo=>_alternateTestInfo.IsSequenceLiveOnMaestro);        
+                alternateTests = repeaterExceptions.AlternateTestInfo;
             }
 
             if (studentAlternateTests.length === 0 && studentRepeaterExceptions.length === 0 && alternateTests.length == 0)
