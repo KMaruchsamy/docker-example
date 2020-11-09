@@ -1,9 +1,6 @@
 {
   "name": "Nursing.Frontend",
-  "version": {
-    "QA": "0.1.12",
-    "PROD": "0.1.9"
-    },
+  "version": "1.2.1",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
