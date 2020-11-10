@@ -466,4 +466,9 @@ export class HomeComponent implements OnInit, OnDestroy {
             }
         }
     }
+
+    redirectToNewApolloRoute(event) {
+        event.preventDefault();
+        window.open('https://ktp.qa.learnwithatom.com/identity?client_id=47hb19klns7ttm2hbh6acb366i','blank');
+    }
 }

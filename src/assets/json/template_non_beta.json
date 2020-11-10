@@ -142,13 +142,13 @@
                     }
                   },
                   {
-                      "text": "Computer Adaptive Test Report",
-                      "name": "ReportStudentCATReportCard",
-                      "target": "_blank",
-                      "ga": {
-                        "category": "Reporting Tools",
-                        "label": "Computer Adaptive Test Report"
-                      }
+                    "text": "Computer Adaptive Test Report",
+                    "name": "ReportStudentCATReportCard",
+                    "target": "_blank",
+                    "ga": {
+                      "category": "Reporting Tools",
+                      "label": "Computer Adaptive Test Report"
+                    }
                   }
                 ]
               },
