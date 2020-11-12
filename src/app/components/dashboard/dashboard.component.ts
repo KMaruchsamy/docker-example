@@ -2,6 +2,7 @@ import { AuthService } from "./../../services/auth.service";
 import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import betaTemplate from "../../../assets/json/template_beta.json";
 import nonBetaTemplate from "../../../assets/json/template_non_beta.json";
+import nonBetaAtomReportTemplate from "../../../assets/json/template_nonbeta_atomreport.json";
 import { MatSelect } from "@angular/material/select";
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
@@ -127,7 +128,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   loadTemplate() {
-    this.templateJson = JSON.parse(JSON.stringify(this.isBetaInstitution ? betaTemplate : nonBetaTemplate));  //To do deep copy
+    if(this.selectedInstitution.IsNonBetaApolloReportLinkEnable) 
+      this.templateJson = JSON.parse(JSON.stringify(nonBetaAtomReportTemplate));  //To do deep copy
+    else
+      this.templateJson = JSON.parse(JSON.stringify(this.isBetaInstitution ? betaTemplate : nonBetaTemplate));  //To do deep copy
     this.updateTemplateToSession();
     this.getDataKeys();
   }

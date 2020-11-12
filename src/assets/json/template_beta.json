@@ -147,7 +147,7 @@
                     "text": "i-Human Patients",
                     "is_internal_link": false,
                     "name": "IHP",
-                    "target": "_blank",
+                    "target":"_blank",
                     "data_key": "iHP",
                     "ga": {
                       "category": "Reporting Tools",
@@ -160,8 +160,8 @@
                     "links": [
                       {
                         "text": "Student Report Card by Module",
-                        "name": "ReportStudentReportCardByModule",
-                        "target": "_blank",
+                        "name":"ReportStudentReportCardByModule",
+                        "target":"_blank",
                         "ga": {
                           "category": "Reporting Tools",
                           "label": "Student Report Card by Module"
@@ -169,8 +169,8 @@
                       },
                       {
                         "text": "Simulation Comparison by Module",
-                        "name": "ReportCaseComparisonByModule",
-                        "target": "_blank",
+                        "name":"ReportCaseComparisonByModule",
+                        "target":"_blank",
                         "ga": {
                           "category": "Reporting Tools",
                           "label": "Simulation Comparison by Module"
@@ -178,8 +178,8 @@
                       },
                       {
                         "text": "Cohort Results by Module",
-                        "name": "ReportCohortResultByModule",
-                        "target": "_blank",
+                        "name":"ReportCohortResultByModule",
+                        "target":"_blank",
                         "ga": {
                           "category": "Reporting Tools",
                           "label": "Cohort Results by Module"
@@ -188,7 +188,7 @@
                       {
                         "text": "Simulation Results by Cohort",
                         "name": "ReportCaseByCohort",
-                        "target": "_blank",
+                        "target":"_blank",
                         "ga": {
                           "category": "Reporting Tools",
                           "label": "Simulation Results by Cohort"
@@ -206,16 +206,25 @@
                   {
                     "text": "Admission Test Results",
                     "name": "ReportStudentAdmissionTestReportCard",
-                    "target": "_blank",
+                    "target":"_blank",
                     "ga": {
                       "category": "Reporting Tools",
                       "label": "Admission Test Results"
                     }
                   },
                   {
+                    "text": "Live Online NCLEX Course Attendance",
+                    "name":"LolReporting",
+                    "target":"_blank",
+                    "ga": {
+                      "category": "Reporting Tools",
+                      "label": "Live Online NCLEX Course Attendance"
+                    }
+                  },
+                  {
                     "text": "Test Schedule by Date",
                     "name": "ReportTestsScheduledbyDate",
-                    "target": "_blank",
+                    "target":"_blank",
                     "ga": {
                       "category": "Reporting Tools",
                       "label": "Test Schedule by Date"
@@ -225,7 +234,7 @@
                     "text": "Examity Proctoring Reports",
                     "is_internal_link": false,
                     "name": "EXAMITY",
-                    "target": "_blank",
+                    "target":"_blank",
                     "data_key": "ITSecurity",
                     "itsecurity_key": 1,
                     "ga": {
@@ -237,7 +246,7 @@
                     "text": "Proctortrack Proctoring Reports",
                     "is_internal_link": false,
                     "name": "PROCTORTRACK",
-                    "target": "_blank",
+                    "target":"_blank",
                     "data_key": "ITSecurity",
                     "itsecurity_key": 3,
                     "ga": {
