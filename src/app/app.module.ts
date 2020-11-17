@@ -39,6 +39,8 @@ import { TestsModule } from './components/tests/tests.module';
 import { UserGuideModule } from './components/userguide/userguide.module';
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import {ToasterService} from './services/toaster.service'
 
 @NgModule({
   declarations: [AppComponent],
@@ -62,12 +64,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ControlsModule,
     PipesModule,
     BrowserAnimationsModule,
-    DirectivesModule
+    DirectivesModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     Angulartics2GoogleAnalytics,
     LogService,
     AuthService,
+    ToasterService,
     Title,
     CommonService,
     LogService,

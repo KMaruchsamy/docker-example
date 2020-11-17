@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, ElementRef, OnDestroy } from '@angular/core';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router, ActivatedRoute, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, from } from 'rxjs';
 import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { links } from '../../constants/config';
@@ -11,7 +11,7 @@ import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { LogService } from './../../services/log.service';
-
+import {ToasterService} from './../../services/toaster.service';
 
 @Component({
     selector: 'choose-test',
@@ -26,6 +26,8 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     testTypeIds: number[];
     subjects: Object[] = [];
     tests: Object[] = [];
+    checkedValue: boolean;
+    isMastroLive: boolean = false;
     testsTable: any;
     sStorage: any;
     attemptedRoute: string;
@@ -64,6 +66,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         public aLocation: Location,
         public titleService: Title,
         private log: LogService,
+        private toaster :ToasterService,
         private sanitizer: DomSanitizer) {
     }
 
@@ -328,8 +331,28 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     checkIfTestHasStarted(): any {
         return this.testService.checkIfTestHasStarted(this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress);
     }
+    setradio(subjectId: number){
+         let self = this;
+         this.subjectId = subjectId;
+         this.searchString = '';
+         let selecturlURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.selectScheduleTest}`);
+         let testsObservable  = this.testService.getTests(selecturlURL);
+ 
+         this.testsSubscription = testsObservable
+             .map(response => response.body)
+             .subscribe((json: any) => {
+                 self.checkedValue = json;
+                 if(!self.checkedValue){
+                     this.isMastroLive = false;
+                    this.toaster.showError("Please contact your Kaplan representative","There is an error scheduling the test" );
+                 }
+                 else{
+                     this.isMastroLive =true;
+                 }
+             });
+    }
 
-    selectTest(testId: number, testName: string, subjectId: number, normingStatusName, testType: number): void {
+    selectTest(testId: number, testName: string, subjectId: number, normingStatusName, testType: number): void {    
         this.sStorage.setItem('previousTest', this.testScheduleModel.testId);
         this.testScheduleModel.subjectId = subjectId;
         this.testScheduleModel.testId = testId;

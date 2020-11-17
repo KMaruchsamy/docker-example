@@ -58,6 +58,7 @@
               "src/assets/css/jquery.timepicker.css",
               "node_modules/datatables/media/css/jquery.dataTables.min.css",
               "src/assets/css/responsive.dataTablescustom.css",
+              "node_modules/ngx-toastr/toastr.css",
               "src/styles.css"
             ],
             "scripts": [
@@ -160,6 +161,7 @@
               "src/assets/css/jquery.timepicker.css",
               "node_modules/datatables/media/css/jquery.dataTables.min.css",
               "src/assets/css/responsive.dataTablescustom.css",
+              "node_modules/ngx-toastr/toastr.css",
               "src/styles.css"
             ],
             "assets": [
