@@ -33,6 +33,7 @@ export const links = {
             facultyAMLoginUrl : "admin/facultyAMLoginUrl",
             ihpSSoLoginApi: "ihp/ltiRequestFormForIHP",
             announcements: "admin/faculty/Messages",
+            signOutApi: "admin/logout",  //To delete Apollouser cookies from NIT server domain
             test: {
                 subjects: "scheduling/institutions/§institutionid/subjects?testType=§testtype",
                 tests: "scheduling/institutions/§institutionid/tests?subject=§subject&testType=§testtype&searchString=§searchString", //Added Searchstring parameter.
@@ -104,7 +105,7 @@ export const links = {
         landingpage: "NewSiteLandingPage.aspx?facultylogin=1",
         ReportingLandingPage: "UX_ALogin.aspx",
         apolloLaunchPage:"Admin/LaunchApollo.aspx?redirectToApollo=true",
-        atomLaunchPage:"Apollo/LaunchAtom.aspx?redirectToApollo=true",
+        atomLaunchPage:"Admin/LaunchAtom.aspx?redirectToApollo=true",
         exceptionpage: "§environment/accounterror"
     },
     faculty: {
