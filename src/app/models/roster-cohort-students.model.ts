@@ -12,4 +12,5 @@ export class RosterCohortStudentsModel {
     isExpiredStudent: boolean;
     isStudentPayDeactivatedStudent: boolean;
     isDuplicate: boolean;
+    IsInactiveForRostering: boolean;
 }

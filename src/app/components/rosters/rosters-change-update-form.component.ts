@@ -313,6 +313,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 changeUpdateStudent.firstName = student.FirstName;
                 changeUpdateStudent.lastName = student.LastName;
                 changeUpdateStudent.studentId = student.StudentId;
+                changeUpdateStudent.IsInactiveForRostering = student.IsInactiveForRostering;
                 changeUpdateStudent.isDuplicate = this.checkDuplicate(cohortStudents, student)
                 if (student.UserExpireDate !== null) {
                     if (moment(student.UserExpireDate).isAfter(Date.now(), 'day')) {
