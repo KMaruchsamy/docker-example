@@ -24,7 +24,7 @@
             <button *ngIf="student.isDuplicate" data-toggle="popover" data-placement="top" [attr.data-content]="student?.email" class="unstyled-button has-popover small-popover">
               <img src="assets/images/identity-icon.png" alt="duplicate student name icon" width="22" height="22" />
             </button>
-            {{student.lastName}}, {{student.firstName}}
+            <div [class.strikethrough-text]="student.IsInactiveForRostering">{{student.lastName}}, {{student.firstName}}</div>
           </div>
          <div [class.name-multiple-icons]="student?.isRepeatStudent || student?.isStudentPayDeactivatedStudent || student?.isExpiredStudent">
             <img *ngIf="student?.isRepeatStudent" src="assets/images/repeat-icon.png" class="repeat-student-icon multiple-icons" alt="repeat student icon" />

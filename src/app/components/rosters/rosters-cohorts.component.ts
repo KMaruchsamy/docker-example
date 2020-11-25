@@ -28,6 +28,7 @@ import { RosterCohortUserPreferenceModel } from '../../models/roster-cohort-user
     }
     .list-item-with-icons {
         padding-right: 55px !important;
+        display: flex;
     }
     .small-popover {
         margin-left: -0.15em;
@@ -35,6 +36,9 @@ import { RosterCohortUserPreferenceModel } from '../../models/roster-cohort-user
     }
     .large-expander-trigger {
         padding-right: 100px;
+    }
+    .strikethrough-text{
+        text-decoration: line-through;
     }`]
 })
 export class RostersCohortsComponent implements OnInit, OnDestroy {
@@ -136,6 +140,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
 
     loadRosterCohortStudents(cohort: RosterCohortsModel, cohortStudents: any) {
         let rosterCohortStudents: Array<RosterCohortStudentsModel> = [];
+        let inactiveForRosteringStudentsCount = 0;
         if (cohortStudents) {
             rosterCohortStudents = _.map(cohortStudents, (student: any) => {
                 let rosterCohortStudent = new RosterCohortStudentsModel();
@@ -151,7 +156,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
                 rosterCohortStudent.isRepeatStudent = !!rosterCohortStudent.repeatExpiryDate && moment(rosterCohortStudent.repeatExpiryDate).isAfter(new Date(), 'day');
                 rosterCohortStudent.isExpiredStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !rosterCohortStudent.studentPayInstitution);
                 rosterCohortStudent.isStudentPayDeactivatedStudent = (moment(rosterCohortStudent.userExpireDate).isSameOrBefore(new Date(), 'day') && !!rosterCohortStudent.studentPayInstitution);
-
+                rosterCohortStudent.IsInactiveForRostering = student.IsInactiveForRostering;
 
                 rosterCohortStudent.isDuplicate = _.some(cohortStudents, function (stud: any) {
                     return stud.StudentId !== student.StudentId
@@ -179,10 +184,13 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
                         cohort.hasStudentPayDeactivatedStudent = true;
                 }
 
+                if (student.IsInactiveForRostering) {
+                    inactiveForRosteringStudentsCount = inactiveForRosteringStudentsCount + 1;
+                }
                 return rosterCohortStudent;
             });
         }
-        cohort.studentCount = rosterCohortStudents ? rosterCohortStudents.length : 0;
+        cohort.studentCount = rosterCohortStudents ? (rosterCohortStudents.length - inactiveForRosteringStudentsCount): 0;
         cohort.students = rosterCohortStudents;
         cohort.visible = !cohort.visible;
     }
