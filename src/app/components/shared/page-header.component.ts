@@ -106,9 +106,6 @@ export class PageHeaderComponent implements OnInit, OnDestroy {
     let logoutObservable  = this.auth.getAPIResponse(apiURL);
     this.logoutSubscription = logoutObservable.subscribe(
       response => {
-        const responseMsg = response.toString();
-        console.log(responseMsg);
-        
         this.router.navigate(["/logout"]);
     });
   }
