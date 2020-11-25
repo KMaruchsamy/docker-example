@@ -68,3 +68,7 @@
 .small-popover {
     margin-left: 5px;
 }
+
+.strikethrough-text{
+    text-decoration: line-through;
+}

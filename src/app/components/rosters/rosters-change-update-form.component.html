@@ -18,22 +18,22 @@
                         <tbody>
                             <tr *ngFor="let cohortStudent of rosterChangeUpdateStudents">
                                 <td class="js-student-name">
-                                    {{cohortStudent.lastName}}, {{cohortStudent.firstName}}
+                                    <div [class.strikethrough-text]="cohortStudent.IsInactiveForRostering">{{cohortStudent.lastName}}, {{cohortStudent.firstName}}</div>
                                     <button *ngIf="cohortStudent.isDuplicate" role="button" data-toggle="popover" data-placement="top"
                                         [attr.data-content]="cohortStudent?.email" class="unstyled-button has-popover small-popover">
                                         <img src="assets/images/identity-icon.png" alt="duplicate student name icon" width="24" height="24" />
                                     </button>
                                 </td>
                                 <td>
-                                    <button  id="btnChangeToCohort_{{cohortStudent.studentId}}" [disabled]="cohortStudent.isInactive || cohortStudent.userExpiryDate" class="button button-small button-light js-choose-cohort button-fixed-width" [class.button-no-change]="(!cohortStudent.userExpiryDate && !(cohortStudent.isInactive) && !(cohortStudent.moveToCohortId !== null ))" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">{{cohortStudent.moveToCohortName ===null ?'Choose an active cohort' : cohortStudent.moveToCohortName}}</button>
+                                    <button  id="btnChangeToCohort_{{cohortStudent.studentId}}" [disabled]="cohortStudent.isInactive || cohortStudent.userExpiryDate || cohortStudent.IsInactiveForRostering" class="button button-small button-light js-choose-cohort button-fixed-width" [class.button-no-change]="(!cohortStudent.userExpiryDate && !(cohortStudent.isInactive) && !(cohortStudent.moveToCohortId !== null ))" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">{{cohortStudent.moveToCohortName ===null ?'Choose an active cohort' : cohortStudent.moveToCohortName}}</button>
                                 </td>
                               
                                 <td>
-                                    <input  type="checkbox" [checked]="cohortStudent.isInactive" class="checkbox-image js-drop" id="inactive_{{cohortStudent.studentId}}" (change)="checkInactive(cohortStudent.studentId,$event)" [disabled]="cohortStudent.userExpiryDate||(cohortStudent.moveToCohortId !== null )|| cohortStudent.isGrantUntimedTest"/>
+                                    <input  type="checkbox" [checked]="cohortStudent.isInactive" class="checkbox-image js-drop" id="inactive_{{cohortStudent.studentId}}" (change)="checkInactive(cohortStudent.studentId,$event)" [disabled]="cohortStudent.userExpiryDate||(cohortStudent.moveToCohortId !== null )|| cohortStudent.isGrantUntimedTest || cohortStudent.IsInactiveForRostering"/>
                                     <label  for="inactive_{{cohortStudent.studentId}}"></label>
                                 </td>
                                 <td>
-                                    <input  [checked]="cohortStudent.isGrantUntimedTest" type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA_{{cohortStudent.studentId}}" (change)="checkGrantUntimedTest(cohortStudent.studentId,$event)" [disabled]="cohortStudent.isInactive || cohortStudent.userExpiryDate" />
+                                    <input  [checked]="cohortStudent.isGrantUntimedTest" type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA_{{cohortStudent.studentId}}" (change)="checkGrantUntimedTest(cohortStudent.studentId,$event)" [disabled]="cohortStudent.isInactive || cohortStudent.userExpiryDate || cohortStudent.IsInactiveForRostering" />
                                     <label  for="ADA_{{cohortStudent.studentId}}"></label>
                                 </td>
                             </tr>

@@ -1,17 +1,18 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "./../../services/auth.service";
 import { links } from "../../constants/config";
 import { CommonService } from "./../../services/common.service";
 import { Location } from "@angular/common";
 import betaTemplate from "../../../assets/json/template_beta.json";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: "page-header",
   templateUrl: "./page-header.component.html",
   styleUrls: ["./page-header.component.scss"]
 })
-export class PageHeaderComponent implements OnInit {
+export class PageHeaderComponent implements OnInit, OnDestroy {
   @Input() showCover: boolean;
   @Input() ariaDisabled: boolean;
   @Input() hideDropdown: boolean;
@@ -27,6 +28,7 @@ export class PageHeaderComponent implements OnInit {
   firstName: string;
   lastName: string;
   templateJson: any;
+  logoutSubscription: Subscription;
 
   constructor(
     public router: Router,
@@ -93,8 +95,26 @@ export class PageHeaderComponent implements OnInit {
       );
   }
   logout(e) {
+    
+    this.clearNITServerCookies();
     this.auth.logout();
     e.preventDefault();
-    this.router.navigate(["/logout"]);
+  }
+
+  clearNITServerCookies() {
+    let apiURL = this.apiServer + links.api.baseurl + links.api.admin.signOutApi + '?adminId=' + this.auth.userid;
+    let logoutObservable  = this.auth.getAPIResponse(apiURL);
+    this.logoutSubscription = logoutObservable.subscribe(
+      response => {
+        const responseMsg = response.toString();
+        console.log(responseMsg);
+        
+        this.router.navigate(["/logout"]);
+    });
+  }
+
+  ngOnDestroy() {
+      if(this.logoutSubscription)
+        this.logoutSubscription.unsubscribe();
   }
 }
