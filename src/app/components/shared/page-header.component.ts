@@ -28,6 +28,9 @@ export class PageHeaderComponent implements OnInit, OnDestroy {
   firstName: string;
   lastName: string;
   templateJson: any;
+  hdToken: any;
+  hdpage: any;
+  hdExceptionURL: any;
   logoutSubscription: Subscription;
 
   constructor(
@@ -94,21 +97,31 @@ export class PageHeaderComponent implements OnInit, OnDestroy {
         }
       );
   }
-  logout(e) {
+  logout(page, form, hdToken , hdExceptionURL,e) {
     
+    this.hdpage = page;
+    this.form = form;
+    this.hdToken = hdToken;
+    this.hdExceptionURL = hdExceptionURL;
     this.clearNITServerCookies();
+    
     this.auth.logout();
     e.preventDefault();
   }
 
   clearNITServerCookies() {
-    let apiURL = this.apiServer + links.api.baseurl + links.api.admin.signOutApi + '?adminId=' + this.auth.userid;
-    let logoutObservable  = this.auth.getAPIResponse(apiURL);
-    this.logoutSubscription = logoutObservable.subscribe(
-      response => {
-        this.router.navigate(["/logout"]);
-    });
+    var serverURL = this.apiServer + links.nursingit.ReportingLandingPage;
+        this.hdToken.value = this.auth.token;
+        this.hdpage.value = "logout";
+        this.hdExceptionURL.value = this.resolveExceptionPage(links.nursingit.exceptionpage);
+        this.form.setAttribute('ACTION', serverURL);
+        this.form.submit();
   }
+
+  resolveExceptionPage(url): string {
+    let resolvedURL = url.replace('§environment', this.common.getOrigin());
+    return resolvedURL;
+}
 
   ngOnDestroy() {
       if(this.logoutSubscription)
