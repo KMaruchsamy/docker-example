@@ -21,6 +21,7 @@ import {ToasterService} from './../../services/toaster.service';
 
 export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     institutionID: number;
+    testID:number;
     apiServer: string;
     subjectId: number;
     testTypeIds: number[];
@@ -66,7 +67,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         public aLocation: Location,
         public titleService: Title,
         private log: LogService,
-        private toaster :ToasterService,
+        private toasterService :ToasterService,
         private sanitizer: DomSanitizer) {
     }
 
@@ -257,6 +258,9 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     resolveSubjectsURL(url: string): string {
         return url.replace('§institutionid', this.institutionID.toString()).replace('§testtype', this.testTypeIds.toString());
     }
+    resolveSelectScheduleURL(url: string): string{
+        return url.replace('§testid', this.testID.toString()).replace('§testtype', this.testTypeIds.toString());
+    }
 
     loadTests(subjectID: number): void {
         let self = this;
@@ -264,7 +268,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         this.searchString = '';
         let testsURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.tests}`);
         let testsObservable  = this.testService.getTests(testsURL);
-
+        
         this.testsSubscription = testsObservable
             .map(response => response.body)
             .subscribe((json: any) => {
@@ -331,25 +335,26 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     checkIfTestHasStarted(): any {
         return this.testService.checkIfTestHasStarted(this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress);
     }
-    setradio(subjectId: number){
-         let self = this;
-         this.subjectId = subjectId;
-         this.searchString = '';
-         let selecturlURL = this.resolveTestsURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.selectScheduleTest}`);
-         let testsObservable  = this.testService.getTests(selecturlURL);
- 
-         this.testsSubscription = testsObservable
-             .map(response => response.body)
-             .subscribe((json: any) => {
-                 self.checkedValue = json;
-                 if(!self.checkedValue){
-                     this.isMastroLive = false;
-                    this.toaster.showError("Please contact your Kaplan representative","There is an error scheduling the test" );
-                 }
-                 else{
-                     this.isMastroLive =true;
-                 }
-             });
+    setradio(subjectId: number,testId:number){
+        let self = this;
+        this.testID = testId;
+        this.subjectId = subjectId;
+        this.searchString = '';
+        let selecturlURL = this.resolveSelectScheduleURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.selectScheduleTest}`)
+        let testsObservable  = this.testService.getTests(selecturlURL);
+
+        this.testsSubscription = testsObservable
+            .map(response => response.body)
+            .subscribe((json: any) => {
+                self.checkedValue = json;
+                if(!self.checkedValue){
+                    this.isMastroLive = false;
+                this.toasterService.showError("Please contact your Kaplan representative","There is an error scheduling the test" );
+                }
+                else{
+                    this.isMastroLive =true;
+                }
+            });
     }
 
     selectTest(testId: number, testName: string, subjectId: number, normingStatusName, testType: number): void {    
