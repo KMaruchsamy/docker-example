@@ -64,7 +64,7 @@
                   [gaProperties]="{label :header.account.menu[1].ga?.label}"
                   href="javascript:void(0)"
                   class="menu-icon remove-text-decoration"
-                  (click)="logout($event)"
+                  (click)="logout(hdpage, myform, hdtoken , hdexceptionurl,$event)"
                   >{{ header.account.menu[1].text }}</a
                 >
               </li>
@@ -87,9 +87,9 @@
     </div>
   </header>
   <page-subheader [showCover]="showCover"></page-subheader>
-  <form id="myForm" method="POST" target="_blank">
-    <input type="hidden" id="institutionID" name="institutionID" />
-    <input type="hidden" id="jwtToken" name="jwtToken" />
-    <input type="hidden" id="redirectPage" name="redirectPage" />
-    <input type="hidden" id="exceptionURL" name="exceptionURL" />
+  <form #myform method="POST" target="_self">
+    <input #hdinstitution type="hidden" id="institutionID" name="institutionID" />
+    <input #hdtoken type="hidden" id="jwtToken" name="jwtToken" />
+    <input #hdpage type="hidden" id="redirectPage" name="redirectPage" />
+    <input #hdexceptionurl type="hidden" id="exceptionURL" name="exceptionURL" />
   </form>
