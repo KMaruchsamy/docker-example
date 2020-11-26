@@ -13,6 +13,7 @@
                                 <th scope="col">Move to different cohort</th>
                                 <th scope="col">Make inactive</th>
                                 <th scope="col">Grant untimed tests</th>
+                                <th scope="col">Make Active</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,6 +36,10 @@
                                 <td>
                                     <input  [checked]="cohortStudent.isGrantUntimedTest" type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA_{{cohortStudent.studentId}}" (change)="checkGrantUntimedTest(cohortStudent.studentId,$event)" [disabled]="cohortStudent.isInactive || cohortStudent.userExpiryDate || cohortStudent.IsInactiveForRostering" />
                                     <label  for="ADA_{{cohortStudent.studentId}}"></label>
+                                </td>
+                                <td>
+                                    <input  [checked]="!cohortStudent.IsInactiveForRostering" type="checkbox" class="checkbox-image js-disable js-Active" id="makeActive_{{cohortStudent.studentId}}" (change)="onActiveChange(cohortStudent.studentId,$event)" [disabled]="!cohortStudent.IsInactiveForRostering" />
+                                    <label  for="makeActive_{{cohortStudent.studentId}}"></label>
                                 </td>
                             </tr>
                         </tbody>
