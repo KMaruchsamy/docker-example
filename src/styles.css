@@ -95,6 +95,9 @@ mark {
 small {
   font-size: 80%;
 }
+#modalAlternateTest{
+  z-index: 9999;
+}
 
 sub,
 sup {

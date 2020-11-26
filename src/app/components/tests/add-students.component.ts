@@ -72,6 +72,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
     popupStudentRepeaterExceptions: any;
     popupRetesterExceptions: any;
     popupTestTakenStudents: any;
+    popupAlternateTest : any;
     popupTestScheduledSudents: any;
     popupStudentWindowException: any;
     popupStudentsStartedTest: any;
@@ -1229,7 +1230,8 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 studentAlternateTests = repeaterExceptions.StudentAlternateTestInfo;
             }
             if (repeaterExceptions.AlternateTestInfo && repeaterExceptions.AlternateTestInfo.length > 0) {
-                alternateTests = repeaterExceptions.AlternateTestInfo.filter(_alternateTestInfo=>_alternateTestInfo.IsSequenceLiveOnMaestro);        
+                alternateTests =repeaterExceptions.AlternateTestInfo;
+                this.popupAlternateTest = alternateTests;
             }
 
             if (studentAlternateTests.length === 0 && studentRepeaterExceptions.length === 0 && alternateTests.length == 0)
