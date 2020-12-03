@@ -18,5 +18,6 @@ export class ChangeUpdateRosterStudentsModel {
     updateType?: number;  //Based on Request for change/Move/Add/Extend Access [1/2/3/4]
     addedFrom?: number;
     isDuplicate?: boolean;
+    makeActive?: boolean = null;
     IsInactiveForRostering: boolean;
 }

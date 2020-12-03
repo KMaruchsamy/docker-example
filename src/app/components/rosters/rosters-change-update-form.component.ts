@@ -239,18 +239,10 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                     _selectedStudent = s;
                 }
             });
-            if (_selectedStudent.moveToCohortId !== null)
-                el.text(_selectedStudent.moveToCohortName);
-            else 
-                el.text('Choose an active cohort');
             if (!_selectedStudent.userExpiryDate && !(_selectedStudent.isInactive) && !(_selectedStudent.moveToCohortId !== null))
                 el.addClass('button-no-change');
             else
                 el.removeClass('button-no-change');
-            if (_selectedStudent.isInactive || _selectedStudent.userExpiryDate)
-                el.attr('disabled', 'true');
-            else
-                el.removeAttr('disabled');
         }
     }
 
@@ -269,7 +261,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
             else
                 el.attr('checked', 'checked');
 
-            let _isRepeater = (_selectedStudent.moveToCohortId === null) || (_selectedStudent.isInactive !== null ? _selectedStudent.isInactive : false || _selectedStudent.userExpiryDate);
+            let _isRepeater = (_selectedStudent.moveToCohortId === null) || (_selectedStudent.isInactive !== null ? _selectedStudent.isInactive : false || _selectedStudent.userExpiryDate) || _selectedStudent.makeActive == null || _selectedStudent.makeActive == false;
             if (_isRepeater)
                 el.attr('disabled', 'true');
             else
@@ -290,7 +282,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 el.attr('checked', 'true');
             else
                 el.removeAttr('checked');
-            let _isActive: boolean = _selectedStudent.userExpiryDate || (_selectedStudent.moveToCohortId !== null) || (_selectedStudent.isGrantUntimedTest !== null ? _selectedStudent.isGrantUntimedTest : false);
+            let _isActive: boolean = _selectedStudent.userExpiryDate || (_selectedStudent.moveToCohortId !== null) || (_selectedStudent.isGrantUntimedTest !== null ? _selectedStudent.isGrantUntimedTest : false) || _selectedStudent.makeActive !== null;
             if (_isActive)
                 el.attr('disabled', 'true');
             else
@@ -311,7 +303,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                 el.attr('checked', 'checked');
             else
                 el.removeAttr('checked');
-            if (_selectedStudent.isInactive !== null && _selectedStudent.isInactive || _selectedStudent.userExpiryDate)
+            if (_selectedStudent.isInactive !== null && _selectedStudent.isInactive || _selectedStudent.userExpiryDate && _selectedStudent.makeActive == null || _selectedStudent.makeActive == false)
                 el.attr('disabled', 'true');
             else
                 el.removeAttr('disabled');
@@ -328,11 +320,12 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                     _selectedStudent = s;
                 }
             });
-            if (_selectedStudent.IsInactiveForRostering !== null && !_selectedStudent.IsInactiveForRostering)
+            if (_selectedStudent.IsInactiveForRostering !== null && !_selectedStudent.IsInactiveForRostering && _selectedStudent.makeActive)
                 el.attr('checked', 'checked');
             else
                 el.removeAttr('checked');
-            if (_selectedStudent.isInactive !== null && _selectedStudent.isInactive || _selectedStudent.userExpiryDate)
+            let _isActive: boolean = _selectedStudent.userExpiryDate || (_selectedStudent.moveToCohortId !== null) || (_selectedStudent.isGrantUntimedTest !== null ? _selectedStudent.isGrantUntimedTest : false) || _selectedStudent.makeActive !== null;
+            if (_isActive)
                 el.attr('disabled', 'true');
             else
                 el.removeAttr('disabled');
@@ -379,7 +372,9 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
                         if (_.has(savedStudent, 'isInactive'))
                             changeUpdateStudent.isInactive = savedStudent.isInactive;
 
-                
+                        if (_.has(savedStudent, 'makeActive')) {
+                            changeUpdateStudent.makeActive = savedStudent.makeActive;
+                        }
 
                         if (_.has(savedStudent, 'isGrantUntimedTest'))
                             changeUpdateStudent.isGrantUntimedTest = savedStudent.isGrantUntimedTest;
@@ -405,23 +400,23 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
 
     onChangingUserSelection(e) {
         var _id = $(e.target).attr('id').split('_')[1];
-       
+
         //On cohort change selection
         var _buttonElement = $('#' + 'btnChangeToCohort_' + _id);
-        this.onMoveToCohortChange(_buttonElement);       
+        this.onMoveToCohortChange(_buttonElement);
 
-       
+
 
         //On Selection of inactive checkbox selection... Start
         var _inactiveElement = $('#' + 'inactive_' + _id);
-        this.onInactiveChange(_inactiveElement);        
+        this.onInactiveChange(_inactiveElement);
 
         //On Selection of ADA checkbox selection... Start   
         var _ADAElement = $('#' + 'ADA_' + _id);
-        this.onADAChange(_ADAElement); 
-        
-        var _ActiveElement = $('#' + 'makeActive_' + _id);
-        this.onActiveChange(_ActiveElement); 
+        this.onADAChange(_ADAElement);
+
+        var _activeElement = $('#' + 'makeActive_' + _id);
+        this.onActiveChange(_activeElement);
     }
 
     showCohortPopup(firstName, lastName, studentId, e) {
@@ -462,8 +457,8 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         let student: ChangeUpdateRosterStudentsModel;
         _.filter(this.rosterChangeUpdateStudents, (_student) => {
             if (_student.studentId === _studentId) {
-                _student.updateType = RosterUpdateTypes.MoveToDifferentCohort; 
-                _student.isInactive= isChecked;
+                _student.updateType = RosterUpdateTypes.MoveToDifferentCohort;
+                _student.isInactive = isChecked;
                 _student.isGrantUntimedTest = false;
                 student = _student;
             }
@@ -478,7 +473,8 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
             if (_student.studentId === _studentId) {
                 _student.isGrantUntimedTest = isChecked;
-                _student.updateType = RosterUpdateTypes.MoveToDifferentCohort; 
+                _student.updateType = RosterUpdateTypes.MoveToDifferentCohort;
+
                 if (_student.moveToCohortId === null) {
                     _student.isInactive = false;
                 }
@@ -495,16 +491,17 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
         let isChecked: boolean = target.checked;
         let student: ChangeUpdateRosterStudentsModel;
         _.filter(this.rosterChangeUpdateStudents, function (_student) {
-            if (_student.studentId === _studentId) {debugger
-                _student.IsInactiveForRostering= isChecked;
-                _student.updateType = RosterUpdateTypes.MoveToDifferentCohort; 
-                if (_student.moveToCohortId === null) {
-                    _student.isInactive = false;
-                }
+            if (_student.studentId === _studentId) {
+                _student.makeActive = isChecked;
+                _student.updateType = RosterUpdateTypes.MoveToDifferentCohort;
                 student = _student;
             }
         });
-
+        if (!isChecked) {
+            student.isGrantUntimedTest = false;
+            student.moveToCohortId= null;
+            student.moveToCohortName = null;
+        }
         this.changeUpdateRosterStudentsEvent.emit(student);
     }
     changeCohortTo(_student: ChangeUpdateRosterStudentsModel) {
