@@ -62,6 +62,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
     apiServer: string;
     getUserPreferenceSubscription: Subscription;
     rosterCohortUserPreferenceModel: RosterCohortUserPreferenceModel;
+    isInActiveStudentPresent: boolean = false;
 
     constructor(public rosters: RostersModal, private rosterService: RosterService, private common: CommonService, private router: Router, private auth: AuthService, private rosterChangesModel: RosterChangesModel) { }
 
@@ -193,6 +194,7 @@ export class RostersCohortsComponent implements OnInit, OnDestroy {
         cohort.studentCount = rosterCohortStudents ? (rosterCohortStudents.length - inactiveForRosteringStudentsCount): 0;
         cohort.students = rosterCohortStudents;
         cohort.visible = !cohort.visible;
+        this.isInActiveStudentPresent = _.some(rosterCohortStudents, { 'IsInactiveForRostering': 1 });
     }
 
     rosterCohortStudents(cohortId: number): any {
