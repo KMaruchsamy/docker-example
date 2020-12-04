@@ -13,6 +13,7 @@
                                 <th scope="col">Move to different cohort</th>
                                 <th scope="col">Make inactive</th>
                                 <th scope="col">Grant untimed tests</th>
+                                <th scope="col">Make Active</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -25,7 +26,12 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <button  id="btnChangeToCohort_{{cohortStudent.studentId}}" [disabled]="cohortStudent.isInactive || cohortStudent.userExpiryDate || cohortStudent.IsInactiveForRostering" class="button button-small button-light js-choose-cohort button-fixed-width" [class.button-no-change]="(!cohortStudent.userExpiryDate && !(cohortStudent.isInactive) && !(cohortStudent.moveToCohortId !== null ))" (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">{{cohortStudent.moveToCohortName ===null ?'Choose an active cohort' : cohortStudent.moveToCohortName}}</button>
+                                    <button  id="btnChangeToCohort_{{cohortStudent.studentId}}" 
+                                    [disabled]="(cohortStudent.isInactive || cohortStudent.userExpiryDate || cohortStudent.IsInactiveForRostering) && !cohortStudent.makeActive" 
+                                    class="button button-small button-light js-choose-cohort button-fixed-width" 
+                                    [class.button-no-change]="(!cohortStudent.userExpiryDate && !(cohortStudent.isInactive) && !(cohortStudent.moveToCohortId !== null ))" 
+                                    (click)="showCohortPopup(cohortStudent.firstName,cohortStudent.lastName,cohortStudent.studentId,$event);">{{cohortStudent.moveToCohortName ===null ?'Choose an active cohort' : cohortStudent.moveToCohortName}}
+                                </button>
                                 </td>
                               
                                 <td>
@@ -33,8 +39,14 @@
                                     <label  for="inactive_{{cohortStudent.studentId}}"></label>
                                 </td>
                                 <td>
-                                    <input  [checked]="cohortStudent.isGrantUntimedTest" type="checkbox" class="checkbox-image js-disable js-ADA" id="ADA_{{cohortStudent.studentId}}" (change)="checkGrantUntimedTest(cohortStudent.studentId,$event)" [disabled]="cohortStudent.isInactive || cohortStudent.userExpiryDate || cohortStudent.IsInactiveForRostering" />
+                                    <input  [checked]="cohortStudent.isGrantUntimedTest" type="checkbox" 
+                                    class="checkbox-image js-disable js-ADA" id="ADA_{{cohortStudent.studentId}}" 
+                                    (change)="checkGrantUntimedTest(cohortStudent.studentId,$event)" [disabled]="(cohortStudent.isInactive || cohortStudent.userExpiryDate || cohortStudent.IsInactiveForRostering) && !cohortStudent.makeActive" />
                                     <label  for="ADA_{{cohortStudent.studentId}}"></label>
+                                </td>
+                                <td>
+                                    <input  [checked]="cohortStudent.makeActive" type="checkbox" class="checkbox-image js-disable js-Active" id="makeActive_{{cohortStudent.studentId}}" (change)="checkMakeActive(cohortStudent.studentId,$event)" [disabled]="!cohortStudent.IsInactiveForRostering" />
+                                    <label  for="makeActive_{{cohortStudent.studentId}}"></label>
                                 </td>
                             </tr>
                         </tbody>

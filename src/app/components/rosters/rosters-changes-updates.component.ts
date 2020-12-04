@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { CommonService } from './../../services/common.service';
@@ -143,7 +143,8 @@ export class RostersChangesUpdatesComponent implements OnInit {
                 studentToUpdate.isInactive = student.isInactive;
                 studentToUpdate.moveToCohortId = student.moveToCohortId;
                 studentToUpdate.moveToCohortName = student.moveToCohortName;
-                if (studentToUpdate.moveToCohortId == null && !studentToUpdate.isInactive && !studentToUpdate.isGrantUntimedTest)
+                studentToUpdate.makeActive = student.makeActive;
+                if ((studentToUpdate.moveToCohortId == null && !studentToUpdate.isInactive && !studentToUpdate.isGrantUntimedTest) && (!studentToUpdate.makeActive || studentToUpdate.makeActive==null))
                     _.remove(this.rosterChangesModel.students, function (s) {
                         return s.studentId == student.studentId;
                     });
@@ -163,7 +164,9 @@ export class RostersChangesUpdatesComponent implements OnInit {
                     studentToUpdate.moveToCohortName = student.moveToCohortName;
                 }
                 else {
-                    if (student.moveToCohortId == null && !student.isInactive && !student.isGrantUntimedTest)
+                    studentToUpdate.moveToCohortId = null;
+                    studentToUpdate.moveToCohortName = null;
+                    if (student.moveToCohortId == null && !student.isInactive && !student.isGrantUntimedTest && !student.makeActive)
                         _.remove(this.rosterChangesModel.students, (s) => {
                             return s.studentId == student.studentId;
                         });
@@ -172,7 +175,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
                             if (s.studentId == student.studentId)
                                 s = student;
                         });
-                        }                   
+                        }
             }
             else
                 if (student.moveToCohortId !== null)
@@ -193,6 +196,7 @@ export class RostersChangesUpdatesComponent implements OnInit {
             studentToAdd.addedFrom = RosterUpdateTypes.AddToThisCohort;
             studentToAdd.moveToCohortId = this.rosterChangesModel.cohortId;
             studentToAdd.moveToCohortName = this.rosterChangesModel.cohortName;
+            studentToAdd.makeActive = studentToAdd.makeActive;
             this.rosterChangesModel.students.push(studentToAdd);
             this.rosterChangesModel.students = this.rosterChangesModel.students.slice();
         }
