@@ -13,4 +13,5 @@ export class RosterCohortsModel{
     students: Array<RosterCohortStudentsModel>;
     visible: boolean;
     isSelected: boolean = false;
+    isInActiveStudentPresent: boolean = false;
 }
