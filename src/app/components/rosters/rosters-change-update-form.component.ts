@@ -39,6 +39,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
     isResponsive: boolean = false;
     showDuplicateStudentMessage: boolean = false;
     _event: any;
+    isInActiveStudentPresent: boolean = false;
 
     constructor(public auth: AuthService, public router: Router, public common: CommonService, public rosterService: RosterService, public rosterCohortsModel: RosterCohortsModel, public rosters: RostersModal) { }
 
@@ -227,6 +228,7 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
             });
 
         });  // Closes setTimeout
+        this.isInActiveStudentPresent = _.some(self.rosterChangeUpdateStudents, { 'IsInactiveForRostering': 1 });
     }
 
     onMoveToCohortChange(el){
@@ -520,6 +522,6 @@ export class RostersChangeUpdateFormComponent implements OnInit, OnDestroy {
 
         }
     }
-    
+
 }
 

@@ -51,6 +51,11 @@
           <span>Student access has expired</span>
         </div>
       </div>
+      <div class="strikethrough-text left margin-left-1em" *ngIf="isInActiveStudentPresent">
+        <span>
+          **Student Name : Student is Currently Inactive.
+        </span>
+      </div>
     </div>
     <div *ngIf="!cohort?.students || cohort?.students?.length===0" class="collapse" [class.in]="cohort.visible" [attr.id]="'cohort' + cohort.cohortId">
       <p>There are no students in this cohort roster.</p>
