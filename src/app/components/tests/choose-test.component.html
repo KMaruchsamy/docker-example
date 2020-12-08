@@ -67,7 +67,7 @@
                                     <img *ngIf="!validatePDFURL(test.TopicalBlueprintLink)" src="assets/images/no-blueprint-icon.svg" width="24" height="24" alt="No Blueprint Available">
                                 </td>
                                 <td class="center">
-                                    <input type="radio" [attr.testid]="test.TestId" (click)="setradio(subjectDropDown.value,test.TestId)" [attr.testname]="test.TestName" [checked]="test.TestId === testScheduleModel.testId"
+                                    <input type="radio" [attr.testid]="test.TestId" [attr.testname]="test.TestName" [checked]="test.TestId === testScheduleModel.testId"
                                         (change)="selectTest(test.TestId,test.TestName, subjectDropDown.value,test.NormingStatusName,test.TestType);"
                                         class="checkbox-image" [attr.id]="'rdb' + test.TestName|removewhitespace" [attr.aria-label]="'Choose ' + test.TestName">
                                     <label [attr.for]="'rdb' + test.TestName|removewhitespace"></label>
@@ -79,7 +79,7 @@
                         <p *ngIf="activeChooseBySubject && missingBlueprints" [class.margin-1em-bottom]="tests?.length===0 || !noBlueprints" class="icon no-blueprint-icon">There is no blueprint available for this test.</p>
                         <p *ngIf="tests?.length > 0 && !noBlueprints" class="icon info-icon-yellow"><strong>Please note:</strong> Test blueprints are for faculty use only and should not be shared with students.</p>
                     </div>
-                    <button type="submit" (click)="saveChooseTest($event)" id="chooseDate" class="button right button-mobile-block" [disabled]="!(testScheduleModel.testId && isMastroLive)">
+                    <button type="submit" (click)="saveChooseTest($event)" id="chooseDate" class="button right button-mobile-block" [disabled]="!testScheduleModel.testId">
                         Next step: Choose date and time
                     </button>
                     <!--</form>-->
