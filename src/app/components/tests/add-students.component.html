@@ -142,12 +142,11 @@
             <div class="icon-container-flush-text">
                 <p *ngIf="modifyInProgress" class="icon red-triangle-alert-small-icon margin-1em-top" id="alreadyStartedNote"><strong>Please note:</strong> Students who have already started their test can no longer be removed from the testing session.</p>
                 <p class="icon info-icon-yellow" *ngIf="!hasADA && selectedStudents.length > 0">
-                    Please contact your Account Manager if there are students in your testing session who need testing accommodations.
-                    Students with testing accommodations receive untimed versions of their tests.
+                    If you need to request extended timing accommodations for any students on this list who have not been previously set with this accommodation, please submit your request in the "Manage Cohorts" section.
+                    For questions please contact your Account Manager.
                 </p>
                 <p class="icon info-icon-yellow" *ngIf="hasADA && selectedStudents.length > 0">
-                    One or more of the students you have added have testing accommodations. Their test will be untimed.
-                    For more information or to designate additional students who need testing accommodations, please contact your Account Manager.
+                    One or more of the students you have added have testing accommodations.  Their test will be untimed.  To designate additional students who need extended timing accommodations or to verify who is currently set with accommodations, please submit your request in the "Manage Cohorts" section.  For questions please contact your Account Manager.
                 </p>
                 <p class="icon info-icon-yellow margin-1em-top" *ngIf="!modifyInProgress && selectedStudents.length > 0">All of the students you have added will remain scheduled for this test unless you remove them prior to test day.</p>
                 <button type="button" class="button button-mobile-block right margin-2em-top-bottom" id="reviewDetails" [disabled]="makeSave_ContinueButtonEnableDisable()" (click)="save_ContinueButtonClick($event);"> <span *ngIf="!modifyInProgress" class="hidden-extra-small-down">Next step: </span>{{ modifyInProgress ? 'Verify changes and save' : 'Add details and review'}}</button>
