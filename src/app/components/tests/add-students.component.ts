@@ -605,7 +605,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 let student:any = {};
                 if ($(el).attr('class').search('hidden') < 0) {
                     let buttonId = $(el).find('td:eq(4) button').attr('id');
-                    if (!$('#' + buttonId).prop('disabled')) {
+                    if ((!$('#' + buttonId).prop('disabled')) && buttonId) {
                         student.LastName = $(el).find('td:eq(0)').attr('lastname');
                         student.FirstName = $(el).find('td:eq(1)').attr('firstname');
                         student.Retester = $(el).find('td:eq(3)').text() === "Yes" ? true : false;
