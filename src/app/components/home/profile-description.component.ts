@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { links } from '../../constants/config';
@@ -7,6 +7,7 @@ import { CommonService } from './../../services/common.service';
 import { LogService } from './../../services/log.service';
 import { ProfileModel } from './../../models/profile.model';
 import { ProfileService } from './profile.service';
+import { AuthService } from './../../../app/services/auth.service';
 
 @Component({
     selector: 'profile-description',
@@ -20,13 +21,16 @@ export class ProfileDescriptionComponent implements OnDestroy {
     routeParametersSubscription: Subscription;
     getProfileSubscription: Subscription;
 
-    constructor(public activatedRoute: ActivatedRoute, public profileService: ProfileService, public common: CommonService, public titleService: Title, private log: LogService) {
+    constructor(public activatedRoute: ActivatedRoute, public profileService: ProfileService, public common: CommonService, public titleService: Title, private log: LogService, public auth: AuthService, public router: Router) {
+        if (!this.auth.isAuth())
+            this.router.navigate(['/']);
+        else {
         this.apiServer = this.common.getApiServer();
         this.routeParametersSubscription = this.activatedRoute.params.subscribe(params => {
             this.kaplanAdminId = +params['id'];
             this.loadProfileDescription();
         });
-
+    }
     }
 
 
