@@ -128,10 +128,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   loadTemplate() {
-    if(this.selectedInstitution.IsNonBetaApolloReportLinkEnable) 
-      this.templateJson = JSON.parse(JSON.stringify(nonBetaAtomReportTemplate));  //To do deep copy
+    if(this.selectedInstitution.IsNonBetaApolloReportLinkEnable)
+    this.templateJson = JSON.parse(JSON.stringify(nonBetaAtomReportTemplate));  //To do deep copy	
     else
-      this.templateJson = JSON.parse(JSON.stringify(this.isBetaInstitution ? betaTemplate : nonBetaTemplate));  //To do deep copy
+    this.templateJson = JSON.parse(JSON.stringify(this.isBetaInstitution ? betaTemplate : nonBetaTemplate));  //To do deep copy
     this.updateTemplateToSession();
     this.getDataKeys();
   }

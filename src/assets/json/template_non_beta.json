@@ -102,79 +102,9 @@
             "cards": [
               {
                 "type": "links",
-                "title": "PERFORMANCE",
+                "title": "PERFORMANCE & UTILIZATION",
                 "color": "#00CDFF",
                 "links": [
-                  {
-                    "text": "Student Report Card",
-                    "name": "StudentReportCard",
-                    "target": "_blank",
-                    "ga": {
-                      "category": "Reporting Tools",
-                      "label": "Student Report Card"
-                    }
-                  },
-                  {
-                    "text": "Test Results By Question",
-                    "name": "ReportCohortByQuestion",
-                    "target": "_blank",
-                    "ga": {
-                      "category": "Reporting Tools",
-                      "label": "Test Results By Question"
-                    }
-                  },
-                  {
-                    "text": "Cohort By Test",
-                    "name": "ReportCohortByTest",
-                    "target": "_blank",
-                    "ga": {
-                      "category": "Reporting Tools",
-                      "label": "Cohort By Test"
-                    }
-                  },
-                  {
-                    "text": "Category Comparisons",
-                    "name": "CohortComparisonsReport",
-                    "target": "_blank",
-                    "ga": {
-                      "category": "Reporting Tools",
-                      "label": "Category Comparisons"
-                    }
-                  },
-                  {
-                      "text": "Computer Adaptive Test Report",
-                      "name": "ReportStudentCATReportCard",
-                      "target": "_blank",
-                      "ga": {
-                        "category": "Reporting Tools",
-                        "label": "Computer Adaptive Test Report"
-                      }
-                  }
-                ]
-              },
-              {
-                "type": "links",
-                "title": "UTILIZATION",
-                "color": "#FF801E",
-                "links": [
-                  {
-                    "text": "Utilization",
-                    "name": "UtilizationReport",
-                    "target": "_blank",
-                    "ga": {
-                      "category": "Reporting Tools",
-                      "label": "Utilization"
-                    }
-                  },
-                  {
-                    "text": "Non Utilization",
-                    "name": "UtilizationReport",
-                    "target": "_blank",
-                    "ga": {
-                      "category": "Reporting Tools",
-                      "label": "Non Utilization"
-                    }
-                  },
                   {
                     "text": "Skills Demo Video Utilization",
                     "name": "CaseWesternReport",
@@ -183,7 +113,16 @@
                       "category": "Reporting Tools",
                       "label": "Skills Demo Video Utilization"
                     }
-                  }
+                  },
+                  {
+                    "text": "Computer Adaptive Test Report",
+                    "name": "ReportStudentCATReportCard",
+                    "target": "_blank",
+                    "ga": {
+                      "category": "Reporting Tools",
+                      "label": "Computer Adaptive Test Report"
+                    }
+                }
                 ]
               },
               {
@@ -301,7 +240,25 @@
                       "category": "Reporting Tools",
                       "label": "Proctortrack Proctoring Reports"
                     }
+                  },
+                {
+                  "text": "Report Card for Dec 2020 - Mar 2021",
+                  "name": "StudentReportCard",
+                  "target": "_blank",
+                  "ga": {
+                    "category": "Reporting Tools",
+                    "label": "Report Card for Dec 2020 - Mar 2021"
                   }
+                },
+                {
+                  "text": "Utilization Report for Dec 2020 - Mar 2021",
+                  "name": "UtilizationReport",
+                  "target": "_blank",
+                  "ga": {
+                    "category": "Reporting Tools",
+                    "label": "Utilization Report for Dec 2020 - Mar 2021"
+                  }
+                }
                 ]
               }
             ]
