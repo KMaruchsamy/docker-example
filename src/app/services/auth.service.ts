@@ -220,18 +220,6 @@ export class AuthService {
 
   logout() {
     this.sStorage.clear();
-    this.token = null;
-    // this.user = null;
-    // this.authheader = null;
-    this.useremail = null;
-    this.istemppassword = false;
-    this.userid = null;
-    this.firstname = null;
-    this.lastname = null;
-    this.title = null;
-    this.institutions = null;
-    this.securitylevel = null;
-    this.username = null;
   }
 
 

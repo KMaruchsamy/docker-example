@@ -11,7 +11,7 @@ export class CommonService {
     }
 
     isPrivateBrowsing() {
-        var testKey = 'test', storage = window.sessionStorage;
+        var testKey = 'test', storage = window.localStorage;
         try {
             storage.setItem(testKey, '1');
             storage.removeItem(testKey);
@@ -24,9 +24,9 @@ export class CommonService {
 
     getStorage() {
         if (this.isPrivateBrowsing())
-            return  (window.sessionStorage as any).__proto__;
+            return  (window.localStorage as any).__proto__;
         else
-            return window.sessionStorage;
+            return window.localStorage;
     }
 
 
