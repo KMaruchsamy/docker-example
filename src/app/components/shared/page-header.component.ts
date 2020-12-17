@@ -75,6 +75,10 @@ export class PageHeaderComponent implements OnInit, OnDestroy {
     this.lastName = this.auth.lastname;
   }
   redirectToKaptest() {
+    if (!this.auth.isAuth()){
+      this.router.navigate(['/']);
+      return;
+    }
     var facultyAMLoginUrl =
       this.apiServer + links.api.baseurl + links.api.admin.facultyAMLoginUrl;
     this.auth

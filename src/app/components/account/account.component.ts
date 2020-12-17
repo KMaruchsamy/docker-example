@@ -56,6 +56,8 @@ export class AccountComponent implements OnInit, OnDestroy {
     examityServer:string;
     examityLoginURL:string;
     constructor(private http: HttpClient, public router: Router, private activatedRoute: ActivatedRoute, public auth: AuthService, public common: CommonService, public validations: ValidationsService, public titleService: Title, private log: LogService) {
+        if (!this.auth.isAuth())
+            this.router.navigate(['/']);
     }
 
     ngOnDestroy(): void {
