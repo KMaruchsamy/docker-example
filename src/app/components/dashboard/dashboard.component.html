@@ -18,7 +18,7 @@
               #institutionList
             >
               <mat-option matTooltip="{{ institution.InstitutionNameWithProgOfStudy }}"
-                *ngFor="let institution of institutions"
+                *ngFor="let institution of institutions | sort:'asc':'InstitutionNameWithProgOfStudy'"
                 [value]="institution.InstitutionId"
               >
                 {{ institution.InstitutionNameWithProgOfStudy }}
