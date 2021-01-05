@@ -23,7 +23,7 @@
                             <p class="text-larger-purple"><b>{{student.LastName}}, {{student.FirstName}}</b></p>
 
                             <div *ngFor="let test of student.AlternateTests; let i = index">
-                                <input type="radio" class="checkbox-image" (change)="onChangeTestTaken(student.StudentId,false,test.TestId,test.TestName,'testTaken',$event);"
+                                <input type="radio" class="checkbox-image" (click)="onPopupChecked(test.TestId)" (change)="onChangeTestTaken(student.StudentId,false,test.TestId,test.TestName,'testTaken',$event);"
                                        [attr.name]="'testTaken' + student.StudentId" [attr.id]="'rdbTestTaken' + student.StudentId + '_' + i"
                                        [checked]="test.Checked" [disabled]="test.ErrorCode>0">
                                 <label [attr.for]="'rdbTestTaken' + student.StudentId + '_' + i"><span class="text-purple">{{test.TestName}}{{test.Recommended ? '*' : ''}}</span> ({{test.NormingStatus}})</label>
@@ -86,7 +86,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="anchor-button anchor-button-left prototype-dismiss1" data-dismiss="modal" (click)="cancel($event)">Cancel</button>
-                <button id="addDetailsReview" class="button" [disabled]= "!valid" (click)="resolve($event);"><span class="hidden-extra-small-down" *ngIf="!modifyInProgress">Next step: </span>{{modifyInProgress? "Save and continue" : "Add details and review"}}</button>
+                <button id="addDetailsReview" class="button" [disabled]= "!(valid && isMastroLive)" (click)="resolve($event);"><span class="hidden-extra-small-down" *ngIf="!modifyInProgress">Next step: </span>{{modifyInProgress? "Save and continue" : "Add details and review"}}</button>
             </div>
 
         </div>
