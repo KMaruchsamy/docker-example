@@ -248,7 +248,9 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
                     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent))
                         $('.selectpicker').selectpicker('mobile');
                 });
-            });
+            },
+                error => console.log(error.message)
+            );
     }
 
     resolveTestsURL(url: string): string {
