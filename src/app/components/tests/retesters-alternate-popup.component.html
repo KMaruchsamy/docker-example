@@ -86,7 +86,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="anchor-button anchor-button-left prototype-dismiss1" data-dismiss="modal" (click)="cancel($event)">Cancel</button>
-                <button id="addDetailsReview" class="button" [disabled]= "!valid" (click)="resolve($event);"><span class="hidden-extra-small-down" *ngIf="!modifyInProgress">Next step: </span>{{modifyInProgress? "Save and continue" : "Add details and review"}}</button>
+                <button id="addDetailsReview" class="button" [disabled]= "!(valid && isMastroLive)" (click)="resolve($event);"><span class="hidden-extra-small-down" *ngIf="!modifyInProgress">Next step: </span>{{modifyInProgress? "Save and continue" : "Add details and review"}}</button>
             </div>
 
         </div>
