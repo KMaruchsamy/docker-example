@@ -102,7 +102,9 @@ export class ChooseInstitutionComponent implements OnInit, OnDestroy {
                     else {
                         this.router.navigateByUrl(`/tests/${this.page}/${institutionId}`);
                     }
-                })
+                },
+                error => console.log(error.message)
+           )
 
         }
         else {

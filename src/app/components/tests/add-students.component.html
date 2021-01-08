@@ -23,7 +23,7 @@
                                     <select id="chooseCohort" #selectcohort class="selectpicker" title="Choose a Cohort" data-width="65%" (change)="loadStudentsByCohort(addallstudents,cohortstudentlist,selectcohort,$event);">
                                         <option *ngFor="let cohort of cohorts; let i=index;" [selected]="cohort.CohortId==lastSelectedCohortID" [value]="cohort.CohortId">{{cohort.CohortName}}</option>
                                     </select>
-                                    <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort($event)">Add all students</button>
+                                    <button id="addAllStudents" #addallstudents class="button button-small button-light right hidden" (click)="AddAllStudentsByCohort($event)">Add all inactive students</button>
                                 </div>
 
                                 <div *ngIf="noCohort">
@@ -225,6 +225,7 @@
 [testTakenStudents]="popupTestTakenStudents"
 [testScheduledSudents]="popupTestScheduledSudents"
 [testSchedule]="testScheduleModel"
+[alternateTests] = "popupAlternateTest"
 (retesterAlternatePopupOK)="onRetesterAlternatePopupOK($event)"
 (retesterAlternatePopupCancel)="onRetesterAlternatePopupCancel($event)">
 </retesters-alternate>

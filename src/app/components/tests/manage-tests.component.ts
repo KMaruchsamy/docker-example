@@ -452,7 +452,9 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
                         else {
                             this.router.navigateByUrl(`/tests/choose-test/${(!this.institutionPN || this.institutionPN === 0) ? this.institutionRN : this.institutionPN}`);
                         }
-                    });
+                    },
+                    error => console.log(error.message)
+                );
             }
             else {
                  window.open('/accounterror');
