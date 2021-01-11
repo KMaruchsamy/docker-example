@@ -13,9 +13,8 @@
         <label *ngIf="institutions.length==1">{{ selectedInstitution.InstitutionNameWithProgOfStudy }}</label>
         <span [class.hidden]="!(institutions.length>1)">
           <mat-form-field class="institution-select">
-            <mat-select [disableOptionCentering]="true" aria-label="My Institution"
-              (selectionChange)="onInstitutionSelected($event)"
-              #institutionList
+            <mat-select #institutionList [disableOptionCentering]="true" aria-label="My Institution"
+              (selectionChange)="onInstitutionSelected($event)" [(value)]="sortInstitution.InstitutionId" 
             >
               <mat-option matTooltip="{{ institution.InstitutionNameWithProgOfStudy }}"
                 *ngFor="let institution of institutions | sort:'asc':'InstitutionNameWithProgOfStudy'"

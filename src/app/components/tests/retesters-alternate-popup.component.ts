@@ -108,7 +108,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
         this.validate();
     }
 
-    onPopupChecked(){
+    onPopupChecked(testId){
         let testsNotLiveOnMaestro = this.alternateTests
                                         .filter(alt=> !alt.IsSequenceLiveOnMaestro)
                                         .map(test=> test.TestId);
@@ -116,7 +116,8 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
             let anyStudentHaveNonLiveMaestroTest = _.some(this.changes, { 'testId': nonLiveAltTest });
             if(anyStudentHaveNonLiveMaestroTest) {
                 this.isMastroLive = false;
-                this.toasterService.showError("Please contact your Kaplan representative","There is an error scheduling the test" );                    return;
+                if(testId)
+                    this.toasterService.showError("Please contact your Kaplan representative","There is an error scheduling the test" );                    return;
                }
             else{
                 this.isMastroLive = true;
@@ -155,7 +156,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
             this.chkTestTaken = false;
         }
         this.validate();
-        this.onPopupChecked();
+        this.onPopupChecked(testId);
     }
 
 
@@ -190,7 +191,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
             this.chkTestSchedule = false;
         }
         this.validate();
-        this.onPopupChecked();
+        this.onPopupChecked(testId);
     }
 
     markForRemoval(_studentId: number, mark: boolean, testId: number, testName: string) {
