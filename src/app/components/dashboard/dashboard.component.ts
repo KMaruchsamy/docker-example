@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   institutions: any[];
   isBetaInstitution = false;
   selectedInstitution;
+  sortInstitution;
   firstname: string;
   apiServer: string;
   nursingITServer: string;
@@ -50,6 +51,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.titleService.setTitle('Faculty Home – Kaplan Nursing');
     this.firstname = this.auth.firstname;
     this.loadInstitutions();
+    this.sortInstitutions();
     this.accountManagerProfile = new ProfileModel(
       null,
       null,
@@ -91,6 +93,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  sortInstitutions() {
+    this.sortInstitution =  (JSON.parse(this.auth.institutions) as any[]).sort((a: any, b: any) => {
+      if (a.InstitutionName < b.InstitutionName) {
+        return -1;
+      } else if (a.InstitutionName > b.InstitutionName) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    this.sortInstitution = this.sortInstitution[0];
+  }
   redirectToPage(): void {
     if (this.location.path().search('first') > 0) {
       if (this.auth.istemppassword && this.auth.isAuth())
@@ -112,7 +126,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (!this.selectedInstitution)
       this.selectedInstitution = this.institutions[0];
     this.saveInstitution(this.selectedInstitution);
-    if(this.institutions.length>1)
+    if (this.institutions.length > 1)
       this.institutionList.value = this.selectedInstitution.InstitutionId;
     this.isBetaInstitution = this.selectedInstitution.IsBetaInstitution;
     this.loadTemplate();
@@ -128,10 +142,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   loadTemplate() {
-    if(this.selectedInstitution.IsNonBetaApolloReportLinkEnable)
-    this.templateJson = JSON.parse(JSON.stringify(nonBetaAtomReportTemplate));  //To do deep copy	
+    if (this.selectedInstitution.IsNonBetaApolloReportLinkEnable)
+      this.templateJson = JSON.parse(JSON.stringify(nonBetaAtomReportTemplate));
+    //To do deep copy
     else
-    this.templateJson = JSON.parse(JSON.stringify(this.isBetaInstitution ? betaTemplate : nonBetaTemplate));  //To do deep copy
+      this.templateJson = JSON.parse(
+        JSON.stringify(this.isBetaInstitution ? betaTemplate : nonBetaTemplate)
+      ); //To do deep copy
     this.updateTemplateToSession();
     this.getDataKeys();
   }
@@ -146,11 +163,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   saveInstitution(institution) {
-   this.auth.selectedInstitution = JSON.stringify(institution);
+    this.auth.selectedInstitution = JSON.stringify(institution);
   }
 
   loadProfiles(self, key): void {
-    let institutionID = this.selectedInstitution.InstitutionId; 
+    let institutionID = this.selectedInstitution.InstitutionId;
     if (institutionID > 0) {
       const url =
         this.apiServer +
@@ -165,11 +182,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
           json => {
             self.bindToModel(self, json, key);
           },
-          (error) => self.bindToModel(self, null, key),
-          () => console.log("complete")
+          error => self.bindToModel(self, null, key),
+          () => console.log('complete')
         );
     } else {
-      self.bindToModel(self, null, key)
+      self.bindToModel(self, null, key);
     }
   }
   bindToModel(self, json, key): void {
@@ -190,7 +207,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       });
     }
-    if (self.accountManagerProfile && !self.accountManagerProfile.kaplanAdminTypeId)
+    if (
+      self.accountManagerProfile &&
+      !self.accountManagerProfile.kaplanAdminTypeId
+    )
       self.accountManagerProfile = new ProfileModel(
         null,
         null,
@@ -207,7 +227,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         null,
         null
       );
-    if (self.nurseConsultantProfile && !self.nurseConsultantProfile.kaplanAdminTypeId)
+    if (
+      self.nurseConsultantProfile &&
+      !self.nurseConsultantProfile.kaplanAdminTypeId
+    )
       self.nurseConsultantProfile = new ProfileModel(
         null,
         null,
@@ -236,7 +259,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(
         data => {
           this.announcementText = data.toString();
-          this.assignValueToCardContent(key, this.announcementText, 0, "content");
+          this.assignValueToCardContent(
+            key,
+            this.announcementText,
+            0,
+            'content'
+          );
           this.updateTemplateToSession();
         },
         error => console.log(error)
@@ -244,13 +272,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   getDataKeys() {
     this.dataKeys = [];
-    this.templateJson.content.sections.forEach((section) => {
-      section.panels.forEach((panel) => {
+    this.templateJson.content.sections.forEach(section => {
+      section.panels.forEach(panel => {
         panel.data_key ? this.dataKeys.push(panel.data_key) : this.dataKeys;
         panel.cards.forEach(card => {
           card.data_key ? this.dataKeys.push(card.data_key) : this.dataKeys;
-          if(card["links"]) {
-            card.links.forEach((link) => {
+          if (card['links']) {
+            card.links.forEach(link => {
               link.data_key ? this.dataKeys.push(link.data_key) : this.dataKeys;
             });
           }
@@ -261,9 +289,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   assignValueToCardContent(key, value, position, propertyToUpdate) {
-    this.templateJson.content.sections.forEach((section) => {
-      section.panels.forEach((panel) => {
-        if (panel["data_key"] === key) {
+    this.templateJson.content.sections.forEach(section => {
+      section.panels.forEach(panel => {
+        if (panel['data_key'] === key) {
           panel.cards.forEach((card, index) => {
             if (index === position) {
               card[propertyToUpdate] = value;
@@ -271,10 +299,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           });
         } else {
           panel.cards.forEach((card, index) => {
-            if (index === position && card["data_key"] === key) {
+            if (index === position && card['data_key'] === key) {
               card[propertyToUpdate] = value;
-            }else {
-             if(!value) this.removeLinkBasedOnDatakey(key, position, card);
+            } else {
+              if (!value) this.removeLinkBasedOnDatakey(key, position, card);
             }
           });
         }
@@ -283,22 +311,32 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   removeLinkBasedOnDatakey(key, position, card) {
-    if(card["links"]){
+    if (card['links']) {
       card.links.forEach((link, index) => {
-        if(link["data_key"] === key){
-          if ( key === "iHP") {
-            card.links.splice(index,1);
+        if (link['data_key'] === key) {
+          if (key === 'iHP') {
+            card.links.splice(index, 1);
           }
-          if ((key === "ITSecurity" ) && link["itsecurity_key"] == position) {
-            card.links.splice(index,1);
-          } 
+          if (key === 'ITSecurity' && link['itsecurity_key'] == position) {
+            card.links.splice(index, 1);
+          }
         }
       });
-    } 
+    }
   }
   updateProfileCard(key) {
-    this.assignValueToCardContent(key, this.accountManagerProfile, 0, "content");
-    this.assignValueToCardContent(key, this.nurseConsultantProfile, 1, "content");
+    this.assignValueToCardContent(
+      key,
+      this.accountManagerProfile,
+      0,
+      'content'
+    );
+    this.assignValueToCardContent(
+      key,
+      this.nurseConsultantProfile,
+      1,
+      'content'
+    );
     this.updateTemplateToSession();
   }
   apiCallBasedOnDataKey() {
@@ -321,33 +359,75 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   removeIHPReportLink(key) {
-    let ihpEnableInstitutions = JSON.parse(this.auth.institutions).filter(institution => { return (institution.IsIHPEnabledForAnyCohorts && (institution.InstitutionId == this.selectedInstitution.InstitutionId))});
-    let hasIhpEnableInstitution = ihpEnableInstitutions.length > 0 ? true : false;
-    if(!hasIhpEnableInstitution) {
-      this.assignValueToCardContent(key, hasIhpEnableInstitution, 0, "");
+    let ihpEnableInstitutions = JSON.parse(this.auth.institutions).filter(
+      institution => {
+        return (
+          institution.IsIHPEnabledForAnyCohorts &&
+          institution.InstitutionId == this.selectedInstitution.InstitutionId
+        );
+      }
+    );
+    let hasIhpEnableInstitution =
+      ihpEnableInstitutions.length > 0 ? true : false;
+    if (!hasIhpEnableInstitution) {
+      this.assignValueToCardContent(key, hasIhpEnableInstitution, 0, '');
       this.updateTemplateToSession();
     }
   }
 
   removeITSecurityReportLink(key) {
-    const ITSecurities = [ItSecurity.Examity,ItSecurity.ProctorTrack];
-    let iTSecurityEnabled = ITSecurities.includes(this.selectedInstitution.ITSecurityEnabled) ? true : false;
-    if(iTSecurityEnabled) {
-      switch(this.selectedInstitution.ITSecurityEnabled) {
+    const ITSecurities = [ItSecurity.Examity, ItSecurity.ProctorTrack];
+    let iTSecurityEnabled = ITSecurities.includes(
+      this.selectedInstitution.ITSecurityEnabled
+    )
+      ? true
+      : false;
+    if (iTSecurityEnabled) {
+      switch (this.selectedInstitution.ITSecurityEnabled) {
         case ItSecurity.ProctorTrack:
-          this.assignValueToCardContent(key, iTSecurityEnabled, ItSecurity.ProctorTrack, "");
-          this.assignValueToCardContent(key, !iTSecurityEnabled, ItSecurity.Examity, "");
+          this.assignValueToCardContent(
+            key,
+            iTSecurityEnabled,
+            ItSecurity.ProctorTrack,
+            ''
+          );
+          this.assignValueToCardContent(
+            key,
+            !iTSecurityEnabled,
+            ItSecurity.Examity,
+            ''
+          );
           break;
         case ItSecurity.Examity:
-          this.assignValueToCardContent(key, !iTSecurityEnabled, ItSecurity.ProctorTrack, "");
-          this.assignValueToCardContent(key, iTSecurityEnabled, ItSecurity.Examity, "");
+          this.assignValueToCardContent(
+            key,
+            !iTSecurityEnabled,
+            ItSecurity.ProctorTrack,
+            ''
+          );
+          this.assignValueToCardContent(
+            key,
+            iTSecurityEnabled,
+            ItSecurity.Examity,
+            ''
+          );
           break;
       }
-    }else {
-        this.assignValueToCardContent(key, iTSecurityEnabled, ItSecurity.ProctorTrack, "");
-        this.assignValueToCardContent(key, iTSecurityEnabled, ItSecurity.Examity, "");
-    }   
-      this.updateTemplateToSession();
+    } else {
+      this.assignValueToCardContent(
+        key,
+        iTSecurityEnabled,
+        ItSecurity.ProctorTrack,
+        ''
+      );
+      this.assignValueToCardContent(
+        key,
+        iTSecurityEnabled,
+        ItSecurity.Examity,
+        ''
+      );
+    }
+    this.updateTemplateToSession();
   }
   ngOnDestroy() {
     if (this.profilesSubscription) this.profilesSubscription.unsubscribe();
