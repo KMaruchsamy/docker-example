@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   institutions: any[];
   isBetaInstitution = false;
   selectedInstitution;
+  sortInstitution;
   firstname: string;
   apiServer: string;
   nursingITServer: string;
@@ -111,6 +112,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.selectedInstitution = this.getSelectedInstitution();
     if (!this.selectedInstitution)
       this.selectedInstitution = this.institutions[0];
+    this.sortInstitution =  this.institutions.sort((a: any, b: any) => {
+      if (a.InstitutionName < b.InstitutionName) {
+        return -1;
+      } else if (a.InstitutionName > b.InstitutionName) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    this.sortInstitution = this.sortInstitution[0];
     this.saveInstitution(this.selectedInstitution);
     if(this.institutions.length>1)
       this.institutionList.value = this.selectedInstitution.InstitutionId;
