@@ -38,6 +38,8 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
     anyStudentPayStudents: boolean = false;
     anyDuplicateStudents: boolean = false;
     searchTriggered: boolean = false;
+    isAnyActiveStudentStrikethrough: boolean = false;
+    isAnyInActiveStudentStrikethrough: boolean = false;
     prevSearchText: string = "";
     typeaheadStudentlist: any;
     typeahead: any;
@@ -102,12 +104,12 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
         }
         try {
             if (this.typeaheadStudentlist) {
-                this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = this.anyDuplicateStudents = false;
+                this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = this.anyDuplicateStudents = this.isAnyActiveStudentStrikethrough = this.isAnyInActiveStudentStrikethrough = false;
                 if (this.typeaheadStudentlist.Active && this.typeaheadStudentlist.Active.length > 0) {
-                    this.activeStudents = this.mapStudents(this.filterStudents(this.typeaheadStudentlist.Active), true);
+                    this.activeStudents = this.mapStudents(this.filterStudents(this.typeaheadStudentlist.Active), true, true);
                 }
                 if (this.typeaheadStudentlist.InactiveOrExpired && this.typeaheadStudentlist.InactiveOrExpired.length > 0) {
-                    this.inactiveStudents = this.mapStudents(this.filterStudents(this.typeaheadStudentlist.InactiveOrExpired), true);
+                    this.inactiveStudents = this.mapStudents(this.filterStudents(this.typeaheadStudentlist.InactiveOrExpired), true, false);
                 }
             }
             this.searchTriggered = true;
@@ -116,12 +118,12 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
             });
             $('.typeahead').typeahead('close');
         } catch (error) {
-            this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = this.anyDuplicateStudents =  false;
+            this.anyRepeatStudents = this.anyExpiredStudents = this.anyStudentPayStudents = this.anyDuplicateStudents = this.isAnyActiveStudentStrikethrough = this.isAnyInActiveStudentStrikethrough =  false;
             this.activeStudents = this.inactiveStudents = [];
         }
     }
 
-    mapStudents(objStudents: Array<any>, isActive: boolean) {
+    mapStudents(objStudents: Array<any>, isActive: boolean, isActiveStudents: boolean) {
         if (!objStudents)
             return [];
         else if (objStudents.length === 0)
@@ -138,6 +140,7 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
                 rosterCohortStudent.repeatExpiryDate = student.RepeatExpiryDate;
                 rosterCohortStudent.userExpireDate = student.UserExpireDate;
                 rosterCohortStudent.studentPayInstitution = student.StudentPayInstitution;
+                rosterCohortStudent.IsInactiveForRostering = student.IsInactiveForRostering;
 
                 rosterCohortStudent.isDuplicate = _.some(objStudents, function (stud: any) {
                     return stud.StudentId !== student.StudentId
@@ -170,6 +173,16 @@ export class RostersSearchComponent implements OnInit, OnDestroy {
                     if (!this.anyStudentPayStudents) {
                         if (rosterCohortStudent.isStudentPayDeactivatedStudent)
                             this.anyStudentPayStudents = true;
+                    }
+
+                    if (!this.isAnyActiveStudentStrikethrough && isActiveStudents) {
+                        if (rosterCohortStudent.IsInactiveForRostering)
+                            this.isAnyActiveStudentStrikethrough = true;
+                    }
+
+                    if (!this.isAnyInActiveStudentStrikethrough && !isActiveStudents) {
+                        if (rosterCohortStudent.IsInactiveForRostering)
+                            this.isAnyInActiveStudentStrikethrough = true;
                     }
 
                 }
