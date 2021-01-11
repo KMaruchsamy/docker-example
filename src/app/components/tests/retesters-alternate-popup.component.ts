@@ -116,7 +116,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
             let anyStudentHaveNonLiveMaestroTest = _.some(this.changes, { 'testId': nonLiveAltTest });
             if(anyStudentHaveNonLiveMaestroTest) {
                 this.isMastroLive = false;
-                if(testId)
+                if(testId !== 0 && testId == nonLiveAltTest)
                     this.toasterService.showError("Please contact your Kaplan representative","There is an error scheduling the test" );                    return;
                }
             else{

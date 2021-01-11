@@ -136,6 +136,10 @@ pre {
   overflow: auto;
 }
 
+.strikethrough-text{
+  text-decoration: line-through;
+}
+
 code,
 kbd,
 pre,
