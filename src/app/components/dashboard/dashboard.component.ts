@@ -1,9 +1,8 @@
 import { AuthService } from "./../../services/auth.service";
-import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import betaTemplate from "../../../assets/json/template_beta.json";
 import nonBetaTemplate from "../../../assets/json/template_non_beta.json";
 import nonBetaAtomReportTemplate from "../../../assets/json/template_nonbeta_atomreport.json";
-import { MatSelect } from "@angular/material/select";
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
 import { ProfileModel } from "./../../models/profile.model";
@@ -23,7 +22,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   institutions: any[];
   isBetaInstitution = false;
   selectedInstitution;
-  sortInstitution;
   firstname: string;
   apiServer: string;
   nursingITServer: string;
@@ -33,7 +31,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   dataKeys: string[] = [];
   announcementSubscription: Subscription;
   profilesSubscription: Subscription;
-  @ViewChild(MatSelect, { static: true }) institutionList: MatSelect;
 
   constructor(
     public location: Location,
@@ -51,7 +48,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.titleService.setTitle('Faculty Home – Kaplan Nursing');
     this.firstname = this.auth.firstname;
     this.loadInstitutions();
-    this.sortInstitutions();
     this.accountManagerProfile = new ProfileModel(
       null,
       null,
@@ -92,9 +88,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       beta: JSON.parse(this.auth.selectedInstitution).IsBetaInstitution
     });
   }
-
-  sortInstitutions() {
-    this.sortInstitution =  (JSON.parse(this.auth.institutions) as any[]).sort((a: any, b: any) => {
+  sortingInstitutions() {
+    this.institutions = (JSON.parse(this.auth.institutions) as any[]).sort((a: any, b: any) => {
       if (a.InstitutionName < b.InstitutionName) {
         return -1;
       } else if (a.InstitutionName > b.InstitutionName) {
@@ -103,7 +98,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return 0;
       }
     });
-    this.sortInstitution = this.sortInstitution[0];
   }
   redirectToPage(): void {
     if (this.location.path().search('first') > 0) {
@@ -119,15 +113,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.auth.dashboardTemplate = JSON.stringify(this.templateJson);
   }
   loadInstitutions() {
-    this.institutions = (JSON.parse(this.auth.institutions) as any[]).sort(
-      (a, b) => b.InstitutionId - a.InstitutionId
-    );
+    this.sortingInstitutions();
     this.selectedInstitution = this.getSelectedInstitution();
     if (!this.selectedInstitution)
       this.selectedInstitution = this.institutions[0];
     this.saveInstitution(this.selectedInstitution);
-    if (this.institutions.length > 1)
-      this.institutionList.value = this.selectedInstitution.InstitutionId;
     this.isBetaInstitution = this.selectedInstitution.IsBetaInstitution;
     this.loadTemplate();
   }
