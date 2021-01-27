@@ -6327,11 +6327,13 @@ input.small-checkbox-image {
     float: none;
   }
   header,
+  page-subheader,
   footer,
   .print-icon,
   .faculty-user-guide-menu,
   .back-to-top-arrow,
   .video,
+  .cx-widget,
   a[href='#focusedReview'],
   a[href='#integratedTesting'] {
     display: none !important;
