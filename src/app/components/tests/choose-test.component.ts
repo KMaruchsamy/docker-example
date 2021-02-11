@@ -28,7 +28,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     subjects: Object[] = [];
     tests: Object[] = [];
     checkedValue: boolean;
-    isMastroLive: boolean = false;
+    isMastroLive: boolean = true;
     testsTable: any;
     sStorage: any;
     attemptedRoute: string;

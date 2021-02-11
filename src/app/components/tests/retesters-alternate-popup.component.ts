@@ -28,7 +28,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
     chkTestSchedule: boolean = false;
     chkRdbTestTaken: boolean = true;
     chkRdbTestSchedule: boolean = true;
-    isMastroLive: boolean = false;
+    isMastroLive: boolean = true;
     
     constructor(public common: CommonService,
                 private toasterService :ToasterService) {
