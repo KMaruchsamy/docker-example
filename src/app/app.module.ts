@@ -40,7 +40,8 @@ import { UserGuideModule } from './components/userguide/userguide.module';
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import {ToasterService} from './services/toaster.service'
+import {ToasterService} from './services/toaster.service';
+import { JWTTokenService } from "./services/jwtTokenService";
 
 @NgModule({
   declarations: [AppComponent],
@@ -77,6 +78,7 @@ import {ToasterService} from './services/toaster.service'
     LogService,
     UtilityService,
     ValidationsService,
+    JWTTokenService,
     SharedDeactivateGuard,
     { provide: ErrorHandler, useClass: MyExceptionHandler },
     TestService,
