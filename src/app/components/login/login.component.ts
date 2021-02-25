@@ -15,6 +15,8 @@ export class LoginComponent implements OnInit {
         if (this.auth.isAuth()){
             if(!this.validateJwtToken())
                 this.router.navigate(['/home']);
+            else
+                this.auth.logout();
         }
           
         this.initialize();
