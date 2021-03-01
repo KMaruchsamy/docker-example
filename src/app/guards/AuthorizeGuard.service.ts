@@ -12,14 +12,14 @@ export class AuthorizeGuard implements CanActivate {
     private auth: AuthService) {
   }
   canActivate(
-    next: ActivatedRouteSnapshot,
+    route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
-      console.log('CanActivate',this.jwtService.jwtToken);
       return this.ValidateRoute();
   }
 
   ValidateRoute(): boolean {
-    if (this.jwtService.jwtToken) {
+    if (this.auth.token) {
+      this.jwtService.jwtToken = this.auth.token;
       if (this.jwtService.isTokenExpired()) {
         this.auth.logout();
         this.router.navigate(['/'])
