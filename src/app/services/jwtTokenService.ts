@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import * as jwt_decode from 'jwt-decode';
-import { AuthService } from './auth.service';
  
 @Injectable()
 export class JWTTokenService {
@@ -8,8 +7,7 @@ export class JWTTokenService {
     jwtToken: string;
     decodedToken: { [key: string]: string };
  
-    constructor(private auth: AuthService) {
-      this.jwtToken = this.auth.token;
+    constructor() {
     }
  
     setToken(token: string) {
