@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as jwt_decode from 'jwt-decode';
+import { AuthService } from './auth.service';
  
 @Injectable()
 export class JWTTokenService {
@@ -7,7 +8,8 @@ export class JWTTokenService {
     jwtToken: string;
     decodedToken: { [key: string]: string };
  
-    constructor() {
+    constructor(private auth: AuthService) {
+      this.jwtToken = this.auth.token;
     }
  
     setToken(token: string) {
@@ -28,7 +30,7 @@ export class JWTTokenService {
  
     getUser() {
       this.decodeToken();
-      return this.decodedToken ? this.decodedToken.displayname : null;
+      return this.decodedToken ? this.decodedToken.unique_name : null;
     }
  
     getEmailId() {

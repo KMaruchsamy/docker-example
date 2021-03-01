@@ -3,10 +3,11 @@ import { ModuleWithProviders } from '@angular/core';
 import { UserGuideComponent } from './userguide.component';
 
 const userguideRoutes: Routes = [
-    { path: 'userguide', component: UserGuideComponent }
+    { path: 'userguide', component: UserGuideComponent, canActivate: [AuthorizeGuard] }
 ]
 
 import { NgModule } from '@angular/core';
+import { AuthorizeGuard } from './../../guards/AuthorizeGuard.service';
 
 @NgModule({
     imports: [
