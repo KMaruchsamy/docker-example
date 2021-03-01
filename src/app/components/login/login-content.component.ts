@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { AnalyticsService } from './../../services/analytics.service';
+import { JWTTokenService } from './../../services/jwtTokenService';
 
 @Component({
     selector: 'login-content',
@@ -35,7 +36,7 @@ export class LoginContentComponent implements OnDestroy {
     site: string;
     atomStudyPlanLink: string;
     pingFederateServer:string;
-    constructor(private zone: NgZone, public router: Router, public auth: AuthService, public common: CommonService, private ga: AnalyticsService) {
+    constructor(private zone: NgZone, public router: Router, public auth: AuthService, public common: CommonService, private ga: AnalyticsService, private jwtToken: JWTTokenService) {
         this.apiServer = this.common.getApiServer();
         this.nursingITServer = this.common.getNursingITServer();
         this.kaptestServer = this.common.getKaptestServer();
@@ -86,6 +87,7 @@ export class LoginContentComponent implements OnDestroy {
                         self.sStorage.setItem('username', json.UserName);
                         self.sStorage.setItem('isenrollmentagreementsigned', json.IsEnrollmentAgreementSigned);
                         self.auth.refresh();
+                        self.jwtToken.setToken(json.AccessToken);
                         if (!json.IsEnrollmentAgreementSigned) {
                             self.showTerms = true;
                             return;

@@ -42,6 +42,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import {ToasterService} from './services/toaster.service';
 import { JWTTokenService } from "./services/jwtTokenService";
+import { AuthorizeGuard } from "./guards/AuthorizeGuard.service";
 
 @NgModule({
   declarations: [AppComponent],
@@ -80,6 +81,7 @@ import { JWTTokenService } from "./services/jwtTokenService";
     ValidationsService,
     JWTTokenService,
     SharedDeactivateGuard,
+    AuthorizeGuard,
     { provide: ErrorHandler, useClass: MyExceptionHandler },
     TestService,
     SelectedStudentModel,
