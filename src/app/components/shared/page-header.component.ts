@@ -6,6 +6,7 @@ import { CommonService } from "./../../services/common.service";
 import { Location } from "@angular/common";
 import betaTemplate from "../../../assets/json/template_beta.json";
 import { Subscription } from 'rxjs';
+import { JWTTokenService } from './../../services/jwtTokenService';
 
 @Component({
   selector: "page-header",
@@ -37,7 +38,8 @@ export class PageHeaderComponent implements OnInit, OnDestroy {
     public router: Router,
     public location: Location,
     public auth: AuthService,
-    public common: CommonService
+    public common: CommonService,
+    public jwtTokenService: JWTTokenService
   ) {}
   ngOnInit(): void {
     this.apiServer = this.common.getApiServer();
@@ -75,7 +77,8 @@ export class PageHeaderComponent implements OnInit, OnDestroy {
     this.lastName = this.auth.lastname;
   }
   redirectToKaptest() {
-    if (!this.auth.isAuth()){
+    this.jwtTokenService.setToken(this.auth.token);
+    if (this.jwtTokenService.jwtToken && this.jwtTokenService.isTokenExpired()){
       this.router.navigate(['/']);
       return;
     }
