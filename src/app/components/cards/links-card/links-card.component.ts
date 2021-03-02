@@ -6,6 +6,8 @@ import { NestedTreeControl } from '@angular/cdk/tree';
 import { of } from 'rxjs';
 import { LinksService } from './links.service';
 import { AnalyticsService } from './../../../services/analytics.service';
+import { JWTTokenService } from './../../../services/jwtTokenService';
+import { AuthService } from './../../../services/auth.service';
 
 @Component({
   selector: 'app-links-card',
@@ -18,7 +20,8 @@ export class LinksCardComponent implements OnInit {
   linksDataSource: MatTreeNestedDataSource<ILink>;
   nestedTreeControl: NestedTreeControl<ILink>;
 
-  constructor(private linkService: LinksService, public router: Router, private ga: AnalyticsService ) {
+  constructor(private linkService: LinksService, public router: Router, private ga: AnalyticsService,private jwtService: JWTTokenService,
+    private auth: AuthService ) {
     this.linksDataSource = new MatTreeNestedDataSource();
   }
 
@@ -33,34 +36,42 @@ export class LinksCardComponent implements OnInit {
     linkData.links && linkData.links.length > 0;
 
   onClickLink(link: ILink,e) {
-    if (link && link.name) {
-      switch(link.name){
-        case 'IHP':
-         this.linkService.callToIHPssoLogin();
-         break;
-        case 'EXAMITY':
-          this.linkService.onClickExamityProfile(link);
-          break;
-        case 'PROCTORTRACK':
-          this.linkService.callToProctortrackReport();
-          break;
-        case 'SCHEDULE_TEST':
-          this.linkService.schedule(link.url);
-          break;
-        default:
-          this.linkService.redirect(link);
+    if (this.auth.token) {
+      this.jwtService.jwtToken = this.auth.token;
+      if (!this.jwtService.isTokenExpired()) {
+        if (link && link.name) {
+          switch(link.name){
+            case 'IHP':
+            this.linkService.callToIHPssoLogin();
+            break;
+            case 'EXAMITY':
+              this.linkService.onClickExamityProfile(link);
+              break;
+            case 'PROCTORTRACK':
+              this.linkService.callToProctortrackReport();
+              break;
+            case 'SCHEDULE_TEST':
+              this.linkService.schedule(link.url);
+              break;
+            default:
+              this.linkService.redirect(link);
+          }
+        }
+        else if (link && link.url) {
+          switch(link.is_internal_link){
+            case true:
+              this.router.navigateByUrl(link.url);
+              break;
+            default:
+              window.open(link.url);
+          }
+        }
+        this.ga.track(e.type,{category: link.ga.category, label: link.ga.label})
+      }
+      else{
+        e.preventDefault();
+        this.router.navigateByUrl('/');
       }
     }
-    else if (link && link.url) {
-      switch(link.is_internal_link){
-        case true:
-          this.router.navigateByUrl(link.url);
-          break;
-        default:
-          window.open(link.url);
-      }
-    }
-
-    this.ga.track(e.type,{category: link.ga.category, label: link.ga.label})
   }
 }
