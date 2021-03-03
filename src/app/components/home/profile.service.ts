@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { AuthService } from './../../services/auth.service';
 import { ProfileModel } from './../../models/profile.model';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class ProfileService {
 	auth: AuthService;
-	constructor(public http: HttpClient) {	
+	constructor(public http: HttpClient, public router: Router) {	
 		this.http = http;
-		this.auth = new AuthService(http);
+		this.auth = new AuthService(http,router);
 		this.auth.refresh();
 	}
 
