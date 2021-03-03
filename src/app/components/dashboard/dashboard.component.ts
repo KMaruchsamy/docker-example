@@ -11,6 +11,7 @@ import { ProfileService } from "../home/profile.service";
 import { Subscription } from "rxjs";
 import { CommonService } from "./../../services/common.service";
 import { Title } from '@angular/platform-browser';
+import { JWTTokenService } from './../../services/jwtTokenService';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,7 +39,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public titleService: Title,
     public profileService: ProfileService,
     public auth: AuthService,
-    public router: Router
+    public router: Router,
+    public jwtTokenService: JWTTokenService
   ) {
     this.redirectToPage();
   }
@@ -148,6 +150,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       return i.InstitutionId === e.value;
     });
     this.saveInstitution(this.selectedInstitution);
+    this.jwtTokenService.setToken(this.auth.token);
+    if(this.jwtTokenService.isTokenExpired()){
+      this.auth.logout();
+      this.router.navigateByUrl('/');
+      return false;
+    }
     this.isBetaInstitution = this.selectedInstitution.IsBetaInstitution;
     this.loadTemplate();
   }

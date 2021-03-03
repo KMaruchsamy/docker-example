@@ -105,7 +105,12 @@ export class PageHeaderComponent implements OnInit, OnDestroy {
       );
   }
   logout(page, form, hdToken , hdExceptionURL,e) {
-    
+    this.jwtTokenService.setToken(this.auth.token);
+    if(this.jwtTokenService.isTokenExpired()){
+      this.auth.logout();
+      this.router.navigateByUrl('/');
+      return false;
+    }
     this.hdpage = page;
     this.form = form;
     this.hdToken = hdToken;
