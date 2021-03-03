@@ -2,11 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonService } from './common.service';
 import { BehaviorSubject } from 'rxjs';
+import { JWTTokenService } from './jwtTokenService';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthService {
   common: CommonService = new CommonService();
   sStorage: any = this.common.getStorage();
+  jwtTokenService: JWTTokenService = new JWTTokenService();
 
   userNameSubject = new BehaviorSubject<string>("");
   userName$ = this.userNameSubject.asObservable();
@@ -21,6 +24,12 @@ export class AuthService {
 
   // authheader: string;
   get authheader(): any {
+    this.jwtTokenService.setToken(this.token);  // to override token,in case manually change jwt in browser localStorage.
+    if(this.jwtTokenService.isTokenExpired()){
+      this.logout();
+      this.router.navigateByUrl('/');
+      return false;
+    }
     return 'Bearer ' + this.token;
   }
 
@@ -130,23 +139,7 @@ export class AuthService {
     this.sStorage.setItem('dashboardtemplate', value);
   }
 
-  constructor(private http: HttpClient) {
-    // this.common = new CommonService();
-    // this.sStorage = this.common.getStorage();
-    // this.token = this.sStorage.getItem('jwt');
-    // this.user = this.token && jwt_decode(this.token);
-    // this.useremail = this.sStorage.getItem('useremail');
-    // this.authheader = 'Bearer ' + this.token;
-    // this.istemppassword = this.sStorage.getItem('istemppassword') === 'true';
-    // this.userid = parseInt(this.sStorage.getItem('userid'));
-    // this.firstname = this.sStorage.getItem('firstname');
-    // this.lastname = this.sStorage.getItem('lastname');
-    // this.title = this.sStorage.getItem('title');
-    // // this.institutions = this.sStorage.getItem('institutions');
-    // this.securitylevel = this.sStorage.getItem('securitylevel');
-    // this.username = this.sStorage.getItem('username');
-    // this.isEnrollmentAgreementSigned = this.sStorage.getItem('isenrollmentagreementsigned') === 'true';
-  }
+  constructor(private http: HttpClient, public router: Router) {}
 
   refresh() {
     this.token = this.sStorage.getItem('jwt');

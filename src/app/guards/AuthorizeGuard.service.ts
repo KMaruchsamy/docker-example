@@ -19,7 +19,7 @@ export class AuthorizeGuard implements CanActivate {
 
   ValidateRoute(): boolean {
     if (this.auth.token) {
-      this.jwtService.jwtToken = this.auth.token;
+      this.jwtService.setToken(this.auth.token);  //  to override token,in case manually change jwt in browser localStorage.
       if (this.jwtService.isTokenExpired()) {
         this.auth.logout();
         this.router.navigate(['/'])
