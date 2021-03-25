@@ -739,7 +739,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
         event.preventDefault();
         $('#cohort-' + student.StudentId.toString()).attr('disabled', 'disabled');
         student.CohortId = (this.isAddByName ? student.CohortId : this.lastSelectedCohortID);
-        student.CohortName = this.FindCohortName(student.CohortId);
+        student.CohortName = this.FindCohortName(student.CohortId) ?? student.CohortName;
         student.StudentTestId = this.testScheduleModel.testId;
         student.StudentTestName = this.testScheduleModel.testName;
         student.NormingId = 0;
