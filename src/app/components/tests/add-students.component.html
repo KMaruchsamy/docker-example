@@ -1,4 +1,4 @@
-﻿<page-header></page-header>
+<page-header></page-header>
 <main role="main" class="app-main">
     <test-header [modify]="modify" [modifyInProgress]="modifyInProgress" (cancelChanges)="onCancelChanges()" (continueMakingChanges)="onContinueMakingChanges()" scheduleStep='Add students' [testSchedule]="testScheduleModel"></test-header>
     <div class="thin-section">
@@ -225,7 +225,6 @@
 [testTakenStudents]="popupTestTakenStudents"
 [testScheduledSudents]="popupTestScheduledSudents"
 [testSchedule]="testScheduleModel"
-[alternateTests] = "popupAlternateTest"
 (retesterAlternatePopupOK)="onRetesterAlternatePopupOK($event)"
 (retesterAlternatePopupCancel)="onRetesterAlternatePopupCancel($event)">
 </retesters-alternate>
