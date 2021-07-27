@@ -31,7 +31,8 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
     isMastroLive: boolean = true;
     
     constructor(public common: CommonService,
-                private toasterService :ToasterService) {
+     private toasterService :ToasterService
+    ) {
 
     }
 
@@ -109,20 +110,20 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
     }
 
     onPopupChecked(testId){
-        let testsNotLiveOnMaestro = this.alternateTests
-                                        .filter(alt=> !alt.IsSequenceLiveOnMaestro)
-                                        .map(test=> test.TestId);
-        testsNotLiveOnMaestro.forEach(nonLiveAltTest => {
-            let anyStudentHaveNonLiveMaestroTest = _.some(this.changes, { 'testId': nonLiveAltTest });
-            if(anyStudentHaveNonLiveMaestroTest) {
-                this.isMastroLive = false;
-                if(testId !== 0 && testId == nonLiveAltTest)
-                    this.toasterService.showError("Please contact your Kaplan representative","There is an error scheduling the test" );                    return;
-               }
-            else{
-                this.isMastroLive = true;
-           }
-       });
+       let testsNotLiveOnMaestro = this.alternateTests
+                                       .filter(alt=> !alt.IsSequenceLiveOnMaestro)
+                                       .map(test=> test.TestId);
+       testsNotLiveOnMaestro.forEach(nonLiveAltTest => {
+           let anyStudentHaveNonLiveMaestroTest = _.some(this.changes, { 'testId': nonLiveAltTest });
+           if(anyStudentHaveNonLiveMaestroTest) {
+               this.isMastroLive = false;
+               if(testId !== 0 && testId == nonLiveAltTest)
+                   this.toasterService.showError("Please contact your Kaplan representative","There is an error scheduling the test" );                    return;
+              }
+           else{
+               this.isMastroLive = true;
+          }
+      });
     }
 
     resolve(e): void {

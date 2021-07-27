@@ -1,4 +1,4 @@
-﻿<div class="modal modal-full-overlay fade" id="modalAlternateTest" tabindex="-1" role="dialog" aria-labelledby="repeatStudentsModal">
+<div class="modal modal-full-overlay fade" id="modalAlternateTest" tabindex="-1" role="dialog" aria-labelledby="repeatStudentsModal">
     <div role="document">
         <button aria-label="Close" class="close close-large-icon prototype-dismiss1" data-dismiss="modal" type="button"></button>
         <div class="modal-full-overlay-content">
@@ -23,7 +23,7 @@
                             <p class="text-larger-purple"><b>{{student.LastName}}, {{student.FirstName}}</b></p>
 
                             <div *ngFor="let test of student.AlternateTests; let i = index">
-                                <input type="radio" class="checkbox-image" (change)="onChangeTestTaken(student.StudentId,false,test.TestId,test.TestName,'testTaken',$event);"
+                               <input type="radio" class="checkbox-image" (change)="onChangeTestTaken(student.StudentId,false,test.TestId,test.TestName,'testTaken',$event);"
                                        [attr.name]="'testTaken' + student.StudentId" [attr.id]="'rdbTestTaken' + student.StudentId + '_' + i"
                                        [checked]="test.Checked" [disabled]="test.ErrorCode>0">
                                 <label [attr.for]="'rdbTestTaken' + student.StudentId + '_' + i"><span class="text-purple">{{test.TestName}}{{test.Recommended ? '*' : ''}}</span> ({{test.NormingStatus}})</label>

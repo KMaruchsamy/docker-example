@@ -265,6 +265,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     loadTests(subjectID: number): void {
+        debugger;
         let self = this;
         this.subjectId = subjectID;
         this.searchString = '';
@@ -338,25 +339,25 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
         return this.testService.checkIfTestHasStarted(this.institutionID, this.testScheduleModel.savedStartTime, this.testScheduleModel.savedEndTime, this.modify, this.modifyInProgress);
     }
     setradio(subjectId: number,testId:number){
-        let self = this;
-        this.testID = testId;
-        this.subjectId = subjectId;
-        this.searchString = '';
-        let selecturlURL = this.resolveSelectScheduleURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.selectScheduleTest}`)
-        let testsObservable  = this.testService.getTests(selecturlURL);
+       let self = this;
+       this.testID = testId;
+       this.subjectId = subjectId;
+       this.searchString = '';
+       let selecturlURL = this.resolveSelectScheduleURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.test.selectScheduleTest}`)
+       let testsObservable  = this.testService.getTests(selecturlURL);
 
-        this.testsSubscription = testsObservable
-            .map(response => response.body)
-            .subscribe((json: any) => {
-                self.checkedValue = json;
-                if(!self.checkedValue){
-                    this.isMastroLive = false;
-                this.toasterService.showError("Please contact your Kaplan representative","There is an error scheduling the test" );
-                }
-                else{
-                    this.isMastroLive =true;
-                }
-            });
+       this.testsSubscription = testsObservable
+           .map(response => response.body)
+           .subscribe((json: any) => {
+               self.checkedValue = json;
+               if(!self.checkedValue){
+                   this.isMastroLive = false;
+               this.toasterService.showError("Please contact your Kaplan representative","There is an error scheduling the test" );
+               }
+               else{
+                   this.isMastroLive =true;
+               }
+           });
     }
 
     selectTest(testId: number, testName: string, subjectId: number, normingStatusName, testType: number): void {    
