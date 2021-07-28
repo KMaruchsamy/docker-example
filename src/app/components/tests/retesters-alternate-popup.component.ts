@@ -1,4 +1,4 @@
-﻿import {Component, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import {SelectedStudentModel} from '../../models/selected-student.model';
 import { CommonService } from './../../services/common.service';
@@ -118,7 +118,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
            if(anyStudentHaveNonLiveMaestroTest) {
                this.isMastroLive = false;
                if(testId !== 0 && testId == nonLiveAltTest)
-                   this.toasterService.showError("Please contact your Kaplan representative","There is an error scheduling the test" );                    return;
+                 this.toasterService.showError("Please contact your Kaplan representative", "This test could not be found to be scheduled" );                    return;
               }
            else{
                this.isMastroLive = true;
