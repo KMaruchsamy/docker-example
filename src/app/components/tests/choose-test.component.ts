@@ -352,7 +352,7 @@ export class ChooseTestComponent implements OnInit, OnChanges, OnDestroy {
                self.checkedValue = json;
                if(!self.checkedValue){
                    this.isMastroLive = false;
-               this.toasterService.showError("Please contact your Kaplan representative","There is an error scheduling the test" );
+                 this.toasterService.showError("Please contact your Kaplan representative","This test could not be found to be scheduled" );
                }
                else{
                    this.isMastroLive =true;
