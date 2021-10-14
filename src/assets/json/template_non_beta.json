@@ -262,6 +262,15 @@
                     }
                   },
                   {
+                    "text": "Live Online NCLEX Course Attendance",
+                    "name":"LolReporting",
+                    "target":"_blank",
+                    "ga": {
+                      "category": "Reporting Tools",
+                      "label": "Live Online NCLEX Course Attendance"
+                    }
+                  },
+                  {
                     "text": "Test Schedule by Date",
                     "name": "ReportTestsScheduledbyDate",
                     "target": "_blank",
