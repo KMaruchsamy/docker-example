@@ -1110,7 +1110,7 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
                 _.forEach(this._selfPayStudent, (student:any) => {
                     let selectedStudent: SelectedStudentModel = _.find(this.testScheduleModel.selectedStudents, { 'StudentId': student.StudentId });
                     if (selectedStudent) {
-                        selectedStudent.MarkedToRemove = false;
+                        // selectedStudent.MarkedToRemove = false;
                         selectedStudent.StudentPay = true;
                     }
                 });
