@@ -1106,14 +1106,16 @@ export class AddStudentsComponent implements OnInit, OnDestroy {
 
     markSelfPayStudents() {
         if (this._selfPayStudent && this._selfPayStudent.length > 0) {
+            let removeMarkStudentFromSelfPay=[];
             if (this.testScheduleModel && this.testScheduleModel.selectedStudents && this.testScheduleModel.selectedStudents.length > 0) {
                 _.forEach(this._selfPayStudent, (student:any) => {
                     let selectedStudent: SelectedStudentModel = _.find(this.testScheduleModel.selectedStudents, { 'StudentId': student.StudentId });
-                    if (selectedStudent) {
-                        // selectedStudent.MarkedToRemove = false;
+                    if (selectedStudent && !selectedStudent.MarkedToRemove) {
                         selectedStudent.StudentPay = true;
+                        removeMarkStudentFromSelfPay.push(student);
                     }
                 });
+                this._selfPayStudent = removeMarkStudentFromSelfPay;
                 this.sStorage.setItem('testschedule', JSON.stringify(this.testScheduleModel));
             }
         }
