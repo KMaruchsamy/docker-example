@@ -110,20 +110,22 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
     }
 
     onPopupChecked(testId){
-       let testsNotLiveOnMaestro = this.alternateTests
+        if(this.alternateTests){
+            let testsNotLiveOnMaestro = this.alternateTests
                                        .filter(alt=> !alt.IsSequenceLiveOnMaestro)
                                        .map(test=> test.TestId);
-       testsNotLiveOnMaestro.forEach(nonLiveAltTest => {
-           let anyStudentHaveNonLiveMaestroTest = _.some(this.changes, { 'testId': nonLiveAltTest });
-           if(anyStudentHaveNonLiveMaestroTest) {
-               this.isMastroLive = false;
-               if(testId !== 0 && testId == nonLiveAltTest)
-                 this.toasterService.showError("Please contact your Kaplan representative", "This test could not be found to be scheduled" );                    return;
-              }
-           else{
-               this.isMastroLive = true;
-          }
-      });
+            testsNotLiveOnMaestro.forEach(nonLiveAltTest => {
+                let anyStudentHaveNonLiveMaestroTest = _.some(this.changes, { 'testId': nonLiveAltTest });
+                if(anyStudentHaveNonLiveMaestroTest) {
+                    this.isMastroLive = false;
+                    if(testId !== 0 && testId == nonLiveAltTest)
+                        this.toasterService.showError("Please contact your Kaplan representative", "This test could not be found to be scheduled" );                    return;
+                    }
+                else{
+                    this.isMastroLive = true;
+                }
+            });
+        }
     }
 
     resolve(e): void {
@@ -198,10 +200,12 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
     markForRemoval(_studentId: number, mark: boolean, testId: number, testName: string) {
         let studentToMark: SelectedStudentModel = _.find(this.testSchedule.selectedStudents, { 'StudentId': _studentId });
         let retesterStudent: any = _.find(this.retesterExceptions, { 'StudentId': _studentId });
-        if (retesterStudent)
+        let previouslySelectedTest: any;
+        if (retesterStudent){
             retesterStudent.Enabled = !mark;
+            previouslySelectedTest= _.find(retesterStudent.AlternateTests, { Checked: true });
+        }
         studentToMark.MarkedToRemove = mark;
-        let previouslySelectedTest: any = _.find(retesterStudent.AlternateTests, { Checked: true });
         if (previouslySelectedTest)
             previouslySelectedTest.Checked = false;
 
