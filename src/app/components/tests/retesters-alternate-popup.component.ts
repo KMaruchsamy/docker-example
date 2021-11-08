@@ -2,7 +2,7 @@ import {Component, Input, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {TestScheduleModel} from '../../models/test-schedule.model';
 import {SelectedStudentModel} from '../../models/selected-student.model';
 import { CommonService } from './../../services/common.service';
-import {ToasterService} from './../../services/toaster.service';
+//import {ToasterService} from './../../services/toaster.service';
 @Component({
     selector: 'retesters-alternate',
     templateUrl: './retesters-alternate-popup.component.html'
@@ -12,7 +12,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
     @Input() retesterExceptions: any[];
     @Input() testScheduledSudents: any[];
     @Input() testTakenStudents: any[];
-    @Input() alternateTests: any[];
+   // @Input() alternateTests: any[];
     @Input() testSchedule: TestScheduleModel;
     @Input() modifyInProgress: boolean = false;
     @Output() retesterAlternatePopupOK = new EventEmitter();
@@ -28,10 +28,10 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
     chkTestSchedule: boolean = false;
     chkRdbTestTaken: boolean = true;
     chkRdbTestSchedule: boolean = true;
-    isMastroLive: boolean = true;
+    isMastroLive: boolean = false;
     
     constructor(public common: CommonService,
-     private toasterService :ToasterService
+     //private toasterService :ToasterService
     ) {
 
     }
@@ -109,24 +109,24 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
         this.validate();
     }
 
-    onPopupChecked(testId){
-        if(this.alternateTests){
-            let testsNotLiveOnMaestro = this.alternateTests
-                                       .filter(alt=> !alt.IsSequenceLiveOnMaestro)
-                                       .map(test=> test.TestId);
-            testsNotLiveOnMaestro.forEach(nonLiveAltTest => {
-                let anyStudentHaveNonLiveMaestroTest = _.some(this.changes, { 'testId': nonLiveAltTest });
-                if(anyStudentHaveNonLiveMaestroTest) {
-                    this.isMastroLive = false;
-                    if(testId !== 0 && testId == nonLiveAltTest)
-                        this.toasterService.showError("Please contact your Kaplan representative", "This test could not be found to be scheduled" );                    return;
-                    }
-                else{
-                    this.isMastroLive = true;
-                }
-            });
-        }
-    }
+    //onPopupChecked(testId){
+    //    if(this.alternateTests){
+    //        let testsNotLiveOnMaestro = this.alternateTests
+    //                                   .filter(alt=> !alt.IsSequenceLiveOnMaestro)
+    //                                   .map(test=> test.TestId);
+    //        testsNotLiveOnMaestro.forEach(nonLiveAltTest => {
+    //            let anyStudentHaveNonLiveMaestroTest = _.some(this.changes, { 'testId': nonLiveAltTest });
+    //            if(anyStudentHaveNonLiveMaestroTest) {
+    //                this.isMastroLive = false;
+    //                if(testId !== 0 && testId == nonLiveAltTest)
+    //                    this.toasterService.showError("Please contact your Kaplan representative", "This test could not be found to be scheduled" );                    return;
+    //                }
+    //            else{
+    //                this.isMastroLive = true;
+    //            }
+    //        });
+    //    }
+    //}
 
     resolve(e): void {
         e.preventDefault();
@@ -159,7 +159,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
             this.chkTestTaken = false;
         }
         this.validate();
-        this.onPopupChecked(testId);
+       // this.onPopupChecked(testId);
     }
 
 
@@ -194,7 +194,7 @@ export class RetesterAlternatePopupComponent implements OnDestroy {
             this.chkTestSchedule = false;
         }
         this.validate();
-        this.onPopupChecked(testId);
+        //this.onPopupChecked(testId);
     }
 
     markForRemoval(_studentId: number, mark: boolean, testId: number, testName: string) {
