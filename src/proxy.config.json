@@ -1,0 +1,6 @@
+{
+      "/api/*": {
+        "target": "https://nursing.qa.kaptest.com/",
+        "secure": false
+      }
+}
