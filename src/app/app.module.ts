@@ -3,7 +3,7 @@ import { GatrackDirective } from './directives/gatrack.directive';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing.module';
@@ -43,6 +43,7 @@ import { ToastrModule } from 'ngx-toastr';
 import {ToasterService} from './services/toaster.service';
 import { JWTTokenService } from "./services/jwtTokenService";
 import { AuthorizeGuard } from "./guards/AuthorizeGuard.service";
+import { HttpHeaderInterceptorService } from './services/http-header-interceptor.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -89,6 +90,7 @@ import { AuthorizeGuard } from "./guards/AuthorizeGuard.service";
     TestStartedExceptionModal,
     TestsModal,
     TimingExceptionsModal,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpHeaderInterceptorService, multi: true }
   ],
   exports: [DirectivesModule],
   bootstrap: [AppComponent],
