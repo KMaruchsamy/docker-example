@@ -22,81 +22,23 @@ export class HttpHeaderInterceptorService implements HttpInterceptor {
     this.server = this.common.getApiServer();
   }
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    console.log('header security');
 
     if (this.authToken) {
-      console.log('if');
-      
-        if (!req.headers.has('Authorization')) {
-          req = req.clone({
-            setHeaders: {
-              Authorization: `Bearer ${this.authToken}`
-            }
-          });
-        }
-
-        if (!(req.method == "OPTIONS"))
-        {
-          req.headers.append("Access-Control-Allow-Origin", req.headers["Origin"] );
-          req.headers.append("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-          req.headers.append("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" );
-          req.headers.append("Access-Control-Allow-Credentials", "true" );
-
-        }
-
-        if (!req.headers.has('Content-Type')) {
-          req = req.clone({
-            setHeaders: {
-              'content-type': 'application/json'
-            }
-          });
-        }
-
-        if (!req.headers.has('Cache-Control')) {
-          req = req.clone({
-            setHeaders: {
-              'Cache-Control': ' no-cache',
-              Pragma: 'no-cache',
-              Expires: '-1'
-            }
-          });
-        }
-
-        if (!req.headers.has('Strict-Transport-Security')) {
-          req = req.clone({
-            setHeaders: {
-              'Strict-Transport-Security': 'max-age=15552000; includeSubDomains'
-            }
-          });
-        }
-
-        if (!req.headers.has('x-content-type-options')) {
-          req = req.clone({
-            setHeaders: {
-              'x-content-type-options': 'nosniff'
-            }
-          });
-        }
-        if (!req.headers.has('Content-Security-Policy')) {
-          req = req.clone({
-            setHeaders: {
-              'Content-Security-Policy': 'default-src self ' + this.server
-            }
-          });
-        }
-
-
-      
+        req.headers.append('Cache-Control', ' no-cache');
+        req.headers.append('Pragma', 'no-cache');
+        req.headers.append('Expires', '-1');
+        req.headers.append('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
+        req.headers.append('x-content-type-options', 'nosniff');
+        req.headers.append('Content-Security-Policy', 'default-src self ' + this.server);      
     } else {
-      console.log('else');
       req = req.clone({
         setHeaders: {
           'Content-Type': 'application/json; charset=utf-8',
-          Accept: 'application/json'
+          'Accept': 'application/json'
         }
       });
     }
-    
+
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
