@@ -9,6 +9,7 @@ import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { TestsModal } from './../../models/tests.model';
+import { first } from 'rxjs/operators';
 
 @Component({
     selector: 'manage-tests',
@@ -81,6 +82,8 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             this.scheduleTestsSubscription.unsubscribe();
         if (this.renameSessionSubscription)
             this.renameSessionSubscription.unsubscribe();
+        if (this.enableExamitySubscription)
+            this.enableExamitySubscription.unsubscribe();
     }
 
 
@@ -580,7 +583,9 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
     onExamityEnableConfirmation(e): void {
         $('#examityDisablePopup').modal('hide');
         $('#examityEnablePopup').modal('hide');
-        this.itSecurityName$.subscribe(itSecurity => {
+        this.itSecurityName$
+        .pipe(first())
+        .subscribe(itSecurity => {
             if (itSecurity === 'examity')
                 this.enableOrCancelExamity();
 
