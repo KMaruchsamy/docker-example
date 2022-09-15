@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { PasswordHeaderComponent } from './password-header.component';
+import { BreakingMedComponent } from './breakingMedWidget/breakingMedWidget.component';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { PasswordHeaderComponent } from './password-header.component';
         ConfirmationPopupComponent,
         LoaderComponent,
         PasswordHeaderComponent,
+        BreakingMedComponent
     ],
     declarations: [
         AlertPopupComponent,
@@ -33,6 +35,7 @@ import { PasswordHeaderComponent } from './password-header.component';
         ConfirmationPopupComponent,
         LoaderComponent,
         PasswordHeaderComponent,
+        BreakingMedComponent
     ],
     providers: [],
 })
