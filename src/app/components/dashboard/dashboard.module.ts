@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { PipesModule } from './../../pipes/pipes.module';
 import { PageModule } from './../shared/page.module';
+import { SharedModule } from './../shared/shared.module';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -18,7 +19,8 @@ import { PageModule } from './../shared/page.module';
     ContentModule,
     MaterialModule,
     PageModule,
-    DirectivesModule
+    DirectivesModule,
+    SharedModule
   ],
 })
 export class DashboardModule {}
