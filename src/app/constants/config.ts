@@ -110,7 +110,8 @@ export const links = {
     },
     faculty: {
         local: {
-            server: "http://localhost:3000/"
+            server: 'http://localhost:3000/',
+            chat_widget_url: 'https://storage.googleapis.com/kna-gen-widgets-dev'
         },
         dev: {
             server: "https://dev-nit.kaplan.com/"
@@ -122,7 +123,8 @@ export const links = {
             server:"https://nit.qa.ktp.io/"
         },
         qa_new: {
-            server:"https://nit.qa.kaptest.com/"
+            server:'https://nit.qa.kaptest.com/',
+            chat_widget_url: 'https://storage.googleapis.com/kna-gen-widgets-dev'
         },
         stg_old: {
             server: "https://stg-nit.kaplan.com/"
@@ -131,7 +133,8 @@ export const links = {
             server: "https://nit.stg.ktp.io/"
         },
         stg_new: {
-            server: "https://nit.stg.kaptest.com/"
+            server: 'https://nit.stg.kaptest.com/',
+            chat_widget_url: 'https://storage.googleapis.com/kna-gen-widgets-stg'
         },
         prod_old: {
             server: "https://nit.kaplan.com/"
@@ -140,7 +143,8 @@ export const links = {
             server: "https://nit.ktp.io/"
         },
         prod_new: {
-            server: "https://nit.kaptest.com/"
+            server: 'https://nit.kaptest.com/',
+            chat_widget_url: 'https://storage.googleapis.com/kna-gen-widgets'
         }
     },
     resetemailexpire: {
@@ -329,5 +333,11 @@ export const dataKey = {
 //     AddToThisCohort : 3,
 //     ExtendAccess : 4
 // }
+
+export const chatWidgetPaths = {
+    plugInPath : '/lib/plugins/',
+    defaultWidgetsFilePath : '/default_kaptest.widgets.min.js',
+    cxbusFilePath : '/lib/cxbus.min.js'
+}
 
 
