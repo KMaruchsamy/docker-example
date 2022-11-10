@@ -44,7 +44,6 @@ import {ToasterService} from './services/toaster.service';
 import { JWTTokenService } from "./services/jwtTokenService";
 import { AuthorizeGuard } from "./guards/AuthorizeGuard.service";
 import { HttpHeaderInterceptorService } from './services/http-header-interceptor.service';
-import { ChatWidgetService } from './services/chat-widget.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -91,7 +90,6 @@ import { ChatWidgetService } from './services/chat-widget.service';
     TestStartedExceptionModal,
     TestsModal,
     TimingExceptionsModal,
-    ChatWidgetService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpHeaderInterceptorService, multi: true }
   ],
   exports: [DirectivesModule],
