@@ -336,7 +336,7 @@ export const dataKey = {
 
 export const chatWidgetPaths = {
     plugInPath : '/lib/plugins/',
-    defaultWidgetsFilePath : '/default_kaptest.widgets.min.js',
+    widgetsFilePath : '/nit.widgets.min.js',
     cxbusFilePath : '/lib/cxbus.min.js'
 }
 
