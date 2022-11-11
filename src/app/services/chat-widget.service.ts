@@ -17,13 +17,13 @@ export class ChatWidgetService {
     loadChatWidget() {
         const chatWidgetUrl = this.getChatWidgetUrl();
         const plugInsPath = chatWidgetUrl + chatWidgetPaths.plugInPath;
-        const filePath = chatWidgetUrl + chatWidgetPaths.defaultWidgetsFilePath;
+        const filePath = chatWidgetUrl + chatWidgetPaths.widgetsFilePath;
         const script = this._renderer2.createElement('script');
         script.type = 'text/javascript';
         script.id = 'widgets';
         script.src = chatWidgetUrl + chatWidgetPaths.cxbusFilePath;
         script.setAttribute('endpoint', 'KTP');
-        script.setAttribute('source', 'Atom');
+        script.setAttribute('product', 'NIT');
         script.onload = function () {
             (window as any).CXBus.configure({ pluginsPath: plugInsPath });
             (window as any).CXBus.loadFile(filePath)
