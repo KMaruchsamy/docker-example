@@ -5492,6 +5492,11 @@ select.mobile-device {
   padding: 0;
 }
 
+.password-section {
+  display: flex;
+  align-items: center;
+}
+
 .review-details-table tr th {
   font-size: 1.1875em;
   font-weight: 600;

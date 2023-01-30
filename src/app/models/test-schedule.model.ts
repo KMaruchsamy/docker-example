@@ -34,5 +34,6 @@ export class TestScheduleModel{
     isProctorTrack: boolean;
     itSecurityEnabledInstitution: number = 0;
     testType: number;
+    testSessionPassword: string = '';
     constructor() { }
 }

@@ -197,6 +197,7 @@ export class TestService {
             _testScheduleModel.isProctorTrack = objTestScheduleModel.IsProctorTrackEnabled;
             _testScheduleModel.itSecurityEnabledInstitution = objTestScheduleModel.ItSecurityEnabledInstitution;
             _testScheduleModel.testType = objTestScheduleModel.TestType || 1;
+            _testScheduleModel.testSessionPassword = objTestScheduleModel.testSessionPassword;
             if (objTestScheduleModel.Students && objTestScheduleModel.Students.length > 0) {
                 _.forEach(objTestScheduleModel.Students, (student) => {
                     let _student = new SelectedStudentModel();
