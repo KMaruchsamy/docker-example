@@ -69,7 +69,7 @@
             "src": "https://nursing-assets-web-ktp.s3.amazonaws.com/admin/ux-template/image/faculty.svg",
             "cards": [
               {
-                "title": "YOUR CUSTOMER ENGAGEMENT MANAGER",
+                "title": "YOUR CUSTOMER ENGAGEMENT TEAM",
                 "type": "profile",
                 "color": "#CDB4FF",
                 "content": [],
@@ -411,7 +411,7 @@
                 "type": "html",
                 "color": "#ED9AB2",
                 "title": "YOUR KAPLAN FACULTY SUPPORT TEAM IS ALSO STANDING BY",
-                "content": "<p>Our Faculty Support representatives are available for urgent assistance via phone or chat. See below for our Hours of Operation <b>(all times are Eastern)</b>. </p><p><b>By Phone</b><br/>Mon - Fri 10 AM - 5 PM Eastern Time<br/></p><p><b>By Chat</b><br/>Mon-Fri: 9 AM - 7 PM Eastern Time<br/><br/>From the US or Canada: 1-866-920-6311<br/>From outside the US or Canada: +1-407-423-6620</p>"
+                "content": "<p>Our Faculty Support representatives are available for urgent assistance via phone or chat. See below for our Hours of Operation <b>(all times are Eastern)</b>. </p><p><b>By Phone</b><br/>Mon - Fri: 10 AM - 5 PM Eastern Time<br/></p><p><b>By Chat</b><br/>Mon - Fri: 9 AM - 7 PM Eastern Time<br/><br/>From the US or Canada: 1-866-920-6311<br/>From outside the US or Canada: +1-407-423-6620</p>"
               },
               {
                 "type": "links",
