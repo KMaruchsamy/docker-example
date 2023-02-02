@@ -5497,6 +5497,33 @@ select.mobile-device {
   align-items: center;
 }
 
+.review-details-table tr #session-password {
+  display: flex;
+  width: 100%;
+}
+
+.review-details-table .enable-link span {
+  display: block;
+  color: #222121;
+  font-weight: 700;
+  padding-right: 12px;
+}
+
+.review-details-table .enable-link a {
+  color: #7825ff;
+  pointer-events: auto;
+}
+
+.review-details-table .disable-link span {
+  display: none;
+}
+
+.review-details-table .disable-link a {
+  color: #6c6c6c;
+  pointer-events: none; 
+  text-decoration: none;
+}
+
 .review-details-table tr th {
   font-size: 1.1875em;
   font-weight: 600;

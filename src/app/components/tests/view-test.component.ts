@@ -32,6 +32,9 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     scheduleSubscription: Subscription;
     chkSecurityView: boolean = false;
     ItSecurityEnabled: boolean = false;
+    showSessionPassword: boolean = false;
+    enableLink: boolean = false;
+    passwordLabel: string = "Password Will Appear Here 48hrs Before Testing Session";
     constructor(public auth: AuthService, public common: CommonService, public testService: TestService, public schedule: TestScheduleModel, public router: Router, private activatedRoute: ActivatedRoute, public titleService: Title    ) {
 
     }
@@ -126,6 +129,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
                     if (__this.schedule) {
                         let startTime = __this.schedule.scheduleStartTime;
                         let endTime = __this.schedule.scheduleEndTime;
+                        this.calculateTimeDifference(startTime);
                         if (moment(endTime).isAfter(startTime, 'day'))
                             __this.nextDay = true;
                     }
@@ -153,6 +157,22 @@ export class ViewTestComponent implements OnInit, OnDestroy {
             error => console.log(error));
     }
 
+    calculateTimeDifference(startTime: any) {
+        const institutionTimezone: string = this.common.getTimezone(this.schedule.institutionId);
+        const localTime = moment.tz(institutionTimezone);
+        const hours = localTime.diff(moment.tz(startTime, institutionTimezone), 'hours');
+        if (Math.abs(hours) <= 48 && this.schedule.testSessionPassword) {
+            this.enableLink = true;
+            this.passwordLabel = "Click to view password";
+        }
+    }
+
+    togglePassword(event): void {
+        event.preventDefault();
+        event.stopPropagation();
+        this.showSessionPassword = !this.showSessionPassword;
+        this.showSessionPassword ? this.passwordLabel = "Hide password" : this.passwordLabel = "Click to view password";
+    }
 
     resolveScheduleURL(url: string): string {
         return url.replace('§scheduleId', this.testScheduleId.toString());
