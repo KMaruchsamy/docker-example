@@ -12,6 +12,14 @@
                 names to your Account Manager <b>at least 48 hours prior to test day</b>. Students with testing accommodations receive untimed versions of their tests.
             </p>
             </div>
+            <div class="section section-beige container-dull-yellow-top text-larger">
+                <div class="password-section" *ngIf="testScheduleModel?.testSessionPassword">
+                    <p class="no-margin-bottom"><strong>Password for the test:</strong> The password for this test will be available 48 hours prior to the testing session
+                        start time on the <a [routerLink]="['/tests','modify','view',testScheduleModel.scheduleId]">View Testing Session page.</a>
+                    </p>
+                    <button class="button" [routerLink]="['/tests','modify','view',testScheduleModel.scheduleId]">View Testing Session</button>
+                </div>
+            </div>
         </div>
         <div class="margin-2em-top">
             <a [routerLink]="['/tests','modify','view',testScheduleModel.scheduleId]">View/print this testing session</a>
