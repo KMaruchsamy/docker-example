@@ -68,10 +68,16 @@
         <a [routerLink]="modify ? ['/tests','modify','add-students'] : ['/tests','add-students']">Change</a>
         <button class="right anchor-button" *ngIf="(retesterExceptions?.length>0 && hasAlternateTests) || (retesterExceptions?.length>0 && hasSavedRetesterExceptions) || (modify && retesterExceptionsModify?.length>0)" (click)="changeAlternateAssignments($event)">Change alternate test assignments</button>
         
-        <div class="margin-1em-bottom" *ngIf="ItSecurityEnabled && +(testScheduleModel.testType) !== 7">
+        <div *ngIf="ItSecurityEnabled && +(testScheduleModel.testType) !== 7">
             <input type="checkbox" class="checkbox-image" [attr.id]="chkSecurity" name="chkSecurity" [checked]="chkSecurity" (change)="OnChangeChkSecurity($event)" />
             <label *ngIf="this.testScheduleModel.itSecurityEnabledInstitution == 1" [attr.for]="chkSecurity"><b>Enable Examity</b></label>
             <label *ngIf="this.testScheduleModel.itSecurityEnabledInstitution == 3" [attr.for]="chkSecurity"><b>Enable Proctortrack</b></label>
+            <div class="margin-1em-bottom icon-container-flush-text clearfix" *ngIf="this.testScheduleModel.itSecurityEnabledInstitution == 1">
+                <p class="icon lightbulb-icon">
+                    If <strong>Examity is enabled</strong>, your testing session will be proctored by Examity and will not be password protected.<br />
+                    If <strong>Examity is disabled</strong>, your testing session will be password protected.
+                </p>
+            </div>
         </div>
         <table id="studentsInTestingSessionTable" class="dataTable-bordered table-with-cell-padding table-striped last-row-no-border">
             <thead>
