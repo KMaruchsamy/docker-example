@@ -32,9 +32,9 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     scheduleSubscription: Subscription;
     chkSecurityView: boolean = false;
     ItSecurityEnabled: boolean = false;
-    showSessionPassword: boolean = false;
+    showAccessCode: boolean = false;
     enableLink: boolean = false;
-    passwordLabel: string = "Password Will Appear Here 48hrs Before Testing Session";
+    passwordLabel: string = "Password Not Required for this Testing Session";
     constructor(public auth: AuthService, public common: CommonService, public testService: TestService, public schedule: TestScheduleModel, public router: Router, private activatedRoute: ActivatedRoute, public titleService: Title    ) {
 
     }
@@ -161,17 +161,20 @@ export class ViewTestComponent implements OnInit, OnDestroy {
         const institutionTimezone: string = this.common.getTimezone(this.schedule.institutionId);
         const localTime = moment.tz(institutionTimezone);
         const hours = localTime.diff(moment.tz(startTime, institutionTimezone), 'hours');
-        if (Math.abs(hours) <= 48 && this.schedule.testSessionPassword) {
-            this.enableLink = true;
-            this.passwordLabel = "Click to view password";
+        if (this.schedule.accessCode) {
+            this.passwordLabel = "Password Will Appear Here 48hrs Before Testing Session";
+            if (Math.abs(hours) <= 48) {
+                this.enableLink = true;
+                this.passwordLabel = "Click to view password";
+            }
         }
     }
 
     togglePassword(event): void {
         event.preventDefault();
         event.stopPropagation();
-        this.showSessionPassword = !this.showSessionPassword;
-        this.showSessionPassword ? this.passwordLabel = "Hide password" : this.passwordLabel = "Click to view password";
+        this.showAccessCode = !this.showAccessCode;
+        this.showAccessCode ? this.passwordLabel = "Hide password" : this.passwordLabel = "Click to view password";
     }
 
     resolveScheduleURL(url: string): string {
