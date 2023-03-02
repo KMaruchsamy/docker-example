@@ -113,9 +113,13 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             window.scroll(0, 0);
 
             this.itSecurityName$.subscribe(itSecurity => {
-                this.enableItSecurityMsg = 'Are you sure you want to enable '+ itSecurity +'?';
-                this.disableItSecurityMsg = 'Are you sure you want to disable ' + itSecurity + '?';
-                
+                this.enableItSecurityMsg = 'Are you sure you want to enable ' + itSecurity + '?';
+                this.disableItSecurityMsg = 'Are you sure you want to disable ' + itSecurity +'?';
+                if (itSecurity === 'examity') {
+                    this.enableItSecurityMsg = this.enableItSecurityMsg + '<br />Your testing session is currently password protected.<br />'+
+                    'Once you enable ' + itSecurity +', password protection will be removed.';
+                    this.disableItSecurityMsg = this.disableItSecurityMsg + '<br />Your testing session will be password protected once you disable '+ itSecurity +'.';
+                }
             })
             
             //Appcues.start();
