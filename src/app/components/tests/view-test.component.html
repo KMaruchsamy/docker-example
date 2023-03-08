@@ -64,6 +64,12 @@
                             <th scope="row">Created/Modified</th>
                             <td>{{schedule?.lastUpdated|parseDate:'MM/DD/YY'}}</td>
                         </tr>
+                        <tr *ngIf="schedule?.testType === 1">
+                            <th scope="row">Password</th>
+                            <td id="session-password" [ngClass]="enableLink ? 'enable-link' : 'disable-link'">
+                                <span *ngIf="showAccessCode">{{schedule?.accessCode}}</span> <a class="block" (click)="togglePassword($event)">{{passwordLabel}}</a>
+                            </td>
+                        </tr>
                     </table>
                 </div>
 
