@@ -34,6 +34,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
     ItSecurityEnabled: boolean = false;
     showAccessCode: boolean = false;
     enableLink: boolean = false;
+    decryptedAccessCode: string;
     passwordLabel: string = "Password Not Required for this Testing Session";
     constructor(public auth: AuthService, public common: CommonService, public testService: TestService, public schedule: TestScheduleModel, public router: Router, private activatedRoute: ActivatedRoute, public titleService: Title    ) {
 
@@ -162,6 +163,7 @@ export class ViewTestComponent implements OnInit, OnDestroy {
         const localTime = moment.tz(institutionTimezone);
         const hours = localTime.diff(moment.tz(startTime, institutionTimezone), 'hours');
         if (this.schedule.accessCode) {
+            this.decryptedAccessCode = this.common.decryption(this.schedule.accessCode);
             this.passwordLabel = "Password Will Appear Here 48hrs Before Testing Session";
             if (Math.abs(hours) <= 48) {
                 this.enableLink = true;
