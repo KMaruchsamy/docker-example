@@ -5497,28 +5497,30 @@ select.mobile-device {
   align-items: center;
 }
 
-.review-details-table tr #session-password {
+.review-details-table tr td .session-password {
   display: flex;
   width: 100%;
 }
 
-.review-details-table .enable-link span {
+.review-details-table .enable-link .access-code {
   display: block;
   color: #222121;
   font-weight: 700;
   padding-right: 12px;
 }
 
-.review-details-table .enable-link a {
+.review-details-table .enable-link a,  .review-details-table .enable-link .password-label {
   color: #7825ff;
   pointer-events: auto;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
-.review-details-table .disable-link span {
+.review-details-table .disable-link .access-code {
   display: none;
 }
 
-.review-details-table .disable-link a {
+.review-details-table .disable-link a, .review-details-table .disable-link .password-label {
   color: #6c6c6c;
   pointer-events: none; 
   text-decoration: none;
