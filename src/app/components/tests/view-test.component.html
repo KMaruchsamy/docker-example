@@ -66,8 +66,11 @@
                         </tr>
                         <tr *ngIf="schedule?.testType === 1">
                             <th scope="row">Password</th>
-                            <td id="session-password" [ngClass]="enableLink ? 'enable-link' : 'disable-link'">
-                                <span *ngIf="showAccessCode">{{decryptedAccessCode}}</span> <a class="block" (click)="togglePassword($event)">{{passwordLabel}}</a>
+                            <td [ngClass]="enableLink ? 'enable-link' : 'disable-link'">
+                                <div class="session-password">
+                                    <span class="access-code" *ngIf="showAccessCode">{{decryptedAccessCode}}</span>
+                                    <span class="password-label" (click)="togglePassword($event)">{{passwordLabel}}</span>
+                                </div>
                             </td>
                         </tr>
                     </table>
