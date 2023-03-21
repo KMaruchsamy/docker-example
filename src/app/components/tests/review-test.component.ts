@@ -459,6 +459,7 @@ export class ReviewTestComponent implements OnInit, OnDestroy {
                 $('#loader').modal('hide');
                 let result = json;
                 if (result.TestingSessionId && result.TestingSessionId > 0) {
+                    __this.testScheduleModel.accessCode = result.AccessCode;
                     __this.testScheduleModel.scheduleId = result.TestingSessionId;
                     __this.testScheduleModel.savedStartTime = __this.testScheduleModel.scheduleStartTime;
                     __this.testScheduleModel.savedEndTime = __this.testScheduleModel.scheduleEndTime;
