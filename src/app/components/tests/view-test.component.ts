@@ -162,10 +162,11 @@ export class ViewTestComponent implements OnInit, OnDestroy {
         const institutionTimezone: string = this.common.getTimezone(this.schedule.institutionId);
         const localTime = moment.tz(institutionTimezone);
         const hours = localTime.diff(moment.tz(startTime, institutionTimezone), 'hours');
+        const days = localTime.diff(moment.tz(startTime, institutionTimezone), 'days');
         if (this.schedule.accessCode) {
             this.decryptedAccessCode = this.common.decryption(this.schedule.accessCode);
             this.passwordLabel = "Password Will Appear Here 48hrs Before Testing Session";
-            if (Math.abs(hours) <= 48) {
+            if (Math.abs(hours) <= 48 || days >= 2) {
                 this.enableLink = true;
                 this.passwordLabel = "Click to view password";
             }
