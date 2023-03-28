@@ -125,6 +125,7 @@
                   },
                   {
                     "text": "Computer Adaptive Test Report",
+                    "subText": "(Please find CAT NGN results in the Reporting Suite)",
                     "name": "ReportStudentCATReportCard",
                     "target": "_blank",
                     "ga": {
