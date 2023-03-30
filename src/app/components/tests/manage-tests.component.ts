@@ -9,7 +9,7 @@ import { TestService } from './test.service';
 import { AuthService } from './../../services/auth.service';
 import { CommonService } from './../../services/common.service';
 import { TestsModal } from './../../models/tests.model';
-import { first } from 'rxjs/operators';
+// import { first } from 'rxjs/operators';
 
 @Component({
     selector: 'manage-tests',
@@ -82,10 +82,9 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
             this.scheduleTestsSubscription.unsubscribe();
         if (this.renameSessionSubscription)
             this.renameSessionSubscription.unsubscribe();
-        if (this.enableExamitySubscription)
-            this.enableExamitySubscription.unsubscribe();
+        // if (this.enableExamitySubscription)
+        //     this.enableExamitySubscription.unsubscribe();
     }
-
 
     ngOnInit(): void {
         if (!this.auth.isAuth())
@@ -588,7 +587,7 @@ export class ManageTestsComponent implements OnInit, OnDestroy {
         $('#examityDisablePopup').modal('hide');
         $('#examityEnablePopup').modal('hide');
         this.itSecurityName$
-        .pipe(first())
+        // .pipe(first())
         .subscribe(itSecurity => {
             if (itSecurity === 'examity')
                 this.enableOrCancelExamity();
