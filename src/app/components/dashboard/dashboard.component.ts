@@ -1,15 +1,21 @@
-import { AuthService } from "./../../services/auth.service";
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import betaTemplate from "../../../assets/json/template_beta.json";
-import nonBetaTemplate from "../../../assets/json/template_non_beta.json";
-import nonBetaAtomReportTemplate from "../../../assets/json/template_nonbeta_atomreport.json";
-import { Location } from "@angular/common";
-import { Router } from "@angular/router";
-import { ProfileModel } from "./../../models/profile.model";
-import { links, dataKey, ItSecurity } from "./../../constants/config";
-import { ProfileService } from "../home/profile.service";
-import { Subscription } from "rxjs";
-import { CommonService } from "./../../services/common.service";
+import { AuthService } from './../../services/auth.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import betaTemplate from '../../../assets/json/template_beta.json';
+import nonBetaTemplate from '../../../assets/json/template_non_beta.json';
+import nonBetaAtomReportTemplate from '../../../assets/json/template_nonbeta_atomreport.json';
+import nonBetaAtomRNTemplate from '../../../assets/json/template_nonbeta_atomRN.json';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+import { ProfileModel } from './../../models/profile.model';
+import {
+  links,
+  dataKey,
+  ItSecurity,
+  ProgramOfStudy
+} from './../../constants/config';
+import { ProfileService } from '../home/profile.service';
+import { Subscription } from 'rxjs';
+import { CommonService } from './../../services/common.service';
 import { Title } from '@angular/platform-browser';
 import { JWTTokenService } from './../../services/jwtTokenService';
 
@@ -91,15 +97,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
   sortingInstitutions() {
-    this.institutions = (JSON.parse(this.auth.institutions) as any[]).sort((a: any, b: any) => {
-      if (a.InstitutionName < b.InstitutionName) {
-        return -1;
-      } else if (a.InstitutionName > b.InstitutionName) {
-        return 1;
-      } else {
-        return 0;
+    this.institutions = (JSON.parse(this.auth.institutions) as any[]).sort(
+      (a: any, b: any) => {
+        if (a.InstitutionName < b.InstitutionName) {
+          return -1;
+        } else if (a.InstitutionName > b.InstitutionName) {
+          return 1;
+        } else {
+          return 0;
+        }
       }
-    });
+    );
   }
   redirectToPage(): void {
     if (this.location.path().search('first') > 0) {
@@ -134,13 +142,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   loadTemplate() {
-    if (this.selectedInstitution.IsNonBetaApolloReportLinkEnable)
-      this.templateJson = JSON.parse(JSON.stringify(nonBetaAtomReportTemplate));
-    //To do deep copy
-    else
-      this.templateJson = JSON.parse(
-        JSON.stringify(this.isBetaInstitution ? betaTemplate : nonBetaTemplate)
-      ); //To do deep copy
+    if (
+      this.common.isAtomQuizBuilderEnable() &&
+      this.selectedInstitution.ProgramofStudyName === ProgramOfStudy.RN
+    ) {
+      this.templateJson = JSON.parse(JSON.stringify(nonBetaAtomRNTemplate)); // To do deep copy
+    } else {
+      if (this.selectedInstitution.IsNonBetaApolloReportLinkEnable)
+        this.templateJson = JSON.parse(
+          JSON.stringify(nonBetaAtomReportTemplate)
+        );
+      //To do deep copy
+      else
+        this.templateJson = JSON.parse(
+          JSON.stringify(
+            this.isBetaInstitution ? betaTemplate : nonBetaTemplate
+          )
+        ); //To do deep copy
+    }
     this.updateTemplateToSession();
     this.getDataKeys();
   }
@@ -151,7 +170,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
     this.saveInstitution(this.selectedInstitution);
     this.jwtTokenService.setToken(this.auth.token);
-    if(this.jwtTokenService.isTokenExpired()){
+    if (this.jwtTokenService.isTokenExpired()) {
       this.auth.logout();
       this.router.navigateByUrl('/');
       return false;
@@ -194,13 +213,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       json.forEach((profile, key) => {
         if (profile && profile.KaplanAdminTypeName !== undefined) {
           if (profile.KaplanAdminTypeName.toUpperCase() === 'ACCOUNTMANAGER') {
-            self.accountManagerProfile = self.profileService.bindToModel(
-              profile
-            );
+            self.accountManagerProfile =
+              self.profileService.bindToModel(profile);
           } else {
-            self.nurseConsultantProfile = self.profileService.bindToModel(
-              profile
-            );
+            self.nurseConsultantProfile =
+              self.profileService.bindToModel(profile);
           }
         }
       });

@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { CommonService } from '../../../services/common.service';
-import { links } from '../../../constants/config';
+import { links, RedirectAction } from '../../../constants/config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -62,17 +62,41 @@ export class LinksService implements OnDestroy {
       this.resolveExceptionPage(links.nursingit.exceptionpage)
     );
 
-    let url: string;
-    if(s.value ==='ApolloStudentReportCard')
-      url = `${this.nitServer}${links.nursingit.apolloLaunchPage}${"&adminId="}${this.auth.userid}`;
-    else if(s.value ==='AtomReportCard')
-      url = `${this.nitServer}${links.nursingit.atomLaunchPage}${"&adminId="}${this.auth.userid}`;
-    else
-      url = `${this.nitServer}${links.nursingit.ReportingLandingPage}`;
+    const redirectUrl = this.redirectUrl(s.value);
 
-    form.setAttribute('ACTION', url);
+    form.setAttribute('ACTION', redirectUrl);
     document.body.appendChild(form);
     form.submit();
+  }
+
+  redirectUrl(redirectActionName: string): string {
+    let url: string = `${this.nitServer}${links.nursingit.ReportingLandingPage}`;
+    switch (redirectActionName) {
+      case RedirectAction.ApolloStudentReportCard:
+        url = `${this.nitServer}${
+          links.nursingit.apolloLaunchPage
+        }${'&adminId='}${this.auth.userid}`;
+        break;
+      case RedirectAction.AtomReportCard:
+        url = `${this.nitServer}${
+          links.nursingit.atomLaunchPage
+        }${'&adminId='}${this.auth.userid}`;
+        break;
+      case RedirectAction.AtomQuizBuilder:
+        url = `${this.nitServer}${
+          links.nursingit.atomQuizBuilderLaunchPage
+        }${'&adminId='}${this.auth.userid}`;
+        break;
+      case RedirectAction.AtomQuizLibrary:
+        url = `${this.nitServer}${
+          links.nursingit.atomQuizLibraryLaunchPage
+        }${'&adminId='}${this.auth.userid}`;
+        break;
+      default:
+        url = `${this.nitServer}${links.nursingit.ReportingLandingPage}`;
+        break;
+    }
+    return url;
   }
 
   resolveExceptionPage(url): string {
@@ -86,41 +110,46 @@ export class LinksService implements OnDestroy {
   }
 
   getSelectedInstitution() {
-    const selectedInstitution = JSON.parse(
-      this.auth.selectedInstitution
-    );
+    const selectedInstitution = JSON.parse(this.auth.selectedInstitution);
     if (selectedInstitution) return selectedInstitution.InstitutionId;
   }
 
   callToProctortrackReport() {
     let input = JSON.stringify({
-        first_name: this.auth.firstname,
-        last_name: this.auth.lastname,
-        user_id: this.auth.userid,
-        email: this.auth.useremail,
-        role: "Instructor",
-        institution_id: this.getSelectedInstitution(),
-        group_id: []
-      });
+      first_name: this.auth.firstname,
+      last_name: this.auth.lastname,
+      user_id: this.auth.userid,
+      email: this.auth.useremail,
+      role: 'Instructor',
+      institution_id: this.getSelectedInstitution(),
+      group_id: []
+    });
     let facultyAPIUrl = `${this.apiServer}${links.api.baseurl}${links.api.admin.proctortrackReportapi}`;
-    let proctortrackObservable  = this.auth.postApiCall(facultyAPIUrl, input);
-    proctortrackObservable.subscribe(response => {
-        window.open(response.body.toString(),'blank');
-    }, error => console.log(error));
-}
+    let proctortrackObservable = this.auth.postApiCall(facultyAPIUrl, input);
+    proctortrackObservable.subscribe(
+      response => {
+        window.open(response.body.toString(), 'blank');
+      },
+      error => console.log(error)
+    );
+  }
 
-onClickExamityProfile(link) {
-  
-  let facultyAPIUrl = this.resolveFacultyURL(`${this.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`);
-  let examityObservable  = this.getHttpCall(facultyAPIUrl);
-  examityObservable.subscribe(response => {
-     let examityEncryptedUserId = response.body.toString();
-     this.getForm(link,examityEncryptedUserId);
-  }, error => console.log(error));
-}
+  onClickExamityProfile(link) {
+    let facultyAPIUrl = this.resolveFacultyURL(
+      `${this.apiServer}${links.api.baseurl}${links.api.admin.examityProfileapi}`
+    );
+    let examityObservable = this.getHttpCall(facultyAPIUrl);
+    examityObservable.subscribe(
+      response => {
+        let examityEncryptedUserId = response.body.toString();
+        this.getForm(link, examityEncryptedUserId);
+      },
+      error => console.log(error)
+    );
+  }
 
-getForm(link, userid) {
-  const form = document.createElement('form');
+  getForm(link, userid) {
+    const form = document.createElement('form');
     form.setAttribute('method', 'post');
     form.setAttribute('target', link.target);
     const y = document.createElement('input');
@@ -132,13 +161,13 @@ getForm(link, userid) {
     form.setAttribute('ACTION', url);
     document.body.appendChild(form);
     form.submit();
-}
+  }
 
-resolveFacultyURL(url: string): string {
-  return url.replace('§adminId', this.auth.userid.toString());
-}
+  resolveFacultyURL(url: string): string {
+    return url.replace('§adminId', this.auth.userid.toString());
+  }
 
-callToIHPssoLogin() {
+  callToIHPssoLogin() {
     let input = {
       UserId: this.auth.userid,
       FirstName: this.auth.firstname,
@@ -154,7 +183,7 @@ callToIHPssoLogin() {
     this.ihpSSOLoginSubscription = ihpSSOLoginObservable
       .map(response => response)
       .subscribe(
-        (data:any) => {
+        (data: any) => {
           let htmlSnippet = data.toString();
           this.appendHTMLSnippetToDOM(htmlSnippet);
         },
@@ -166,19 +195,19 @@ callToIHPssoLogin() {
     const formScript = document
       .createRange()
       .createContextualFragment(htmlSnippet);
-      document.body.appendChild(formScript);
+    document.body.appendChild(formScript);
   }
 
-  getHttpCall(url: string)  {
+  getHttpCall(url: string) {
     let self = this;
     const headers = new HttpHeaders({
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': self.auth.authheader
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: self.auth.authheader
     });
     let options = {
-        headers : headers,
-        observe: 'response' as const
+      headers: headers,
+      observe: 'response' as const
     };
     return this.http.get(url, options);
   }
