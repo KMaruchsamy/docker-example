@@ -2285,6 +2285,11 @@ main .right-grid ::-webkit-scrollbar {
   display: table;
 }
 
+/* adding on top of container-dull-yellow-top for it to have less precedence to container-dull-yellow-top */
+.container-dull-yellow-border {
+  border: 2px solid #ecba66;
+}
+
 .container-dull-yellow-top {
   border-top: 4px solid #ecba66;
 }
@@ -2468,7 +2473,7 @@ main .right-grid ::-webkit-scrollbar {
   content: " ";
   display: inline-block;
   margin-left: 0.75em;
-} 
+}
 @media only screen and (-webkit-min-device-pixel-ratio: 1.3),
   only screen and (min--moz-device-pixel-ratio: 1.3),
   only screen and (-webkit-min-device-pixel-ratio: 1.3020833333333333),
@@ -5522,7 +5527,7 @@ select.mobile-device {
 
 .review-details-table .disable-link a, .review-details-table .disable-link .password-label {
   color: #6c6c6c;
-  pointer-events: none; 
+  pointer-events: none;
   text-decoration: none;
 }
 
@@ -6432,7 +6437,7 @@ a.subheader-link {
 
 .html-card .header {
   color: #101b2b;
-  line-height: 1.3;   
+  line-height: 1.3;
   padding: 0.3em 0 0.3em;
   margin: 0 0 1rem;
   font-size: 22px;
