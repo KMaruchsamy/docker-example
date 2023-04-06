@@ -152,7 +152,7 @@ export const links = {
     },
     stg_old: {
       server: 'https://stg-nit.kaplan.com/',
-      atom_quiz_builder_enable: true
+      atom_quiz_builder_enable: false
     },
     stg: {
       server: 'https://nit.stg.ktp.io/',
