@@ -76,15 +76,13 @@
                     </table>
                 </div>
 
-
-
                 <h4 class="teal inline">Students in Testing Session ({{schedule?.selectedStudents?.length}})</h4>
                 <div class="margin-1em-bottom" *ngIf="ItSecurityEnabled && +(schedule.testType)!==7" >
                     <input type="checkbox" class="checkbox-image" [attr.id]="chkSecurityView" name="chkSecurityView" [checked]="chkSecurityView" disabled="disabled" />
                     <label *ngIf="schedule.itSecurityEnabledInstitution == 1" [attr.for]="chkSecurityView"><b>Enable Examity</b></label>
                     <label *ngIf="schedule.itSecurityEnabledInstitution == 3" [attr.for]="chkSecurityView"><b>Enable Proctortrack</b></label>
                 </div>
-                <table id="studentsInTestingSessionTable" class="table-with-cell-padding table-striped last-row-no-border">
+                <table id="studentsInTestingSessionTable" class="table-with-cell-padding table-striped last-row-no-border" *ngIf="!(!schedule.isExamity && schedule.testType===1)">
                     <thead>
                         <tr>
                             <th scope="col">Last Name</th>
@@ -106,6 +104,12 @@
 
                     </tbody>
                 </table>
+
+                <div  class="margin-1em-top" *ngIf="!schedule.isExamity && schedule.testType===1">
+                    <faculty-approval
+                        [schedule]="schedule">
+                    </faculty-approval>
+                </div>
 
                 <div class="icon-container-flush-text">
                     <p class="icon info-icon-yellow margin-1em-top" *ngIf="hasADA">One or more of the students you have added have testing accommodations.  Their test will be untimed.  To designate additional students who need extended timing accommodations or to verify who is currently set with accommodations, please submit your request in the "Manage Cohorts" section.  For questions please contact your Account Manager. </p>

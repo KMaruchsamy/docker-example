@@ -15,6 +15,10 @@ import { TestHeaderComponent } from './test-header.component';
 import { TestingSessionStartingPopupComponent } from './test-starting-popup.component';
 import { TimeExceptionPopupComponent } from './time-exception-popup.component';
 import { ViewTestComponent } from './view-test.component';
+import { FacultyApprovalComponent } from './faculty-approval.component';
+import { NITMatTableComponent } from '../shared/nit-mat-table.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 // import { SelectedStudentModel } from './../../models/selected-student.model';
 // import { TestScheduleModel } from './../../models/test-schedule.model';
 // import { TestStartedExceptionModal } from './../../models/test-started-exceptions.model';
@@ -37,7 +41,9 @@ import { ManageTestsMultiCampusComponent } from './manage-tests-multicampus.comp
         PageModule,
         SharedModule,
         PipesModule,
-        TestsRoutingModule
+        TestsRoutingModule,
+        MatTableModule,
+        MatCheckboxModule
     ],
     exports: [],
     declarations: [
@@ -57,6 +63,8 @@ import { ManageTestsMultiCampusComponent } from './manage-tests-multicampus.comp
         TestingSessionStartingPopupComponent,
         TimeExceptionPopupComponent,
         ViewTestComponent,
+        FacultyApprovalComponent,
+        NITMatTableComponent,
         ManageTestsMultiCampusComponent
     ],
     providers: [
