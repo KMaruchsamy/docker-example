@@ -35,40 +35,38 @@ import { TestScheduleModel } from '../../models/test-schedule.model';
 import { ManageTestsMultiCampusComponent } from './manage-tests-multicampus.component';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        PageModule,
-        SharedModule,
-        PipesModule,
-        TestsRoutingModule,
-        MatTableModule,
-        MatCheckboxModule
-    ],
-    exports: [],
-    declarations: [
-        ManageTestsComponent,
-        AddStudentsComponent,
-        ChooseTestComponent,
-        ConfirmationModifyInProgressComponent,
-        ConfirmationComponent,
-        LastTestingSessionComponent,
-        RetesterAlternatePopupComponent,
-        RetesterNoAlternatePopupComponent,
-        ReviewTestComponent,
-        ScheduleTestComponent,
-        SelfPayStudentPopupComponent,
-        StudentsStartedTestComponent,
-        TestHeaderComponent,
-        TestingSessionStartingPopupComponent,
-        TimeExceptionPopupComponent,
-        ViewTestComponent,
-        FacultyApprovalComponent,
-        NITMatTableComponent,
-        ManageTestsMultiCampusComponent
-    ],
-    providers: [
-        TestScheduleModel
-    ]
+  imports: [
+    CommonModule,
+    FormsModule,
+    PageModule,
+    SharedModule,
+    PipesModule,
+    TestsRoutingModule,
+    MatTableModule,
+    MatCheckboxModule
+  ],
+  exports: [],
+  declarations: [
+    ManageTestsComponent,
+    AddStudentsComponent,
+    ChooseTestComponent,
+    ConfirmationModifyInProgressComponent,
+    ConfirmationComponent,
+    LastTestingSessionComponent,
+    RetesterAlternatePopupComponent,
+    RetesterNoAlternatePopupComponent,
+    ReviewTestComponent,
+    ScheduleTestComponent,
+    SelfPayStudentPopupComponent,
+    StudentsStartedTestComponent,
+    TestHeaderComponent,
+    TestingSessionStartingPopupComponent,
+    TimeExceptionPopupComponent,
+    ViewTestComponent,
+    FacultyApprovalComponent,
+    NITMatTableComponent,
+    ManageTestsMultiCampusComponent
+  ],
+  providers: [TestScheduleModel]
 })
-export class TestsModule { }
+export class TestsModule {}
