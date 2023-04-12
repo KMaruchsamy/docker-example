@@ -1,58 +1,90 @@
 <div class="faculty-approval-container">
-
-    <div class="tab-container">
-        <div class="tab-group attendance-group">
-            <div>
-                <span class="attendance-tab" (click)="getAttendance($event, 'notConfirmed')"
-                    [ngClass]="isNotConfirmedActive ? 'active-tab' : 'not-active-tab'">
-                    Attendance Not Confirmed ({{numberOfStudentsNotConfirmed}})
-                </span>
-                <span class="attendance-tab-divider">|</span>
-                <span class="attendance-tab" (click)="getAttendance($event, 'confirmed')"
-                    [ngClass]="isConfirmedActive ? 'active-tab' : 'not-active-tab'">
-                    Attendance Confirmed ({{numberOfStudentsConfirmed}})
-                </span>
-            </div>
-        </div>
-
-        <div class="tab-group link-group">
-            <div>
-                <span class="icon export-icon attendance-tab export-link" (click)="exportToExcel($event)">Export to
-                    Excel</span>
-                <span class="icon refresh-icon attendance-tab refresh-link" (click)="refreshData($event)">Refresh to see
-                    latest data</span>
-            </div>
-        </div>
+  <div class="tab-container">
+    <div class="tab-group attendance-group">
+      <div>
+        <span
+          class="attendance-tab"
+          (click)="getAttendance($event, 'notConfirmed')"
+          [ngClass]="isNotConfirmedActive ? 'active-tab' : 'not-active-tab'"
+        >
+          Attendance Not Confirmed ({{ numberOfStudentsNotConfirmed }})
+        </span>
+        <span class="attendance-tab-divider">|</span>
+        <span
+          class="attendance-tab"
+          (click)="getAttendance($event, 'confirmed')"
+          [ngClass]="isConfirmedActive ? 'active-tab' : 'not-active-tab'"
+        >
+          Attendance Confirmed ({{ numberOfStudentsConfirmed }})
+        </span>
+      </div>
     </div>
 
-    <div class="faculty-approval-table">
-        <div class="search">
-            <form class="search-bar" role="form" onsubmit="return false;">
-                <p class="smaller">
-                    Enter a minimum of 2 characters to start searching.
-                </p>
-                <div class="search-input">
-                    <input class="typeahead" type="search" autocomplete="off" role="search" id="findStudent"
-                        name="findStudent" #findstudent id="findStudent"
-                        (input)="getStudentsByName($event.target.value);" [(ngModel)]="searchString">
-                    <button class="button" id="findStudentButton" (click)="searchStudents($event)" type="submit"
-                        [disabled]="!validInstitution || (searchString.length < 2)">
-                        <img src="assets/images/search-icon_2x.png" alt="Search Icon">
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <div class="static-message">
-            <p class="icon lightbulb-icon"></p>
-            <p> {{staticMessage}} </p>
-        </div>
-        <div class="empty-state" *ngIf="dataSource.connect().value.length === 0; else nit_table">
-            {{emptyStateMessage}}
-        </div>
-        <ng-template #nit_table>
-            <nit-mat-table [dataSource]="dataSource" [displayedColumns]="displayedColumns" [isDisabled]="isDisabled">
-            </nit-mat-table>
-        </ng-template>
+    <div class="tab-group link-group">
+      <div>
+        <span
+          class="icon export-icon attendance-tab export-link"
+          (click)="exportToExcel($event)"
+          >Export to Excel</span
+        >
+        <span
+          class="icon refresh-icon attendance-tab refresh-link"
+          (click)="refreshData($event)"
+          >Refresh to see latest data</span
+        >
+      </div>
     </div>
+  </div>
+
+  <div class="faculty-approval-table">
+    <div class="search">
+      <form class="search-bar" role="form" onsubmit="return false;">
+        <p class="smaller">
+          Enter a minimum of 2 characters to start searching.
+        </p>
+        <div class="search-input">
+          <input
+            class="typeahead"
+            type="search"
+            autocomplete="off"
+            role="search"
+            id="findStudent"
+            name="findStudent"
+            #findstudent
+            id="findStudent"
+            (input)="getStudentsByName($event.target.value)"
+            [(ngModel)]="searchString"
+          />
+          <button
+            class="button"
+            id="findStudentButton"
+            (click)="searchStudents($event)"
+            type="submit"
+            [disabled]="!validInstitution || searchString.length < 2"
+          >
+            <img src="assets/images/search-icon_2x.png" alt="Search Icon" />
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="static-message">
+      <p class="icon lightbulb-icon"></p>
+      <p>{{ staticMessage }}</p>
+    </div>
+    <div
+      class="empty-state"
+      *ngIf="dataSource.connect().value.length === 0; else nit_table"
+    >
+      {{ emptyStateMessage }}
+    </div>
+    <ng-template #nit_table>
+      <nit-mat-table
+        [dataSource]="dataSource"
+        [displayedColumns]="displayedColumns"
+        [isDisabled]="isDisabled"
+      >
+      </nit-mat-table>
+    </ng-template>
+  </div>
 </div>
