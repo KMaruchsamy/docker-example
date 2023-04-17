@@ -13,22 +13,24 @@ import { AttendanceMessage } from '../../models/faculty-approval.enum';
 export class FacultyApprovalComponent implements OnInit {
 
   @Input() schedule: TestScheduleModel;
-  displayedColumns: string[] = ['checkBox', 'Last Name', 'First Name', 'Cohort', 'Test', 'Testing Status'];
+  public displayedColumns: string[] = ['checkBox', 'Last Name', 'First Name', 'Cohort', 'Test', 'Testing Status'];
   public dataSource: MatTableDataSource<IFacultyApprovalStudent>;
-  numberOfStudentsConfirmed: number = 0;
-  numberOfStudentsNotConfirmed: number = 0;
-  emptyStateMessage: string = "";
-  selection: SelectionModel<any>;
-  isDisabled: boolean = false;
-  isNotConfirmedActive: boolean = true;
-  isConfirmedActive: boolean = false;
-  staticMessage: string = "";
-  institutionTimezone: string = "";
-  localTime;
-  schedStartTime;
-  schedEndTime;
-  searchString: string;
-  validInstitution: boolean = false;
+  public numberOfStudentsConfirmed: number = 0;
+  public numberOfStudentsNotConfirmed: number = 0;
+  public emptyStateMessage: string = "";
+  public selection: SelectionModel<any>;
+  public isDisabled: boolean = false;
+  public isNotConfirmedActive: boolean = true;
+  public isConfirmedActive: boolean = false;
+  public staticMessage: string = "";
+  public institutionTimezone: string = "";
+  public localTime;
+  public schedStartTime;
+  public schedEndTime;
+  public searchString: string;
+  public validInstitution: boolean = false;
+  public notConfirmed: MatTableDataSource<IFacultyApprovalStudent>;
+  public confirmed: MatTableDataSource<IFacultyApprovalStudent>;
 
 
   constructor(public common: CommonService) { }
@@ -38,7 +40,8 @@ export class FacultyApprovalComponent implements OnInit {
     const initialSelection = [];
     const allowMultiSelect = true;
     this.selection = new SelectionModel<any>(allowMultiSelect, initialSelection);
-    this.displayAttendanceNotConfirmed();
+    this.getTempStudents();
+    this.dataSource = this.notConfirmed;
     this.isConfirmedActive = false;
     this.isNotConfirmedActive = true;
     this.setTime();
@@ -94,35 +97,50 @@ export class FacultyApprovalComponent implements OnInit {
       this.dataSource.connect().value.forEach(row => this.selection.select(row));
   }
 
-  // TODO: This is temporary.  Remove when API is finished.
-  parseResults(results) {
-    if (results && results.length) {
-      return results.map(student => ({
-        "First Name": student.FirstName,
-        "Last Name": student.LastName,
-        "Cohort": student.CohortName,
-        "Test": student.StudentTestName,
-        "Testing Status": 'Not Started',
-        attendanceConfirmed: false
-      }));
+  // TODO: remove with new api service
+  parseAttendanceNotConfirmed(students) {
+    if (students && students.length) {
+        this.numberOfStudentsNotConfirmed = students.length;
+        return students.map(student => ({
+            "First Name": student.FirstName,
+            "Last Name": student.LastName,
+            "Cohort": student.CohortName,
+            "Test": student.StudentTestName,
+            "Testing Status": 'Not Started',
+            attendanceConfirmed: false
+        }));
     }
+    this.emptyStateMessage = AttendanceMessage.EmptyConfirmed;
     return [];
   }
 
-  displayAttendanceNotConfirmed() {
-    this.dataSource = new MatTableDataSource(
-      this.parseResults(this.schedule.selectedStudents)
-    );
-    this.numberOfStudentsNotConfirmed = this.dataSource.connect().value.length;
-    if (this.numberOfStudentsNotConfirmed === 0)
-      this.emptyStateMessage = AttendanceMessage.EmptyNotConfirmed;
+  // TODO: remove with new api service
+  parseAttendanceConfirmed(students) {
+    if (students && students.length) {
+        this.numberOfStudentsConfirmed = students.length;
+        return students.map(student => ({
+            "First Name": student.FirstName,
+            "Last Name": student.LastName,
+            "Cohort": student.CohortName,
+            "Test": student.StudentTestName,
+            "Testing Status": 'Started',
+            attendanceConfirmed: true
+        }));
+    }
+    this.emptyStateMessage = AttendanceMessage.EmptyNotConfirmed;
+    return [];
   }
 
-  displayAttendanceConfirmed() {
-    this.dataSource = new MatTableDataSource([]);;
-    this.numberOfStudentsConfirmed = this.dataSource.connect().value.length;
-    if (this.numberOfStudentsConfirmed === 0)
-      this.emptyStateMessage = AttendanceMessage.EmptyConfirmed;
+  // TODO: remove with new api service
+  getTempStudents(): void {
+    const students = this.schedule.selectedStudents;
+    const half = Math.ceil(students.length / 2);
+    this.notConfirmed = new MatTableDataSource(
+        this.parseAttendanceNotConfirmed(students.slice(0, half))
+    );
+    this.confirmed = new MatTableDataSource(
+        this.parseAttendanceConfirmed(students.slice(half))
+    );
   }
 
   getAttendance(event, type: string): void {
@@ -131,12 +149,12 @@ export class FacultyApprovalComponent implements OnInit {
     if (type === 'confirmed') {
       this.isConfirmedActive = true;
       this.isNotConfirmedActive = false;
-      this.displayAttendanceConfirmed();
+      this.dataSource = this.confirmed;
     }
     else {
       this.isConfirmedActive = false;
       this.isNotConfirmedActive = true;
-      this.displayAttendanceNotConfirmed();
+      this.dataSource = this.notConfirmed;
     }
   }
 
