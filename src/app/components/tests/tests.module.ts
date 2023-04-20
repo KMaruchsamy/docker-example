@@ -19,6 +19,8 @@ import { FacultyApprovalComponent } from './faculty-approval.component';
 import { NITMatTableComponent } from '../shared/nit-mat-table.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
 // import { SelectedStudentModel } from './../../models/selected-student.model';
 // import { TestScheduleModel } from './../../models/test-schedule.model';
 // import { TestStartedExceptionModal } from './../../models/test-started-exceptions.model';
@@ -43,7 +45,9 @@ import { ManageTestsMultiCampusComponent } from './manage-tests-multicampus.comp
     PipesModule,
     TestsRoutingModule,
     MatTableModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSortModule,
+    MatPaginatorModule
   ],
   exports: [],
   declarations: [
