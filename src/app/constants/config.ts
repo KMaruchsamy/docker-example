@@ -137,16 +137,16 @@ export const links = {
     },
     qa_old: {
       server: 'https://qa-nit.kaplan.com/',
-      atom_quiz_builder_enable: false
+      atom_quiz_builder_enable: true
     },
     qa: {
       server: 'https://nit.qa.ktp.io/',
-      atom_quiz_builder_enable: false
+      atom_quiz_builder_enable: true
     },
     qa_new: {
       server: 'https://nit.qa.kaptest.com/',
       chat_widget_url: 'https://storage.googleapis.com/kna-gen-widgets-dev',
-      atom_quiz_builder_enable: false
+      atom_quiz_builder_enable: true
     },
     stg_old: {
       server: 'https://stg-nit.kaplan.com/',
