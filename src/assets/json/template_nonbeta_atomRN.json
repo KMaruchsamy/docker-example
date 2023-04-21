@@ -165,6 +165,16 @@
                     }
                   },
                   {
+                    "text": "Schedule a Faculty-Created Custom Test",
+                    "is_internal_link": true,
+                    "name": "SCHEDULE_TEST",
+                    "url": "/tests/choose-test",
+                    "ga": {
+                      "category": "Test Scheduling",
+                      "label": "Schedule an Faculty-Created Custom Test"
+                    }
+                  },
+                  {
                     "text": "Manage Scheduled Test",
                     "is_internal_link": true,
                     "url": "/tests",
@@ -203,14 +213,6 @@
                     "ga": {
                       "category": "Atom Quiz Builder",
                       "label": "Non Beta Atom Quiz Builder"
-                    }
-                  },
-                  {
-                    "text": "Schedule a Faculty-Created Custom Test",
-                    "name": "SCHEDULE_TEST",
-                    "ga": {
-                      "category": "Custom Test Scheduling",
-                      "label": "Schedule an Faculty-Created Custom Test"
                     }
                   },
                   {

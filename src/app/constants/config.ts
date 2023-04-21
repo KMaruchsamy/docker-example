@@ -120,10 +120,8 @@ export const links = {
     ReportingLandingPage: 'UX_ALogin.aspx',
     apolloLaunchPage: 'Admin/LaunchApollo.aspx?redirectToApollo=true',
     atomLaunchPage: 'Admin/LaunchAtom.aspx?redirectToApollo=true',
-    atomQuizBuilderLaunchPage:
-      'Admin/LaunchAtom.aspx?redirectToQuizBuilder=true',
-    atomQuizLibraryLaunchPage:
-      'Admin/LaunchAtom.aspx?redirectToQuizLibrary=true',
+    atomQuizBuilderLaunchPage: 'Admin/LaunchAtom.aspx?redirectTo=quizBuilder',
+    atomQuizLibraryLaunchPage: 'Admin/LaunchAtom.aspx?redirectTo=quizLibrary',
     exceptionpage: '§environment/accounterror'
   },
   faculty: {
