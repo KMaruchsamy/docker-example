@@ -1,21 +1,35 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnInit,
+  OnChanges,
+  ViewChild,
+  SimpleChanges
+} from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
-import { CommonService } from './../../services/common.service';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'nit-mat-table',
   templateUrl: './nit-mat-table.component.html',
   providers: [{ provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: 'check' }]
 })
-export class NITMatTableComponent<TRows> implements OnInit {
+export class NITMatTableComponent<TRows> implements OnInit, OnChanges {
   @Input() dataSource: MatTableDataSource<TRows>;
   @Input() displayedColumns: string[] = [];
   @Input() isDisabled: boolean = false;
-  selection: SelectionModel<TRows>;
+  @Output() sortChange: EventEmitter<any> = new EventEmitter<any>();
+  public pageSize: number = 25;
+  private selection: SelectionModel<TRows>;
 
-  constructor(public common: CommonService) {}
+  constructor() {}
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit(): void {
     const initialSelection = [];
@@ -24,6 +38,21 @@ export class NITMatTableComponent<TRows> implements OnInit {
       allowMultiSelect,
       initialSelection
     );
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnChanges(SimpleChanges: SimpleChanges) {
+    const { dataSource } = SimpleChanges;
+
+    if (dataSource && this.paginator && this.sort) {
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   isAllSelected() {
