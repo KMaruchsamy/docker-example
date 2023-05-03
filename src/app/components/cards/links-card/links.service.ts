@@ -71,6 +71,7 @@ export class LinksService implements OnDestroy {
 
   redirectUrl(redirectActionName: string): string {
     let url: string = `${this.nitServer}${links.nursingit.ReportingLandingPage}`;
+    const institutionId = this.getSelectedInstitution();
     switch (redirectActionName) {
       case RedirectAction.ApolloStudentReportCard:
         url = `${this.nitServer}${
@@ -85,12 +86,12 @@ export class LinksService implements OnDestroy {
       case RedirectAction.AtomQuizBuilder:
         url = `${this.nitServer}${links.nursingit.atomLaunchPage}${
           links.nursingit.redirectToQuizBuilder
-        }${'&adminId='}${this.auth.userid}`;
+        }${'&adminId='}${this.auth.userid}${'&institutionId='}${institutionId}`;
         break;
       case RedirectAction.AtomQuizLibrary:
         url = `${this.nitServer}${links.nursingit.atomLaunchPage}${
           links.nursingit.redirectToQuizLibrary
-        }${'&adminId='}${this.auth.userid}`;
+        }${'&adminId='}${this.auth.userid}${'&institutionId='}${institutionId}`;
         break;
       default:
         url = `${this.nitServer}${links.nursingit.ReportingLandingPage}`;
