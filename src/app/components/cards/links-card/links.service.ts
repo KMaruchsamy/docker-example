@@ -71,6 +71,7 @@ export class LinksService implements OnDestroy {
 
   redirectUrl(redirectActionName: string): string {
     let url: string = `${this.nitServer}${links.nursingit.ReportingLandingPage}`;
+    const institutionId = this.getSelectedInstitution();
     switch (redirectActionName) {
       case RedirectAction.ApolloStudentReportCard:
         url = `${this.nitServer}${
@@ -78,19 +79,19 @@ export class LinksService implements OnDestroy {
         }${'&adminId='}${this.auth.userid}`;
         break;
       case RedirectAction.AtomReportCard:
-        url = `${this.nitServer}${
-          links.nursingit.atomLaunchPage
+        url = `${this.nitServer}${links.nursingit.atomLaunchPage}${
+          links.nursingit.redirectToApollo
         }${'&adminId='}${this.auth.userid}`;
         break;
       case RedirectAction.AtomQuizBuilder:
-        url = `${this.nitServer}${
-          links.nursingit.atomQuizBuilderLaunchPage
-        }${'&adminId='}${this.auth.userid}`;
+        url = `${this.nitServer}${links.nursingit.atomLaunchPage}${
+          links.nursingit.redirectToQuizBuilder
+        }${'&adminId='}${this.auth.userid}${'&institutionId='}${institutionId}`;
         break;
       case RedirectAction.AtomQuizLibrary:
-        url = `${this.nitServer}${
-          links.nursingit.atomQuizLibraryLaunchPage
-        }${'&adminId='}${this.auth.userid}`;
+        url = `${this.nitServer}${links.nursingit.atomLaunchPage}${
+          links.nursingit.redirectToQuizLibrary
+        }${'&adminId='}${this.auth.userid}${'&institutionId='}${institutionId}`;
         break;
       default:
         url = `${this.nitServer}${links.nursingit.ReportingLandingPage}`;
